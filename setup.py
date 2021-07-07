@@ -9,7 +9,7 @@ setuptools.setup(
     author="TBC",
     author_email="TBC",
     description="A small example package",
-    # long_description=long_description,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bgoujaud/PEPit",
     project_urls={
@@ -20,7 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
+    package_dir={"": "PEPit"},
     packages=setuptools.find_packages(where="PEPit"),
     python_requires=">=3.6",
 )
