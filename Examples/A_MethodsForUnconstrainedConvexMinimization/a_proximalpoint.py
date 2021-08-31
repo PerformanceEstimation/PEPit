@@ -59,9 +59,8 @@ def wc_ppa(gamma, n):
 if __name__ == "__main__":
 
     n = 2
-    mu = 0
-    L = 1
+    gamma = 1
 
-    rate = rate_gd(mu=mu, L=L, gamma=1/L, n=n)
+    rate = wc_ppa(gamma, n)
 
     print('{}'.format(rate))
