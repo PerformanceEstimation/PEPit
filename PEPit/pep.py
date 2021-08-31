@@ -22,8 +22,8 @@ class PEP(object):
         Function.counter = 0
 
         # Update the class counter
-        self.counter = self.__class__.counter
-        self.__class__.counter += 1
+        self.counter = PEP.counter
+        PEP.counter += 1
 
         # Initialize list of functions,
         # points and conditions that are independent of the functions,
@@ -101,30 +101,34 @@ class PEP(object):
 
         :return: (cvxpy Variable) the expression in terms of F and G
         """
+        cvxpy_variable = 0
+        Fweights = np.zeros((Expression.counter,))
+        Gweights = np.zeros((Point.counter, Point.counter))
 
         # If simple function value, then simply return the right coordinate in F
         if expression._is_function_value:
-            cvxpy_variable = F[expression.counter]
+            Fweights[expression.counter] += 1
         # If composite, combine all the cvxpy expression found from basis expressions
         else:
-            cvxpy_variable = 0
             for key, weight in expression.decomposition_dict.items():
                 # Function values are stored in F
                 if type(key) == Expression:
                     assert key._is_function_value
-                    cvxpy_variable += weight * F[key.counter]
+                    Fweights[key.counter] += weight
                 # Inner products are stored in G
                 elif type(key) == tuple:
                     point1, point2 = key
                     assert point1._is_leaf
                     assert point2._is_leaf
-                    cvxpy_variable += weight * G[point1.counter, point2.counter]
+                    Gweights[point1.counter, point2.counter] += weight
                 # Constants are simply constants
                 elif key == 1:
                     cvxpy_variable += weight
                 # Others don't exist and raise an Exception
                 else:
                     raise TypeError("Expressions are made of function values, inner products and constants only!")
+
+        cvxpy_variable += F@Fweights + cp.sum(cp.multiply(G, Gweights))
 
         # Return the input expression in a cvxpy variable
         return cvxpy_variable

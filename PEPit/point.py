@@ -40,8 +40,8 @@ class Point(object):
         if is_leaf:
             assert decomposition_dict is None
             self.decomposition_dict = {self: 1}
-            self.counter = self.__class__.counter
-            self.__class__.counter += 1
+            self.counter = Point.counter
+            Point.counter += 1
         else:
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict
@@ -56,7 +56,7 @@ class Point(object):
         """
 
         # Verify that other is a Point
-        assert other.__class__ == Point
+        assert isinstance(other, Point)
 
         # Update the linear decomposition of the sum of 2 points from their respective basis decomposition
         merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
@@ -103,7 +103,7 @@ class Point(object):
             # Create and return the newly created point
             return Point(is_leaf=False, decomposition_dict=new_decomposition_dict)
         # Multiplying by another point leads to an expression encoding the inner product of the 2 points.
-        elif other.__class__ == Point:
+        elif isinstance(other, Point):
             # Compute the decomposition dict of the new expression
             decomposition_dict = multiply_dicts(self.decomposition_dict, other.decomposition_dict)
             # Create and return the new expression
