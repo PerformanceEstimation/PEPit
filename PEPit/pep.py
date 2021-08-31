@@ -22,8 +22,8 @@ class PEP(object):
         Function.counter = 0
 
         # Update the class counter
-        self.counter = self.__class__.counter
-        self.__class__.counter += 1
+        self.counter = PEP.counter
+        PEP.counter += 1
 
         # Initialize list of functions,
         # points and conditions that are independent of the functions,
