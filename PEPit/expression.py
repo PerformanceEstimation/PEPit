@@ -35,8 +35,8 @@ class Expression(object):
         if is_function_value:
             assert decomposition_dict is None
             self.decomposition_dict = {self: 1}
-            self.counter = self.__class__.counter
-            self.__class__.counter += 1
+            self.counter = Expression.counter
+            Expression.counter += 1
         else:
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict
@@ -51,7 +51,7 @@ class Expression(object):
         """
 
         # If other is an Expression, merge the decomposition_dicts
-        if other.__class__ == Expression:
+        if isinstance(other, Expression):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
         # It other is a scalar constant, add it to the decomposition_dict of self
         elif type(other) in {int, float}:

@@ -36,8 +36,8 @@ class Function(object):
         if is_leaf:
             assert decomposition_dict is None
             self.decomposition_dict = {self: 1}
-            self.counter = self.__class__.counter
-            self.__class__.counter += 1
+            self.counter = Function.counter
+            Function.counter += 1
         else:
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict
@@ -58,7 +58,7 @@ class Function(object):
         """
 
         # Verify other is a function
-        assert other.__class__ == Function
+        assert isinstance(other, Function)
 
         # Merge decomposition dicts of self and other
         merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
@@ -138,9 +138,9 @@ class Function(object):
         """
 
         # Verify the type of each element
-        assert triplet[0].__class__ == Point
-        assert triplet[1].__class__ == Point
-        assert triplet[2].__class__ == Expression
+        assert isinstance(triplet[0], Point)
+        assert isinstance(triplet[1], Point)
+        assert isinstance(triplet[2], Expression)
 
         # Prune the decomposition dict of each element to verify if the point is optimal or not by testing gradient=0.
         for element in triplet:
@@ -180,7 +180,7 @@ class Function(object):
         """
 
         # Verify point is a Point
-        assert point.__class__ == Point
+        assert isinstance(point, Point)
 
         # If those values already exist, simply return them.
         # If not, instantiate them before returning.
