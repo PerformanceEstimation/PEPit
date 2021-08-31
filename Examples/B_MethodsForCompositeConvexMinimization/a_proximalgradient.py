@@ -50,7 +50,7 @@ def wc_pgd(L, mu, gamma, n):
     # Solve the PEP
     wc = problem.solve()
 
-    # Return the worst-case rate of the method, which should be max((1-gamma*mu)^2,(1-gamma*L)^2)
+    # Return the worst-case rate of the method, which should be max((1-gamma*mu)^2,(1-gamma*L)^2)^n
     return wc
 
 
