@@ -130,29 +130,6 @@ class Function(object):
         # P / v = P * (1/v)
         return self.__rmul__(other=1 / denominator)
 
-    def add_point(self, triplet):
-        """
-        Add a triplet (point, gradient, function_value) to the list of points of this function.
-
-        :param triplet: (tuple) A tuple containing 3 elements: point, gradient, and function value
-        """
-
-        # Verify the type of each element
-        assert isinstance(triplet[0], Point)
-        assert isinstance(triplet[1], Point)
-        assert isinstance(triplet[2], Expression)
-
-        # Prune the decomposition dict of each element to verify if the point is optimal or not by testing gradient=0.
-        for element in triplet:
-            element.decomposition_dict = prune_dict(element.decomposition_dict)
-
-        # Store the point in list_of_points
-        self.list_of_points.append(triplet)
-
-        # If gradient==0, then store the point in list_of_optimal_points too
-        if triplet[1].decomposition_dict == dict():
-            self.list_of_optimal_points.append(triplet)
-
     def add_constraint(self, constraint):
         """
         Add a constraint to the list of constraints of the function
@@ -170,6 +147,63 @@ class Function(object):
         """
 
         raise NotImplementedError
+
+    def add_point(self, triplet):
+        """
+        Add a triplet (point, gradient, function_value) to the list of points of this function.
+
+        :param triplet: (tuple) A tuple containing 3 elements: point, gradient, and function value
+        """
+
+        # Unpack triplet
+        point, g, f = triplet
+
+        # Verify the type of each element
+        assert isinstance(point, Point)
+        assert isinstance(g, Point)
+        assert isinstance(f, Expression)
+
+        # Prune the decomposition dict of each element to verify if the point is optimal or not by testing gradient=0.
+        for element in triplet:
+            element.decomposition_dict = prune_dict(element.decomposition_dict)
+
+        # Store the point in list_of_points
+        self.list_of_points.append(triplet)
+
+        # If gradient==0, then store the point in list_of_optimal_points too
+        if g.decomposition_dict == dict():
+            self.list_of_optimal_points.append(triplet)
+
+        # If self is not a basis function, create gradient and function value
+        # for each of the latest and combine under the constraint that the full gradient is null.
+        if not self._is_leaf:
+
+            # Remove the basis functions that are not really involved in the decomposition of self
+            # to avoid division by zero at the end.
+            self.decomposition_dict = prune_dict(self.decomposition_dict)
+
+            # Store the number of such basis function and the gradient and function value of self on point
+            total_number_of_involved_basis_functions = len(self.decomposition_dict.keys())
+            gradient_of_last_basis_function = g
+            value_of_last_basis_function = f
+            number_of_currently_computed_gradients_and_values = 0
+
+            for function, weight in self.decomposition_dict.items():
+
+                # Keep track of the gradient and function value of self minus those from visited basis functions
+                if number_of_currently_computed_gradients_and_values < total_number_of_involved_basis_functions - 1:
+                    grad, val = function.oracle(point)
+                    gradient_of_last_basis_function = gradient_of_last_basis_function - weight * grad
+                    value_of_last_basis_function = value_of_last_basis_function - weight * val
+
+                    number_of_currently_computed_gradients_and_values += 1
+
+                # The latest function must receive a fully conditioned gradient and a fully conditioned function value
+                else:
+                    gradient_of_last_basis_function = gradient_of_last_basis_function / weight
+                    value_of_last_basis_function = value_of_last_basis_function / weight
+
+                    function.add_point((point, gradient_of_last_basis_function, value_of_last_basis_function))
 
     def oracle(self, point):
         """
@@ -190,63 +224,18 @@ class Function(object):
                 if self.is_differentiable:
                     return associated_point[1], associated_point[2]
                 else:
-                    g = self.define_new_gradient_only(point)
+                    g = Point(is_leaf=True, decomposition_dict=None)
                     self.add_point((point, g, associated_point[2]))
                     return g, associated_point[2]
 
-        g, f = self.define_new_gradient_and_value(point)
+        # Define new gradient and function value
+        g = Point(is_leaf=True, decomposition_dict=None)
+        f = Expression(is_function_value=True, decomposition_dict=None)
 
-        # Store the point
-        self.add_point((point, g, f))
+        # Store it
+        self.add_point(triplet=(point, g, f))
 
         # Return gradient and function value
-        return g, f
-
-    def define_new_gradient_only(self, point):
-        """
-        Define a new gradient
-
-        :param point: (Point) Anny point
-        :return: (Point) newly computed gradient
-        """
-
-        # If the function a basis one, then compute a simple gradient.
-        # Otherwise, iterate over all the basis functions involved in the decomposition of self and combine.
-        if self._is_leaf:
-            g = Point(is_leaf=True, decomposition_dict=None)
-        else:
-            g = Point(is_leaf=False, decomposition_dict=dict())
-
-            for function, weight in self.decomposition_dict.items():
-                grad = function.gradient(point)
-                g = g + weight * grad
-
-        # Return the newly created gradient
-        return g
-
-    def define_new_gradient_and_value(self, point):
-        """
-        Define a new gradient and a new function value
-
-        :param point: (Point) Anny point
-        :return: (tuple) newly computed gradient and function value
-        """
-
-        # If the function a basis one, then compute a simple gradient and function value.
-        # Otherwise, iterate over all the basis functions involved in the decomposition of self and combine.
-        if self._is_leaf:
-            g = Point(is_leaf=True, decomposition_dict=None)
-            f = Expression(is_function_value=True, decomposition_dict=None)
-        else:
-            g = Point(is_leaf=False, decomposition_dict=dict())
-            f = Expression(is_function_value=False, decomposition_dict=dict())
-
-            for function, weight in self.decomposition_dict.items():
-                grad, val = function.oracle(point)
-                g = g + weight * grad
-                f = f + weight * val
-
-        # Return the newly created gradient and function value
         return g, f
 
     def gradient(self, point):
@@ -294,48 +283,13 @@ class Function(object):
         :return: (Point or tuple) The optimal point
         """
 
-        # Create a new point
+        # Create a new point, null gradient and new function value
         point = Point(is_leaf=True, decomposition_dict=None)
-
-        # Create a null gradient
         g = Point(is_leaf=False, decomposition_dict=dict())
-
-        # Create a new function value
         f = Expression(is_function_value=True, decomposition_dict=None)
 
         # Add the triplet to the list of points of the function as well as to its list of optimal points
         self.add_point((point, g, f))
-
-        # If self is not a basis function, create gradient and function value
-        # for each of the latest and combine under the constraint that the full gradient is null.
-        if not self._is_leaf:
-
-            # Remove the basis functions that are not really involved in the decomposition of self
-            # to avoid division by zero at the end.
-            self.decomposition_dict = prune_dict(self.decomposition_dict)
-
-            # Store the number of such basis function and the gradient and function value of self on point
-            total_number_of_involved_basis_functions = len(self.decomposition_dict.keys())
-            gradient_of_last_basis_function = g
-            value_of_last_basis_function = f
-            number_of_currently_computed_gradients_and_values = 0
-
-            for function, weight in self.decomposition_dict.items():
-
-                # Keep track of the gradient and function value of self minus those from visited basis functions
-                if number_of_currently_computed_gradients_and_values < total_number_of_involved_basis_functions - 1:
-                    grad, val = function.oracle(point)
-                    gradient_of_last_basis_function = gradient_of_last_basis_function - weight * grad
-                    value_of_last_basis_function = value_of_last_basis_function - weight * val
-
-                    number_of_currently_computed_gradients_and_values += 1
-
-                # The latest function must receive a fully conditioned gradient and a fully conditioned function value
-                else:
-                    gradient_of_last_basis_function = gradient_of_last_basis_function / weight
-                    value_of_last_basis_function = value_of_last_basis_function / weight
-
-                    function.add_point((point, gradient_of_last_basis_function, value_of_last_basis_function))
 
         # Return the required information
         if return_gradient_and_function_value:

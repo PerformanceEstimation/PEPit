@@ -62,8 +62,8 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val, Expression)
 
         self.assertIs(point, self.point)
-        self.assertFalse(grad._is_leaf)
-        self.assertFalse(val._is_function_value)
+        self.assertTrue(grad._is_leaf)
+        self.assertTrue(val._is_function_value)
 
         # On func1
         self.assertEqual(len(self.func1.list_of_points), 1)
@@ -84,8 +84,8 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(grad2, Point)
         self.assertIsInstance(val2, Expression)
 
-        self.assertTrue(grad2._is_leaf)
-        self.assertTrue(val2._is_function_value)
+        self.assertFalse(grad2._is_leaf)
+        self.assertFalse(val2._is_function_value)
 
         # Combination
         self.assertIs(point1, self.point)
