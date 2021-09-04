@@ -287,27 +287,27 @@ class Function(object):
         # then break the loop and return the previously computed values.
         if associated_grad_and_function_val and self.is_differentiable:
             return associated_grad_and_function_val
-        
+
         # If "self" has already been evaluated on "point" but is not differentiable,
         # then the function value is fixed by the previously computed one,
         # but a new sub-gradient remains to be defined
         if associated_grad_and_function_val and not self.is_differentiable:
             f = associated_grad_and_function_val[-1]
-        
+
         # Here we separate the list of basis functions according to their needs
         list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self.separate_basis_functions_regarding_their_need_on_point(point=point)
-        
+
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
         # Here we deal with the function value computation
         if associated_grad_and_function_val is None:
-            
+
             # If no basis function need a new function value, it means that they all have one,
             # and then "self"'s one is determined by linear combination.
             if list_of_functions_which_need_gradient_and_function_value == list():
                 f = Expression(is_function_value=False, decomposition_dict=dict())
                 for function, weight in self.decomposition_dict.items():
                     f += weight * function.value(point=point)
-                    
+
             # Otherwise, we define a new one.
             else:
                 f = Expression(is_function_value=True, decomposition_dict=None)
@@ -315,13 +315,13 @@ class Function(object):
         # Here we deal with the gradient computation.
         # We come to this point if "self" need a new gradient,
         # either because it is not differentiable or because it had never been computed so far.
-        
+
         # If "self" function value is determined by its basis functions, then we compute it.
         if list_of_functions_which_need_gradient_and_function_value == list() and list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
                 g += weight * function.gradient(point=point)
-        
+
         # Otherwise, we create a new one.
         else:
             g = Point(is_leaf=True, decomposition_dict=None)
