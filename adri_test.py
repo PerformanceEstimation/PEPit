@@ -1,6 +1,7 @@
 import Examples.A_MethodsForUnconstrainedConvexMinimization.OptimizedGradientMethod as OGM
 import Examples.A_MethodsForUnconstrainedConvexMinimization.GradientExactLineSearch as ELS
 import Examples.A_MethodsForUnconstrainedConvexMinimization.Subgradient as SG
+import Examples.A_MethodsForUnconstrainedConvexMinimization.ConjugateGradientMethod as CG
 import numpy as np
 
 import time
@@ -21,11 +22,19 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-M,N=2,50
+M,N=2,10
 gamma = 1/(np.sqrt(N+1)*M)
 
 start = time.time()
 wc,theory =  SG.wc_subgd(M=M, N=N, gamma=gamma)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+
+L,n=1,2
+
+start = time.time()
+wc,theory = CG.wc_CG(L=L, n=n)
 end = time.time()
 print('Timing:', end - start, '[s]')
 
