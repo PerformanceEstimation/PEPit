@@ -17,7 +17,7 @@ def wc_subgd(M, N, gamma):
 
     :param M: (float) the lipschitz parameter.
     :param N: (int) the number of iterations
-    :param gamma: optimal step size is 1/(sqrt(N)*M)
+    :param gamma: optimal step size is 1/(sqrt(N+1)*M)
     :return:
     """
 
@@ -28,7 +28,7 @@ def wc_subgd(M, N, gamma):
     func = problem.declare_function(ConvexLipschitzFunction,
                                     {'M': M})
 
-    # Start by defining its unique optimal point and its function value
+    # Start by defining its optimal point and its function value
     xs = func.optimal_point()
     fs = func.value(xs)
 
@@ -40,14 +40,15 @@ def wc_subgd(M, N, gamma):
 
     # Run the subgradient method
     x = x0
+    gx,fx = func.oracle(x)
 
     for _ in range(N):
-        problem.set_performance_metric(func.value(x) - fs)
-        x = x - gamma * func.gradient(x)
-        _, _ = func.oracle(x)
+        problem.set_performance_metric(fx - fs)
+        x = x - gamma * gx
+        gx,fx = func.oracle(x)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(func.value(x)-fs)
+    problem.set_performance_metric(fx-fs)
 
     # Solve the PEP
     wc = problem.solve()
@@ -55,20 +56,19 @@ def wc_subgd(M, N, gamma):
     # Theoretical guarantee (for comparison)
     theory = M/np.sqrt(N+1)
 
-    print('*** Example file: worst-case performance of the subgradient gradient method (OGM) in function values ***')
+    print('*** Example file: worst-case performance of the subgradient gradient method in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
     print('\tTheoretical guarantee:\t f(y_n)-f_* <= ', theory)
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
 
     # Return the rate of the evaluated method
-    return wc
+    return wc, theory
 
 
 if __name__ == "__main__":
 
     M = 2
-    # N = 8 # does not work (eval_points_and_function_values error)
-    N = 6 # work
+    N = 6
     gamma = 1/(np.sqrt(N+1)*M)
 
     rate = wc_subgd(M=M,
