@@ -1,5 +1,5 @@
 from PEPit.pep import PEP
-from PEPit.Function_classes.cvx_function import CvxFunction
+from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
 
@@ -28,7 +28,7 @@ def wc_ppa(gamma, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(CvxFunction,{})
+    func = problem.declare_function(ConvexFunction,{})
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()

@@ -6,7 +6,7 @@ from PEPit.Tools.dict_operations import prune_dict
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
-from PEPit.Function_classes.cvx_function import CvxFunction
+from PEPit.Function_classes.convex_function import ConvexFunction
 
 
 class TestFunction(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestFunction(unittest.TestCase):
     def setUp(self):
 
         self.func1 = Function(is_leaf=True, decomposition_dict=None)
-        self.func2 = CvxFunction(dict(), is_leaf=True, decomposition_dict=None)
+        self.func2 = ConvexFunction(dict(), is_leaf=True, decomposition_dict=None)
 
         self.point = Point(is_leaf=True, decomposition_dict=None)
 

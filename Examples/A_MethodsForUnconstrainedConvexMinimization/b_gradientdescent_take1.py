@@ -1,5 +1,5 @@
 from PEPit.pep import PEP
-from PEPit.Function_classes.strong_cvx_smooth_function import StrongCvxSmoothFunction
+from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
 def wc_gd(mu, L, gamma, n):
@@ -22,7 +22,7 @@ def wc_gd(mu, L, gamma, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(StrongCvxSmoothFunction,
+    func = problem.declare_function(SmoothStronglyConvexFunction,
                                     {'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point

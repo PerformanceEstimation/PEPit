@@ -1,6 +1,6 @@
 from PEPit.pep import PEP
-from PEPit.Function_classes.strong_cvx_smooth_function import StrongCvxSmoothFunction
-from PEPit.Function_classes.cvx_function import CvxFunction
+from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
 
@@ -25,8 +25,8 @@ def wc_pgd(L, mu, gamma, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    f1 = problem.declare_function(StrongCvxSmoothFunction, {'mu': mu, 'L': L})
-    f2 = problem.declare_function(CvxFunction, {})
+    f1 = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
+    f2 = problem.declare_function(ConvexFunction, {})
     func = f1 + f2
 
     # Start by defining its unique optimal point
