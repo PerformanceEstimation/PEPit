@@ -11,7 +11,7 @@ def wc_ogm(L, n):
     This code computes a worst-case guarantee for the optimized gradient method. That is, it computes the
     smallest possible tau(n,L) such that the guarantee
         f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
-    where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
+    is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
 
     In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when
     || x_0 - x_* || == 1.
@@ -46,17 +46,19 @@ def wc_ogm(L, n):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run the GD method
-    theta = [1]
-    x = [x0]
+    theta_new = 1
+    x_new = x0
     y = x0
     for i in range(n):
-        x.append(y - 1 / L * func.gradient(y))
+        x_old = x_new
+        x_new = y - 1 / L * func.gradient(y)
+        theta_old = theta_new
         if i < n - 1:
-            theta.append( (1 + sqrt(4 * theta[i] ** 2 + 1)) / 2)
+            theta_new =  (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
         else:
-            theta.append( (1 + sqrt(8 * theta[i] ** 2 + 1)) / 2)
+            theta_new =  (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
 
-        y = x[i + 1] + (theta[i] - 1) / theta[i + 1] * (x[i + 1] - x[i]) + theta[i] / theta[i + 1] * (x[i + 1] - y)
+        y = x_new + (theta_old - 1) / theta_new * (x_new - x_old) + theta_old / theta_new * (x_new - y)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric(func.value(y) - fs)
@@ -64,7 +66,7 @@ def wc_ogm(L, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = 1/2/theta[n]**2
+    theory = 1/2/theta_new**2
 
     print('*** Example file: worst-case performance of the optimized gradient method (OGM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
