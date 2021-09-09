@@ -181,7 +181,13 @@ class PEP(object):
 
         # Write the gram matrix G as M.T M to extract points' values
         eig_val, eig_vec = np.linalg.eig(G_value)
-        points_values = (np.sqrt(eig_val) * eig_vec).T
+
+        # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
+        assert np.min(eig_val) >= - 10**-5 * np.max(eig_val)
+        eig_val = np.maximum(eig_val, 0)
+
+        # Extracts points values
+        points_values = np.linalg.qr((np.sqrt(eig_val) * eig_vec).T, mode='r')
 
         # Iterate over point and function value
         # Set the attribute value of all leaf variables to the right value
