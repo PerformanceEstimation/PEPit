@@ -6,7 +6,7 @@ import numpy as np
 
 import time
 
-L,n=1,4
+L,n=3,4
 
 start = time.time()
 wc,theory = OGM.wc_ogm(L, n)
@@ -14,7 +14,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,mu,n=1,.001,2
+L,mu,n=3,.1,1
 
 start = time.time()
 wc,theory = ELS.wc_ELS(L=L, mu=mu, n=n)
@@ -31,7 +31,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,n=1,2
+L,n=3,2
 
 start = time.time()
 wc,theory = CG.wc_CG(L=L, n=n)

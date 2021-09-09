@@ -67,7 +67,7 @@ def wc_CG(L, n):
             theta_new =  (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
         else:
             theta_new =  (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
-    theory = 1/2/theta_new**2
+    theory = L/2/theta_new**2
 
     print('*** Example file: worst-case performance of conjugate gradient (CG) with exact span searches ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)

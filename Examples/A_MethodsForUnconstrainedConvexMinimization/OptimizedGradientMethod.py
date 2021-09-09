@@ -66,7 +66,7 @@ def wc_ogm(L, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = 1/2/theta_new**2
+    theory = L/2/theta_new**2
 
     print('*** Example file: worst-case performance of the optimized gradient method (OGM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
