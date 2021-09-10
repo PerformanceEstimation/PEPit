@@ -3,6 +3,7 @@ import Examples.A_MethodsForUnconstrainedConvexMinimization.GradientExactLineSea
 import Examples.A_MethodsForUnconstrainedConvexMinimization.Subgradient as SG
 import Examples.A_MethodsForUnconstrainedConvexMinimization.ConjugateGradientMethod as CG
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradientExactLineSearch as inELS
+import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradient as inGD
 
 import numpy as np
 
@@ -47,5 +48,14 @@ start = time.time()
 wc,theory = inELS.wc_InexactGrad_ELS(L=L, mu=mu, epsilon=epsilon, n=n)
 end = time.time()
 print('Timing:', end - start, '[s]')
+
+
+L,mu,epsilon,n=1,.1,.1,2
+
+start = time.time()
+wc,theory = inGD.wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
 
 
