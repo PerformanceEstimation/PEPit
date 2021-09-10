@@ -15,11 +15,11 @@ def exactlinesearch_step(x0, f, directions):
     """
 
     x = Point()
-    gx,fx = f.oracle(x)
-    f.add_constraint((x-x0)*gx)
-    f.add_constraint(-(x-x0)*gx)
+    gx, fx = f.oracle(x)
+    f.add_constraint((x - x0) * gx)
+    f.add_constraint(-(x - x0) * gx)
     for d in directions:
-        f.add_constraint(d*gx)
-        f.add_constraint(-d*gx)
+        f.add_constraint(d * gx)
+        f.add_constraint(-d * gx)
 
     return x, gx, fx

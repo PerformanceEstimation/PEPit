@@ -2,6 +2,8 @@ import Examples.A_MethodsForUnconstrainedConvexMinimization.OptimizedGradientMet
 import Examples.A_MethodsForUnconstrainedConvexMinimization.GradientExactLineSearch as ELS
 import Examples.A_MethodsForUnconstrainedConvexMinimization.Subgradient as SG
 import Examples.A_MethodsForUnconstrainedConvexMinimization.ConjugateGradientMethod as CG
+import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradientExactLineSearch as inELS
+
 import numpy as np
 
 import time
@@ -38,5 +40,12 @@ wc,theory = CG.wc_CG(L=L, n=n)
 end = time.time()
 print('Timing:', end - start, '[s]')
 
+
+L,mu,epsilon,n=1,.1,.1,2
+
+start = time.time()
+wc,theory = inELS.wc_InexactGrad_ELS(L=L, mu=mu, epsilon=epsilon, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
 
 
