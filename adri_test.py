@@ -43,7 +43,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,mu,epsilon,n=1,.1,.1,2
+L,mu,epsilon,n=3,.1,.1,2
 
 start = time.time()
 wc,theory = inELS.wc_InexactGrad_ELS(L=L, mu=mu, epsilon=epsilon, n=n)
@@ -51,7 +51,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,mu,epsilon,n=1,.1,.1,2
+L,mu,epsilon,n=3,.1,.1,2
 
 start = time.time()
 wc,theory = inGD.wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n)
@@ -59,7 +59,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,epsilon,n=1,0,5
+L,epsilon,n=3,0,5
 
 start = time.time()
 wc,theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n)
@@ -67,7 +67,7 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
-L,epsilon,n=1,.1,5
+L,epsilon,n=2,.1,5
 
 start = time.time()
 wc,theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n)

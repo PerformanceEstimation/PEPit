@@ -58,7 +58,7 @@ def wc_InexactAGM(L, epsilon, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = 2 / (n ** 2 + 5 * n + 6)
+    theory = 2 * L / (n ** 2 + 5 * n + 6)
 
     print('*** Example file: worst-case performance of an inexact accelerated gradient method ***')
     print('\tPEP-it guarantee:\t\t\t\t f(x_n)-f_* <= ', wc)
