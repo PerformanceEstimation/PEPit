@@ -73,8 +73,8 @@ def wc_InexactGrad(L, mu, epsilon, n):
     theory = ((Leps-meps)/(Leps+meps))**(2*n)
 
     print('*** Example file: worst-case performance of inexact gradient descent ***')
-    print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
-    print('\tTheoretical guarantee:\t f(y_n)-f_* <= ', theory)
+    print('\tPEP-it guarantee:\t f(x_n)-f_* <= ', wc)
+    print('\tTheoretical guarantee:\t f(x_n)-f_* <= ', theory)
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return wc, theory
 

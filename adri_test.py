@@ -4,6 +4,7 @@ import Examples.A_MethodsForUnconstrainedConvexMinimization.Subgradient as SG
 import Examples.A_MethodsForUnconstrainedConvexMinimization.ConjugateGradientMethod as CG
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradientExactLineSearch as inELS
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradient as inGD
+import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactAcceleratedGradient as inAGM
 
 import numpy as np
 
@@ -58,4 +59,18 @@ end = time.time()
 print('Timing:', end - start, '[s]')
 
 
+L,epsilon,n=1,0,5
+
+start = time.time()
+wc,theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+
+L,epsilon,n=1,.1,5
+
+start = time.time()
+wc,theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
 
