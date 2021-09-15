@@ -32,10 +32,10 @@ def wc_ogm(L, n):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a strongly convex smooth function
+    # Declare a smooth convex function
     func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': 0, 'L': L})
 
-    # Start by defining its unique optimal point
+    # Start by defining an optimal point
     xs = func.optimal_point()
     fs = func.value(xs)
 
@@ -45,7 +45,7 @@ def wc_ogm(L, n):
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Run the GD method
+    # Run the optimized gradient method (OGM) method
     theta_new = 1
     x_new = x0
     y = x0
@@ -66,7 +66,7 @@ def wc_ogm(L, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = 1/2/theta_new**2
+    theory = L/2/theta_new**2
 
     print('*** Example file: worst-case performance of the optimized gradient method (OGM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
