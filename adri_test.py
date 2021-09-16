@@ -11,6 +11,7 @@ import Examples.A_MethodsForUnconstrainedConvexMinimization.TripleMomentumMethod
 import Examples.A_MethodsForUnconstrainedConvexMinimization.RobustMomentumMethod as inRMM
 import Examples.A_MethodsForUnconstrainedConvexMinimization.FastGradientMethod as inFGM
 import Examples.A_MethodsForUnconstrainedConvexMinimization.FastGradientMethod_StronglyConvex as instrFGM
+import Examples.B_MethodsForCompositeConvexMinimization.FastProximalGradientMethod as inFPGM
 
 import numpy as np
 
@@ -112,7 +113,7 @@ print('Timing:', end - start, '[s]')
 
 
 L, mu, n= 1,.1,1
-lam = 1
+lam = .5
 
 start = time.time()
 
@@ -120,18 +121,22 @@ wc = inRMM.wc_rmm(mu=mu, L=L, lam=lam)
 end = time.time()
 print('Timing:', end - start, '[s]')
 
-for n_i in [1,2,4, 8, 16]:
-
-    mu,L,n=0, 1, n_i
-    print('n  is', n)
-    start = time.time()
-    wc,theory = inFGM.wc_fgm(mu,L, n)
-    end = time.time()
-    print('Timing:', end - start, '[s]')
+mu,L,n=0, 1, 10
+start = time.time()
+wc,theory = inFGM.wc_fgm(mu,L, n)
+end = time.time()
+print('Timing:', end - start, '[s]')
 
 L, mu, n = 1,.1,5
 
 start = time.time()
 wc, theory = instrFGM.wc_fgm(mu=mu, L=L, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+
+mu,L,n=0, 1, 5
+start = time.time()
+wc,theory = inFPGM.wc_fgm(mu,L, n)
 end = time.time()
 print('Timing:', end - start, '[s]')

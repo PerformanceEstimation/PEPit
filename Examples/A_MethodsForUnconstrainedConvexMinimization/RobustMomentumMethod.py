@@ -73,16 +73,14 @@ def wc_rmm(mu, L, lam):
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
-    theory0 = (1 - 1/np.sqrt(kappa))**2
-    theory1 = (1 - 1 / kappa) ** 2
+    theory = rho**2
     print('*** Example file: worst-case performance of the Robust Momentum Method (RMM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
-    print('\tTheoretical guarantee for lam = 0. :\t f(y_n)-f_* <= ', theory0)
-    print('\tTheoretical guarantee for lam = 1. :\t f(y_n)-f_* <= ', theory1)
+    print('\tTheoretical guarantee :\t f(y_n)-f_* <= ', theory)
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
 
     # Return the rate of the evaluated method
-    return wc
+    return wc, theory
 
 
 if __name__ == "__main__":
