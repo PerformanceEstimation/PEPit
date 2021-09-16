@@ -146,24 +146,36 @@ class PEP(object):
         F = cp.Variable((Expression.counter,))
         G = cp.Variable((Point.counter, Point.counter), PSD=True)
 
+        print('(PEP-it) Setting up the problem: size of the main PSD matrix: ', Point.counter, ' x ', Point.counter)
+
         # Express the constraints from F, G and objective
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         constraints_list = list()
         for performance_metric in self.list_of_performance_metrics:
             constraints_list.append(objective <= self.expression_to_cvxpy(performance_metric, F, G))
+        print('(PEP-it) Setting up the problem: performance measure (done, performance measure is minimum of', len(self.list_of_performance_metrics), 'elements)')
         for condition in self.list_of_conditions:
             constraints_list.append(self.expression_to_cvxpy(condition, F, G) <= 0)
+        print('(PEP-it) Setting up the problem: initial conditions (done,', len(self.list_of_performance_metrics), 'constraint(s) added)')
+
+        print('(PEP-it) Setting up the problem: interpolation conditions for', len(self.list_of_functions), 'functions')
+        function_counter = 0
         for function in self.list_of_functions:
             function.add_class_constraints()
+            function_counter += 1
             for constraint in function.list_of_constraints:
                 constraints_list.append(self.expression_to_cvxpy(constraint, F, G) <= 0)
+            print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
 
         # Create the cvxpy problem
+
         prob = cp.Problem(objective=cp.Maximize(objective), constraints=constraints_list)
 
+        print('(PEP-it) Calling SDP solver')
         # Solve it
         prob.solve(solver=solver)
+        print('(PEP-it) Solver status:', prob.status, '(solver:',')')
 
         # Store all the values of points and function values
         self.eval_points_and_function_values(F.value, G.value)
