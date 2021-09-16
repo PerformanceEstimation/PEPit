@@ -41,7 +41,7 @@ def wc_fgm(mu, L, n):
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition(func.value(x0)- fs + + mu/2 * (x0 - xs) ** 2 <= 1)
+    problem.set_initial_condition(func.value(x0) - fs + mu/2 * (x0 - xs) ** 2 <= 1)
 
     # Run the GD method
     kappa = mu/L
@@ -50,10 +50,10 @@ def wc_fgm(mu, L, n):
     for i in range(n):
         x_old = x_new
         x_new = y - 1/L * func.gradient(y)
-        y = x_new + (1-sqrt(kappa))/(1+sqrt(kappa))* (x_new-x_old)
+        y = x_new + (1-sqrt(kappa))/(1+sqrt(kappa)) * (x_new-x_old)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func.value(x_new) - fs)
+    problem.set_performance_metric(func.value(x_new) - fs )
 
     # Solve the PEP
     wc = problem.solve()

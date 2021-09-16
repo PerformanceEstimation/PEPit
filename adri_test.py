@@ -5,6 +5,12 @@ import Examples.A_MethodsForUnconstrainedConvexMinimization.ConjugateGradientMet
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradientExactLineSearch as inELS
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactGradient as inGD
 import Examples.A_MethodsForUnconstrainedConvexMinimization.InexactAcceleratedGradient as inAGM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.HeavyBallMethod as inHBM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.FastProximalPoint as inFPM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.TripleMomentumMethod as inTMM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.RobustMomentumMethod as inRMM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.FastGradientMethod as inFGM
+import Examples.A_MethodsForUnconstrainedConvexMinimization.FastGradientMethod_StronglyConvex as instrFGM
 
 import numpy as np
 
@@ -74,3 +80,58 @@ wc,theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n)
 end = time.time()
 print('Timing:', end - start, '[s]')
 
+mu = 0.1
+L = 1.
+alpha = 4*L/(np.sqrt(L)+np.sqrt(mu))**2
+beta = ((np.sqrt(L)-np.sqrt(mu))/(np.sqrt(L)+np.sqrt(mu)))**2
+n = 3
+
+start = time.time()
+
+wc = inHBM.wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+A0, n = 1,3
+gammas = [1, 1, 1]
+
+start = time.time()
+
+wc = inFPM.wc_fppa(A0=A0,gammas=gammas,n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+
+L, mu, n = 1,.1,1
+
+start = time.time()
+
+wc = inTMM.wc_tmm(mu=mu, L=L, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+
+L, mu, n= 1,.1,1
+lam = 1
+
+start = time.time()
+
+wc = inRMM.wc_rmm(mu=mu, L=L, lam=lam)
+end = time.time()
+print('Timing:', end - start, '[s]')
+
+for n_i in [1,2,4, 8, 16]:
+
+    mu,L,n=0, 1, n_i
+    print('n  is', n)
+    start = time.time()
+    wc,theory = inFGM.wc_fgm(mu,L, n)
+    end = time.time()
+    print('Timing:', end - start, '[s]')
+
+L, mu, n = 1,.1,5
+
+start = time.time()
+wc, theory = instrFGM.wc_fgm(mu=mu, L=L, n=n)
+end = time.time()
+print('Timing:', end - start, '[s]')

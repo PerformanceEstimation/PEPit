@@ -48,26 +48,23 @@ def wc_fgm(mu, L, n):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run the GD method
-    theta_new = 1
     x_new = x0
     y = x0
     for i in range(n):
-        theta_old = theta_new
         x_old = x_new
         x_new = y - 1/L * func.gradient(y)
-        theta_new = (1 + sqrt(1+4*theta_old**2))/2
-        y = x_new + (theta_old - 1)/theta_new * (x_new-x_old)
+        y = x_new + i/(i+3) * (x_new-x_old)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func.value(y) - fs)
+    problem.set_performance_metric(func.value(x_new) - fs)
 
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
     if mu==0:
-        theory = 2*L / (n**2+7*n+4) # see [2], Table 1, column 2
+        theory = 2*L / (n**2+5*n+6) # tight, see [2], Table 1 (column 1, line 1)
     else:
-        theory = 0
+        theory = 2*L / (n**2+5*n+6) # not tight (bound for smooth convex functions)
         print('Warning: momentum is tuned for non-strongly convex functions.')
 
     print('*** Example file: worst-case performance of the Fast Gradient Method (FGM) in function values***')
