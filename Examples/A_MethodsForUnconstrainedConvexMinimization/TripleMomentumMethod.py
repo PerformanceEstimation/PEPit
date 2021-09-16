@@ -59,8 +59,8 @@ def wc_tmm(mu, L, n):
 
     for _ in range(n+1):
         x_inter = (1+beta) * x_new - beta * x_old - alpha * func.gradient(y)
-        y = (1+gamma) * x_new - gamma * x_old
-        x = (1+delta) * x_new - delta * x_old
+        y = (1+gamma) * x_inter - gamma * x_new
+        x = (1+delta) * x_inter - delta * x_new
         x_new, x_old = x_inter, x_new
 
     # Set the performance metric to the final distance to optimum
@@ -70,7 +70,7 @@ def wc_tmm(mu, L, n):
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
-    theory = rho**(2*n) * L / 2 * kappa
+    theory = rho**(2*(n+1)) * L / 2 * kappa
     print('*** Example file: worst-case performance of the triple momentum method (TMM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
     print('\tTheoretical guarantee for L/mu large :\t f(y_n)-f_* <= ', theory)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     mu = 0.1
     L = 1.
-    n = 1
+    n = 4
 
     rate = wc_tmm(mu=mu,
                   L=L,
