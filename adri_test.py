@@ -113,7 +113,7 @@ print('Timing:', end - start, '[s]')
 
 
 L, mu, n= 1,.1,1
-lam = 1
+lam = .5
 
 start = time.time()
 
