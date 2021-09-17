@@ -1,4 +1,4 @@
-from PEPit.Function_classes.strong_cvx_smooth_function import StrongCvxSmoothFunction
+from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
 class SmoothConvexFunction(SmoothStronglyConvexFunction):
