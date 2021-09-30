@@ -81,6 +81,9 @@ target/
 profile_default/
 ipython_config.py
 
+# MacOS files
+.DS_Store
+
 # pyenv
 .python-version
 
