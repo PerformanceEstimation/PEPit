@@ -81,6 +81,9 @@ target/
 profile_default/
 ipython_config.py
 
+# intellij configs
+.idea/
+
 # MacOS files
 .DS_Store
 
