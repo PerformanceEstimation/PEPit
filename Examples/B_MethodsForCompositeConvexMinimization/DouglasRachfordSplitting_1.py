@@ -3,6 +3,7 @@ from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStrongl
 from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
+
 def wc_drs(mu, L, alpha, theta, n):
     """
     In this example, we use a Douglas-Rachford splitting (DRS)
@@ -42,13 +43,12 @@ def wc_drs(mu, L, alpha, theta, n):
     :return:
     """
 
-
     # Instantiate PEP
     problem = PEP()
 
     # Declare a convex lipschitz function
     func1 = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+                                     {'mu': mu, 'L': L})
     func2 = problem.declare_function(ConvexFunction, {})
     func = func1 + func2
 
@@ -62,14 +62,14 @@ def wc_drs(mu, L, alpha, theta, n):
     f0 = func.value(x0)
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition((x0 - x0p)**2 <= 1)
+    problem.set_initial_condition((x0 - x0p) ** 2 <= 1)
 
     # Compute trajectory starting from x0
     w = x0
     for _ in range(n):
         x, _, _ = proximal_step(w, func2, alpha)
         y, _, _ = proximal_step(2 * x - w, func1, alpha)
-        w = w + theta * (y-x)
+        w = w + theta * (y - x)
 
     # Compute trajectory starting from x0p
     wp = x0p
@@ -79,14 +79,14 @@ def wc_drs(mu, L, alpha, theta, n):
         wp = wp + theta * (yp - xp)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric((w - wp)**2)
+    problem.set_performance_metric((w - wp) ** 2)
 
     # Solve the PEP
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
     # when theta = 1
-    theory = (max(1/(1+mu*alpha), alpha*1/(1+alpha*L)))**(2*n)
+    theory = (max(1 / (1 + mu * alpha), alpha * 1 / (1 + alpha * L))) ** (2 * n)
     print('*** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***')
     print('\tPEP-it guarantee:\t||w^2_n - w^1_n||^2 <= ', wc)
     print('\tTheoretical guarantee :\t|w^2_n - w^1_n||^2 <= ', theory)
@@ -97,16 +97,15 @@ def wc_drs(mu, L, alpha, theta, n):
 
 
 if __name__ == "__main__":
-
     mu = 0.1
     L = 1.
-    ## Test scheme parameters
+    # Test scheme parameters
     alpha = 3
     theta = 1
     n = 2
 
     rate = wc_drs(mu=mu,
-                    L=L,
-                    alpha=alpha,
-                    theta=theta,
-                    n=n)
+                  L=L,
+                  alpha=alpha,
+                  theta=theta,
+                  n=n)

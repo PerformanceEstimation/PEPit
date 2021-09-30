@@ -30,7 +30,6 @@ def wc_heavyball(mu, L, alpha, beta, n):
     :return:
     """
 
-
     # Instantiate PEP
     problem = PEP()
 
@@ -52,21 +51,21 @@ def wc_heavyball(mu, L, alpha, beta, n):
     # Run the heavy ball method
     x_old = x0
     g_old = func.gradient(x_old)
-    x_new = x_old - alpha*g_old
+    x_new = x_old - alpha * g_old
     g_new, f_new = func.oracle(x_new)
 
     for _ in range(n):
-        x_new, x_old = x_new - alpha*g_new + beta*(x_new - x_old), x_new
+        x_new, x_old = x_new - alpha * g_new + beta * (x_new - x_old), x_new
         g_new, f_new = func.oracle(x_new)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(f_new-fs)
+    problem.set_performance_metric(f_new - fs)
 
     # Solve the PEP
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
-    theory = (1 - alpha*mu)**(n+1)
+    theory = (1 - alpha * mu) ** (n + 1)
     print('*** Example file: worst-case performance of the heavy-ball method (HBM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
     print('\tTheoretical upper bound for differentiable functions:\t f(y_n)-f_* <= ', theory)
@@ -77,17 +76,16 @@ def wc_heavyball(mu, L, alpha, beta, n):
 
 
 if __name__ == "__main__":
-
     mu = 0.1
     L = 1.
     ## Test scheme parameters
 
     ## Optimal parameters for twice differentiable functions
-    #alpha = 4*L/(np.sqrt(L)+np.sqrt(mu))**2
-    #beta = ((np.sqrt(L)-np.sqrt(mu))/(np.sqrt(L)+np.sqrt(mu)))**2
+    # alpha = 4*L/(np.sqrt(L)+np.sqrt(mu))**2
+    # beta = ((np.sqrt(L)-np.sqrt(mu))/(np.sqrt(L)+np.sqrt(mu)))**2
     ## Optimal parameters for differentiable functions
-    alpha = mu/L # alpha \in [0, 1/L]
-    beta = np.sqrt((1- alpha*mu)*(1-L*alpha))
+    alpha = mu / L  # alpha \in [0, 1/L]
+    beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
     n = 1
 
     rate = wc_heavyball(mu=mu,

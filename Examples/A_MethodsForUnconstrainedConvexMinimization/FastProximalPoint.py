@@ -57,15 +57,15 @@ def wc_fppa(A0, gammas, n):
 
     # Run the GD method
     x = x0
-    v = x0 # second sequence of iterates
+    v = x0  # second sequence of iterates
     A = A0
 
     for i in range(n):
-        alpha = (np.sqrt((A*gammas[i])**2 + 4*A*gammas[i]) - A*gammas[i])/2
-        y = (1-alpha)*x + alpha*v
+        alpha = (np.sqrt((A * gammas[i]) ** 2 + 4 * A * gammas[i]) - A * gammas[i]) / 2
+        y = (1 - alpha) * x + alpha * v
         x, _, _ = proximal_step(y, func, gammas[i])
-        v = v + 1/alpha*(x-y)
-        A = (1-alpha)*A
+        v = v + 1 / alpha * (x - y)
+        A = (1 - alpha) * A
 
     # Set the performance metric to the final distance to optimum
     problem.set_performance_metric(func.value(x) - fs)
@@ -78,10 +78,10 @@ def wc_fppa(A0, gammas, n):
     accumulation = 0
     for i in range(n):
         accumulation += np.sqrt(gammas[i])
-    theory = 4 / A0 / accumulation**2
+    theory = 4 / A0 / accumulation ** 2
 
     print('*** Example file: worst-case performance of the fast proximal point in function values ***')
-    print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
+    print('\tPEP-it guarantee:\t\t\t\t f(y_n)-f_* <= ', wc)
     print('\tTheoretical upper guarantee:\t f(y_n)-f_* <= ', theory)
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return wc
@@ -90,7 +90,6 @@ def wc_fppa(A0, gammas, n):
 if __name__ == "__main__":
     n = 3
     A0 = 5
-    gammas = [(i+1)/1.1 for i in range(n)]
+    gammas = [(i + 1) / 1.1 for i in range(n)]
 
-    rate = wc_fppa(A0, gammas, n)
-
+    wc = wc_fppa(A0, gammas, n)

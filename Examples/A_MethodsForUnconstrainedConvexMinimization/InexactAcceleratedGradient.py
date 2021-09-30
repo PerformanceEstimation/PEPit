@@ -1,5 +1,5 @@
 from PEPit.pep import PEP
-from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 from PEPit.Primitive_steps.inexactgradient import inexactgradient
 
 
@@ -30,7 +30,7 @@ def wc_InexactAGM(L, epsilon, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, {'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()

@@ -40,21 +40,21 @@ def wc_subgd(M, N, gamma):
 
     # Run the subgradient method
     x = x0
-    gx,fx = func.oracle(x)
+    gx, fx = func.oracle(x)
 
     for _ in range(N):
         problem.set_performance_metric(fx - fs)
         x = x - gamma * gx
-        gx,fx = func.oracle(x)
+        gx, fx = func.oracle(x)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(fx-fs)
+    problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
-    theory = M/np.sqrt(N+1)
+    theory = M / np.sqrt(N + 1)
 
     print('*** Example file: worst-case performance of the subgradient gradient method in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
@@ -66,10 +66,9 @@ def wc_subgd(M, N, gamma):
 
 
 if __name__ == "__main__":
-
     M = 2
     N = 6
-    gamma = 1/(np.sqrt(N+1)*M)
+    gamma = 1 / (np.sqrt(N + 1) * M)
 
     rate = wc_subgd(M=M,
                     N=N,

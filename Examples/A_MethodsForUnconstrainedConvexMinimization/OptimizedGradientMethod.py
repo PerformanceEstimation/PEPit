@@ -1,6 +1,7 @@
+from math import sqrt
+
 from PEPit.pep import PEP
-from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from numpy import sqrt
+from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 
 
 def wc_ogm(L, n):
@@ -33,7 +34,7 @@ def wc_ogm(L, n):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, {'mu': 0, 'L': L})
 
     # Start by defining an optimal point
     xs = func.optimal_point()
@@ -54,9 +55,9 @@ def wc_ogm(L, n):
         x_new = y - 1 / L * func.gradient(y)
         theta_old = theta_new
         if i < n - 1:
-            theta_new =  (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
+            theta_new = (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
         else:
-            theta_new =  (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
+            theta_new = (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
 
         y = x_new + (theta_old - 1) / theta_new * (x_new - x_old) + theta_old / theta_new * (x_new - y)
 
@@ -66,7 +67,7 @@ def wc_ogm(L, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = L/2/theta_new**2
+    theory = L / 2 / theta_new ** 2
 
     print('*** Example file: worst-case performance of the optimized gradient method (OGM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
@@ -79,7 +80,7 @@ if __name__ == "__main__":
     n = 2
     L = 1
 
-    wc,theory = wc_ogm(L=L, n=n)
+    wc, theory = wc_ogm(L=L, n=n)
 
     print('{}'.format(wc))
     print('{}'.format(theory))

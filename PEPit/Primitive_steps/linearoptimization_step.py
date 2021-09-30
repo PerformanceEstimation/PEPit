@@ -1,6 +1,7 @@
 from PEPit.point import Point
 from PEPit.expression import Expression
 
+
 def linearoptimization_step(dir, ind):
     """
     This routine performs a linear optimization step with objective function
@@ -14,7 +15,7 @@ def linearoptimization_step(dir, ind):
 
     gx = -dir
     x = Point()
-    fx = Expression()# function value
+    fx = Expression()  # function value
     ind.add_point((x, gx, fx))
 
     return x, gx, fx

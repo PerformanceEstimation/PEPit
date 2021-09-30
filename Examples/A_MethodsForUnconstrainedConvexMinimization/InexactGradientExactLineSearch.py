@@ -51,7 +51,7 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n):
     g0, f0 = func.oracle(x0)
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( f0 - fs <= 1)
+    problem.set_initial_condition(f0 - fs <= 1)
 
     # Run the GD method with ELS
     x = x0
@@ -65,9 +65,9 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    Leps = (1+epsilon) * L
-    meps = (1-epsilon) * mu
-    theory = ((Leps-meps)/(Leps+meps))**(2*n)
+    Leps = (1 + epsilon) * L
+    meps = (1 - epsilon) * mu
+    theory = ((Leps - meps) / (Leps + meps)) ** (2 * n)
 
     print('*** Example file: worst-case performance of inexact gradient descent with exact linesearch (ELS) ***')
     print('\tPEP-it guarantee:\t f(x_n)-f_* <= ', wc)
@@ -79,10 +79,10 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n):
 if __name__ == "__main__":
     n = 2
     L = 1
-    mu= .1
+    mu = .1
     epsilon = .1
 
-    wc,theory = wc_InexactGrad_ELS(L=L, mu=mu, epsilon=epsilon, n=n)
+    wc, theory = wc_InexactGrad_ELS(L=L, mu=mu, epsilon=epsilon, n=n)
 
     print('{}'.format(wc))
     print('{}'.format(theory))

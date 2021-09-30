@@ -1,5 +1,5 @@
 from PEPit.pep import PEP
-from PEPit.Function_classes.cvx_function import CvxFunction
+from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
 
@@ -28,9 +28,9 @@ def wc_ppa(gamma, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    f1 = problem.declare_function(CvxFunction,{})
-    #f2 = problem.declare_function(CvxFunction,{})
-    func = 2*f1
+    f1 = problem.declare_function(ConvexFunction, {})
+    # f2 = problem.declare_function(CvxFunction,{})
+    func = 2 * f1
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()
@@ -45,10 +45,10 @@ def wc_ppa(gamma, n):
     # Run the GD method
     x = x0
     for _ in range(n):
-        x,_,fx = proximal_step(x,func,gamma)
+        x, _, fx = proximal_step(x, func, gamma)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(fx-fs)
+    problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
     wc = problem.solve()
@@ -59,7 +59,6 @@ def wc_ppa(gamma, n):
 
 
 if __name__ == "__main__":
-
     n = 2
     gamma = 1
 
