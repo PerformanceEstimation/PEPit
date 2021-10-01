@@ -168,7 +168,7 @@ class PEP(object):
             constraints_list.append(self.expression_to_cvxpy(condition, F, G) <= 0)
         if verbose:
             print('(PEP-it) Setting up the problem:'
-                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_performance_metrics)))
+                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
 
         # Defining class constraints
         if verbose:
