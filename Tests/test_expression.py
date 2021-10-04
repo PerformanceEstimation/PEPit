@@ -3,6 +3,7 @@ import unittest
 
 from PEPit.point import Point
 from PEPit.expression import Expression
+from PEPit.constraint import Constraint
 
 
 class TestPoint(unittest.TestCase):
@@ -45,8 +46,8 @@ class TestPoint(unittest.TestCase):
 
         constraint = self.inner_product <= self.function_value
 
-        self.assertIsInstance(constraint, Expression)
-        self.assertEqual(constraint.decomposition_dict, (self.inner_product - self.function_value).decomposition_dict)
+        self.assertIsInstance(constraint, Constraint)
+        self.assertEqual(constraint.expression.decomposition_dict, (self.inner_product - self.function_value).decomposition_dict)
 
     def tearDown(self):
 

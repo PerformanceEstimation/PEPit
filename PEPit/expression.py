@@ -3,6 +3,8 @@ import numpy as np
 
 from PEPit.Tools.dict_operations import merge_dict
 
+from PEPit.constraint import Constraint
+
 
 class Expression(object):
     """
@@ -132,7 +134,7 @@ class Expression(object):
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
 
-        return self - other
+        return Constraint(self - other, equality_or_inequality='inequality')
 
     def __lt__(self, other):
         """
@@ -156,7 +158,7 @@ class Expression(object):
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
 
-        return other - self
+        return other <= self
 
     def __gt__(self, other):
         """
