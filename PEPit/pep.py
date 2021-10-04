@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import cvxpy as cp
 
@@ -231,8 +233,10 @@ class PEP(object):
         eig_val, eig_vec = np.linalg.eig(G_value)
 
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
-        assert np.min(eig_val) >= - 10**-4
-        eig_val = np.maximum(eig_val, 0)
+        if np.min(eig_val) < 0:
+            warnings.warn("Not all the eigenvalues of the Gram matrix are nonnegative: the smallest is equal to {:.3}. "
+                          "The negative ones are replaced by 0.".format(np.min(eig_val)))
+            eig_val = np.maximum(eig_val, 0)
 
         # Extracts points values
         points_values = np.linalg.qr((np.sqrt(eig_val) * eig_vec).T, mode='r')
