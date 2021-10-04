@@ -174,7 +174,16 @@ class Expression(object):
         warnings.warn("Strict constraints will lead to the same solution as under soft constraints")
         return self.__ge__(other=other)
 
-    ## TODO define __eq__. Currently it raises an error.
+    # TODO define __eq__. Currently it raises an error.
+    # def __eq__(self, other):
+    #     """
+    #     Create a null expression from an equality
+    #
+    #     :param other: (Expression of int or float)
+    #     :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+    #     """
+    #
+    #     return Constraint(self - other, equality_or_inequality='equality')
 
     def eval(self):
         """
