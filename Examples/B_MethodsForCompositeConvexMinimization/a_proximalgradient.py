@@ -45,7 +45,7 @@ def wc_pgd(L, mu, gamma, n):
         x, _, _ = proximal_step(y, f2, gamma)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric((x - xs)**2)
+    problem.set_performance_metric((x - xs) ** 2)
 
     # Solve the PEP
     wc = problem.solve()

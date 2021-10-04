@@ -6,11 +6,11 @@ def inexactgradient(x0, f, epsilon, notion='absolute'):
      TODO: CANEVAS DESCRIPTION DE CE QU'on FAIT
 
 
-        :param x0:
-        :param f:
-        :param epsilon:
-        :param notion:
-        :return:
+    :param x0:
+    :param f:
+    :param epsilon:
+    :param notion:
+    :return:
     """
     gx, fx = f.oracle(x0)
     gxeps = Point()

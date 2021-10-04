@@ -1,6 +1,5 @@
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.Primitive_steps.exactlinesearch_step import exactlinesearch_step
 from PEPit.Primitive_steps.inexactgradient import inexactgradient
 
 
@@ -51,13 +50,12 @@ def wc_InexactGrad(L, mu, epsilon, n):
     d0, f0 = inexactgradient(x0, func, epsilon, notion='relative')
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( f0 - fs <= 1)
-
+    problem.set_initial_condition(f0 - fs <= 1)
 
     # Run the GD method
-    Leps = (1+epsilon) * L
-    meps = (1-epsilon) * mu
-    gamma = 2/(Leps+meps)
+    Leps = (1 + epsilon) * L
+    meps = (1 - epsilon) * mu
+    gamma = 2 / (Leps + meps)
     x = x0
     dx = d0
     for i in range(n):
@@ -70,7 +68,7 @@ def wc_InexactGrad(L, mu, epsilon, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    theory = ((Leps-meps)/(Leps+meps))**(2*n)
+    theory = ((Leps - meps) / (Leps + meps)) ** (2 * n)
 
     print('*** Example file: worst-case performance of inexact gradient descent ***')
     print('\tPEP-it guarantee:\t f(x_n)-f_* <= ', wc)
@@ -82,10 +80,10 @@ def wc_InexactGrad(L, mu, epsilon, n):
 if __name__ == "__main__":
     n = 2
     L = 1
-    mu= .1
+    mu = .1
     epsilon = .1
 
-    wc,theory = wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n)
+    wc, theory = wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n)
 
     print('{}'.format(wc))
     print('{}'.format(theory))

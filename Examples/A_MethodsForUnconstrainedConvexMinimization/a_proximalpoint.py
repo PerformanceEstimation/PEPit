@@ -28,7 +28,7 @@ def wc_ppa(gamma, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(ConvexFunction,{})
+    func = problem.declare_function(ConvexFunction, dict())
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()
@@ -43,10 +43,10 @@ def wc_ppa(gamma, n):
     # Run the GD method
     x = x0
     for _ in range(n):
-        x,_,fx = proximal_step(x,func,gamma)
+        x, _, fx = proximal_step(x, func, gamma)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(fx-fs)
+    problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
     wc = problem.solve()
@@ -57,7 +57,6 @@ def wc_ppa(gamma, n):
 
 
 if __name__ == "__main__":
-
     n = 2
     gamma = 1
 

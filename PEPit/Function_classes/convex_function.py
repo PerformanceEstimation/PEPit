@@ -10,7 +10,7 @@ class ConvexFunction(Function):
                  _,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):
+                 is_differentiable=False):
         """
         Class of convex functions.
         It does not need any additional parameter.

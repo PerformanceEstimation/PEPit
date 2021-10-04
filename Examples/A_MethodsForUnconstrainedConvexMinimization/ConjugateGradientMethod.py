@@ -1,7 +1,8 @@
+from math import sqrt
+
 from PEPit.pep import PEP
-from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 from PEPit.Primitive_steps.exactlinesearch_step import exactlinesearch_step
-from numpy import sqrt
 
 
 def wc_CG(L, n):
@@ -32,7 +33,7 @@ def wc_CG(L, n):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, {'L': L})
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()
@@ -42,32 +43,31 @@ def wc_CG(L, n):
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( (x0-xs)**2 <= 1)
+    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run the GD method with ELS
     x_new = x0
-    g0,f0 = func.oracle(x0)
-    span = [g0] # list of search directions
+    g0, f0 = func.oracle(x0)
+    span = [g0]  # list of search directions
     for i in range(n):
         x_old = x_new
-        x_new,gx,fx = exactlinesearch_step(x_new,func,span)
+        x_new, gx, fx = exactlinesearch_step(x_new, func, span)
         span.append(gx)
-        span.append(x_old-x_new)
+        span.append(x_old - x_new)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(fx- fs)
+    problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
     theta_new = 1
     for i in range(n):
-        theta_old = theta_new
         if i < n - 1:
-            theta_new =  (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
+            theta_new = (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
         else:
-            theta_new =  (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
-    theory = L/2/theta_new**2
+            theta_new = (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
+    theory = L / 2 / theta_new ** 2
 
     print('*** Example file: worst-case performance of conjugate gradient (CG) with exact span searches ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
@@ -79,7 +79,4 @@ def wc_CG(L, n):
 if __name__ == "__main__":
     n = 2
     L = 1
-    wc,theory = wc_CG(L=L, n=n)
-
-    print('{}'.format(wc))
-    print('{}'.format(theory))
+    wc, theory = wc_CG(L=L, n=n)

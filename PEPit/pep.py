@@ -138,6 +138,8 @@ class PEP(object):
         Solve the PEP
 
         :param solver: (str) the name of the underlying solver.
+        :param verbose: (int) Level of information details to print (0 or 1)
+
         :return: (float) value of the performance metric
         """
 
@@ -145,42 +147,55 @@ class PEP(object):
         objective = cp.Variable((1,))
         F = cp.Variable((Expression.counter,))
         G = cp.Variable((Point.counter, Point.counter), PSD=True)
-
-        print('(PEP-it) Setting up the problem: size of the main PSD matrix: ', Point.counter, ' x ', Point.counter)
+        if verbose:
+            print('(PEP-it) Setting up the problem:'
+                  ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
 
         # Express the constraints from F, G and objective
+        constraints_list = list()
+
+        # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
-        constraints_list = list()
         for performance_metric in self.list_of_performance_metrics:
             constraints_list.append(objective <= self.expression_to_cvxpy(performance_metric, F, G))
-        if verbose == 1:
-            print('(PEP-it) Setting up the problem: performance measure (done, performance measure is minimum of', len(self.list_of_performance_metrics), 'element(s))')
+        if verbose:
+            print('(PEP-it) Setting up the problem:'
+                  ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
+
+        # Defining initial conditions
         for condition in self.list_of_conditions:
             constraints_list.append(self.expression_to_cvxpy(condition, F, G) <= 0)
-        if verbose == 1:
-            print('(PEP-it) Setting up the problem: initial conditions (done,', len(self.list_of_performance_metrics), 'constraint(s) added)')
-            print('(PEP-it) Setting up the problem: interpolation conditions for', len(self.list_of_functions), 'function(s)')
+        if verbose:
+            print('(PEP-it) Setting up the problem:'
+                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
+
+        # Defining class constraints
+        if verbose:
+            print('(PEP-it) Setting up the problem:'
+                  ' interpolation conditions for {} function(s)'.format(len(self.list_of_functions)))
         function_counter = 0
         for function in self.list_of_functions:
             function.add_class_constraints()
             function_counter += 1
             for constraint in function.list_of_constraints:
                 constraints_list.append(self.expression_to_cvxpy(constraint, F, G) <= 0)
-            if verbose == 1:
+            if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
 
         # Create the cvxpy problem
-
+        if verbose:
+            print('(PEP-it) Compiling SDP')
         prob = cp.Problem(objective=cp.Maximize(objective), constraints=constraints_list)
 
-        if verbose == 1:
-            print('(PEP-it) Calling SDP solver')
         # Solve it
+        if verbose:
+            print('(PEP-it) Calling SDP solver')
         prob.solve(solver=solver)
-        if verbose == 1:
-            sname = prob.solver_stats.solver_name
-            print('(PEP-it) Solver status:', prob.status, '(solver:', sname, '); optimal value:', prob.value)
+        if verbose:
+            print('(PEP-it) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
+                                                                                      prob.solver_stats.solver_name,
+                                                                                      prob.value))
 
         # Store all the values of points and function values
         self.eval_points_and_function_values(F.value, G.value)

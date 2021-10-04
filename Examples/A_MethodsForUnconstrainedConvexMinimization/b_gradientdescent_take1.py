@@ -41,7 +41,7 @@ def wc_gd(mu, L, gamma, n):
         x = x - gamma * func.gradient(x)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(func.value(x)-fs)
+    problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
     wc = problem.solve()
@@ -51,11 +51,10 @@ def wc_gd(mu, L, gamma, n):
 
 
 if __name__ == "__main__":
-
     n = 2
     mu = 0
     L = 1
 
-    rate = rate_gd(mu=mu, L=L, gamma=1/L, n=n)
+    wc = wc_gd(mu=mu, L=L, gamma=1 / L, n=n)
 
-    print('{}'.format(rate))
+    print('{}'.format(wc))

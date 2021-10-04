@@ -22,7 +22,6 @@ def wc_rmm(mu, L, lam):
     :return:
     """
 
-
     # Instantiate PEP
     problem = PEP()
 
@@ -39,30 +38,30 @@ def wc_rmm(mu, L, lam):
     x1 = problem.set_initial_point()
 
     # algorithmic parameters
-    kappa = L/mu
-    rho = lam*(1 - 1 / kappa) + (1 - lam) * (1 - 1 / float(np.sqrt(kappa)))
-    alpha = kappa * (1 - rho)**2*(1 + rho)/L
-    beta = kappa * rho**3 / (kappa - 1)
-    gamma = rho**3 / ((kappa - 1) * (1 - rho)**2 * (1 + rho))
-    l = mu ** 2 * (kappa - kappa * rho**2 - 1) / (2 * rho * (1-rho))
-    nnu = (1 + rho) * (1 - kappa + 2 * kappa * rho - kappa * rho**2) / (2 * rho)
+    kappa = L / mu
+    rho = lam * (1 - 1 / kappa) + (1 - lam) * (1 - 1 / float(np.sqrt(kappa)))
+    alpha = kappa * (1 - rho) ** 2 * (1 + rho) / L
+    beta = kappa * rho ** 3 / (kappa - 1)
+    gamma = rho ** 3 / ((kappa - 1) * (1 - rho) ** 2 * (1 + rho))
+    l = mu ** 2 * (kappa - kappa * rho ** 2 - 1) / (2 * rho * (1 - rho))
+    nnu = (1 + rho) * (1 - kappa + 2 * kappa * rho - kappa * rho ** 2) / (2 * rho)
 
     # Run the robust momentum method
     y0 = x1 + gamma * (x1 - x0)
     g0, f0 = func.oracle(y0)
-    x2 = x1 + beta * (x1-x0) - alpha * g0
+    x2 = x1 + beta * (x1 - x0) - alpha * g0
     y1 = x2 + gamma * (x2 - x1)
     g1, f1 = func.oracle(y1)
     x3 = x2 + beta * (x2 - x1) - alpha * g1
 
-    z1 = (x2 - (rho**2) * x1) / (1 - rho**2)
-    z2 = (x3 - (rho**2) * x2) / (1 - rho**2)
+    z1 = (x2 - (rho ** 2) * x1) / (1 - rho ** 2)
+    z2 = (x3 - (rho ** 2) * x2) / (1 - rho ** 2)
 
     # Evaluation the lyapunov function at the first and second iteration
-    q0 = (L-mu)*(f0 - fs - mu/2*(y0-xs)**2) - 1/2*(g0 - mu*(y0-xs))**2
-    q1 = (L-mu)*(f1 - fs - mu/2*(y1-xs)**2) - 1/2*(g1 - mu*(y1-xs))**2
-    initLyapunov = l*(z1 - xs)**2 + q0
-    finalLyapunov = l*(z2 - xs)**2 + q1
+    q0 = (L - mu) * (f0 - fs - mu / 2 * (y0 - xs) ** 2) - 1 / 2 * (g0 - mu * (y0 - xs)) ** 2
+    q1 = (L - mu) * (f1 - fs - mu / 2 * (y1 - xs) ** 2) - 1 / 2 * (g1 - mu * (y1 - xs)) ** 2
+    initLyapunov = l * (z1 - xs) ** 2 + q0
+    finalLyapunov = l * (z2 - xs) ** 2 + q1
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition(initLyapunov <= 1)
 
@@ -73,7 +72,7 @@ def wc_rmm(mu, L, lam):
     wc = problem.solve()
 
     # Theoretical guarantee (for comparison)
-    theory = rho**2
+    theory = rho ** 2
     print('*** Example file: worst-case performance of the Robust Momentum Method (RMM) in function values ***')
     print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
     print('\tTheoretical guarantee :\t f(y_n)-f_* <= ', theory)
@@ -84,7 +83,6 @@ def wc_rmm(mu, L, lam):
 
 
 if __name__ == "__main__":
-
     mu = 0.1
     L = 1.
     lam = 0.2

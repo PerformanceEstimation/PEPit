@@ -2,15 +2,14 @@ from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
-
 def wc_fgm(mu, L, n):
     """
     Consider the convex minimization problem
         f_* = min_x f(x),
     where f is L-smooth and mu-strongly-convex.
 
-    This code computes a worst-case guarantee for the fast gradient method, a.k.a. accelerated gradient method. That is, it computes the
-    smallest possible tau(n,L) such that the guarantee
+    This code computes a worst-case guarantee for the fast gradient method, a.k.a. accelerated gradient method.
+    That is, it computes the smallest possible tau(n,L) such that the guarantee
         f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
     is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
 
@@ -52,8 +51,8 @@ def wc_fgm(mu, L, n):
     y = x0
     for i in range(n):
         x_old = x_new
-        x_new = y - 1/L * func.gradient(y)
-        y = x_new + i/(i+3) * (x_new-x_old)
+        x_new = y - 1 / L * func.gradient(y)
+        y = x_new + i / (i + 3) * (x_new - x_old)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric(func.value(x_new) - fs)
@@ -61,10 +60,10 @@ def wc_fgm(mu, L, n):
     # Solve the PEP
     wc = problem.solve()
     # Theoretical guarantee (for comparison)
-    if mu==0:
-        theory = 2*L / (n**2+5*n+6) # tight, see [2], Table 1 (column 1, line 1)
+    if mu == 0:
+        theory = 2 * L / (n ** 2 + 5 * n + 6)  # tight, see [2], Table 1 (column 1, line 1)
     else:
-        theory = 2*L / (n**2+5*n+6) # not tight (bound for smooth convex functions)
+        theory = 2 * L / (n ** 2 + 5 * n + 6)  # not tight (bound for smooth convex functions)
         print('Warning: momentum is tuned for non-strongly convex functions.')
 
     print('*** Example file: worst-case performance of the Fast Gradient Method (FGM) in function values***')
@@ -79,7 +78,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0
 
-    wc,theory = wc_fgm(mu=mu, L=L, n=n)
-
-    print('{}'.format(wc))
-    print('{}'.format(theory))
+    wc, theory = wc_fgm(mu=mu, L=L, n=n)
