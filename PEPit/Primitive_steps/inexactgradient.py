@@ -15,8 +15,8 @@ def inexactgradient(x0, f, epsilon, notion='absolute'):
     gx, fx = f.oracle(x0)
     gxeps = Point()
     if notion == 'absolute':
-        f.add_constraint( (gx-gxeps)**2 - epsilon**2)
+        f.add_constraint((gx-gxeps)**2 - epsilon**2 <= 0)
     elif notion == 'relative':
-        f.add_constraint( (gx-gxeps)**2 - epsilon**2*(gx**2))
+        f.add_constraint((gx-gxeps)**2 - epsilon**2*(gx**2) <= 0)
 
     return gxeps, fx

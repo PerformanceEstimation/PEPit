@@ -3,6 +3,7 @@ import cvxpy as cp
 
 from PEPit.point import Point
 from PEPit.expression import Expression
+from PEPit.constraint import Constraint
 from PEPit.function import Function
 
 
@@ -158,6 +159,7 @@ class PEP(object):
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
+            assert isinstance(performance_metric, Expression)
             constraints_list.append(objective <= self.expression_to_cvxpy(performance_metric, F, G))
         if verbose:
             print('(PEP-it) Setting up the problem:'
@@ -165,7 +167,14 @@ class PEP(object):
 
         # Defining initial conditions
         for condition in self.list_of_conditions:
-            constraints_list.append(self.expression_to_cvxpy(condition, F, G) <= 0)
+            assert isinstance(condition, Constraint)
+            if condition.equality_or_inequality == 'inequality':
+                constraints_list.append(self.expression_to_cvxpy(condition.expression, F, G) <= 0)
+            elif condition.equality_or_inequality == 'equality':
+                constraints_list.append(self.expression_to_cvxpy(condition.expression, F, G) == 0)
+            else:
+                raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
+                                 ' must either be \'equality\' or \'inequality\'.')
         if verbose:
             print('(PEP-it) Setting up the problem:'
                   ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
@@ -179,7 +188,14 @@ class PEP(object):
             function.add_class_constraints()
             function_counter += 1
             for constraint in function.list_of_constraints:
-                constraints_list.append(self.expression_to_cvxpy(constraint, F, G) <= 0)
+                assert isinstance(constraint, Constraint)
+                if constraint.equality_or_inequality == 'inequality':
+                    constraints_list.append(self.expression_to_cvxpy(constraint.expression, F, G) <= 0)
+                elif constraint.equality_or_inequality == 'equality':
+                    constraints_list.append(self.expression_to_cvxpy(constraint.expression, F, G) == 0)
+                else:
+                    raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
+                                     ' must either be \'equality\' or \'inequality\'.')
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
 
