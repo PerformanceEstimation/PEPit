@@ -4,7 +4,7 @@ from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
-def compute_rate_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_steps=False):
+def compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_steps=False):
     """
     Compute the rate of n steps of GD methods over strongly convex and smooth functions class.
     Computed either for optimized constant step size or optimized alternating one.
@@ -55,8 +55,11 @@ def compute_rate_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_steps=False)
     # Solve the PEP
     rate = problem.solve()
 
+    # Get the dual values, giving the proof
+    dual_values = [constraint.dual_variable_value for constraint in func.list_of_constraints]
+
     # Return the rate of the evaluated method
-    return rate
+    return rate, dual_values
 
 
 if __name__ == "__main__":
@@ -65,7 +68,6 @@ if __name__ == "__main__":
     mu = .1
     L = 1
 
-    rate = compute_rate_n_steps_gd_on_str_cvx_smooth(mu=mu, L=L, n=n, alternating_steps=False)
-    accelerated_rate = compute_rate_n_steps_gd_on_str_cvx_smooth(mu=mu, L=L, n=n, alternating_steps=True)
-
+    rate, _ = compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu=mu, L=L, n=n, alternating_steps=False)
+    accelerated_rate, _ = compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu=mu, L=L, n=n, alternating_steps=True)
     print('{} < {}'.format(accelerated_rate, rate))
