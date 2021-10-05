@@ -218,6 +218,9 @@ class PEP(object):
         # Store all the values of points and function values
         self.eval_points_and_function_values(F.value, G.value)
 
+        # Store all the dual values in constraints
+        self.eval_constraint_dual_values(prob.constraints)
+
         # Return the value of the minimal performance metric
         return prob.value
 
@@ -257,3 +260,35 @@ class PEP(object):
                         gradient.value = points_values[:, gradient.counter]
                     if function_value._is_function_value:
                         function_value.value = F_value[function_value.counter]
+
+    def eval_constraint_dual_values(self, cvx_constraints):
+        """
+        Store all dual values in appropriate constraints
+
+        :param cvx_constraints: (list) a list of cvxpy constraints
+        :return: (np.float) the position, in the list of performance metric, of the one that is actually reached
+        """
+
+        # Set counter
+        counter = len(self.list_of_performance_metrics)
+
+        # The dual variables associated to performance metric all have nonnegative values of sum 1.
+        # Generally, only 1 performance metric is used.
+        # Then its associated dual values is 1 while the others'associated dual values are 0.
+        performance_metric_dual_values = np.array([constraint.dual_value for constraint in cvx_constraints[:counter]])
+        performance_metric_dual_values = performance_metric_dual_values.reshape(-1)
+        position_of_minimal_objective = np.argmax(performance_metric_dual_values)
+
+        # Store all dual values of initial conditions (Generally the rate)
+        for condition in self.list_of_conditions:
+            condition.dual_variable_value = cvx_constraints[counter].dual_value
+            counter += 1
+
+        # Store all the class constraints dual values, providing the proof of the desired rate.
+        for function in self.list_of_functions:
+            for constraint in function.list_of_constraints:
+                constraint.dual_variable_value = cvx_constraints[counter].dual_value
+                counter += 1
+
+        # Return the position of the reached performance metric
+        return position_of_minimal_objective
