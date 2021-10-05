@@ -10,7 +10,7 @@ class ConvexLipschitzFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):
+                 is_differentiable=False):
         """
         Class of convex smooth functions.
         The differentiability is necessarily verified.
@@ -22,7 +22,7 @@ class ConvexLipschitzFunction(Function):
         # Inherit directly from Function.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=True)
+                         is_differentiable=is_differentiable)
 
         # param M
         self.M = param['M']
