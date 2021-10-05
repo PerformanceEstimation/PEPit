@@ -2,6 +2,7 @@ import numpy as np
 
 from PEPit.function import Function
 
+
 class ConvexIndicatorFunction(Function):
     """
     This routine implements the interpolation conditions for convex
@@ -34,11 +35,12 @@ class ConvexIndicatorFunction(Function):
     :param R:
     :return:
     """
+
     def __init__(self,
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):
+                 is_differentiable=True):  # TODO verifier la valeur par defaut de _is_differentiable
         """
         Class of smooth strongly convex functions.
         The differentiability is necessarily verified.
@@ -52,14 +54,15 @@ class ConvexIndicatorFunction(Function):
                          is_differentiable=True)
 
         # Store D ad R
-        self.D = param['D']# diameter
-        self.R = param['R']# radius
+        self.D = param['D']  # diameter
+        self.R = param['R']  # radius
 
     def add_class_constraints(self):
         """
         Add constraints of convex indicator functions
         """
 
+        # TODO verifier la pertinence de R
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -69,12 +72,11 @@ class ConvexIndicatorFunction(Function):
                 xj, gj, fj = point_j
 
                 if xi == xj:
-                    self.add_constraint(fi)
-                    self.add_constraint(-fi)
+                    self.add_constraint(fi == 0)
                     if self.R != np.inf:
-                        self.add_constraint(xi ** 2 - self.R ** 2)
+                        self.add_constraint(xi ** 2 <= self.R ** 2)
 
                 else:
-                    self.add_constraint(gi * (xj - xi))
+                    self.add_constraint(gi * (xj - xi) <= 0)
                     if self.D != np.inf:
-                        self.add_constraint((xi - xj)**2 - self.D**2)
+                        self.add_constraint((xi - xj) ** 2 <= self.D ** 2)
