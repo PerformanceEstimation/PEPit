@@ -76,8 +76,8 @@ print('Timing:', end - start, '[s]')
 
 mu = 0.1
 L = 1.
-alpha = 4 * L / (np.sqrt(L) + np.sqrt(mu)) ** 2
-beta = ((np.sqrt(L) - np.sqrt(mu)) / (np.sqrt(L) + np.sqrt(mu))) ** 2
+alpha = 1 / (2*L)  # alpha \in [0, 1/L]
+beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
 n = 3
 
 start = time.time()

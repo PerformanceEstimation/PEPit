@@ -80,11 +80,8 @@ if __name__ == "__main__":
     L = 1.
     ## Test scheme parameters
 
-    ## Optimal parameters for twice differentiable functions
-    # alpha = 4*L/(np.sqrt(L)+np.sqrt(mu))**2
-    # beta = ((np.sqrt(L)-np.sqrt(mu))/(np.sqrt(L)+np.sqrt(mu)))**2
     ## Optimal parameters for differentiable functions
-    alpha = mu / L  # alpha \in [0, 1/L]
+    alpha = 1 / (2*L)  # alpha \in [0, 1/L]
     beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
     n = 1
 
