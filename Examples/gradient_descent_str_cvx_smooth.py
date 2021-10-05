@@ -21,12 +21,12 @@ def compute_rate_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_steps=False)
 
     # Define step sizes, alternating or not
     if alternating_steps:
-        gamma1 = 1 / L * (sqrt(L ** 2 + (L - mu) ** 2) - mu) / (L - mu)
-        gamma2 = 1 / L * (sqrt(L ** 2 + (L - mu) ** 2) + 2 * L + mu) / (L + 3 * mu)
+        gamma0 = 1 / L * (sqrt(L ** 2 + (L - mu) ** 2) - mu) / (L - mu)
+        gamma1 = 1 / L * (sqrt(L ** 2 + (L - mu) ** 2) + 2 * L + mu) / (L + 3 * mu)
     else:
         gamma = 2 / (L + mu)
+        gamma0 = gamma
         gamma1 = gamma
-        gamma2 = gamma
 
     # Declare a strongly convex smooth function
     func = problem.declare_function(SmoothStronglyConvexFunction,
@@ -43,9 +43,11 @@ def compute_rate_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_steps=False)
 
     # Run the GD method
     x = x0
-    for _ in range(n // 2):
-        x = x - gamma1 * func.gradient(x)
-        x = x - gamma2 * func.gradient(x)
+    for i in range(n):
+        if i % 2 == 0:
+            x = x - gamma0 * func.gradient(x)
+        else:
+            x = x - gamma1 * func.gradient(x)
 
     # Set the performance metric to the final distance to optimum
     problem.set_performance_metric((x - xs) ** 2)
