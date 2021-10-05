@@ -38,7 +38,7 @@ def wc_cg_fw(L, D, n):
     func1 = problem.declare_function(SmoothConvexFunction,
                                      {'L': L})
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': D, 'R': np.inf})
+                                     {'D': D})
     func = func1 + func2
 
     # Start by defining its unique optimal point and its function value
@@ -68,7 +68,7 @@ def wc_cg_fw(L, D, n):
     # Theoretical guarantee (for comparison)
     # when theta = 1
     theory = 2 * L * D ** 2 / (n + 2)
-    print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function value ***')
+    print('*** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
     print('\tPEP-it guarantee:\tf(y_n) - f_* <= ', wc)
     print('\tTheoretical standard guarantee :\tf(y_n) - f_* <=  <= ', theory)
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

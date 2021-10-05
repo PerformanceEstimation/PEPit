@@ -84,6 +84,3 @@ if __name__ == "__main__":
     mu = 0
 
     wc, theory = wc_fgm(mu=mu, L=L, n=n)
-
-    print('{}'.format(wc))
-    print('{}'.format(theory))
