@@ -234,7 +234,7 @@ class PEP(object):
 
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
-            warnings.warn("Not all the eigenvalues of the Gram matrix are nonnegative: the smallest is equal to {:.3}. "
+            warnings.warn("Not all the eigenvalues of the Gram matrix are nonnegative: the smallest is equal to {:.3}."
                           "The negative ones are replaced by 0.".format(np.min(eig_val)))
             eig_val = np.maximum(eig_val, 0)
 
