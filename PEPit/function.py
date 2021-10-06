@@ -157,7 +157,7 @@ class Function(object):
         """
         Add a constraint to the list of constraints of the function
 
-        :param constraint: (Expression) typically resulting from an inequality between 2 expressions.
+        :param constraint: (Constraint) typically resulting from an inequality between 2 expressions.
         """
 
         self.list_of_constraints.append(constraint)
