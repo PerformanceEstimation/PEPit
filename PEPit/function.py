@@ -15,7 +15,7 @@ class Function(object):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True,
+                 is_differentiable=False,
                  ):
         """
         A function is a linear combination of basis functions.
@@ -191,7 +191,7 @@ class Function(object):
             if function.is_already_evaluated_on_point(point=point):
 
                 # If function is differentiable, one should keep both previous gradient and previous function value.
-                if function._is_differentiable:
+                if function.is_differentiable:
                     list_of_functions_which_need_nothing.append((function, weight))
 
                 # If function is not differentiable, one should keep only previous function value.
