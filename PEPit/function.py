@@ -350,6 +350,9 @@ class Function(object):
         :return: (Point) The gradient of self in point
         """
 
+        # Verify point is a Point
+        assert isinstance(point, Point)
+
         # Call oracle but only return the gradient
         g, _ = self.oracle(point)
 
@@ -363,9 +366,21 @@ class Function(object):
         :return: (Point) The function value of self in point
         """
 
-        # Call oracle but only return the function value
-        _, f = self.oracle(point)
+        # Verify point is a Point
+        assert isinstance(point, Point)
 
+        # Check whether "self" has already been evaluated on "point"
+        associated_grad_and_function_val = self.is_already_evaluated_on_point(point=point)
+
+        # "associated_grad_and_function_val" is a tuple (True) or None (False)
+        if associated_grad_and_function_val:
+            # If the value already exist, simply return it
+            f = associated_grad_and_function_val[-1]
+        else:
+            # Otherwise, call oracle but only return the function value
+            _, f = self.oracle(point)
+
+        # Return the function value
         return f
 
     def optimal_point(self, return_gradient_and_function_value=False):
