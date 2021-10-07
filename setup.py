@@ -11,6 +11,7 @@ setuptools.setup(
     description="A small example package",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    setup_requires=["numpy", "scipy", "cvxpy"],
     url="https://github.com/bgoujaud/PEPit",
     project_urls={
         "Documentation": "https://github.com/bgoujaud/PEPit/documentation",
