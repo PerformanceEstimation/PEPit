@@ -96,7 +96,8 @@ jobs:
         pip install -e .
     - name: Run tests
       run: |
-        files = `ls Examples/MethodsForUnconstrainedConvexMinimization/*.py`
+        files = `ls Examples/A_MethodsForUnconstrainedConvexMinimization/*.py`
         for file in ${files} : do
-          python Examples/${{ matrix.file }}
+          echo "Runing file : ${file}""
+          python Examples/${file}
         done
