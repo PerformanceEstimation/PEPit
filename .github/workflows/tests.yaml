@@ -78,10 +78,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.8, 3.9]
-        files :
-        ['A_MethodsForUnconstrainedConvexMinimization/a_proximalpoint.py',
-         'A_MethodsForUnconstrainedConvexMinimization/b_gradientdescent_take1.py',]
+        python-version: [ 3.8 ]
 
     steps:
     - uses: actions/checkout@v1
@@ -99,4 +96,7 @@ jobs:
         pip install -e .
     - name: Run tests
       run: |
-        python Examples/${{ matrix.file }}
+        files = `ls Examples/MethodsForUnconstrainedConvexMinimization/*.py`
+        for file in ${files} : do
+          python Examples/${{ matrix.file }}
+        done
