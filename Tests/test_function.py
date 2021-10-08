@@ -96,26 +96,37 @@ class TestFunction(unittest.TestCase):
 
     def test_oracle_with_predetermined_values(self):
 
+        # Compute composite function
         new_function = self.compute_linear_combination()
-        new_function.oracle(point=self.point)
 
+        # Compute oracle of each basis function
         grad1, val1 = self.func1.oracle(point=self.point)
         grad2, val2 = self.func2.oracle(point=self.point)
 
+        # Verifies the number of registered points
+        self.assertEqual(len(self.func1.list_of_points), 1)
+        self.assertEqual(len(self.func2.list_of_points), 1)
+
+        # Compute oracle of composite function
         grad, val = new_function.oracle(point=self.point)
 
+        # The value of composite must be determined, but the gradient must be new
         self.assertEqual(prune_dict(val.decomposition_dict), prune_dict((-val1 + 9/5*val2).decomposition_dict))
-        print(self.func1.list_of_points)
         self.assertNotEqual(prune_dict(grad.decomposition_dict), prune_dict((-grad1 + 9/5*grad2).decomposition_dict))
-        # TODO the commented tests don't pass because the call to the method value is not optimal. To fix!
-        # self.assertEqual(len(self.func1.list_of_points), 2)
-        # self.assertEqual(len(self.func2.list_of_points), 2)
 
-        # Note the index 2 has been chosen manually, but this must be chosen a more clever way
-        other_grad1, other_val1 = self.func1.list_of_points[2][1:]
-        other_grad2, other_val2 = self.func2.list_of_points[2][1:]
+        # Verifies the number of registered points
+        self.assertEqual(len(self.func1.list_of_points), 2)
+        self.assertEqual(len(self.func2.list_of_points), 2)
+
+        # Grab the new gradients and function values created for basis functions
+        other_grad1, other_val1 = self.func1.list_of_points[1][1:]
+        other_grad2, other_val2 = self.func2.list_of_points[1][1:]
+
+        # The function values must be the same, but not the gradients
         self.assertEqual(val1.decomposition_dict, other_val1.decomposition_dict)
         self.assertEqual(val2.decomposition_dict, other_val2.decomposition_dict)
+
+        # The new gradients must match with the composite function gradient
         self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-other_grad1 + 9/5*other_grad2).decomposition_dict))
 
     def test_optimal_point(self):
