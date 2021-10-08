@@ -316,7 +316,7 @@ class Function(object):
         # We come to this point if "self" need a new gradient,
         # either because it is not differentiable or because it had never been computed so far.
 
-        # If "self" function value is determined by its basis functions, then we compute it.
+        # If "self" gradient is determined by its basis functions, then we compute it.
         if list_of_functions_which_need_gradient_and_function_value == list() and list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
