@@ -62,8 +62,8 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val, Expression)
 
         self.assertIs(point, self.point)
-        self.assertFalse(grad._is_leaf)
-        self.assertFalse(val._is_function_value)
+        self.assertTrue(grad._is_leaf)
+        self.assertTrue(val._is_function_value)
 
         # On func1
         self.assertEqual(len(self.func1.list_of_points), 1)
@@ -84,8 +84,8 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(grad2, Point)
         self.assertIsInstance(val2, Expression)
 
-        self.assertTrue(grad2._is_leaf)
-        self.assertTrue(val2._is_function_value)
+        self.assertFalse(grad2._is_leaf)
+        self.assertFalse(val2._is_function_value)
 
         # Combination
         self.assertIs(point1, self.point)
@@ -93,6 +93,30 @@ class TestFunction(unittest.TestCase):
 
         self.assertEqual((-grad1 + 9 * grad2 / 5).decomposition_dict, grad.decomposition_dict)
         self.assertEqual(prune_dict((-val1 + 9 * val2 / 5).decomposition_dict), val.decomposition_dict)
+
+    def test_oracle_with_predetermined_values(self):
+
+        new_function = self.compute_linear_combination()
+        new_function.oracle(point=self.point)
+
+        grad1, val1 = self.func1.oracle(point=self.point)
+        grad2, val2 = self.func2.oracle(point=self.point)
+
+        grad, val = new_function.oracle(point=self.point)
+
+        self.assertEqual(prune_dict(val.decomposition_dict), prune_dict((-val1 + 9/5*val2).decomposition_dict))
+        print(self.func1.list_of_points)
+        self.assertNotEqual(prune_dict(grad.decomposition_dict), prune_dict((-grad1 + 9/5*grad2).decomposition_dict))
+        # TODO the commented tests don't pass because the call to the method value is not optimal. To fix!
+        # self.assertEqual(len(self.func1.list_of_points), 2)
+        # self.assertEqual(len(self.func2.list_of_points), 2)
+
+        # Note the index 2 has been chosen manually, but this must be chosen a more clever way
+        other_grad1, other_val1 = self.func1.list_of_points[2][1:]
+        other_grad2, other_val2 = self.func2.list_of_points[2][1:]
+        self.assertEqual(val1.decomposition_dict, other_val1.decomposition_dict)
+        self.assertEqual(val2.decomposition_dict, other_val2.decomposition_dict)
+        self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-other_grad1 + 9/5*other_grad2).decomposition_dict))
 
     def test_optimal_point(self):
 
