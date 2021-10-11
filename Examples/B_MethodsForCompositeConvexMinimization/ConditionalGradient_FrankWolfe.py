@@ -6,17 +6,18 @@ from PEPit.Function_classes.convex_indicator import ConvexIndicatorFunction
 from PEPit.Primitive_steps.linearoptimization_step import linearoptimization_step
 
 
-def wc_cg_fw(L, D, n):
+def wc_cg_fw(L, D, n, verbose=True):
     """
-    In this example, we use a conditional gradient method for
-    solving the constrained smooth convex minimization problem
+
+    Consider the composite convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) }
-    for notational convenience we denote xs=argmin_x F(x);
     where f_1(x) is L-smooth and convex and where f_2(x) is
     a convex indicator function of diameter at most D.
 
-    We show how to compute the worst-case value of F(xN)-F(xs) when xN is
-    obtained by doing N steps of the method starting with a feasible point
+    This code computes a worst-case guarantee for the conditional Gradient method.
+    That is, it computes the smallest possible tau(n,L) such that the guarantee
+        F(x_n) - F(x_*) <= tau(n,L) * ||x_0 - x_*||^2
+    is valid, where x_n is the output of the Conditional Gradient method, and where x_* is a minimizer of F.
 
     The theoretical guarantee is presented in the following reference.
     [1] Jaggi, Martin. "Revisiting Frank-Wolfe: Projection-free sparse
@@ -28,30 +29,33 @@ def wc_cg_fw(L, D, n):
     :param alpha: (float) parameter of the scheme.
     :param theta: (float) parameter of the scheme.
     :param n: (int) number of iterations.
-    :return:
+    :param verbose: (bool) if True, print conclusion
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a convex lipschitz function
+    # Declare a smooth convex function and a convex indicator of rayon D
     func1 = problem.declare_function(SmoothConvexFunction,
                                      {'L': L})
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': D})
+                                     {'D': D, 'R': np.inf})
+    # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
-    # Start by defining its unique optimal point and its function value
+    # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.optimal_point()
     fs = func.value(xs)
 
-    # Then Define the starting point of the algorithm
+    # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x^*
+    # Set the initial constraint that is the distance between x0 and x^* = xs
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Compute trajectory starting from x0
+    # Compute n steps of the Conditional Gradient / Frank-Wolfe method starting from x0
     x = x0
     for i in range(n):
         g = func1.gradient(x)
@@ -59,22 +63,23 @@ def wc_cg_fw(L, D, n):
         lam = 2 / (i + 1)
         x = (1 - lam) * x + lam * y
 
-    # Set the performance metric to the final distance to optimum
+    # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric((func.value(x)) - fs)
 
     # Solve the PEP
-    wc = problem.solve()
+    pepit_tau = problem.solve()
 
-    # Theoretical guarantee (for comparison)
+    # Compute theoretical guarantee (for comparison)
     # when theta = 1
-    theory = 2 * L * D ** 2 / (n + 2)
-    print('*** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
-    print('\tPEP-it guarantee:\tf(y_n) - f_* <= ', wc)
-    print('\tTheoretical standard guarantee :\tf(y_n) - f_* <=  <= ', theory)
-    # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
+    theoretical_tau = 2 * L * D ** 2 / (n + 2)
 
-    # Return the rate of the evaluated method
-    return wc
+    # Print conclusion if require
+    if verbose:
+        print('*** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
+        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+    # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
+    return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
@@ -82,6 +87,6 @@ if __name__ == "__main__":
     L = 1.
     n = 10
 
-    rate = wc_cg_fw(L=L,
+    pepit_tau, theoretical_tau = wc_cg_fw(L=L,
                     D=D,
                     n=n)

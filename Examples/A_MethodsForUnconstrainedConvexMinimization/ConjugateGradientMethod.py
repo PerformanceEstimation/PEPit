@@ -26,7 +26,8 @@ def wc_CG(L, n):
 
     :param L: (float) the smoothness parameter.
     :param n: (int) number of iterations.
-    :return:
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP

@@ -4,7 +4,7 @@ from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
 
-def wc_fgm(mu, L, n):
+def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
         F_* = min_x f(x) + h(x),
@@ -30,28 +30,30 @@ def wc_fgm(mu, L, n):
 
     :param L: (float) the smoothness parameter.
     :param n: (int) number of iterations.
-    :return:
+    :param verbose: (bool) if True, print conclusion
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a strongly convex smooth function
+    # Declare a strongly convex smooth function and a convex function
     f = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
     h = problem.declare_function(ConvexFunction, {})
     F = f + h
 
-    # Start by defining its unique optimal point
+    # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = F.optimal_point()
     Fs = F.value(xs)
 
-    # Then Define the starting point of the algorithm
+    # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Run the method
+    # Compute n steps of the Fast Proximal Gradient method starting from x0
     x_new = x0
     y = x0
     for i in range(n):
@@ -63,19 +65,24 @@ def wc_fgm(mu, L, n):
     problem.set_performance_metric((f.value(x_new) + hx_new) - Fs)
 
     # Solve the PEP
-    wc = problem.solve()
-    # Theoretical guarantee (for comparison)
+    pepit_tau = problem.solve()
+
+    # Compute theoretical guarantee (for comparison)
     if mu == 0:
-        theory = 2 * L / (n ** 2 + 5 * n + 2)  # tight, see [2], Table 1 (column 1, line 1)
+        theoretical_tau = 2 * L / (n ** 2 + 5 * n + 2)  # tight, see [2], Table 1 (column 1, line 1)
     else:
-        theory = 2 * L / (n ** 2 + 5 * n + 2)  # not tight (bound for smooth convex functions)
+        theoretical_tau = 2 * L / (n ** 2 + 5 * n + 2)  # not tight (bound for smooth convex functions)
         print('Warning: momentum is tuned for non-strongly convex functions.')
 
-    print('*** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***')
-    print('\tPEP-it guarantee:\t F(y_n)-F_* <= ', wc)
-    print('\tTheoretical guarantee:\t F(y_n)-F_* <= ', theory)
+    # Print conclusion if required
+    if verbose:
+        print('*** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***')
+        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print(
+            '\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
-    return wc, theory
+    return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
@@ -83,4 +90,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0
 
-    wc, theory = wc_fgm(mu=mu, L=L, n=n)
+    pepit_tau, theoretical_tau = wc_fgm(mu=mu, L=L, n=n)
