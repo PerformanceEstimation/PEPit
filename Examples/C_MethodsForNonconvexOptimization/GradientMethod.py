@@ -57,20 +57,20 @@ def wc_gd(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = None
+    theoretical_tau = 2*L/n
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of gradient descent with fixed step size ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t min_i (f\'(x_i)) ** 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_i (f\'(x_i)) <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 2
+    n = 5
     L = 1
     gamma = 1/L
 

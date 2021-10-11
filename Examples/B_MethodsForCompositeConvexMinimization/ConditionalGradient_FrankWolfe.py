@@ -41,7 +41,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     func1 = problem.declare_function(SmoothConvexFunction,
                                      {'L': L})
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': D, 'R': np.inf})
+                                     {'D': D})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 

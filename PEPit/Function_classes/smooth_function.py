@@ -15,7 +15,7 @@ class SmoothFunction(Function):
         Class of smooth functions.
         The differentiability is not necessarily verified.
 
-        :param param: (dict) contains the values of mu and L
+        :param param: (dict) contains the values L
         :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
         :param decomposition_dict: (dict) Decomposition in the basis of functions.
         """
@@ -42,5 +42,5 @@ class SmoothFunction(Function):
                 if ((xi != xj) | (gi != gj) | (fi != fj)):
 
                     # Interpolation conditions of smooth functions class
-                    self.add_constraint(fi - fj - self.L/4 * (xi - xj)**2 - 1/2 * (gi - gj) * (xi - xj)
+                    self.add_constraint(fi - fj - self.L/4 * (xi - xj)**2 - 1/2 * (gi + gj) * (xi - xj)
                                         + 1/(4 * self.L) * (gi - gj)**2 <= 0)

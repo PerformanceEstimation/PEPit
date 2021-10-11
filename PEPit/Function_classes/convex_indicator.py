@@ -40,7 +40,7 @@ class ConvexIndicatorFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):  # TODO verifier la valeur par defaut de _is_differentiable
+                 is_differentiable=False):
         """
         Class of smooth strongly convex functions.
         The differentiability is necessarily verified.
@@ -51,18 +51,16 @@ class ConvexIndicatorFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=True)
+                         is_differentiable=is_differentiable)
 
         # Store D ad R
         self.D = param['D']  # diameter
-        self.R = param['R']  # radius
 
     def add_class_constraints(self):
         """
         Add constraints of convex indicator functions
         """
 
-        # TODO verifier la pertinence de R
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -73,8 +71,6 @@ class ConvexIndicatorFunction(Function):
 
                 if xi == xj:
                     self.add_constraint(fi == 0)
-                    if self.R != np.inf:
-                        self.add_constraint(xi ** 2 <= self.R ** 2)
 
                 else:
                     self.add_constraint(gi * (xj - xi) <= 0)
