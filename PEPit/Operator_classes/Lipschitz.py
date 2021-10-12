@@ -1,7 +1,7 @@
 from PEPit.function import Function
 
 
-class StronglyMonotoneOperator(Function):
+class LipschitzOperator(Function):
     """
     Tis routine implements the interpolation conditions for Lipschitz operators (non expansive operators by setting L=1).
 
