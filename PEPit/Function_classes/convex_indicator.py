@@ -7,17 +7,16 @@ class ConvexIndicatorFunction(Function):
     """
     This routine implements the interpolation conditions for convex
     indicator functions with bounded domains. Two parameters may be provided:
-           - a diameter D (D is nonnegative, and possibly infinite),
-           - a radius R (R is nonnegative, and possibly infinite).
+           - a diameter D (D is nonnegative, and possibly infinite).
 
-    Note: not defining the value of D and/or R automatically corresponds to
-          set D and/or R to infinite.
+    Note: not defining the value of D automatically corresponds to
+          set D to infinite.
 
     To generate a convex indicator function 'h' with diameter D=infinite and
     a radius R=1 from an instance of PEP called P:
     >> problem = pep()
-    >> D, R = np.inf, 1
-    >> h = problem.declare_function('ConvexIndicator',{'D' :D, 'R': R});
+    >> D= np.inf
+    >> h = problem.declare_function('ConvexIndicator',{'D' :D});
 
     For details about interpolation conditions, we refer to the following
     references:
@@ -42,8 +41,8 @@ class ConvexIndicatorFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of smooth strongly convex functions.
-        The differentiability is necessarily verified.
+        Class of convex indicator functions.
+        The differentiability is not necessarily verified.
 
         :param param: (dict) contains the values of mu and L
         :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
