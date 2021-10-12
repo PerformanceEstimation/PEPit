@@ -157,8 +157,8 @@ class Expression(object):
         :param other: (Expression of int or float)
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
-
-        return other <= self
+        #return other <= self
+        return -self <= other
 
     def __gt__(self, other):
         """
