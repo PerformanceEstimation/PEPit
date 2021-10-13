@@ -65,7 +65,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of Polay steps ***')
+        print('*** Example file: worst-case performance of Polyak steps ***')
         print('\tPEP-it guarantee:\t\t||x_1 - x_*||^2  <= {:.6} ||x_0 - x_*||^2 '.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_1 - x_*||^2  <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
@@ -79,5 +79,5 @@ if __name__ == "__main__":
     gamma = 2/(L + mu)
 
     pepit_tau, theoretical_tau = wc_ps_1(L=L,
-                                                  mu=mu,
-                                                  gamma=gamma)
+                                        mu=mu,
+                                        gamma=gamma)

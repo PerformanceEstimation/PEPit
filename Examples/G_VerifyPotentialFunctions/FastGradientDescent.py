@@ -6,7 +6,7 @@ from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 
 
 
-def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
+def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     """
     Consider the minimization problem
         f_* = min_x f(x),
@@ -33,7 +33,6 @@ def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
     :param L: (float) the smoothness parameter.
     :param gamma: (float) the step size.
     :param lam: (float) the initial value for sequence (lambda_k)_k.
-    :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
@@ -93,12 +92,10 @@ def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 10
     L = 1
     lam = 10.
     gamma = 1/L
 
     pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L,
                                             gamma=gamma,
-                                            lam=lam,
-                                            n=n)
+                                            lam=lam)

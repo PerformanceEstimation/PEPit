@@ -65,7 +65,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of Polay steps ***')
+        print('*** Example file: worst-case performance of Polyak steps ***')
         print('\tPEP-it guarantee:\t\t f(x_1) - f_*  <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f_*  <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
