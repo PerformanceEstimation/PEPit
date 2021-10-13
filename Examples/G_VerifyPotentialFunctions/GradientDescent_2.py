@@ -35,7 +35,7 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a smooth strongly convex function
+    # Declare a smooth convex function
     func = problem.declare_function(SmoothConvexFunction,
                                     {'L': L})
 
