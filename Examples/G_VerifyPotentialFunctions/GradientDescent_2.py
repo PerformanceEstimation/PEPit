@@ -16,7 +16,7 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     for a well-chosen Lyapunov function :
         v(x_k) = (2k + 1)*L*(f(x_{k+1}) - f_*) + L/2 || x_k - x_*||^2 + k*(k+2)* ||f'(x_{k+1})||^2
     That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        v(x_{k+1}) <= tau(n, L, mu) * v(x_k)
+        v(x_{k+1}) <= tau(n, L) * v(x_k)
     is valid, where x_k is the output of the gradient descent with fixed step size.
 
     The detailed potential approach and the SDP approach are available in in :

@@ -15,7 +15,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
     for a well-chosen Lyapunov function :
         v(x_k) = (k)*(f(x_{k}) - f_*) + L/2 || x_k - x_*||^2
     That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        v(x_{k+1}) <= tau(n, L, mu) * v(x_k)
+        v(x_{k+1}) <= tau(n, L) * v(x_k)
     is valid, where x_k is the output of the gradient descent with fixed step size.
 
     The detailed potential approach is available in [1, Theorem 3.3], and the SDP approach in [2].
@@ -27,7 +27,6 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
          potential functions." (2019)
 
     :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
     :param gamma: (float) the step size.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion

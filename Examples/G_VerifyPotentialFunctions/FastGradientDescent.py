@@ -23,7 +23,7 @@ def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
     with taux_k = 1/lambda_k and eta_k = (lambda_k^2 - lambda_{k-1}^2) / L
 
     That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        v(x_{k+1}) <= tau(n, L, mu) * v(x_k)
+        v(x_{k+1}) <= tau(n, L) * v(x_k)
     is valid, where x_k is the output of the accelerated gradient descent.
 
     The detailed potential approach is available in [1, Theorem 5.3].
