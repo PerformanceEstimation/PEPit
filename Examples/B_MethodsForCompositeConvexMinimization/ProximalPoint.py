@@ -68,4 +68,5 @@ if __name__ == "__main__":
     n = 2
     gamma = 1
 
-    pepit_tau, theoretical_tau = wc_ppa(gamma, n)
+    pepit_tau, theoretical_tau = wc_ppa(gamma=gamma,
+                                        n=n)

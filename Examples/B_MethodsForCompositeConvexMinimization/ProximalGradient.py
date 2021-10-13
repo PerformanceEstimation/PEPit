@@ -71,4 +71,7 @@ if __name__ == "__main__":
     mu = .1
     gamma = 1
 
-    pepit_tau, theoretical_tau = wc_pgd(L, mu, gamma, n)
+    pepit_tau, theoretical_tau = wc_pgd(L=L,
+                                        mu=mu,
+                                        gamma=gamma,
+                                        n=n)
