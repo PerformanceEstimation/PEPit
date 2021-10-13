@@ -16,7 +16,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
         f(x_{k+1}) - f_* <= tau(n, L, mu) * (f(x_k) - f_*)
     is valid, where x_k is the output of Plyak steps.
 
-    The detailed potential approach is available in [1]
+    The detailed potential approach is available in [1, Proposition 2]
     [1] Mathieu Barre, Adrien Taylor, Alexandre d'Aspremont (2020).
       "Complexity Guarantees for Polyak Steps with Momentum."
 

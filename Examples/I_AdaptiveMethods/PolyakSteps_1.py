@@ -16,7 +16,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
         ||x_{k+1} - x_*||^2 <= tau(n, L, mu) * ||x_{k+1} - x_*||^2
     is valid, where x_k is the output of Plyak steps.
 
-    The detailed potential approach is available in [1]
+    The detailed potential approach is available in [1, Proposition 1]
     [1] Mathieu Barre, Adrien Taylor, Alexandre d'Aspremont (2020).
       "Complexity Guarantees for Polyak Steps with Momentum."
 
