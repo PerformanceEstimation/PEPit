@@ -158,7 +158,7 @@ class Expression(object):
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
         #return other <= self
-        return -self <= other
+        return -self <= -other
 
     def __gt__(self, other):
         """

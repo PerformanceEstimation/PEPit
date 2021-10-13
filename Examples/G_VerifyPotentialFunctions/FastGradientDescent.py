@@ -63,7 +63,7 @@ def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
     yn = (1 - tau) * xn + tau * zn
     gyn = func.gradient(yn)
     xnp1 = yn - gamma * gyn
-    znp1 = zn - gamma * gyn
+    znp1 = zn - eta * gyn
     gnp1, fnp1 = func.oracle(xnp1)
 
     # Compute the Lyapunov function at iteration n and at iteration n+1
@@ -93,7 +93,7 @@ def wc_gd_lyapunov(L, gamma, lam, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 5
+    n = 10
     L = 1
     lam = 10.
     gamma = 1/L
