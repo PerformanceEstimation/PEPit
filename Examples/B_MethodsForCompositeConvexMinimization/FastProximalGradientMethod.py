@@ -14,7 +14,7 @@ def wc_fgm(mu, L, n, verbose=True):
     This code computes a worst-case guarantee for the fast proximal gradient method (a.k.a. accelerated gradient).
     That is, the code computes the smallest possible tau(n,L) such that the guarantee
         f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
-    is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
+    is valid, where x_n is the output of the fast proximal gradient, and where x_* is a minimizer of f.
 
     In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when
     || x_0 - x_* || == 1.
@@ -78,8 +78,7 @@ def wc_fgm(mu, L, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***')
         print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print(
-            '\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
