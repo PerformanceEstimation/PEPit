@@ -4,12 +4,17 @@ from PEPit.pep import PEP
 from PEPit.Function_classes.convex_lipschitz_function import ConvexLipschitzFunction
 
 
-def wc_subgd(M, N, gamma):
+def wc_subgd(M, N, gamma, verbose=True):
     """
-    In this example, we use a subgradient method for solving the non-smooth convex minimization problem
-    min_x F(x).
-    For notational convenience we denote xs=argmin_x F(x), where F(x) satisfies a Lipschitz condition; i.e.,
-    it has a bounded gradient ||g||<=M for all g being a subgradient of F at some point.
+    Consider the minimization problem
+        f_* = min_x f(x),
+    where f is convex and Lipschitz. This problem is a non-smooth minimization problem.
+
+    This code computes a worst-case guarantee for the subgradient method. That is, it computes
+    the smallest possible tau(n, L) such that the guarantee
+        f(x_n) - f_* <= tau(n, L) * (f(x_0) - f_*)
+    is valid, where x_n is the output of the gradient descent with exact linesearch,
+    and where x_* is the minimizer of f.
 
     We show how to compute the worst-case value of min_i F(xi)-F(xs) when xi is
     obtained by doing i steps of a subgradient method starting with an initial
@@ -18,7 +23,9 @@ def wc_subgd(M, N, gamma):
     :param M: (float) the lipschitz parameter.
     :param N: (int) the number of iterations
     :param gamma: optimal step size is 1/(sqrt(N+1)*M)
-    :return:
+    :param verbose: (bool) if True, print conclusion
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP
@@ -28,17 +35,17 @@ def wc_subgd(M, N, gamma):
     func = problem.declare_function(ConvexLipschitzFunction,
                                     {'M': M})
 
-    # Start by defining its optimal point and its function value
+    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
     fs = func.value(xs)
 
-    # Then Define the starting point of the algorithm
+    # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x^*
+    # Set the initial constraint that is the distance between x0 and xs
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Run the subgradient method
+    # Run n steps of the subgradient method
     x = x0
     gx, fx = func.oracle(x)
 
@@ -47,22 +54,23 @@ def wc_subgd(M, N, gamma):
         x = x - gamma * gx
         gx, fx = func.oracle(x)
 
-    # Set the performance metric to the final distance to optimum
+    # Set the performance metric to the function value accuracy
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    wc = problem.solve()
+    pepit_tau = problem.solve()
 
-    # Theoretical guarantee (for comparison)
-    theory = M / np.sqrt(N + 1)
+    # Compute theoretical guarantee (for comparison)
+    theoretical_tau = M / np.sqrt(N + 1)
 
-    print('*** Example file: worst-case performance of the subgradient gradient method in function values ***')
-    print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
-    print('\tTheoretical guarantee:\t f(y_n)-f_* <= ', theory)
-    # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
+    # Print conclusion if required
+    if verbose:
+        print('*** Example file: worst-case performance of sugbradient method ***')
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
-    # Return the rate of the evaluated method
-    return wc, theory
+    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
+    return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":

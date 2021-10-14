@@ -4,11 +4,12 @@ from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 
 
-def wc_ogm(L, n):
+def wc_ogm(L, n, verbose=True):
     """
     Consider the convex minimization problem
         f_* = min_x f(x),
     where f is L-smooth and convex.
+
     This code computes a worst-case guarantee for the optimized gradient method. That is, it computes the
     smallest possible tau(n,L) such that the guarantee
         f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
@@ -27,7 +28,9 @@ def wc_ogm(L, n):
 
     :param L: (float) the smoothness parameter.
     :param n: (int) number of iterations.
-    :return:
+    :param verbose: (bool) if True, print conclusion
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP
@@ -36,7 +39,7 @@ def wc_ogm(L, n):
     # Declare a smooth convex function
     func = problem.declare_function(SmoothConvexFunction, {'mu': 0, 'L': L})
 
-    # Start by defining an optimal point
+    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
     fs = func.value(xs)
 
@@ -46,7 +49,7 @@ def wc_ogm(L, n):
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Run the optimized gradient method (OGM) method
+    # Run n steps of the optimized gradient method (OGM) method
     theta_new = 1
     x_new = x0
     y = x0
@@ -65,22 +68,26 @@ def wc_ogm(L, n):
     problem.set_performance_metric(func.value(y) - fs)
 
     # Solve the PEP
-    wc = problem.solve()
-    # Theoretical guarantee (for comparison)
-    theory = L / 2 / theta_new ** 2
+    pepit_tau = problem.solve()
 
-    print('*** Example file: worst-case performance of the optimized gradient method (OGM) in function values ***')
-    print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
-    print('\tTheoretical guarantee:\t f(y_n)-f_* <= ', theory)
-    # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
-    return wc, theory
+    # Compute theoretical guarantee (for comparison)
+    theoretical_tau = L / 2 / theta_new ** 2
+
+    # Print conclusion if required
+    if verbose:
+        print('*** Example file: worst-case performance of optimized gradient method ***')
+        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||**2'.format(
+            pepit_tau))
+        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||**2'.format(
+            theoretical_tau))
+
+    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
+    return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
     n = 2
     L = 1
 
-    wc, theory = wc_ogm(L=L, n=n)
-
-    print('{}'.format(wc))
-    print('{}'.format(theory))
+    pepit_tau, theoretical_tau = wc_ogm(L=L,
+                                        n=n)
