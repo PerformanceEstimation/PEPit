@@ -48,7 +48,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
     x0 = problem.set_initial_point()
     f0 = func.value(x0)
 
-    # Set the initial constraint that is the distance between x0 and x^*
+    # Set the initial constraint that is the distance between f(x0) and f(x^*)
     problem.set_initial_condition((f0 - fs) <= 1)
 
     # Run one step of the heavy ball method

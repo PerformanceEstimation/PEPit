@@ -1,5 +1,5 @@
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
 
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
@@ -13,7 +13,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     Consider the composite convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) }
     where f_1(x) is a smooth convex function, and f_2(x) is a closed convex indicator.
-    We use a kernel h that is assumed to be smooth strongly convex.
+    We use a kernel h that is assumed to be non-smooth strongly convex.
 
     This code computes a worst-case guarantee for Improved Interior Point method.
     That is, it computes the smallest possible tau(n,L) such that the guarantee
@@ -43,7 +43,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     func1 = problem.declare_function(SmoothConvexFunction,
                                     {'L': L})
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': np.inf, 'R': np.inf})
+                                     {'D': np.inf})
     h = problem.declare_function(SmoothStronglyConvexFunction,
                                      {'mu': mu, 'L': np.inf})
     # Define the function to optimize as the sum of func1 and func2
@@ -61,7 +61,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
 
 
 
-    # Compute n steps of the Bregman Proximal Point method starting from x0
+    # Compute n steps of the Improved Interior Algorithm starting from x0
     x = x0
     z = x0
     g = g10
@@ -78,14 +78,18 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
         x = (1 - alphak) * x + alphak * z
         gh, _ = h.oracle(z)
 
-    # Set the initial constraint that is a Lypunov distance between x0 and x^*
+    # Set the initial constraint that is a Lyapunov distance between x0 and x^*
     problem.set_initial_condition((hs - h0 - gh0 * (xs - x0)) * c + f10 - fs <= 1)
 
     # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK)
+    try :
+        pepit_tau = problem.solve(cp.MOSEK)
+    except :
+        pepit_tau = problem.solve()
+        print("\033[93m(PEP-it) We recommend to use an other solver, such as MOSEK. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 4*L/(n+1)**2/c

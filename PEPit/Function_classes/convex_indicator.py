@@ -52,7 +52,7 @@ class ConvexIndicatorFunction(Function):
                          decomposition_dict=decomposition_dict,
                          is_differentiable=is_differentiable)
 
-        # Store D ad R
+        # Store D
         self.D = param['D']  # diameter
 
     def add_class_constraints(self):

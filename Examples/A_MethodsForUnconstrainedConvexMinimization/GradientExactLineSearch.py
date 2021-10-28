@@ -59,7 +59,7 @@ def wc_els(L, mu, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = ((L - mu) / (L + mu)) ** (2 * n)

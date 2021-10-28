@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 from PEPit.Function_classes.convex_function import ConvexFunction
@@ -69,7 +67,7 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     problem.set_performance_metric((func2.value(y) + fy) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1

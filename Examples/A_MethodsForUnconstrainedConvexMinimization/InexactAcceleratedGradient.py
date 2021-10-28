@@ -67,7 +67,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of inexact accelerated gradient method ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tTheoretical guarantee for epsilon = 0 :\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -76,7 +76,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
 if __name__ == "__main__":
     n = 5
     L = 1
-    epsilon = .1
+    epsilon = 0.1 #Theoretical and PEPit guarantee match when epsilon = 0.
 
     pepit_tau, theoretical_tau= wc_InexactAGM(L=L,
                                               epsilon=epsilon,

@@ -8,11 +8,11 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     """
     Consider the convex minimization problem
         f_* = min_x f1(x) + f2(x),
-    where f is L-smooth and mu-strongly convex, and where f2 is a convex indicator function.
+    where f is L-smooth and mu-strongly convex, and where f2 is a closed convex and proper.
 
     This code computes a worst-case guarantee for the proximal gradient method.
-    That is, the code computes the smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_* <= tau(n,L) * (f(x_0) - f_*),
+    That is, the code computes the smallest possible tau(n,L,mu) such that the guarantee
+        f(x_n) - f_* <= tau(n,L,mu) * (f(x_0) - f_*),
     is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
 
     :param L: (float) the smoothness parameter.
@@ -26,7 +26,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a strongly convex smooth function and a convex indicator function
+    # Declare a strongly convex smooth function and a closed convex proper function
     f1 = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
     f2 = problem.declare_function(ConvexFunction, {})
     func = f1 + f2

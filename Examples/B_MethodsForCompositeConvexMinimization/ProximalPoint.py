@@ -7,11 +7,11 @@ def wc_ppa(gamma, n, verbose=True):
     """
     Consider the non-smooth convex minimization problem
         f_* = min_x f1(x) + f2(x),
-    where f is convex, and where f2 is a convex function.
+    where f is convex, and where f2 is a closed convex and proper function.
 
     This code computes a worst-case guarantee for the proximal point method.
-    That is, the code computes the smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_* <= tau(n,L) * (f(x_0) - f_*),
+    That is, the code computes the smallest possible tau(n) such that the guarantee
+        f(x_n) - f_* <= tau(n) * ||x0 - x_*||^2,
     is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
 
 

@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -13,8 +12,8 @@ def wc_km(L, n, verbose=True):
     where A is a Lipschitz non-expansive operator..
 
     This code computes a worst-case guarantee for the Krasnolselskii-Mann. That is, it computes
-    the smallest possible tau(n, L, mu) such that the guarantee
-        1/2|| x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
+    the smallest possible tau(n, L) such that the guarantee
+        1/4|| x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Krasnolseskii-Mann iterations, and x_* the fixed point of A.
 
     This scheme was first studied using PEPs in:
@@ -33,7 +32,8 @@ def wc_km(L, n, verbose=True):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a Lipschitz operator
+    # Declare a non expansive operator
+    assert (L == 1), 'The operator is non-expansive : L=1'
     A = problem.declare_function(LipschitzOperator, {'L': L})
 
     # Start by defining its unique optimal point xs = x_*
@@ -51,13 +51,13 @@ def wc_km(L, n, verbose=True):
     Ax = A.gradient(x)
 
     # Set the performance metric to distance between xN and AxN
-    problem.set_performance_metric(1/2*(x - Ax) ** 2)
+    problem.set_performance_metric((1 / 2 * (x - Ax)) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
-    tn = 1 - 1/(n+2)
+    tn = 1 - 1/(n+1)
     if (tn >= 1/2) & (tn <= 1/2 * (1 + np.sqrt(n / (n + 1)))):
         theoretical_tau = 1 / (n + 1) * (n / (n + 1)) ** n / (4 * tn * (1 - tn))
     if (tn <= 1) & (tn > 1/2 * (1 + np.sqrt(n / (n + 1)))):
@@ -66,16 +66,15 @@ def wc_km(L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEP-it guarantee:\t\t 1/2|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t 1/2|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t 1/4|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t 1/4|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 10
-    L = 1
-
+    n = 3
+    L = 1 # T is non-expansive
     pepit_tau, theoretical_tau = wc_km(L=L,
                                         n=n)

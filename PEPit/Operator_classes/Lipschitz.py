@@ -12,7 +12,7 @@ class LipschitzOperator(Function):
     NOTE : PEPit was initially tough for evaluating performances of optimization algorithms.
     Operators are represented in the same way as functions, but function values are not accessible.
 
-    For details about interpolation conditions, we refer to the fllowing :
+    For details about interpolation conditions, we refer to the following :
     [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
       "Operator Splitting Performance Estimation: Tight contraction factors
       and optimal parameter selection," arXiv:1812.00146, 2018.

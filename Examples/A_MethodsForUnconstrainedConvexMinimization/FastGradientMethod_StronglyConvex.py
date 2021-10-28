@@ -13,7 +13,7 @@ def wc_fgm(mu, L, n, verbose=True):
     This code computes a worst-case guarantee for the fast gradient method, a.k.a. accelerated gradient method.
     That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
         f(x_n) - f_* <= tau(n, mu, L) (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2),
-    is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
+    is valid, where x_n is the output of the accelerated gradient method, and where x_* is a minimizer of f.
 
     In short, for given values of n and L, tau(n,mu,L) is be computed as the worst-case value of f(x_n)-f_* when
     (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2) == 1.
@@ -63,23 +63,23 @@ def wc_fgm(mu, L, n, verbose=True):
 
     # Compute theoretical guarantee (for comparison)
     if mu > 0:
-        theoretical_tau = (1 - sqrt(kappa)) ** (2*n - 1)
+        theoretical_tau = (1 - sqrt(kappa)) ** n
     else:
         theoretical_tau = 0
-        print("Momentum is here designed for strongly convex functions")
+        print("Momentum is tuned for strongly convex functions")
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the fast gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 1
+    n = 2
     L = 1
     mu = 0.1
 

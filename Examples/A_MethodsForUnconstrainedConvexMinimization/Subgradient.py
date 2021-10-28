@@ -8,11 +8,11 @@ def wc_subgd(M, N, gamma, verbose=True):
     """
     Consider the minimization problem
         f_* = min_x f(x),
-    where f is convex and Lipschitz. This problem is a non-smooth minimization problem.
+    where f is convex and M-Lipschitz. This problem is a non-smooth minimization problem.
 
     This code computes a worst-case guarantee for the subgradient method. That is, it computes
-    the smallest possible tau(n, L) such that the guarantee
-        f(x_n) - f_* <= tau(n, L) * (f(x_0) - f_*)
+    the smallest possible tau(n, M) such that the guarantee
+        min_{0 \leq i \leq N} f(x_i) - f_* <= tau(n, M) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the gradient descent with exact linesearch,
     and where x_* is the minimizer of f.
 
@@ -66,8 +66,8 @@ def wc_subgd(M, N, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of sugbradient method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -14,7 +14,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
         v_(x_{n+1}) <= tau(n, mu, L) v_(x_{n}),
     is valid, where x_n is the output of the optimized gradient method, where x_* is a minimizer of f,
-    and where v(x_n) is a well-chosen lyapunov function decreasing along the sequence :
+    and where v(x_n) is a well-chosen Lyapunov function decreasing along the sequence :
 
     We show how to compute the tight rate for the Lyapunov function developped in
     [1] Cyrus, S., Hu, B., Van Scoy, B., & Lessard, L. "A robust accelerated
@@ -23,7 +23,7 @@ def wc_rmm(mu, L, lam, verbose=True):
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
-    :param lam: (float) if lam=1 it is the gradient descent, if lam=0, it is the triple momentum method.
+    :param lam: (float) if lam=1 it is the gradient descent, if lam=0, it is the Triple Momentum Method.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
@@ -53,7 +53,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     l = mu ** 2 * (kappa - kappa * rho ** 2 - 1) / (2 * rho * (1 - rho))
     nnu = (1 + rho) * (1 - kappa + 2 * kappa * rho - kappa * rho ** 2) / (2 * rho)
 
-    # Run one step of the robust momentum method
+    # Run one step of the Robust Momentum Method
     y0 = x1 + gamma * (x1 - x0)
     g0, f0 = func.oracle(y0)
     x2 = x1 + beta * (x1 - x0) - alpha * g0
@@ -70,10 +70,10 @@ def wc_rmm(mu, L, lam, verbose=True):
     initLyapunov = l * (z1 - xs) ** 2 + q0
     finalLyapunov = l * (z2 - xs) ** 2 + q1
 
-    # Set the initial constraint that is a bound on the initial lypuanov function
+    # Set the initial constraint that is a bound on the initial Lyapunov function
     problem.set_initial_condition(initLyapunov <= 1)
 
-    # Set the performance metric to the final distance to optimum, that is the final lypuanov function
+    # Set the performance metric to the final distance to optimum, that is the final Lyapunov function
     problem.set_performance_metric(finalLyapunov)
 
     # Solve the PEP
@@ -84,7 +84,7 @@ def wc_rmm(mu, L, lam, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the robust momentum gradient method ***')
+        print('*** Example file: worst-case performance of the Robust Momentum Method ***')
         print('\tPEP-it guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(

@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.Function_classes.convex_function import ConvexFunction
@@ -21,8 +19,8 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
            else
                u{k+1} = w{k+1};
 
-    That is, it computes the smallest possible tau(n,L) such that the guarantee
-        F(y_n) - F(x_*) <= tau(n,L) * ||w_0 - w_*||^2
+    That is, it computes the smallest possible tau(n,L,mu) such that the guarantee
+        F(y_n) - F(x_*) <= tau(n,L,mu) * ||w_0 - w_*||^2
     is valid, where x_n is the output of the Fast Douglas Rachford Splitting method, and where x_* is a minimizer of F,
     and w_* defined such that
         x_* = prox_{\alpha}(w_*) is an optimal point.
@@ -33,7 +31,8 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
         variants." In 53rd IEEE Conference on Decision and Control (2014)
         where the theory is available for quadratics.
 
-    The tight guarantee obtained in [1, Theorem 4] is tau(n, L, mu) = 2/alpha*(1+alpha*L)/(1-alpha*L)/(n+2)**2
+    The tight guarantee obtained in [1, Theorem 4] is tau(n, L, mu) = 2/alpha*(1+alpha*L)/(1-alpha*L)/(n+2)**2.
+    However, this guarantee is only valid for quadratics.
 
     :param mu: (float) the strong convexity parameter.
     :param L: (float) the smoothness parameter.
@@ -89,7 +88,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     problem.set_performance_metric(func2.value(y) + fy - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2/(alpha*theta*(n+3)**2)
@@ -98,7 +97,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     if verbose :
         print('*** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
         print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
+        print('\tTheoretical guarantee for quadratics :\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

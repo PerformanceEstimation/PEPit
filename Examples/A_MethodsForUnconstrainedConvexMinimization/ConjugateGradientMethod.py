@@ -23,8 +23,6 @@ def wc_CG(L, n, verbose=True):
     [1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
     Mathematical Programming 184 (1), 183-220.
 
-    The tight guarantee obtained in [1] is tau(n,L)
-
     :param L: (float) the smoothness parameter.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion

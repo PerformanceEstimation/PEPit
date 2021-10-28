@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -71,7 +70,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     problem.set_performance_metric(distavg)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
     kappa = L/mu
@@ -80,8 +79,8 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of stochastic gradient descent with fixed step size ***')
-        print('\tPEP-it guarantee:\t\t sum_i((x_i - x_*)^2)/n <= {:.6} (x0 - x_*)^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t sum_i((x_i - x_*)^2)/n <= {:.6} (x0 - x_*)^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t sum_i(||x_i - x_*||^2)/n <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t sum_i(||x_i - x_*)^2||/n <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.bregmanproximal_step import BregmanProximal_Step
@@ -65,7 +63,7 @@ def wc_bpp(gamma, n, verbose=True):
     problem.set_performance_metric(ff - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK)
+    pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1/gamma/n

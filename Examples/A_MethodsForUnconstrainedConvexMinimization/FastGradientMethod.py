@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
@@ -13,7 +11,7 @@ def wc_fgm(mu, L, n, verbose=True):
     This code computes a worst-case guarantee for the fast gradient method, a.k.a. accelerated gradient method.
     That is, it computes the smallest possible tau(n,L,mu) such that the guarantee
         f(x_n) - f_* <= tau(n,L,mu) * || x_0 - x_* ||^2,
-    is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
+    is valid, where x_n is the output of the accelerated gradient method, and where x_* is a minimizer of f.
 
     In short, for given values of n and L, tau(n,L,mu) is be computed as the worst-case value of f(x_n)-f_* when
     || x_0 - x_* || == 1.
@@ -21,7 +19,7 @@ def wc_fgm(mu, L, n, verbose=True):
     Theoretical rates can be found in the following paper
     For an Upper bound (not tight)
     [1] A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems∗
-    Amir Beck† and Marc Teboulle‡
+    Amir Beck and Marc Teboulle
 
     For an exact bound (convex):
     [2] Exact Worst-case Performance of First-order Methods for Composite Convex Optimization
@@ -62,7 +60,7 @@ def wc_fgm(mu, L, n, verbose=True):
     problem.set_performance_metric(func.value(x_new) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve()
 
     # Theoretical guarantee (for comparison)
     if mu == 0:

@@ -52,8 +52,9 @@ def wc_cg_fw(L, D, n, verbose=True):
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x^* = xs
-    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
+    # Enforce the feasibility of x0 : there is no initial constraint on x0
+    f10 = func1.value(x0)
+    f20 = func2.value(x0)
 
     # Compute n steps of the Conditional Gradient / Frank-Wolfe method starting from x0
     x = x0

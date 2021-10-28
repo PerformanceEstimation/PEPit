@@ -8,7 +8,7 @@ def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
         F_* = min_x f(x) + h(x),
-    where f is L-smooth and convex, and where h is convex. We further consider the case where the gradient of f
+    where f is L-smooth and convex, and where h is closed convex and proper. We further consider the case where the gradient of f
     can be evaluated, and where the proximal operator of h can be evaluated as well.
 
     This code computes a worst-case guarantee for the fast proximal gradient method (a.k.a. accelerated gradient).

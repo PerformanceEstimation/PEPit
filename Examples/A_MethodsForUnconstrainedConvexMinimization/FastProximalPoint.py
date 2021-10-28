@@ -14,7 +14,7 @@ def wc_fppa(A0, gammas, n, verbose=True):
     This code computes a worst-case guarantee for the fast proximal point method. That is, it computes
     the smallest possible tau(n) such that the guarantee
         f(x_n) - f_* <= tau(n) * (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
-    is valid, where x_n is the output of the proximal point method, and where x_* is the minimizer of f.
+    is valid, where x_n is the output of the fast proximal point method, and where x_* is the minimizer of f.
 
     [1] O. Güler. New proximal point algorithms for convex minimization.
         SIAM Journal on Optimization, 2(4):649–664, 1992.

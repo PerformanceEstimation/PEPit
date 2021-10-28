@@ -57,23 +57,22 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     xs = func.optimal_point()
     fs = func.value(xs)
 
-    # Then define the starting point x0 of the algorithm and its function value f0
-    x0 = problem.set_initial_point()
-    x0p = problem.set_initial_point()
-    f0 = func.value(x0)
+    # Then define the starting points x0 and x0p of the algorithm
+    w0 = problem.set_initial_point()
+    w0p = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and xs = x_*
-    problem.set_initial_condition((x0 - x0p) ** 2 <= 1)
+    # Set the initial constraint that is the distance between x0 and x0p
+    problem.set_initial_condition((w0 - w0p) ** 2 <= 1)
 
     # Compute n steps of the Douglas Rachford Splitting starting from x0
-    w = x0
+    w = w0
     for _ in range(n):
         x, _, _ = proximal_step(w, func2, alpha)
         y, _, _ = proximal_step(2 * x - w, func1, alpha)
         w = w + theta * (y - x)
 
     # Compute n steps of the Douglas Rachford Splitting starting from x0p
-    wp = x0p
+    wp = w0p
     for _ in range(n):
         xp, _, _ = proximal_step(wp, func2, alpha)
         yp, _, _ = proximal_step(2 * xp - wp, func1, alpha)
@@ -93,7 +92,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***')
         print('\tPEP-it guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t||w - wp||^2 <= {:.6} ||w - wp||^2'.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
