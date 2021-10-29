@@ -11,14 +11,14 @@ def wc_ppm(alpha, n, verbose=True):
 
     This code computes a worst-case guarantee for the proximal point method, that is the smallest
     possible tau(n,L) such that the guarantee
-        || x_(n) - x(n-1)||^2 <= tau(n,L) * || x_0 - x_*||^2,
+        ||x_(n) - x(n-1)||^2 <= tau(n,L) * ||x_0 - x_*||^2,
     is valid, where x_* is such that 0 in Ax_*..
 
     Theoretical rates can be found in the following paper (section 4)
 
     [1] Guoyong Gu, and Junfeng Yang. "Optimal nonergodic sublinear
-     convergence rate of proximal point algorithm for maximal monotone
-     inclusion problems." (2019)
+    convergence rate of proximal point algorithm for maximal monotone
+    inclusion problems." (2019)
 
     :param alpha: (float) the step size
     :param n: (int) number of iterations.
