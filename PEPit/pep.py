@@ -214,7 +214,7 @@ class PEP(object):
                                                                                       prob.value))
 
         # Store all the values of points and function values
-        self.eval_points_and_function_values(F.value, G.value, verbose)
+        self.eval_points_and_function_values(F.value, G.value, verbose=verbose)
 
         # Store all the dual values in constraints
         self.eval_constraint_dual_values(prob.constraints)
