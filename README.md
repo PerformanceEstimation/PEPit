@@ -22,3 +22,5 @@ You are all set!
 - All branches must be approved before merge. We use PRs and the ``git rebase`` command to sync any branch on ``develop``.
 
 ## Documentation
+
+# TODO Remove all the above and replace by quick starter (+ add our names somewhere).
