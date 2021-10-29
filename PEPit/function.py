@@ -1,6 +1,7 @@
 from PEPit.Tools.dict_operations import merge_dict, prune_dict
 from PEPit.point import Point
 from PEPit.expression import Expression
+from PEPit.constraint import Constraint
 
 
 class Function(object):
@@ -137,6 +138,10 @@ class Function(object):
         :param constraint: (Constraint) typically resulting from an inequality between 2 expressions.
         """
 
+        # Verify constraint is an actual Constraint object
+        assert isinstance(constraint, Constraint)
+
+        # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
     def add_class_constraints(self):
