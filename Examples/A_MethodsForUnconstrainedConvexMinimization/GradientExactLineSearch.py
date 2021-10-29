@@ -36,9 +36,9 @@ def wc_els(L, mu, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
-    # Start by defining its unique optimal point xs=x_* and corresponding function value fs=f_*
+    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
     fs = func.value(xs)
 

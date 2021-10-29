@@ -23,4 +23,4 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         super().__init__(param={'mu': 0, 'L': param['L']},
                          is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=True)
+                         is_differentiable=is_differentiable)

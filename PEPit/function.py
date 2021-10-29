@@ -98,7 +98,7 @@ class Function(object):
         """
 
         # Verify other is a scalar constant
-        assert type(other) in {int, float}
+        assert isinstance(other, float) or isinstance(other, int)
 
         # Multiply uniformly self's decomposition_dict by other
         new_decomposition_dict = dict()

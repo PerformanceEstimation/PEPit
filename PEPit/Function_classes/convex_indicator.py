@@ -7,17 +7,16 @@ class ConvexIndicatorFunction(Function):
     """
     This routine implements the interpolation conditions for convex
     indicator functions with bounded domains. Two parameters may be provided:
-           - a diameter D (D is nonnegative, and possibly infinite),
-           - a radius R (R is nonnegative, and possibly infinite).
+           - a diameter D (D is nonnegative, and possibly infinite).
 
-    Note: not defining the value of D and/or R automatically corresponds to
-          set D and/or R to infinite.
+    Note: not defining the value of D automatically corresponds to
+          set D to infinite.
 
     To generate a convex indicator function 'h' with diameter D=infinite and
     a radius R=1 from an instance of PEP called P:
     >> problem = pep()
-    >> D, R = np.inf, 1
-    >> h = problem.declare_function('ConvexIndicator',{'D' :D, 'R': R});
+    >> D= np.inf
+    >> h = problem.declare_function('ConvexIndicator',{'D' :D});
 
     For details about interpolation conditions, we refer to the following
     references:
@@ -40,10 +39,10 @@ class ConvexIndicatorFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):  # TODO verifier la valeur par defaut de _is_differentiable
+                 is_differentiable=False):
         """
-        Class of smooth strongly convex functions.
-        The differentiability is necessarily verified.
+        Class of convex indicator functions.
+        The differentiability is not necessarily verified.
 
         :param param: (dict) contains the values of mu and L
         :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
@@ -51,18 +50,16 @@ class ConvexIndicatorFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=True)
+                         is_differentiable=is_differentiable)
 
-        # Store D ad R
+        # Store D
         self.D = param['D']  # diameter
-        self.R = param['R']  # radius
 
     def add_class_constraints(self):
         """
         Add constraints of convex indicator functions
         """
 
-        # TODO verifier la pertinence de R
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -73,8 +70,6 @@ class ConvexIndicatorFunction(Function):
 
                 if xi == xj:
                     self.add_constraint(fi == 0)
-                    if self.R != np.inf:
-                        self.add_constraint(xi ** 2 <= self.R ** 2)
 
                 else:
                     self.add_constraint(gi * (xj - xi) <= 0)

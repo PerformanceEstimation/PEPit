@@ -56,7 +56,7 @@ class Expression(object):
         if isinstance(other, Expression):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
         # It other is a scalar constant, add it to the decomposition_dict of self
-        elif type(other) in {int, float}:
+        elif isinstance(other, int) or isinstance(other, float):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, {1: other})
         # Raise an Exception in any other scenario
         else:
@@ -95,7 +95,7 @@ class Expression(object):
         """
 
         # Verify other is a scalar constant
-        assert type(other) in {int, float}
+        assert isinstance(other, int) or isinstance(other, float)
 
         # Multiply uniformly self's decomposition_dict by other
         new_decomposition_dict = dict()
@@ -157,8 +157,8 @@ class Expression(object):
         :param other: (Expression of int or float)
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
-
-        return other <= self
+        #return other <= self
+        return -self <= -other
 
     def __gt__(self, other):
         """

@@ -129,12 +129,12 @@ class PEP(object):
                 else:
                     raise TypeError("Expressions are made of function values, inner products and constants only!")
 
-        cvxpy_variable += F@Fweights + cp.sum(cp.multiply(G, Gweights))
+        cvxpy_variable += F @ Fweights + cp.sum(cp.multiply(G, Gweights))
 
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=cp.SCS, verbose=1):
+    def solve(self, solver=cp.SCS, verbose=1, tracetrick=False):
         """
         Solve the PEP
 
@@ -213,16 +213,41 @@ class PEP(object):
                                                                                       prob.solver_stats.solver_name,
                                                                                       prob.value))
 
+        wc_value = prob.value
+        if tracetrick:
+            eig_threshold = 1e-5
+            if verbose:
+                eig_val, _ = np.linalg.eig(G.value)
+                nb_eigen = len([element for element in eig_val if element > eig_threshold])
+                print(
+                    '(PEP-it) Postprocessing: applying trace heuristic. Currently {} eigenvalue(s) > {} before resolve.'.format(
+                        nb_eigen, eig_threshold))
+                print('(PEP-it) Calling SDP solver')
+            tol_tracetrick = 1e-5
+            constraints_list.append(objective >= wc_value - tol_tracetrick)
+            prob = cp.Problem(objective=cp.Minimize(cp.trace(G)), constraints=constraints_list)
+            prob.solve(solver=solver)
+            wc_value = objective.value[0]
+            if verbose:
+                print('(PEP-it) Solver status: {} (solver: {}); objective value: {}'.format(prob.status,
+                                                                                            prob.solver_stats.solver_name,
+                                                                                            wc_value))
+                eig_val, _ = np.linalg.eig(G.value)
+                nb_eigen = len([element for element in eig_val if element > eig_threshold])
+                print(
+                    '(PEP-it) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
+                                                                                                  eig_threshold))
+
         # Store all the values of points and function values
-        self.eval_points_and_function_values(F.value, G.value)
+        self.eval_points_and_function_values(F.value, G.value, verbose=verbose)
 
         # Store all the dual values in constraints
         self.eval_constraint_dual_values(prob.constraints)
 
         # Return the value of the minimal performance metric
-        return prob.value
+        return wc_value
 
-    def eval_points_and_function_values(self, F_value, G_value):
+    def eval_points_and_function_values(self, F_value, G_value, verbose):
         """
         Store values of points and function values from the result of the PEP
 
@@ -235,12 +260,13 @@ class PEP(object):
 
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
-            print("\033[93m(PEP-it) Postprocessing: solver\'s output is not entirely feasible"
-                  " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
-                  " Small deviation from 0 may simply be due to numerical error."
-                  " Big ones should be deeply investigated.\n"
-                  " In any cases, from now the provided values of parameters are based on the projection of the Gram"
-                  " matrix onto the cone of symmetric semi-definite matrix.\033[0m".format(np.min(eig_val)))
+            if verbose:
+                print("\033[93m(PEP-it) Postprocessing: solver\'s output is not entirely feasible"
+                      " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
+                      " Small deviation from 0 may simply be due to numerical error."
+                      " Big ones should be deeply investigated.\n"
+                      " In any case, from now the provided values of parameters are based on the projection of the Gram"
+                      " matrix onto the cone of symmetric semi-definite matrix.\033[0m".format(np.min(eig_val)))
             eig_val = np.maximum(eig_val, 0)
 
         # Extracts points values

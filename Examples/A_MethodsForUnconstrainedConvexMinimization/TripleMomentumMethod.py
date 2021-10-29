@@ -4,16 +4,16 @@ from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
-def wc_tmm(mu, L, n):
+def wc_tmm(mu, L, n, verbose=True):
     """
-    In this example, we use the triple momentum method for solving the
-    L-smooth mu-strongly convex minimization problem
-       min_x F(x);
-    for notational convenience we denote xs=argmin_x F(x).
+    Consider the convex minimization problem
+        f_* = min_x f(x),
+    where f is L-smooth and mu-strongly-convex.
 
-    We show how to compute the worst-case value of F(xN)-F(xs) when xN is
-    obtained by doing N steps of the method starting with an initial
-    iterate satisfying ||x0-xs||<=1.
+    This code computes a worst-case guarantee for the Triple Momentum Method.
+    That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
+        f(x_n) - f_* <= tau(n, mu, L) ||x_0 - x_*||^2,
+    is valid, where x_n is the output of the triple momentum method, and where x_* is a minimizer of f.
 
     [1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018).
     "The fastest known globally convergent first-order method for
@@ -23,27 +23,28 @@ def wc_tmm(mu, L, n):
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
     :param n: (int) number of iterations.
-    :return:
+    :param verbose: (bool) if True, print conclusion
+
+    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a convex lipschitz function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    # Declare a smooth strongly convex
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
-    # Start by defining its unique optimal point and its function value
+    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
     fs = func.value(xs)
 
-    # Then Define the starting point of the algorithm
+    # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # algorithmic parameters
+    # Set the parameters of the Triple Momentum Method
     kappa = L / mu
     rho = (1 - 1 / np.sqrt(kappa))
     alpha = (1 + rho) / L
@@ -51,32 +52,33 @@ def wc_tmm(mu, L, n):
     gamma = rho ** 2 / (1 + rho) / (2 - rho)
     delta = rho ** 2 / (1 - rho ** 2)
 
-    # Run the triple momentum method
+    # Run n steps of the Triple Momentum Method
     x_old = x0
     x_new = x0
     y = x0
-
     for _ in range(n + 1):
         x_inter = (1 + beta) * x_new - beta * x_old - alpha * func.gradient(y)
         y = (1 + gamma) * x_inter - gamma * x_new
         x = (1 + delta) * x_inter - delta * x_new
         x_new, x_old = x_inter, x_new
 
-    # Set the performance metric to the final distance to optimum
+    # Set the performance metric to the function value accuracy
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    wc = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
-    # Theoretical guarantee (for comparison)
-    theory = rho ** (2 * (n + 1)) * L / 2 * kappa
-    print('*** Example file: worst-case performance of the triple momentum method (TMM) in function values ***')
-    print('\tPEP-it guarantee:\t f(y_n)-f_* <= ', wc)
-    print('\tTheoretical guarantee for L/mu large :\t f(y_n)-f_* <= ', theory)
-    # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
+    # Compute theoretical guarantee (for comparison)
+    theoretical_tau = rho ** (2 * (n + 1)) * L / 2 * kappa
 
-    # Return the rate of the evaluated method
-    return wc
+    # Print conclusion if required
+    if verbose:
+        print('*** Example file: worst-case performance of the Triple Momentum Method ***')
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+
+    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
+    return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
@@ -84,6 +86,6 @@ if __name__ == "__main__":
     L = 1.
     n = 4
 
-    rate = wc_tmm(mu=mu,
-                  L=L,
-                  n=n)
+    pepit_tau, theoretical_tau = wc_tmm(mu=mu,
+                                        L=L,
+                                        n=n)

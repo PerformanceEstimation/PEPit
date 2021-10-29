@@ -95,7 +95,7 @@ class Point(object):
         """
 
         # Multiplying by a scalar value is applying an homothety
-        if type(other) in {int, float}:
+        if isinstance(other, int) or isinstance(other, float):
             # Build the decomposition of the new point
             new_decomposition_dict = dict()
             for key, value in self.decomposition_dict.items():
@@ -130,8 +130,7 @@ class Point(object):
         :return: (Point) The resulting point
         """
         # Verify the type of denominator
-        assert type(denominator) in {int, float}
-
+        assert isinstance(denominator, float) or isinstance(denominator, int)
         # P / v = P * (1/v)
         return self.__rmul__(1 / denominator)
 
