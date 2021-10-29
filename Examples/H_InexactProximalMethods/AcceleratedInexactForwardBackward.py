@@ -1,8 +1,9 @@
 import numpy as np
 
 from PEPit.pep import PEP
-from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.Primitive_steps.inexactproximal_step import inexact_proximal_step
+from PEPit.Function_classes.strongly_convex import StronglyConvexFunction
+from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 
 
 def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
@@ -42,8 +43,8 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     problem = PEP()
 
     # Declare a non-smooth strongly convex function, and a smooth convex function.
-    g = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': np.inf})
-    f = problem.declare_function(SmoothStronglyConvexFunction, {'mu':0, 'L':L})
+    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
+    f = problem.declare_function(SmoothConvexFunction, param={'L': L})
     F = f + g
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
@@ -60,7 +61,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Set the scheme parameters
-    eta = (1 - zeta**2) * gamma
+    eta = (1 - zeta ** 2) * gamma
     opt = 'PD_gapI'
     a0 = (eta + 2 * A0 * eta * mu + np.sqrt(4 * eta * A0 * (A0 * mu + 1) * (eta * mu + 1) + eta ** 2)) / 2
     A1 = A0 + a0
@@ -69,18 +70,18 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     y = x0 + (A1 - A0) * (A0 * mu + 1) / (A0 * mu * (2 * A1 - A0) + A1) * (z0 - x0)
     dfy, fy = f.oracle(y)
     x1, _, g1, w, v, _, epsVar = inexact_proximal_step(y - gamma * dfy, g, gamma, opt)
-    f.add_constraint(epsVar <= sigma**2/2 * (y - x1)**2 + gamma**2 * zeta**2 / 2 * (v + dfy) ** 2 + xi/2)
+    f.add_constraint(epsVar <= sigma ** 2 / 2 * (y - x1) ** 2 + gamma ** 2 * zeta ** 2 / 2 * (v + dfy) ** 2 + xi / 2)
     f1 = f.value(x1)
     z1 = z0 + (A1 - A0) / (A1 * mu + 1) * (mu * (w - z0) - (v + dfy))
 
-    phi0 = A0 * (f0 + g0 - fs) + (1 + mu * A0) / 2 * (z0 - xs)**2
+    phi0 = A0 * (f0 + g0 - fs) + (1 + mu * A0) / 2 * (z0 - xs) ** 2
     phi1 = A1 * (f1 + g1 - fs) + (1 + mu * A1) / 2 * (z1 - xs) ** 2
 
     # Set the performance metric to the final distance between zn and zs
     problem.set_performance_metric(phi1 - phi0 - A1 / 2 / gamma * xi)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 0.
@@ -99,18 +100,20 @@ if __name__ == "__main__":
     # Choose the function parameter
     mu = 1
     L = 2
+
     # Choose scheme parameters
     sigma = 0.2
-    gamma = (1 - sigma ** 2) / L # the step size should be in [0, (1 - sigma**2)/L
+    gamma = (1 - sigma ** 2) / L  # the step size should be in [0, (1 - sigma**2)/L]
+
     # Choose the scheme (and Lyapunov) parameter
     zeta = 0.9
     xi = 3
     A0 = 1
 
     pepit_tau, theoretical_tau = wc_aifb(mu=mu,
-                                        L=2,
-                                        gamma=gamma,
-                                        sigma=sigma,
-                                        xi=xi,
-                                        zeta=zeta,
-                                        A0=A0)
+                                         L=2,
+                                         gamma=gamma,
+                                         sigma=sigma,
+                                         xi=xi,
+                                         zeta=zeta,
+                                         A0=A0)

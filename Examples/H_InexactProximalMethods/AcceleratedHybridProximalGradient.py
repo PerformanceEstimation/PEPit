@@ -41,7 +41,7 @@ def wc_ahpg(mu, gamma, sigma, A0, verbose=True):
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    f = problem.declare_function(SmoothStronglyConvexFunction, {'mu':mu, 'L':np.inf})
+    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': np.inf})
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
     xs = f.optimal_point()
@@ -56,23 +56,23 @@ def wc_ahpg(mu, gamma, sigma, A0, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute one step of the Accelerated Hybrid Proximal Gradient starting from x0
-    a0 = (gamma + 2 * A0 * gamma * mu + np.sqrt(4 * gamma * A0 * (A0 * mu + 1) * (gamma * mu + 1) + gamma**2))/2
+    a0 = (gamma + 2 * A0 * gamma * mu + np.sqrt(4 * gamma * A0 * (A0 * mu + 1) * (gamma * mu + 1) + gamma ** 2)) / 2
     A1 = A0 + a0
     opt = 'PD_gapI'
 
     y = x0 + (A1 - A0) * (A0 * mu + 1) / (A0 * mu * (2 * A1 - A0) + A1) * (z0 - x0)
     x1, _, f1, w, v, _, epsVar = inexact_proximal_step(y, f, gamma, opt)
-    f.add_constraint(epsVar <= sigma**2/2 * (y - x1)**2)
-    z1 = z0 + (A1 - A0)/(A1 * mu + 1) * (mu * (w - z0) - v)
+    f.add_constraint(epsVar <= sigma ** 2 / 2 * (y - x1) ** 2)
+    z1 = z0 + (A1 - A0) / (A1 * mu + 1) * (mu * (w - z0) - v)
 
-    phi0 = A0 * (f0 - fs) + (1 + mu * A0) / 2 * (z0 - xs)**2
+    phi0 = A0 * (f0 - fs) + (1 + mu * A0) / 2 * (z0 - xs) ** 2
     phi1 = A1 * (f1 - fs) + (1 + mu * A1) / 2 * (z1 - xs) ** 2
 
     # Set the performance metric to the final distance between zn and zs
     problem.set_performance_metric(phi1 - phi0)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 0.
@@ -97,6 +97,6 @@ if __name__ == "__main__":
     A0 = 10
 
     pepit_tau, theoretical_tau = wc_ahpg(mu=mu,
-                                        gamma=gamma,
-                                        sigma=sigma,
-                                        A0=A0)
+                                         gamma=gamma,
+                                         sigma=sigma,
+                                         A0=A0)

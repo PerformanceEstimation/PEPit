@@ -32,8 +32,7 @@ def wc_tmm(mu, L, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -67,10 +66,10 @@ def wc_tmm(mu, L, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau= rho ** (2 * (n + 1)) * L / 2 * kappa
+    theoretical_tau = rho ** (2 * (n + 1)) * L / 2 * kappa
 
     # Print conclusion if required
     if verbose:
@@ -88,5 +87,5 @@ if __name__ == "__main__":
     n = 4
 
     pepit_tau, theoretical_tau = wc_tmm(mu=mu,
-                                          L=L,
-                                          n=n)
+                                        L=L,
+                                        n=n)

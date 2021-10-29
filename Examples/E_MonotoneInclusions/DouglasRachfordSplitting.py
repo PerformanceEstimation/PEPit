@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -48,11 +47,8 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(LipschitzStronglyMonotoneOperator, {'L': L, 'mu': 0})
-    B = problem.declare_function(StronglyMonotoneOperator, {'mu': mu})
-
-    # Start by defining its unique optimal point xs = x_*
-    #xs = A.optimal_point()
+    A = problem.declare_function(LipschitzStronglyMonotoneOperator, param={'L': L, 'mu': 0})
+    B = problem.declare_function(StronglyMonotoneOperator, param={'mu': mu})
 
     # Then define starting points w0 and w1
     w0 = problem.set_initial_point()
@@ -72,23 +68,28 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     z1 = w1 - theta * (x1 - y1)
 
     # Set the performance metric to the distance between z0 and z1
-    problem.set_performance_metric((z0 - z1)**2)
+    problem.set_performance_metric((z0 - z1) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     mu = alpha * mu
     L = alpha * L
-    c = np.sqrt(((2 * (theta - 1) * mu + theta - 2)**2 + L**2 * (theta - 2 * (mu + 1))**2)/(L**2 + 1))
-    if theta * (theta + c)/(mu + 1)**2 / c * (c + mu * ((2 * (theta - 1) * mu + theta - 2) - L**2 * (theta - 2 * (mu + 1)))/(L**2 + 1)) >= 0:
-        theoretical_tau = ((theta + c) / 2 / (mu + 1))**2
-    elif (L <= 1) & (mu >= (L**2 + 1)/(L-1)**2) & (theta <= - (2 * (mu + 1) * (L + 1) *
-        (mu + (mu - 1) * L**2 - 2 * mu * L - 1))/(mu + L * (L**2 + L + 1) + 2 * mu**2 * (L - 1) + mu * L * (1 - (L - 3) * L) + 1)):
-        theoretical_tau = (1 - theta * (L + mu) / (L + 1) / (mu + 1))**2
-    else :
-        theoretical_tau = (2 - theta) / 4 / mu / (L**2 + 1) * (theta * (1 - 2 * mu + L**2)-2 * mu * (L**2 - 1)) * \
-                          (theta * (1 + 2 * mu + L**2)-2 * (mu + 1)*(L**2 + 1))/(theta * (1 + 2 * mu - L**2)-2*(mu + 1) * (1 - L**2))
+    c = np.sqrt(((2 * (theta - 1) * mu + theta - 2) ** 2 + L ** 2 * (theta - 2 * (mu + 1)) ** 2) / (L ** 2 + 1))
+    if theta * (theta + c) / (mu + 1) ** 2 / c * (
+            c + mu * ((2 * (theta - 1) * mu + theta - 2) - L ** 2 * (theta - 2 * (mu + 1))) / (L ** 2 + 1)) >= 0:
+        theoretical_tau = ((theta + c) / 2 / (mu + 1)) ** 2
+    elif (L <= 1) & (mu >= (L ** 2 + 1) / (L - 1) ** 2) & (theta <= - (2 * (mu + 1) * (L + 1) *
+                                                                       (mu + (mu - 1) * L ** 2 - 2 * mu * L - 1)) / (
+                                                                   mu + L * (L ** 2 + L + 1) + 2 * mu ** 2 * (
+                                                                   L - 1) + mu * L * (1 - (L - 3) * L) + 1)):
+        theoretical_tau = (1 - theta * (L + mu) / (L + 1) / (mu + 1)) ** 2
+    else:
+        theoretical_tau = (2 - theta) / 4 / mu / (L ** 2 + 1) * (
+                    theta * (1 - 2 * mu + L ** 2) - 2 * mu * (L ** 2 - 1)) * \
+                          (theta * (1 + 2 * mu + L ** 2) - 2 * (mu + 1) * (L ** 2 + 1)) / (
+                                      theta * (1 + 2 * mu - L ** 2) - 2 * (mu + 1) * (1 - L ** 2))
 
     # Print conclusion if required
     if verbose:

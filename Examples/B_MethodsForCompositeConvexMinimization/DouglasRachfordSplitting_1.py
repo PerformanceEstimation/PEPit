@@ -46,16 +46,14 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    func1 = problem.declare_function(SmoothStronglyConvexFunction,
-                                     {'mu': mu, 'L': L})
-    func2 = problem.declare_function(ConvexFunction, {})
+    func1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
+    func2 = problem.declare_function(ConvexFunction, param={})
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
-    # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
+    # Start by defining its unique optimal point xs = x_*
     xs = func.optimal_point()
-    fs = func.value(xs)
 
     # Then define the starting points x0 and x0p of the algorithm
     w0 = problem.set_initial_point()
@@ -82,7 +80,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     problem.set_performance_metric((w - wp) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
@@ -107,7 +105,7 @@ if __name__ == "__main__":
     n = 2
 
     pepit_tau, theoretical_tau = wc_drs(mu=mu,
-                  L=L,
-                  alpha=alpha,
-                  theta=theta,
-                  n=n)
+                                        L=L,
+                                        alpha=alpha,
+                                        theta=theta,
+                                        n=n)

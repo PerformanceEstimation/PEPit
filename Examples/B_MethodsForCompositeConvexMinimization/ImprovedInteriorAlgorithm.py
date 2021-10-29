@@ -40,12 +40,10 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     problem = PEP()
 
     # Declare three convex functions
-    func1 = problem.declare_function(SmoothConvexFunction,
-                                    {'L': L})
-    func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': np.inf})
-    h = problem.declare_function(SmoothStronglyConvexFunction,
-                                     {'mu': mu, 'L': np.inf})
+    func1 = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
+    h = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': np.inf})
+
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -59,8 +57,6 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     gh0, h0 = h.oracle(x0)
     g10, f10 = func1.oracle(x0)
 
-
-
     # Compute n steps of the Improved Interior Algorithm starting from x0
     x = x0
     z = x0
@@ -69,12 +65,12 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     gh = gh0
     ck = c
     for i in range(n):
-        alphak = (np.sqrt((ck * lam)**2 + 4 * ck * lam) - lam*ck)/2
-        ck = (1- alphak) * ck
+        alphak = (np.sqrt((ck * lam) ** 2 + 4 * ck * lam) - lam * ck) / 2
+        ck = (1 - alphak) * ck
         y = (1 - alphak) * x + alphak * z
         if i >= 1:
-            g, f = func1. oracle(y)
-        z, _, _ = BregmanGradient_Step(g, gh, h+func2, alphak/ck)
+            g, f = func1.oracle(y)
+        z, _, _ = BregmanGradient_Step(g, gh, h + func2, alphak / ck)
         x = (1 - alphak) * x + alphak * z
         gh, _ = h.oracle(z)
 
@@ -85,30 +81,30 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    try :
-        pepit_tau = problem.solve(cp.MOSEK)
-    except :
-        pepit_tau = problem.solve()
+    try:
+        pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    except cp.error.SolverError:
+        pepit_tau = problem.solve(verbose=verbose)
         print("\033[93m(PEP-it) We recommend to use an other solver, such as MOSEK. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 4*L/(n+1)**2/c
+    theoretical_tau = 4 * L / (n + 1) ** 2 / c
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Improved Interior Point method in function values ***')
         print('\tPEP-it guarantee:\t f(x_n)-f_* <= {:.6} (c * Dh(x0,xs) + f1(x0) - f(xs))'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} (c * Dh(x0,xs) + f1(x0) - f(xs))'.format(theoretical_tau))
+        print(
+            '\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} (c * Dh(x0,xs) + f1(x0) - f(xs))'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     L = 1
     mu = 1
     c = 1
-    lam = 1/L
+    lam = 1 / L
     n = 5
 
     pepit_tau, theoretical_tau = wc_iipp(L=L,

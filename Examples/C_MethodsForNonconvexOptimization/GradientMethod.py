@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_function import SmoothFunction
 
@@ -12,7 +10,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     This code computes a worst-case guarantee for the gradient method fixed step size. That is, it computes
     the smallest possible tau(n, L, mu) such that the guarantee
-        min_n ||f'(x_n)||^2 <= tau(n, L, mu) * (f(x_0) - f(x_n))
+        min_n ||f'(x_n)||^2 <= tau(n, L) * (f(x_0) - f(x_n))
     is valid, where x_n is the output of the gradient descent with fixed step sizes,
     and where x_n is the n-th iterates obtained with the gradient method.
 
@@ -28,7 +26,7 @@ def wc_gd(L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothFunction, {'L': L})
+    func = problem.declare_function(SmoothFunction, param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -54,10 +52,10 @@ def wc_gd(L, gamma, n, verbose=True):
     problem.set_performance_metric(gx ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2*L/n
+    theoretical_tau = 2 * L / n
 
     # Print conclusion if required
     if verbose:
@@ -72,8 +70,8 @@ def wc_gd(L, gamma, n, verbose=True):
 if __name__ == "__main__":
     n = 5
     L = 1
-    gamma = 1/L
+    gamma = 1 / L
 
     pepit_tau, theoretical_tau = wc_gd(L=L,
-                                        gamma=gamma,
-                                        n=n)
+                                       gamma=gamma,
+                                       n=n)

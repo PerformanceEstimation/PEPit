@@ -29,8 +29,7 @@ def compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_st
         gamma1 = gamma
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point
     xs = func.optimal_point()
@@ -63,7 +62,6 @@ def compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_st
 
 
 if __name__ == "__main__":
-
     n = 4
     mu = .1
     L = 1

@@ -33,8 +33,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -77,7 +76,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     problem.set_performance_metric(finalLyapunov)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = rho ** 2
@@ -100,5 +99,5 @@ if __name__ == "__main__":
     lam = 0.2
 
     pepit_tau, theoretical_tau = wc_rmm(mu=mu,
-                                          L=L,
-                                          lam=lam)
+                                        L=L,
+                                        lam=lam)

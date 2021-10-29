@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Operator_classes.Monotone import MonotoneOperator
 from PEPit.Operator_classes.Cocoercive import CocoerciveOperator
@@ -40,9 +38,9 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(MonotoneOperator, {})
-    B = problem.declare_function(CocoerciveOperator, {'beta': beta})
-    C = problem.declare_function(SmoothStronglyConvexFunction, {'L': L, 'mu': mu})
+    A = problem.declare_function(MonotoneOperator, param={})
+    B = problem.declare_function(CocoerciveOperator, param={'beta': beta})
+    C = problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu})
 
     # Then define the starting points w0 and w1
     w0 = problem.set_initial_point()
@@ -62,10 +60,10 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     z1 = w1 - theta * (x1 - y1)
 
     # Set the performance metric to the distance between z0 and z1
-    problem.set_performance_metric((z0 - z1)**2)
+    problem.set_performance_metric((z0 - z1) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None

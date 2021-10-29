@@ -43,12 +43,12 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     # Declare two convex functions and a convex indicator function
     d = problem.declare_function(ConvexFunction,
-                                    {})
+                                 param={})
     func1 = problem.declare_function(ConvexFunction,
-                                     {})
-    h = (d + func1)/L
+                                     param={})
+    h = (d + func1) / L
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': np.inf})
+                                     param={'D': np.inf})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -78,10 +78,10 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     problem.set_performance_metric(ffx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1/gamma/n
+    theoretical_tau = 1 / gamma / n
 
     # Print conclusion if required
     if verbose:
@@ -94,11 +94,10 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     L = 1
-    gamma = 1/L/2
+    gamma = 1 / (2*L)
     n = 3
 
     pepit_tau, theoretical_tau = wc_no_lips1(L=L,
-                        gamma=gamma,
-                        n=n)
+                                             gamma=gamma,
+                                             n=n)

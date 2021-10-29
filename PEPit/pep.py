@@ -239,7 +239,7 @@ class PEP(object):
                   " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
                   " Small deviation from 0 may simply be due to numerical error."
                   " Big ones should be deeply investigated.\n"
-                  " In any cases, from now the provided values of parameters are based on the projection of the Gram"
+                  " In any case, from now the provided values of parameters are based on the projection of the Gram"
                   " matrix onto the cone of symmetric semi-definite matrix.\033[0m".format(np.min(eig_val)))
             eig_val = np.maximum(eig_val, 0)
 

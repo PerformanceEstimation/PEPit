@@ -1,9 +1,7 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
-
 
 
 def wc_gd_lyapunov(L, gamma, lam, verbose=True):
@@ -43,7 +41,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
     # Declare a smooth convex function
     func = problem.declare_function(SmoothConvexFunction,
-                                    {'L': L})
+                                    param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -55,9 +53,9 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     zn = problem.set_initial_point()
 
     # Run the AGD at iteration (n+1)
-    lam_np1 = (1 + np.sqrt(4*lam ** 2 + 1))/2
-    tau = 1/lam_np1
-    eta = (lam_np1**2 - lam**2) / L
+    lam_np1 = (1 + np.sqrt(4 * lam ** 2 + 1)) / 2
+    tau = 1 / lam_np1
+    eta = (lam_np1 ** 2 - lam ** 2) / L
 
     yn = (1 - tau) * xn + tau * zn
     gyn = func.gradient(yn)
@@ -66,8 +64,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     gnp1, fnp1 = func.oracle(xnp1)
 
     # Compute the Lyapunov function at iteration n and at iteration n+1
-    final_lyapunov = lam_np1 ** 2 * (fnp1 - fs) + L/2 * (znp1 - xs)**2
-    init_lyapunov = lam ** 2 * (fn - fs) + L/2 * (zn - xs)**2
+    final_lyapunov = lam_np1 ** 2 * (fnp1 - fs) + L / 2 * (znp1 - xs) ** 2
+    init_lyapunov = lam ** 2 * (fn - fs) + L / 2 * (zn - xs) ** 2
 
     # Set the initial constraint that is the bounded initial Lyapunov function
     problem.set_initial_condition(init_lyapunov <= 1)
@@ -76,16 +74,23 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     problem.set_performance_metric(final_lyapunov)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1.
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
-        print('\tPEP-it guarantee:\t\t(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2  <= {:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2 '.format(pepit_tau))
-        print('\tTheoretical guarantee:\t (n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2  <= {:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2'.format(theoretical_tau))
+        print(
+            '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
+        print('\tPEP-it guarantee:\t\t'
+              '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
+              ' <= '
+              '{:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2 '.format(pepit_tau))
+        print('\tTheoretical guarantee:\t'
+              '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
+              ' <= '
+              '{:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -94,8 +99,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 if __name__ == "__main__":
     L = 1
     lam = 10.
-    gamma = 1/L
+    gamma = 1 / L
 
     pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L,
-                                            gamma=gamma,
-                                            lam=lam)
+                                                gamma=gamma,
+                                                lam=lam)

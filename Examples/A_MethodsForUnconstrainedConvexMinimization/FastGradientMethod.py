@@ -36,7 +36,7 @@ def wc_fgm(mu, L, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -60,7 +60,7 @@ def wc_fgm(mu, L, n, verbose=True):
     problem.set_performance_metric(func.value(x_new) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Theoretical guarantee (for comparison)
     if mu == 0:
@@ -84,4 +84,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0
 
-    pepit_tau, thoeretical_tau = wc_fgm(mu=mu,L=L,n=n)
+    pepit_tau, theoretical_tau = wc_fgm(mu=mu, L=L, n=n)

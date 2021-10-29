@@ -37,7 +37,7 @@ def wc_ogm(L, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction, {'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, param={'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -68,7 +68,7 @@ def wc_ogm(L, n, verbose=True):
     problem.set_performance_metric(func.value(y) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / 2 / theta_new ** 2

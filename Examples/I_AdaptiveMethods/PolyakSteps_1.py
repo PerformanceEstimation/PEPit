@@ -1,8 +1,5 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-
 
 
 def wc_ps_1(L, mu, gamma, verbose=True):
@@ -33,8 +30,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'L': L, 'mu': mu})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -45,20 +41,20 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     g0, f0 = func.oracle(x0)
 
     # Set the initial condition to the distance between x0 and xs
-    problem.set_initial_condition((x0 - xs)**2 <= 1)
+    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run the Polayk steps at iteration 1
     x1 = x0 - gamma * g0
     _, _ = func.oracle(x1)
 
     # Set the initial condition to the Polyak step size
-    problem.set_initial_condition(gamma * g0**2 == 2 * (f0 - fs))
+    problem.set_initial_condition(gamma * g0 ** 2 == 2 * (f0 - fs))
 
     # Set the performance metric to the distance between x_1 and x_* = xs
-    problem.set_performance_metric((x1 - xs)**2)
+    problem.set_performance_metric((x1 - xs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (gamma * L - 1) * (1 - gamma * mu) / (gamma * (L + mu) - 1)
@@ -76,8 +72,8 @@ def wc_ps_1(L, mu, gamma, verbose=True):
 if __name__ == "__main__":
     L = 1
     mu = 0.1
-    gamma = 2/(L + mu)
+    gamma = 2 / (L + mu)
 
     pepit_tau, theoretical_tau = wc_ps_1(L=L,
-                                        mu=mu,
-                                        gamma=gamma)
+                                         mu=mu,
+                                         gamma=gamma)

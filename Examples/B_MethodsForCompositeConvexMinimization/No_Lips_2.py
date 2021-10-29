@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -44,12 +43,12 @@ def wc_no_lips2(L, gamma, n, verbose=True):
 
     # Declare two convex functions and a convex indicator function
     d = problem.declare_function(ConvexFunction,
-                                    {})
+                                 param={})
     func1 = problem.declare_function(ConvexFunction,
-                                     {})
-    h = (d + func1)/L
+                                     param={})
+    h = (d + func1) / L
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': np.inf})
+                                     param={'D': np.inf})
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
@@ -77,7 +76,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
         x2, _, _ = BregmanGradient_Step(gfx, ghx, func2 + h, gamma)
         gfx, _ = func1.oracle(x2)
         ghx, hx2 = h.oracle(x2)
-        Dhx = hx1 - hx2 - ghx*(x1 - x2)
+        Dhx = hx1 - hx2 - ghx * (x1 - x2)
         # update the iterates
         x1 = x2
         hx1 = hx2
@@ -85,13 +84,13 @@ def wc_no_lips2(L, gamma, n, verbose=True):
         problem.set_performance_metric(Dhx)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2/(n-1)/n
+    theoretical_tau = 2 / (n - 1) / n
 
     # Print conclusion if required
-    if verbose :
+    if verbose:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
         print('\tPEP-it guarantee:\t min_n Dh(y_n, y_(n-1)) <= {:.6} Dh(y_0, x_*)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t min_n Dh(y_n, y_(n-1)) <= {:.6} Dh(y_0, x_*) '.format(theoretical_tau))
@@ -101,11 +100,10 @@ def wc_no_lips2(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     L = 1
-    gamma = 1/L
+    gamma = 1 / L
     n = 10
 
     pepit_tau, theoretical_tau = wc_no_lips2(L=L,
-                        gamma=gamma,
-                        n=n)
+                                             gamma=gamma,
+                                             n=n)
