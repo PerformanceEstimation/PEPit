@@ -346,11 +346,10 @@ class TestExamples(unittest.TestCase):
         self.assertLessEqual(wc, theory + 10 ** -3)
 
     def test_inAHPE(self):
-        mu,gamma,sigma,A0 = 1,1,1,10
+        mu, gamma, sigma, A0 = 1, 1, 1, 10
 
         wc, theory = inAHPE.wc_ahpe(mu, gamma, sigma, A0, verbose=self.verbose)
-        self.assertLessEqual(wc,  10 ** -5)
-
+        self.assertLessEqual(wc, 10 ** -5)
 
     def tearDown(self):
         Point.counter = 0

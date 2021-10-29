@@ -36,7 +36,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then Define the starting points of the algorithm, x0 and x1

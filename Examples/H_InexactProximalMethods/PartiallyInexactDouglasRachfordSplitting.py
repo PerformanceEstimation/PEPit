@@ -53,7 +53,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
     # Start by defining its unique optimal point xs = x_*, its function value fs = F(x_*)
     # and zs te fixed point of the operator.
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     zs = xs + gamma * f.gradient(xs)
 
     # Then define the starting point z0, that is the previous step of the algorithm.

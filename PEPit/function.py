@@ -1,6 +1,7 @@
 from PEPit.Tools.dict_operations import merge_dict, prune_dict
 from PEPit.point import Point
 from PEPit.expression import Expression
+from PEPit.constraint import Constraint
 
 
 class Function(object):
@@ -45,9 +46,12 @@ class Function(object):
 
         # Initialize list of points and constraints.
         # An optimal point will be stored in the 2 lists "list_of_optimal_points" and "list_of_points".
-        self.list_of_optimal_points = list()
+        self.list_of_stationary_points = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
+
+    def get_is_leaf(self):
+        return self._is_leaf
 
     def __add__(self, other):
         """
@@ -137,6 +141,10 @@ class Function(object):
         :param constraint: (Constraint) typically resulting from an inequality between 2 expressions.
         """
 
+        # Verify constraint is an actual Constraint object
+        assert isinstance(constraint, Constraint)
+
+        # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
     def add_class_constraints(self):
@@ -173,8 +181,8 @@ class Function(object):
         gradient and function value on the point "point".
 
         :param point: (Point) the point we look at
-        :return: (tuple of lists) 3 lists or functions arranged with respect to their need.
-                                  Note functions are returned with their corresponding weight in the decomposition of self.
+        :return: (tuple of lists) 3 lists or functions arranged with respect to their need. Note functions are returned
+                                  with their corresponding weight in the decomposition of self.
         """
 
         # Initialize the 3 lists
@@ -229,7 +237,7 @@ class Function(object):
 
         # If gradient==0, then store the point in list_of_optimal_points too
         if g.decomposition_dict == dict():
-            self.list_of_optimal_points.append(triplet)
+            self.list_of_stationary_points.append(triplet)
 
         # If self is not a basis function, create gradient and function value for each of the latest
         # and combine under the constraint that the full gradient and function value is fixed.
@@ -383,9 +391,9 @@ class Function(object):
         # Return the function value
         return f
 
-    def optimal_point(self, return_gradient_and_function_value=False):
+    def stationary_point(self, return_gradient_and_function_value=False):
         """
-        Create a new optimal point, as well as its null gradient and its function value
+        Create a new stationary point, as well as its null gradient and its function value
 
         :param return_gradient_and_function_value: (bool) If True, return the triplet point, gradient, function value.
                                                           Otherwise, return only the point.
@@ -397,7 +405,7 @@ class Function(object):
         g = Point(is_leaf=False, decomposition_dict=dict())
         f = Expression(is_function_value=True, decomposition_dict=None)
 
-        # Add the triplet to the list of points of the function as well as to its list of optimal points
+        # Add the triplet to the list of points of the function as well as to its list of stationary points
         self.add_point((point, g, f))
 
         # Return the required information

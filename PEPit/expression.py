@@ -44,6 +44,9 @@ class Expression(object):
             self.decomposition_dict = decomposition_dict
             self.counter = None
 
+    def get_is_function_value(self):
+        return self._is_function_value
+
     def __add__(self, other):
         """
         Add 2 expressions together, leading to a new expression. Note an expression can also be added to a constant.
@@ -157,7 +160,6 @@ class Expression(object):
         :param other: (Expression of int or float)
         :return: (Expression) Expression <= 0 must be equivalent to the input inequality
         """
-        #return other <= self
         return -self <= -other
 
     def __gt__(self, other):
@@ -207,12 +209,12 @@ class Expression(object):
                 for key, weight in self.decomposition_dict.items():
                     # Distinguish 3 cases: function values, inner products, and constant values
                     if type(key) == Expression:
-                        assert key._is_function_value
+                        assert key.get_is_function_value()
                         value += weight * key.eval()
                     elif type(key) == tuple:
                         point1, point2 = key
-                        assert point1._is_leaf
-                        assert point2._is_leaf
+                        assert point1.get_is_leaf()
+                        assert point2.get_is_leaf()
                         value += weight * np.dot(point1.eval(), point2.eval())
                     elif key == 1:
                         value += weight

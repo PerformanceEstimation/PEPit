@@ -55,7 +55,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     func = func1 + func2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
     g1s, _ = func1.oracle(xs)
     g2s, _ = func2.oracle(xs)

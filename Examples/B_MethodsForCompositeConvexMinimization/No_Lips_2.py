@@ -55,7 +55,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     func = func1 + func2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     Fs = func.value(xs)
     gfs, fs = func1.oracle(xs)
     ghs, hs = h.oracle(xs)

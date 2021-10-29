@@ -46,7 +46,7 @@ def wc_ahpe(mu, gamma, sigma, A0, verbose=True):
     f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': np.inf})
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
-    xs = f.optimal_point()
+    xs = f.stationary_point()
     fs = f.value(xs)
 
     # Then define the starting point z0 and x0, that is the previous step of the algorithm.

@@ -33,7 +33,7 @@ def wc_ppm(alpha, n, verbose=True):
     A = problem.declare_function(MonotoneOperator, param={})
 
     # Start by defining its unique optimal point xs = x_*
-    xs = A.optimal_point()
+    xs = A.stationary_point()
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
