@@ -43,7 +43,7 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     func = np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()

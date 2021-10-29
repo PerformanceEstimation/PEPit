@@ -32,7 +32,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()

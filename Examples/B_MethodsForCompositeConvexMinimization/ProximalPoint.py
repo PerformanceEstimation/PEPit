@@ -31,7 +31,7 @@ def wc_ppa(gamma, n, verbose=True):
     func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm

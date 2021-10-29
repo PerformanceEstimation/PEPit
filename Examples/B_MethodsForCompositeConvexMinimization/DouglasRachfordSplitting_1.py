@@ -53,7 +53,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     func = func1 + func2
 
     # Start by defining its unique optimal point xs = x_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the starting points x0 and x0p of the algorithm
     w0 = problem.set_initial_point()

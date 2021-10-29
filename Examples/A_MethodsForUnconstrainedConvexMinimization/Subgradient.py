@@ -36,7 +36,7 @@ def wc_subgd(M, N, gamma, verbose=True):
                                     param={'M': M})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm

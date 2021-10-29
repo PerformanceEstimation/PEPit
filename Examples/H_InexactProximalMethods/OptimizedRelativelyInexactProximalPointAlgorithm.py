@@ -37,7 +37,7 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     f = problem.declare_function(ConvexFunction, param={})
 
     # Start by defining its unique optimal point xs = x_*
-    xs = f.optimal_point()
+    xs = f.stationary_point()
 
     # Then define the starting point x0, that is the previous step of the algorithm.
     x0 = problem.set_initial_point()

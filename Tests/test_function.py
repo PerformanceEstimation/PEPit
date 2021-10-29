@@ -132,7 +132,7 @@ class TestFunction(unittest.TestCase):
     def test_optimal_point(self):
 
         new_function = self.compute_linear_combination()
-        new_function.optimal_point()
+        new_function.stationary_point()
 
         # On new_function
         self.assertEqual(len(new_function.list_of_points), 1)

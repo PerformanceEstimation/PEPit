@@ -36,7 +36,7 @@ def wc_psaga(L, mu, n, verbose=True):
     func = np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the initial values
     phi = [problem.set_initial_point() for _ in range(n)]

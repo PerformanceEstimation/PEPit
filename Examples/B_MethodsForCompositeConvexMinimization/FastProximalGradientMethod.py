@@ -44,7 +44,7 @@ def wc_fgm(mu, L, n, verbose=True):
     F = f + h
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = F.optimal_point()
+    xs = F.stationary_point()
     Fs = F.value(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0
