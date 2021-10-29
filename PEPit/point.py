@@ -47,6 +47,9 @@ class Point(object):
             self.decomposition_dict = decomposition_dict
             self.counter = None
 
+    def get_is_leaf(self):
+        return self._is_leaf
+
     def __add__(self, other):
         """
         Add 2 points together, leading to a new point.
