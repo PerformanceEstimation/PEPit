@@ -48,6 +48,7 @@ import Examples.I_AdaptiveMethods.PolyakSteps_1 as inPS1
 import Examples.I_AdaptiveMethods.PolyakSteps_2 as inPS2
 import Examples.J_LowDimensionalWorstCasesScenarios.InexactGradient as inLDIGD
 import Examples.J_LowDimensionalWorstCasesScenarios.OptimizedGradientMethod as inLDOGM
+import Examples.H_InexactProximalMethods.AcceleratedHybridProximalExtraGradient as inAHPE
 
 
 class TestExamples(unittest.TestCase):
@@ -343,6 +344,13 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = inPS2.wc_ps_2(L, mu, gamma, verbose=self.verbose)
         self.assertLessEqual(wc, theory + 10 ** -3)
+
+    def test_inAHPE(self):
+        mu,gamma,sigma,A0 = 1,1,1,10
+
+        wc, theory = inAHPE.wc_ahpe(mu, gamma, sigma, A0, verbose=self.verbose)
+        self.assertLessEqual(wc,  10 ** -5)
+
 
     def tearDown(self):
         Point.counter = 0
