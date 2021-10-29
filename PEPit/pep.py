@@ -107,20 +107,20 @@ class PEP(object):
         Gweights = np.zeros((Point.counter, Point.counter))
 
         # If simple function value, then simply return the right coordinate in F
-        if expression._is_function_value:
+        if expression.get_is_function_value():
             Fweights[expression.counter] += 1
         # If composite, combine all the cvxpy expression found from basis expressions
         else:
             for key, weight in expression.decomposition_dict.items():
                 # Function values are stored in F
                 if type(key) == Expression:
-                    assert key._is_function_value
+                    assert key.get_is_function_value()
                     Fweights[key.counter] += weight
                 # Inner products are stored in G
                 elif type(key) == tuple:
                     point1, point2 = key
-                    assert point1._is_leaf
-                    assert point2._is_leaf
+                    assert point1.get_is_leaf()
+                    assert point2.get_is_leaf()
                     Gweights[point1.counter, point2.counter] += weight
                 # Constants are simply constants
                 elif key == 1:
@@ -253,17 +253,17 @@ class PEP(object):
         # Set the attribute value of all leaf variables to the right value
         # Note the other ones are not stored until user asks to eval them
         for point in self.list_of_points:
-            if point._is_leaf:
+            if point.get_is_leaf():
                 point.value = points_values[:, point.counter]
         for function in self.list_of_functions:
-            if function._is_leaf:
+            if function.get_is_leaf():
                 for triplet in function.list_of_points:
                     point, gradient, function_value = triplet
-                    if point._is_leaf:
+                    if point.get_is_leaf():
                         point.value = points_values[:, point.counter]
-                    if gradient._is_leaf:
+                    if gradient.get_is_leaf():
                         gradient.value = points_values[:, gradient.counter]
-                    if function_value._is_function_value:
+                    if function_value.get_is_function_value():
                         function_value.value = F_value[function_value.counter]
 
     def eval_constraint_dual_values(self, cvx_constraints):

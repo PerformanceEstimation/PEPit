@@ -50,6 +50,9 @@ class Function(object):
         self.list_of_points = list()
         self.list_of_constraints = list()
 
+    def get_is_leaf(self):
+        return self._is_leaf
+
     def __add__(self, other):
         """
         Add 2 functions together, leading to a new function.
@@ -178,8 +181,8 @@ class Function(object):
         gradient and function value on the point "point".
 
         :param point: (Point) the point we look at
-        :return: (tuple of lists) 3 lists or functions arranged with respect to their need.
-                                  Note functions are returned with their corresponding weight in the decomposition of self.
+        :return: (tuple of lists) 3 lists or functions arranged with respect to their need. Note functions are returned
+                                  with their corresponding weight in the decomposition of self.
         """
 
         # Initialize the 3 lists
