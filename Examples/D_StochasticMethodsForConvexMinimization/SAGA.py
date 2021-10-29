@@ -14,7 +14,16 @@ def wc_saga(L, mu, n, verbose=True):
     is closed proper and convex with a proximal operator available.
 
     This code computes the exact rate for the Lyapunov function from the original SAGA paper,
-    given in Theorem 1 of [1].
+    given in Theorem 1 of [1]. At each iteration k, for a j chosen uniformely at random,
+        phi_j^{k+1} = x^k
+        w^{k+1} = x^k - gamma(f_j'(phi_j^{k+1}) - f_j'(phi_j^k) + 1/n sum(f_i'(phi^k)))
+        x^{k+1} = prox_gamma^h(w^{k+1})
+
+    That is, it computes the smallest possible tau(n,L,mu) such that a given Lyapunov sequence V1 is
+    decreasing along the trajectory:
+        V1(x_1) <= tau(n,L,mu) V0(x_0),
+    with Vk(x1) = 1/n*sum(fi(phi_i^k) - f_*) - 1/n*sum(<f_i'(x^*), phi_i^k - x^*> + ||x_k - x^*||/(2*gamma*(1-mu*gamma)),
+    and with gamma = 1/2/(mu*n+L).
 
     [1] Aaron Defazio, Francis Bach, and Simon Lacoste-Julien.
         "SAGA: A fast incremental gradient method with support for
@@ -23,7 +32,7 @@ def wc_saga(L, mu, n, verbose=True):
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of iterations.
+    :param n: (int) number of functions.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
@@ -49,36 +58,36 @@ def wc_saga(L, mu, n, verbose=True):
     # Compute the initial value of the Lyapunov function, for a given parameter
     gamma = 1 / 2 / (mu * n + L)
     c = 1 / 2 / gamma / (1 - mu * gamma) / n
-    T0 = c * (xs - x0) ** 2
+    init_lyapunov = c * (xs - x0) ** 2
     for i in range(n):
         gi, fi = fn[i].oracle(phi[i])
         gis, fis = fn[i].oracle(xs)
-        T0 = T0 + 1 / n * (fi - fis - gis * (phi[i] - xs))
+        init_lyapunov = init_lyapunov + 1 / n * (fi - fis - gis * (phi[i] - xs))
 
     # Set the initial constraint as the Lyapunov bounded by 1
-    problem.set_initial_condition(T0 <= 1)
+    problem.set_initial_condition(init_lyapunov <= 1)
 
     # Compute the expected value of the Lyapunov function after one iteration
     # (so: expectation over n possible scenarios: one for each element fi in the function).
-    T1avg = (xs - xs) ** 2
+    final_lyapunov_avg = (xs - xs) ** 2
     for i in range(n):
         w = x0 - gamma * (fn[i].gradient(x0) - fn[i].gradient(phi[i]))
         for j in range(n):
             w = w - gamma/n * fn[j].gradient(phi[j])
         x1, _, _ = proximal_step(w, h, gamma)
-        T1 = c * (x1 - xs) ** 2
+        final_lyapunov = c * (x1 - xs) ** 2
         for j in range(n):
             gis, fis = fn[j].oracle(xs)
             if i != j:
                 gi, fi = fn[j].oracle(phi[j])
-                T1 = T1 + 1 / n * (fi - fis - gis * (phi[j] - xs))
+                final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (phi[j] - xs))
             else:
                 gi, fi = fn[j].oracle(x0)
-                T1 = T1 + 1 / n * (fi - fis - gis * (x0 - xs))
-        T1avg = T1avg + T1 / n
+                final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (x0 - xs))
+        final_lyapunov_avg = final_lyapunov_avg + final_lyapunov / n
 
     # Set the performance metric to the distance average to optimal point
-    problem.set_performance_metric(T1avg)
+    problem.set_performance_metric(final_lyapunov_avg)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
@@ -90,8 +99,8 @@ def wc_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of SAGA for a given Lyapunov function ***')
-        print('\tPEP-it guarantee:\t\t T1(x_n, x_*) <= {:.6} TO(x_n, x_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t T1(x_n, x_*) <= {:.6} TO(x_n, x_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t v1(x_1, x_*) <= {:.6} v0(x_0, x_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t v1(x_1, x_*) <= {:.6} vO(x_0, x_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

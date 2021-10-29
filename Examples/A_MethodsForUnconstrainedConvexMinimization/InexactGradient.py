@@ -16,7 +16,7 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     and where x_* is the minimizer of f.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with 0 <= epsilon <= 1 )
+    described by (with 0 <= epsilon < 1 )
         || f'(x_i) - d || <= epsilon * || f'(x_i) ||,
     where f'(x_i) is the true gradient, and d is the approximate descent direction that is used.
 

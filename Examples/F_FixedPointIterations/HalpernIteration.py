@@ -3,21 +3,20 @@ from PEPit.Operator_classes.Lipschitz import LipschitzOperator
 from PEPit.Primitive_steps.fixedpoint import fixedpoint
 
 
-def wc_halpern(L, n, verbose=True):
+def wc_halpern(n, verbose=True):
     """
     Consider the fixed point problem
         Find x such that x = Ax,
-    where A is a non-expansive operator..
+    where A is a non-expansive operator., that is a L-Lipschitz operator with L=1.
 
     This code computes a worst-case guarantee for the Halpern Iteration. That is, it computes
-    the smallest possible tau(n, L) such that the guarantee
-        || x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
+    the smallest possible tau(n) such that the guarantee
+        || x_n - Ax_n||^2 <= tau(n) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Halpern iteration, and x_* the fixed point of A.
 
-    The detailed approach and the tight upper bound are availaible in [1, Theorem 2.1].
+    The detailed approach and the tight upper bound are available in [1, Theorem 2.1].
     [1] Lieder, Felix. "On the Convergence Rate of the Halpern-Iteration." (2017)
 
-    :param L: (float) the Lipschitz parameter.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
@@ -27,8 +26,8 @@ def wc_halpern(L, n, verbose=True):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a lipschitz operator
-    A = problem.declare_function(LipschitzOperator, param={'L': L})
+    # Declare a non expansive operator
+    A = problem.declare_function(LipschitzOperator, param={'L': 1.})
 
     # Start by defining its unique optimal point xs = x_*
     xs, _, _ = fixedpoint(A)
@@ -66,7 +65,5 @@ def wc_halpern(L, n, verbose=True):
 
 if __name__ == "__main__":
     n = 10
-    L = 1
 
-    pepit_tau, theoretical_tau = wc_halpern(L=L,
-                                            n=n)
+    pepit_tau, theoretical_tau = wc_halpern(n=n)

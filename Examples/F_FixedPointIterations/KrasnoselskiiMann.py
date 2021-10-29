@@ -5,15 +5,15 @@ from PEPit.Operator_classes.Lipschitz import LipschitzOperator
 from PEPit.Primitive_steps.fixedpoint import fixedpoint
 
 
-def wc_km(L, n, verbose=True):
+def wc_km(n, verbose=True):
     """
     Consider the fixed point problem
         Find x such that x = Ax,
-    where A is a non-expansive operator..
+    where A is a non-expansive operator., that is a L-Lipschitz operator wit L=1.
 
     This code computes a worst-case guarantee for the Krasnolselskii-Mann. That is, it computes
-    the smallest possible tau(n, L) such that the guarantee
-        1/4|| x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
+    the smallest possible tau(n) such that the guarantee
+        1/4|| x_n - Ax_n||^2 <= tau(n) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Krasnolseskii-Mann iterations, and x_* the fixed point of A.
 
     This scheme was first studied using PEPs in [1, Theorem 4.9], with a theoretical upper bound:
@@ -32,8 +32,7 @@ def wc_km(L, n, verbose=True):
     problem = PEP()
 
     # Declare a non expansive operator
-    assert (L == 1), 'The operator is non-expansive : L=1'
-    A = problem.declare_function(LipschitzOperator, param={'L': L})
+    A = problem.declare_function(LipschitzOperator, param={'L': 1.})
 
     # Start by defining its unique optimal point xs = x_*
     xs, _, _ = fixedpoint(A)
@@ -74,6 +73,4 @@ def wc_km(L, n, verbose=True):
 
 if __name__ == "__main__":
     n = 3
-    L = 1  # T is non-expansive
-    pepit_tau, theoretical_tau = wc_km(L=L,
-                                       n=n)
+    pepit_tau, theoretical_tau = wc_km(n=n)

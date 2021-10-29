@@ -11,15 +11,17 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     where f1, ..., fn are assumed L-smooth and mu-strongly convex.
 
     In addition, we assume a bounded variance at the optimal point :
-        sum_i(||fi'(x^*)||^2)/n <= v^2,
+        \mathbb{E}(sum_i(||fi'(x^*)||^2)/n) <= v^2,
     which is standard from the SGD literature.
 
     This code computes a worst-case guarantee for one step of the stochastic gradient descent in expectation,
     for the distance to optimality.
+
     That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
     \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * (f(x_0) - f_*)
     is valid, where x_1 is the output of one step of stochastic gradient descent: x_1 = x_0 - \gamma f'_{i_0}(x_0),
     with i_0 uniformly sampled in {1, \dots, n}, and the expectation is taken over the randomness of i_0.
+
     We will observe it does not depend on the number n of functions for this particular setting,
     meaning that the guarantees are also valid for expectation minimization settings (i.e., when n goes to infinity).
 

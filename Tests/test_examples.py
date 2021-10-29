@@ -285,15 +285,15 @@ class TestExamples(unittest.TestCase):
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=10 ** -3 * ref_pesto_bounds[n - 1])
 
     def test_inhi(self):
-        L, n = 1, 10
+        n = 10
 
-        wc, theory = inHI.wc_halpern(L, n, verbose=self.verbose)
+        wc, theory = inHI.wc_halpern(n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
     def test_inkm(self):
-        L, n = 1, 10
+        n = 10
 
-        wc, theory = inKM.wc_km(L, n, verbose=self.verbose)
+        wc, theory = inKM.wc_km(n, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
 
     def test_potgd1(self):
@@ -301,21 +301,21 @@ class TestExamples(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = potGD1.wc_gd_lyapunov_1(L, gamma, n, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
+        self.assertAlmostEqual(wc, theory, delta=10 ** -3 + theory)
 
     def test_potgd2(self):
         L, n = 1, 10
         gamma = 1 / L
 
         wc, theory = potGD2.wc_gd_lyapunov_2(L, gamma, n, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
+        self.assertAlmostEqual(wc, theory, delta=10 ** -3 + theory)
 
     def test_potfgd(self):
         L, lam = 1, 10
         gamma = 1 / L
 
         wc, theory = potFGD.wc_gd_lyapunov(L, gamma, lam, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
+        self.assertAlmostEqual(wc, theory, delta=10 ** -3 + theory)
 
     def test_inps1(self):
         L, mu = 1, 0.1
@@ -335,3 +335,6 @@ class TestExamples(unittest.TestCase):
         Point.counter = 0
         Expression.counter = 0
         Function.counter = 0
+
+if __name__ == '__main__':
+    unittest.main()

@@ -11,13 +11,14 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     where f1, ..., fn are assumed L-smooth and mu-strongly convex.
 
     In addition, we assume a zero variance at the optimal point :
-        sum_i(||fi'(x^*)||^2)/n ==0 (i.e. fi'(x^*)=0),
+        \mathbb{E}sum_i(||fi'(x^*)||^2)/n ==0 (i.e. \mathbb{E}fi'(x^*)=0),
     which happens for example in machine learning in the interpolation regime,
     that is if there exists a model x^* such that the loss \ell on any observation (z_i)_{i \in [n]},
     \ell(x^*, z_i)=f_i(x^*)" is zero.
 
     This code computes a worst-case guarantee for the stochastic gradient descent in expectation,
     for the distance to optimality.
+
     That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
     \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * (f(x_0) - f_*)
     is valid, where x_1 is the output of one step of stochastic gradient descent: x_1 = x_0 - \gamma f'_{i_0}(x_0),
