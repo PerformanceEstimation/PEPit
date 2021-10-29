@@ -214,7 +214,7 @@ class PEP(object):
                                                                                       prob.value))
 
         # Store all the values of points and function values
-        self.eval_points_and_function_values(F.value, G.value)
+        self.eval_points_and_function_values(F.value, G.value, verbose=verbose)
 
         # Store all the dual values in constraints
         self.eval_constraint_dual_values(prob.constraints)
@@ -222,7 +222,7 @@ class PEP(object):
         # Return the value of the minimal performance metric
         return prob.value
 
-    def eval_points_and_function_values(self, F_value, G_value):
+    def eval_points_and_function_values(self, F_value, G_value, verbose):
         """
         Store values of points and function values from the result of the PEP
 
@@ -235,12 +235,13 @@ class PEP(object):
 
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
-            print("\033[93m(PEP-it) Postprocessing: solver\'s output is not entirely feasible"
-                  " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
-                  " Small deviation from 0 may simply be due to numerical error."
-                  " Big ones should be deeply investigated.\n"
-                  " In any case, from now the provided values of parameters are based on the projection of the Gram"
-                  " matrix onto the cone of symmetric semi-definite matrix.\033[0m".format(np.min(eig_val)))
+            if verbose:
+                print("\033[93m(PEP-it) Postprocessing: solver\'s output is not entirely feasible"
+                      " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
+                      " Small deviation from 0 may simply be due to numerical error."
+                      " Big ones should be deeply investigated.\n"
+                      " In any case, from now the provided values of parameters are based on the projection of the Gram"
+                      " matrix onto the cone of symmetric semi-definite matrix.\033[0m".format(np.min(eig_val)))
             eig_val = np.maximum(eig_val, 0)
 
         # Extracts points values
