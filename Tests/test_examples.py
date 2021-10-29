@@ -46,6 +46,8 @@ import Examples.G_VerifyPotentialFunctions.GradientDescent_1 as potGD1
 import Examples.G_VerifyPotentialFunctions.GradientDescent_2 as potGD2
 import Examples.I_AdaptiveMethods.PolyakSteps_1 as inPS1
 import Examples.I_AdaptiveMethods.PolyakSteps_2 as inPS2
+import Examples.J_LowDimensionalWorstCasesScenarios.InexactGradient as inLDIGD
+import Examples.J_LowDimensionalWorstCasesScenarios.OptimizedGradientMethod as inLDOGM
 
 
 class TestExamples(unittest.TestCase):
@@ -54,7 +56,6 @@ class TestExamples(unittest.TestCase):
         self.n = 6
         self.mu = .1
         self.L = 1
-
         self.verbose = False
 
     def test_OGM(self):
@@ -92,6 +93,18 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 3, .1, .1, 2
 
         wc, theory = inGD.wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
+
+    def test_lowdimensional_OGM(self):
+        L, n = 3, 4
+
+        wc, theory = inLDOGM.wc_ogm(L, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
+
+    def test_lowdimensional_inexact_grad(self):
+        L, mu, epsilon, n = 3, .1, .1, 2
+
+        wc, theory = inLDIGD.wc_InexactGrad(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
     def test_inexact_agm(self):
