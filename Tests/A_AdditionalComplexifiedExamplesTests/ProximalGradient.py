@@ -39,10 +39,10 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    F1 = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu / 3, 'L': L / 3})
-    F2 = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu / 2, 'L': L / 2})
-    f3 = problem.declare_function(ConvexFunction, {})
-    f4 = problem.declare_function(ConvexFunction, {})
+    F1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu / 3, 'L': L / 3})
+    F2 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu / 2, 'L': L / 2})
+    f3 = problem.declare_function(ConvexFunction, param={})
+    f4 = problem.declare_function(ConvexFunction, param={})
     f2 = 5 * f3 + 2 * f4
     f1 = (3 * F1 + 2 * F2) / 2
     func = f1 + f2
@@ -65,7 +65,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     problem.set_performance_metric((x - xs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=True)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - gamma * mu) ** 2, (1 - gamma * L) ** 2) ** n

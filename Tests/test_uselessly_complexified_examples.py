@@ -1,7 +1,5 @@
 import unittest
 
-import numpy as np
-
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.point import Point

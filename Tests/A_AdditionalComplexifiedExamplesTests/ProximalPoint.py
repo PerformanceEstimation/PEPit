@@ -54,7 +54,7 @@ def wc_ppa(gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1/4/gamma/n
+    theoretical_tau = 1 / (4 * gamma * n)
 
     # Print conclusion if required
     if verbose:
