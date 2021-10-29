@@ -19,7 +19,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     with f1 = 5*F3 + 2*F4 and f2 = (3*F1 + 2*F2)/2.
 
     That is, the code computes the smallest possible tau(n,L,mu) such that the guarantee
-        f(x_n) - f_* <= tau(n,L,mu) * (f(x_0) - f_*),
+       ||x_n - x_*||^2 <= tau(n,L,mu) * ||x_0 - x_*||^2,
     is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
 
     The worst-case bound obtained in this example should match both the theoretical upper bound, and the
