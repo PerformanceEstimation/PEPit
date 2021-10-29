@@ -47,7 +47,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     f1 = (3 * F1 + 2 * F2) / 2
     func = f1 + f2
     # Start by defining its unique optimal point
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then Define the starting point of the algorithm
     x0 = problem.set_initial_point()
