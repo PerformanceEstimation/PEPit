@@ -31,12 +31,19 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
 	     first-order methods with inexact proximal operators
 
 
-	:param x0: starting point x0.
-	:param f: function on which the (epsilon-sub)gradient will be evaluated.
-	:param step: step size of the proximal step.
-	:param opt: inaccuracy parameters in the "opt" structure.
+	:param x0(Point): starting point x0.
+	:param f (Function): function on which the (epsilon-sub)gradient will be evaluated.
+	:param step (float): step size of the proximal step.
+	:param opt (string): inaccuracy parameters in the "opt" structure.
 
-	:return: x, gx, fx, w, v , fw, epsVar
+	:return:
+		- x (Point) the point x.
+		- gx (Point) the (sub)gradient of f at x.
+		- fx (Expression) the function f evaluation at x.
+		- w (Point) the point w.
+		- v (Point) the (sub)gradient of f evaluated at w.
+		- fw (Expression) the function f evaluated at w.
+		- epsVar (Expression) : an intermediate variable
 	NOTE : v is an epxilon-subgradient of f at x, and is the subgradient of f evaluated at w.
 	epsVar is te required accuracy (a variable), which the user can (should) bound.
 	"""

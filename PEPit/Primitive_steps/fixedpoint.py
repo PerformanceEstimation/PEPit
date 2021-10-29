@@ -4,10 +4,12 @@ from PEPit.expression import Expression
 
 def fixedpoint(A):
     """
-    This tourine allows to find a fixed point of an operator A.
+    This routine allows to find a fixed point of an operator A, that is x suh that :
+        Ax = x.
 
-    :param A: an operator or a function
-    :return: - if A is an operator, x such that x = A x (ixed point of A)
+    :param A (Operator): an operator or a function
+
+    :return: - if A is an operator, x such that x = A x (fixed point of A)
              - if A is a function, x such that x = A.gradient(x)
     """
 
