@@ -32,11 +32,11 @@ def wc_bpp(gamma, n, verbose=True):
 
     # Declare three convex functions
     func1 = problem.declare_function(ConvexFunction,
-                                    {})
+                                     param={})
     func2 = problem.declare_function(ConvexFunction,
-                                     {})
+                                     param={})
     h = problem.declare_function(ConvexFunction,
-                                     {})
+                                 param={})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -63,10 +63,10 @@ def wc_bpp(gamma, n, verbose=True):
     problem.set_performance_metric(ff - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1/gamma/n
+    theoretical_tau = 1 / gamma / n
 
     # Print conclusion if required
     if verbose:
@@ -78,9 +78,8 @@ def wc_bpp(gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     gamma = 3
     n = 5
 
     pepit_tau, theoretical_tau = wc_bpp(gamma=gamma,
-                   n=n)
+                                        n=n)

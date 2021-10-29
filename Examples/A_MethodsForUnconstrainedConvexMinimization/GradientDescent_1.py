@@ -30,8 +30,7 @@ def wc_gd(mu, L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -52,10 +51,10 @@ def wc_gd(mu, L, gamma, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L/2/(2*n+1)
+    theoretical_tau = L / 2 / (2 * n + 1)
 
     # Print conclusion if required
     if verbose:
@@ -71,7 +70,7 @@ if __name__ == "__main__":
     n = 2
     mu = 0
     L = 1
-    gamma = 1/L
+    gamma = 1 / L
 
     wc = wc_gd(mu=mu,
                L=L,

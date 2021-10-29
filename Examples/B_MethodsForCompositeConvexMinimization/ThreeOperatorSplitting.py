@@ -6,6 +6,7 @@ from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
 
+
 def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     """
      Consider the composite convex minimization problem,
@@ -51,16 +52,13 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     :return: (tuple) worst_case value, theoretical value
     """
 
-
     # Instantiate PEP
     problem = PEP()
 
     # Declare a smooth strongly convex function, a smooth function and a convex function.
-    func1 = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu1, 'L': L1})
-    func2 = problem.declare_function(ConvexFunction, {})
-    func3 = problem.declare_function(SmoothConvexFunction,
-                                     {'L': L3})
+    func1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu1, 'L': L1})
+    func2 = problem.declare_function(ConvexFunction, param={})
+    func3 = problem.declare_function(SmoothConvexFunction, param={'L': L3})
     # Define the function to optimize as the sum of func1, func2 and func3
     func = func1 + func2 + func3
 
@@ -71,16 +69,16 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     w0 = problem.set_initial_point()
     w0p = problem.set_initial_point()
 
-    #Set the initial constraint that is the distance between w0 and w0p
-    problem.set_initial_condition((w0 - w0p)**2 <= 1)
+    # Set the initial constraint that is the distance between w0 and w0p
+    problem.set_initial_condition((w0 - w0p) ** 2 <= 1)
 
     # Compute n steps of the Three Operator Splitting starting from w0
     w = w0
     for _ in range(n):
         x, _, _ = proximal_step(w, func2, alpha)
         gx, _ = func3.oracle(x)
-        y, _, _ = proximal_step(2 * x - w - alpha*gx, func1, alpha)
-        w = w + theta * (y-x)
+        y, _, _ = proximal_step(2 * x - w - alpha * gx, func1, alpha)
+        w = w + theta * (y - x)
 
     # Compute trajectory starting from w0p
     wp = w0p
@@ -91,16 +89,16 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
         wp = wp + theta * (yp - xp)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric((w - wp)**2)
+    problem.set_performance_metric((w - wp) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1/np.sqrt((n)) # holds for theta = 1
+    theoretical_tau = 1 / np.sqrt((n))  # holds for theta = 1
 
     # Print conclusion if required
-    if verbose :
+    if verbose:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
         print('\tPEP-it guarantee:\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
@@ -110,18 +108,18 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     mu1 = 0.1
     L1 = 10
     L3 = 1
-    ## Test scheme parameters
-    alpha = 1/L3
+
+    # Test scheme parameters
+    alpha = 1 / L3
     theta = 1
     n = 4
 
     pepit_tau, theoretical_tau = wc_tos(mu1=mu1,
-                    L1=L1,
-                    L3=L3,
-                    alpha=alpha,
-                    theta=theta,
-                    n=n)
+                                        L1=L1,
+                                        L3=L3,
+                                        alpha=alpha,
+                                        theta=theta,
+                                        n=n)

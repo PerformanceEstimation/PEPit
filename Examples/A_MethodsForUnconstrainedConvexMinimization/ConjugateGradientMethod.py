@@ -19,8 +19,8 @@ def wc_CG(L, n, verbose=True):
     In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when
     ||x_0 - x_* || == 1.
 
-    The detailed approach (based on convex relaxations) is available in
-    [1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+    The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
+    Efficient first-order methods for convex minimization: a constructive approach.
     Mathematical Programming 184 (1), 183-220.
 
     :param L: (float) the smoothness parameter.
@@ -34,7 +34,7 @@ def wc_CG(L, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction, {'L': L})
+    func = problem.declare_function(SmoothConvexFunction, param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -60,7 +60,7 @@ def wc_CG(L, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theta_new = 1
@@ -86,4 +86,4 @@ if __name__ == "__main__":
     L = 1
 
     pepit_tau, theoretical_tau = wc_CG(L=L,
-                                        n=n)
+                                       n=n)

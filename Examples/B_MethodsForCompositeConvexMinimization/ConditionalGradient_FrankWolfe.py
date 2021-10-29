@@ -1,5 +1,3 @@
-import numpy as np
-
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 from PEPit.Function_classes.convex_indicator import ConvexIndicatorFunction
@@ -39,9 +37,9 @@ def wc_cg_fw(L, D, n, verbose=True):
 
     # Declare a smooth convex function and a convex indicator of rayon D
     func1 = problem.declare_function(SmoothConvexFunction,
-                                     {'L': L})
+                                     param={'L': L})
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': D})
+                                     param={'D': D})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -53,8 +51,8 @@ def wc_cg_fw(L, D, n, verbose=True):
     x0 = problem.set_initial_point()
 
     # Enforce the feasibility of x0 : there is no initial constraint on x0
-    f10 = func1.value(x0)
-    f20 = func2.value(x0)
+    _ = func1.value(x0)
+    _ = func2.value(x0)
 
     # Compute n steps of the Conditional Gradient / Frank-Wolfe method starting from x0
     x = x0
@@ -68,7 +66,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     problem.set_performance_metric((func.value(x)) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
@@ -76,7 +74,8 @@ def wc_cg_fw(L, D, n, verbose=True):
 
     # Print conclusion if require
     if verbose:
-        print('*** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
+        print('*** Example file:'
+              ' worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
         print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -89,5 +88,5 @@ if __name__ == "__main__":
     n = 10
 
     pepit_tau, theoretical_tau = wc_cg_fw(L=L,
-                    D=D,
-                    n=n)
+                                          D=D,
+                                          n=n)

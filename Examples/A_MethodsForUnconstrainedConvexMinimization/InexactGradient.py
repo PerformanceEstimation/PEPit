@@ -41,13 +41,14 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
     fs = func.value(xs)
 
-    # Then define the starting point x0 of the algorithm as well as corresponding inexact gradient and function value g0 and f0
+    # Then define the starting point x0 of the algorithm
+    # as well as corresponding inexact gradient and function value g0 and f0
     x0 = problem.set_initial_point()
     d0, f0 = inexactgradient(x0, func, epsilon, notion='relative')
 
@@ -68,7 +69,7 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = ((Leps - meps) / (Leps + meps)) ** (2 * n)
@@ -93,4 +94,3 @@ if __name__ == "__main__":
                                                 mu=mu,
                                                 epsilon=epsilon,
                                                 n=n)
-

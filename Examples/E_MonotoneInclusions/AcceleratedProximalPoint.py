@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Operator_classes.Monotone import MonotoneOperator
 from PEPit.Primitive_steps.proximal_step import proximal_step
@@ -32,7 +30,7 @@ def wc_ppm(alpha, n, verbose=True):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(MonotoneOperator, {})
+    A = problem.declare_function(MonotoneOperator, param={})
 
     # Start by defining its unique optimal point xs = x_*
     xs = A.optimal_point()
@@ -44,21 +42,21 @@ def wc_ppm(alpha, n, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Proximal Gradient method starting from x0
-    x = [x0 for _ in range(n+1)]
-    y = [x0 for _ in range(n+1)]
-    for i in range(0, n-1):
-        x[i+1], _, _ = proximal_step(y[i+1], A, alpha)
-        y[i+2] = x[i+1] + i / (i + 2) * (x[i+1] - x[i]) - i / (i + 2) * (x[i] - y[i])
+    x = [x0 for _ in range(n + 1)]
+    y = [x0 for _ in range(n + 1)]
+    for i in range(0, n - 1):
+        x[i + 1], _, _ = proximal_step(y[i + 1], A, alpha)
+        y[i + 2] = x[i + 1] + i / (i + 2) * (x[i + 1] - x[i]) - i / (i + 2) * (x[i] - y[i])
     x[n], _, _ = proximal_step(y[n], A, alpha)
 
     # Set the performance metric to the distance between xn and yn
-    problem.set_performance_metric((x[n] - y[n])**2)
+    problem.set_performance_metric((x[n] - y[n]) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1/(n)**2
+    theoretical_tau = 1 / n ** 2
 
     # Print conclusion if required
     if verbose:

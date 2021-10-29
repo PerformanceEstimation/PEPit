@@ -37,8 +37,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -65,7 +64,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
     problem.set_performance_metric(f_new - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - alpha * mu) ** (n + 1)
@@ -86,13 +85,13 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1.
 
-    ## Optimal parameters for differentiable functions
-    alpha = 1 / (2*L)  # alpha \in [0, 1/L]
+    # Optimal parameters for differentiable functions
+    alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
     beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
     n = 1
 
     pepit_tau, theoretical_tau = wc_heavyball(mu=mu,
-                                            L=L,
-                                            alpha=alpha,
-                                            beta=beta,
-                                            n=n)
+                                              L=L,
+                                              alpha=alpha,
+                                              beta=beta,
+                                              n=n)

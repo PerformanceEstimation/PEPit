@@ -33,7 +33,7 @@ def wc_subgd(M, N, gamma, verbose=True):
 
     # Declare a convex lipschitz function
     func = problem.declare_function(ConvexLipschitzFunction,
-                                    {'M': M})
+                                    param={'M': M})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -58,7 +58,7 @@ def wc_subgd(M, N, gamma, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = M / np.sqrt(N + 1)
@@ -67,7 +67,8 @@ def wc_subgd(M, N, gamma, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of sugbradient method ***')
         print('\tPEP-it guarantee:\t\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(
+            theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -11,7 +10,8 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     """
     Consider the constrainted composite convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) }
-    where f_2 is a closed convex indicator function and f_1 is h-smooth (possibly non-convex).
+    where f_2 is a closed convex indicator function and f_1 is L-smooth relatively to h (possibly non-convex),
+    and h is closed proper and convex.
 
     This code computes a worst-case guarantee for the NoLips Method solving this problem.
     That is, it computes the smallest possible tau(n,L) such that the guarantee
@@ -41,15 +41,15 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare two convex functions and a convex indicator function
+    # Declare two convex functions and a convex function
     d1 = problem.declare_function(ConvexFunction,
-                                    {})
+                                  param={})
     d2 = problem.declare_function(ConvexFunction,
-                                     {})
-    func1 = (d2 - d1)/2
-    h = (d1 + d2)/L/2
+                                  param={})
+    func1 = (d2 - d1) / 2
+    h = (d1 + d2) / L / 2
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     {'D': np.inf})
+                                     param={'D': np.inf})
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
@@ -69,7 +69,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
         x2, _, _ = BregmanGradient_Step(gfx, ghx, func2 + h, gamma)
         gfx, _ = func1.oracle(x2)
         ghx, hx2 = h.oracle(x2)
-        Dhx = hx1 - hx2 - ghx*(x1 - x2)
+        Dhx = hx1 - hx2 - ghx * (x1 - x2)
         # update the iterates
         x1, hx1 = x2, hx2
         # Set the performance metric to the Bregman distance to the last iterate
@@ -79,13 +79,13 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     problem.set_initial_condition(F0 - Fx <= 1)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = gamma/n
+    theoretical_tau = gamma / n
 
     # Print conclusion if required
-    if verbose :
+    if verbose:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
         print('\tPEP-it guarantee:\t min_n Dh(y_n, y_(n-1)) <= {:.6} Dh(y_0, x_*)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t min_n Dh(y_n, y_(n-1)) <= {:.6} Dh(y_0, x_*) '.format(theoretical_tau))
@@ -95,11 +95,10 @@ def wc_no_lips2(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     L = 1
-    gamma = 1/L
+    gamma = 1 / L
     n = 3
 
     pepit_tau, theoretical_tau = wc_no_lips2(L=L,
-                        gamma=gamma,
-                        n=n)
+                                             gamma=gamma,
+                                             n=n)

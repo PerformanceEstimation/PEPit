@@ -45,9 +45,8 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    f = problem.declare_function(SmoothStronglyConvexFunction,
-                                     {'mu': mu, 'L': L})
-    g = problem.declare_function(ConvexFunction, {})
+    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
+    g = problem.declare_function(ConvexFunction, param={})
 
     # Define the function to optimize as the sum of func1 and func2
     func = f + g
@@ -69,22 +68,23 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     for _ in range(n):
         x, dfx, _, _, _, _, epsVar = inexact_proximal_step(z, f, gamma, opt)
         y, _, _ = proximal_step(x - gamma * dfx, g, gamma)
-        f.add_constraint(epsVar <= ((sigma / gamma) * (y - z + gamma * dfx))**2)
+        f.add_constraint(epsVar <= ((sigma / gamma) * (y - z + gamma * dfx)) ** 2)
         z = z + (y - x)
 
     # Set the performance metric to the final distance between zn and zs
     problem.set_performance_metric((z - zs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = max(((1 - sigma + gamma * mu * sigma) / (1 - sigma + gamma * mu))**2,
-                          ((sigma + (1-sigma) * gamma * L)/(1 + (1 - sigma) * gamma *L))**2)**n
+    theoretical_tau = max(((1 - sigma + gamma * mu * sigma) / (1 - sigma + gamma * mu)) ** 2,
+                          ((sigma + (1 - sigma) * gamma * L) / (1 + (1 - sigma) * gamma * L)) ** 2) ** n
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Partially Inexact Douglas Rachford Splitting in distance ***')
+        print('*** Example file:'
+              ' worst-case performance of the Partially Inexact Douglas Rachford Splitting in distance ***')
         print('\tPEP-it guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     mu = 1.
     L = 5.
     # Choose random scheme parameters
-    gamma = rd.random()*4
+    gamma = rd.random() * 4
     sigma = rd.random()
     # Number of iterations
     n = 5

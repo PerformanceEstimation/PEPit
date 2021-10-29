@@ -47,10 +47,8 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     problem = PEP()
 
     # Declare a convex function and a smooth strongly convex function
-    func1 = problem.declare_function(ConvexFunction,
-                                     {})
-    func2 = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func1 = problem.declare_function(ConvexFunction, param={})
+    func2 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -65,7 +63,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     f0 = func.value(x0)
 
     # Set the parameters of the scheme
-    theta = (1-alpha*L)/(1+alpha*L)
+    theta = (1 - alpha * L) / (1 + alpha * L)
 
     # Set the initial constraint that is the distance between x0 and ws = w^*
     ws = xs + alpha * g2s
@@ -73,29 +71,30 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
 
     # Compute n steps of the Fast Douglas Rachford Splitting starting from x0
     x = [x0 for _ in range(n)]
-    w = [x0 for _ in range(n+1)]
-    u = [x0 for _ in range(n+1)]
+    w = [x0 for _ in range(n + 1)]
+    u = [x0 for _ in range(n + 1)]
     for i in range(n):
         x[i], _, _ = proximal_step(u[i], func2, alpha)
         y, _, fy = proximal_step(2 * x[i] - u[i], func1, alpha)
-        w[i+1] = u[i] + theta * (y-x[i])
+        w[i + 1] = u[i] + theta * (y - x[i])
         if i >= 1:
-            u[i+1] = w[i+1] + (i-1)/(i+2) * (w[i+1] - w[i])
+            u[i + 1] = w[i + 1] + (i - 1) / (i + 2) * (w[i + 1] - w[i])
         else:
-            u[i+1] = w[i+1]
+            u[i + 1] = w[i + 1]
 
     # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric(func2.value(y) + fy - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2/(alpha*theta*(n+3)**2)
+    theoretical_tau = 2 / (alpha * theta * (n + 3) ** 2)
 
     # Print conclusion if required
-    if verbose :
-        print('*** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
+    if verbose:
+        print('*** Example file:'
+              ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
         print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         print('\tTheoretical guarantee for quadratics :\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
@@ -104,14 +103,14 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     mu = 0.1
     L = 1.
-    ## Test scheme parameters
+
+    # Test scheme parameters
     alpha = 0.9
     n = 2
 
     pepit_tau, theoretical_tau = wc_adrs(mu=mu,
-                   L=L,
-                   alpha=alpha,
-                   n=n)
+                                         L=L,
+                                         alpha=alpha,
+                                         n=n)

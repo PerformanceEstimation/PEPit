@@ -1,27 +1,22 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
 from PEPit.Function_classes.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.Function_classes.convex_function import ConvexFunction
 from PEPit.Primitive_steps.proximal_step import proximal_step
-
 
 
 def wc_psaga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_* = min_x F(x) = 1/n [f1(x) + ... + fn(x)],
+        f_* = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
     where f1, ..., fn are assumed L-smooth and mu-strongly convex,
     and with proximal operator available.
 
     This code computes the exact rate for the Lyapunov function from the original Point SAGA paper,
-     given in Theorem 5 of [1].
+    given in [1, Theorem 5].
 
-    [1] Aaron Defazio, Francis Bach, and Simon Lacoste-Julien.
-        "SAGA: A fast incremental gradient method with support for
-        non-strongly convex composite objectives." (2014)
-        (Theorem 1 of [1])
+    [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite
+        Sums." (2014).
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
@@ -35,23 +30,14 @@ def wc_psaga(L, mu, n, verbose=True):
     problem = PEP()
 
     # Declare a sum of strongly convex functions
-    f0 = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'L':L, 'mu':mu})
-
-    fn = [f0]
-    func = f0 / n
-    for i in range(1, n):
-        fn.append(problem.declare_function(SmoothStronglyConvexFunction,
-                                           {'L': L, 'mu': mu}))
-        func += fn[i]/n
+    fn = [problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu}) for _ in range(n)]
+    func = np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_*
     xs = func.optimal_point()
 
     # Then define the initial values
-    phi = []
-    for i in range(n):
-        phi.append(problem.set_initial_point())
+    phi = [problem.set_initial_point() for _ in range(n)]
     x0 = problem.set_initial_point()
 
     # Parameters of the scheme and of the Lyapunov function
@@ -59,17 +45,16 @@ def wc_psaga(L, mu, n, verbose=True):
     c = 1 / mu / L
 
     # Compute the initial value of the Lyapunov function
-    T0 = (xs - x0)**2
+    T0 = (xs - x0) ** 2
     for i in range(n):
         gis, fis = fn[i].oracle(xs)
-        T0 = T0 + c / n * (gis - phi[i])**2
+        T0 = T0 + c / n * (gis - phi[i]) ** 2
 
     # Set the initial constraint as the Lyapunov bounded by 1
     problem.set_initial_condition(T0 <= 1.)
 
-    # Compute the expected value of te Lyapunov function after one iteration
-    #(so: expectation over n possible scenarios:  one for each element fi in the function).
-
+    # Compute the expected value of the Lyapunov function after one iteration
+    # (so: expectation over n possible scenarios:  one for each element fi in the function).
     T1avg = (xs - xs) ** 2
     for i in range(n):
         w = x0 + gamma * phi[i]
@@ -80,16 +65,16 @@ def wc_psaga(L, mu, n, verbose=True):
         for j in range(n):
             gjs, fjs = fn[j].oracle(xs)
             if i != j:
-                T1 = T1 + c/n * (phi[j] - gjs)**2
+                T1 = T1 + c / n * (phi[j] - gjs) ** 2
             else:
-                T1 = T1 + c/n * (gjs - gx1)**2
-        T1avg = T1avg + T1/n
+                T1 = T1 + c / n * (gjs - gx1) ** 2
+        T1avg = T1avg + T1 / n
 
     # Set the performance metric to the distance average to optimal point
     problem.set_performance_metric(T1avg)
 
     # Solve the PEP
-    pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison) : the bound is given in theorem 5 of [1]
     kappa = mu * gamma / (1 + mu * gamma)
@@ -111,5 +96,5 @@ if __name__ == "__main__":
     mu = 0.1
 
     pepit_tau, theoretical_tau = wc_psaga(L=L,
-                                        mu=mu,
-                                        n=n)
+                                          mu=mu,
+                                          n=n)

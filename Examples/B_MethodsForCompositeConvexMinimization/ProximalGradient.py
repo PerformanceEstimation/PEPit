@@ -27,8 +27,8 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function and a closed convex proper function
-    f1 = problem.declare_function(SmoothStronglyConvexFunction, {'mu': mu, 'L': L})
-    f2 = problem.declare_function(ConvexFunction, {})
+    f1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
+    f2 = problem.declare_function(ConvexFunction, param={})
     func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_*
@@ -50,7 +50,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     problem.set_performance_metric((x - xs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - mu*gamma)**2, (1 - L*gamma)**2)**n

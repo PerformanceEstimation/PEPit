@@ -34,7 +34,7 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     problem = PEP()
 
     # Declare a convex function.
-    f = problem.declare_function(ConvexFunction, {})
+    f = problem.declare_function(ConvexFunction, param={})
 
     # Start by defining its unique optimal point xs = x_*
     xs = f.optimal_point()
@@ -51,20 +51,20 @@ def wc_orippm(n, gamma, sigma, verbose=True):
 
     opt = 'Orip-style'
     for i in range(n):
-        theta = (1 + np.sqrt(4*theta**2 + 1))/2
-        y = (1 - 1/theta) * x + 1/theta * z
+        theta = (1 + np.sqrt(4 * theta ** 2 + 1)) / 2
+        y = (1 - 1 / theta) * x + 1 / theta * z
         x, _, fx, _, v, _, epsVar = inexact_proximal_step(y, f, gamma, opt)
         z = z - 2 * gamma / (1 + sigma) * theta * v
-        f.add_constraint(epsVar <= sigma/(1 + sigma) * v**2)
+        f.add_constraint(epsVar <= sigma / (1 + sigma) * v ** 2)
 
     # Set the performance metric to the final distance in function values
     problem.set_performance_metric(f.value(x) - f.value(xs))
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 + sigma)/4/gamma/(theta**2)
+    theoretical_tau = (1 + sigma) / 4 / gamma / (theta ** 2)
 
     # Print conclusion if required
     if verbose:
@@ -84,5 +84,5 @@ if __name__ == "__main__":
     n = 10
 
     pepit_tau, theoretical_tau = wc_orippm(n=n,
-                                          gamma=gamma,
-                                          sigma=sigma)
+                                           gamma=gamma,
+                                           sigma=sigma)

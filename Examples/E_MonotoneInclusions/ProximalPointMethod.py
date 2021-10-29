@@ -11,14 +11,14 @@ def wc_ppm(alpha, n, verbose=True):
 
     This code computes a worst-case guarantee for the proximal point method, that is the smallest
     possible tau(n,L) such that the guarantee
-        || x_(n) - x(n-1)||^2 <= tau(n,L) * || x_0 - x_*||^2,
+        ||x_(n) - x(n-1)||^2 <= tau(n,L) * ||x_0 - x_*||^2,
     is valid, where x_* is such that 0 in Ax_*..
 
     Theoretical rates can be found in the following paper (section 4)
 
     [1] Guoyong Gu, and Junfeng Yang. "Optimal nonergodic sublinear
-     convergence rate of proximal point algorithm for maximal monotone
-     inclusion problems." (2019)
+    convergence rate of proximal point algorithm for maximal monotone
+    inclusion problems." (2019)
 
     :param alpha: (float) the step size
     :param n: (int) number of iterations.
@@ -31,7 +31,7 @@ def wc_ppm(alpha, n, verbose=True):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(MonotoneOperator, {})
+    A = problem.declare_function(MonotoneOperator, param={})
 
     # Start by defining its unique optimal point xs = x_*
     xs = A.optimal_point()
@@ -43,18 +43,18 @@ def wc_ppm(alpha, n, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Proximal Gradient method starting from x0
-    x = [x0 for _ in range(n+1)]
-    for i in range(1, n+1):
-        x[i], _, _ = proximal_step(x[i-1], A, alpha)
+    x = [x0 for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        x[i], _, _ = proximal_step(x[i - 1], A, alpha)
 
     # Set the performance metric to the distance between x(n) and x(n-1)
-    problem.set_performance_metric((x[n] - x[n-1])**2)
+    problem.set_performance_metric((x[n] - x[n - 1]) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 - 1/n)**(n-1)/n
+    theoretical_tau = (1 - 1 / n) ** (n - 1) / n
 
     # Print conclusion if required
     if verbose:

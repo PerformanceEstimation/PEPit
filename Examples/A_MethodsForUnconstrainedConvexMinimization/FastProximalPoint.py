@@ -31,7 +31,7 @@ def wc_fppa(A0, gammas, n, verbose=True):
     problem = PEP()
 
     # Declare a convex function
-    func = problem.declare_function(ConvexFunction, {})
+    func = problem.declare_function(ConvexFunction, param={})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -57,7 +57,7 @@ def wc_fppa(A0, gammas, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     accumulation = 0

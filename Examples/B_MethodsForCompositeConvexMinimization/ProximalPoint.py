@@ -26,8 +26,8 @@ def wc_ppa(gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a convex function
-    f1 = problem.declare_function(ConvexFunction, {})
-    f2 = problem.declare_function(ConvexFunction,{})
+    f1 = problem.declare_function(ConvexFunction, param={})
+    f2 = problem.declare_function(ConvexFunction, param={})
     func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
@@ -49,7 +49,7 @@ def wc_ppa(gamma, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1/4/gamma/n

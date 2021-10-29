@@ -1,5 +1,3 @@
-import cvxpy as cp
-
 from PEPit.pep import PEP
 from PEPit.Operator_classes.Monotone import MonotoneOperator
 from PEPit.Operator_classes.Cocoercive import CocoerciveOperator
@@ -21,10 +19,9 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
         z = w - theta * (x - y)
     and z is chosen as the next iterate.
 
-    Given two initial points w_0 and w_1, this code computes the smallest possible tau(n,L) such that the guarantee
-        || z_0 - z_1||^2 <= tau(n,L) * || w_0 - w_1||^2,
+    Given two initial points w_0 and w_1, this code computes the smallest possible tau(n,L,mu) such that the guarantee
+        || (w0 - theta * (x0 - y0)) - (w1 - theta * (x1 - y1))||^2 <= tau(n,L,mu) * || w_0 - w_1||^2,
     is valid, where z_0 and z_1 are obtained after one iteration of TOS from respectively w_0 and w_1.
-
 
     :param L: (float) the Lipschitz parameter.
     :param mu: (float) the strong convexity parameter.
@@ -40,9 +37,9 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(MonotoneOperator, {})
-    B = problem.declare_function(CocoerciveOperator, {'beta': beta})
-    C = problem.declare_function(SmoothStronglyConvexFunction, {'L': L, 'mu': mu})
+    A = problem.declare_function(MonotoneOperator, param={})
+    B = problem.declare_function(CocoerciveOperator, param={'beta': beta})
+    C = problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu})
 
     # Then define the starting points w0 and w1
     w0 = problem.set_initial_point()
@@ -62,10 +59,10 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     z1 = w1 - theta * (x1 - y1)
 
     # Set the performance metric to the distance between z0 and z1
-    problem.set_performance_metric((z0 - z1)**2)
+    problem.set_performance_metric((z0 - z1) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(cp.MOSEK)
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -73,7 +70,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Three Operator Splitting ***')
-        print('\tPEP-it guarantee:\t ||z_1 - z_0||^2 <= {:.6} ||w_1 - w_0||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t || (w0 - theta * (x0 - y0)) - (w1 - theta * (x1 - y1))||^2 <= {:.6} ||w_1 - w_0||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

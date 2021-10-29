@@ -1,4 +1,3 @@
-import cvxpy as cp
 import numpy as np
 
 from PEPit.pep import PEP
@@ -37,7 +36,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     problem = PEP()
 
     # Declare a convex function.
-    f = problem.declare_function(ConvexFunction, {})
+    f = problem.declare_function(ConvexFunction, param={})
 
     # Start by defining its unique optimal point xs = x_*
     xs = f.optimal_point()
@@ -49,20 +48,20 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Inexact Proximal Point Method starting from x0
-    x = [x0 for i in range(n+1)]
+    x = [x0 for i in range(n + 1)]
     opt = 'PD_gapII'
     for i in range(n):
-        x[i+1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)
-        f.add_constraint(epsVar <= ((sigma / gamma) * (x[i+1] - x[i]))**2)
+        x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)
+        f.add_constraint(epsVar <= ((sigma / gamma) * (x[i + 1] - x[i])) ** 2)
 
     # Set the performance metric to the final distance in function values
     problem.set_performance_metric(f.value(x[n]) - f.value(xs))
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 + sigma)/(4 * gamma * n**np.sqrt(1 - sigma**2))
+    theoretical_tau = (1 + sigma) / (4 * gamma * n ** np.sqrt(1 - sigma ** 2))
 
     # Print conclusion if required
     if verbose:
@@ -82,5 +81,5 @@ if __name__ == "__main__":
     n = 5
 
     pepit_tau, theoretical_tau = wc_rippm1(n=n,
-                                          gamma=gamma,
-                                          sigma=sigma)
+                                           gamma=gamma,
+                                           sigma=sigma)

@@ -32,7 +32,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothConvexFunction, {'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, param={'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.optimal_point()
@@ -58,7 +58,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (n ** 2 + 5 * n + 6)
@@ -76,8 +76,8 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
 if __name__ == "__main__":
     n = 5
     L = 1
-    epsilon = 0.1 #Theoretical and PEPit guarantee match when epsilon = 0.
+    epsilon = 0.1  # Theoretical and PEPit guarantee match when epsilon = 0.
 
-    pepit_tau, theoretical_tau= wc_InexactAGM(L=L,
-                                              epsilon=epsilon,
-                                              n=n)
+    pepit_tau, theoretical_tau = wc_InexactAGM(L=L,
+                                               epsilon=epsilon,
+                                               n=n)
