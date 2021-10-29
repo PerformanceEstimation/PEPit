@@ -59,6 +59,7 @@ class TestExamples(unittest.TestCase):
 
     def test_OGM(self):
         L, n = 3, 4
+
         wc, theory = OGM.wc_ogm(L, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
@@ -66,7 +67,6 @@ class TestExamples(unittest.TestCase):
         L, mu, n = 3, .1, 1
 
         wc, theory = ELS.wc_els(L=L, mu=mu, n=n, verbose=self.verbose)
-
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
     def test_subgd(self):
@@ -96,6 +96,7 @@ class TestExamples(unittest.TestCase):
 
     def test_inexact_agm(self):
         L, epsilon, n = 3, 0, 5
+
         wc, theory = inAGM.wc_InexactAGM(L=L, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(theory, wc, delta=10 ** -3 * theory)
 
@@ -155,11 +156,11 @@ class TestExamples(unittest.TestCase):
     def test_inadgs(self):
         mu, L, alpha = 0.1, 1, 0.9
 
-        n_list = range(1,8)
+        n_list = range(1, 8)
         ref_pesto_bounds = [0.2027, 0.1929, 0.1839, 0.1737, 0.1627, 0.1514, 0.1400, 0.1289]
         for n in n_list:
             wc, _ = inADGS.wc_adrs(mu, L, alpha, n, verbose=self.verbose)
-            self.assertAlmostEqual(wc, ref_pesto_bounds[n-1], delta=10 ** -3 * ref_pesto_bounds[n-1])
+            self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=10 ** -3 * ref_pesto_bounds[n - 1])
 
     def test_inbppm(self):
         gamma, n = 3, 5
