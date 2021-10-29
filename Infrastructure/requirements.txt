@@ -1,7 +1,0 @@
-cvxpy==1.1.13
-ecos==2.0.7.post1
-numpy==1.19.5
-osqp==0.6.2.post0
-qdldl==0.1.5.post0
-scipy==1.5.4
-scs==2.1.4
