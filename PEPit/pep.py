@@ -144,6 +144,10 @@ class PEP(object):
         :return: (float) value of the performance metric
         """
 
+        # Create all class constraints
+        for function in self.list_of_functions:
+            function.add_class_constraints()
+
         # Define the cvxpy variables
         objective = cp.Variable((1,))
         F = cp.Variable((Expression.counter,))
@@ -185,7 +189,6 @@ class PEP(object):
                   ' interpolation conditions for {} function(s)'.format(len(self.list_of_functions)))
         function_counter = 0
         for function in self.list_of_functions:
-            function.add_class_constraints()
             function_counter += 1
             for constraint in function.list_of_constraints:
                 assert isinstance(constraint, Constraint)
