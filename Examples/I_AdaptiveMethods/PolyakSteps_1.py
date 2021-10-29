@@ -33,7 +33,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     func = problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value gn and fn

@@ -48,7 +48,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     F = f + g
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
-    xs = F.optimal_point()
+    xs = F.stationary_point()
     fs = F.value(xs)
 
     # Then define the starting point z0 and x0, that is the previous step of the algorithm.

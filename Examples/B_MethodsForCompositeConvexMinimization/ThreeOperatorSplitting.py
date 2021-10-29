@@ -63,7 +63,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     func = func1 + func2 + func3
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the starting points w0 and w0p of the algorithm
     w0 = problem.set_initial_point()

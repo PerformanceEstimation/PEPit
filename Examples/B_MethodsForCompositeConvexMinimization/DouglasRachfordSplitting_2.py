@@ -45,7 +45,7 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     func = func1 + func2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0

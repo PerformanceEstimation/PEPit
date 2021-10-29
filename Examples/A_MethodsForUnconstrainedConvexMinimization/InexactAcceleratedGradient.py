@@ -35,7 +35,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     func = problem.declare_function(SmoothConvexFunction, param={'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm

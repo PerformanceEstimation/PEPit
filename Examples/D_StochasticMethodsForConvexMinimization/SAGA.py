@@ -49,7 +49,7 @@ def wc_saga(L, mu, n, verbose=True):
     func = h + np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
 
     # Then define the initial points
     phi = [problem.set_initial_point() for _ in range(n)]

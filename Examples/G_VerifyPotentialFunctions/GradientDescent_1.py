@@ -40,7 +40,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
                                     param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value gn and fn
