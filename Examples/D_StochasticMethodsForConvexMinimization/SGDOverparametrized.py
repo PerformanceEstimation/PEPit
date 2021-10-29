@@ -11,7 +11,7 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     where f1, ..., fn are assumed L-smooth and mu-strongly convex.
 
     In addition, we assume a zero variance at the optimal point :
-        \mathbb{E}sum_i(||fi'(x^*)||^2)/n ==0 (i.e. \mathbb{E}fi'(x^*)=0),
+        \mathbb{E}[ ||fi'(x_*)||^2 = 1/n sum_i(||fi'(x^*)||^2) ==0 (i.e. \mathbb{E}fi'(x^*)=0),
     which happens for example in machine learning in the interpolation regime,
     that is if there exists a model x^* such that the loss \ell on any observation (z_i)_{i \in [n]},
     \ell(x^*, z_i)=f_i(x^*)" is zero.
@@ -20,7 +20,7 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     for the distance to optimality.
 
     That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-    \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * (f(x_0) - f_*)
+    \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * ||x_0 - x_*||^2
     is valid, where x_1 is the output of one step of stochastic gradient descent: x_1 = x_0 - \gamma f'_{i_0}(x_0),
     with i_0 uniformly sampled in {1, \dots, n}, and the expectation is taken over the randomness of i_0.
     We will observe it does not depend on n for this particular setting,
@@ -55,7 +55,7 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     problem.set_initial_condition(var <= 0.)
     problem.set_initial_condition((x0 - xs) ** 2 <= R ** 2)
 
-    # Run n-step of the stochastic gradient and compute the averaged distance to optimality
+    # Compute the *expected* distance to optimality after running one step of the stochastic gradient descent
     distavg = np.mean([(x0 - gamma * f.gradient(x0) - xs) ** 2 for f in fn])
 
     # Set the performance metric to the distance average to optimal point

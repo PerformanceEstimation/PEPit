@@ -17,8 +17,8 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
         y_k     = prox_{\alpha f1}(2*x_k-w_k)
         w_{k+1} = w_k +\theta (y_k - x_k)
 
-    That is, it computes the smallest possible tau(n,L) such that the guarantee
-        F(y_n) - F(x_*) <= tau(n,L) * ||x_0 - x_*||^2.
+    That is, it computes the smallest possible tau(n,L,alpha,theta) such that the guarantee
+        F(y_n) - F(x_*) <= tau(n,L,alpha_theta) * ||x_0 - x_*||^2.
     is valid, where it is known that xk and yk converge to xs, but not wk, and hence
     we require the initial condition on x0 (arbitrary choice; partially justified by
     the fact we choose f2 to be the smooth function). Note that yN is feasible as it

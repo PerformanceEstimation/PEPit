@@ -17,8 +17,8 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
         y_k     = prox_{\alpha f1}(2*x_k-w_k)
         w_{k+1} = w_k +\theta (y_k - x_k)
 
-    That is, it computes the smallest possible tau(n,L) such that the guarantee
-        ||w_1 - w_1'||^2 <= tau(n,L) * ||w_0 - w_0'||^2.
+    That is, it computes the smallest possible tau(mu,L,alpha,theta,n) such that the guarantee
+        ||w_1 - w_1'||^2 <= tau(mu,L,alpha,theta) * ||w_0 - w_0'||^2.
     is valid, where x_n is the output of the Fast Douglas Rachford Splitting method. It is a contraction
     factor computed when the algorithm is started from two different points w_0 and w_0'.
 

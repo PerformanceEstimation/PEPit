@@ -13,8 +13,8 @@ def wc_cg_fw(L, D, n, verbose=True):
     a convex indicator function of diameter at most D.
 
     This code computes a worst-case guarantee for the conditional Gradient method.
-    That is, it computes the smallest possible tau(n,L) such that the guarantee
-        F(x_n) - F(x_*) <= tau(n,L) * ||x_0 - x_*||^2
+    That is, it computes the smallest possible tau(n,L,D) such that the guarantee
+        F(x_n) - F(x_*) <= tau(n,L,D) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Conditional Gradient method, and where x_* is a minimizer of F.
 
     The theoretical guarantee is presented in the following reference.

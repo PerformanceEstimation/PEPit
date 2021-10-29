@@ -7,13 +7,14 @@ from PEPit.Primitive_steps.proximal_step import proximal_step
 def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
-        F_* = min_x f(x) + h(x),
-    where f is L-smooth and convex, and where h is closed convex and proper. We further consider the case where the gradient of f
-    can be evaluated, and where the proximal operator of h can be evaluated as well.
+        F_* = min_x { F(x) = f(x) + h(x) },
+    where f is L-smooth and convex, and where h is closed convex and proper.
+    We further consider the case where the gradient of f can be evaluated, and where the proximal operator
+    of h can be evaluated as well.
 
     This code computes a worst-case guarantee for the fast proximal gradient method (a.k.a. accelerated gradient).
-    That is, the code computes the smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
+    That is, the code computes the smallest possible tau(mu,L,n) such that the guarantee
+        f(x_n) - f_* <= tau(mu,L,n) * || x_0 - x_* ||^2,
     is valid, where x_n is the output of the fast proximal gradient, and where x_* is a minimizer of f.
 
     In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when

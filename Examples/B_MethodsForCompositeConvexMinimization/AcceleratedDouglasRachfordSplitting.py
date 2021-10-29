@@ -8,7 +8,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     """
     Consider the composite convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) }
-    where f_2 is L-smooth and f_1 is smooth strongly convex.
+    where f_1 is closed convex and proper, and f_2 is L-smooth mu-strongly convex.
 
     This code computes a worst-case guarantee for the fast Douglas Rachford Splitting method:
            x_k     = prox_{\alpha f2}(u_k)
@@ -19,20 +19,22 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
            else
                u{k+1} = w{k+1};
 
-    That is, it computes the smallest possible tau(n,L,mu) such that the guarantee
-        F(y_n) - F(x_*) <= tau(n,L,mu) * ||w_0 - w_*||^2
+    That is, it computes the smallest possible tau(n,L,mu,alpha) such that the guarantee
+        F(y_n) - F(x_*) <= tau(n,L,mu,alpha) * ||w_0 - w_*||^2
     is valid, where x_n is the output of the Fast Douglas Rachford Splitting method, and where x_* is a minimizer of F,
     and w_* defined such that
         x_* = prox_{\alpha}(w_*) is an optimal point.
 
-    The detailed approach is availaible in
+    The detailed approach is available in
     [1] Panagiotis Patrinos, Lorenzo Stella, and Alberto Bemporad.
         "Douglas-Rachford splitting: Complexity estimates and accelerated
         variants." In 53rd IEEE Conference on Decision and Control (2014)
         where the theory is available for quadratics.
 
-    The tight guarantee obtained in [1, Theorem 4] is tau(n, L, mu) = 2/alpha*(1+alpha*L)/(1-alpha*L)/(n+2)**2.
-    However, this guarantee is only valid for quadratics.
+    The tight guarantee obtained in [1, Theorem 4] is :
+        tau_q(n,L,mu,alpha) = 2/alpha*(1+alpha*L)/(1-alpha*L)/(n+2)**2.
+    However, this guarantee is only valid for quadratics. So we expect :
+        tau_q(n,L,mu,alpha) <= tau(n,L,mu,alpha).
 
     :param mu: (float) the strong convexity parameter.
     :param L: (float) the smoothness parameter.

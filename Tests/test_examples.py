@@ -348,6 +348,3 @@ class TestExamples(unittest.TestCase):
         Point.counter = 0
         Expression.counter = 0
         Function.counter = 0
-
-if __name__ == '__main__':
-    unittest.main()

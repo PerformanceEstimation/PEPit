@@ -7,16 +7,16 @@ from PEPit.Primitive_steps.proximal_step import proximal_step
 def wc_pgd(L, mu, gamma, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f1(x) + f2(x),
+        f_* = min_x { F(x) = f1(x) + f2(x) },
     where f is L-smooth and mu-strongly convex, and where f2 is a closed convex and proper.
 
     This code computes a worst-case guarantee for the proximal gradient method.
     That is, the code computes the smallest possible tau(n,L,mu) such that the guarantee
-        f(x_n) - f_* <= tau(n,L,mu) * (f(x_0) - f_*),
-    is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
+        ||x_n - x_*||^2 <= tau(n,L,mu) * ||x_0 - x_*||^2,
+    is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of F.
 
     :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity paramter
+    :param mu: (float) the strong convexity parameter.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
@@ -58,8 +58,8 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Proximal Gradient Method in function values***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
