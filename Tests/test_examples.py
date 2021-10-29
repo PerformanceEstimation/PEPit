@@ -152,15 +152,14 @@ class TestExamples(unittest.TestCase):
         wc, theory = inFPGM.wc_fgm(mu, L, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
-    # def test_inadgs(self):
-    #
-    #     mu, L, alpha = 0.1, 1, 0.9
-    #
-    #     n_list = range(1,8)
-    #     ref_pesto_bounds = [0.2027, 0.1929, 0.1839, 0.1737, 0.1627, 0.1514, 0.1400, 0.1289]
-    #     for n in n_list:
-    #         wc, _ = inADGS.wc_adrs(mu, L, alpha, n, verbose=self.verbose)
-    #         self.assertAlmostEqual(wc, ref_pesto_bounds[n-1], delta=10 ** -3 * ref_pesto_bounds[n-1])
+    def test_inadgs(self):
+        mu, L, alpha = 0.1, 1, 0.9
+
+        n_list = range(1,8)
+        ref_pesto_bounds = [0.2027, 0.1929, 0.1839, 0.1737, 0.1627, 0.1514, 0.1400, 0.1289]
+        for n in n_list:
+            wc, _ = inADGS.wc_adrs(mu, L, alpha, n, verbose=self.verbose)
+            self.assertAlmostEqual(wc, ref_pesto_bounds[n-1], delta=10 ** -3 * ref_pesto_bounds[n-1])
 
     def test_inbppm(self):
         gamma, n = 3, 5
@@ -208,10 +207,13 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
     def test_intos(self):
-        mu, L1, L3, alpha, theta, n = 0.1, 10, 1, 1, 1, 4
+        mu, L1, L3, alpha, theta = 0.1, 10, 1, 1, 1
+        n_list = range(1, 3)
 
-        wc, theory = inTOS.wc_tos(mu, L1, L3, alpha, theta, n, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        ref_pesto_bounds = [0.8304, 0.6895, 0.5726]
+        for n in n_list:
+            wc, _ = inTOS.wc_tos(mu, L1, L3, alpha, theta, n, verbose=self.verbose)
+            self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=10 ** -3 * ref_pesto_bounds[n - 1])
 
     def test_ncgd(self):
         L, n = 1, 5
@@ -272,11 +274,14 @@ class TestExamples(unittest.TestCase):
         wc, theory = opDRS.wc_drs(L, mu, alpha, theta, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=10 ** -3 * theory)
 
-    # def test_optos(self):
-    #
-    #     L, mu, beta, alpha, theta = 1, 0.1, 1, 1.3, 0.9
-    #
-    #     wc, theory = opTOS.wc_tos(L, mu, beta, alpha, theta)
+    def test_optos(self):
+        L, mu, beta, alpha, theta = 1, 0.1, 1, 1.3, 0.9
+        n_list = range(1, 1)
+
+        ref_pesto_bounds = [0.7797]
+        for n in n_list:
+            wc, _ = opTOS.wc_tos(L, mu, beta, alpha, theta, verbose=self.verbose)
+            self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=10 ** -3 * ref_pesto_bounds[n - 1])
 
     def test_inhi(self):
         L, n = 1, 10
