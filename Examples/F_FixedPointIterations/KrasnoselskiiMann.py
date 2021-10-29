@@ -16,11 +16,10 @@ def wc_km(L, n, verbose=True):
         1/4|| x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Krasnolseskii-Mann iterations, and x_* the fixed point of A.
 
-    This scheme was first studied using PEPs in:
+    This scheme was first studied using PEPs in [1, Theorem 4.9], with a theoretical upper bound:
     [1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
         Optimal First Order Complexities and Norm Constrained Quasi Newton
         Methods."  PhD thesis (2018)
-    The theoretical bound is given in [1, Theorem 4.9].
 
     :param L: (float) the Lipschitz parameter.
     :param n: (int) number of iterations.

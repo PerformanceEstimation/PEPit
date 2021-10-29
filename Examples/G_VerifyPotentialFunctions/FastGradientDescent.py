@@ -20,8 +20,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
         z_{k+1} = z_k - eta_k f'(y_k)
     with taux_k = 1/lambda_k and eta_k = (lambda_k^2 - lambda_{k-1}^2) / L
 
-    That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        v(x_{k+1}) <= tau(n, L) * v(x_k)
+    That is, it verifies that the Lyapunov v(.) is decreasing on the trajectory :
+        v(x_{k+1}) - v(x_k) <= 0.
     is valid, where x_k is the output of the accelerated gradient descent.
 
     The detailed potential approach is available in [1, Theorem 5.3].
@@ -67,11 +67,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     final_lyapunov = lam_np1 ** 2 * (fnp1 - fs) + L / 2 * (znp1 - xs) ** 2
     init_lyapunov = lam ** 2 * (fn - fs) + L / 2 * (zn - xs) ** 2
 
-    # Set the initial constraint that is the bounded initial Lyapunov function
-    problem.set_initial_condition(init_lyapunov <= 1)
-
     # Set the performance metric to the difference between the initial and the final Lyapunov
-    problem.set_performance_metric(final_lyapunov)
+    problem.set_performance_metric(final_lyapunov - init_lyapunov)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
@@ -85,12 +82,14 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
             '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
               '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
-              ' <= '
-              '{:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2 '.format(pepit_tau))
+              ' - '
+              '[n*(f(x_n) - f_*) + L/2 || x_n - x_*||^2] '
+              '<= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t'
               '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
-              ' <= '
-              '{:.6} (n)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2'.format(theoretical_tau))
+              ' - '
+              '[n*(f(x_n) - f_*) + L/2 || x_n - x_*||^2] '
+              '<= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

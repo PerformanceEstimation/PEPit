@@ -11,8 +11,9 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     This code computes a worst-case guarantee for the gradient descent with fixed steps,
     for a well-chosen Lyapunov function :
         v(x_k) = (2k + 1)*L*(f(x_{k+1}) - f_*) + L/2 || x_k - x_*||^2 + k*(k+2)* ||f'(x_{k+1})||^2
-    That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        v(x_{k+1}) <= tau(n, L) * v(x_k)
+
+    That is, it verifies that the Lyapunov is decreasing on the trajectory :
+        v(x_{k+1}) - v(x_k) <= 0
     is valid, where x_k is the output of the gradient descent with fixed step size.
 
     The detailed potential approach and the SDP approach are available in in :
@@ -51,11 +52,8 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     final_lyapunov = L * (2 * n + 1) * (fnp1 - fs) + L ** 2 * (xnp1 - xs) ** 2 + n * (n + 2) * gnp1 ** 2
     init_lyapunov = L * (2 * n - 1) * (fn - fs) + L ** 2 * (xn - xs) ** 2 + (n - 1) * (n + 1) * gn ** 2
 
-    # Set the initial condition to the bounded initial Lyapunov iterate
-    problem.set_initial_condition(init_lyapunov <= 1.)
-
     # Set the performance metric to the difference between the initial and the final Lyapunov
-    problem.set_performance_metric(final_lyapunov)
+    problem.set_performance_metric(final_lyapunov - init_lyapunov)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
@@ -69,15 +67,16 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
               ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
               'L(2 n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2 + n(n+2) || f\'(x(n+1))||^2'
-              ' <= '
-              '{:.6} L(2n - 1)*[(f(x_n) - f_*) + L/2 || x_n - x_*||^2 + (n+1)(n-1) || f\'(x(n))||^2 ]'.format(
+              ' - '
+              'L(2n - 1)*[(f(x_n) - f_*) + L/2 || x_n - x_*||^2 + (n+1)(n-1) || f\'(x(n))||^2 ]'
+            ' <= {:.6}'.format(
                 pepit_tau))
         print(
             '\tTheoretical guarantee:\t'
-            'L(2n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2 + n(n+2) || f\'(x(n+1))||^2'
-            ' <= '
-            '{:.6} [L(2n - 1)*(f(x_n) - f_*) + L/2 || x_n - x_*||^2  + (n+1)(n-1) || f\'(x(n))||^2 ]'.format(
-                theoretical_tau))
+            'L(2 n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2 + n(n+2) || f\'(x(n+1))||^2'
+              ' - '
+              'L(2n - 1)*[(f(x_n) - f_*) + L/2 || x_n - x_*||^2 + (n+1)(n-1) || f\'(x(n))||^2 ]'
+            ' <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

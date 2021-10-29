@@ -14,9 +14,8 @@ def wc_halpern(L, n, verbose=True):
         || x_n - Ax_n||^2 <= tau(n, L) * ||x_0 - x_*||^2
     is valid, where x_n is the output of the Halpern iteration, and x_* the fixed point of A.
 
-    The detailed approach is availaible in
+    The detailed approach and the tight upper bound are availaible in [1, Theorem 2.1].
     [1] Lieder, Felix. "On the Convergence Rate of the Halpern-Iteration." (2017)
-    and the theoretical upper bound is given in Theorem 2.1.
 
     :param L: (float) the Lipschitz parameter.
     :param n: (int) number of iterations.

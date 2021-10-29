@@ -13,12 +13,10 @@ def wc_psaga(L, mu, n, verbose=True):
     and with proximal operator available.
 
     This code computes the exact rate for the Lyapunov function from the original Point SAGA paper,
-    given in Theorem 5 of [1].
+    given in [1, Theorem 5].
 
-    [1] Aaron Defazio, Francis Bach, and Simon Lacoste-Julien.
-        "SAGA: A fast incremental gradient method with support for
-        non-strongly convex composite objectives." (2014)
-        (Theorem 1 of [1])
+    [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite
+        Sums." (2014).
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.

@@ -14,6 +14,10 @@ def wc_gd(L, gamma, n, verbose=True):
     is valid, where x_n is the output of the gradient descent with fixed step sizes,
     and where x_n is the n-th iterates obtained with the gradient method.
 
+    The detailed approach is available in [1].
+    [1] Polyak, Boris. "Introduction to optimization" (1987)
+    and the theoretical upper bound is given in Theorem 1.
+
     :param L: (float) the smoothness parameter.
     :param gamma: (float) the step size.
     :param n: (int) number of iterations.

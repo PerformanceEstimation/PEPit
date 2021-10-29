@@ -10,7 +10,8 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     """
     Consider the constrainted non-convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) }
-    where f_2 is a closed convex indicator function and f_1 is h-smooth (possibly non-convex).
+    where f_2 is a closed convex indicator function and f_1 is L-smooth relatively to h (possibly non-convex),
+    and h is closed proper and convex.
 
     This code computes a worst-case guarantee for the NoLips Method solving this problem.
     That is, it computes the smallest possible tau(n,L) such that the guarantee
