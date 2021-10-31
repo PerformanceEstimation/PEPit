@@ -9,12 +9,12 @@ from PEPit.Function_classes.smooth_convex_function import SmoothConvexFunction
 def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
-        min_x { f(x) + g(x)}
-    where f(x) is smothh convex, and g is non-smooth strongly convex.
+        min_x { F(x) = f(x) + g(x)}
+    where f(x) is smooth convex, and g is non-smooth strongly convex.
     Both proximal operators are assumed to be available.
 
     This code computes a worst-case guarantee for an Accelerated Hybrid Proximal Gradient,
-    where x_* = argmin_x (f(x)).
+    where x_* = argmin_x (F(x)).
 
     That is, it computes the smallest possible tau(mu,n,sigma,gamma) such that the guarantee
         Phi_n <= tau(mu,n,sigma,gamma) * Phi_{n+1}
@@ -22,7 +22,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     We are going to verify that :
         max(Phi_{n+1} - Phi_{n}) <= 0
 
-    The moethod originates from [1, Section 4.3].
+    The method originates from [1, Section 4.3].
 
     [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
     first-order methods with inexact proximal operators (2020).

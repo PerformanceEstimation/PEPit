@@ -11,11 +11,11 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
         min_x { F(x) = f(x) + g(x) }
-    where f(x) is L-smooth and mu-strongly convex, and g is convex.
+    where f(x) is L-smooth and mu-strongly convex, and g is closed convex and proper.
     Both proximal operators are assumed to be available.
 
     This code computes a worst-case guarantee for a partially inexact Douglas Rachford
-    Splitting (DRS) method, where x_* = argmin_x (f(x) + g(x)).
+    Splitting (DRS) method, where x_* = argmin_x (F(x) = f(x) + g(x)).
 
     That is, it computes the smallest possible tau(n,L,mu,sigma,gamma) such that the guarantee
         ||z_{n+1} - z_*||^2 <= tau(n,L,mu,sigma,gamma) * ||z_{n} - z_*||^2.
@@ -49,11 +49,11 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     g = problem.declare_function(ConvexFunction, param={})
 
     # Define the function to optimize as the sum of func1 and func2
-    func = f + g
+    F = f + g
 
     # Start by defining its unique optimal point xs = x_*, its function value fs = F(x_*)
     # and zs te fixed point of the operator.
-    xs = func.stationary_point()
+    xs = F.stationary_point()
     zs = xs + gamma * f.gradient(xs)
 
     # Then define the starting point z0, that is the previous step of the algorithm.
@@ -96,8 +96,8 @@ if __name__ == "__main__":
     mu = 1.
     L = 5.
     # Choose random scheme parameters
-    gamma = rd.random() * 4
-    sigma = rd.random()
+    gamma = 1.4
+    sigma = 0.2
     # Number of iterations
     n = 5
 

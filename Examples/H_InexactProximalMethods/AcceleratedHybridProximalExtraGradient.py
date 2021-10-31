@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # Choose the Lyapunov parameter
     A0 = 10
 
-    pepit_tau, theoretical_tau = wc_ahpg(mu=mu,
+    pepit_tau, theoretical_tau = wc_ahpe(mu=mu,
                                          gamma=gamma,
                                          sigma=sigma,
                                          A0=A0)

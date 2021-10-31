@@ -7,9 +7,9 @@ from PEPit.Primitive_steps.inexactproximal_step import inexact_proximal_step
 
 def wc_rippm2(n, gamma, sigma, verbose=True):
     """
-    Consider the composite non-smooth convex minimization problem,
+    Consider the non-smooth convex minimization problem,
         min_x { f(x) }
-    where f(x) is convex. Proximal operator is assumed to be available.
+    where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
     This code computes a worst-case guarantee for an Inexact Proximal Point Method,
     where x_* = argmin_x (f(x)), that is :
