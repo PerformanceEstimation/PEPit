@@ -59,7 +59,7 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1.
+    theoretical_tau = 0
 
     # Print conclusion if required
     if verbose:
