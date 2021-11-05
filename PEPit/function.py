@@ -1,4 +1,4 @@
-from PEPit.Tools.dict_operations import merge_dict, prune_dict
+from PEPit.tools.dict_operations import merge_dict, prune_dict
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint

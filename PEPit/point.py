@@ -1,4 +1,4 @@
-from PEPit.Tools.dict_operations import merge_dict, prune_dict, multiply_dicts
+from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
 from PEPit.expression import Expression
 
 

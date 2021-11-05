@@ -1,7 +1,7 @@
 import warnings
 import numpy as np
 
-from PEPit.Tools.dict_operations import merge_dict
+from PEPit.tools.dict_operations import merge_dict
 
 from PEPit.constraint import Constraint
 
