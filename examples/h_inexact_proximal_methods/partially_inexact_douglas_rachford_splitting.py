@@ -1,5 +1,3 @@
-import random as rd
-
 from PEPit.pep import PEP
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.functions.convex_function import ConvexFunction

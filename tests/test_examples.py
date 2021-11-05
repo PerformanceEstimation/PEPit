@@ -49,11 +49,11 @@ import examples.i_adaptive_methods.polyak_steps_2 as inPS2
 import examples.j_low_dimensional_worst_cases_scenarios.inexact_gradient as inLDIGD
 import examples.j_low_dimensional_worst_cases_scenarios.optimized_gradient_method as inLDOGM
 import examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_extra_gradient as inAHPE
-import Examples.H_InexactProximalMethods.AcceleratedInexactForwardBackward as inAIFB
-import Examples.H_InexactProximalMethods.OptimizedRelativelyInexactProximalPointAlgorithm as inORIPPA
-import Examples.H_InexactProximalMethods.PartiallyInexactDouglasRachfordSplitting as inPIDRS
-import Examples.H_InexactProximalMethods.RelativelyInexactProximalPointAlgorithm_1 as inRIPP_1
-import Examples.H_InexactProximalMethods.RelativelyInexactProximalPointAlgorithm_2 as inRIPP_2
+import examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward as inAIFB
+import examples.h_inexact_proximal_methods.optimized_relatively_inexact_proximal_point_algorithm as inORIPPA
+import examples.h_inexact_proximal_methods.partially_inexact_douglas_rachford_splitting as inPIDRS
+import examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_1 as inRIPP_1
+import examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_2 as inRIPP_2
 
 
 class TestExamples(unittest.TestCase):
@@ -303,13 +303,13 @@ class TestExamples(unittest.TestCase):
         ref_pesto_bounds = [0.7797]
         for n in n_list:
             wc, _ = opTOS.wc_tos(L, mu, beta, alpha, theta, verbose=self.verbose)
-            self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta= self.relative_precision * ref_pesto_bounds[n - 1])
+            self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
 
     def test_inhi(self):
         n = 10
 
         wc, theory = inHI.wc_halpern(n, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta= self.relative_precision * theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inkm(self):
         n = 10
@@ -322,35 +322,35 @@ class TestExamples(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = potGD1.wc_gd_lyapunov_1(L, gamma, n, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta= self.absolute_precision)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_potgd2(self):
         L, n = 1, 10
         gamma = 1 / L
 
         wc, theory = potGD2.wc_gd_lyapunov_2(L, gamma, n, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta= self.absolute_precision)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_potfgd(self):
         L, lam = 1, 10
         gamma = 1 / L
 
         wc, theory = potFGD.wc_gd_lyapunov(L, gamma, lam, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta= self.absolute_precision)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_inps1(self):
         L, mu = 1, 0.1
         gamma = 2 / L
 
         wc, theory = inPS1.wc_ps_1(L, mu, gamma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory * (1+self.relative_precision))
+        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
 
     def test_inps2(self):
         L, mu = 1, 0.1
         gamma = 2 / L
 
         wc, theory = inPS2.wc_ps_2(L, mu, gamma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory *(1+self.relative_precision))
+        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
 
     def test_inAHPE(self):
         mu, gamma, sigma, A0 = 1, 1, 1, 10
@@ -360,22 +360,22 @@ class TestExamples(unittest.TestCase):
 
     def test_inAIFB(self):
         mu, L, sigma, zeta, xi, A0 = 1, 2, 0.2, 0.9, 3, 1
-        gamma = (1 - sigma ** 2)/L
+        gamma = (1 - sigma ** 2) / L
 
         wc, theory = inAIFB.wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta= self.absolute_precision)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_inORIPPA(self):
         gamma, sigma, n = 2, 3, 10
 
         wc, theory = inORIPPA.wc_orippm(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision*theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inPIDRS(self):
         mu, L, gamma, sigma, n = 1, 5., 1.4, 0.2, 5
 
         wc, theory = inPIDRS.wc_pidrs(mu, L, n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision*theory )
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inRIPP_1(self):
         gamma, sigma, n = 2, 0.3, 5
@@ -387,12 +387,13 @@ class TestExamples(unittest.TestCase):
         gamma, sigma, n = 10, 0, 8
 
         wc, theory = inRIPP_2.wc_rippm2(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision*theory)
+        self.assertAlmostEqual(wc, theory, delta=2 * self.relative_precision * theory)
 
     def tearDown(self):
         Point.counter = 0
         Expression.counter = 0
         Function.counter = 0
 
-if __name__=='__name__':
+
+if __name__ == '__name__':
     unittest.main()
