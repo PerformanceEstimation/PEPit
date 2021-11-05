@@ -12,13 +12,19 @@ Welcome to PEPit's documentation!
 
 TODO : write it!
 
+PEPit.Operator_classes
+----------------------
+
+.. automodule:: PEPit.Operator_classes.Cocoercive
+   :members:
+   :show-inheritance:
+
 PEPit.Function_classes
 ----------------------
 
 .. automodule:: PEPit.Function_classes.convex_function
    :members:
    :show-inheritance:
-
 
 .. automodule:: PEPit.Function_classes.convex_indicator
    :members:
@@ -62,7 +68,6 @@ PEPit.pep
 ----------------
 
 .. automodule:: PEPit.pep
-
    :members:
    :show-inheritance:
 
@@ -70,7 +75,6 @@ PEPit.point
 ----------------
 
 .. automodule:: PEPit.point
-
    :members:
    :show-inheritance:
 
