@@ -85,7 +85,7 @@ ipython_config.py
 .idea/
 
 # MacOS files
-.DS_Store
+*.DS_Store
 
 # pyenv
 .python-version
