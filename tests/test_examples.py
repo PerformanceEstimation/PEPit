@@ -384,10 +384,10 @@ class TestExamples(unittest.TestCase):
         self.assertLessEqual(wc, theory)
 
     def test_inRIPP_2(self):
-        gamma, sigma, n = 10, 0, 8
+        gamma, sigma, n = 10, 0.01, 8
 
         wc, theory = inRIPP_2.wc_rippm2(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        self.assertLessEqual(wc, theory)
 
     def tearDown(self):
         Point.counter = 0
