@@ -1,4 +1,3 @@
-
 import unittest
 
 from PEPit.point import Point
@@ -6,7 +5,7 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 
 
-class TestPoint(unittest.TestCase):
+class TestExpression(unittest.TestCase):
 
     def setUp(self):
 
@@ -15,7 +14,6 @@ class TestPoint(unittest.TestCase):
 
         self.inner_product = self.point1 * self.point2
         self.function_value = Expression(is_function_value=True, decomposition_dict=None)
-        # TODO replace by child class like constraint when it will exist
 
     def test_is_instance(self):
 
