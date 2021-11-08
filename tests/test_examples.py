@@ -387,7 +387,7 @@ class TestExamples(unittest.TestCase):
         gamma, sigma, n = 10, 0, 8
 
         wc, theory = inRIPP_2.wc_rippm2(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=2 * self.relative_precision * theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def tearDown(self):
         Point.counter = 0

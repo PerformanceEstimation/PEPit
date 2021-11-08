@@ -7,8 +7,8 @@ from PEPit.point import Point
 from tests.additional_complexified_examples_tests.proximal_gradient import wc_pgd
 from tests.additional_complexified_examples_tests.proximal_point import wc_ppa
 
-import examples.a_methods_for_unconstrained_convex_minimization.proximal_point_method as ref_ppa
-import examples.b_methods_for_composite_convex_minimization.proximal_gradient as ref_pgd
+import PEPit.examples.a_methods_for_unconstrained_convex_minimization.proximal_point_method as ref_ppa
+import PEPit.examples.b_methods_for_composite_convex_minimization.proximal_gradient as ref_pgd
 
 
 class TestExamples(unittest.TestCase):
