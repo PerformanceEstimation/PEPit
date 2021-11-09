@@ -109,7 +109,7 @@ def wc_gd(mu, L, gamma, n, verbose=True):
     pepit_tau = problem.solve()
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L/2/(2*n+1)
+    theoretical_tau = L / (2 * (2 * n + 1))
 
     # Print conclusion if required
     if verbose:
