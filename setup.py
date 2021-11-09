@@ -11,7 +11,7 @@ setuptools.setup(
     description="PEPit is a package that allows users to pep their optimization algorithms as easy as they code them",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    setup_requires=["numpy", "scipy", "cvxpy"],
+    install_requires=["numpy", "scipy", "cvxpy"],
     url="https://github.com/bgoujaud/PEPit",
     project_urls={
         "Documentation": "https://github.com/bgoujaud/PEPit/docs",
@@ -22,7 +22,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "PEPit"},
-    packages=setuptools.find_packages(where="PEPit"),
+    packages=[element for element in setuptools.find_packages() if element[:5] == 'PEPit'],
     python_requires=">=3.6",
 )
