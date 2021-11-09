@@ -44,7 +44,7 @@ jobs:
         pip install -e .
     - name: Run tests
       run: |
-        python -m unittest Tests/test_*
+        python -m unittest tests/test_*
 
   pep8:
     runs-on: ubuntu-latest
