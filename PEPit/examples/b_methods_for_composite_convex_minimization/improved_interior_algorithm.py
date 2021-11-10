@@ -81,14 +81,11 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    try:
-        pepit_tau = problem.solve(solver=cp.MOSEK, verbose=verbose)
-    except cp.error.SolverError:
-        pepit_tau = problem.solve(verbose=verbose)
-        print("\033[93m(PEP-it) We recommend to use an other solver, such as MOSEK. \033[0m")
+    print("\033[93m(PEP-it) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 4 * L / (n + 1) ** 2 / c
+    theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
 
     # Print conclusion if required
     if verbose:

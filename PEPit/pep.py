@@ -134,12 +134,13 @@ class PEP(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=cp.SCS, verbose=1, tracetrick=False):
+    def solve(self, solver=None, verbose=1, tracetrick=False):
         """
         Solve the PEP
 
         :param solver: (str) the name of the underlying solver.
         :param verbose: (int) Level of information details to print (0 or 1)
+        :param tracetrick: (bool) apply trace trick or not
 
         :return: (float) value of the performance metric
         """
