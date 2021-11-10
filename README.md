@@ -26,7 +26,7 @@ The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/) f
 ## Installing the toolbox
 
 This code runs under Python 3.6+.
-- Please run ``pip install -r Infrastructure.requirements.txt``
+- Please run ``pip install -r requirements.txt``
 - Then run ``pip install -e .``
 
 You are all set; it remains to test the installation by running the tests:

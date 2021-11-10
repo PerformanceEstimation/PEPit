@@ -11,7 +11,10 @@ setuptools.setup(
     description="PEPit is a package that allows users to pep their optimization algorithms as easy as they code them",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["numpy", "scipy", "cvxpy"],
+    install_requires=["numpy",
+                      "scipy",
+                      "cvxpy",
+                      ],
     url="https://github.com/bgoujaud/PEPit",
     project_urls={
         "Documentation": "https://github.com/bgoujaud/PEPit/docs",
