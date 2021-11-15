@@ -10,45 +10,25 @@ Welcome to PEPit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-TODO : write it!
+   self
+   quickstart
+   examples
 
-PEPit.Operator_classes
-----------------------
+README.md
 
-.. automodule:: PEPit.Operator_classes.Cocoercive
+PEPit.pep
+---------
+
+.. automodule:: PEPit.pep
    :members:
    :show-inheritance:
 
-PEPit.Function_classes
-----------------------
+PEPit.point
+-----------
 
-.. automodule:: PEPit.Function_classes.convex_function
+.. automodule:: PEPit.point
    :members:
    :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.convex_indicator
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.convex_lipschitz_function
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.smooth_convex_function
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.smooth_strongly_convex_function
-   :members:
-   :show-inheritance:
-
-PEPit.function
---------------
-
-.. automodule:: PEPit.function
-   :members:
-   :show-inheritance:
-
 
 PEPit.expression
 ----------------
@@ -64,20 +44,37 @@ PEPit.constraint
    :members:
    :show-inheritance:
 
-PEPit.pep
-----------------
+PEPit.function
+--------------
 
-.. automodule:: PEPit.pep
+.. automodule:: PEPit.function
    :members:
    :show-inheritance:
 
-PEPit.point
-----------------
+PEPit.functions and PEPit.operators
+-----------------------------------
 
-.. automodule:: PEPit.point
+.. automodule:: PEPit.functions
    :members:
    :show-inheritance:
 
+.. automodule:: PEPit.operators
+   :members:
+   :show-inheritance:
+
+PEPit.primitive_steps
+---------------------
+
+.. automodule:: PEPit.primitive_steps
+   :members:
+   :show-inheritance:
+
+PEPit.tools
+-----------
+
+.. automodule:: PEPit.tools
+   :members:
+   :show-inheritance:
 
 
 Indices and tables

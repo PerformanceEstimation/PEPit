@@ -8,16 +8,22 @@ from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
 def wc_CG(L, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and convex.
+
+    .. math:: f_* = \min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for the conjugate gradient (CG) method (with exact span searches).
-    That is, it computes the smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_* <= tau(n,L) * ||x_0-x_*||^2
-    is valid, where x_n is the output of the conjugate gradient method, and where x_* is a minimizer of f.
+    That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when
-    ||x_0 - x_*|| == 1.
+    .. math :: f(x_n) - f_* \\leqslant \\tau(n, L) \|x_0-x_*\|^2
+
+    is valid, where :math:`x_n` is the output of the conjugate gradient method,
+    and where :math:`x_*` is a minimizer of :math:`f`.
+
+    In short, for given values of :math:`n` and :math:`L`,
+    :math:`\\tau(n,L)` is be computed as the worst-case value of :math:`f(x_n)-f_*`
+    when :math:`\|x_0 - x_*\| \\leqslant 1`.
 
     The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
     Efficient first-order methods for convex minimization: a constructive approach.
