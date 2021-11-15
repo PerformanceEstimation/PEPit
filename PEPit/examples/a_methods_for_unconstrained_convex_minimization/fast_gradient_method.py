@@ -25,11 +25,16 @@ def wc_fgm(mu, L, n, verbose=True):
     [2] Exact Worst-case Performance of First-order Methods for Composite Convex Optimization
     Adrien B. Taylor, Julien M. Hendrickx, François Glineur
 
-    :param L: (float) the smoothness parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        :param L: (float) the smoothness parameter.
+        :param n: (int) number of iterations.
+        :param verbose: (bool) if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    :Returns:
+        (tuple) worst_case value, theoretical value
+
+    Note:
+        TODO add a note
     """
 
     # Instantiate PEP
