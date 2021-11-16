@@ -1,5 +1,4 @@
 import numpy as np
-import cvxpy as cp
 
 from PEPit.pep import PEP
 from PEPit.functions.smooth_convex_function import SmoothConvexFunction
@@ -81,8 +80,10 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    print("\033[93m(PEP-it) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
-    pepit_tau = problem.solve(verbose=verbose)
+    cvxpy_prob = problem.solve(verbose=verbose, return_full_cvxpy_problem=True)
+    pepit_tau = cvxpy_prob.value
+    if cvxpy_prob.solver_stats.solver_name == "SCS":
+        print("\033[93m(PEP-it) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
