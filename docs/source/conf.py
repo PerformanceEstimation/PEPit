@@ -13,6 +13,7 @@
 # import os
 import os
 import sys
+import PEPit  # The module you're documenting (assumes you've added the parent dir to sys.path)
 
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -31,6 +32,7 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    # 'easydev.copybutton',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
@@ -43,8 +45,6 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinxcontrib_autodocgen',
 ]
-
-import PEPit  # The module you're documenting (assumes you've added the parent dir to sys.path)
 
 autodocgen_config = [{
     'modules': [PEPit],
@@ -83,6 +83,18 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+# # Make the copy paste possible for any example code in documentation
+# import easydev
+#
+# jscopybutton_path = easydev.copybutton.get_copybutton_path()
+#
+# # if not os.path.isdir('_static'):
+# #     os.mkdir('_static')
+#
+# import shutil
+#
+# shutil.copy(jscopybutton_path, '_static')
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

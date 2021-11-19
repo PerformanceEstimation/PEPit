@@ -5,6 +5,14 @@ from PEPit.expression import Expression
 class Point(object):
     """
     Point or Gradient
+
+    Attributes:
+        _is_leaf (bool): True if self is defined from scratch.
+                         False if self is defined as linear combination of other points.
+        value (nd.array): a possible value at optimum.
+        decomposition_dict (dict): decomposition of self as linear combination of leaf points.
+        counter (int)
+
     """
 
     # Class counter.
@@ -22,9 +30,11 @@ class Point(object):
         A point contains also a value that is computed only when the pep is solved.
         Finally, a basis point contains a counter to keep track of the order in which they where defined.
 
-        :param is_leaf: (bool) if True, the point defines a new dimension, hence linearly independent from the others.
-        :param decomposition_dict: (dict) the decomposition in the basis of points.
-                                          None if the point defines a new direction.
+        Args:
+            is_leaf (bool): if True, the point defines a new dimension, hence linearly independent from the others.
+            decomposition_dict (dict): the decomposition in the basis of points.
+                                       None if the point defines a new direction.
+
         """
 
         # Store is_leaf in a protected attribute
@@ -54,8 +64,12 @@ class Point(object):
         """
         Add 2 points together, leading to a new point.
 
-        :param other: (Point) Any other point
-        :return: (Point) The sum of the 2 points
+        Args:
+            other (Point): Any other point
+
+        Returns:
+            Point: The sum of the 2 points
+
         """
 
         # Verify that other is a Point
@@ -72,8 +86,12 @@ class Point(object):
         """
         Subtract 2 points together, leading to a new point.
 
-        :param other: (Point) Any other point
-        :return: (Point) The difference between the 2 points
+        Args:
+            other (Point): Any other point
+
+        Returns:
+            Point: The difference between the 2 points
+
         """
 
         # A-B = A+(-B)
@@ -83,7 +101,9 @@ class Point(object):
         """
         Compute the opposite of a point.
 
-        :return: (Point) - point
+        Returns:
+            Point: -self
+
         """
 
         # -A = (-1)*A
@@ -93,8 +113,15 @@ class Point(object):
         """
         Multiply 1 point to the left by a constant scalar value or another point.
 
-        :param other: (int or float or Point) Any scalar value or any Point.
-        :return: (Expression) other * self
+        Args:
+            other (int or float or Point): Any scalar value or any Point.
+
+        Returns:
+            Expression: other * self
+
+        Raises:
+            TypeError("Points can be multiplied by scalar constants and other points only!")
+
         """
 
         # Multiplying by a scalar value is applying an homothety
@@ -119,8 +146,12 @@ class Point(object):
         """
         Multiply 1 point to the right by a constant scalar value or another point.
 
-        :param other: (int or float or Point) Any scalar value or any Point.
-        :return: (Expression) self * other
+        Args:
+            other (int or float or Point): Any scalar value or any Point.
+
+        Returns:
+            Expression: self * other
+
         """
 
         return self.__rmul__(other=other)
@@ -129,11 +160,16 @@ class Point(object):
         """
         Divide a point by a scalar value
 
-        :param denominator: (int or float) the value to divide by.
-        :return: (Point) The resulting point
+        Args:
+            denominator (int or float): the value to divide by.
+
+        Returns:
+            Point: The resulting point
+
         """
         # Verify the type of denominator
         assert isinstance(denominator, float) or isinstance(denominator, int)
+
         # P / v = P * (1/v)
         return self.__rmul__(1 / denominator)
 
@@ -141,8 +177,12 @@ class Point(object):
         """
         Compute the square norm of a point.
 
-        :param power: (int) must be 2.
-        :return: (Expression) Inner product of point by itself.
+        Args:
+            power (int): must be 2.
+
+        Returns:
+            Expression: Inner product of point by itself.
+
         """
         # Works only for power=2
         assert power == 2
@@ -155,7 +195,9 @@ class Point(object):
         Compute, store and return the value of a point.
         Raise Exception if the PEP did not run yet.
 
-        :return: (np.array) The value of the point.
+        Returns:
+            np.array: The value of the point.
+
         """
 
         # If the attribute value is not None, then simply return it.

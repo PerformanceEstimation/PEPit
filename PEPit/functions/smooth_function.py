@@ -3,7 +3,18 @@ from PEPit.function import Function
 
 class SmoothFunction(Function):
     """
-    Smooth strongly convex function
+    SmoothFunction class
+
+    Attributes:
+        L (float): smoothness constant
+
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=SmoothFunction, param={'L': 1})
+
+    References:
+
+
     """
 
     def __init__(self,
@@ -12,12 +23,12 @@ class SmoothFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of smooth functions.
-        The differentiability is not necessarily verified.
+        Smooth functions are characterized by their smoothness constant L.
 
-        :param param: (dict) contains the values L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        Args:
+            param (dict): contains the values L
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
@@ -39,8 +50,11 @@ class SmoothFunction(Function):
 
                 xj, gj, fj = point_j
 
-                if ((xi != xj) | (gi != gj) | (fi != fj)):
+                if (xi != xj) | (gi != gj) | (fi != fj):
 
                     # Interpolation conditions of smooth functions class
-                    self.add_constraint(fi - fj - self.L/4 * (xi - xj)**2 - 1/2 * (gi + gj) * (xi - xj)
-                                        + 1/(4 * self.L) * (gi - gj)**2 <= 0)
+                    self.add_constraint(fi - fj
+                                        - self.L/4 * (xi - xj)**2
+                                        - 1/2 * (gi + gj) * (xi - xj)
+                                        + 1/(4 * self.L) * (gi - gj)**2
+                                        <= 0)

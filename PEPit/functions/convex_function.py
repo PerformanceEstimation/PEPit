@@ -3,7 +3,15 @@ from PEPit.function import Function
 
 class ConvexFunction(Function):
     """
-    Convex Function
+    ConvexFunction class
+
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=ConvexFunction, param=dict())
+
+    References:
+
+
     """
 
     def __init__(self,
@@ -12,12 +20,13 @@ class ConvexFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of convex functions.
-        It does not need any additional parameter.
+        Convex functions are not characterized by any parameter.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_differentiable (bool): If true, the function can have only one subgradient per point.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
@@ -25,7 +34,7 @@ class ConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the convex functions
+        Add all the interpolation conditions of convex functions
         """
 
         for i, point_i in enumerate(self.list_of_points):

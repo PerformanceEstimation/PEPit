@@ -3,7 +3,18 @@ from PEPit.function import Function
 
 class ConvexLipschitzFunction(Function):
     """
-    Convex Smooth Function
+    ConvexLipschitzFunction class
+
+    Attributes:
+        L (float): Lipschitz constant
+
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=ConvexLipschitzFunction, param={'L': 1})
+
+    References:
+
+
     """
 
     def __init__(self,
@@ -12,12 +23,13 @@ class ConvexLipschitzFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of convex smooth functions.
-        The differentiability is necessarily verified.
+        Convex Lipschitz functions are characterized by their lipschitz parameter L.
 
-        :param param: (dict) contains the value of L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        Args:
+            param (dict): contains the value of L
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+
         """
         # Inherit directly from Function.
         super().__init__(is_leaf=is_leaf,

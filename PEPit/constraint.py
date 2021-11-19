@@ -1,6 +1,13 @@
 class Constraint(object):
     """
     Equality or inequality between two expressions
+
+    Attributes:
+        counter (int)
+        expression (Expression)
+        equality_or_inequality (str): self is Expression = 0 or Expression :math:`\\leqslant` 0
+        dual_variable_value (float)
+
     """
     # Class counter.
     # It counts the number of generated constraints
@@ -9,10 +16,12 @@ class Constraint(object):
     def __init__(self, expression, equality_or_inequality):
         """
         A constraint is defined by an expression that is either equal to or non-greater than 0.
-
-        :param expression: (Expression) an object of class Expression
-        :param equality_or_inequality: (str) either 'equality' or 'inequality'.
         The constraint must be understood as Expression == 0 or Expression <=0.
+
+        Args:
+            expression (Expression): an object of class Expression
+            equality_or_inequality (str): either 'equality' or 'inequality'.
+
         """
 
         # Update the counter

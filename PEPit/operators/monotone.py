@@ -3,19 +3,17 @@ from PEPit.function import Function
 
 class MonotoneOperator(Function):
     """
-    Tis routine implements the interpolation conditions for monotone operators.
+    MonotoneOperator class
 
-    To generate a monotone operator 'h' from an instance of PEP called P :
-    >> problem = pep()
-    >> h = problem.DeclareFunction(MonotoneOperator, {})
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=MonotoneOperator, param=dict())
 
-    NOTE : PEPit was initially tough for evaluating performances of optimization algorithms.
-    Operators are represented in the same way as functions, but function values are not accessible.
-
-    For details about interpolation conditions, we refer to the fllowing :
-    [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-      "Operator Splitting Performance Estimation: Tight contraction factors
-      and optimal parameter selection," arXiv:1812.00146, 2018.
+    References:
+        For details about interpolation conditions, we refer to the fllowing :
+        [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
+        "Operator Splitting Performance Estimation: Tight contraction factors
+        and optimal parameter selection," arXiv:1812.00146, 2018.
 
     """
 
@@ -25,12 +23,13 @@ class MonotoneOperator(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of monotone operators.
-        It does not need any additional parameter.
+        Monotone operators are are not characterized by any parameter.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_differentiable (bool): If true, the function can have only one subgradient per point.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,

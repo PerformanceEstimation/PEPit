@@ -11,14 +11,16 @@ def inexact_gradient(x0, f, epsilon, notion='absolute'):
         - 'relative' :
             ||g(x0) - f'(x0)||^2 <= epsilon^2 ||f'(x_0)||^2.
 
-    :param x0 (Point): the starting point x0.
-    :param f (function): the function on which the gradient is evaluated.
-    :param epsilon (float): the required accuracy.
-    :param notion (string): defines the mode 'absolute' or 'relative' inaccuracy (see above).
+    Args:
+        x0 (Point): the starting point x0.
+        f (Function): the function on which the gradient is evaluated.
+        epsilon (float): the required accuracy.
+        notion (string): defines the mode 'absolute' or 'relative' inaccuracy (see above).
 
-    :return:
+    Returns:
         - gxeps (Point): the approximate (sub)gradient of at x0.
         - fx (Expression): the function f evaluated at x0.
+
     """
     gx, fx = f.oracle(x0)
     gxeps = Point()

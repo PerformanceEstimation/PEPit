@@ -12,14 +12,16 @@ def proximal_step(x0, f, step):
 	<=>
 	y=x-gamma * \partial f(y)
 
-	:param x0 (Point): starting point x0
-	:param f (function): function on which the (sub)radient will be evaluated
-	:param step (float): step size of the proximal step
+	Args:
+		x0 (Point): starting point x0
+		f (Function): function on which the (sub)gradient will be evaluated
+		step (float): step size of the proximal step
 
-	:return:
+	Returns:
 		- x (Point).
 		- gx (Point) the (sub)gradient of f at x.
 		- fx (Expression) the function f evaluated at x.
+
 	"""
 
 	gx = Point()

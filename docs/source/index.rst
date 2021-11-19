@@ -14,8 +14,6 @@ Welcome to PEPit's documentation!
    quickstart
    examples
 
-README.md
-
 PEPit.pep
 ---------
 

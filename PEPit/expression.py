@@ -9,6 +9,14 @@ from PEPit.constraint import Constraint
 class Expression(object):
     """
     Function value, inner product, or constant
+
+    Attributes:
+        _is_function_value (bool): True if self is a function value defined from scratch.
+                                   False if self is a linear combination of function values or inner product of points.
+        value (float): the value of self at optimum.
+        decomposition_dict (dict): decomposition of self as a linear combination of basis expressions.
+        counter (int)
+
     """
     # Class counter.
     # It counts the number of function values needed to linearly generate the expressions.
@@ -21,8 +29,10 @@ class Expression(object):
         """
         An expression is a linear combination of functions values, inner products and constant scalar values.
 
-        :param is_function_value: (bool) If true, the expression is a basis function value.
-        :param decomposition_dict: (dict) Decomposition in the basis of function values, inner products and constants.
+        Args:
+            is_function_value (bool): If true, the expression is a basis function value.
+            decomposition_dict (dict): Decomposition in the basis of function values, inner products and constants.
+
         """
         # Store is_function_value in a protected attribute
         self._is_function_value = is_function_value
@@ -51,8 +61,12 @@ class Expression(object):
         """
         Add 2 expressions together, leading to a new expression. Note an expression can also be added to a constant.
 
-        :param other: (Expression or int or float) Any other expression or scalar constant
-        :return: (Expression) The sum of the 2 expressions
+        Args:
+            other (Expression or int or float): Any other expression or scalar constant
+
+        Returns:
+            Expression: The sum of the 2 expressions
+
         """
 
         # If other is an Expression, merge the decomposition_dicts
@@ -72,8 +86,12 @@ class Expression(object):
         """
         Subtract 2 Expressions together, leading to a new expression.
 
-        :param other: (Expression or int or float) Any other expression or scalar constant
-        :return: (Expression) The difference between the 2 expressions
+        Args:
+            other (Expression or int or float): Any other expression or scalar constant
+
+        Returns:
+            Expression: The difference between the 2 expressions
+
         """
 
         # A-B = A+(-B)
@@ -83,7 +101,9 @@ class Expression(object):
         """
         Compute the opposite of an expression.
 
-        :return: (Expression) - expression
+        Returns:
+            Expression: -self
+
         """
 
         # -A = (-1)*A
@@ -93,8 +113,12 @@ class Expression(object):
         """
         Multiply an expression by a scalar value
 
-        :param other: (int or float) Any scalar constant
-        :return: (Expression) other * self
+        Args:
+            other (int or float): Any scalar constant
+
+        Returns:
+            Expression: other * self
+
         """
 
         # Verify other is a scalar constant
@@ -112,8 +136,12 @@ class Expression(object):
         """
         Multiply an expression by a scalar value
 
-        :param other: (int or float) Any scalar constant
-        :return: (Expression) self * other
+        Args:
+            other (int or float): Any scalar constant
+
+        Returns:
+            Expression: self * other
+
         """
 
         return self.__rmul__(other=other)
@@ -122,8 +150,12 @@ class Expression(object):
         """
         Divide an expression by a scalar value
 
-        :param denominator: (int or float) the value to divide by.
-        :return: (Expression) The resulting expression
+        Args:
+            denominator (int or float): the value to divide by.
+
+        Returns:
+            Expression: The resulting expression
+
         """
 
         # P / v = P * (1/v)
@@ -133,8 +165,12 @@ class Expression(object):
         """
         Create a non-positive expression from an inequality
 
-        :param other: (Expression of int or float)
-        :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+        Args:
+            other (Expression of int or float)
+
+        Returns:
+            Expression: Expression <= 0 must be equivalent to the input inequality
+
         """
 
         return Constraint(self - other, equality_or_inequality='inequality')
@@ -143,11 +179,19 @@ class Expression(object):
         """
         Create a non-positive expression from an inequality
 
-        :param other: (Expression of int or float)
-        :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+        Args:
+            other (Expression of int or float)
 
-        Note: The input inequality is strict, but optimizing over the interior set is equivalent,
-        so we refer to the large inequality.
+        Returns:
+            Expression: Expression <= 0 must be equivalent to the input inequality
+
+        Note:
+            The input inequality is strict, but optimizing over the interior set is equivalent,
+            so we refer to the large inequality.
+
+        Raises:
+            Warnings("Strict constraints will lead to the same solution as under soft constraints")
+
         """
 
         warnings.warn("Strict constraints will lead to the same solution as under soft constraints")
@@ -157,8 +201,12 @@ class Expression(object):
         """
         Create a non-positive expression from an inequality
 
-        :param other: (Expression of int or float)
-        :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+        Args:
+            other (Expression of int or float)
+
+        Returns:
+            Expression: Expression <= 0 must be equivalent to the input inequality
+
         """
         return -self <= -other
 
@@ -166,11 +214,19 @@ class Expression(object):
         """
         Create a non-positive expression from an inequality
 
-        :param other: (Expression of int or float)
-        :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+        Args:
+            other (Expression of int or float)
 
-        Note: The input inequality is strict, but optimizing over the interior set is equivalent,
-        so we refer to the large inequality.
+        Returns:
+            Expression: Expression <= 0 must be equivalent to the input inequality
+
+        Note:
+            The input inequality is strict, but optimizing over the interior set is equivalent,
+            so we refer to the large inequality.
+
+        Raises:
+            Warnings("Strict constraints will lead to the same solution as under soft constraints")
+
         """
 
         warnings.warn("Strict constraints will lead to the same solution as under soft constraints")
@@ -180,8 +236,12 @@ class Expression(object):
         """
         Create a null expression from an equality
 
-        :param other: (Expression of int or float)
-        :return: (Expression) Expression <= 0 must be equivalent to the input inequality
+        Args:
+            other (Expression of int or float)
+
+        Returns:
+            Expression: Expression <= 0 must be equivalent to the input inequality
+
         """
 
         return Constraint(self - other, equality_or_inequality='equality')
@@ -192,9 +252,15 @@ class Expression(object):
     def eval(self):
         """
         Compute, store and return the value of an expression.
-        Raise Exception if the PEP did not run yet.
 
-        :return: (np.array) The value of the expression.
+        Returns:
+            np.array: The value of the expression.
+
+        Raises:
+            ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
+
+            TypeError("Expressions are made of function values, inner products and constants only!")
+
         """
 
         # If the attribute value is not None, then simply return it.

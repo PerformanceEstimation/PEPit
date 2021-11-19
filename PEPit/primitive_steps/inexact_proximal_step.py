@@ -30,13 +30,13 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
     [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
          first-order methods with inexact proximal operators
 
+    Args:
+        x0 (Point): starting point x0.
+        f (Function): function on which the (epsilon-sub)gradient will be evaluated.
+        step (float): step size of the proximal step.
+        opt (string): inaccuracy parameters in the "opt" structure.
 
-    :param x0(Point): starting point x0.
-    :param f (Function): function on which the (epsilon-sub)gradient will be evaluated.
-    :param step (float): step size of the proximal step.
-    :param opt (string): inaccuracy parameters in the "opt" structure.
-
-    :return:
+    Returns:
         - x (Point) the point x.
         - gx (Point) the (sub)gradient of f at x.
         - fx (Expression) the function f evaluation at x.
@@ -44,8 +44,11 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         - v (Point) the (sub)gradient of f evaluated at w.
         - fw (Expression) the function f evaluated at w.
         - epsVar (Expression) : an intermediate variable
-    NOTE : v is an epxilon-subgradient of f at x, and is the subgradient of f evaluated at w.
-    epsVar is te required accuracy (a variable), which the user can (should) bound.
+
+    Note:
+        v is an epsilon-subgradient of f at x, and is the subgradient of f evaluated at w.
+        epsVar is te required accuracy (a variable), which the user can (should) bound.
+
     """
     if opt == 'PD_gapI':
         """
@@ -70,7 +73,7 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         eps_sub = fx - fw - v * (x - w)
         f.add_constraint(e ** 2 / 2 + step * eps_sub <= epsVar)
 
-    if opt == 'PD_gapII':
+    elif opt == 'PD_gapII':
         """
         Approximate the proximal operator outputs x such that
             ||e||**2 <= epsVar
@@ -85,7 +88,7 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         f.add_constraint(e ** 2 <= epsVar)
         w, v, fw = x, gx, fx
 
-    if opt == 'PD_gapIII':
+    elif opt == 'PD_gapIII':
         """
         Approximate the proximal operator outputs x such that
             step * (fx - fw - v*(x - w) <= epsVar
@@ -100,7 +103,7 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         eps_sub = fx - fw - v * (x - w)
         f.add_constraint(step*eps_sub <= epsVar)
 
-    if opt == 'Orip-style':
+    elif opt == 'Orip-style':
         """
         Approximate proximal operator outputs x such that :
             <v, e> + epsilon/step <= espVar
@@ -120,5 +123,8 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         epsVar = Expression()
         eps_sub = fx - fw - v * (x - w)
         f.add_constraint(e * v + eps_sub / step <= epsVar)
+
+    else:
+        raise ValueError("Input opt must be either PD_gapI, PD_gapII, PD_gapIII or Orip-style")
 
     return x, gx, fx, w, v, fw, epsVar

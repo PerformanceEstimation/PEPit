@@ -7,6 +7,21 @@ from PEPit.constraint import Constraint
 class Function(object):
     """
     Function or Operator
+
+    Attributes:
+        _is_leaf (bool): True if self is defined from scratch.
+                         False is self is defined as linear combination of leaf functions.
+        is_differentiable (bool)
+        decomposition_dict (dict): decomposition of self as linear combination of leaf functions.
+        counter (int)
+        list_of_stationary_points (list)
+        list_of_points (list)
+        list_of_constraints (list)
+
+    Note:
+        PEPit was initially tough for evaluating performances of optimization algorithms.
+        Operators are represented in the same way as functions, but function values are not accessible.
+
     """
     # Class counter.
     # It counts the number of functions defined from scratch.
@@ -21,9 +36,11 @@ class Function(object):
         """
         A function is a linear combination of basis functions.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_differentiable (bool): If true, the function can have only one subgradient per point.
+
         """
 
         # Store inputs
@@ -57,8 +74,12 @@ class Function(object):
         """
         Add 2 functions together, leading to a new function.
 
-        :param other: (Function) Any other function
-        :return: (Function) The sum of the 2 functions
+        Args:
+            other (Function): Any other function
+
+        Returns:
+            Function: The sum of the 2 functions
+
         """
 
         # Verify other is a function
@@ -76,8 +97,12 @@ class Function(object):
         """
         Subtract 2 functions together, leading to a new function.
 
-        :param other: (Function) Any other function
-        :return: (Function) The difference between the 2 functions
+        Args:
+            other (Function): Any other function
+
+        Returns:
+            Function: The difference between the 2 functions
+
         """
 
         # A-B = A+(-B)
@@ -87,7 +112,9 @@ class Function(object):
         """
         Compute the opposite of a function.
 
-        :return: (Function) - function
+        Returns:
+            Function: -self
+
         """
 
         # -A = (-1)*A
@@ -97,8 +124,12 @@ class Function(object):
         """
         Multiply a function by a scalar value
 
-        :param other: (int or float) Any scalar constant
-        :return: (Function) other * self
+        Args:
+            other (int or float): Any scalar constant
+
+        Returns:
+            Function: other * self
+
         """
 
         # Verify other is a scalar constant
@@ -118,8 +149,12 @@ class Function(object):
         """
         Multiply a function by a scalar value
 
-        :param other: (int or float) Any scalar constant
-        :return: (Function) self * other
+        Args:
+            other (int or float): Any scalar constant
+
+        Returns:
+            Function: self * other
+
         """
         return self.__rmul__(other=other)
 
@@ -127,8 +162,12 @@ class Function(object):
         """
         Divide a function by a scalar value
 
-        :param denominator: (int or float) the value to divide by.
-        :return: (Function) The resulting function
+        Args:
+            denominator (int or float): the value to divide by.
+
+        Returns:
+            Function: The resulting function
+
         """
 
         # P / v = P * (1/v)
@@ -138,7 +177,9 @@ class Function(object):
         """
         Add a constraint to the list of constraints of the function
 
-        :param constraint: (Constraint) typically resulting from an inequality between 2 expressions.
+        Args:
+            constraint (Constraint): typically resulting from an inequality between 2 expressions.
+
         """
 
         # Verify constraint is an actual Constraint object
@@ -152,18 +193,26 @@ class Function(object):
         Needs to be overwritten with interpolation conditions.
         This methods is run by the PEP just before solving,
         applying the interpolation condition from the 2 lists of points.
+
+        Raises:
+            NotImplementedError: This method must be overwritten in children classes
+
         """
 
-        raise NotImplementedError
+        raise NotImplementedError("This method must be overwritten in children classes")
 
     def is_already_evaluated_on_point(self, point):
         """
         Check whether the "self" function is already evaluated on the point "point" or not.
 
-        :param point: (Point) the point we want to check whether the function is evaluated on or not.
-        :return: (tuple or None) if "self" is evaluated on "point",
-                                 return the tuple "gradient, function value" associated to "point".
-                                 Otherwise, return None.
+        Args:
+            point (Point): the point we want to check whether the function is evaluated on or not.
+
+        Returns:
+            tuple or None: if "self" is evaluated on "point",
+                           return the tuple "gradient, function value" associated to "point".
+                           Otherwise, return None.
+
         """
 
         # Browse the list of point "self" has been evaluated on
@@ -180,9 +229,13 @@ class Function(object):
         Separate basis functions in 3 categories depending whether they need new evaluation or not of
         gradient and function value on the point "point".
 
-        :param point: (Point) the point we look at
-        :return: (tuple of lists) 3 lists or functions arranged with respect to their need. Note functions are returned
-                                  with their corresponding weight in the decomposition of self.
+        Args:
+            point (Point): the point we look at
+
+        Returns:
+            tuple of lists: 3 lists or functions arranged with respect to their need. Note functions are returned
+                            with their corresponding weight in the decomposition of self.
+
         """
 
         # Initialize the 3 lists
@@ -217,7 +270,9 @@ class Function(object):
         """
         Add a triplet (point, gradient, function_value) to the list of points of this function.
 
-        :param triplet: (tuple) A tuple containing 3 elements: point, gradient, and function value
+        Args:
+            triplet (tuple): A tuple containing 3 elements: point, gradient, and function value
+
         """
 
         # Unpack triplet
@@ -278,8 +333,12 @@ class Function(object):
         """
         Return the gradient and the function value of self in point
 
-        :param point: (Point) Any point
-        :return: (tuple) A gradient and a function value
+        Args:
+            point (Point): Any point
+
+        Returns:
+            tuple: A gradient and a function value
+
         """
 
         # Verify point is a Point
@@ -344,8 +403,12 @@ class Function(object):
         """
         Return the gradient of self in point.
 
-        :param point: (Point) Any point
-        :return: (Point) The gradient of self in point
+        Args:
+            point (Point): Any point
+
+        Returns:
+            Point: The gradient of self in point
+
         """
 
         return self.subgradient(point)
@@ -354,8 +417,12 @@ class Function(object):
         """
         Return the gradient of self in point.
 
-        :param point: (Point) Any point
-        :return: (Point) The gradient of self in point
+        Args:
+            point (Point): Any point
+
+        Returns:
+            Point: The gradient of self in point
+
         """
 
         # Verify point is a Point
@@ -370,8 +437,12 @@ class Function(object):
         """
         Return the function value of self in point.
 
-        :param point: (Point) Any point
-        :return: (Point) The function value of self in point
+        Args:
+            point (Point): Any point
+
+        Returns:
+            Point: The function value of self in point
+
         """
 
         # Verify point is a Point
@@ -395,9 +466,13 @@ class Function(object):
         """
         Create a new stationary point, as well as its null gradient and its function value
 
-        :param return_gradient_and_function_value: (bool) If True, return the triplet point, gradient, function value.
-                                                          Otherwise, return only the point.
-        :return: (Point or tuple) The optimal point
+        Args:
+            return_gradient_and_function_value (bool): If True, return the triplet point, gradient, function value.
+                                                       Otherwise, return only the point.
+
+        Returns:
+            Point or tuple: The optimal point
+
         """
 
         # Create a new point, null gradient and new function value

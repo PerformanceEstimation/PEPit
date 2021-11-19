@@ -10,6 +10,14 @@ from PEPit.function import Function
 class PEP(object):
     """
     PEP class
+
+    Attributes:
+        counter (int)
+        list_of_functions (list)
+        list_of_points (list)
+        list_of_conditions (list)
+        list_of_performance_metrics (list): the pep maximizes the minimum of all performance metrics.
+
     """
     # Class counter.
     # It counts the number of PEP defined instantiated.
@@ -39,11 +47,14 @@ class PEP(object):
         """
         Instantiate a function
 
-        :param function_class: (class) a class of function that overwrites the class Function
-        :param param: (dict) dictionary of variables needed to define the function
-        :param is_differentiable: (bool) whether the function can admit different gradients in a same point
+        Args:
+            function_class (class): a class of function that overwrites the class Function
+            param (dict): dictionary of variables needed to define the function
+            is_differentiable (bool): whether the function can admit different gradients in a same point
 
-        :return: (Function) the newly created function
+        Returns:
+            Function: the newly created function
+
         """
 
         # Create the function
@@ -59,7 +70,9 @@ class PEP(object):
         """
         Create a new point from scratch
 
-        :return: (Point)
+        Returns:
+            Point
+
         """
 
         # Create a new point from scratch
@@ -75,7 +88,9 @@ class PEP(object):
         """
         Add a constraint manually, typically an initial condition
 
-        :param condition: (Expression) typically an inequality between expressions
+        Args:
+            condition (Expression): typically an inequality between expressions
+
         """
 
         # Store condition in the appropriate list
@@ -85,7 +100,9 @@ class PEP(object):
         """
         Define a performance metric
 
-        :param expression: (Expression)
+        Args:
+            expression (Expression)
+
         """
 
         # Store performance metric in the appropriate list
@@ -96,11 +113,14 @@ class PEP(object):
         """
         Create a cvxpy compatible expression from an Expression
 
-        :param expression: (Expression) Any expression
-        :param F: (cvxpy Variable) A vector representing the function values
-        :param G: (cvxpy Variable) A matrix representing the gram of all points
+        Args:
+            expression (Expression): Any expression
+            F (cvxpy Variable): A vector representing the function values
+            G (cvxpy Variable): A matrix representing the gram of all points
 
-        :return: (cvxpy Variable) The expression in terms of F and G
+        Returns:
+            cvxpy Variable: The expression in terms of F and G
+
         """
         cvxpy_variable = 0
         Fweights = np.zeros((Expression.counter,))
@@ -138,15 +158,18 @@ class PEP(object):
         """
         Solve the PEP
 
-        :param solver: (str) The name of the underlying solver.
-        :param verbose: (int) Level of information details to print (0 or 1)
-        :param tracetrick: (bool) Apply trace trick or not
-        :param return_full_cvxpy_problem: (bool) If True, return the cvxpy Problem object.
-                                                 If False, return the worst case value only.
-                                                 Set to False by default.
+        Args:
+            solver (str): The name of the underlying solver.
+            verbose (int): Level of information details to print (0 or 1)
+            tracetrick (bool): Apply trace trick or not
+            return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
+                                              If False, return the worst case value only.
+                                              Set to False by default.
 
-        :return: (float or cp.Problem) Value of the performance metric of cp.Problem object corresponding to the SDP.
-                                       The value only is returned by default.
+        Returns:
+            float or cp.Problem: Value of the performance metric of cp.Problem object corresponding to the SDP.
+                                 The value only is returned by default.
+
         """
 
         # Create all class constraints
@@ -227,9 +250,8 @@ class PEP(object):
             if verbose:
                 eig_val, _ = np.linalg.eig(G.value)
                 nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print(
-                    '(PEP-it) Postprocessing: applying trace heuristic. Currently {} eigenvalue(s) > {} before resolve.'.format(
-                        nb_eigen, eig_threshold))
+                print('(PEP-it) Postprocessing: applying trace heuristic.'
+                      ' Currently {} eigenvalue(s) > {} before resolve.'.format(nb_eigen, eig_threshold))
                 print('(PEP-it) Calling SDP solver')
             tol_tracetrick = 1e-5
             constraints_list.append(objective >= wc_value - tol_tracetrick)
@@ -237,9 +259,10 @@ class PEP(object):
             prob.solve(solver=solver)
             wc_value = objective.value[0]
             if verbose:
-                print('(PEP-it) Solver status: {} (solver: {}); objective value: {}'.format(prob.status,
-                                                                                            prob.solver_stats.solver_name,
-                                                                                            wc_value))
+                print('(PEP-it) Solver status: {} (solver: {});'
+                      ' objective value: {}'.format(prob.status,
+                                                    prob.solver_stats.solver_name,
+                                                    wc_value))
                 eig_val, _ = np.linalg.eig(G.value)
                 nb_eigen = len([element for element in eig_val if element > eig_threshold])
                 print('(PEP-it) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
@@ -263,8 +286,11 @@ class PEP(object):
         """
         Store values of points and function values from the result of the PEP
 
-        :param F_value: (nd.array) value of the cvxpy variable F
-        :param G_value: (nd.array) value of the cvxpy variable G
+        Args:
+            F_value (nd.array): value of the cvxpy variable F
+            G_value (nd.array): value of the cvxpy variable G
+            verbose (bool): if True, details of computation are printed
+
         """
 
         # Write the gram matrix G as M.T M to extract points' values
@@ -305,8 +331,11 @@ class PEP(object):
         """
         Store all dual values in appropriate constraints
 
-        :param cvx_constraints: (list) a list of cvxpy constraints
-        :return: (np.float) the position, in the list of performance metric, of the one that is actually reached
+        Args:
+            cvx_constraints (list): a list of cvxpy constraints
+
+        Returns:
+             np.float: the position, in the list of performance metric, of the one that is actually reached
         """
 
         # Set counter

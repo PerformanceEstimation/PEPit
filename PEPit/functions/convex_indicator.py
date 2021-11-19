@@ -5,34 +5,28 @@ from PEPit.function import Function
 
 class ConvexIndicatorFunction(Function):
     """
-    This routine implements the interpolation conditions for convex
-    indicator functions with bounded domains. Two parameters may be provided:
-           - a diameter D (D is nonnegative, and possibly infinite).
+    ConvexIndicatorFunction class
 
-    Note: not defining the value of D automatically corresponds to
-          set D to infinite.
+    Attributes:
+        D (float): diameter of the feasible set
 
-    To generate a convex indicator function 'h' with diameter D=infinite and
-    a radius R=1 from an instance of PEP called P:
-    >> problem = pep()
-    >> D= np.inf
-    >> h = problem.declare_function('ConvexIndicator',{'D' :D});
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
 
-    For details about interpolation conditions, we refer to the following
-    references:
+    Note:
+        The default value of D is infinity, which is equivalent to no constraint.
 
-    [1] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-    "Smooth strongly convex interpolation and exact worst-case
-    performance of first-order methods."
-    Mathematical Programming 161.1-2 (2017): 307-345.
+    References:
+        [1] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
+        "Smooth strongly convex interpolation and exact worst-case
+        performance of first-order methods."
+        Mathematical Programming 161.1-2 (2017): 307-345.
 
-    [2] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-    "Exact Worst-case Performance of First-order Methods for Composite
-    Convex Optimization."to appear in SIAM Journal on Optimization (2017)
+        [2] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
+        "Exact Worst-case Performance of First-order Methods for Composite
+        Convex Optimization."to appear in SIAM Journal on Optimization (2017)
 
-    :param D:
-    :param R:
-    :return:
     """
 
     def __init__(self,
@@ -41,19 +35,19 @@ class ConvexIndicatorFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of convex indicator functions.
-        The differentiability is not necessarily verified.
+        Convex indicator functions are characterized by the diameter of the feasible set.
 
-        :param param: (dict) contains the values of mu and L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        Args:
+            param (dict): contains the values of mu and L
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
                          is_differentiable=is_differentiable)
 
-        # Store D
-        self.D = param['D']  # diameter
+        # Store the diameter D in an attribute
+        self.D = param['D']
 
     def add_class_constraints(self):
         """

@@ -3,19 +3,25 @@ from PEPit.function import Function
 
 class LipschitzOperator(Function):
     """
-    Tis routine implements the interpolation conditions for Lipschitz operators (non expansive operators by setting L=1).
+    LipschitzOperator class
 
-    To generate a Lipschitz operator 'h' from an instance of PEP called P :
-    >> problem = pep()
-    >> h = problem.DeclareFunction(LipschitzOperator, {'L': L})
+    Attributes:
+        L (float) Lipschitz constant
 
-    NOTE : PEPit was initially tough for evaluating performances of optimization algorithms.
-    Operators are represented in the same way as functions, but function values are not accessible.
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=LipschitzOperator, param={'L': 1})
 
-    For details about interpolation conditions, we refer to the following :
-    [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-      "Operator Splitting Performance Estimation: Tight contraction factors
-      and optimal parameter selection," arXiv:1812.00146, 2018.
+    Notes:
+        By setting L=1, we define a non expansive operator.
+
+        By setting L<1, we define a contracting operator.
+
+    References:
+        For details about interpolation conditions, we refer to the following :
+        [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
+        "Operator Splitting Performance Estimation: Tight contraction factors
+        and optimal parameter selection," arXiv:1812.00146, 2018.
 
     """
 
@@ -25,12 +31,13 @@ class LipschitzOperator(Function):
                  decomposition_dict=None,
                  is_differentiable=False):
         """
-        Class of Lipschitz operators.
-        It does not need any additional parameter.
+        Lipschitz operators are characterized by their Lipschitz constant L.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_differentiable (bool): If true, the function can have only one subgradient per point.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,

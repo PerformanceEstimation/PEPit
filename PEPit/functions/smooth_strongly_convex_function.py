@@ -3,7 +3,19 @@ from PEPit.function import Function
 
 class SmoothStronglyConvexFunction(Function):
     """
-    Smooth strongly convex function
+    SmoothStronglyConvexFunction class
+
+    Attributes:
+        mu (float): strong convexity constant
+        L (float): smoothness constant
+
+    Example:
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=SmoothStronglyConvexFunction, param={'mu': .1, 'L': 1})
+
+    References:
+
+
     """
 
     def __init__(self,
@@ -12,12 +24,17 @@ class SmoothStronglyConvexFunction(Function):
                  decomposition_dict=None,
                  is_differentiable=True):
         """
-        Class of smooth strongly convex functions.
-        The differentiability is necessarily verified.
+        Strongly convex smooth functions are characterized by
+        their strong convexity constant mu
+        and their smoothness constant L.
 
-        :param param: (dict) contains the values of mu and L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        They are necessarily differentiable.
+
+        Args:
+            param (dict): contains the values of mu and L
+            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
+            decomposition_dict (dict): Decomposition in the basis of functions.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
