@@ -6,30 +6,66 @@ from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
 def wc_els(L, mu, n, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly convex.
-    This code computes a worst-case guarantee for the gradient method with exact linesearch (ELS). That is, it computes
-    the smallest possible tau(n, L, mu) such that the guarantee
-        f(x_n) - f_* <= tau(n, L, mu) * (f(x_0) - f_*)
-    is valid, where x_n is the output of the gradient descent with exact linesearch,
-    and where x_* is the minimizer of f.
 
-    In short, for given values of n and L and mu, tau(n, L, mu) is computed as the worst-case value of f(x_n)-f_* when
-    f(x_0) - f_* <= 1.
+    .. math:: f_* = \\min_x f(x),
 
-    The detailed approach (based on convex relaxations) is available in
-    [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-    "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-    Optimization Letters (2017).
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    The tight guarantee obtained in [1, Theorem 1.2] is tau(n, L, mu) = ((L-mu)/(L+mu))^(2n).
+    This code computes a worst-case guarantee for the **gradient method with exact linesearch (ELS)**. That is, it computes
+    the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_*)
 
-    :return: (tuple) worst_case value, theoretical value
+    is valid, where :math:`x_n` is the output of the **gradient method with exact linesearch**,
+    and where :math:`x_*` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n` and :math:`L` and :math:`\\mu, \\tau(n, L, \\mu)`
+    is computed as the worst-case value of :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
+
+    **Algorithm**:
+
+        .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t)
+
+        with
+
+        .. math:: \\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_t) \\right)
+
+    **Theoretical guarantee**:
+
+        The **tight** guarantee obtained in [1, Theorem 1.2] is
+
+        .. math:: \\tau(n, L, \\mu) = \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n}.
+
+    References:
+
+        The detailed approach (based on convex relaxations) is available in
+        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
+        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
+        Optimization Letters (2017).
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        n (int): number of iterations.
+        verbose (bool, optional): if True, print conclusion
+    
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+
+        >>> pepit_tau, theoretical_tau = wc_els(L=1, mu=.1, n=2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 16 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.44812204883466417
+        *** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.448122 (f(x_0)-f_*)
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
+
     """
 
     # Instantiate PEP
