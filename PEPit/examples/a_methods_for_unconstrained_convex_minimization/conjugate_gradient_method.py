@@ -9,21 +9,21 @@ def wc_CG(L, n, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_* = \min_x f(x),
+    .. math:: f_* = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for the conjugate gradient (CG) method (with exact span searches).
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: f(x_n) - f_* \\leqslant \\tau(n, L) \|x_0-x_*\|^2
+    .. math :: f(x_n) - f_* \\leqslant \\tau(n, L) \\|x_0-x_*\\|^2
 
     is valid, where :math:`x_n` is the output of the conjugate gradient method,
     and where :math:`x_*` is a minimizer of :math:`f`.
 
     In short, for given values of :math:`n` and :math:`L`,
     :math:`\\tau(n,L)` is be computed as the worst-case value of :math:`f(x_n)-f_*`
-    when :math:`\|x_0 - x_*\| \\leqslant 1`.
+    when :math:`\\|x_0 - x_*\\| \\leqslant 1`.
 
     The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
     Efficient first-order methods for convex minimization: a constructive approach.

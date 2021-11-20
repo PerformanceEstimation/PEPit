@@ -95,7 +95,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1 / np.sqrt((n))  # holds for theta = 1
+    theoretical_tau = 1 / np.sqrt(n)  # holds for theta = 1
 
     # Print conclusion if required
     if verbose:
