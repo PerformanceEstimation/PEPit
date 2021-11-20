@@ -13,8 +13,8 @@
 # import os
 import os
 import sys
-import PEPit  # The module you're documenting (assumes you've added the parent dir to sys.path)
 
+# The module you're documenting (assumes you've added the project root dir to sys.path)
 sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
@@ -45,6 +45,8 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinxcontrib_autodocgen',
 ]
+
+import PEPit
 
 autodocgen_config = [{
     'modules': [PEPit],

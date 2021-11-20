@@ -12,6 +12,9 @@ Welcome to PEPit's documentation!
 
    self
    quickstart
+   functions
+   steps
+   tools
    examples
 
 PEPit.pep
@@ -46,31 +49,6 @@ PEPit.function
 --------------
 
 .. automodule:: PEPit.function
-   :members:
-   :show-inheritance:
-
-PEPit.functions and PEPit.operators
------------------------------------
-
-.. automodule:: PEPit.functions
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.operators
-   :members:
-   :show-inheritance:
-
-PEPit.primitive_steps
----------------------
-
-.. automodule:: PEPit.primitive_steps
-   :members:
-   :show-inheritance:
-
-PEPit.tools
------------
-
-.. automodule:: PEPit.tools
    :members:
    :show-inheritance:
 

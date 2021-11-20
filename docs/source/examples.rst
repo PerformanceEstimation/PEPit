@@ -1,6 +1,17 @@
 Examples
 --------
 
-.. automodule:: PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_exact_line_search
-   :members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   examples/a
+   examples/b
+   examples/c
+   examples/d
+   examples/e
+   examples/f
+   examples/g
+   examples/h
+   examples/i
+   examples/j
