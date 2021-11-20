@@ -100,7 +100,7 @@ class PEP(object):
         :param F: (cvxpy Variable) A vector representing the function values
         :param G: (cvxpy Variable) A matrix representing the gram of all points
 
-        :return: (cvxpy Variable) the expression in terms of F and G
+        :return: (cvxpy Variable) The expression in terms of F and G
         """
         cvxpy_variable = 0
         Fweights = np.zeros((Expression.counter,))
@@ -134,14 +134,19 @@ class PEP(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=cp.SCS, verbose=1, tracetrick=False):
+    def solve(self, solver=None, verbose=1, tracetrick=False, return_full_cvxpy_problem=False):
         """
         Solve the PEP
 
-        :param solver: (str) the name of the underlying solver.
+        :param solver: (str) The name of the underlying solver.
         :param verbose: (int) Level of information details to print (0 or 1)
+        :param tracetrick: (bool) Apply trace trick or not
+        :param return_full_cvxpy_problem: (bool) If True, return the cvxpy Problem object.
+                                                 If False, return the worst case value only.
+                                                 Set to False by default.
 
-        :return: (float) value of the performance metric
+        :return: (float or cp.Problem) Value of the performance metric of cp.Problem object corresponding to the SDP.
+                                       The value only is returned by default.
         """
 
         # Create all class constraints
@@ -237,9 +242,8 @@ class PEP(object):
                                                                                             wc_value))
                 eig_val, _ = np.linalg.eig(G.value)
                 nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print(
-                    '(PEP-it) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
-                                                                                                  eig_threshold))
+                print('(PEP-it) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
+                                                                                                    eig_threshold))
 
         # Store all the values of points and function values
         self.eval_points_and_function_values(F.value, G.value, verbose=verbose)
@@ -247,8 +251,13 @@ class PEP(object):
         # Store all the dual values in constraints
         self.eval_constraint_dual_values(prob.constraints)
 
-        # Return the value of the minimal performance metric
-        return wc_value
+        # Return the value of the minimal performance metric or the full cvxpy Problem object
+        if return_full_cvxpy_problem:
+            # Return the cvxpy Problem object
+            return prob
+        else:
+            # Return the value of the minimal performance metric
+            return wc_value
 
     def eval_points_and_function_values(self, F_value, G_value, verbose):
         """
