@@ -6,31 +6,62 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_drs_2(L, alpha, theta, n, verbose=True):
     """
-    Consider the composite convex minimization problem,
-        min_x { F(x) = f_1(x) + f_2(x) }
-    where f_1(x) is L-smooth and mu-strongly convex, and f_2 is convex,
+    Consider the composite convex minimization problem
+
+        .. math:: \min_x { F(x) = f_1(x) + f_2(x) }
+    where :math:`f_1(x)` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS) method,
-    where our notations for the DRS algorithm are as follows:
-        x_k     = prox_{\alpha f2}(w_k)
-        y_k     = prox_{\alpha f1}(2*x_k-w_k)
-        w_{k+1} = w_k +\theta (y_k - x_k)
+    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS) method.
+    That is, it computes the smallest possible :math:`\\tau(n,L,\\alpha,\\theta)` such that the guarantee
 
-    That is, it computes the smallest possible tau(n,L,alpha,theta) such that the guarantee
-        F(y_n) - F(x_*) <= tau(n,L,alpha_theta) * ||x_0 - x_*||^2.
-    is valid, where it is known that xk and yk converge to xs, but not wk, and hence
-    we require the initial condition on x0 (arbitrary choice; partially justified by
-    the fact we choose f2 to be the smooth function). Note that yN is feasible as it
-    has a finite value for f1 (output of the proximal operator on f1) and as f2 is smooth.
+        .. math:: F(y_n) - F(x_*) \\leqslant \\tau(n,L,\\alpha,\\theta) ||x_0 - x_*||^2.
 
-    :param L: (float) the smoothness parameter.
-    :param alpha: (float) parameter of the scheme.
-    :param theta: (float) parameter of the scheme.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_*`, but not :math:`w_k`, and hence
+    we require the initial condition on :math:`x_0`(arbitrary choice; partially justified by
+    the fact we choose :math:`f_2` to be the smooth function). Note that :math:`y_N` is feasible as it
+    has a finite value for :math:`f_1` (output of the proximal operator on :math:`f_1`) and as :math:`f_2` is smooth.
 
-    :return: (tuple) worst_case value, theoretical value
+    **Algorithms**:
+
+    Our notations for the DRS algorithm are as follows
+
+        .. math:: x_k     = prox_{\\alpha f_2}(w_k)
+        .. math:: y_k     = prox_{\\alpha f_1}(2x_k - w_k)
+        .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
+
+    **Theoretical guarantees**:
+
+
+    **References**:
+
+    [1] Giselsson, Pontus, and Stephen Boyd. "Linear convergence and metric selection in
+    Douglas-Rachford splitting and ADMM.
+
+    Args:
+        L (float): the smoothness parameter.
+        alpha (float): parameter of the scheme.
+        theta (float): parameter of the scheme.
+        n (int): number of iterations.
+        verbose (bool, optional): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_drs_2(1, 1, 1, 10)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 132 constraint(s) added
+                 function 2 : 156 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.025006128454582784
+        *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
+            PEP-it guarantee:	 f(y_n)-f_* <= 0.0250061 ||x0 - xs||^2
+            Theoretical guarantee :	 f(y_n)-f_* <= 0.0909091 ||x0 - xs||^2
     """
 
     # Instantiate PEP

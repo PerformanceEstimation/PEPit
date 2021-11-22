@@ -7,25 +7,52 @@ from PEPit.functions.convex_lipschitz_function import ConvexLipschitzFunction
 def wc_subgd(M, N, gamma, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is convex and M-Lipschitz. This problem is a non-smooth minimization problem.
+
+    .. math:: f_* = \\min_x f(x),
+
+    where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a non-smooth minimization problem.
 
     This code computes a worst-case guarantee for the subgradient method. That is, it computes
-    the smallest possible tau(n, M) such that the guarantee
-        min_{0 \leq i \leq N} f(x_i) - f_* <= tau(n, M) * ||x_0 - x_*||^2
-    is valid, where x_n is the output of the gradient descent with exact linesearch,
-    and where x_* is the minimizer of f.
+    the smallest possible :math:`\\tau(n, M)` such that the guarantee
 
-    We show how to compute the worst-case value of min_i F(xi)-F(xs) when xi is
-    obtained by doing i steps of a subgradient method starting with an initial
-    iterate satisfying ||x0-xs||<=1.
+    .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_* \\leqslant \\tau(n, M)  ||x_0 - x_*||^2
 
-    :param M: (float) the Lipschitz parameter.
-    :param N: (int) the number of iterations
-    :param gamma: optimal step size is 1/(sqrt(N+1)*M)
-    :param verbose: (bool) if True, print conclusion
+    is valid, where :math:`x_i` is the output of the gradient descent with exact linesearch,
+    and where :math:`x_*` is the minimizer of :math:`f`.
 
-    :return: (tuple) worst_case value, theoretical value
+    We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_*)` when :math:`x_i` is
+    obtained by doing :math:`i`steps of a subgradient method starting with an initial
+    iterate satisfying :math:`||x_0-x_*|| \\leqslant 1`.
+
+    **Algorithm**:
+        .. math:: g_{i} \\in \\partial f(x_i)
+        .. math:: x_{i+1} = x_i - \\gamma g_i
+
+    **Theoretical guarantee**:
+        .. math:: \\tau(n, M) = \\frac{M}{\\sqrt{N+1}}
+
+    Args:
+        M (float): the Lipschitz parameter.
+        N (int): the number of iterations
+        gamma (float):optimal step size is :math:`\\frac{1}{M\\sqrt{N+1}}`.
+        verbose (bool, optional): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_subgd(2, 6, 1 / (2*np.sqrt(6 + 1)))
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
+        (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 64 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.755982533173183
+        *** Example file: worst-case performance of subgradient method ***
+            PEP-it guarantee:		 min_(0 <= i <= N) f(x_i) - f_*  <= 0.755983 ||x_0 - x_*||**2`
+            Theoretical guarantee:	 min_(0 <= i <= N) f(x_i) - f_*  <= 0.755929 ||x_0 - x_*||**2`
     """
 
     # Instantiate PEP

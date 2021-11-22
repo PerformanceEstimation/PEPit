@@ -6,40 +6,71 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_drs(mu, L, alpha, theta, n, verbose=True):
     """
-    Consider the composite convex minimization problem,
-        min_x { F(x) = f_1(x) + f_2(x) }
-    where f_1(x) is L-smooth and mu-strongly convex, and f_2 is convex,
+    Consider the composite convex minimization problem
+
+        .. math:: \min_x { F(x) = f_1(x) + f_2(x) }
+
+    where :math:`f_1(x)` is :math:`L`-smooth and :math:`\mu`-strongly convex, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS) method, where
-    our notations for the DRS algorithm are as follows:
-        x_k     = prox_{\alpha f2}(w_k)
-        y_k     = prox_{\alpha f1}(2*x_k-w_k)
-        w_{k+1} = w_k +\theta (y_k - x_k)
+    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS)** method.
+    That is, it computes the smallest possible :math:`\\tau(\\mu,L,\\alpha,\\theta,n)` such that the guarantee
 
-    That is, it computes the smallest possible tau(mu,L,alpha,theta,n) such that the guarantee
-        ||w_1 - w_1'||^2 <= tau(mu,L,alpha,theta) * ||w_0 - w_0'||^2.
-    is valid, where x_n is the output of the Fast Douglas Rachford Splitting method. It is a contraction
-    factor computed when the algorithm is started from two different points w_0 and w_0'.
+        .. math:: ||w_1 - w_1'||^2 \\leqslant \\tau(\\mu,L,\\alpha,\\theta,n) ||w_0 - w_0'||^2.
+
+    is valid, where :math:`x_n` is the output of the Fast Douglas Rachford Splitting method. It is a contraction
+    factor computed when the algorithm is started from two different points :math:`w_0` and :math:`w_0`.
+
+    **Algorithms**:
+
+    Our notations for the DRS algorithm are as follows
+
+        .. math:: x_k     = prox_{\\alpha f_2}(w_k)
+        .. math:: y_k     = prox_{\\alpha f_1}(2x_k - w_k)
+        .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
+
+    **Theoretical guarantees**:
+
+        The theoretial guarantee is obtained in [2, Theorem 2]:
+        .. math:: \\tau(\\mu,L,\\alpha,\\theta,n) = \max(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha }{1 + L \\alpha})^{2n}
+
+    **References**:
 
     Details on the SDP formulations can be found in
-    [1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling,
-      and Pontus Giselsson. "Operator splitting performance estimation:
-      Tight contraction factors and optimal parameter selection." (2018)
 
-    When theta = 1, the bound can be compared with that of
-    [2] Giselsson, Pontus, and Stephen Boyd. "Linear convergence and
-       metric selection in Douglas-Rachford splitting and ADMM."
-       IEEE Transactions on Automatic Control (2016).
+    [1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling, and Pontus Giselsson. "Operator splitting
+    performance estimation: Tight contraction factors and optimal parameter selection." (2018)
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param alpha: (float) parameter of the scheme.
-    :param theta: (float) parameter of the scheme.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    When :math:`\\theta = 1`, the bound can be compared with that of [2, Theorem 2]
 
-    :return: (tuple) worst_case value, theoretical value
+    [2] Giselsson, Pontus, and Stephen Boyd. "Linear convergence and metric selection in
+    Douglas-Rachford splitting and ADMM." IEEE Transactions on Automatic Control (2016).
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        alpha (float): parameter of the scheme.
+        theta (float): parameter of the scheme.
+        n (int): number of iterations.
+        verbose (bool, optional): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Examples:
+        >>> pepit_tau, theoretical_tau = wc_drs(0.1, 1, 3, 1, 2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 20 constraint(s) added
+                 function 2 : 20 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.35012898383515983
+        *** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***
+            PEP-it guarantee:	 ||w - wp||^2 <= 0.350129 ||w0 - w0p||^2
+            Theoretical guarantee:	||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
     """
 
     # Instantiate PEP
