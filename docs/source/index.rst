@@ -12,10 +12,11 @@ Welcome to PEPit's documentation!
 
    self
    quickstart
-   functions
+   functions_and_operators
    steps
    tools
    examples
+   contributing
 
 PEPit.pep
 ---------

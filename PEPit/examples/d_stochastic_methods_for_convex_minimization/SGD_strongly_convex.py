@@ -7,33 +7,87 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_* = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
-    where f1, ..., fn are assumed L-smooth and mu-strongly convex.
 
-    In addition, we assume a bounded variance at the optimal point :
-        \mathbb{E}[ ||fi'(x_*)||^2] = 1/n * sum_i(||fi'(x^*)||^2) <= v^2,
-    which is standard from the SGD literature.
+    .. math:: f_* = \\min_x {F(x) = \\frac{1}{n} (f_1(x) + ... + f_n(x))},
 
-    This code computes a worst-case guarantee for one step of the stochastic gradient descent in expectation,
-    for the distance to optimality.
+    where :math:`f_1, ..., f_n` are L-smooth and mu-strongly convex.
 
-    That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-    \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * (F(x_0) - f_*)
-    is valid, where x_1 is the output of one step of stochastic gradient descent: x_1 = x_0 - \gamma f'_{i_0}(x_0),
-    with i_0 uniformly sampled in {1, \dots, n}, and the expectation is taken over the randomness of i_0.
+    In addition, we assume a bounded variance at the optimal point:
 
-    We will observe it does not depend on the number n of functions for this particular setting,
-    meaning that the guarantees are also valid for expectation minimization settings (i.e., when n goes to infinity).
+    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_*)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2,
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param gamma: (float) the step size.
-    :param v: (float) the variance bound.
-    :param R: (float) the initial distance.
-    :param n: (int) number of functions.
-    :param verbose: (bool) if True, print conclusion
+    This code computes a worst-case guarantee for one step of the **stochastic gradient descent (SGD)** in expectation,
+    for the distance to optimal point.
 
-    :return: (tuple) worst_case value, theoretical value
+    That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, v, R, n)` such that
+
+    .. math:: \\mathbb{E}\\left[\\|x_1 - x^*\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, v, R, n)
+
+    holds if
+
+    .. math:: \\|x_0 - x_*\\|^2 \\leqslant R^2
+
+    and
+
+    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_*)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2.
+
+    Here, where x_1 is the output of one step of **stochastic gradient descent (SGD)**.
+
+    **Algorithm**:
+        .. math:: x_{t+1} = x_t - \gamma f'_{i_t}(x_t)
+
+        with
+
+        .. math:: i_t \\sim \\mathcal{U}\\left([|1, n|]\\right)
+
+    **Theoretical guarantee**:
+        TODO
+        The **?** guarantee obtained in ?? is
+
+        .. math:: \\tau(L, \\mu, \\gamma, v, R, n) = \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2}.
+
+    Notes:
+
+        We will observe it does not depend on the number n of functions for this particular setting,
+        hence the guarantees are also valid for expectation minimization settings (i.e., when n goes to infinity).
+
+    References:
+
+        TODO
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        gamma (float): the step size.
+        v (float): the variance bound.
+        R (float): the initial distance.
+        n (int): number of functions.
+        verbose (bool): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> mu = 0.1
+        >>> L = 1
+        >>> gamma = 1/L
+        >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (2 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 5 function(s)
+                 function 1 : 2 constraint(s) added
+                 function 2 : 2 constraint(s) added
+                 function 3 : 2 constraint(s) added
+                 function 4 : 2 constraint(s) added
+                 function 5 : 2 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 5.041652328250217
+        *** Example file: worst-case performance of stochastic gradient descent with fixed step size ***
+            PEP-it guarantee:		 sum_i(||x_i - x_*||^2)/n <= 5.04165 ||x0 - x_*||^2
+            Theoretical guarantee:	 sum_i(||x_i - x_*||^2)/n <= 5.04165 ||x0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -79,16 +133,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 5
-    L = 1
     mu = 0.1
-    v = 1
-    R = 2
+    L = 1
     gamma = 1/L
-
-    pepit_tau, theoretical_tau = wc_sgd(L=L,
-                                        mu=mu,
-                                        gamma=gamma,
-                                        v=v,
-                                        R=R,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)

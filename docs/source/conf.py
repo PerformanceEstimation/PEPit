@@ -44,6 +44,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinxcontrib_autodocgen',
+    'myst_parser',
 ]
 
 import PEPit

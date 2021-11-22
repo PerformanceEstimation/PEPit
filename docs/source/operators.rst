@@ -1,6 +1,6 @@
-Functions
+Operators
 ---------
 
-.. automodule:: PEPit.functions
+.. automodule:: PEPit.operators
    :members:
    :show-inheritance:

@@ -7,30 +7,77 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly-convex.
 
-    This code computes a worst-case guarantee for the Heavy-ball method :
-    x_{k+1} = x_k - alpha*grad(f(x_k)) + beta*(x_k-x_{k-1})
+    .. math:: f_* = \\min_x f(x),
 
-    That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
-        f(x_n) - f_* <= tau(n, mu, L) (f(x_0) -  f(x_*)),
-    is valid, where x_n is the output of the heavy-ball method, and where x_* is a minimizer of f.
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This methods was first introduce in [1], and convergence upper bound was proved in [2].
-    [1] B.T. Polyak.
-    "Some methods of speeding up the convergence of iteration methods".
-    [2]  Euhanna Ghadimi, Hamid Reza Feyzmahdavian, Mikael. Johansson.
-    " Global convergence of the Heavy-ball method for convex optimization".
+    This code computes a worst-case guarantee for the **Heavy-ball (HB)** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param alpha: (float) parameter of the scheme.
-    :param beta: (float) parameter of the scheme such that 0<beta<1 and 0<alpha<2*(1+beta)
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_*)
 
-    :return: (tuple) worst_case value, theoretical value
+    is valid, where :math:`x_n` is the output of the **Heavy-ball (HB)** method,
+    and where :math:`x_*` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
+
+    **Algorithm**:
+
+        .. math:: x_{t+1} = x_t - \\alpha \\nabla f(x_t) + \\beta (x_t-x_{t-1})
+
+        with
+
+        .. math:: \\alpha \\in (0, \\frac{1}{L}]
+
+        and
+
+        .. math:: \\beta = \\sqrt{(1 - \\alpha \\mu)(1 - L \\alpha)}
+
+    **Theoretical guarantee**:
+
+        The **upper** guarantee obtained in [2, Theorem 4] is
+
+        .. math:: \\tau(n, L, \\mu) = (1 - \\alpha \\mu)^{n + 1}
+
+    References:
+
+        This methods was first introduce in [1], and convergence upper bound was proved in [2].
+        [1] B.T. Polyak.
+        "Some methods of speeding up the convergence of iteration methods".
+        [2]  Euhanna Ghadimi, Hamid Reza Feyzmahdavian, Mikael. Johansson.
+        " Global convergence of the Heavy-ball method for convex optimization".
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        alpha (float): parameter of the scheme.
+        beta (float): parameter of the scheme such that 0<beta<1 and 0<alpha<2*(1+beta)
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> mu = 0.1
+        >>> L = 1.
+        >>> alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
+        >>> beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
+        >>> pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=1, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 12 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.753492450790045
+        *** Example file: worst-case performance of the fast gradient method ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) -  f(x_*))
+
     """
 
     # Instantiate PEP
@@ -84,14 +131,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
 if __name__ == "__main__":
     mu = 0.1
     L = 1.
-
-    # Optimal parameters for differentiable functions
     alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
     beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
-    n = 1
 
-    pepit_tau, theoretical_tau = wc_heavyball(mu=mu,
-                                              L=L,
-                                              alpha=alpha,
-                                              beta=beta,
-                                              n=n)
+    pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=1, verbose=True)

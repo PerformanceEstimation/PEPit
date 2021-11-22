@@ -6,39 +6,78 @@ from PEPit.primitive_steps.linear_optimization_step import linear_optimization_s
 
 def wc_cg_fw(L, D, n, verbose=True):
     """
+    Consider the composite convex minimization problem
 
-    Consider the composite convex minimization problem,
-        min_x { F(x) = f_1(x) + f_2(x) }
-    where f_1(x) is L-smooth and convex and where f_2(x) is
-    a convex indicator function of diameter at most D.
+    .. math:: f_* = \\min_x {F(x) = f_1(x) + f_2(x)},
 
-    This code computes a worst-case guarantee for the conditional Gradient method.
-    That is, it computes the smallest possible tau(n,L,D) such that the guarantee
-        F(x_n) - F(x_*) <= tau(n,L,D) * ||x_0 - x_*||^2
-    is valid, where x_n is the output of the Conditional Gradient method, and where x_* is a minimizer of F.
+    where :math:`f_1` is :math:`L`-smooth and convex
+    and where :math:`f_2` is a convex indicator function of diameter at most :math:`D`.
 
-    The theoretical guarantee is presented in the following reference.
-    [1] Jaggi, Martin. "Revisiting Frank-Wolfe: Projection-free sparse
-     convex optimization." In: Proceedings of the 30th International
-     Conference on Machine Learning (ICML-13), pp. 427–435 (2013)
+    This code computes a worst-case guarantee for the **conditional gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, D)` such that the guarantee
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param alpha: (float) parameter of the scheme.
-    :param theta: (float) parameter of the scheme.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math :: F(x_n) - F(x_*) \\leqslant \\tau(n, L, D) \\|x_0 - x_*\\|^2,
 
-    :return: (tuple) worst_case value, theoretical value
+    is valid, where x_n is the output of the **conditional gradient** method,
+    and where :math:`x_*` is a minimizer of :math:`F`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`D`,
+    :math:`\\tau(n, L, D)` is computed as the worst-case value of
+    :math:`F(x_n) - F(x_*)` when :math:`\\|x_0 - x_*\\|^2 \\leqslant 1`.
+
+    **Algorithm**:
+        TODO
+        .. math:: x_{t+1} =
+
+        with
+
+        .. math::
+
+    **Theoretical guarantee**:
+        TODO
+        The **?** guarantee obtained in ?? is
+
+        .. math:: \\tau(n, L, D) =
+
+    References:
+
+        The theoretical guarantee is presented in the following reference.
+        [1] Jaggi, Martin. "Revisiting Frank-Wolfe: Projection-free sparse
+        convex optimization." In: Proceedings of the 30th International
+        Conference on Machine Learning (ICML-13), pp. 427–435 (2013)
+
+    Args:
+        L (float): the smoothness parameter.
+        D (float): diameter of f2
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_cg_fw(L=1, D=1, n=10, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 132 constraint(s) added
+                 function 2 : 325 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
+        *** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***
+            PEP-it guarantee:	 f(y_n)-f_* <= 0.0994521 ||x0 - xs||^2
+            Theoretical guarantee :	 f(y_n)-f_* <= 0.166667 ||x0 - xs||^2
+
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a smooth convex function and a convex indicator of rayon D
-    func1 = problem.declare_function(SmoothConvexFunction,
+    func1 = problem.declare_function(function_class=SmoothConvexFunction,
                                      param={'L': L})
-    func2 = problem.declare_function(ConvexIndicatorFunction,
+    func2 = problem.declare_function(function_class=ConvexIndicatorFunction,
                                      param={'D': D})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
@@ -72,7 +111,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     # when theta = 1
     theoretical_tau = 2 * L * D ** 2 / (n + 2)
 
-    # Print conclusion if require
+    # Print conclusion if required
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
@@ -83,10 +122,5 @@ def wc_cg_fw(L, D, n, verbose=True):
 
 
 if __name__ == "__main__":
-    D = 1.
-    L = 1.
-    n = 10
 
-    pepit_tau, theoretical_tau = wc_cg_fw(L=L,
-                                          D=D,
-                                          n=n)
+    pepit_tau, theoretical_tau = wc_cg_fw(L=1, D=1, n=10, verbose=True)

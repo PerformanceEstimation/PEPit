@@ -13,27 +13,70 @@ def wc_CG(L, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for the conjugate gradient (CG) method (with exact span searches).
+    This code computes a worst-case guarantee for the **conjugate gradient (CG)** method (with exact span searches).
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math :: f(x_n) - f_* \\leqslant \\tau(n, L) \\|x_0-x_*\\|^2
 
-    is valid, where :math:`x_n` is the output of the conjugate gradient method,
+    is valid, where :math:`x_n` is the output of the **conjugate gradient** method,
     and where :math:`x_*` is a minimizer of :math:`f`.
-
     In short, for given values of :math:`n` and :math:`L`,
-    :math:`\\tau(n,L)` is be computed as the worst-case value of :math:`f(x_n)-f_*`
-    when :math:`\\|x_0 - x_*\\| \\leqslant 1`.
+    :math:`\\tau(n, L)` is computed as the worst-case value of
+    :math:`f(x_n)-f_*` when :math:`\\|x_0-x_*\\|^2 \\leqslant 1`.
 
-    The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
-    Efficient first-order methods for convex minimization: a constructive approach.
-    Mathematical Programming 184 (1), 183-220.
+    **Algorithm**:
 
-    :param L: (float) the smoothness parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+        .. math:: x_{t+1} = x_t - \\sum_{i=0}^t \\gamma_i \\nabla f(x_i)
 
-    :return: (tuple) worst_case value, theoretical value
+        with
+
+        .. math:: (\\gamma_i)_{i \\leqslant t} = \\arg\\min_{(\\gamma_i)_{i \\leqslant t}} f \\left( x_t - \\sum_{i=0}^t \\gamma_i \\nabla f(x_i) \\right)
+
+    **Theoretical guarantee**:
+
+        The **tight** guarantee obtained in [1] is
+
+        .. math:: \\tau(n, L) = \\frac{L}{2 \\theta_t^2}.
+
+        where
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\theta_0 & = & 1 \\\\
+                \\theta_i & = & \\frac{1 + \\sqrt{4 \\theta_{i-1}^2 + 1}}{2}, \\forall i \\in [|1, n-1|] \\\\
+                \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}
+            \\end{eqnarray}
+
+    References:
+
+        The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
+        Efficient first-order methods for convex minimization: a constructive approach.
+        Mathematical Programming 184 (1), 183-220.
+
+    Args:
+        L (float): the smoothness parameter.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_CG(L=1, n=2, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 18 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.061893515427809735
+        *** Example file: worst-case performance of conjugate gradient method ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.0618935 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -75,7 +118,7 @@ def wc_CG(L, n, verbose=True):
             theta_new = (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
         else:
             theta_new = (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
-    theoretical_tau = L / 2 / theta_new ** 2
+    theoretical_tau = L / (2 * theta_new ** 2)
 
     # Print conclusion if required
     if verbose:
@@ -88,8 +131,5 @@ def wc_CG(L, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
 
-    pepit_tau, theoretical_tau = wc_CG(L=L,
-                                       n=n)
+    pepit_tau, theoretical_tau = wc_CG(L=1, n=2, verbose=True)

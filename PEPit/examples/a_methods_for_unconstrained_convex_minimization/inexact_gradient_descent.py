@@ -6,35 +6,73 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly convex
-    .
-    This code computes a worst-case guarantee for an inexact gradient method.
-    That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-        f(x_n) - f_* <= tau(n,L,mu,epsilon) * ( f(x_0) - f_* )
-    is valid, where x_n is the output of the gradient descent with an inexact descent direction,
-    and where x_* is the minimizer of f.
 
-    The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with 0 <= epsilon < 1 )
-        || f'(x_i) - d || <= epsilon * || f'(x_i) ||,
-    where f'(x_i) is the true gradient, and d is the approximate descent direction that is used.
+    .. math:: f_* = \\min_x f(x),
 
-    The detailed approach (based on convex relaxations) is available in
-    [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-    "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-    Optimization Letters (2017).
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    The tight guarantee obtained in [1, Theorem 5.1] is tau(n,L,mu,epsilon) = ((L_eps-mu_eps)/(L_eps+mu_eps))**(2*n),
-    with L_eps = (1+epsilon) * L and mu_eps = (1-epsilon) * mu
+    This code computes a worst-case guarantee for the **inexact gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\varepsilon)` such that the guarantee
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param epsilon: (float) level of inaccuracy
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu, \\varepsilon) (f(x_0) - f_*)
 
-    :return: (tuple) worst_case value, theoretical value
+    is valid, where :math:`x_n` is the output of the **inexact gradient** method,
+    and where :math:`x_*` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu` and :math:`\\varepsilon`,
+    :math:`\\tau(n, L, \\mu, \\varepsilon)` is computed as the worst-case value of
+    :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
+
+    **Algorithm**:
+
+        .. math:: x_{t+1} = x_t - \\gamma d_t
+
+        with
+
+        .. math:: \\|d_t - \\nabla f(x_t)\|| \leqslant \\varepsilon \\|\\nabla f(x_t)\||
+
+        and
+
+        .. math:: \\gamma = \\frac{2}{L(1 + \\varepsilon) + \\mu(1 - \\varepsilon)}
+
+    **Theoretical guarantee**:
+        The **tight** guarantee obtained in [1, Theorem 5.1] is
+
+        .. math:: \\tau(n, L, \\mu, \\epsilon) = \\left(\\frac{L(1 + \\varepsilon)-\\mu(1 - \\varepsilon)}{L(1 + \\varepsilon)+\\mu(1 - \\varepsilon)}\\right)^{2n}.
+
+    References:
+        TODO verify this
+        The detailed approach (based on convex relaxations) is available in
+        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
+        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
+        Optimization Letters (2017).
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        epsilon (float): level of inaccuracy
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 15 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
+        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -2.52e-06 < 0).
+        Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+        In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        *** Example file: worst-case performance of inexact gradient ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.518866 (f(x_0)-f_*)
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+
     """
 
     # Instantiate PEP
@@ -85,12 +123,5 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
-    epsilon = .1
 
-    pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=L,
-                                                             mu=mu,
-                                                             epsilon=epsilon,
-                                                             n=n)
+    pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2, verbose=True)

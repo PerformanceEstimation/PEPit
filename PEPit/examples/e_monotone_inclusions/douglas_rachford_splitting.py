@@ -9,14 +9,16 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_drs(L, mu, alpha, theta, verbose=True):
     """
     Consider the monotone inclusion problem
-        Find x, 0 \in Ax + Bx,
-    where A is L-Lipschitz and monotone and B is (maximally) mu-strongly monotone.
+
+    .. math:: \\mathrm{Find~} x ~ | ~ 0 \\in Ax + Bx,
+
+    where :math:`A` is :math:`L`-Lipschitz and monotone and :math:`B` is (maximally) :math:`\\mu`-strongly monotone.
     We denote JA and JB the respective resolvents of A and B.
 
     This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS). One iteration of the algorithm
     starting from a point w is as follows:
         x = JB(w)
-        y = JA( 2* x - w)
+        y = JA(2* x - w)
         z = w - theta * (x - y)
 
     Given two initial points w_0 and w_1, this code computes the smallest possible tau(n,L) such that the guarantee

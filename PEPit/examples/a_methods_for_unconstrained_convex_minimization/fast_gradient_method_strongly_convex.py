@@ -7,27 +7,69 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly-convex.
 
-    This code computes a worst-case guarantee for the fast gradient method, a.k.a. accelerated gradient method.
-    That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
-        f(x_n) - f_* <= tau(n, mu, L) (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2),
-    is valid, where x_n is the output of the accelerated gradient method, and where x_* is a minimizer of f.
+    .. math:: f_* = \\min_x f(x),
 
-    In short, for given values of n and L, tau(n,mu,L) is be computed as the worst-case value of f(x_n)-f_* when
-    (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2) == 1.
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    Theoretical rates can be found in the following paper [1,  Corollary 4.15]
-    [1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor,
-    https://arxiv.org/pdf/2101.09545.pdf
+    This code computes a worst-case guarantee for the **fast gradient** method, a.k.a. **accelerated gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    :param mu: (float) the strong-convexity parameter.
-    :param L: (float) the smoothness parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu) \\left(f(x_0) -  f(x_*) + \\frac{\\mu}{2}\\|x_0 - x_*\\|^2\\right),
 
-    :return: (tuple) worst_case value, theoretical value
+    is valid, where :math:`x_n` is the output of the **accelerated gradient** method,
+    and where :math:`x_*` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`f(x_n)-f_*` when :math:`f(x_0) -  f(x_*) + \\frac{\\mu}{2}\\|x_0 - x_*\\|^2 \\leqslant 1`.
+
+    **Algorithm**:
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                y_t & = & x_t + \\frac{\\sqrt{L} - \\sqrt{\\mu}}{\\sqrt{L} + \\sqrt{\\mu}}(x_t - x_{t-1}) \\\\
+                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)
+            \\end{eqnarray}
+
+    **Theoretical guarantee**:
+
+        TODO isn't there any tight guarantee???
+
+        The **upper** guarantee obtained in [1,  Corollary 4.15] is
+
+        .. math:: \\tau(n, L, \\mu) = \\left(1 - \\frac{\\sqrt{\\mu}}{\\sqrt{L}}\\right)^n
+
+    References:
+
+        Theoretical rates can be found in the following paper [1,  Corollary 4.15]
+        [1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor,
+        https://arxiv.org/pdf/2101.09545.pdf
+
+    Args:
+        mu (float): the strong convexity parameter
+        L (float): the smoothness parameter.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_fgm(mu=0.1, L=1, n=2, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 12 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.34758587217463155
+        *** Example file: worst-case performance of the fast gradient method ***
+            PEP-it guarantee:		 f(x_n)-f_*  <= 0.347586 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
+            Theoretical guarantee:	 f(x_n)-f_*  <= 0.467544 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
+
     """
 
     # Instantiate PEP
@@ -62,11 +104,9 @@ def wc_fgm(mu, L, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if mu > 0:
-        theoretical_tau = (1 - sqrt(kappa)) ** n
-    else:
-        theoretical_tau = 0
-        print("Momentum is tuned for strongly convex functions")
+    theoretical_tau = (1 - sqrt(kappa)) ** n
+    if mu == 0:
+        print("Warning: momentum is tuned for strongly convex functions!")
 
     # Print conclusion if required
     if verbose:
@@ -81,10 +121,5 @@ def wc_fgm(mu, L, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = 0.1
 
-    pepit_tau, theoretical_tau = wc_fgm(mu=mu,
-                                        L=L,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_fgm(mu=0.1, L=1, n=2, verbose=True)

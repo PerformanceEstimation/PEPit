@@ -6,21 +6,67 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_pgd(L, mu, gamma, n, verbose=True):
     """
-    Consider the convex minimization problem
-        f_* = min_x { F(x) = f1(x) + f2(x) },
-    where f is L-smooth and mu-strongly convex, and where f2 is a closed convex and proper.
+    Consider the composite convex minimization problem
 
-    This code computes a worst-case guarantee for the proximal gradient method.
-    That is, the code computes the smallest possible tau(n,L,mu) such that the guarantee
-        ||x_n - x_*||^2 <= tau(n,L,mu) * ||x_0 - x_*||^2,
-    is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of F.
+    .. math:: f_* = \\min_x {F(x) = f_1(x) + f_2(x)},
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
+    and where :math:`f_2` is closed convex and proper.
 
-    :return: (tuple) worst_case value, theoretical value
+    This code computes a worst-case guarantee for the **proximal gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+
+    .. math :: \\|x_n - x_*\\|^2 \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_*\\|^2,
+
+    is valid, where :math:`x_n` is the output of the **proximal gradient**,
+    and where :math:`x_*` is a minimizer of :math:`F`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`\\|x_n - x_*\\|^2` when :math:`\\|x_0 - x_*\\|^2 \\leqslant 1`.
+
+    **Algorithm**:
+        TODO
+        .. math:: x_{t+1} =
+
+        with
+
+        .. math::
+
+    **Theoretical guarantee**:
+        TODO
+        The **?** guarantee obtained in ?? is
+
+        .. math:: \\tau(n, L, \\mu) =
+
+    References:
+
+        TODO
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        gamma (float): proximal step size
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_pgd(L=1, mu=.1, gamma=1, n=2, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 6 constraint(s) added
+                 function 2 : 6 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6560999999942829
+        *** Example file: worst-case performance of the Proximal Gradient Method in function values***
+            PEP-it guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+            Theoretical guarantee :	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+
     """
 
     # Instantiate PEP
@@ -66,12 +112,5 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
-    gamma = 1
 
-    pepit_tau, theoretical_tau = wc_pgd(L=L,
-                                        mu=mu,
-                                        gamma=gamma,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_pgd(L=1, mu=.1, gamma=1, n=2, verbose=True)

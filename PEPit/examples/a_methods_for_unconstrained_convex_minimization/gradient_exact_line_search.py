@@ -5,21 +5,22 @@ from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
 
 def wc_els(L, mu, n, verbose=True):
     """
-    Consider the minimization problem
+    Consider the convex minimization problem
 
     .. math:: f_* = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for the **gradient method with exact linesearch (ELS)**. That is, it computes
-    the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+    This code computes a worst-case guarantee for the **gradient method with exact linesearch (ELS)**.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_*)
 
     is valid, where :math:`x_n` is the output of the **gradient method with exact linesearch**,
     and where :math:`x_*` is the minimizer of :math:`f`.
-    In short, for given values of :math:`n` and :math:`L` and :math:`\\mu, \\tau(n, L, \\mu)`
-    is computed as the worst-case value of :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
 
     **Algorithm**:
 
@@ -52,8 +53,7 @@ def wc_els(L, mu, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-
-        >>> pepit_tau, theoretical_tau = wc_els(L=1, mu=.1, n=2)
+        >>> pepit_tau, theoretical_tau = wc_els(L=1, mu=.1, n=2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -111,8 +111,5 @@ def wc_els(L, mu, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
 
-    pepit_tau, theoretical_tau = wc_els(L=L, mu=mu, n=n)
+    pepit_tau, theoretical_tau = wc_els(L=1, mu=.1, n=2, verbose=True)
