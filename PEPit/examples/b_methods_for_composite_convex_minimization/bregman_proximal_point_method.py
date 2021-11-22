@@ -21,7 +21,7 @@ def wc_bpp(gamma, n, verbose=True):
 
     **Algorithms**:
 
-        .. math:: x_{n+1} = argmin_{u \\in R^n} \\nabla f(x_n)^T(u - x_n) + \\frac{1}{\\gamma} Dh(u, x_n)
+        .. math:: x_{n+1} = \\arg\\min_{u \\in R^n} \\nabla f(x_n)^T(u - x_n) + \\frac{1}{\\gamma} Dh(u, x_n)
 
         .. math:: Dh(x, y) = h(x) - h(y) - \\nabla h (y)^T(x - y)
 
