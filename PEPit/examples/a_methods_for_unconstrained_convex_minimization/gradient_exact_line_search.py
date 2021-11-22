@@ -36,9 +36,10 @@ def wc_els(L, mu, n, verbose=True):
 
         .. math:: \\tau(n, L, \\mu) = \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n}.
 
-    References:
+    **References**:
 
         The detailed approach (based on convex relaxations) is available in
+
         [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
         "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
         Optimization Letters (2017).
@@ -47,7 +48,7 @@ def wc_els(L, mu, n, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         n (int): number of iterations.
-        verbose (bool, optional): if True, print conclusion
+        verbose (bool, optional): if True, print conclusion.
     
     Returns:
         tuple: worst_case value, theoretical value

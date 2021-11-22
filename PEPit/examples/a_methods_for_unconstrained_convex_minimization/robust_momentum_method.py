@@ -7,26 +7,74 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_rmm(mu, L, lam, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly-convex.
+
+        .. math:: f_* = min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
     This code computes a worst-case guarantee for the robust momentum.
-    That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
-        v_(x_{n+1}) <= tau(n, mu, L) v_(x_{n}),
-    is valid, where x_n is the output of the optimized gradient method, where x_* is a minimizer of f,
-    and where v(x_n) is a well-chosen Lyapunov function decreasing along the sequence :
+    That is, it verifies that the guarantee
 
-    We show how to compute the tight rate for the Lyapunov function developped in
+        .. math:: v(x_{n+1}) \\leqslant v(x_{n}),
+
+    is valid, where :math:`x_n` is the output of the optimized gradient method, where :math:`x_*` is a minimizer of :math:`f`,
+    and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
+
+        .. math:: \\kappa = \\frac{\\mu}{L}
+
+        .. math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
+
+        .. math:: l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}
+
+        .. math:: q_n = (L - \\mu) (f(x_n) - f(x_* - \\frac{\\mu}{2}||y_n - x_*||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_*)||^2
+
+        .. math:: v(x_n) = l||z_n - x_*||^2 + q_n
+
+    **Algorithms**:
+
+        .. math:: x_{n+1} = x_{n} + \\beta (x_n - x_{n-1}) - \\alpha \\nabla f(y_n)
+
+        .. math:: y_{n} + \\gamma (x_n - x_{n-1})
+
+    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`,
+     :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
+    
+    **Theoretical guarantees**:
+    
+    ..math:: \\tau(n, \\mu, L) = 1
+
+    ..math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
+    
+    **References**:
+
+    We show how to compute the tight rate for the Lyapunov function developed in [1, Theorem 1]
+
     [1] Cyrus, S., Hu, B., Van Scoy, B., & Lessard, L. "A robust accelerated
          optimization algorithm for strongly convex functions." In 2018 Annual
          American Control Conference (ACC) (pp. 1376-1381). IEEE.
+         
+    Args:    
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        lam (float): if :math:`lam=1` it is the gradient descent, if :math:`lam=0`, it is the Triple Momentum Method.
+        verbose (bool, optional): if True, print conclusion
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param lam: (float) if lam=1 it is the gradient descent, if lam=0, it is the Triple Momentum Method.
-    :param verbose: (bool) if True, print conclusion
-
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+         tuple: worst_case value, theoretical value
+    
+    Examples:
+        >>> pepit_tau, theoretical_tau = wc_rmm(0.1, 1, 0.2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 6 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5285548355257013
+        *** Example file: worst-case performance of the Robust Momentum Method ***
+            PEP-it guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
+            Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
     """
 
     # Instantiate PEP
