@@ -7,15 +7,17 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
+
         .. math:: f_* = \min_x f(x),
+
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for an inexact gradient method with exact linesearch (ELS)**.
+    This code computes a worst-case guarantee for an **inexact gradient method with exact linesearch (ELS)**.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\epsilon)` such that the guarantee
 
         .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu, \\epsilon) ( f(x_0) - f_* )
 
-    is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction and an exact linesearch,
+    is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction and an exact linesearch**,
     and where :math:`x_*` is the minimizer of :math:`f`.
 
     The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\epsilon < 1`)
@@ -27,13 +29,15 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
     **Algorithm**:
 
     Select :math:`d_i` such that
-        .. math:: \\gamma = argmin_{\\gamma \in R^d} f(x_i - \\gamma d_i).
+
+        .. math:: \\gamma = \\arg\\min_{\\gamma \in R^d} f(x_i - \\gamma d_i).
         .. math:: x_{i+1} = x_i - \\gamma d_i.
 
     **Theoretical guarantees**:
-    The tight guarantee obtained in [1, Theorem 5.1] is
 
-    .. math:: \\tau(n,L,\\mu,\\epsilon) = \\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}^{2n},
+    The **tight** guarantee obtained in [1, Theorem 5.1] is
+
+        .. math:: \\tau(n,L,\\mu,\\epsilon) = \\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}^{2n},
 
     with :math:`L_{\\epsilon} = (1 + \\epsilon) L` and :math:`\\mu_{\\epsilon} = (1 - \\epsilon) \\mu`
 

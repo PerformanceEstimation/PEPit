@@ -12,12 +12,12 @@ def wc_rmm(mu, L, lam, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
-    This code computes a worst-case guarantee for the robust momentum.
+    This code computes a worst-case guarantee for the **robust momentum method**.
     That is, it verifies that the guarantee
 
         .. math:: v(x_{n+1}) \\leqslant v(x_{n}),
 
-    is valid, where :math:`x_n` is the output of the optimized gradient method, where :math:`x_*` is a minimizer of :math:`f`,
+    is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_*` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
         .. math:: \\kappa = \\frac{\\mu}{L}
@@ -30,28 +30,31 @@ def wc_rmm(mu, L, lam, verbose=True):
 
         .. math:: v(x_n) = l||z_n - x_*||^2 + q_n
 
-    **Algorithms**:
+    **Algorithm**:
 
         .. math:: x_{n+1} = x_{n} + \\beta (x_n - x_{n-1}) - \\alpha \\nabla f(y_n)
 
         .. math:: y_{n} + \\gamma (x_n - x_{n-1})
 
     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`,
+
      :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
-    **Theoretical guarantees**:
-    
-    ..math:: \\tau(n, \\mu, L) = 1
+    **Theoretical guarantee**:
 
-    ..math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
+    The **tight** bound is obtained in [1, Theorem 1],
+    
+        .. math:: \\tau(n, \\mu, L) = 1
+
+        .. math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
     
     **References**:
 
     We show how to compute the tight rate for the Lyapunov function developed in [1, Theorem 1]
 
     [1] Cyrus, S., Hu, B., Van Scoy, B., & Lessard, L. "A robust accelerated
-         optimization algorithm for strongly convex functions." In 2018 Annual
-         American Control Conference (ACC) (pp. 1376-1381). IEEE.
+    optimization algorithm for strongly convex functions." In 2018 Annual
+    American Control Conference (ACC) (pp. 1376-1381). IEEE.
          
     Args:    
         L (float): the smoothness parameter.
