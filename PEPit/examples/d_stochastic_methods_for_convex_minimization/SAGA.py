@@ -42,8 +42,10 @@ def wc_saga(L, mu, n, verbose=True):
     problem = PEP()
 
     # Declare a convex function and n smooth strongly convex ones
-    h = problem.declare_function(ConvexFunction, param={})
-    fn = [problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu}) for _ in range(n)]
+    h = problem.declare_function(ConvexFunction,
+                                 param={}, is_differentiable=True)
+    fn = [problem.declare_function(SmoothStronglyConvexFunction,
+                                   param={'L': L, 'mu': mu}, is_differentiable=True) for _ in range(n)]
 
     # Define the objective as a linear combination of the former
     func = h + np.mean(fn)

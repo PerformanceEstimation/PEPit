@@ -43,7 +43,7 @@ class PEP(object):
         self.list_of_conditions = list()
         self.list_of_performance_metrics = list()
 
-    def declare_function(self, function_class, param, is_differentiable=True):
+    def declare_function(self, function_class, param, is_differentiable=False):
         """
         Instantiate a function
 

@@ -69,11 +69,11 @@ def wc_bpp(gamma, n, verbose=True):
 
     # Declare three convex functions
     func1 = problem.declare_function(ConvexFunction,
-                                     param={})
+                                     param={}, is_differentiable=True)
     func2 = problem.declare_function(ConvexFunction,
-                                     param={})
+                                     param={}, is_differentiable=True)
     h = problem.declare_function(ConvexFunction,
-                                 param={})
+                                 param={}, is_differentiable=True)
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 

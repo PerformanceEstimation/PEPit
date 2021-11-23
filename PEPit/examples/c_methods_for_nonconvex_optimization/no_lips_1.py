@@ -81,9 +81,9 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     # Declare two convex functions and a convex indicator function
     d1 = problem.declare_function(ConvexFunction,
-                                  param={})
+                                  param={}, is_differentiable=True)
     d2 = problem.declare_function(ConvexFunction,
-                                  param={})
+                                  param={}, is_differentiable=True)
     func1 = (d2 - d1) / 2
     h = (d1 + d2) / 2 / L
     func2 = problem.declare_function(ConvexIndicatorFunction,

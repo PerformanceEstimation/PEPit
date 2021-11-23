@@ -19,7 +19,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     This code computes a worst-case guarantee for the **NoLips** method.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: F(x_n) - F_* \\leqslant \\tau(n, L) D_h(x0, x_*),
+    .. math :: F(x_n) - F_* \\leqslant \\tau(n, L) D_h(x_0, x_*),
 
     is valid, where :math:`x_n` is the output of the **NoLips** method,
     where :math:`x_*` is a minimizer of :math:`F`,
@@ -90,12 +90,12 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     # Declare two convex functions and a convex indicator function
     d = problem.declare_function(ConvexFunction,
-                                 param={})
+                                 param={}, is_differentiable=True)
     func1 = problem.declare_function(ConvexFunction,
-                                     param={})
+                                     param={}, is_differentiable=True)
     h = (d + func1) / L
     func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     param={'D': np.inf})
+                                     param={'D': np.inf}, is_differentiable=True)
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
