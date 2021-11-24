@@ -38,11 +38,13 @@ def wc_ppa(gamma, n, verbose=True):
     [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
     convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
 
-    :param gamma: (float) step size.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        gamma (float): step size.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_ppa(gamma=3, n=4, verbose=True)
@@ -57,6 +59,7 @@ def wc_ppa(gamma, n, verbose=True):
         *** Example file: worst-case performance of proximal point method ***
             PEP-it guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
             Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP

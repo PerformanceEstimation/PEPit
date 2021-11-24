@@ -37,13 +37,14 @@ def wc_gd(L, gamma, n, verbose=True):
     [1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
     approach. Math. Program. 145(1–2), 451–482.
 
+    Args:
+        L (float): the smoothness parameter.
+        gamma (float): step size.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :param L: (float) the smoothness parameter.
-    :param gamma: (float) step size.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
-
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
         >>> L, n = 3, 4

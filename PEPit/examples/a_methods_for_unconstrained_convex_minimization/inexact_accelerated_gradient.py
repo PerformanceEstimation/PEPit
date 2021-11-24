@@ -19,13 +19,15 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
         || f'(x_i) - d || <= epsilon * || f'(x_i) ||,
     where f'(x_i) is the true gradient, and d is the approximate descent direction that is used.
 
+    Args:
+        L (float): smoothness parameter.
+        epsilon (float): level of inaccuracy
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :param L: (float) smoothness parameter.
-    :param epsilon: (float) level of inaccuracy
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Returns:
+        tuple: worst_case value, theoretical value
 
-    :return: (tuple) worst_case value, theoretical value
     """
 
     # Instantiate PEP

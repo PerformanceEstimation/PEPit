@@ -56,11 +56,13 @@ def wc_ogm(L, n, verbose=True):
     [2] D. Kim, J. Fessler (2016).Optimized first-order methods for smooth convex minimization. Mathematical
     programming 159.1-2: 81-107.
 
-    :param L: (float) the smoothness parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        L (float): the smoothness parameter.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Examples:
         >>> pepit_tau, theoretical_tau = wc_ogm(L=3, n=4, verbose=True)
@@ -75,6 +77,7 @@ def wc_ogm(L, n, verbose=True):
         *** Example file: worst-case performance of optimized gradient method ***
 	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
 	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
+
     """
 
     # Instantiate PEP
