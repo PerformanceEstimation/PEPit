@@ -30,13 +30,13 @@ def wc_CG(L, n, verbose=True):
 
         with
 
-        .. math:: (\\gamma_i)_{i \\leqslant t} = \\arg\\min_{(\\gamma_i)_{i \\leqslant t}} f \\left( x_t - \\sum_{i=0}^t \\gamma_i \\nabla f(x_i) \\right)
+        .. math:: (\\gamma_i)_{i \\leqslant t} = \\arg\\min_{(\\gamma_i)_{i \\leqslant t}} f \\left(x_t - \\sum_{i=0}^t \\gamma_i \\nabla f(x_i) \\right)
 
     **Theoretical guarantee**:
 
         The **tight** guarantee obtained in [1] is
 
-        .. math:: \\tau(n, L) = \\frac{L}{2 \\theta_t^2}.
+        .. math:: \\tau(n, L) = \\frac{L}{2 \\theta_n^2}.
 
         where
 
