@@ -6,31 +6,75 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 def wc_ogm(L, n, verbose=True):
     """
-    Consider the convex minimization problem
-        f_\star = min_x f(x),
-    where f is L-smooth and convex.
+    Consider the minimization problem
 
-    This code computes a worst-case guarantee for the optimized gradient method. That is, it computes the
-    smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_\star <= tau(n,L) * || x_0 - x_\star ||^2,
-    is valid, where x_n is the output of the optimized gradient method, and where x_\star is a minimizer of f.
+    .. math:: f_\star = \\min_x f(x),
 
-    In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_\star when
-    || x_0 - x_\star || == 1.
+    where :math:`f` is :math:`L`-smooth and convex.
 
-    Note that the optimized gradient method (OGM) was developed in the following two works:
-    [1] Drori, Yoel, and Marc Teboulle.
-     "Performance of first-order methods for smooth convex minimization: a novel approach."
-     Mathematical Programming 145.1-2 (2014): 451-482.
+    This code computes a worst-case guarantee for **optimized gradient method** (OGM). That is, it computes
+    the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    [2] Kim, Donghwan, and Jeffrey A. Fessler.
-    "Optimized first-order methods for smooth convex minimization." Mathematical programming 159.1-2 (2016): 81-107.
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L)  || x_0 - x_\star ||^2
+
+    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\star` is a minimizer of :math:`f`.
+
+    In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L)` is computed as the worst-case value
+    of :math:`f(x_n)-f_\star` when :math:`||x_0 - x_\star||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    The optimized gradient method is described by
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_{k+1} &&= y_k - \\frac{1}{L} \\nabla f(y_k)\\\\
+                y_{k+1} &&= x_{k+1} + \\frac{\\theta_{k}-1}{\\theta_{k+1}}(x_{k+1}-x_k)+\\frac{\\theta_{k}}{\\theta_{k+1}}(x_{k+1}-y_k),
+            \\end{eqnarray}
+
+    with
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\theta_0 & = & 1 \\\\
+                \\theta_i & = & \\frac{1 + \\sqrt{4 \\theta_{i-1}^2 + 1}}{2}, \\forall i \\in [|1, n-1|] \\\\
+                \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}.
+            \\end{eqnarray}
+    **Theoretical guarantee**:
+    The tight theoretical guarantee can be found in [2, Theorem 2]:
+
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{2\\theta_n^2}.
+
+    **References**:
+    The optimized gradient method was developed in the following two works:
+    [1] Y. Drori, M. Teboulle (2014).Performance of first-order methods for smooth convex minimization: a novel
+    approach. Mathematical Programming 145.1-2: 451-482.
+
+    [2] D. Kim, J. Fessler (2016).Optimized first-order methods for smooth convex minimization. Mathematical
+    programming 159.1-2: 81-107.
 
     :param L: (float) the smoothness parameter.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Examples:
+        >>> pepit_tau, theoretical_tau = wc_ogm(L=3, n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 30 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.07675182659831646
+        *** Example file: worst-case performance of optimized gradient method ***
+	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
+	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
     """
 
     # Instantiate PEP
