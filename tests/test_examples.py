@@ -7,6 +7,7 @@ from PEPit.function import Function
 from PEPit.point import Point
 
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.conjugate_gradient_method as CG
+import PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_descent as inGD
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_gradient_method as inFGM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_gradient_method_strongly_convex as instrFGM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_proximal_point as inFPM
@@ -14,7 +15,7 @@ import PEPit.examples.a_methods_for_unconstrained_convex_minimization.proximal_p
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_exact_line_search as ELS
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.heavy_ball_method as inHBM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.inexact_accelerated_gradient as inAGM
-import PEPit.examples.a_methods_for_unconstrained_convex_minimization.inexact_gradient_descent as inGD
+import PEPit.examples.a_methods_for_unconstrained_convex_minimization.inexact_gradient_descent as inEGD
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.inexact_gradient_exact_line_search as inELS
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.optimized_gradient_method as OGM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.robust_momentum_method as inRMM
@@ -73,6 +74,13 @@ class TestExamples(unittest.TestCase):
         wc, theory = OGM.wc_ogm(L, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_GD(self):
+        L, n = 3, 4
+        gamma = 1/L
+        
+        wc, theory = inGD.wc_gd(L, gamma, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        
     def test_els(self):
         L, mu, n = 3, .1, 1
 
@@ -101,7 +109,7 @@ class TestExamples(unittest.TestCase):
     def test_inexact_grad(self):
         L, mu, epsilon, n = 3, .1, .1, 2
 
-        wc, theory = inGD.wc_inexact_gradient_descent(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        wc, theory = inEGD.wc_inexact_gradient_descent(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
     def test_proximalpointmethod(self):

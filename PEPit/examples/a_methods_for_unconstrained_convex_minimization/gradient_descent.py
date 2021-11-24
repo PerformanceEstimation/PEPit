@@ -2,35 +2,70 @@ from PEPit.pep import PEP
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
-def wc_gd(mu, L, gamma, n, verbose=True):
+def wc_gd(L, gamma, n, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly convex.
-    This code computes a worst-case guarantee for the gradient method with fixed step size. That is, it computes
-    the smallest possible tau(n, L, mu) such that the guarantee
-        f(x_n) - f_* <= tau(n, L, mu) * || x_0 - x_* ||^2
-    is valid, where x_n is the output of the gradient descent with fixed step size,
-    and where x_* is the minimizer of f.
 
-    Result to be compared with that of
-    [1] Yoel Drori. "Contributions to the Complexity Analysis of
-        Optimization Algorithms." PhD thesis, Tel-Aviv University, 2014.
+    .. math:: f_\star = \\min_x f(x),
 
-    :param mu: (float) the strong convexity parameter.
+    where :math:`f` is :math:`L`-smooth and convex.
+
+    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`. That is, it computes
+    the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
+
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\gamma)  || x_0 - x_\star ||^2
+
+    is valid, where :math:`x_n` is the output of gradient descent with fixed step size :math:`\\gamma`, and
+    where :math:`x_\star` is a minimizer of :math:`f`.
+
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
+    value of :math:`f(x_n)-f_\star` when :math:`||x_0 - x_\star||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    Gradient descent is described by
+
+    .. math:: x_{k+1} = x_k - \\gamma \\nabla f(x_k),
+
+    where :math:`\\gamma` is a step size.
+
+    **Theoretical guarantee**:
+    When :math:`\\gamma=\\frac{1}{L}`, the tight theoretical guarantee can be found in [1, Theorem 1]:
+
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4n+2}.
+
+    **References**:
+    [1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
+    approach. Math. Program. 145(1–2), 451–482.
+
+
     :param L: (float) the smoothness parameter.
     :param gamma: (float) step size.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> L, n = 3, 4
+        >>> pepit_tau, theoretical_tau = inGD.wc_gd(L=L, gamma=1/L, n=n, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+		         function 1 : 30 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.16666666497937685
+        *** Example file: worst-case performance of gradient descent with fixed step sizes ***
+	        PEP-it guarantee:       f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+	        Theoretical guarantee:  f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -68,11 +103,9 @@ def wc_gd(mu, L, gamma, n, verbose=True):
 
 if __name__ == "__main__":
     n = 2
-    mu = 0
     L = 1
     gamma = 1 / L
 
-    wc = wc_gd(mu=mu,
-               L=L,
+    wc = wc_gd(L=L,
                gamma=gamma,
                n=n)
