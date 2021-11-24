@@ -18,32 +18,33 @@ def wc_km(n, verbose=True):
 
         .. math:: \\frac{1}{4}|| x_n - Ax_n||^2 \\leqslant \\tau(n) ||x_0 - x_\star||^2
 
-    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\star` the fixed point of :math:`A`.
+    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\star` the fixed point of :math:`A.`
 
     **Algorithm**:
 
-        .. math:: x_{i+1} = 1 / (i + 2) * x_{i} + (1 - 1 / (i + 2)) Ax_{i}
+        .. math:: x_{i+1} = \\frac{1}{i + 2} x_{i} + \\left(1 - \\frac{1}{i + 2}\\right) Ax_{i}
 
     **Theoretical guarantee**:
 
-    The theoretical **upper bound** is given in [1, Theorem 4.9]
+        The theoretical **upper bound** is given in [1, Theorem 4.9]
 
         .. math:: t_n = 1 - \\frac{1}{n+1}
 
         If :math:`\\frac{1}{2} \\leqslant t_n \\leqslant \\frac{1}{2}(1+\\sqrt{\\frac{n}{n+1}})`,
 
             .. math:: \\tau(n) = \\frac{1}{n+1}\\frac{n}{n+1}^n \\frac{1}{4 t_n (1 - t_n)}
+
         Else :
 
             .. math:: \\tau(n) = (2t_n - 1)^{2n}
 
     **Reference**:
 
-    This scheme was first studied using PEPs in [1, Theorem 4.9]:
+        This scheme was first studied using PEPs in [1, Theorem 4.9]:
 
-    [1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
-    Optimal First Order Complexities and Norm Constrained Quasi Newton
-    Methods."  PhD thesis (2018)
+        [1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
+        Optimal First Order Complexities and Norm Constrained Quasi Newton
+        Methods."  PhD thesis (2018)
 
     Args:
         L (float): the Lipschitz parameter.
@@ -66,6 +67,7 @@ def wc_km(n, verbose=True):
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
             PEP-it guarantee:		 1/4|| xN - AxN ||^2 <= 0.119634 ||x0 - x_*||^2
             Theoretical guarantee:	 1/4|| xN - AxN ||^2 <= 0.140625 ||x0 - x_*||^2
+
     """
 
     # Instantiate PEP

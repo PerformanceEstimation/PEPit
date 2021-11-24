@@ -34,20 +34,20 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
         The theoretical **tight** bound is obtained in [2, Theorem 5.1],
 
-        .. math:: \max(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
-                          \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)})^{2n}
+        .. math:: \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
+                             \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n}
 
     **References**:
 
-    The exact method is from [1], its PEP formulation and solution from [2].
-    The precise formulation we used is described in (2, Section 4.4).
+        The exact method is from [1], its PEP formulation and solution from [2].
+        The precise formulation we used is described in (2, Section 4.4).
 
-    [1] J. Eckstein and W. Yao, Relative-error approximate versions of
-    Douglas–Rachford splitting and special cases of the ADMM.
-    Mathematical Programming (2018).
+        [1] J. Eckstein and W. Yao, Relative-error approximate versions of
+        Douglas–Rachford splitting and special cases of the ADMM.
+        Mathematical Programming (2018).
 
-    [2] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
+        [2] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
+        first-order methods with inexact proximal operators (2020).
 
     Args:
         L (float): the smoothness parameter.
@@ -74,6 +74,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
         *** Example file: worst-case performance of the Partially Inexact Douglas Rachford Splitting in distance ***
             PEP-it guarantee:	 ||z_n - z_*||^2 <= 0.274732 ||z_0 - z_*||^2
             Theoretical guarantee:	||z_n - z_*||^2 <= 0.274689 ||z_0 - z_*||^2
+
     """
 
     # Instantiate PEP
