@@ -11,8 +11,8 @@ def wc_ppm(alpha, n, verbose=True):
 
     This code computes a worst-case guarantee for the proximal point method, that is the smallest
     possible tau(n,L) such that the guarantee
-        ||x_(n) - x(n-1)||^2 <= tau(n,L) * ||x_0 - x_*||^2,
-    is valid, where x_* is such that 0 in Ax_*..
+        ||x_(n) - x(n-1)||^2 <= tau(n,L) * ||x_0 - x_\star||^2,
+    is valid, where x_\star is such that 0 \in Ax_\star.
 
     Theoretical rates can be found in the following paper (section 4)
 

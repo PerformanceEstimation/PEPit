@@ -6,20 +6,20 @@ def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_* = \\min_x f(x),
+    .. math:: f_\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex (:math:`\\mu` is possibly 0).
 
     This code computes a worst-case guarantee for the **fast gradient** method, a.k.a. **accelerated gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_*\\|^2
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\star\\|^2
 
     is valid, where :math:`x_n` is the output of the **accelerated gradient** method,
-    and where :math:`x_*` is the minimizer of :math:`f`.
+    and where :math:`x_\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
-    :math:`f(x_n)-f_*` when :math:`\\|x_0 - x_*\\|^2 \\leqslant 1`.
+    :math:`f(x_n)-f_\star` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 

@@ -6,13 +6,13 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 def wc_InexactAGM(L, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
+        f_\star = min_x f(x),
     where f is L-smooth and convex.
 
     This code computes a worst-case guarantee for an accelerated gradient method using inexact first-order information.
     That is, the code computes the smallest possible tau(n,L,epsilon) such that the guarantee
-        f(x_n) - f_* <= tau(n,L,epsilon) * ||x_0-x_*||^2
-    is valid, where x_n is the output of the inexact accelerated gradient descent, and where x_* is a minimizer of f.
+        f(x_n) - f_\star <= tau(n,L,epsilon) * ||x_0-x_\star||^2
+    is valid, where x_n is the output of the inexact accelerated gradient descent, and where x_\star is a minimizer of f.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
     described by (with 0 <= epsilon <= 1 )

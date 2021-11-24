@@ -9,7 +9,7 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_saga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_* = min_x {F(x) = 1/n [f1(x) + ... + fn(x)] + h(x)},
+        f_\star = min_x {F(x) = 1/n [f1(x) + ... + fn(x)] + h(x)},
     where f1, ..., fn are assumed L-smooth and mu-strongly convex, and h
     is closed proper and convex with a proximal operator available.
 
@@ -22,7 +22,7 @@ def wc_saga(L, mu, n, verbose=True):
     That is, it computes the smallest possible tau(n,L,mu) such that a given Lyapunov sequence V1 is
     decreasing along the trajectory:
         V1(x_1) <= tau(n,L,mu) V0(x_0),
-    with Vk(x1) = 1/n*sum(fi(phi_i^k) - f_*) - 1/n*sum(<f_i'(x^*), phi_i^k - x^*> + ||x_k - x^*||/(2*gamma*(1-mu*gamma)),
+    with Vk(x1) = 1/n*sum(fi(phi_i^k) - f_\star) - 1/n*sum(<f_i'(x^*), phi_i^k - x^*> + ||x_k - x^*||/(2*gamma*(1-mu*gamma)),
     and with gamma = 1/2/(mu*n+L).
 
     [1] Aaron Defazio, Francis Bach, and Simon Lacoste-Julien.

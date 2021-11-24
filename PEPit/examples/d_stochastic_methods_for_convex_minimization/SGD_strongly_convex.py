@@ -8,13 +8,13 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: f_* = \\min_x {F(x) = \\frac{1}{n} (f_1(x) + ... + f_n(x))},
+    .. math:: f_\star = \\min_x {F(x) = \\frac{1}{n} (f_1(x) + ... + f_n(x))},
 
     where :math:`f_1, ..., f_n` are L-smooth and mu-strongly convex.
 
     In addition, we assume a bounded variance at the optimal point:
 
-    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_*)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2,
+    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2,
 
     This code computes a worst-case guarantee for one step of the **stochastic gradient descent (SGD)** in expectation,
     for the distance to optimal point.
@@ -25,11 +25,11 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
 
     holds if
 
-    .. math:: \\|x_0 - x_*\\|^2 \\leqslant R^2
+    .. math:: \\|x_0 - x_\star\\|^2 \\leqslant R^2
 
     and
 
-    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_*)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2.
+    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2.
 
     Here, where x_1 is the output of one step of **stochastic gradient descent (SGD)**.
 

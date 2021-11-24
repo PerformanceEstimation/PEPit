@@ -8,17 +8,17 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
 
-        .. math:: f_* = \min_x f(x),
+        .. math:: f_\star = \min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for an **inexact gradient method with exact linesearch (ELS)**.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\epsilon)` such that the guarantee
 
-        .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu, \\epsilon) ( f(x_0) - f_* )
+        .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu, \\epsilon) ( f(x_0) - f_\star )
 
     is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction and an exact linesearch**,
-    and where :math:`x_*` is the minimizer of :math:`f`.
+    and where :math:`x_\star` is the minimizer of :math:`f`.
 
     The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\epsilon < 1`)
 

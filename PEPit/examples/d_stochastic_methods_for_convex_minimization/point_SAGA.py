@@ -8,7 +8,7 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_psaga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_* = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
+        f_\star = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
     where f1, ..., fn are assumed L-smooth and mu-strongly convex,
     and with proximal operator available.
 
@@ -20,7 +20,7 @@ def wc_psaga(L, mu, n, verbose=True):
     That is, it computes the smallest possible tau(n,L,mu) such that a given Lyapunov sequence V1 is
     decreasing along the trajectory:
         V1(x_1) <= tau(n,L,mu) V0(x_0),
-    with Vk(x1) = c/n*sum(||g_i^k - g_i^*||^2 + ||x^k - x_*||^2,
+    with Vk(x1) = c/n*sum(||g_i^k - g_i^*||^2 + ||x^k - x_\star||^2,
     with gamma = sqrt((n-1)^2 + 4*n*L/mu)/(2*L*n), and c = 1/(mu*L).
 
     [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite

@@ -7,13 +7,13 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_tmm(mu, L, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
+        f_\star = min_x f(x),
     where f is L-smooth and mu-strongly-convex.
 
     This code computes a worst-case guarantee for the Triple Momentum Method.
     That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
-        f(x_n) - f_* <= tau(n, mu, L) ||x_0 - x_*||^2,
-    is valid, where x_n is the output of the triple momentum method, and where x_* is a minimizer of f.
+        f(x_n) - f_\star <= tau(n, mu, L) ||x_0 - x_\star||^2,
+    is valid, where x_n is the output of the triple momentum method, and where x_\star is a minimizer of f.
 
     [1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018).
     "The fastest known globally convergent first-order method for

@@ -14,13 +14,13 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     where :math:`f` is closed convex and proper. Proximal operator is assumed to be available.
 
     This code computes a worst-case guarantee for an **Inexact Proximal Point Method**,
-    where :math:`x_* = \\arg\\min_x (f(x))`.
+    where :math:`x_\star = \\arg\\min_x (f(x))`.
 
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
-        .. math:: f(x_n) - f(x_*) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_*||^2
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\star||^2
 
-    is valid, where :math:`z_n` is the output os the operator, and :math:`z_*` a fixed point of this operator.
+    is valid, where :math:`z_n` is the output os the operator, and :math:`z_\star` a fixed point of this operator.
 
     **Algorithm**:
 

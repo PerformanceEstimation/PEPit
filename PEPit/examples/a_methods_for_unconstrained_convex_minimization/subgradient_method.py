@@ -8,21 +8,21 @@ def wc_subgd(M, N, gamma, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_* = \\min_x f(x),
+    .. math:: f_\star = \\min_x f(x),
 
     where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a non-smooth minimization problem.
 
     This code computes a worst-case guarantee for the **subgradient method**. That is, it computes
     the smallest possible :math:`\\tau(n, M)` such that the guarantee
 
-    .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_* \\leqslant \\tau(n, M)  ||x_0 - x_*||^2
+    .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_\star \\leqslant \\tau(n, M)  ||x_0 - x_\star||^2
 
     is valid, where :math:`x_i` is the output of the **subgradient method**,
-    and where :math:`x_*` is the minimizer of :math:`f`.
+    and where :math:`x_\star` is the minimizer of :math:`f`.
 
-    We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_*)` when :math:`x_i` is
+    We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_\star)` when :math:`x_i` is
     obtained by doing :math:`i`steps of a subgradient method starting with an initial
-    iterate satisfying :math:`||x_0-x_*|| \\leqslant 1`.
+    iterate satisfying :math:`||x_0-x_\star|| \\leqslant 1`.
 
     **Algorithm**:
 

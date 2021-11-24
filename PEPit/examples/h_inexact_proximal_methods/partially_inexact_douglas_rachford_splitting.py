@@ -15,13 +15,13 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     Both proximal operators are assumed to be available.
 
     This code computes a worst-case guarantee for a partially inexact **Douglas Rachford
-    Splitting (DRS) method**, where :math:`x_* = \\arg\\min_x (F(x) = f(x) + g(x))`.
+    Splitting (DRS) method**, where :math:`x_\star = \\arg\\min_x (F(x) = f(x) + g(x))`.
 
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\sigma,\\gamma)` such that the guarantee
 
-        .. math:: ||z_{n+1} - z_*||^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  ||z_{n} - z_*||^2
+        .. math:: ||z_{n+1} - z_\star||^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  ||z_{n} - z_\star||^2
 
-    is valid, where :math:`z_n` is the output of the operator, and :math:`z_*` a fixed point of this operator.
+    is valid, where :math:`z_n` is the output of the operator, and :math:`z_\star` a fixed point of this operator.
 
     **Algorithm**:
 

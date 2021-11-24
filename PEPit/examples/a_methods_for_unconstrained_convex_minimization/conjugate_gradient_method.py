@@ -9,20 +9,20 @@ def wc_CG(L, n, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_* = \\min_x f(x),
+    .. math:: f_\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for the **conjugate gradient (CG)** method (with exact span searches).
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: f(x_n) - f_* \\leqslant \\tau(n, L) \\|x_0-x_*\\|^2
+    .. math :: f(x_n) - f_\star \\leqslant \\tau(n, L) \\|x_0-x_\star\\|^2
 
     is valid, where :math:`x_n` is the output of the **conjugate gradient** method,
-    and where :math:`x_*` is a minimizer of :math:`f`.
+    and where :math:`x_\star` is a minimizer of :math:`f`.
     In short, for given values of :math:`n` and :math:`L`,
     :math:`\\tau(n, L)` is computed as the worst-case value of
-    :math:`f(x_n)-f_*` when :math:`\\|x_0-x_*\\|^2 \\leqslant 1`.
+    :math:`f(x_n)-f_\star` when :math:`\\|x_0-x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 
@@ -92,7 +92,7 @@ def wc_CG(L, n, verbose=True):
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x^*
+    # Set the initial constraint that is the distance between x0 and x_*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run n steps of the Conjugate Gradient method

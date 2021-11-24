@@ -10,7 +10,7 @@ def wc_ahpe(mu, gamma, sigma, A0, verbose=True):
     Consider the convex minimization problem,
         min_x { f(x) }
     where f(x) is closed, proper and convex (possibly mu-strongly convex), and for which an
-    approximate proximal operator is available. We denote by x_* = argmin_x (f(x)).
+    approximate proximal operator is available. We denote by x_\star = argmin_x (f(x)).
 
     This code verifies a potential function for the Accelerated Hybrid Proximal Extragradient (A-HPE) introduced in [1].
 

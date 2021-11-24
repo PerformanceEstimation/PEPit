@@ -14,9 +14,9 @@ def wc_ppm(alpha, n, verbose=True):
     This code computes a worst-case guarantee for the accelerated proximal point method, that is the smallest
     possible :math:`\\tau(n)` such that the guarantee
 
-        .. math:: ||x_n - y_n||^2 \\leqslant \\tau(n) || x_0 - x_*||^2,
+        .. math:: ||x_n - y_n||^2 \\leqslant \\tau(n) || x_0 - x_\star||^2,
 
-    is valid, where :math:`x_*` is such that :math:`0 \\in Ax_*`.
+    is valid, where :math:`x_\star` is such that :math:`0 \\in Ax_\star`.
 
     **Algorithm**:
 

@@ -14,11 +14,11 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     Both proximal operators are assumed to be available.
 
     This code computes a worst-case guarantee for an Accelerated Hybrid Proximal Gradient,
-    where x_* = argmin_x (F(x)).
+    where x_\star = argmin_x (F(x)).
 
     That is, it computes the smallest possible tau(mu,n,sigma,gamma) such that the guarantee
         Phi_n <= tau(mu,n,sigma,gamma) * Phi_{n+1}
-    is valid, where phi_{n+1} = A_{n+1}(F(x_{n+1} - F_*) + (1 + mu * A_{n+1})/2 * ||z_{n+1} - x_*||^2.
+    is valid, where phi_{n+1} = A_{n+1}(F(x_{n+1} - F_\star) + (1 + mu * A_{n+1})/2 * ||z_{n+1} - x_\star||^2.
     We are going to verify that :
         max(Phi_{n+1} - Phi_{n}) <= 0
 

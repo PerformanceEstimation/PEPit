@@ -20,10 +20,10 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
                u{k+1} = w{k+1};
 
     That is, it computes the smallest possible tau(n,L,mu,alpha) such that the guarantee
-        F(y_n) - F(x_*) <= tau(n,L,mu,alpha) * ||w_0 - w_*||^2
-    is valid, where x_n is the output of the Fast Douglas Rachford Splitting method, and where x_* is a minimizer of F,
-    and w_* defined such that
-        x_* = prox_{\alpha}(w_*) is an optimal point.
+        F(y_n) - F(x_\star) <= tau(n,L,mu,alpha) * ||w_0 - w_\star||^2
+    is valid, where x_n is the output of the Fast Douglas Rachford Splitting method, and where x_\star is a minimizer of F,
+    and w_\star defined such that
+        x_\star = prox_{\alpha}(w_\star) is an optimal point.
 
     The detailed approach is available in
     [1] Panagiotis Patrinos, Lorenzo Stella, and Alberto Bemporad.

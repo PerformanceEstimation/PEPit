@@ -11,8 +11,8 @@ def wc_halpern(n, verbose=True):
 
     This code computes a worst-case guarantee for the Halpern Iteration. That is, it computes
     the smallest possible tau(n) such that the guarantee
-        || x_n - Ax_n||^2 <= tau(n) * ||x_0 - x_*||^2
-    is valid, where x_n is the output of the Halpern iteration, and x_* the fixed point of A.
+        || x_n - Ax_n||^2 <= tau(n) * ||x_0 - x_\star||^2
+    is valid, where x_n is the output of the Halpern iteration, and x_\star the fixed point of A.
 
     The detailed approach and the tight upper bound are available in [1, Theorem 2.1].
     [1] Lieder, Felix. "On the Convergence Rate of the Halpern-Iteration." (2017)

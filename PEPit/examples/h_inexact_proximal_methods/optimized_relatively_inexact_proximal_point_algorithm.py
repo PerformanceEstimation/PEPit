@@ -12,11 +12,11 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
     This code computes a worst-case guarantee for an Optimized Inexact Proximal Point Method,
-    where x_* = argmin_x (f(x)).
+    where x_\star = argmin_x (f(x)).
 
     That is, it computes the smallest possible tau(n,sigma,gamma) such that the guarantee
-        f(x_n) - f(x_*) <= tau(n,sigma,gamma) * ||x_0 - x_*||^2.
-    is valid, where z_n is the output os the operator, an z_* a fixed point of this operator.
+        f(x_n) - f(x_\star) <= tau(n,sigma,gamma) * ||x_0 - x_\star||^2.
+    is valid, where z_n is the output os the operator, an z_\star a fixed point of this operator.
 
     The precise formulation is presented in [1].
     [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of

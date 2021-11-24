@@ -6,14 +6,14 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
+        f_\star = min_x f(x),
     where f is L-smooth and mu-strongly convex
     .
     This code computes a worst-case guarantee for an inexact gradient method.
     That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-        f(x_n) - f_* <= tau(n,L,mu,epsilon) * ( f(x_0) - f_* )
+        f(x_n) - f_\star <= tau(n,L,mu,epsilon) * ( f(x_0) - f_\star )
     is valid, where x_n is the output of the gradient descent with an inexact descent direction,
-    and where x_* is the minimizer of f.
+    and where x_\star is the minimizer of f.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
     described by (with 0 <= epsilon <= 1 )

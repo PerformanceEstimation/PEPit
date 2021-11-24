@@ -7,12 +7,12 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is assumed L-smooth and x_* = argmin f(x) denotes the minimizer of f.
+        f_\star = min_x f(x),
+    where f is assumed L-smooth and x_\star = argmin f(x) denotes the minimizer of f.
 
     This code computes a worst-case guarantee for the accelerated gradient descent,
     for a well-chosen Lyapunov function :
-        v(x_{k+1}) = lambda_k^2 (f(x_{k+1}) - f_*) + L/2 * || z_{k+1} - xs||^2
+        v(x_{k+1}) = lambda_k^2 (f(x_{k+1}) - f_\star) + L/2 * || z_{k+1} - xs||^2
         with lambda_{k+1} = 1/2 * (1 - sqrt(4*lambda_k^2 + 1))
     where :
         y_{k} = (1 - tau_k) x_k + tau_k z_k

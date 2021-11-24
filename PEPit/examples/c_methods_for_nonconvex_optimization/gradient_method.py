@@ -5,7 +5,7 @@ from PEPit.functions.smooth_function import SmoothFunction
 def wc_gd(L, gamma, n, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
+        f_\star = min_x f(x),
     where f is L-smooth.
 
     This code computes a worst-case guarantee for the gradient method fixed step size. That is, it computes

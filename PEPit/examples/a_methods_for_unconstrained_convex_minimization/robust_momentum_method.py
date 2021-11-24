@@ -8,7 +8,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     """
     Consider the convex minimization problem
 
-        .. math:: f_* = min_x f(x),
+        .. math:: f_\star = min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
@@ -17,7 +17,7 @@ def wc_rmm(mu, L, lam, verbose=True):
 
         .. math:: v(x_{n+1}) \\leqslant v(x_{n}),
 
-    is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_*` is a minimizer of :math:`f`,
+    is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
         .. math:: \\kappa = \\frac{\\mu}{L}
@@ -26,9 +26,9 @@ def wc_rmm(mu, L, lam, verbose=True):
 
         .. math:: l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}
 
-        .. math:: q_n = (L - \\mu) (f(x_n) - f(x_* - \\frac{\\mu}{2}||y_n - x_*||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_*)||^2
+        .. math:: q_n = (L - \\mu) (f(x_n) - f(x_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2
 
-        .. math:: v(x_n) = l||z_n - x_*||^2 + q_n
+        .. math:: v(x_n) = l||z_n - x_\star||^2 + q_n
 
     **Algorithm**:
 

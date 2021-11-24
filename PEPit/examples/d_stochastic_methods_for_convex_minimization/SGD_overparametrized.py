@@ -7,11 +7,11 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_* = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
+        f_\star = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
     where f1, ..., fn are assumed L-smooth and mu-strongly convex.
 
     In addition, we assume a zero variance at the optimal point :
-        \mathbb{E}[ ||fi'(x_*)||^2 = 1/n sum_i(||fi'(x^*)||^2) ==0 (i.e. \mathbb{E}fi'(x^*)=0),
+        \mathbb{E}[ ||fi'(x_\star)||^2 = 1/n sum_i(||fi'(x^*)||^2) ==0 (i.e. \mathbb{E}fi'(x^*)=0),
     which happens for example in machine learning in the interpolation regime,
     that is if there exists a model x^* such that the loss \ell on any observation (z_i)_{i \in [n]},
     \ell(x^*, z_i)=f_i(x^*)" is zero.
@@ -20,7 +20,7 @@ def wc_sgdo(L, mu, gamma, R, n, verbose=True):
     for the distance to optimality.
 
     That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-    \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * ||x_0 - x_*||^2
+    \mathbb{E}[||x_1 - x^*||^2] <= tau(L, mu, gamma, v, R, n) * ||x_0 - x_\star||^2
     is valid, where x_1 is the output of one step of stochastic gradient descent: x_1 = x_0 - \gamma f'_{i_0}(x_0),
     with i_0 uniformly sampled in {1, \dots, n}, and the expectation is taken over the randomness of i_0.
     We will observe it does not depend on n for this particular setting,

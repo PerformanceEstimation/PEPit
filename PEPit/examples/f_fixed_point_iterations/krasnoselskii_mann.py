@@ -16,9 +16,9 @@ def wc_km(n, verbose=True):
     This code computes a worst-case guarantee for the **Krasnolselskii-Mann**. That is, it computes
     the smallest possible :math:`\tau(n)` such that the guarantee
 
-        .. math:: \\frac{1}{4}|| x_n - Ax_n||^2 \\leqslant \\tau(n) ||x_0 - x_*||^2
+        .. math:: \\frac{1}{4}|| x_n - Ax_n||^2 \\leqslant \\tau(n) ||x_0 - x_\star||^2
 
-    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_*` the fixed point of :math:`A`.
+    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\star` the fixed point of :math:`A`.
 
     **Algorithm**:
 

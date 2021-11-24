@@ -5,12 +5,12 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is assumed L-smooth, and x_* = argmin f(x) denotes the minimizer of f.
+        f_\star = min_x f(x),
+    where f is assumed L-smooth, and x_\star = argmin f(x) denotes the minimizer of f.
 
     This code computes a worst-case guarantee for the gradient descent with fixed steps,
     for a well-chosen Lyapunov function :
-        v(x_k) = (2k + 1)*L*(f(x_{k+1}) - f_*) + L/2 || x_k - x_*||^2 + k*(k+2)* ||f'(x_{k+1})||^2
+        v(x_k) = (2k + 1)*L*(f(x_{k+1}) - f_\star) + L/2 || x_k - x_\star||^2 + k*(k+2)* ||f'(x_{k+1})||^2
 
     That is, it verifies that the Lyapunov is decreasing on the trajectory :
         v(x_{k+1}) - v(x_k) <= 0

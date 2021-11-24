@@ -7,20 +7,20 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_* = \\min_x f(x),
+    .. math:: f_\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for the **inexact gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\varepsilon)` such that the guarantee
 
-    .. math:: f(x_n) - f_* \\leqslant \\tau(n, L, \\mu, \\varepsilon) (f(x_0) - f_*)
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu, \\varepsilon) (f(x_0) - f_\star)
 
     is valid, where :math:`x_n` is the output of the **inexact gradient** method,
-    and where :math:`x_*` is the minimizer of :math:`f`.
+    and where :math:`x_\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L`, :math:`\\mu` and :math:`\\varepsilon`,
     :math:`\\tau(n, L, \\mu, \\varepsilon)` is computed as the worst-case value of
-    :math:`f(x_n)-f_*` when :math:`f(x_0) - f_* \\leqslant 1`.
+    :math:`f(x_n)-f_\star` when :math:`f(x_0) - f_\star \\leqslant 1`.
 
     **Algorithm**:
 

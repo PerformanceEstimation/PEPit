@@ -7,16 +7,16 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 def wc_ogm(L, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_* = min_x f(x),
+        f_\star = min_x f(x),
     where f is L-smooth and convex.
 
     This code computes a worst-case guarantee for the optimized gradient method. That is, it computes the
     smallest possible tau(n,L) such that the guarantee
-        f(x_n) - f_* <= tau(n,L) * || x_0 - x_* ||^2,
-    is valid, where x_n is the output of the optimized gradient method, and where x_* is a minimizer of f.
+        f(x_n) - f_\star <= tau(n,L) * || x_0 - x_\star ||^2,
+    is valid, where x_n is the output of the optimized gradient method, and where x_\star is a minimizer of f.
 
-    In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_* when
-    || x_0 - x_* || == 1.
+    In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_\star when
+    || x_0 - x_\star || == 1.
 
     Note that the optimized gradient method (OGM) was developed in the following two works:
     [1] Drori, Yoel, and Marc Teboulle.

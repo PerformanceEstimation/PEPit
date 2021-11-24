@@ -5,12 +5,12 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 def wc_ps_1(L, mu, gamma, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is assumed L-smooth mu-strongly convex and x_* = argmin f(x) denotes the minimizer of f.
+        f_\star = min_x f(x),
+    where f is assumed L-smooth mu-strongly convex and x_\star = argmin f(x) denotes the minimizer of f.
 
     This code computes a worst-case guarantee for a variant of Polyak steps.
     That is, it computes the smallest possible tau(n, L, mu) such that the guarantee
-        ||x_{k+1} - x_*||^2 <= tau(n, L, mu) * ||x_{k+1} - x_*||^2
+        ||x_{k+1} - x_\star||^2 <= tau(n, L, mu) * ||x_{k+1} - x_\star||^2
     is valid, where x_k is the output of Plyak steps.
 
     The detailed potential approach is available in [1, Proposition 1]

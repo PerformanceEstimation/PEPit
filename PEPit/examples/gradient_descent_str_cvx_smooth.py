@@ -11,7 +11,7 @@ def compute_rate_and_proof_n_steps_gd_on_str_cvx_smooth(mu, L, n, alternating_st
 
     :param mu: (float) the strong convexity constant.
     :param L: (float) the smoothness constant.
-    :param n: (int) number of iterations. Actually, 2.[n/2]is the real number of steps.
+    :param n: (int) number of iterations. Actually, 2[n/2] is the real number of steps.
     :param alternating_steps: (bool) whether to use alternating step-sizes or not.
     :return:
     """
