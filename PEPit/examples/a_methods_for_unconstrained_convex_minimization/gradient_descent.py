@@ -47,7 +47,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     Example:
         >>> L, n = 3, 4
-        >>> pepit_tau, theoretical_tau = inGD.wc_gd(L=L, gamma=1/L, n=n, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1/L, n=n, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
