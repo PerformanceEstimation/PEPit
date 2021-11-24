@@ -10,6 +10,7 @@ import PEPit.examples.a_methods_for_unconstrained_convex_minimization.conjugate_
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_gradient_method as inFGM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_gradient_method_strongly_convex as instrFGM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.fast_proximal_point as inFPM
+import PEPit.examples.a_methods_for_unconstrained_convex_minimization.proximal_point_method as inPPM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_exact_line_search as ELS
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.heavy_ball_method as inHBM
 import PEPit.examples.a_methods_for_unconstrained_convex_minimization.inexact_accelerated_gradient as inAGM
@@ -101,6 +102,12 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 3, .1, .1, 2
 
         wc, theory = inGD.wc_inexact_gradient_descent(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        
+    def test_proximalpointmethod(self):
+        n, gamma = 3, .1
+
+        wc, theory = inPPM.wc_ppa(gamma=gamma, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_lowdimensional_OGM(self):
