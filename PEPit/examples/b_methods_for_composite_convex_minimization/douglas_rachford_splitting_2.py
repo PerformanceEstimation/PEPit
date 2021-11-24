@@ -9,20 +9,22 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     Consider the composite convex minimization problem
 
         .. math:: \min_x { F(x) = f_1(x) + f_2(x) }
-    where :math:`f_1(x)` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`f_2` is convex,
+    where :math:`f_1(x)` is :math:`L`-smooth, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS) method.
+    This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS) method**.
     That is, it computes the smallest possible :math:`\\tau(n,L,\\alpha,\\theta)` such that the guarantee
 
         .. math:: F(y_n) - F(x_*) \\leqslant \\tau(n,L,\\alpha,\\theta) ||x_0 - x_*||^2.
 
     is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_*`, but not :math:`w_k`, and hence
     we require the initial condition on :math:`x_0`(arbitrary choice; partially justified by
-    the fact we choose :math:`f_2` to be the smooth function). Note that :math:`y_N` is feasible as it
+    the fact we choose :math:`f_2` to be the smooth function).
+
+    Note that :math:`y_N` is feasible as it
     has a finite value for :math:`f_1` (output of the proximal operator on :math:`f_1`) and as :math:`f_2` is smooth.
 
-    **Algorithms**:
+    **Algorithm**:
 
     Our notations for the DRS algorithm are as follows
 
@@ -30,8 +32,11 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
         .. math:: y_k     = prox_{\\alpha f_1}(2x_k - w_k)
         .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
 
-    **Theoretical guarantees**:
+    **Theoretical guarantee**:
 
+    TODO : find reference for theoretical upper bound?
+
+        .. math:: \\tau(n, L, \\alpha, \\theta) = \\frac{1}{n}
 
     **References**:
 

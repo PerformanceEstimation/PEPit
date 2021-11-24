@@ -6,22 +6,57 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_ppa(gamma, n, verbose=True):
     """
     Consider the minimization problem
-        f_* = min_x f(x),
-    where f is convex.
 
-    This code computes a worst-case guarantee for the proximal point method. That is, it computes
-    the smallest possible tau(n) such that the guarantee
-        f(x_n) - f_* <= tau(n) * ||x_0 - x_*||^2
-    is valid, where x_n is the output of the proximal point method, and where x_* is the minimizer of f.
+    .. math:: f_\star = \\min_x f(x),
 
-    In short, for given values of n, tau(n) is computed as the worst-case value of f(x_n)-f_* when
-   ||x_0 - x_*||^2 <= 1.
+    where :math:`f` is closed, proper, and convex (and potentially non-smooth).
+
+    This code computes a worst-case guarantee for the **proximal point method** with step size :math:`\\gamma`. That is, it computes
+    the smallest possible :math:`\\tau(n,\\gamma)` such that the guarantee
+
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n,\\gamma)  ||x_0 - x_\star||^2
+
+    is valid, where :math:`x_n` is the output of the proximal point method, and where :math:`x_\star` is a
+    minimizer of :math:`f`.
+
+    In short, for given values of :math:`n` and :math:`\\gamma`, :math:`\\tau(n,\\gamma)` is computed as the worst-case value of :math:`f(x_n)-f_\star`
+    when :math:`||x_0 - x_\star||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    The proximal point method is described by
+
+    .. math:: x_{k+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_k||^2 \\right\\},
+
+    where :math:`\\gamma` is a step size.
+
+    **Theoretical guarantee**:
+    The tight theoretical guarantee can be found in [1, Theorem 4.1]:
+
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
+
+    **References**:
+    [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
 
     :param gamma: (float) step size.
     :param n: (int) number of iterations.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_ppa(gamma=3, n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 20 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.020833335685727362
+        *** Example file: worst-case performance of proximal point method ***
+            PEP-it guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+            Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
     """
 
     # Instantiate PEP

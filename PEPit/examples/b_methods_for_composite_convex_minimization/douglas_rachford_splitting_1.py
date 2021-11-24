@@ -13,15 +13,15 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     where :math:`f_1(x)` is :math:`L`-smooth and :math:`\mu`-strongly convex, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS)** method.
+    This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS) method**.
     That is, it computes the smallest possible :math:`\\tau(\\mu,L,\\alpha,\\theta,n)` such that the guarantee
 
         .. math:: ||w_1 - w_1'||^2 \\leqslant \\tau(\\mu,L,\\alpha,\\theta,n) ||w_0 - w_0'||^2.
 
-    is valid, where :math:`x_n` is the output of the Fast Douglas Rachford Splitting method. It is a contraction
+    is valid, where :math:`x_n` is the output of the **Douglas Rachford Splitting method**. It is a contraction
     factor computed when the algorithm is started from two different points :math:`w_0` and :math:`w_0`.
 
-    **Algorithms**:
+    **Algorithm**:
 
     Our notations for the DRS algorithm are as follows
 
@@ -29,9 +29,10 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
         .. math:: y_k     = prox_{\\alpha f_1}(2x_k - w_k)
         .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
 
-    **Theoretical guarantees**:
+    **Theoretical guarantee**:
 
-        The theoretial guarantee is obtained in [2, Theorem 2]:
+    The **tight** theoretial guarantee is obtained in [2, Theorem 2]:
+
         .. math:: \\tau(\\mu,L,\\alpha,\\theta,n) = \max(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha }{1 + L \\alpha})^{2n}
 
     **References**:

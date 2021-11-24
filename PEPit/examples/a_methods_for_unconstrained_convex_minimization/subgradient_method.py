@@ -12,12 +12,12 @@ def wc_subgd(M, N, gamma, verbose=True):
 
     where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a non-smooth minimization problem.
 
-    This code computes a worst-case guarantee for the subgradient method. That is, it computes
+    This code computes a worst-case guarantee for the **subgradient method**. That is, it computes
     the smallest possible :math:`\\tau(n, M)` such that the guarantee
 
     .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_* \\leqslant \\tau(n, M)  ||x_0 - x_*||^2
 
-    is valid, where :math:`x_i` is the output of the gradient descent with exact linesearch,
+    is valid, where :math:`x_i` is the output of the **subgradient method**,
     and where :math:`x_*` is the minimizer of :math:`f`.
 
     We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_*)` when :math:`x_i` is
@@ -25,10 +25,15 @@ def wc_subgd(M, N, gamma, verbose=True):
     iterate satisfying :math:`||x_0-x_*|| \\leqslant 1`.
 
     **Algorithm**:
+
         .. math:: g_{i} \\in \\partial f(x_i)
         .. math:: x_{i+1} = x_i - \\gamma g_i
 
     **Theoretical guarantee**:
+
+    TODO : find a reference for theoretical guarantee, that is tight.
+    The **tight** bound is
+
         .. math:: \\tau(n, M) = \\frac{M}{\\sqrt{N+1}}
 
     Args:
@@ -41,7 +46,10 @@ def wc_subgd(M, N, gamma, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_subgd(2, 6, 1 / (2*np.sqrt(6 + 1)))
+        >>> M = 2
+        >>> N = 6
+        >>> gamma = 1 / (M * np.sqrt(N + 1))
+        >>> pepit_tau, theoretical_tau = wc_subgd(M, N, gamma)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
