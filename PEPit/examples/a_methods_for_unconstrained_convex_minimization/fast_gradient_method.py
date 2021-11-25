@@ -10,45 +10,36 @@ def wc_fgm(mu, L, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex (:math:`\\mu` is possibly 0).
 
-    This code computes a worst-case guarantee for the **fast gradient** method, a.k.a. **accelerated gradient** method.
+    This code computes a worst-case guarantee for the **accelerated gradient method**, a.k.a. **fast gradient method**.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the **accelerated gradient** method,
+    is valid, where :math:`x_n` is the output of the accelerated gradient method,
     and where :math:`x_\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`f(x_n)-f_\star` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
+    The accelerated gradient method of this example is provided by
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                y_t & = & x_t + \\frac{t}{t + 3}(x_t - x_{t-1}) \\\\
-                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)
+                x_{k+1} &&= y_k - \\frac{1}{L} \\nabla f(y_k)\\\\
+                y_{k+1} &&= x_{k+1} + \\frac{k-1}{k + 2}  (x_{k+1} - x_k).
             \\end{eqnarray}
 
     **Theoretical guarantee**:
+    When :math:`\\mu=0`, a tight theoretical guarantee can be found in [1, Table 1]:
 
-        The **upper** guarantee obtained in [1, 2] is
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{2L||x_0-x_\\star||^2}{n^2 + 5 n + 6}.
 
-        .. math:: \\tau(n, L, \\mu) = \\frac{2L}{n^2 + 5n + 6}
-
-        Furthermore, it is **tight** for smooth convex functions.
-
-    References:
-
-        Theoretical rates can be found in the following paper
-        For an Upper bound (not tight):
-        [1] A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems∗
-        Amir Beck and Marc Teboulle
-
-        For an exact bound (convex):
-        [2] Exact Worst-case Performance of First-order Methods for Composite Convex Optimization
-        Adrien B. Taylor, Julien M. Hendrickx, François Glineur
+    **References**:
+    [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
 
     Args:
         mu (float): the strong convexity parameter
@@ -69,7 +60,7 @@ def wc_fgm(mu, L, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.16666666668209376
-        *** Example file: worst-case performance of conjugate gradient method ***
+        *** Example file: worst-case performance of accelerated gradient method ***
             PEP-it guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
 
@@ -111,7 +102,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of conjugate gradient method ***')
+        print('*** Example file: worst-case performance of accelerated gradient method ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 

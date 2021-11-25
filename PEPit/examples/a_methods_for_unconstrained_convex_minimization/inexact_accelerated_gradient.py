@@ -34,7 +34,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
 
             \\begin{eqnarray}
                 x_{k+1} &&= y_k - \\frac{1}{L} d_k\\\\
-                y_{k+1} &&= x_{k+1} + \\frac{k-1}{k + 2}  (x_{k+1} - x_k),
+                y_{k+1} &&= x_{k+1} + \\frac{k-1}{k + 2}  (x_{k+1} - x_k).
             \\end{eqnarray}
 
     **Theoretical guarantee**:

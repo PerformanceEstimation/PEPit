@@ -11,12 +11,12 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     but the parameterization is different (convex function to be minimized is explicitly formed as a sum of four convex
     functions). That is, the minimization problem is the composite convex minimization problem
 
-    .. math:: f_\star = \\min_x {f(x) = f_1(x) + f_2(x)},
+    .. math:: f_\star = \\min_x \\{f(x) = f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and where :math:`f_2` is closed convex and
     proper. We further let :math:`f_1=(3 F_1+2F_2)/2` and :math:`f_2=5 F_2+2F_4`
-        - F1 mu/3-stronglygit ban-convex and L/3 smooth,
-        - F2 mu/2-strongly-convex and L/2 smooth,
+        - F1 mu/3-strongly convex and L/3 smooth,
+        - F2 mu/2-strongly convex and L/2 smooth,
         - F3 and F4 two closed proper convex functions.
 
     :param L: (float) the smoothness parameter.
