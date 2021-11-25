@@ -5,17 +5,14 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_ppa(gamma, n, verbose=True):
     """
-    Consider the non-smooth convex minimization problem
-        f_* = min_x {F(x) = f1(x) + f2(x)},
-    where f is convex, and where f2 is a closed convex and proper function.
+    See description in Examples/a_methods_for_unconstrained_convex_minimization/proximal_point_method.py.
+    This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
+    but the parameterization is different (convex function to be minimized is explicitly formed as a sum of two convex
+    functions). That is, the minimization problem is
 
-    This code computes a worst-case guarantee for the proximal point method.
-    That is, the code computes the smallest possible tau(n) such that the guarantee
-        f(x_n) - f_* <= tau(n) * ||x0 - x_*||^2,
-    is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
+    .. math:: f_\star = \\min_x \\{f(x)\\equiv f_1(x)+f_2(x)\\},
 
-    The worst-case bound obtained in this example should math the one obtained for the proximal point method
-    in section a_methods_for_unconstrained_convex_minimization.
+    where :math:`f_1` and :math:`f_2` are closed, proper, and convex (and potentially non-smooth).
 
     :param gamma: (float) the step size parameter.
     :param n: (int) number of iterations.
