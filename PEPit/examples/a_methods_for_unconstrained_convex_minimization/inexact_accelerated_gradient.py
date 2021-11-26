@@ -5,19 +5,46 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 
 def wc_InexactAGM(L, epsilon, n, verbose=True):
     """
-    Consider the convex minimization problem
-        f_\star = min_x f(x),
-    where f is L-smooth and convex.
+    Consider the minimization problem
 
-    This code computes a worst-case guarantee for an accelerated gradient method using inexact first-order information.
-    That is, the code computes the smallest possible tau(n,L,epsilon) such that the guarantee
-        f(x_n) - f_\star <= tau(n,L,epsilon) * ||x_0-x_\star||^2
-    is valid, where x_n is the output of the inexact accelerated gradient descent, and where x_\star is a minimizer of f.
+    .. math:: f_\star = \\min_x f(x),
 
-    The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with 0 <= epsilon <= 1 )
-        || f'(x_i) - d || <= epsilon * || f'(x_i) ||,
-    where f'(x_i) is the true gradient, and d is the approximate descent direction that is used.
+    where :math:`f` is :math:`L`-smooth and convex.
+
+    This code computes a worst-case guarantee for an **accelerated gradient method** using **inexact first-order
+    information**. That is, it computes the smallest possible :math:`\\tau(n, L, \\epsilon)` such that the guarantee
+
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\epsilon)  || x_0 - x_\star ||^2
+
+    is valid, where :math:`x_n` is the output of **inexact accelerated gradient descent** and where :math:`x_\star`
+    is a minimizer of :math:`f`.
+
+    The inexact descent direction is assumed to satisfy a relative inaccuracy described by
+    (with :math:`0\\leqslant \\epsilon \\leqslant 1`)
+
+    .. math:: || f'(y_i) - d_i || \\leqslant \\epsilon  || f'(y_i) ||,
+
+    where :math:`f'(y_i)` is the true gradient at :math:`y_i` and :math:`d_i` is the approximate descent direction that is used.
+
+    **Algorithm**:
+    The inexact accelerated gradient method of this example is provided by
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_{k+1} &&= y_k - \\frac{1}{L} d_k\\\\
+                y_{k+1} &&= x_{k+1} + \\frac{k-1}{k + 2}  (x_{k+1} - x_k).
+            \\end{eqnarray}
+
+    **Theoretical guarantee**:
+    When :math:`\\epsilon=0`, a tight theoretical guarantee can be found in [1, Table 1]:
+
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{2L||x_0-x_\\star||^2}{n^2 + 5 n + 6}.
+
+    **References**:
+    [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
 
     Args:
         L (float): smoothness parameter.
@@ -28,6 +55,19 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     Returns:
         tuple: worst_case value, theoretical value
 
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_InexactAGM(L=3, epsilon=.1, n=5, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 13x13
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+		         function 1 : 47 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.11816352677249196
+        *** Example file: worst-case performance of inexact accelerated gradient method ***
+	        PEP-it guarantee:                       f(x_n)-f_* <= 0.118164 (f(x_0)-f_*)
+	        Theoretical guarantee for epsilon = 0:  f(x_n)-f_* <= 0.107143 (f(x_0)-f_*)
     """
 
     # Instantiate PEP

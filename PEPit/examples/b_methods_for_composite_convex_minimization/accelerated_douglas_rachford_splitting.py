@@ -6,35 +6,57 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_adrs(mu, L, alpha, n, verbose=True):
     """
-    Consider the composite convex minimization problem,
-        min_x { F(x) = f_1(x) + f_2(x) }
-    where f_1 is closed convex and proper, and f_2 is L-smooth mu-strongly convex.
+    Consider the composite convex minimization problem
 
-    This code computes a worst-case guarantee for the fast Douglas Rachford Splitting method:
-           x_k     = prox_{\alpha f2}(u_k)
-           y_k     = prox_{\alpha f1}(2*x_k-u_k)
-           w_{k+1} = u_k + \theta (y_k - x_k)
-           if k > 1
-               u{k+1} = w{k+1} + (k-2)/(k+1) * (w{k+1} - w{k});
-           else
-               u{k+1} = w{k+1};
+    .. math:: F_\star = \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
-    That is, it computes the smallest possible tau(n,L,mu,alpha) such that the guarantee
-        F(y_n) - F(x_\star) <= tau(n,L,mu,alpha) * ||w_0 - w_\star||^2
-    is valid, where x_n is the output of the Fast Douglas Rachford Splitting method, and where x_\star is a minimizer of F,
-    and w_\star defined such that
-        x_\star = prox_{\alpha}(w_\star) is an optimal point.
+    where :math:`f_1` is closed convex and proper, and :math:`f_2` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    The detailed approach is available in
-    [1] Panagiotis Patrinos, Lorenzo Stella, and Alberto Bemporad.
-        "Douglas-Rachford splitting: Complexity estimates and accelerated
-        variants." In 53rd IEEE Conference on Decision and Control (2014)
-        where the theory is available for quadratics.
+    This code computes a worst-case guarantee for **accelerated Douglas-Rachford**. That is, it computes
+    the smallest possible :math:`\\tau(n, L, \\mu, \\alpha, \\theta)` such that the guarantee
 
-    The tight guarantee obtained in [1, Theorem 4] is :
-        tau_q(n,L,mu,alpha) = 2/alpha*(1+alpha*L)/(1-alpha*L)/(n+2)**2.
-    However, this guarantee is only valid for quadratics. So we expect :
-        tau_q(n,L,mu,alpha) <= tau(n,L,mu,alpha).
+    .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) * ||w_0 - w_\star||^2
+
+    is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the algorithm, and where :math:`y_n` is the output
+    of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,
+    and :math:`w_\\star` defined such that
+
+    .. math:: x_\star = \mathrm{prox}_{\\alpha f_2}(w_\\star)
+
+    is an optimal point.
+
+    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu`, :math:`\\alpha` and :math:`\\theta`,
+    :math:`\\tau(n,L,\\mu,\\alpha,\\theta)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
+    when :math:`||x_0 - w_\star||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    The accelerated Douglas-Rachford splitting [1] is described by
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_{k} &&= \\mathrm{prox}_{\\alpha f_2} (u_k)\\\\
+                y_{k} &&= \\mathrm{prox}_{\\alpha f_1}(2x_k-u_k)\\\\
+                w_{k+1} &&= u_k+\\theta (y_k-x_k)\\\\
+                x_{k+1} &&= \\left\\{\\begin{array}{ll} u_{k+1} = w_{k+1}+\\frac{k-2}{k+1}(w_{k+1}-w_k)\, & \\text{if } k >1,\\\\
+                w_{k+1}& \\text{otherwise.} \\end{array}\\right.
+            \\end{eqnarray}
+
+    **Theoretical guarantee**:
+    There is no theoretical guarantee for this method beyond quadratic minimization. For quadratics, an upper bound on
+    is provided by [1, Theorem 5]:
+
+    .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta  (n + 3)^ 2},
+
+    when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha\\leqslant \\frac{1}{L}`.
+
+    **References**:
+    An analysis of the accelerated Douglas-Rachford splitting is available in [1] for when the convex minimization
+    problem is quadratic.
+
+    [1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
+    variants. In 53rd IEEE Conference on Decision and Control (CDC).
 
     :param mu: (float) the strong convexity parameter.
     :param L: (float) the smoothness parameter.
@@ -42,7 +64,22 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     :param n: (int) the number of iterations.
     :param verbose: (bool) if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    :return: (tuple) worst_case value, theoretical value (upper bound for quadratics; not directly comparable)
+
+    Example:
+        >>> pepit_tau, _ = wc_adrs(mu=.1, L=1, alpha=.9, n=10, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 28x28
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+		         function 1 : 156 constraint(s) added
+		         function 2 : 182 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.10812869851093912
+        *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
+	        PEP-it guarantee:                       F(y_n)-F_* <= 0.108129 ||x0 - ws||^2
+	        Theoretical guarantee for quadratics:   F(y_n)-F_* <= 0.249836 ||x0 - ws||^2
     """
 
     # Instantiate PEP
@@ -97,8 +134,8 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee for quadratics :\t f(y_n)-f_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

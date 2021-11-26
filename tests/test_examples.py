@@ -358,14 +358,14 @@ class TestExamples(unittest.TestCase):
         gamma = 2 / L
 
         wc, theory = inPS1.wc_ps_1(L, mu, gamma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_inps2(self):
         L, mu = 1, 0.1
         gamma = 2 / L
 
         wc, theory = inPS2.wc_ps_2(L, mu, gamma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_inAHPE(self):
         mu, gamma, sigma, A0 = 1, 1, 1, 10

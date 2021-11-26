@@ -6,25 +6,18 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_pgd(L, mu, gamma, n, verbose=True):
     """
-    Consider the convex minimization problem
-        f_* = min_x f1(x) + f2(x),
-    where f2 is L-smooth and mu-strongly convex, and where f2 is a closed convex and proper.
-    Instead of declaring f1 and f2, let us declare:
-        - F1 mu/3-strongly-convex and L/3 smooth,
-        - F2 mu/2-strongly-convex and L/2 smooth,
+    See description in Examples/a_methods_for_unconstrained_convex_minimization/proximal_point_method.py.
+    This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
+    but the parameterization is different (convex function to be minimized is explicitly formed as a sum of four convex
+    functions). That is, the minimization problem is the composite convex minimization problem
+
+    .. math:: f_\star = \\min_x \\{f(x) = f_1(x) + f_2(x)\\},
+
+    where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and where :math:`f_2` is closed convex and
+    proper. We further let :math:`f_1=(3 F_1+2F_2)/2` and :math:`f_2=5 F_2+2F_4`
+        - F1 mu/3-strongly convex and L/3 smooth,
+        - F2 mu/2-strongly convex and L/2 smooth,
         - F3 and F4 two closed proper convex functions.
-
-    This code computes a worst-case guarantee for the proximal gradient method, for :
-        f = f1 + f2,
-    with f1 = 5*F3 + 2*F4 and f2 = (3*F1 + 2*F2)/2.
-
-    That is, the code computes the smallest possible tau(n,L,mu) such that the guarantee
-       ||x_n - x_*||^2 <= tau(n,L,mu) * ||x_0 - x_*||^2,
-    is valid, where x_n is the output of the proximal gradient, and where x_* is a minimizer of f.
-
-    The worst-case bound obtained in this example should match both the theoretical upper bound, and the
-    PEPit bound obtained for the Proximal Gradient when considering directly f1 L-smoth and mu-stronlgy convex,
-    and f2 closed proper and convex.
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.

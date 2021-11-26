@@ -8,27 +8,43 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_saga(L, mu, n, verbose=True):
     """
-    Consider the finite sum minimization problem
-        f_\star = min_x {F(x) = 1/n [f1(x) + ... + fn(x)] + h(x)},
-    where f1, ..., fn are assumed L-smooth and mu-strongly convex, and h
-    is closed proper and convex with a proximal operator available.
+    Consider the finite sum convex minimization problem
 
-    This code computes the exact rate for the Lyapunov function from the original SAGA paper,
-    given in Theorem 1 of [1]. At each iteration k, for a j chosen uniformely at random,
-        phi_j^{k+1} = x^k
-        w^{k+1} = x^k - gamma(f_j'(phi_j^{k+1}) - f_j'(phi_j^k) + 1/n sum(f_i'(phi^k)))
-        x^{k+1} = prox_gamma^h(w^{k+1})
+    .. math:: F^\star = \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
 
-    That is, it computes the smallest possible tau(n,L,mu) such that a given Lyapunov sequence V1 is
-    decreasing along the trajectory:
-        V1(x_1) <= tau(n,L,mu) V0(x_0),
-    with Vk(x1) = 1/n*sum(fi(phi_i^k) - f_\star) - 1/n*sum(<f_i'(x^*), phi_i^k - x^*> + ||x_k - x^*||/(2*gamma*(1-mu*gamma)),
-    and with gamma = 1/2/(mu*n+L).
+    where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
+    closed, proper, and convex with a proximal operator readily available.
 
-    [1] Aaron Defazio, Francis Bach, and Simon Lacoste-Julien.
-        "SAGA: A fast incremental gradient method with support for
-        non-strongly convex composite objectives." (2014)
-        (Theorem 1 of [1])
+    This code computes the exact rate for the Lyapunov function from the original SAGA work [1, Theorem 1].
+    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu)` such a Lyapunov function decreases geometrically
+
+    .. math:: V^{(k+1)} \\leqslant \\tau(n,L,\\mu) V^{(k)},
+
+    where the value of the Lyapunov function at iteration :math:`k`is denoted by :math:`V_k` is
+
+    .. math:: V^{(k)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(k)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(k)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} ||x^{(k)} - x^\\star||^2,
+
+    with :math:`\\gamma = \\frac{1}{2(\\mu n+L)}`.
+
+    **Algorithm**:
+    One iteration of SAGA [1] is described as follows: at iteration :math:`k`, pick :math:`j\\in\\{1,\ldots,n\\}` uniformely at random and set:
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\phi_j^{(k+1)} &&= x^{(k)}\\\\
+                w^{(k+1)} &&= x^{(k)} - \\gamma \\left[ \\nabla f_j (\\phi_j^{(k+1)}) - \\nabla f_j(\\phi_j^{(k)}) + \\frac{1}{n} \\sum_{i=1}^n(\\nabla f_i(\\phi^{(k)}))\\right]\\\\
+                x^{(k+1)} &&= \mathrm{prox}_{\\gamma h} (w^{(k+1)})
+            \\end{eqnarray}
+
+    **Theoretical guarantee**: The following upper bound can be found in [1, Theorem 1]:
+
+    .. math:: V^{(k+1)}\\leqslant \\left(1-\\gamma\\mu \\right)V^{(k)}
+
+    **References**:
+    [1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
+    non-strongly convex composite objectives. Advances in neural information processing systems (NIPS).
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
@@ -36,6 +52,25 @@ def wc_saga(L, mu, n, verbose=True):
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> wc, theory = wc_saga(L=1, mu=.1, n=5, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 27x27
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 6 function(s)
+                 function 1 : 30 constraint(s) added
+                 function 2 : 6 constraint(s) added
+                 function 3 : 6 constraint(s) added
+                 function 4 : 6 constraint(s) added
+                 function 5 : 6 constraint(s) added
+                 function 6 : 6 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
+        *** Example file: worst-case performance of SAGA for Lyapunov function V_k ***
+	        PEP-it guarantee:       V^(k+1) <= 0.966667 V^k
+	        Theoretical guarantee:  V^(k+1) <= 0.966667 V^k
     """
 
     # Instantiate PEP
@@ -94,15 +129,15 @@ def wc_saga(L, mu, n, verbose=True):
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
 
-    # Compute theoretical guarantee (for comparison) : the bound is given in theorem 1 of [1]
+    # Compute theoretical guarantee (for comparison) : the bound is given in Theorem 1 of [1]
     kappa = 1 / gamma / mu
     theoretical_tau = (1 - 1 / kappa)
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of SAGA for a given Lyapunov function ***')
-        print('\tPEP-it guarantee:\t\t v1(x_1, x_*) <= {:.6} v0(x_0, x_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t v1(x_1, x_*) <= {:.6} vO(x_0, x_*)'.format(theoretical_tau))
+        print('*** Example file: worst-case performance of SAGA for Lyapunov function V_k ***')
+        print('\tPEP-it guarantee:\t V^(k+1) <= {:.6} V^k'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t V^(k+1) <= {:.6} V^k'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

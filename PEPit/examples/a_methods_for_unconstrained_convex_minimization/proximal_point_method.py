@@ -59,7 +59,6 @@ def wc_ppa(gamma, n, verbose=True):
         *** Example file: worst-case performance of proximal point method ***
             PEP-it guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
             Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
-
     """
 
     # Instantiate PEP

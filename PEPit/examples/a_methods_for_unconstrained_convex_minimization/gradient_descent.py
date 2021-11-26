@@ -60,7 +60,6 @@ def wc_gd(L, gamma, n, verbose=True):
         *** Example file: worst-case performance of gradient descent with fixed step sizes ***
 	        PEP-it guarantee:       f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
 	        Theoretical guarantee:  f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-
     """
 
     # Instantiate PEP

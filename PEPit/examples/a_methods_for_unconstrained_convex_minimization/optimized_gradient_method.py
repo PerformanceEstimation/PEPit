@@ -64,7 +64,7 @@ def wc_ogm(L, n, verbose=True):
     Returns:
         tuple: worst_case value, theoretical value
 
-    Examples:
+    Example:
         >>> pepit_tau, theoretical_tau = wc_ogm(L=3, n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
@@ -77,7 +77,6 @@ def wc_ogm(L, n, verbose=True):
         *** Example file: worst-case performance of optimized gradient method ***
 	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
 	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
-
     """
 
     # Instantiate PEP
