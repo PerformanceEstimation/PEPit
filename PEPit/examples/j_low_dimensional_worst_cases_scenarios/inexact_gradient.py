@@ -7,16 +7,16 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
 
-        .. math:: f_* = \min_x f(x),
+        .. math:: f_\\star = \min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for an **inexact gradient** method.
+    This code computes a worst-case guarantee for an **inexact gradient method**.
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\epsilon)` such that the guarantee
 
-        .. math:: f(x_n) - f_* \\leqslant \\tau(n,L,\\mu,\\epsilon) ( f(x_0) - f_* )
+        .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\epsilon) ( f(x_0) - f_\\star )
     is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction,
-    and where :math:`x_*` is the minimizer of :math:`f`.
+    and where :math:`x_\\star` is the minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
     described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1` )
@@ -27,24 +27,30 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
 
     **Algorithm**:
 
-        .. math:: x_{i+1} = x_i - \\gamma_{\\epsilon}d_i
-        .. math:: \\gamma_{\\epsilon} = \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}}
+    The inexact gradient descent under consideration can be written as
+
+        .. math:: x_{i+1} = x_i - \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}} d_i
+
+    where :math:`d_i` is the inexact search direction, :math:`L_{\\epsilon} = (1 + \\epsilon)L`
+    and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
 
     **Theoretical guarantee**:
 
-    The **tight** guarantee obtained in [1, Theorem 5.1] is
+    The tight worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
-        .. math:: f(x_n) - f_* \\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}(f(x_0) - f_* ),
+        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}(f(x_0) - f_\\star ),
 
     with :math:`L_{\\epsilon} = (1 + \\epsilon)L` and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
 
     **References**:
 
-        The detailed approach (based on convex relaxations) is available in
-        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-        Optimization Letters (2017).
+        The detailed approach and proof are available in [1, 2].
 
+        [1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
+        inexact gradient andNewton methods through semidefinite programming performance estimation.
+        SIAM Journal on Optimization, 30(3), 2053-2082.
+
+        [2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods. Mathematical Programming.
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
@@ -55,7 +61,7 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     :return: (tuple) worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_InexactGrad(1, 0.1, 0.1, 2)
+        >>> pepit_tau, theoretical_tau = wc_InexactGrad(L=1, mu=0.1, epsilon=0.1, n=2, Verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
