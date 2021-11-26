@@ -8,29 +8,70 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     """
     Consider the monotone inclusion problem
-        Find x, 0 \in Ax + Bx + Cx,
-    where A is maximally monotone, B is cocoercive and C is the gradient of a smooth strongly convex function.
-    We denote JA ad JB the respective resolvents of A and B.
 
-    This code computes a worst-case guarantee for the Three Operator Splitting (TOS). One iteration of the algorithm
-    starting from a point w is as follows:
-        x = JB(w)
-        y = JA( 2* x - w - Cx)
-        z = w - theta * (x - y)
-    and z is chosen as the next iterate.
+    .. math:: \mathrm{Find}\\, x:\\, 0\\in Ax + Bx + Cx,
 
-    Given two initial points w_0 and w_1, this code computes the smallest possible tau(n,L,mu) such that the guarantee
-        || (w0 - theta * (x0 - y0)) - (w1 - theta * (x1 - y1))||^2 <= tau(n,L,mu) * || w_0 - w_1||^2,
-    is valid, where z_0 and z_1 are obtained after one iteration of TOS from respectively w_0 and w_1.
+    where :math:`A` is maximally monotone, :math:`B` is :math:`\\beta`-cocoercive and C is the gradient of some
+    :math:`L`-smooth :math:`\\mu`-strongly convex function. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}`
+    the resolvent of respectively :math:`A` and :math:`B`, with step size :math:`\\alpha`.
 
-    :param L: (float) the Lipschitz parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param beta: (float) the cocoercive parameter.
-    :param alpha: (float) the step size in the resolvent.
-    :param theta: (float) algorithm parameter.
+    This code computes a worst-case guarantee for the **three operator splitting** (TOS). That is, given two initial points
+    :math:`w^{(0)}` and :math:`w^{(1)}`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
+    (a.k.a. "contraction factor") such that the guarantee
+
+    .. math:: || w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta)  || w^{(0)}_{k} - w^{(1)}_{k} ||^2,
+
+    is valid, where :math:`w^{(0)}_{k+1}` and :math:`w^{(1)}_{k+1}` are obtained after one iteration of TOS from
+    respectively :math:`w^{(0)}_{k}` and :math:`w^{(1)}_{k}`.
+
+    In short, for given values of :math:`L`, :math:`\\mu`, :math:`\\beta`, :math:`\\alpha` and :math:`\\theta`, the contraction
+    factor :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)` is computed as the worst-case value of
+    :math:`|| w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2` when :math:`|| w^{(0)}_{k} - w^{(1)}_{k} ||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    One iteration of the algorithm (see [1]) is described by
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_{k+1} &&= J_{\\alpha B} (w_k)\\\\
+                y_{k+1} &&= J_{\\alpha A} (2x_{k+1}-w_k-C x_{k+1})\\\\
+                w_{k+1} &&= w_k - \\theta (x_{k+1}-y_{k+1}).
+            \\end{eqnarray}
+
+    **References**: The TOS was proposed in [1], the analysis of such operator splitting methods using PEPs was proposed in [2].
+
+    [1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
+    Set-valued and variational analysis 25.4: 829-858.
+
+    [2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+
+
+    :param L: (float) smoothness constant of C.
+    :param mu: (float) strong convexity of C.
+    :param beta: (float) cocoercivity of B.
+    :param alpha: (float) step size (in the resolvants).
+    :param theta: (float) overrelaxation parameter.
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> wc, _ = wc_tos(L=1, mu=.1, beta=1, alpha=1.3, theta=.9, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
+                 function 1 : 2 constraint(s) added
+                 function 2 : 2 constraint(s) added
+                 function 3 : 2 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
+        *** Example file: worst-case contraction factor of the Three Operator Splitting ***
+                PEP-it guarantee:	 || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.779689 || w_(k)^0 - w_(k)^1 ||^2
     """
 
     # Instantiate PEP
@@ -69,8 +110,8 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Three Operator Splitting ***')
-        print('\tPEP-it guarantee:\t || (w0 - theta * (x0 - y0)) - (w1 - theta * (x1 - y1))||^2 <= {:.6} ||w_1 - w_0||^2'.format(pepit_tau))
+        print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
+        print('\tPEP-it guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
