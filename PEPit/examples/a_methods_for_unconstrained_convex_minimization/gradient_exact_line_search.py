@@ -11,38 +11,36 @@ def wc_els(L, mu, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for the **gradient method with exact linesearch (ELS)**.
+    This code computes a worst-case guarantee for the **gradient descent** (GD) with **exact linesearch** (ELS).
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_\star)
 
-    is valid, where :math:`x_n` is the output of the **gradient method with exact linesearch**,
+    is valid, where :math:`x_n` is the output of the GD with ELS,
     and where :math:`x_\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`f(x_n)-f_\star` when :math:`f(x_0) - f_\star \\leqslant 1`.
 
     **Algorithm**:
+    GD with ELS can be written as
 
-        .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t)
+        .. math:: x_{k+1} = x_k - \\gamma_k \\nabla f(x_k)
 
-        with
-
-        .. math:: \\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_t) \\right)
+        with :math:`\\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_k) \\right)`.
 
     **Theoretical guarantee**:
 
-        The **tight** guarantee obtained in [1, Theorem 1.2] is
+        The tight worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
 
-        .. math:: \\tau(n, L, \\mu) = \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n}.
+        .. math:: f(x_n) - f_\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\star)
 
     **References**:
 
         The detailed approach (based on convex relaxations) is available in
 
-        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-        Optimization Letters (2017).
+        [1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
+        line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
 
     Args:
         L (float): the smoothness parameter.
