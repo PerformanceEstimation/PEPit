@@ -36,7 +36,7 @@ def wc_CG(L, n, verbose=True):
 
         The **tight** guarantee obtained in [1] is
 
-        .. math:: \\tau(n, L) = \\frac{L}{2 \\theta_n^2}.
+        .. math:: f(x_n) - f_\star \\leqslant\\frac{L}{2 \\theta_n^2}\\|x_0-x_\star\\|^2.
 
         where
 
@@ -51,7 +51,9 @@ def wc_CG(L, n, verbose=True):
 
     References:
 
-        The detailed approach (based on convex relaxations) is available in [1] Y. Drori and A. Taylor (2020).
+        The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
+
+        [1] Y. Drori and A. Taylor (2020).
         Efficient first-order methods for convex minimization: a constructive approach.
         Mathematical Programming 184 (1), 183-220.
 

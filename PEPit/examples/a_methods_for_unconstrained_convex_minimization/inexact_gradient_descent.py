@@ -32,16 +32,19 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
         and
 
-        .. math:: \\gamma = \\frac{2}{L(1 + \\varepsilon) + \\mu(1 - \\varepsilon)}
+        .. math:: \\gamma = \\frac{2}{L_{\\varepsilon} + \\mu_{\\varepsilon}}
+
+        where :math:`L_{\\varepsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`.
 
     **Theoretical guarantee**:
+
         The **tight** guarantee obtained in [1, Theorem 5.1] is
 
-        .. math:: \\tau(n, L, \\mu, \\epsilon) = \\left(\\frac{L(1 + \\varepsilon)-\\mu(1 - \\varepsilon)}{L(1 + \\varepsilon)+\\mu(1 - \\varepsilon)}\\right)^{2n}.
+        .. math:: \\tau(n, L, \\mu, \\varepsilon) = \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}.
 
     References:
-        TODO verify this
-        The detailed approach (based on convex relaxations) is available in
+        The detailed approach (based on convex relaxations) is available in [1].
+
         [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
         "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
         Optimization Letters (2017).
@@ -66,10 +69,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
-        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -2.52e-06 < 0).
-        Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
-        In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
-        *** Example file: worst-case performance of inexact gradient ***
+        *** Example file: worst-case performance of inexact gradient method in distance in function values ***
             PEP-it guarantee:		 f(x_n)-f_* <= 0.518866 (f(x_0)-f_*)
             Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
 
@@ -114,7 +114,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of inexact gradient ***')
+        print('*** Example file: worst-case performance of inexact gradient method in distance in function values ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 

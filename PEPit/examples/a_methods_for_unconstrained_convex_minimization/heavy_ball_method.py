@@ -39,13 +39,15 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
 
         The **upper** guarantee obtained in [2, Theorem 4] is
 
-        .. math:: \\tau(n, L, \\mu) = (1 - \\alpha \\mu)^{n + 1}
+        .. math:: f(x_n) - f_\star \\leqslant (1 - \\alpha \\mu)^{n + 1} (f(x_0) - f_\star)
 
     References:
 
         This methods was first introduce in [1], and convergence upper bound was proved in [2].
+
         [1] B.T. Polyak.
         "Some methods of speeding up the convergence of iteration methods".
+
         [2]  Euhanna Ghadimi, Hamid Reza Feyzmahdavian, Mikael. Johansson.
         " Global convergence of the Heavy-ball method for convex optimization".
 
@@ -53,11 +55,11 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         alpha (float): parameter of the scheme.
-        beta (float): parameter of the scheme such that 0<beta<1 and 0<alpha<2*(1+beta)
+        beta (float): parameter of the scheme such that :math:`0<\\beta<1` and :math:`0<\\alpha<2(1+\\beta)`.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
-    Returns
+    Returns:
         tuple: worst_case value, theoretical value
 
     Example:
@@ -74,7 +76,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.753492450790045
-        *** Example file: worst-case performance of the fast gradient method ***
+        *** Example file: worst-case performance of the Heavy-Ball method ***
             PEP-it guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
             Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) -  f(x_*))
 
@@ -118,7 +120,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the fast gradient method ***')
+        print('*** Example file: worst-case performance of the Heavy-Ball method ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(

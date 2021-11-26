@@ -8,9 +8,9 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: f_\star = \\min_x {F(x) = \\frac{1}{n} (f_1(x) + ... + f_n(x))},
+    .. math:: f_\star = \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
 
-    where :math:`f_1, ..., f_n` are L-smooth and mu-strongly convex.
+    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     In addition, we assume a bounded variance at the optimal point:
 
@@ -31,9 +31,10 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
 
     .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x^*)\\|^2 \\leqslant v^2.
 
-    Here, where x_1 is the output of one step of **stochastic gradient descent (SGD)**.
+    Here, where :math:`x_1` is the output of one step of **stochastic gradient descent (SGD)**.
 
     **Algorithm**:
+
         .. math:: x_{t+1} = x_t - \gamma f'_{i_t}(x_t)
 
         with
@@ -41,15 +42,17 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
         .. math:: i_t \\sim \\mathcal{U}\\left([|1, n|]\\right)
 
     **Theoretical guarantee**:
-        TODO
-        The **?** guarantee obtained in ?? is
 
-        .. math:: \\tau(L, \\mu, \\gamma, v, R, n) = \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2}.
+        TODO
+
+        The **tight** guarantee obtained in ?? is
+
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x^*\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2}.
 
     Notes:
 
-        We will observe it does not depend on the number n of functions for this particular setting,
-        hence the guarantees are also valid for expectation minimization settings (i.e., when n goes to infinity).
+        We will observe it does not depend on the number `math:`n` of functions for this particular setting,
+        hence the guarantees are also valid for expectation minimization settings (i.e., when :math:`n` goes to infinity).
 
     References:
 
