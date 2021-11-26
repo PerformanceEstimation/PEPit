@@ -61,7 +61,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
 
     Example:
         >>> L = 1
-        >>> wc, theory = wc_iipp(L=L, mu=1, c=1, lam=1/L, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_iipp(L=L, mu=1, c=1, lam=1/L, n=5, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 22x22
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
