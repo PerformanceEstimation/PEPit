@@ -8,11 +8,12 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-        .. math:: \min_x { F(x) = f_1(x) + f_2(x) }
+        .. math:: \min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
+
     where :math:`f_1(x)` is :math:`L`-smooth, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS) method**.
+    This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS)** method.
     That is, it computes the smallest possible :math:`\\tau(n,L,\\alpha,\\theta)` such that the guarantee
 
         .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\alpha,\\theta) ||x_0 - x_\star||^2.
@@ -28,15 +29,15 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
 
     Our notations for the DRS algorithm are as follows
 
-        .. math:: x_k     = prox_{\\alpha f_2}(w_k)
-        .. math:: y_k     = prox_{\\alpha f_1}(2x_k - w_k)
+        .. math:: x_k     = \\mathrm{prox}_{\\alpha f_2}(w_k)
+        .. math:: y_k     = \\mathrm{prox}_{\\alpha f_1}(2x_k - w_k)
         .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
 
     **Theoretical guarantee**:
 
     TODO : find reference for theoretical upper bound?
 
-        .. math:: \\tau(n, L, \\alpha, \\theta) = \\frac{1}{n}
+        .. math:: F(y_n) - F(x_\star)\\leqslant  \\frac{1}{n} ||x_0 - x_\star||^2
 
     **References**:
 

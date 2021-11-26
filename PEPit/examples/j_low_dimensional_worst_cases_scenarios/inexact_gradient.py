@@ -6,27 +6,45 @@ from PEPit.primitive_steps.inexact_gradient import inexact_gradient
 def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
-        f_\star = min_x f(x),
-    where f is L-smooth and mu-strongly convex
-    .
-    This code computes a worst-case guarantee for an inexact gradient method.
-    That is, it computes the smallest possible tau(n,L,mu,epsilon) such that the guarantee
-        f(x_n) - f_\star <= tau(n,L,mu,epsilon) * ( f(x_0) - f_\star )
-    is valid, where x_n is the output of the gradient descent with an inexact descent direction,
-    and where x_\star is the minimizer of f.
+
+        .. math:: f_* = \min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
+
+    This code computes a worst-case guarantee for an **inexact gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\epsilon)` such that the guarantee
+
+        .. math:: f(x_n) - f_* \\leqslant \\tau(n,L,\\mu,\\epsilon) ( f(x_0) - f_* )
+    is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction,
+    and where :math:`x_*` is the minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with 0 <= epsilon <= 1 )
-        || f'(x_i) - d || <= epsilon * || f'(x_i) ||,
-    where f'(x_i) is the true gradient, and d is the approximate descent direction that is used.
+    described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1` )
 
-    The detailed approach (based on convex relaxations) is available in
-    [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-    "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-    Optimization Letters (2017).
+        .. math:: || \\nabla f(x_i) - d_i || \\leqslant \\epsilon || \\nabla f(x_i) ||,
 
-    The tight guarantee obtained in [1, Theorem 5.1] is tau(n,L,mu,epsilon) = ((L_eps-mu_eps)/(L_eps+mu_eps))**(2*n),
-    with L_eps = (1+epsilon) * L and mu_eps = (1-epsilon) * mu
+    where :math:`\\nabla f(x_i)` is the true gradient, and :math:`d_i` is the approximate descent direction that is used.
+
+    **Algorithm**:
+
+        .. math:: x_{i+1} = x_i - \\gamma_{\\epsilon}d_i
+        .. math:: \\gamma_{\\epsilon} = \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}}
+
+    **Theoretical guarantee**:
+
+    The **tight** guarantee obtained in [1, Theorem 5.1] is
+
+        .. math:: f(x_n) - f_* \\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}(f(x_0) - f_* ),
+
+    with :math:`L_{\\epsilon} = (1 + \\epsilon)L` and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
+
+    **References**:
+
+        The detailed approach (based on convex relaxations) is available in
+        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
+        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
+        Optimization Letters (2017).
+
 
     :param L: (float) the smoothness parameter.
     :param mu: (float) the strong convexity parameter.
@@ -35,6 +53,24 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_InexactGrad(1, 0.1, 0.1, 2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 15 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188606799005029
+        (PEP-it) Postprocessing: applying trace heuristic. Currently 5 eigenvalue(s) > 1e-05 before resolve.
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); objective value: 0.5188668411169357
+        (PEP-it) Postprocessing: 4 eigenvalue(s) > 1e-05 after trace heuristic
+        *** Example file: worst-case performance of inexact gradient ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.518867 (f(x_0)-f_*)
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
     """
 
     # Instantiate PEP

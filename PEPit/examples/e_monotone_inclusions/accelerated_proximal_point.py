@@ -9,9 +9,9 @@ def wc_ppm(alpha, n, verbose=True):
 
         .. math:: \\text{Find} \ x, 0 \in Ax,
 
-    where :math:`A` is maximally monotone. we denote :math:`J_A` the resolvents of :math:`A`.
+    where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 
-    This code computes a worst-case guarantee for the accelerated proximal point method, that is the smallest
+    This code computes a worst-case guarantee for the **accelerated proximal point** method, that is the smallest
     possible :math:`\\tau(n)` such that the guarantee
 
         .. math:: ||x_n - y_n||^2 \\leqslant \\tau(n) || x_0 - x_\star||^2,
@@ -20,7 +20,7 @@ def wc_ppm(alpha, n, verbose=True):
 
     **Algorithm**:
 
-        .. math:: x_{i+1} = (I + \\alpha A)^{-1}(y_i) = J_{\\alpha A}(y_i)
+        .. math:: x_{i+1} = J_{\\alpha A}(y_i)
 
         .. math y_{i+1} = x_{i+1} + \\frac{i}{i+2}(x_{i+1} - x_{i}) - \\frac{i}{i+1}(x_i - y_{i-1})
 
@@ -28,7 +28,7 @@ def wc_ppm(alpha, n, verbose=True):
 
     Theoretical rates can be found in the following paper (section 4, Theorem 4.1)
 
-        .. math:: \\tau(n) = \\frac{1}{n^2}
+        .. math:: ||x_n - y_n||^2 \\leqslant  \\frac{1}{n^2}  || x_0 - x_\star||^2
 
     **Reference**:
 

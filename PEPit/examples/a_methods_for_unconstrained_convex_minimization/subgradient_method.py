@@ -10,14 +10,14 @@ def wc_subgd(M, N, gamma, verbose=True):
 
     .. math:: f_\star = \\min_x f(x),
 
-    where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a non-smooth minimization problem.
+    where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a (possibly non-smooth) minimization problem.
 
-    This code computes a worst-case guarantee for the **subgradient method**. That is, it computes
+    This code computes a worst-case guarantee for the **subgradient** method. That is, it computes
     the smallest possible :math:`\\tau(n, M)` such that the guarantee
 
     .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_\star \\leqslant \\tau(n, M)  ||x_0 - x_\star||^2
 
-    is valid, where :math:`x_i` is the output of the **subgradient method**,
+    is valid, where :math:`x_i` is the output of the **subgradient** method,
     and where :math:`x_\star` is the minimizer of :math:`f`.
 
     We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_\star)` when :math:`x_i` is
@@ -34,7 +34,7 @@ def wc_subgd(M, N, gamma, verbose=True):
     TODO : find a reference for theoretical guarantee, that is tight.
     The **tight** bound is
 
-        .. math:: \\tau(n, M) = \\frac{M}{\\sqrt{N+1}}
+        .. math:: \\min_i F(x_i)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{N+1}}||x_0-x_\star||^2
 
     Args:
         M (float): the Lipschitz parameter.

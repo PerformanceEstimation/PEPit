@@ -13,25 +13,26 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
     where :math:`f` is closed convex and proper. Proximal operator is assumed to be available.
 
-    This code computes a worst-case guarantee for an **Inexact Proximal Point Method**,
+    This code computes a worst-case guarantee for an **Inexact Proximal Point** method,
     where :math:`x_\star = \\arg\\min_x (f(x))`.
 
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
         .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\star||^2
 
-    is valid, where :math:`z_n` is the output os the operator, and :math:`z_\star` a fixed point of this operator.
+    is valid, where :math:`z_n` is the output of the operator, and :math:`z_\star` a fixed point of this operator.
 
     **Algorithm**:
 
         .. math:: x_{n+1} = x_n - \\gamma (f'(x_{n+1} - e)
+
         .. math:: ||e||^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
 
     **Theoretical guarantee**:
 
     The theoretical **upper** bound is obtained in [1, Section 3.5.1],
 
-        .. math:: \\tau(n, \\gamma, \\sigma) = \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}||x_0 - x_\star||^2
 
     **References**:
 
@@ -57,7 +58,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.03348574648049885
-        *** Example file: worst-case performance of the Inexact Proximal Point Method in distance ***
+        *** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***
             PEP-it guarantee:	  f(x_n) - f(x_*) <= 0.0334857 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.0350008 ||x_0 - x_*||^2
     """
@@ -95,7 +96,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Inexact Proximal Point Method in distance ***')
+        print('*** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***')
         print('\tPEP-it guarantee:\t  f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 

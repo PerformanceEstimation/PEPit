@@ -37,7 +37,7 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
     The **tight** guarantee obtained in [1, Theorem 5.1] is
 
-        .. math:: \\tau(n,L,\\mu,\\epsilon) = \\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}^{2n},
+        .. math:: f(x_n) - f_\star\\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}( f(x_0) - f_\star ),
 
     with :math:`L_{\\epsilon} = (1 + \\epsilon) L` and :math:`\\mu_{\\epsilon} = (1 - \\epsilon) \\mu`
 

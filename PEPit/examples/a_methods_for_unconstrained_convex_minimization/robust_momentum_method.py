@@ -20,15 +20,11 @@ def wc_rmm(mu, L, lam, verbose=True):
     is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
-        .. math:: \\kappa = \\frac{\\mu}{L}
-
-        .. math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
-
-        .. math:: l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}
-
-        .. math:: q_n = (L - \\mu) (f(x_n) - f(x_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2
+        .. math:: q_n = (L - \\mu) (f(x_n) - f_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2
 
         .. math:: v(x_n) = l||z_n - x_\star||^2 + q_n
+
+     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) (1 - \\sqrt{\\frac{1}{\\kappa}})`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
 
     **Algorithm**:
 
@@ -36,17 +32,13 @@ def wc_rmm(mu, L, lam, verbose=True):
 
         .. math:: y_{n} + \\gamma (x_n - x_{n-1})
 
-    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`,
-
-     :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
+    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
     **Theoretical guarantee**:
 
-    The **tight** bound is obtained in [1, Theorem 1],
+    The **Lyapunov is proven to be decreasing** in [1, Theorem 1],
     
-        .. math:: \\tau(n, \\mu, L) = 1
-
-        .. math:: \\rho = lam (1 - \\frac{1}{\\kappa}) + (1 - lam) (1 - \\sqrt{\\frac{1}{\\kappa}})
+        .. math:: v(x_{n+1}) \\leqslant v(x_n)\\tau(n, \\mu, L) = v(x_n)
     
     **References**:
 

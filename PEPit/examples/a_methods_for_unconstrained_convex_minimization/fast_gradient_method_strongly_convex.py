@@ -12,7 +12,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for the **fast gradient** method, a.k.a. **accelerated gradient** method.
+    This code computes a worst-case guarantee for the **fast gradient** method, a.k.a **accelerated gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) \\left(f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2\\right),
@@ -35,15 +35,14 @@ def wc_fgm(mu, L, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        TODO isn't there any tight guarantee???
-
         The **upper** guarantee obtained in [1,  Corollary 4.15] is
 
-        .. math:: \\tau(n, L, \\mu) = \\left(1 - \\frac{\\sqrt{\\mu}}{\\sqrt{L}}\\right)^n
+        .. math:: f(x_n)-f_\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n (f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2)
 
     References:
 
         Theoretical rates can be found in the following paper [1,  Corollary 4.15]
+
         [1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor,
         https://arxiv.org/pdf/2101.09545.pdf
 
@@ -66,7 +65,7 @@ def wc_fgm(mu, L, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.34758587217463155
-        *** Example file: worst-case performance of the fast gradient method ***
+        *** Example file: worst-case performance of the accelerated gradient method ***
             PEP-it guarantee:		 f(x_n)-f_*  <= 0.347586 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
             Theoretical guarantee:	 f(x_n)-f_*  <= 0.467544 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
 
@@ -110,7 +109,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the fast gradient method ***')
+        print('*** Example file: worst-case performance of the accelerated gradient method ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)'.format(

@@ -26,7 +26,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     **Algorithm**:
 
         .. math:: x_{k+1} = z_k - \\gamma (v_{k+1} - e), \ v_{k+1} \\in \\partial f(x_{k+1})
-        .. math:: y_{k+1} = prox_{\\gamma g}(x_{k+1} - \\gamma v_{k+1})
+        .. math:: y_{k+1} = \\mathrm{prox}_{\\gamma g}(x_{k+1} - \\gamma v_{k+1})
         .. math:: ||e||^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}(y_{k+1} - z_k + \\gamma v_{k+1})^2
         .. math:: z_{k+1} = z_{k} + y_{k+1} - x_{k+1}
 
@@ -34,8 +34,8 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
         The theoretical **tight** bound is obtained in [2, Theorem 5.1],
 
-        .. math:: \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
-                             \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n}
+        .. math:: |z_{n+1} - z_\star||^2  \\leqslant \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
+                             \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n} ||z_{n} - z_\star||^2
 
     **References**:
 

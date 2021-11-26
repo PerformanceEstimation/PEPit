@@ -13,7 +13,7 @@ def wc_km(n, verbose=True):
 
     where :math:'A' is a non-expansive operator, that is a :math:`L`-Lipschitz operator with :math:`L=1`.
 
-    This code computes a worst-case guarantee for the **Krasnolselskii-Mann**. That is, it computes
+    This code computes a worst-case guarantee for the **Krasnolselskii-Mann** method. That is, it computes
     the smallest possible :math:`\tau(n)` such that the guarantee
 
         .. math:: \\frac{1}{4}|| x_n - Ax_n||^2 \\leqslant \\tau(n) ||x_0 - x_\star||^2
@@ -28,15 +28,11 @@ def wc_km(n, verbose=True):
 
         The theoretical **upper bound** is given in [1, Theorem 4.9]
 
-        .. math:: t_n = 1 - \\frac{1}{n+1}
+        Let us define :math:`t_n = 1 - \\frac{1}{n+1}`,
 
-        If :math:`\\frac{1}{2} \\leqslant t_n \\leqslant \\frac{1}{2}(1+\\sqrt{\\frac{n}{n+1}})`,
+            .. math:: \\tau(n) = \\frac{1}{n+1}\\left(\\frac{n}{n+1}\\right)^n \\frac{1}{4 t_n (1 - t_n)} , \ \\text{if} \\frac{1}{2} \\leqslant t_n \\leqslant \\frac{1}{2}(1+\\sqrt{\\frac{n}{n+1}})
 
-            .. math:: \\tau(n) = \\frac{1}{n+1}\\frac{n}{n+1}^n \\frac{1}{4 t_n (1 - t_n)}
-
-        Else :
-
-            .. math:: \\tau(n) = (2t_n - 1)^{2n}
+            .. math:: \\tau(n) = (2t_n - 1)^{2n}, \ \\text{otherwise}.
 
     **Reference**:
 
