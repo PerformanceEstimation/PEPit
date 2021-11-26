@@ -10,31 +10,48 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     """
     Consider the monotone inclusion problem
 
-    .. math:: \\mathrm{Find~} x ~ | ~ 0 \\in Ax + Bx,
+    .. math:: \mathrm{Find}\\, x:\\, 0\\in Ax + Bx,
 
-    where :math:`A` is :math:`L`-Lipschitz and monotone and :math:`B` is (maximally) :math:`\\mu`-strongly monotone.
-    We denote JA and JB the respective resolvents of A and B.
+    where :math:`A` is :math:`L`-Lipschitz and maximally monotone and :math:`B` is (maximally) :math:`\\mu`-strongly
+    monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively A and B, with
+    step sizes :math:`\\alpha`.
 
-    This code computes a worst-case guarantee for the Douglas Rachford Splitting (DRS). One iteration of the algorithm
-    starting from a point w is as follows:
-        x = JB(w)
-        y = JA(2* x - w)
-        z = w - theta * (x - y)
+    This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
+    :math:`w^{(0)}_k` and :math:`w^{(1)}_k`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
+    (a.k.a. "contraction factor") such that the guarantee
 
-    Given two initial points w_0 and w_1, this code computes the smallest possible tau(n,L) such that the guarantee
-        || z_0 - z_1||^2 <= tau(n,L) * || w_0 - w_1||^2,
-    is valid, where z_0 and z_1 are obtained after one iteration of DRS from respectively w_0 and w_1.
+    .. math:: || w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2 \\leqslant \\tau(L, \\mu, \\alpha, \\theta)  || w^{(0)}_{k} - w^{(1)}_{k} ||^2,
 
-    Theoretical rates can be found in the following paper (section 4, Theorem 4.1)
-    [1] Walaa M. Moursi, and Lieven Vandenberghe. "Douglas–Rachford
-         Splitting for the Sum of a Lipschitz Continuous and a Strongly
-         Monotone Operator." (2019)
+    is valid, where :math:`w^{(0)}_{k+1}` and :math:`w^{(1)}_{k+1}` are obtained after one iteration of DRS from
+    respectively :math:`w^{(0)}_{k}` and :math:`w^{(1)}_{k}`.
 
-    The methodology using PEPs is presented in
-    [2] Ernest K. Ryu, Adrien B. Taylor, C. Bergeling, and P. Giselsson.
-        "Operator Splitting Performance Estimation: Tight contraction
-        factors and optimal parameter selection." (2018).
-    since the results of [2] tightened that of [1], we compare with [2, Theorem 3] below.
+    In short, for given values of :math:`L`, :math:`\\mu`, :math:`\\alpha` and :math:`\\theta`, the contraction
+    factor :math:`\\tau(L, \\mu, \\alpha, \\theta)` is computed as the worst-case value of
+    :math:`|| w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2` when :math:`|| w^{(0)}_{k} - w^{(1)}_{k} ||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    One iteration of the Douglas-Rachford splitting is described by
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_{k+1} &&= J_{\\alpha B} (w_k)\\\\
+                y_{k+1} &&= J_{\\alpha A} (2x_{k+1}-w_k)\\\\
+                w_{k+1} &&= w_k - \\theta (x_{k+1}-y_{k+1}).
+            \\end{eqnarray}
+
+    **References**:
+    Theoretical rates can be found in the following paper [1, section 4, Theorem 4.1].  Since the results of [2]
+    tighten that of [1], we compare with [2, Theorem 3] below. The detailed PEP methodology for studying operator
+    splitting is provided in [2].
+
+    [1] W. Moursi, L. Vandenberghe (2019). Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and
+    a Strongly Monotone Operator. Journal of Optimization Theory and Applications 183, 179–198.
+
+    [2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+
 
     :param L: (float) the Lipschitz parameter.
     :param mu: (float) the strongly monotone parameter.
@@ -43,6 +60,21 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     :param verbose: (bool) if True, print conclusion
 
     :return: (tuple) worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau  = wc_drs(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 4 constraint(s) added
+                 function 2 : 2 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9287707078361858
+        *** Example file: worst-case performance of the Douglas Rachford Splitting***
+            PEP-it guarantee:       || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.928771 || w_(k)^0 - w_(k)^1 ||^2
+            Theoretical guarantee:  || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.928771 || w_(k)^0 - w_(k)^1 ||^2
     """
 
     # Instantiate PEP
@@ -75,7 +107,7 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
 
-    # Compute theoretical guarantee (for comparison)
+    # Compute theoretical guarantee (for comparison), see [2, Theorem 3]
     mu = alpha * mu
     L = alpha * L
     c = np.sqrt(((2 * (theta - 1) * mu + theta - 2) ** 2 + L ** 2 * (theta - 2 * (mu + 1)) ** 2) / (L ** 2 + 1))
@@ -96,8 +128,8 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEP-it guarantee:\t ||z_1 - z_0||^2 <= {:.6} ||w_1 - w_0||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t ||z_1 - z_0||^2 <= {:.6} ||w_1 - w_0||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

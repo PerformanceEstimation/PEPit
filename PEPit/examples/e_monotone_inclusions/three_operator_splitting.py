@@ -16,7 +16,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     the resolvent of respectively :math:`A` and :math:`B`, with step size :math:`\\alpha`.
 
     This code computes a worst-case guarantee for the **three operator splitting** (TOS). That is, given two initial points
-    :math:`w^{(0)}` and :math:`w^{(1)}`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
+    :math:`w^{(0)}_k` and :math:`w^{(1)}_k`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
     .. math:: || w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta)  || w^{(0)}_{k} - w^{(1)}_{k} ||^2,
@@ -59,7 +59,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     :return: (tuple) worst_case value, theoretical value
 
     Example:
-        >>> wc, _ = wc_tos(L=1, mu=.1, beta=1, alpha=1.3, theta=.9, verbose=True)
+        >>> pepit_tau, _  = wc_tos(L=1, mu=.1, beta=1, alpha=1.3, theta=.9, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)

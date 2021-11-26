@@ -54,7 +54,7 @@ def wc_saga(L, mu, n, verbose=True):
     :return: (tuple) worst_case value, theoretical value
 
     Example:
-        >>> wc, theory = wc_saga(L=1, mu=.1, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 27x27
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
