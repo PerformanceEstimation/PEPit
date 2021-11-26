@@ -75,8 +75,8 @@ def wc_ogm(L, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.07675182659831646
         *** Example file: worst-case performance of optimized gradient method ***
-	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
-	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||**2
+	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||^2
+	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||^2
     """
 
     # Instantiate PEP
@@ -122,9 +122,9 @@ def wc_ogm(L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||**2'.format(
+        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
             pepit_tau))
-        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||**2'.format(
+        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
             theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
