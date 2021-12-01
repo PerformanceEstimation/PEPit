@@ -98,10 +98,10 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     _, F0 = func.oracle(x0)
 
     # Compute n steps of the NoLips starting from x0
-    xx = [x0 for i in range(n + 1)]
+    xx = [x0 for _ in range(n + 1)]
     gfx = gf0
-    ghx = [gh0 for i in range(n + 1)]
-    hx = [h0 for i in range(n + 1)]
+    ghx = [gh0 for _ in range(n + 1)]
+    hx = [h0 for _ in range(n + 1)]
     for i in range(n):
         xx[i + 1], _, _ = bregman_gradient_step(gfx, ghx[i], func2 + h, gamma)
         gfx, _ = func1.oracle(xx[i + 1])

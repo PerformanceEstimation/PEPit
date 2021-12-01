@@ -102,8 +102,6 @@ def wc_no_lips2(L, gamma, n, verbose=True):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    Fs = func.value(xs)
-    gfs, fs = func1.oracle(xs)
     ghs, hs = h.oracle(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0

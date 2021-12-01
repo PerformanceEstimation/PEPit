@@ -90,7 +90,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     # Declare two convex functions and a convex indicator function
     d = problem.declare_function(ConvexFunction,
-                                 param={}, is_differentiable=True)
+                                 param={})
     func1 = problem.declare_function(ConvexFunction,
                                      param={}, is_differentiable=True)
     h = (d + func1) / L
@@ -101,7 +101,6 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    Fs = func.value(xs)
     ghs, hs = h.oracle(xs)
     gfs, fs = func1.oracle(xs)
 

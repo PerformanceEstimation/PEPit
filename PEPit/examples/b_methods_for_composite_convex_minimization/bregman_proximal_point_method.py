@@ -69,11 +69,11 @@ def wc_bpp(gamma, n, verbose=True):
 
     # Declare three convex functions
     func1 = problem.declare_function(ConvexFunction,
-                                     param={}, is_differentiable=True)
+                                     param={})
     func2 = problem.declare_function(ConvexFunction,
-                                     param={}, is_differentiable=True)
+                                     param={})
     h = problem.declare_function(ConvexFunction,
-                                 param={}, is_differentiable=True)
+                                 param={})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -92,9 +92,7 @@ def wc_bpp(gamma, n, verbose=True):
     # Compute n steps of the Bregman Proximal Point method starting from x0
     gh = gh0
     for i in range(n):
-        x, _, _, _, _ = bregman_proximal_step(gh, h, func, gamma)
-        _, ff = func.oracle(x)
-        gh, _ = h.oracle(x)
+        x, gh, hx, gx, ff = bregman_proximal_step(gh, h, func, gamma)
 
     # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric(ff - fs)

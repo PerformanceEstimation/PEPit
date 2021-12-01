@@ -105,7 +105,6 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     x = x0
     z = x0
     g = g10
-    f = f10
     gh = gh0
     ck = c
     for i in range(n):
