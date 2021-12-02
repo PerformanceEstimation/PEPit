@@ -21,8 +21,9 @@ def wc_psaga(L, mu, n, verbose=True):
     decreasing along the trajectory:
         V1(x_1) <= tau(n,L,mu) V0(x_0),
     with Vk(x1) = c/n*sum(||g_i^k - g_i^*||^2 + ||x^k - x_\star||^2,
-    with gamma = sqrt((n-1)^2 + 4*n*L/mu)/(2*L*n), and c = 1/(mu*L).
+    with gamma = sqrt((n-1)^2 + 4*n*L/mu)/(2*L*n) - (1-1/n)/2L, and c = 1/(mu*L).
 
+    A theoretical upper bound is given in
     [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite
         Sums." (2014).
 
@@ -101,7 +102,7 @@ def wc_psaga(L, mu, n, verbose=True):
 if __name__ == "__main__":
     n = 10
     L = 1
-    mu = 0.1
+    mu = 0.01
 
     pepit_tau, theoretical_tau = wc_psaga(L=L,
                                           mu=mu,

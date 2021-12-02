@@ -78,9 +78,9 @@ def wc_saga(L, mu, n, verbose=True):
 
     # Declare a convex function and n smooth strongly convex ones
     h = problem.declare_function(ConvexFunction,
-                                 param={}, is_differentiable=True)
+                                 param={})
     fn = [problem.declare_function(SmoothStronglyConvexFunction,
-                                   param={'L': L, 'mu': mu}, is_differentiable=True) for _ in range(n)]
+                                   param={'L': L, 'mu': mu}) for _ in range(n)]
 
     # Define the objective as a linear combination of the former
     func = h + np.mean(fn)
@@ -95,11 +95,14 @@ def wc_saga(L, mu, n, verbose=True):
     # Compute the initial value of the Lyapunov function, for a given parameter
     gamma = 1 / 2 / (mu * n + L)
     c = 1 / 2 / gamma / (1 - mu * gamma) / n
+    g, f = [x0 for _ in range(n)], [x0 for _ in range(n)]
+    g0, f0 = [x0 for _ in range(n)], [x0 for _ in range(n)]
     init_lyapunov = c * (xs - x0) ** 2
+
     for i in range(n):
-        gi, fi = fn[i].oracle(phi[i])
+        g[i], f[i] = fn[i].oracle(phi[i])
         gis, fis = fn[i].oracle(xs)
-        init_lyapunov = init_lyapunov + 1 / n * (fi - fis - gis * (phi[i] - xs))
+        init_lyapunov = init_lyapunov + 1 / n * (f[i] - fis - gis * (phi[i] - xs))
 
     # Set the initial constraint as the Lyapunov bounded by 1
     problem.set_initial_condition(init_lyapunov <= 1)
@@ -108,18 +111,19 @@ def wc_saga(L, mu, n, verbose=True):
     # (so: expectation over n possible scenarios: one for each element fi in the function).
     final_lyapunov_avg = (xs - xs) ** 2
     for i in range(n):
-        w = x0 - gamma * (fn[i].gradient(x0) - fn[i].gradient(phi[i]))
+        g0[i], f0[i] = fn[i].oracle(x0)
+        w = x0 - gamma * (g0[i] - g[i])
         for j in range(n):
-            w = w - gamma/n * fn[j].gradient(phi[j])
+            w = w - gamma/n * g[j]
         x1, _, _ = proximal_step(w, h, gamma)
         final_lyapunov = c * (x1 - xs) ** 2
         for j in range(n):
             gis, fis = fn[j].oracle(xs)
             if i != j:
-                gi, fi = fn[j].oracle(phi[j])
+                gi, fi = g[j], f[j]
                 final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (phi[j] - xs))
             else:
-                gi, fi = fn[j].oracle(x0)
+                gi, fi = g0[i], f0[i]
                 final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (x0 - xs))
         final_lyapunov_avg = final_lyapunov_avg + final_lyapunov / n
 

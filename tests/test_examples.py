@@ -37,6 +37,7 @@ import PEPit.examples.c_methods_for_nonconvex_optimization.no_lips_2 as ncNL2
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SAGA as inSAGA
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_overparametrized as inSGD
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_strongly_convex as inSGDSC
+import PEPit.examples.d_stochastic_methods_for_convex_minimization.point_SAGA as inPSAGA
 import PEPit.examples.e_monotone_inclusions.accelerated_proximal_point as opAPP
 import PEPit.examples.e_monotone_inclusions.douglas_rachford_splitting as opDRS
 import PEPit.examples.e_monotone_inclusions.proximal_point_method as opPPM
@@ -292,6 +293,12 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = inSGD.wc_sgdo(L, mu, gamma, R, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_inpsaga(self):
+        L, mu, n = 1, 0.1, 10
+
+        wc, theory = inPSAGA.wc_psaga(L, mu, n, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
 
     def test_opapp(self):
         alpha, n = 2, 10
