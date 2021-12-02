@@ -10,9 +10,9 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     """
     Consider the constrainted composite convex minimization problem
 
-    .. math:: f_\star = \\min_x {F(x) = f_1(x) + f_2(x)},
+    .. math:: F_\star = \\min_x {F(x) = f_1(x) + f_2(x)},
 
-    where :math:`f_1` is :math:`L`-smooth relatively to :math:`h`,
+    where :math:`f_1` is convex and :math:`L`-smooth relatively to :math:`h`,
     :math:`h` being closed proper and convex,
     and where :math:`f_2` is a closed convex indicator function.
 
@@ -29,29 +29,28 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     :math:`F(x_n) - F_\star` when :math:`D_h(x0, x_\star) \\leqslant 1`.
 
     **Algorithm**:
-        TODO
-        .. math:: x_{t+1} =
+        This method is presented in [2, Algorithm 1]
 
-        with
-
-        .. math::
+        .. math:: x_{t+1} = \\arg\\min_{u \\in \\mathrm{Dom}(f_2)} \\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)
 
     **Theoretical guarantee**:
-        TODO
-        The **?** guarantee obtained in ?? is
+        The **tight** guarantee obtained in [2, Theorem 1, 2] is
 
-        .. math:: \\tau(n, L, \\mu) =
+        .. math:: \\tau(n, L, \\mu) = \\frac{1}{\\gamma n}
+
+        for any :math:`\\gamma \\leq \\frac{1}{L}`.
 
     References:
 
         The detailed approach is availaible in [1]. The formulation as a PEP, and the tightness are proven in [2].
-        [1] Heinz H. Bauschke, Jérôme Bolte, and Marc Teboulle. "A Descent Lemma
-        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited
-        and Applications." (2017)
 
-        [2] Radu-Alexandru Dragomir, Adrien B. Taylor, Alexandre d’Aspremont, and
+        `[1] Heinz H. Bauschke, Jérôme Bolte, and Marc Teboulle. "A Descent Lemma
+        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited
+        and Applications." (2017)<https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
+
+        `[2] Radu-Alexandru Dragomir, Adrien B. Taylor, Alexandre d’Aspremont, and
         Jérôme Bolte. "Optimal Complexity and Certification of Bregman
-        First-Order Methods". (2019)
+        First-Order Methods". (2019)<https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
         Disclaimer: This example requires some experience with PESTO and PEPs ([2], section 4).
@@ -80,8 +79,8 @@ def wc_no_lips1(L, gamma, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6666452858806611
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:	 f(y_n) - f_* <= 0.666645 Dh(y_0, x_*)
-            Theoretical guarantee :	 f(y_n) - f_* <= 0.666667 Dh(y_0, x_*)
+            PEP-it guarantee:	 f(x_n) - f_* <= 0.666645 Dh(y_0, x_*)
+            Theoretical guarantee :	 f(x_n) - f_* <= 0.666667 Dh(x_0, x_*)
 
     """
 
@@ -127,13 +126,13 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1 / gamma / n
+    theoretical_tau = 1 / (gamma * n)
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEP-it guarantee:\t f(y_n) - f_* <= {:.6} Dh(y_0, x_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n) - f_* <= {:.6} Dh(y_0, x_*) '.format(
+        print('\tPEP-it guarantee:\t f(x_n) - f_* <= {:.6} Dh(y_0, x_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t f(x_n) - f_* <= {:.6} Dh(x_0, x_*) '.format(
             theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
