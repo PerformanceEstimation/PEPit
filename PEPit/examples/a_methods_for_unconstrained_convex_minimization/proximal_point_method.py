@@ -11,32 +11,33 @@ def wc_ppa(gamma, n, verbose=True):
 
     where :math:`f` is closed, proper, and convex (and potentially non-smooth).
 
-    This code computes a worst-case guarantee for the **proximal point method** with step size :math:`\\gamma`. That is, it computes
-    the smallest possible :math:`\\tau(n,\\gamma)` such that the guarantee
+    This code computes a worst-case guarantee for the **proximal point method** with step size :math:`\\gamma`.
+    That is, it computes the smallest possible :math:`\\tau(n,\\gamma)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n,\\gamma)  ||x_0 - x_\star||^2
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, \\gamma)  ||x_0 - x_\star||^2
 
     is valid, where :math:`x_n` is the output of the proximal point method, and where :math:`x_\star` is a
     minimizer of :math:`f`.
 
-    In short, for given values of :math:`n` and :math:`\\gamma`, :math:`\\tau(n,\\gamma)` is computed as the worst-case value of :math:`f(x_n)-f_\star`
+    In short, for given values of :math:`n` and :math:`\\gamma`,
+    :math:`\\tau(n,\\gamma)` is computed as the worst-case value of :math:`f(x_n)-f_\star`
     when :math:`||x_0 - x_\star||^2 \\leqslant 1`.
 
     **Algorithm**:
-    The proximal point method is described by
 
-    .. math:: x_{k+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_k||^2 \\right\\},
+        .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_t||^2 \\right\\},
 
-    where :math:`\\gamma` is a step size.
+        where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
-    The tight theoretical guarantee can be found in [1, Theorem 4.1]:
+        The tight theoretical guarantee can be found in [1, Theorem 4.1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
 
     **References**:
-    [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
-    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for
+        composite convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
+        <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         gamma (float): step size.
@@ -59,6 +60,7 @@ def wc_ppa(gamma, n, verbose=True):
         *** Example file: worst-case performance of proximal point method ***
             PEP-it guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
             Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -102,8 +104,5 @@ def wc_ppa(gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    gamma = 1
 
-    rate = wc_ppa(gamma=gamma,
-                  n=n)
+    pepit_tau, theoretical_tau = wc_ppa(gamma=3, n=4, verbose=True)
