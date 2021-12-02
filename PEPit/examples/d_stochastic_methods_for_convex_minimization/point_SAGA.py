@@ -55,9 +55,9 @@ def wc_psaga(L, mu, n, verbose=True):
 
     # Compute the initial value of the Lyapunov function
     init_lyapunov = (xs - x0) ** 2
+    gs = [fn[i].gradient(xs) for i in range(n)]
     for i in range(n):
-        gis, fis = fn[i].oracle(xs)
-        init_lyapunov = init_lyapunov + c / n * (gis - phi[i]) ** 2
+        init_lyapunov = init_lyapunov + c / n * (gs[i] - phi[i]) ** 2
 
     # Set the initial constraint as the Lyapunov bounded by 1
     problem.set_initial_condition(init_lyapunov <= 1.)
@@ -72,11 +72,10 @@ def wc_psaga(L, mu, n, verbose=True):
         x1, gx1, _ = proximal_step(w, fn[i], gamma)
         final_lyapunov = (xs - x1) ** 2
         for j in range(n):
-            gjs, fjs = fn[j].oracle(xs)
             if i != j:
-                final_lyapunov = final_lyapunov + c / n * (phi[j] - gjs) ** 2
+                final_lyapunov = final_lyapunov + c / n * (phi[j] - gs[j]) ** 2
             else:
-                final_lyapunov = final_lyapunov + c / n * (gjs - gx1) ** 2
+                final_lyapunov = final_lyapunov + c / n * (gs[j] - gx1) ** 2
         final_lyapunov_avg = final_lyapunov_avg + final_lyapunov / n
 
     # Set the performance metric to the distance average to optimal point

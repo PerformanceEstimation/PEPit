@@ -80,7 +80,7 @@ def wc_saga(L, mu, n, verbose=True):
     h = problem.declare_function(ConvexFunction,
                                  param={})
     fn = [problem.declare_function(SmoothStronglyConvexFunction,
-                                   param={'L': L, 'mu': mu}) for _ in range(n)]
+                                   param={'L': L, 'mu': mu}, is_differentiable=True) for _ in range(n)]
 
     # Define the objective as a linear combination of the former
     func = h + np.mean(fn)
@@ -97,12 +97,13 @@ def wc_saga(L, mu, n, verbose=True):
     c = 1 / 2 / gamma / (1 - mu * gamma) / n
     g, f = [x0 for _ in range(n)], [x0 for _ in range(n)]
     g0, f0 = [x0 for _ in range(n)], [x0 for _ in range(n)]
+    gs, fs = [x0 for _ in range(n)], [x0 for _ in range(n)]
     init_lyapunov = c * (xs - x0) ** 2
 
     for i in range(n):
         g[i], f[i] = fn[i].oracle(phi[i])
-        gis, fis = fn[i].oracle(xs)
-        init_lyapunov = init_lyapunov + 1 / n * (f[i] - fis - gis * (phi[i] - xs))
+        gs[i], fs[i] = fn[i].oracle(xs)
+        init_lyapunov = init_lyapunov + 1 / n * (f[i] - fs[i] - gs[i] * (phi[i] - xs))
 
     # Set the initial constraint as the Lyapunov bounded by 1
     problem.set_initial_condition(init_lyapunov <= 1)
@@ -118,13 +119,12 @@ def wc_saga(L, mu, n, verbose=True):
         x1, _, _ = proximal_step(w, h, gamma)
         final_lyapunov = c * (x1 - xs) ** 2
         for j in range(n):
-            gis, fis = fn[j].oracle(xs)
             if i != j:
                 gi, fi = g[j], f[j]
-                final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (phi[j] - xs))
+                final_lyapunov = final_lyapunov + 1 / n * (fi - fs[j] - gs[j] * (phi[j] - xs))
             else:
                 gi, fi = g0[i], f0[i]
-                final_lyapunov = final_lyapunov + 1 / n * (fi - fis - gis * (x0 - xs))
+                final_lyapunov = final_lyapunov + 1 / n * (fi - fs[j] - gs[j] * (x0 - xs))
         final_lyapunov_avg = final_lyapunov_avg + final_lyapunov / n
 
     # Set the performance metric to the distance average to optimal point
@@ -134,8 +134,7 @@ def wc_saga(L, mu, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison) : the bound is given in Theorem 1 of [1]
-    kappa = 1 / gamma / mu
-    theoretical_tau = (1 - 1 / kappa)
+    theoretical_tau = (1 - gamma * mu)
 
     # Print conclusion if required
     if verbose:
