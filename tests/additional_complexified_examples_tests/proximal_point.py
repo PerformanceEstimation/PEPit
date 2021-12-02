@@ -7,7 +7,7 @@ def wc_ppa(gamma, n, verbose=True):
     """
     See description in Examples/a_methods_for_unconstrained_convex_minimization/proximal_point_method.py.
     This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
-    but the parametrization is different (convex function to be minimized is explicitly formed as a sum of two convex
+    but the parameterization is different (convex function to be minimized is explicitly formed as a sum of two convex
     functions). That is, the minimization problem is
 
     .. math:: f_\star = \\min_x \\{f(x)\\equiv f_1(x)+f_2(x)\\},

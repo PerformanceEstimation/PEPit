@@ -25,19 +25,22 @@ def wc_ppa(gamma, n, verbose=True):
 
     **Algorithm**:
 
-        .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_t||^2 \\right\\},
+    The proximal point method is described by
 
-        where :math:`\\gamma` is a step size.
+        .. math:: x_{k+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_k||^2 \\right\\},
+
+    where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
-        The tight theoretical guarantee can be found in [1, Theorem 4.1]:
+
+    The tight theoretical guarantee can be found in [1, Theorem 4.1]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
 
     **References**:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for
-        composite convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
-        <https://arxiv.org/pdf/1512.07516.pdf>`_
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         gamma (float): step size.
