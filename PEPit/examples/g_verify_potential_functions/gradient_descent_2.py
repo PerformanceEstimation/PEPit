@@ -47,7 +47,7 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         gamma (float): the step size.
-        n (int): number of iterations.
+        n (int): rank of studied iteration.
         verbose (bool): if True, print conclusion
 
     Returns:

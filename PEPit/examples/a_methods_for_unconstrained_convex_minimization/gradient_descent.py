@@ -4,14 +4,14 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 
 def wc_gd(L, gamma, n, verbose=True):
     """
-    Consider the minimization problem
+    Consider the convex minimization problem
 
     .. math:: f_\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`. That is, it computes
-    the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
+    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
     .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\gamma)  || x_0 - x_\star ||^2
 
@@ -47,19 +47,20 @@ def wc_gd(L, gamma, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> L, n = 3, 4
-        >>> pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1/L, n=n, verbose=True)
+        >>> L = 3
+        >>> pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1/L, n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : 30 constraint(s) added
+                 function 1 : 30 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.16666666497937685
         *** Example file: worst-case performance of gradient descent with fixed step sizes ***
-	        PEP-it guarantee:       f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-	        Theoretical guarantee:  f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -103,10 +104,6 @@ def wc_gd(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    gamma = 1 / L
 
-    wc = wc_gd(L=L,
-               gamma=gamma,
-               n=n)
+    L = 3
+    pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1 / L, n=4, verbose=True)
