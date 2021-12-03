@@ -288,10 +288,10 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_insgd(self):
-        L, mu, R, n = 1, 0.1, 2, 5
+        L, mu, n = 1, 0.1, 5
         gamma = 1 / L
 
-        wc, theory = inSGD.wc_sgdo(L, mu, gamma, R, n, verbose=self.verbose)
+        wc, theory = inSGD.wc_sgdo(L, mu, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inpsaga(self):
