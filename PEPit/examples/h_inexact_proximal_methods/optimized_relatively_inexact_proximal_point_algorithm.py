@@ -9,7 +9,7 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     """
     Consider the composite non-smooth convex minimization problem,
 
-        .. math:: \min_x { f(x) }
+    .. math:: \\min_x { f(x) }
 
     where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
@@ -17,14 +17,16 @@ def wc_orippm(n, gamma, sigma, verbose=True):
 
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
-        .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
+    .. math:: f(x_n) - f(x_\\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
 
     is valid, where :math:`z_n` is the :math:`n^{\\mathrm{th}}` output of the method,
     and :math:`z_\star` a fixed point of the operator.
 
     **Algorithm**:
 
-        TODO
+    The algorithm is presented in [1].
+
+        .. math:: TODO
 
     **Theoretical guarantee**:
 

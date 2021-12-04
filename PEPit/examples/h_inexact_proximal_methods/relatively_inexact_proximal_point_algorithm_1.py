@@ -23,9 +23,12 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
     **Algorithm**:
 
-        .. math:: x_{n+1} = x_n - \\gamma (f'(x_{n+1} - e)
+        .. math::
 
-        .. math:: ||e||^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
+            \\begin{eqnarray}
+                x_{n+1} & = & x_n - \\gamma (f'(x_{n+1} - e) \\\\
+                ||e||^2 & \\leqslant & \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 

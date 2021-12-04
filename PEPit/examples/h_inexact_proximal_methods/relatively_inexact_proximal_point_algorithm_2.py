@@ -9,7 +9,7 @@ def wc_rippm2(n, gamma, sigma, verbose=True):
     """
     Consider the non-smooth convex minimization problem,
 
-        .. math:: \min_x { f(x) }
+    .. math:: \\min_x { f(x) }
 
     where :math:`f` is closed convex and proper. Proximal operator is assumed to be available.
 
@@ -17,16 +17,19 @@ def wc_rippm2(n, gamma, sigma, verbose=True):
 
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
-        .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
+    .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`z_n` is the :math:`n^{\\mathrm{th}}` output of the method,
     and :math:`z_\star` a fixed point of the operator.
 
     **Algorithm**:
 
-        .. math:: x_{n+1} = x_n - \\gamma (f'(x_{n+1} - e)
+        .. math::
 
-        .. math:: ||e||^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
+            \\begin{eqnarray}
+                x_{n+1} & = & x_n - \\gamma (f'(x_{n+1} - e) \\\\
+                ||e||^2 & \\leqslant & \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 
