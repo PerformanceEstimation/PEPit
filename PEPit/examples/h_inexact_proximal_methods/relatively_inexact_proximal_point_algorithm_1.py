@@ -13,8 +13,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
     where :math:`f` is closed convex and proper. Proximal operator is assumed to be available.
 
-    This code computes a worst-case guarantee for an **Inexact Proximal Point** method,
-    where :math:`x_\star = \\arg\\min_x (f(x))`.
+    This code computes a worst-case guarantee for an **Inexact Proximal Point** method.
 
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
@@ -32,14 +31,14 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
     The theoretical **upper** bound is obtained in [1, Section 3.5.1],
 
-        .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}||x_0 - x_\star||^2
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2
 
     **References**:
 
-    The precise formulation is presented in [1, Section 3],
+    The precise formulation is presented in [1, Section 3].
 
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
+    `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of first-order methods
+    with inexact proximal operators (2020).<https://arxiv.org/pdf/2006.06041.pdf>`_
 
     :param n: (int) number of iterations.
     :param gamma: (float) the step size.
@@ -49,7 +48,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     :return: (tuple) worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_rippm1(, 2, 0.3)
+        >>> pepit_tau, theoretical_tau = wc_rippm1(n=5, gamma=2, sigma=.3, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -59,8 +58,9 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.03348574648049885
         *** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***
-            PEP-it guarantee:	  f(x_n) - f(x_*) <= 0.0334857 ||x_0 - x_*||^2
+            PEP-it guarantee:	     f(x_n) - f(x_*) <= 0.0334857 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.0350008 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -79,7 +79,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Inexact Proximal Point Method starting from x0
-    x = [x0 for i in range(n + 1)]
+    x = [x0 for _ in range(n + 1)]
     opt = 'PD_gapII'
     for i in range(n):
         x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)
@@ -97,7 +97,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***')
-        print('\tPEP-it guarantee:\t  f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -105,12 +105,5 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose random scheme parameters
-    gamma = 2
-    sigma = 0.3
-    # Number of iterations
-    n = 5
 
-    pepit_tau, theoretical_tau = wc_rippm1(n=n,
-                                           gamma=gamma,
-                                           sigma=sigma)
+    pepit_tau, theoretical_tau = wc_rippm1(n=5, gamma=2, sigma=.3, verbose=True)

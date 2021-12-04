@@ -8,26 +8,60 @@ from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
 def wc_orippm(n, gamma, sigma, verbose=True):
     """
     Consider the composite non-smooth convex minimization problem,
-        min_x { f(x) }
+
+        .. math:: \min_x { f(x) }
+
     where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
-    This code computes a worst-case guarantee for an Optimized Inexact Proximal Point Method,
-    where x_\star = argmin_x (f(x)).
+    This code computes a worst-case guarantee for an **Optimized Inexact Proximal Point** method.
 
-    That is, it computes the smallest possible tau(n,sigma,gamma) such that the guarantee
-        f(x_n) - f(x_\star) <= tau(n,sigma,gamma) * ||x_0 - x_\star||^2.
-    is valid, where z_n is the output os the operator, an z_\star a fixed point of this operator.
+    That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
+
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
+
+    is valid, where :math:`z_n` is the :math:`n^{\\mathrm{th}}` output of the method,
+    and :math:`z_\star` a fixed point of the operator.
+
+    **Algorithm**:
+
+        TODO
+
+    **Theoretical guarantee**:
+
+    The theoretical **upper** bound is obtained in [1, Theorem ??],
+
+        \\tau(n, \\gamma, \\sigma) = \\frac{1 + \\sigma}{4 \\gamma \\theta^2}
+
+    **References**:
 
     The precise formulation is presented in [1].
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
 
-    :param n: (int) number of iterations.
-    :param gamma: (float) the step size.
-    :param sigma: (float) noise parameter.
-    :param verbose: (bool) if True, print conclusion
+    `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of first-order methods
+    with inexact proximal operators (2020).<https://arxiv.org/pdf/2006.06041.pdf>`_
 
-    :return: (tuple) worst_case value, theoretical value
+    Args:
+        n (int): number of iterations.
+        gamma (float): the step size.
+        sigma (float): noise parameter.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_orippm(n=10, gamma=2, sigma=3, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 42x42
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 440 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.014168407813835255
+        *** Example file: worst-case performance of the Optimized Inexact Proximal Point Method in distance ***
+            PEP-it guarantee:		 f(x_n) - f(x_*) <= 0.0141684 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.0141608 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -64,12 +98,12 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 + sigma) / 4 / gamma / (theta ** 2)
+    theoretical_tau = (1 + sigma) / (4 * gamma * (theta ** 2))
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Optimized Inexact Proximal Point Method in distance ***')
-        print('\tPEP-it guarantee:\t  f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -77,12 +111,5 @@ def wc_orippm(n, gamma, sigma, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose random scheme parameters
-    gamma = 2
-    sigma = 3
-    # Number of iterations
-    n = 10
 
-    pepit_tau, theoretical_tau = wc_orippm(n=n,
-                                           gamma=gamma,
-                                           sigma=sigma)
+    pepit_tau, theoretical_tau = wc_orippm(n=10, gamma=2, sigma=3, verbose=True)

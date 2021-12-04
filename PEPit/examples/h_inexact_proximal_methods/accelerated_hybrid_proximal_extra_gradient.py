@@ -18,7 +18,10 @@ def wc_ahpe(mu, gamma, sigma, A0, verbose=True):
             Phi_{k+1} - Phi_k <= 0
     is valid for all f satisfying the previous assumptions, and for any initialization of the A-HPE.
 
-    The method originates from [1]; it was adapted to deal with strong convexity in [2].
+    **References**:
+
+    The method originates from [1].
+    It was adapted to deal with strong convexity in [2].
     The PEP methodology for analyzing such methods was proposed in [3].
 
     [1] R. D. Monteiro and B. F. Svaiter. An accelerated hybrid proximal extragradient method for
@@ -30,13 +33,16 @@ def wc_ahpe(mu, gamma, sigma, A0, verbose=True):
     [3] M. Barre, A. Taylor, F. Bach. Principled analyses and design of first-order methods
     with inexact proximal operators (2020).
 
-    :param mu: (float) strong convexity parameter.
-    :param gamma: (float) the step size.
-    :param sigma: (float) noise parameter.
-    :param A0: (float) Lyapunov parameter.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        mu (float): strong convexity parameter.
+        gamma (float): the step size.
+        sigma (float): noise parameter.
+        A0 (float): Lyapunov parameter.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
+
     """
 
     # Instantiate PEP
@@ -88,15 +94,5 @@ def wc_ahpe(mu, gamma, sigma, A0, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose the function parameter
-    mu = 1
-    # Choose scheme parameters
-    gamma = 1
-    sigma = 1
-    # Choose the Lyapunov parameter
-    A0 = 10
 
-    pepit_tau, theoretical_tau = wc_ahpe(mu=mu,
-                                         gamma=gamma,
-                                         sigma=sigma,
-                                         A0=A0)
+    pepit_tau, theoretical_tau = wc_ahpe(mu=1, gamma=1, sigma=1, A0=10, verbose=True)

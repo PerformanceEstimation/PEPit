@@ -8,29 +8,62 @@ from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
 def wc_rippm2(n, gamma, sigma, verbose=True):
     """
     Consider the non-smooth convex minimization problem,
-        min_x { f(x) }
-    where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
-    This code computes a worst-case guarantee for an Inexact Proximal Point Method,
-    where x_\star = argmin_x (f(x)), that is :
-        x_{n+1} = x_n - gamma * (f'(x_{n+1} - e)
-    with gamma * (f(x_{n+1}) + f^*(v) - (v, x_{n+1}) <= sigma**2/2*||x_{n+1} - x_n||^2
-    and with x = (x_{n - x_{n+1})/gamma
+        .. math:: \min_x { f(x) }
 
-    That is, it computes the smallest possible tau(n,sigma,gamma) such that the guarantee
-        f(x_n) - f(x_\star) <= tau(n,sigma,gamma) * ||x_0 - x_\star||^2.
-    is valid, where z_n is the output os the operator, an z_\star a fixed point of this operator.
+    where :math:`f` is closed convex and proper. Proximal operator is assumed to be available.
 
-    The precise formulation is presented in [1, Section 3].
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
+    This code computes a worst-case guarantee for an **Inexact Proximal Point** method.
 
-    :param n: (int) number of iterations.
-    :param gamma: (float) the step size.
-    :param sigma: (float) noise parameter.
-    :param verbose: (bool) if True, print conclusion
+    That is, it computes the smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
-    :return: (tuple) worst_case value, theoretical value
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
+
+    is valid, where :math:`z_n` is the :math:`n^{\\mathrm{th}}` output of the method,
+    and :math:`z_\star` a fixed point of the operator.
+
+    **Algorithm**:
+
+        .. math:: x_{n+1} = x_n - \\gamma (f'(x_{n+1} - e)
+
+        .. math:: ||e||^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}(x_{n+1} - x_n)^2
+
+    **Theoretical guarantee**:
+
+    The theoretical **upper** bound is obtained in [1, Theorem 4.1],
+
+        .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2
+
+    **References**:
+
+    The precise formulation is presented in [1, Section 4.3].
+
+    `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of first-order methods
+    with inexact proximal operators (2020).<https://arxiv.org/pdf/2006.06041.pdf>`_
+
+    Args:
+        n (int): number of iterations.
+        gamma (float): the step size.
+        sigma (float): noise parameter.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_rippm2(n=8, gamma=10, sigma=.65, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 288 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.0032854448298864857
+        *** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***
+            PEP-it guarantee:		  f(x_n) - f(x_*) <= 0.00328544 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -49,10 +82,10 @@ def wc_rippm2(n, gamma, sigma, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Inexact Proximal Point Method starting from x0
-    x = [x0 for i in range(n + 1)]
+    x = [x0 for _ in range(n + 1)]
     opt = 'PD_gapIII'
     for i in range(n):
-        x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)
+        x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)  # TODO verify this is it
         f.add_constraint(epsVar <= (sigma ** 2) / 2 * (x[i + 1] - x[i]) ** 2)
 
     # Set the performance metric to the final distance in function values
@@ -66,8 +99,8 @@ def wc_rippm2(n, gamma, sigma, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Inexact Proximal Point Method in distance ***')
-        print('\tPEP-it guarantee:\t  f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('*** Example file: worst-case performance of the Inexact Proximal Point Method in distance in function values ***')
+        print('\tPEP-it guarantee:\t\t  f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -75,12 +108,5 @@ def wc_rippm2(n, gamma, sigma, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose random scheme parameters
-    gamma = 10
-    sigma = np.sqrt(0.4)
-    # Number of iterations
-    n = 8
 
-    pepit_tau, theoretical_tau = wc_rippm2(n=n,
-                                           gamma=gamma,
-                                           sigma=sigma)
+    pepit_tau, theoretical_tau = wc_rippm2(n=8, gamma=10, sigma=.65, verbose=True)
