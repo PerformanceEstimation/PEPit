@@ -13,7 +13,7 @@ def wc_gd(L, gamma, n, verbose=True):
     This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\gamma)  || x_0 - x_\star ||^2
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\gamma) || x_0 - x_\star ||^2
 
     is valid, where :math:`x_n` is the output of gradient descent with fixed step size :math:`\\gamma`, and
     where :math:`x_\star` is a minimizer of :math:`f`.
@@ -29,9 +29,9 @@ def wc_gd(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma=\\frac{1}{L}`, the tight theoretical guarantee can be found in [1, Theorem 1]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the tight theoretical guarantee can be found in [1, Theorem 1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4n+2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2}.
 
     **References**:
     [1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
@@ -48,7 +48,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     Example:
         >>> L = 3
-        >>> pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1/L, n=4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gd(L=L, gamma=1 / L, n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -91,7 +91,7 @@ def wc_gd(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L / (2 * (2 * n + 1))
+    theoretical_tau = L / (2 * (2 * n * L * gamma + 1))
 
     # Print conclusion if required
     if verbose:

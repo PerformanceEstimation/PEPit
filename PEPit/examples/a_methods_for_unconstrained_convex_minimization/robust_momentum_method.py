@@ -15,12 +15,12 @@ def wc_rmm(mu, L, lam, verbose=True):
     This code computes a worst-case guarantee for the **robust momentum method**.
     That is, it verifies that the guarantee
 
-        .. math:: v(x_{n+1}) \\leqslant v(x_{n}),
+        .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L) v(x_{n}),
 
     is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
-        .. math:: q_n = (L - \\mu) (f(x_n) - f_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2
+        .. math:: q_n = (L - \\mu) \\left(f(x_n) - f_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2 \\right)
 
         .. math:: v(x_n) = l||z_n - x_\star||^2 + q_n
 
@@ -35,10 +35,10 @@ def wc_rmm(mu, L, lam, verbose=True):
     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
     **Theoretical guarantee**:
-
+    TIGHT TODO
     The **Lyapunov is proven to be decreasing** in [1, Theorem 1],
     
-        .. math:: v(x_{n+1}) \\leqslant v(x_n)\\tau(n, \\mu, L) = v(x_n)
+        .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n)
     
     **References**:
 

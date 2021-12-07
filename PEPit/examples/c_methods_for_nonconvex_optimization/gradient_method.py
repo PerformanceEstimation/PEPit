@@ -5,12 +5,15 @@ from PEPit.functions.smooth_function import SmoothFunction
 def wc_gd(L, gamma, n, verbose=True):
     """
     Consider the minimization problem
-        f_\star = min_x f(x),
-    where f is L-smooth.
 
-    This code computes a worst-case guarantee for the gradient method fixed step size. That is, it computes
-    the smallest possible tau(n, L, mu) such that the guarantee
-        min_n ||f'(x_n)||^2 <= tau(n, L) * (f(x_0) - f(x_n))
+    .. math:: f_\star = \\min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth.
+
+    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
+
+    .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\tau(n, L, \\gamma) (f(x_0) - f(x_n))
     is valid, where x_n is the output of the gradient descent with fixed step sizes,
     and where x_n is the n-th iterates obtained with the gradient method.
 
@@ -31,10 +34,6 @@ def wc_gd(L, gamma, n, verbose=True):
 
     # Declare a smooth strongly convex function
     func = problem.declare_function(SmoothFunction, param={'L': L})
-
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.stationary_point()
-    fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()
@@ -59,13 +58,13 @@ def wc_gd(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2 * L / n
+    theoretical_tau = 4 / 3 * L / n
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of gradient descent with fixed step size ***')
         print('\tPEP-it guarantee:\t\t min_i (f\'(x_i)) ** 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_i (f\'(x_i)) <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t min_i (f\'(x_i)) ** 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -15,7 +15,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     This code computes a worst-case guarantee for **accelerated Douglas-Rachford**. That is, it computes
     the smallest possible :math:`\\tau(n, L, \\mu, \\alpha, \\theta)` such that the guarantee
 
-    .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) * ||w_0 - w_\star||^2
+    .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) \\|w_0 - w_\star\\|^2
 
     is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the algorithm, and where :math:`y_n` is the output
     of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,

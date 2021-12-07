@@ -33,19 +33,16 @@ def wc_subgd(M, N, gamma, verbose=True):
 
     The **tight** bound is obtained in [1? Corollary 3].
 
-        .. math:: \\min_i F(x_i)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{N+1}}||x_0-x_\star||^2
+        .. math:: \\min_i F(x_i)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{N+1}}||x_0-x_\star||
 
     **References**:
-        The detailed approach (based on convex relaxations) is available in [1, Corollary 3].
 
-        [1] Y. Drori and A. Taylor (2020).
-        Efficient first-order methods for convex minimization: a constructive approach.
-        Mathematical Programming 184 (1), 183-220.
+        TODO
 
     Args:
         M (float): the Lipschitz parameter.
         N (int): the number of iterations
-        gamma (float):optimal step size is :math:`\\frac{1}{M\\sqrt{N+1}}`.
+        gamma (float): step size.
         verbose (bool, optional): if True, print conclusion.
 
     Returns:

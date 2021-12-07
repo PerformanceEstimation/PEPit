@@ -15,10 +15,10 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         PD gap(x,v;x0) <= epsVar for the proximal subproblem.
     - 'PD_gapII' :
         PD gap(x,v;x0) <= epsVar for the proximal subproblem,
-                                with v a subgradient of f at x.
+                                 with v a subgradient of f at x.
     - 'PD_gapIII' :
         PD gap(x,v;x0) <= epsVar for the proximal subproblem,
-                                with v = (x_0 - x)/step
+                                 with v = (x_0 - x)/step
     - 'Orip-style' (see [1] below) :
     Approximate proximal operator outputs x such that
         <v, e> + epsilon/step <= espVar for the proximal subproblem,
@@ -27,8 +27,12 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         PD gap(x,v;x0) <= epsVar for the proximal subproblem.
 
     ORIP: optimized relatively inexact proximal point algorithm (see [1])
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-         first-order methods with inexact proximal operators
+
+    References:
+
+        `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
+        first-order methods with inexact proximal operators
+        <https://arxiv.org/pdf/2006.06041.pdf>`_
 
     Args:
         x0 (Point): starting point x0.
@@ -37,13 +41,13 @@ def inexact_proximal_step(x0, f, step, opt='PD_gapII'):
         opt (string): inaccuracy parameters in the "opt" structure.
 
     Returns:
-        - x (Point) the point x.
-        - gx (Point) the (sub)gradient of f at x.
-        - fx (Expression) the function f evaluation at x.
-        - w (Point) the point w.
-        - v (Point) the (sub)gradient of f evaluated at w.
-        - fw (Expression) the function f evaluated at w.
-        - epsVar (Expression) : an intermediate variable
+        x (Point): the point x.
+        gx (Point): the (sub)gradient of f at x.
+        fx (Expression): the function f evaluation at x.
+        w (Point): the point w.
+        v (Point): the (sub)gradient of f evaluated at w.
+        fw (Expression): the function f evaluated at w.
+        epsVar (Expression): an intermediate variable
 
     Note:
         v is an epsilon-subgradient of f at x, and is the subgradient of f evaluated at w.

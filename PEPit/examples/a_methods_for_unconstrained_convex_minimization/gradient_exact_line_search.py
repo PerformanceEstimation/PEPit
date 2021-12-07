@@ -25,9 +25,9 @@ def wc_els(L, mu, n, verbose=True):
     **Algorithm**:
     GD with ELS can be written as
 
-        .. math:: x_{k+1} = x_k - \\gamma_k \\nabla f(x_k)
+        .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t)
 
-        with :math:`\\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_k) \\right)`.
+        with :math:`\\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_t) \\right)`.
 
     **Theoretical guarantee**:
 

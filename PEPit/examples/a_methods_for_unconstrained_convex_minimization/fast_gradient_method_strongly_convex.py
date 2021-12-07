@@ -43,8 +43,8 @@ def wc_fgm(mu, L, n, verbose=True):
 
         Theoretical rates can be found in the following paper [1,  Corollary 4.15]
 
-        [1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor,
-        https://arxiv.org/pdf/2101.09545.pdf
+        `[1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor
+        <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter

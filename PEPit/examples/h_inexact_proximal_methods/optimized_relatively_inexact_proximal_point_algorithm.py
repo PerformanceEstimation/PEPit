@@ -7,9 +7,9 @@ from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
 
 def wc_orippm(n, gamma, sigma, verbose=True):
     """
-    Consider the composite non-smooth convex minimization problem,
+    Consider the non-smooth convex minimization problem,
 
-    .. math:: \\min_x { f(x) }
+    .. math:: \\min_x f(x)
 
     where f(x) is closed convex and proper. Proximal operator is assumed to be available.
 
@@ -19,17 +19,23 @@ def wc_orippm(n, gamma, sigma, verbose=True):
 
     .. math:: f(x_n) - f(x_\\star) \\leqslant \\tau(n, \\gamma, \\sigma) ||x_0 - x_\\star||^2
 
-    is valid, where :math:`z_n` is the :math:`n^{\\mathrm{th}}` output of the method,
-    and :math:`z_\star` a fixed point of the operator.
+    is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` output of the method.
 
     **Algorithm**:
 
-    The algorithm is presented in [1].
-
-        .. math:: TODO
+    The algorithm is presented in [1, section 4.3].
+        TODO
+        .. math::
+            \\begin{eqnarray}
+                \\theta = \\frac{1 + \\sqrt{4 \\theta^2 + 1}}{2} \\\\
+                y = \\left(1 - \\frac{1}{\\theta}\\right) x + \\frac{1}{\\theta} z \\\\
+                x, _, fx, _, v, _, epsVar = inexact_proximal_step(y, f, gamma, opt) \\\\
+                z = z - \\frac{2 \\gamma \\theta}{1 + \\sigma} v \\\\
+                Enforce ~ epsVar \\leqslant \\frac{\\sigma}{1 + \\sigma} \\|v\\|^2 \\\\
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
-
+    TODO
     The theoretical **upper** bound is obtained in [1, Theorem ??],
 
         \\tau(n, \\gamma, \\sigma) = \\frac{1 + \\sigma}{4 \\gamma \\theta^2}
@@ -39,7 +45,8 @@ def wc_orippm(n, gamma, sigma, verbose=True):
     The precise formulation is presented in [1].
 
     `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of first-order methods
-    with inexact proximal operators (2020).<https://arxiv.org/pdf/2006.06041.pdf>`_
+    with inexact proximal operators (2020).
+    <https://arxiv.org/pdf/2006.06041.pdf>`_
 
     Args:
         n (int): number of iterations.

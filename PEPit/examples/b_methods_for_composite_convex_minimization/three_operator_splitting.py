@@ -9,7 +9,7 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     """
-     Consider the composite convex minimization problem,
+    Consider the composite convex minimization problem,
         min_x { F(x) = f_1(x) + f_2(x) + f_3(x)}
     where f_1 is L1-smooth and mu1-strongly convex, f_2 is closed, convex
     and proper, and f_3 is L3-smooth convex. Proximal operators are assumed to be available for f_1 and f_2.
@@ -31,25 +31,49 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     (i.e., how do the iterates contract when the algorithm is started from
     two different initial points).%
 
-    Details on the SDP formulations can be found in
-    [1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling,
+    References:
+
+        Details on the SDP formulations can be found in [1].
+        The TOS and an upper bound is introduced in [2].
+
+        `[1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling,
         and Pontus Giselsson. "Operator splitting performance estimation:
         Tight contraction factors and optimal parameter selection." (2018)
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
-    The TOS and an upper bound is introduced in
-    [2] Damek Davis, and Wotao Yin. "A three-operator splitting scheme
-        and its optimization applications." Set-valued and variational
-        analysis  (2017).
+        `[2] Damek Davis, and Wotao Yin. "A three-operator splitting scheme and its optimization applications."
+        Set-valued and variational analysis  (2017).
+        <https://arxiv.org/pdf/1504.01032.pdf>`_
 
-    :param mu1: (float) the strong convexity parameter.
-    :param L1: (float) the smoothness parameter of function f1.
-    :param L3: (float) the smoothness parameter of function f3.
-    :param alpha: (float) parameter of the scheme.
-    :param theta: (float) parameter of the scheme.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        mu1 (float): the strong convexity parameter.
+        L1 (float): the smoothness parameter of function f1.
+        L3 (float): the smoothness parameter of function f3.
+        alpha (float): parameter of the scheme.
+        theta (float): parameter of the scheme.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> L3 = 1
+        >>> pepit_tau, theoretical_tau = wc_tos(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 29x29
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
+                 function 1 : 72 constraint(s) added
+                 function 2 : 72 constraint(s) added
+                 function 3 : 72 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.4752811057240984
+        *** Example file: worst-case performance of the Three Operator Splitting in distance ***
+            PEP-it guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475281 ||x0 - ws||^2
+            Theoretical guarantee :	 ||w^2_n - w^1_n||^2 <= 0.5 ||x0 - ws||^2
+
     """
 
     # Instantiate PEP
@@ -100,7 +124,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
-        print('\tPEP-it guarantee:\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -108,18 +132,6 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
 
 
 if __name__ == "__main__":
-    mu1 = 0.1
-    L1 = 10
+
     L3 = 1
-
-    # Test scheme parameters
-    alpha = 1 / L3
-    theta = 1
-    n = 4
-
-    pepit_tau, theoretical_tau = wc_tos(mu1=mu1,
-                                        L1=L1,
-                                        L3=L3,
-                                        alpha=alpha,
-                                        theta=theta,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_tos(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4,  verbose=True)

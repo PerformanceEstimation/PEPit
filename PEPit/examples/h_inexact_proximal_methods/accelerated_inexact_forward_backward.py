@@ -9,42 +9,81 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
-        min_x { F(x) = f(x) + g(x)}
-    where f(x) is smooth convex, and g is non-smooth strongly convex.
+
+    .. math:: \\min_x {F(x) = f(x) + g(x)}
+
+    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth.
     Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for an Accelerated Hybrid Proximal Gradient,
-    where x_\star = argmin_x (F(x)).
+    This code computes a worst-case guarantee for an **Accelerated Hybrid Proximal Gradient**.
 
-    That is, it computes the smallest possible tau(mu,n,sigma,gamma) such that the guarantee
-        Phi_n <= tau(mu,n,sigma,gamma) * Phi_{n+1}
-    is valid, where phi_{n+1} = A_{n+1}(F(x_{n+1} - F_\star) + (1 + mu * A_{n+1})/2 * ||z_{n+1} - x_\star||^2.
-    We are going to verify that :
-        max(Phi_{n+1} - Phi_{n}) <= 0
+    That is, it computes the smallest possible :math:`\\tau(\\mu, n, \\sigma, \\gamma)` such that the guarantee
 
-    The method originates from [1, Section 4.3].
+    .. math:: \\Phi_{n+1} \\leq \\tau(\\mu, n, \\sigma, \\gamma) \\Phi_n
 
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
+    is valid, where Phi_n = A_n(F(x_n - F_\\star) + \\frac{1 + \\mu * A_n}{2} \\|z_n - x_\\star\\|^2.
+    We are going to verify that:
 
-    :param mu: (float) strong convexity parameter.
-    :param L: (float) smoothness parameter.
-    :param gamma: (float) the step size.
-    :param sigma: (float) noise parameter.
-    :param xi: (float) Lyapunov and scheme parameter.
-    :param zeta: (float) Lyapunov and scheme parameter.
-    :param A0: (float) Lyapunov parameter.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: \\Phi_{n+1} - \\Phi_n \\leq 0
 
-    :return: (tuple) worst_case value, theoretical value
+    **Algorithm**:
+
+    The algorithm is presented in TODO
+
+        .. math:: TODO je comprends pas comment c'est lié au papier
+
+    **Theoretical guarantee**:
+
+    The theoretical guarantee is obtained in TODO
+
+        .. math:: \\Phi_{n+1} - \\Phi_n \\leq 0
+
+    **References**:
+
+        The method originates from [1, Section 4.3].
+
+        `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
+        first-order methods with inexact proximal operators (2020).
+        <https://arxiv.org/pdf/2006.06041.pdf>`_
+
+    Args:
+        mu (float): strong convexity parameter.
+        L (float): smoothness parameter.
+        gamma (float): the step size.
+        sigma (float): noise parameter.
+        xi (float): Lyapunov and scheme parameter.
+        zeta (float): Lyapunov and scheme parameter.
+        A0 (float): Lyapunov parameter.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> L = 2
+        >>> sigma = .2
+        >>> pepit_tau, theoretical_tau = wc_aifb(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 13 constraint(s) added
+                 function 2 : 13 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 2.028195930733028e-05
+        *** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***
+            PEP-it guarantee:		 phi(n+1) - phi(n) <= 2.0282e-05
+            Theoretical guarantee:	 phi(n+1) - phi(n) <= 0.0
+
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a non-smooth strongly convex function, and a smooth convex function.
-    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
     f = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
     F = f + g
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
@@ -89,7 +128,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***')
-        print('\tPEP-it guarantee:\t  phi(n+1) - phi(n) <= {:.6}'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t phi(n+1) - phi(n) <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t phi(n+1) - phi(n) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -97,23 +136,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose the function parameter
-    mu = 1
+
     L = 2
-
-    # Choose scheme parameters
-    sigma = 0.2
-    gamma = (1 - sigma ** 2) / L  # the step size should be in [0, (1 - sigma**2)/L]
-
-    # Choose the scheme (and Lyapunov) parameter
-    zeta = 0.9
-    xi = 3
-    A0 = 1
-
-    pepit_tau, theoretical_tau = wc_aifb(mu=mu,
-                                         L=2,
-                                         gamma=gamma,
-                                         sigma=sigma,
-                                         xi=xi,
-                                         zeta=zeta,
-                                         A0=A0)
+    sigma = .2
+    pepit_tau, theoretical_tau = wc_aifb(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)

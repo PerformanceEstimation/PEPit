@@ -38,16 +38,19 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        The **tight** guarantee obtained in [1, Theorem 5.1] is
+    The tight worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
         .. math:: \\tau(n, L, \\mu, \\varepsilon) = \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}.
 
     References:
         The detailed approach (based on convex relaxations) is available in [1].
 
-        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-        Optimization Letters (2017).
+        [1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
+        inexact gradient andNewton methods through semidefinite programming performance estimation.
+        SIAM Journal on Optimization, 30(3), 2053-2082.
+
+        [2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods. Mathematical Programming.
+
 
     Args:
         L (float): the smoothness parameter.
