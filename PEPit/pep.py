@@ -43,7 +43,7 @@ class PEP(object):
         self.list_of_conditions = list()
         self.list_of_performance_metrics = list()
 
-    def declare_function(self, function_class, param, is_differentiable=False):
+    def declare_function(self, function_class, param, is_differentiable=None):
         """
         Instantiate a function
 
@@ -58,7 +58,10 @@ class PEP(object):
         """
 
         # Create the function
-        f = function_class(param, is_leaf=True, decomposition_dict=None, is_differentiable=is_differentiable)
+        if is_differentiable is None:
+            f = function_class(param, is_leaf=True, decomposition_dict=None)
+        else:
+            f = function_class(param, is_leaf=True, decomposition_dict=None, is_differentiable=is_differentiable)
 
         # Store it in list_of_functions
         self.list_of_functions.append(f)

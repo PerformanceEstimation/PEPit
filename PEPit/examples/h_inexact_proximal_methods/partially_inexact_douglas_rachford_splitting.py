@@ -78,14 +78,15 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
-		     function 1 : 40 constraint(s) added
-		     function 2 : 30 constraint(s) added
+                 function 1 : 40 constraint(s) added
+                 function 2 : 30 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.28120616269977927
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.2812035034317067
         *** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***
-	        PEP-it guarantee:       ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
-	        Theoretical guarantee:  ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+            PEP-it guarantee:		 ||z_n - z_*||^2 <= 0.281204 ||z_0 - z_*||^2
+            Theoretical guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+
     """
 
     # Instantiate PEP
@@ -130,10 +131,9 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file:'
-              ' worst-case performance of the partially inexact Douglas Rachford splitting ***')
-        print('\tPEP-it guarantee:\t||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
+        print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
+        print('\tPEP-it guarantee:\t\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
