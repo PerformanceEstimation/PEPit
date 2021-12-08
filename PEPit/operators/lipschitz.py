@@ -29,7 +29,7 @@ class LipschitzOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 is_differentiable=True):
         """
         Lipschitz operators are characterized by their Lipschitz constant L.
 
