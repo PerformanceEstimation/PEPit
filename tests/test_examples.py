@@ -55,8 +55,7 @@ import PEPit.examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_ext
 import PEPit.examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward as inAIFB
 import PEPit.examples.h_inexact_proximal_methods.optimized_relatively_inexact_proximal_point_algorithm as inORIPPA
 import PEPit.examples.h_inexact_proximal_methods.partially_inexact_douglas_rachford_splitting as inPIDRS
-import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_1 as inRIPP_1
-import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_2 as inRIPP_2
+import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm as inRIPP
 
 
 class TestExamples(unittest.TestCase):
@@ -258,7 +257,7 @@ class TestExamples(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = ncGD.wc_gd(L, gamma, n, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_ncnl1(self):
         L, n = 1, 5
@@ -399,16 +398,10 @@ class TestExamples(unittest.TestCase):
         wc, theory = inPIDRS.wc_pidrs(mu, L, n, gamma, sigma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
-    def test_inRIPP_1(self):
+    def test_inRIPP(self):
         gamma, sigma, n = 2, 0.3, 5
 
-        wc, theory = inRIPP_1.wc_rippm1(n, gamma, sigma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
-
-    def test_inRIPP_2(self):
-        gamma, sigma, n = 10, 0.01, 8
-
-        wc, theory = inRIPP_2.wc_rippm2(n, gamma, sigma, verbose=self.verbose)
+        wc, theory = inRIPP.wc_rippm(n, gamma, sigma, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
 
     def tearDown(self):

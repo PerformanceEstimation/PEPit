@@ -5,7 +5,7 @@ from PEPit.functions.convex_function import ConvexFunction
 from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
 
 
-def wc_rippm1(n, gamma, sigma, verbose=True):
+def wc_rippm(n, gamma, sigma, verbose=True):
     """
     Consider the non-smooth convex minimization problem,
 
@@ -53,18 +53,19 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_rippm1(n=8, gamma=10, sigma=.65, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_rippm(n=8, gamma=10, sigma=.65, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 18x18
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : 88 constraint(s) added
+                 function 1 : 88 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.007678668602554672
+        (PEP-it) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.00810915174704416
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
-	        PEP-it guarantee:       f(x_n) - f(x_*) <= 0.00767867 ||x_0 - x_*||^2
-	        Theoretical guarantee:  f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
+            PEP-it guarantee:		 f(x_n) - f(x_*) <= 0.00810915 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -101,7 +102,7 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact proximal point method in distance in function values ***')
-        print('\tPEP-it guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -110,4 +111,4 @@ def wc_rippm1(n, gamma, sigma, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_rippm1(n=8, gamma=10, sigma=.65, verbose=True)
+    pepit_tau, theoretical_tau = wc_rippm(n=8, gamma=10, sigma=.65, verbose=True)
