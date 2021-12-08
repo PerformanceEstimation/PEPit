@@ -43,13 +43,13 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
 
     References:
 
-        This methods was first introduce in [1], and convergence upper bound was proved in [2].
+        This methods was first introduce in [1, Section 2], and convergence upper bound was proven in [2, Theorem 4].
 
-        [1] B.T. Polyak.
-        "Some methods of speeding up the convergence of iteration methods".
+        `[1] B.T. Polyak (1964). Some methods of speeding up the convergence of iteration method (URSS Computational Mathematics and Mathematical Physics).
+        <https://www.sciencedirect.com/science/article/pii/0041555364901375>`_
 
-        [2]  Euhanna Ghadimi, Hamid Reza Feyzmahdavian, Mikael. Johansson.
-        " Global convergence of the Heavy-ball method for convex optimization".
+        `[2] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015). Global convergence of the Heavy-ball method for convex optimization (European Control Conference).
+        <https://arxiv.org/pdf/1412.7457.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

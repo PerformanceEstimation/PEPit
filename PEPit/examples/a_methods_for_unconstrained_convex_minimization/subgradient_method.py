@@ -15,33 +15,34 @@ def wc_subgd(M, N, gamma, verbose=True):
     This code computes a worst-case guarantee for the **subgradient** method. That is, it computes
     the smallest possible :math:`\\tau(n, M)` such that the guarantee
 
-    .. math:: \\min_{0 \leq i \leq N} f(x_i) - f_\star \\leqslant \\tau(n, M)  ||x_0 - x_\star||^2
+    .. math:: \\min_{0 \leqslant t \leqslant N} f(x_t) - f_\star \\leqslant \\tau(n, M)  \|x_0 - x_\star\|^2
 
     is valid, where :math:`x_i` is the output of the **subgradient** method,
     and where :math:`x_\star` is the minimizer of :math:`f`.
 
-    We show how to compute the worst-case value of :math:`\\min_i F(x_i)-F(x_\star)` when :math:`x_i` is
+    We show how to compute the worst-case value of :math:`\\min_t F(x_t)-F(x_\star)` when :math:`x_t` is
     obtained by doing :math:`i`steps of a subgradient method starting with an initial
-    iterate satisfying :math:`||x_0-x_\star|| \\leqslant 1`.
+    iterate satisfying :math:`\|x_0-x_\star\| \\leqslant 1`.
 
     **Algorithm**:
 
-        .. math:: g_{i} \\in \\partial f(x_i)
-        .. math:: x_{i+1} = x_i - \\gamma g_i
+        .. math:: g_{t} \\in \\partial f(x_t)
+        .. math:: x_{t+1} = x_t - \\gamma g_t
 
     **Theoretical guarantee**:
 
-    The **tight** bound is obtained in [1? Corollary 3].
+    The **tight** bound is obtained in [1, Section 3.2.3],
 
-        .. math:: \\min_i F(x_i)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{N+1}}||x_0-x_\star||
+        .. math:: \\min_{0 \\leqslant t \\leqslant n} F(x_t)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\star\|.
 
     **References**:
 
-        TODO
+        `[1] Y. Nesterov, Introductory Lectures on Convex Programming, Volume 1: Basic course (1998).
+        <https://scholar.google.com/citations?view_op=view_citation&hl=fr&user=DJ8Ep8YAAAAJ&citation_for_view=DJ8Ep8YAAAAJ:FiDNX6EVdGUC>`_
 
     Args:
         M (float): the Lipschitz parameter.
-        N (int): the number of iterations
+        N (int): the number of iterations.
         gamma (float): step size.
         verbose (bool, optional): if True, print conclusion.
 
@@ -52,7 +53,7 @@ def wc_subgd(M, N, gamma, verbose=True):
         >>> M = 2
         >>> N = 6
         >>> gamma = 1 / (M * np.sqrt(N + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgd(M, N, gamma)
+        >>> pepit_tau, theoretical_tau = wc_subgd(M, N, gamma, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -117,6 +118,4 @@ if __name__ == "__main__":
     N = 6
     gamma = 1 / (M * np.sqrt(N + 1))
 
-    rate = wc_subgd(M=M,
-                    N=N,
-                    gamma=gamma)
+    rate = wc_subgd(M=M, N=N, gamma=gamma, verbose=True)

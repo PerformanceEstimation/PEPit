@@ -42,14 +42,13 @@ def wc_cg_fw(L, D, n, verbose=True):
 
     References:
 
-        `[1] Jaggi, Martin. "Revisiting Frank-Wolfe: Projection-free sparse
-        convex optimization." In: Proceedings of the 30th International
-        Conference on Machine Learning (ICML-13), pp. 427–435 (2013)
+        `[1] J. Martin (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization
+        (Proceedings of the 30th International Conference on Machine Learning (ICML-13), pp. 427–435).
         <http://proceedings.mlr.press/v28/jaggi13.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
-        D (float): diameter of f2
+        D (float): diameter of :math:`f_2`.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion.
 
@@ -68,7 +67,7 @@ def wc_cg_fw(L, D, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
         *** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***
-            PEP-it guarantee:	 f(y_n)-f_* <= 0.0994521 ||x0 - xs||^2
+            PEP-it guarantee:	     f(y_n)-f_* <= 0.0994521 ||x0 - xs||^2
             Theoretical guarantee :	 f(y_n)-f_* <= 0.166667 ||x0 - xs||^2
 
     """
@@ -117,7 +116,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t \t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

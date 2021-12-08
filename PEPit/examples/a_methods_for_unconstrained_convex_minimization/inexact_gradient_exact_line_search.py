@@ -22,16 +22,16 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
     The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\varepsilon < 1`)
 
-        .. math:: || f'(x_i) - d || \\leqslant \\varepsilon || f'(x_i) ||,
+        .. math:: \| f'(x_t) - d \| \\leqslant \\varepsilon \| f'(x_t) \|,
 
-    where :math:`f'(x_i)` is the true gradient, and d is the approximate descent direction that is used.
+    where :math:`f'(x_t)` is the true gradient, and d is the approximate descent direction that is used.
 
     **Algorithm**:
 
-    Select :math:`d_i` such that
+    Select :math:`d_t` such that
 
-        .. math:: \\gamma = \\arg\\min_{\\gamma \in R^d} f(x_i - \\gamma d_i).
-        .. math:: x_{i+1} = x_i - \\gamma d_i.
+        .. math:: \\gamma = \\arg\\min_{\\gamma \in R^d} f(x_t- \\gamma d_t).
+        .. math:: x_{t+1} = x_t - \\gamma d_t.
 
     **Theoretical guarantees**:
 
@@ -39,15 +39,15 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
         .. math:: f(x_n) - f_\star\\leqslant \\left(\\frac{L_{\\varepsilon} - \\mu_{\\varepsilon}}{L_{\\varepsilon} + \\mu_{\\varepsilon}}\\right)^{2n}( f(x_0) - f_\star ),
 
-    with :math:`L_{\\epsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`
+    with :math:`L_{\\epsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`.
 
     References:
 
-        The detailed approach (based on convex relaxations) is available in
+        The detailed approach (based on convex relaxations) is available in [1],
 
-        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-        Optimization Letters (2017).
+        `[1] E. De Klerk, F. Glineur, and A. B. Taylor (2017). On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions
+        (Optimization Letter).
+        <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -60,7 +60,7 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_InexactGrad_ELS(1, 0.1, 0.1, 1)
+        >>> pepit_tau, theoretical_tau = wc_InexactGrad_ELS(1, 0.1, 0.1, 1, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -119,12 +119,5 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
-    epsilon = .1
 
-    pepit_tau, theoretical_tau = wc_InexactGrad_ELS(L=L,
-                                                    mu=mu,
-                                                    epsilon=epsilon,
-                                                    n=n)
+    pepit_tau, theoretical_tau = wc_InexactGrad_ELS(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)
