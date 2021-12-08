@@ -93,7 +93,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L}, is_differentiable=True)
+    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
     g = problem.declare_function(ConvexFunction, param={})
 
     # Define the function to optimize as the sum of func1 and func2
@@ -132,7 +132,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
-        print('\tPEP-it guarantee:\t\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
