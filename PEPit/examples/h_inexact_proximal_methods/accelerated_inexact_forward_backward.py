@@ -54,7 +54,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
                  TBC\\\
             \\end{eqnarray}
 
-    **Theoretical guarantee**: A tight theoretical guarantee is obtained in [1, Theorem 3.2]:
+    **Theoretical guarantee**: A theoretical guarantee is obtained in [1, Theorem 3.2]:
 
         .. math:: \\Phi_{t+1} - \\Phi_t \\leq 0.
 
