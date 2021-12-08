@@ -23,7 +23,7 @@ class CocoerciveOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 is_differentiable=True):
         """
         Cocoercive operators are not characterized by any parameter.
 
