@@ -53,7 +53,6 @@ import PEPit.examples.j_low_dimensional_worst_cases_scenarios.inexact_gradient a
 import PEPit.examples.j_low_dimensional_worst_cases_scenarios.optimized_gradient_method as inLDOGM
 import PEPit.examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_extra_gradient as inAHPE
 import PEPit.examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward as inAIFB
-import PEPit.examples.h_inexact_proximal_methods.optimized_relatively_inexact_proximal_point_algorithm as inORIPPA
 import PEPit.examples.h_inexact_proximal_methods.partially_inexact_douglas_rachford_splitting as inPIDRS
 import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm as inRIPP
 
@@ -385,12 +384,6 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = inAIFB.wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
-
-    def test_inORIPPA(self):
-        gamma, sigma, n = 2, 3, 10
-
-        wc, theory = inORIPPA.wc_orippm(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inPIDRS(self):
         mu, L, gamma, sigma, n = 1, 5., 1.4, 0.2, 5
