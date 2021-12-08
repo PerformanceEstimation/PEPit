@@ -10,41 +10,58 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
 
-    .. math:: \\min_x {F(x) = f(x) + g(x)}
+    .. math:: \\min_x \\left\\{F(x) \\equiv f(x) + g(x)\\right\\}
 
-    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth.
-    Both proximal operators are assumed to be available.
+    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth
+    (and possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
+    that one has access to an inexact version of the proximal operator of :math:`g`.
 
-    This code computes a worst-case guarantee for an **Accelerated Hybrid Proximal Gradient**.
+    This code verifies a potential (or Lyapunov/energy) function for an **inexact accelerated forward-backward method**
+    presented in [1, Algorithm 3.1]. That is, it verifies that
 
-    That is, it computes the smallest possible :math:`\\tau(\\mu, n, \\sigma, \\gamma)` such that the guarantee
+    .. math:: \\Phi_{t+1} \\leq \\Phi_t
 
-    .. math:: \\Phi_{n+1} \\leq \\tau(\\mu, n, \\sigma, \\gamma) \\Phi_n
-
-    is valid, where Phi_n = A_n(F(x_n - F_\\star) + \\frac{1 + \\mu * A_n}{2} \\|z_n - x_\\star\\|^2.
-    We are going to verify that:
-
-    .. math:: \\Phi_{n+1} - \\Phi_n \\leq 0
+    is valid, where :math:`\\Phi_t \\triangleq A_t (F(x_t) - F_\\star) + \\frac{1 + \\mu A_t}{2} \\|z_t - x_\\star\\|^2` is a potential function.
+    For doing that, we verify that the maximum value of :math:`\\Phi_{t+1} - \\Phi_t` is less than zero (maximum over all
+    problem instances and initializations).
 
     **Algorithm**:
 
-    The algorithm is presented in TODO
+    The algorithm is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
+    values for its parameters: :math:`\\xi_k=0`, :math:`\\sigma_k=0`, :math:`\\lambda_k=\\tfrac{1}{L}` (constant value
+    accross the iterations), and without backtracking, arriving to:
 
-        .. math:: TODO je comprends pas comment c'est lié au papier
+        .. math::
+            :nowrap:
 
-    **Theoretical guarantee**:
+            \\begin{eqnarray}
+                 \\eta_t && = (1-\\zeta_t^2) \\lambda \\\\
+                 A_{t+1} && = A_t + \\frac{\\eta_t+2A_t \\mu\\eta_t+\\sqrt{\\eta_t^2+4\\eta_t A_t(1+\\eta_t\\mu)(1+A_t\\mu)}}{2},\\\\
+                 y_{t} && = x_t + \\frac{(A_{t+1}-A_t)(1+\\mu A_t)}{A_{t+1}+A_t(2A_{t+1}-A_t)\\mu} (z_t-x_t),\\\\
+                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t,\\mu} \\left(\mathrm{prox}_{\lambda g}\\left(y_t-\\lambda \\nabla f(y_t)\\right),\,
+                 \mathrm{prox}_{ g^*/\\lambda}\\left(\\frac{y_t-\\lambda \\nabla f(y_t)}{\\lambda}\\right)\\right),\\\\
+                 && \\text{with } \\varepsilon_t = \\frac{\\zeta_t^2\\lambda^2}{2(1+\\lambda\\mu)^2}\|v_{t+1}+\\nabla f(y_t) \|^2,\\\\
+                 z_{t+1} && = z_t+\\frac{A_{t+1}-A_t}{1+\\mu A_{t+1}}\\left(\\mu (x_{t+1}-z_t)-(v_{t+1}+\\nabla f(y_t))\\right),\\\\
+            \\end{eqnarray}
 
-    The theoretical guarantee is obtained in TODO
+    where :math:`\\varepsilon_t` is some accuracy parameter. More precisely, the sign ":math:`\\approx_{\\varepsilon,\\mu}`"
+    can be described as
 
-        .. math:: \\Phi_{n+1} - \\Phi_n \\leq 0
+     .. math::
+            :nowrap:
 
-    **References**:
+            \\begin{eqnarray}
+                 TBC\\\
+            \\end{eqnarray}
 
-        The method originates from [1, Section 4.3].
+    **Theoretical guarantee**: A tight theoretical guarantee is obtained in [1, Theorem 3.2]:
 
-        `[1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-        first-order methods with inexact proximal operators (2020).
-        <https://arxiv.org/pdf/2006.06041.pdf>`_
+        .. math:: \\Phi_{t+1} - \\Phi_t \\leq 0.
+
+    **References**: The method and theoretical result can be found in [1, Section 3].
+
+        `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
+        absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v1. <https://arxiv.org/pdf/2106.15536v1.pdf>`_
 
     Args:
         mu (float): strong convexity parameter.
