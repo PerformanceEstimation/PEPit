@@ -16,12 +16,12 @@ def wc_fppa(A0, gammas, n, verbose=True):
        This code computes a worst-case guarantee for **fast proximal point method** (FPP). That is, it computes
        the smallest possible :math:`\\tau(n, A_0, \\gamma)` such that the guarantee
 
-       .. math:: f(x_n) - f_\star \\leqslant \\tau(n, A_0, \\gamma) (f(x_0) - f_\star + \\frac{A_0}{2}  || x_0 - x_\star ||^2)
+       .. math:: f(x_n) - f_\star \\leqslant \\tau(n, A_0, \\gamma) (f(x_0) - f_\star + \\frac{A_0}{2}  \\| x_0 - x_\star \\|^2)
 
        is valid, where :math:`x_n` is the output of FPP (with learning rates \\gamma_k at step k) and where :math:`x_\star` is a minimizer of :math:`f` and :math:`A_0` is a positive number.
 
        In short, for given values of :math:`n`,  :math:`A_0` and :math:`\\gamma`, :math:`\\tau(n)` is computed as the worst-case value
-       of :math:`f(x_n)-f_\star` when :math:`f(x_0) - f_\star + \\frac{A_0}{2} || x_0 - x_\star ||^2 \\leqslant 1`, for the following algorithm.
+       of :math:`f(x_n)-f_\star` when :math:`f(x_0) - f_\star + \\frac{A_0}{2} \\| x_0 - x_\star \\|^2 \\leqslant 1`, for the following algorithm.
 
        **Algorithm**:
         
@@ -30,7 +30,7 @@ def wc_fppa(A0, gammas, n, verbose=True):
 
                \\begin{eqnarray}
                    y_{k+1} &&= (1-\\alpha_{k} ) x_{k} + \\alpha_{k} v_k \\\\
-                   x_{k+1} &&= \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma_k}||x-y_{k+1}||^2 \\right\\}, \\\\
+                   x_{k+1} &&= \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma_k}\\|x-y_{k+1}\\|^2 \\right\\}, \\\\
                    v_{k+1} &&= v_k + \\frac{1}{\\alpha_{k}} (x_{k+1}-y_{k+1}) 
                \\end{eqnarray}
 
@@ -45,9 +45,9 @@ def wc_fppa(A0, gammas, n, verbose=True):
                \\end{eqnarray}
                
        **Theoretical guarantee**:
-       A theoretical upper bound can be found in [1, Theorem 2.3.]:
+       A theoretical upper-bound can be found in [1, Theorem 2.3.]:
 
-       .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{i=1}^n \\sqrt{\\gamma_i})^2}(f(x_0) - f_\star + \\frac{A_0}{2}  || x_0 - x_\star ||^2).
+       .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{i=1}^n \\sqrt{\\gamma_i})^2}(f(x_0) - f_\star + \\frac{A_0}{2}  \\| x_0 - x_\star \\|^2).
 
        **References**:
        The fast proximal point was analyzed in the following work:

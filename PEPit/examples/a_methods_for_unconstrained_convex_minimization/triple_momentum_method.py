@@ -6,27 +6,109 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 
 def wc_tmm(mu, L, n, verbose=True):
     """
-    Consider the convex minimization problem
-        f_\star = min_x f(x),
-    where f is L-smooth and mu-strongly-convex.
+    Consider the minimization problem
 
-    This code computes a worst-case guarantee for the Triple Momentum Method.
-    That is, it computes the smallest possible tau(n, mu, L) such that the guarantee
-        f(x_n) - f_\star <= tau(n, mu, L) ||x_0 - x_\star||^2,
-    is valid, where x_n is the output of the triple momentum method, and where x_\star is a minimizer of f.
+        .. math:: f_\star = \\min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
+
+    This code computes a worst-case guarantee for **triple momentum method.** (TMM).
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+
+        .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) \\| x_0 - x_\star \\|^2
+
+    is valid, where :math:`x_n` is the output of the **triple momentum method.** (TMM),
+    and where :math:`x_\star` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+        :math:`f(x_n)-f_\star` when :math:`\\| x_0 - x_\star \\|^2 \\leqslant 1`.
+
+
+    **Algorithm**:
+
+        .. math:: for k \in 1, \dots, n
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+               \\xi_{k+1} = (1 + \\beta) * \\xi_{k} - \\beta * \\xi_{k-1} - \\alpha * \\nabla f(y_k) \\\\
+               y_{k} &&= (1+\\gamma ) \\xi_{k} -\\gamma \\xi_{k-1} \\\\
+               x_{k} && = (1 + \\delta) * \\xi_{k} - \\delta * \\xi_{k-1}
+            \\end{eqnarray}
+
+    with
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\kappa &&= L / \\mu \\\\
+                \\rho &&= 1- \\frac{1}{\\sqrt{\\kappa}}\\\\
+                \\alpha && = \\frac{1+\\rho}{L}\\\\
+                \\beta && = \\frac{\\rho^2}{2-\\rho}\\\\
+                \\gamma  && = \\frac{\\rho^2}{(1+\\rho)(2-\\rho)} \\\\
+                \\delta && = \\frac{\\rho^2}{1-\\rho^2}
+            \\end{eqnarray}
+
+    and
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\xi_{0} = x_0 \\\\
+                \\xi_{1} = x_0 \\\\
+                y = x_0
+            \\end{eqnarray}
+
+
+    **Theoretical guarantee**:
+    A theoretical upper-bound can be found in [1, Theorem 1]:
+
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\| x_0 - x_\star \\|^2.
+
+    **References**:
+    The triple momentum method was analyzed in the following work:
 
     [1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018).
     "The fastest known globally convergent first-order method for
     minimizing strongly convex functions."
     IEEE Control Systems Letters, 2(1), 49-54.
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        alpha (float): parameter of the scheme.
+        beta (float): parameter of the scheme such that :math:`0<\\beta<1` and :math:`0<\\alpha<2(1+\\beta)`.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+
+    Example:
+        >>> mu = 0.1
+        >>> L = 1.
+        >>> n = 4
+        >>> pepit_tau, theoretical_tau = wc_tmm(mu=mu, L=L,  n=n, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+             function 1 : 42 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.1117036959488595
+        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -2.18e-06 < 0).
+        Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+        In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        *** Example file: worst-case performance of the Triple Momentum Method ***
+        PEP-it guarantee:		 f(x_n)-f_* <= 0.111704 ||x_0-x_*||^2
+        Theoretical guarantee:	 f(x_n)-f_* <= 0.111708 ||x_0-x_*||^2
     """
+
 
     # Instantiate PEP
     problem = PEP()
@@ -74,8 +156,8 @@ def wc_tmm(mu, L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Triple Momentum Method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
