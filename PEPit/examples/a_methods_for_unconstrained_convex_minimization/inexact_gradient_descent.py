@@ -28,7 +28,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
         with
 
-        .. math:: \\|d_t - \\nabla f(x_t)\|| \leqslant \\varepsilon \\|\\nabla f(x_t)\||
+        .. math:: \|d_t - \\nabla f(x_t)\| \\leqslant  \\varepsilon \|\\nabla f(x_t)\|
 
         and
 
@@ -38,23 +38,27 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        The **tight** guarantee obtained in [1, Theorem 5.1] is
+    The tight worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
-        .. math:: \\tau(n, L, \\mu, \\varepsilon) = \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}.
+        .. math:: f(x_n) - f_\star \\leqslant \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}(f(x_0) - f_\star).
 
     References:
         The detailed approach (based on convex relaxations) is available in [1].
 
-        [1] De Klerk, Etienne, François Glineur, and Adrien B. Taylor.
-        "On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions."
-        Optimization Letters (2017).
+        `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
+        inexact gradient and Newton methods through semidefinite programming performance estimation.
+        (SIAM Journal on Optimization, 30(3), 2053-2082).
+        <https://arxiv.org/pdf/1709.05191.pdf>`_
+
+        `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods (Mathematical Programming).
+        <https://arxiv.org/pdf/1912.13494.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        epsilon (float): level of inaccuracy
+        epsilon (float): level of inaccuracy.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
         tuple: worst_case value, theoretical value

@@ -37,6 +37,7 @@ import PEPit.examples.c_methods_for_nonconvex_optimization.no_lips_2 as ncNL2
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SAGA as inSAGA
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_overparametrized as inSGD
 import PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_strongly_convex as inSGDSC
+import PEPit.examples.d_stochastic_methods_for_convex_minimization.point_SAGA as inPSAGA
 import PEPit.examples.e_monotone_inclusions.accelerated_proximal_point as opAPP
 import PEPit.examples.e_monotone_inclusions.douglas_rachford_splitting as opDRS
 import PEPit.examples.e_monotone_inclusions.proximal_point_method as opPPM
@@ -52,10 +53,8 @@ import PEPit.examples.j_low_dimensional_worst_cases_scenarios.inexact_gradient a
 import PEPit.examples.j_low_dimensional_worst_cases_scenarios.optimized_gradient_method as inLDOGM
 import PEPit.examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_extra_gradient as inAHPE
 import PEPit.examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward as inAIFB
-import PEPit.examples.h_inexact_proximal_methods.optimized_relatively_inexact_proximal_point_algorithm as inORIPPA
 import PEPit.examples.h_inexact_proximal_methods.partially_inexact_douglas_rachford_splitting as inPIDRS
-import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_1 as inRIPP_1
-import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm_2 as inRIPP_2
+import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm as inRIPP
 
 
 class TestExamples(unittest.TestCase):
@@ -257,7 +256,7 @@ class TestExamples(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = ncGD.wc_gd(L, gamma, n, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_ncnl1(self):
         L, n = 1, 5
@@ -287,11 +286,17 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_insgd(self):
-        L, mu, R, n = 1, 0.1, 2, 5
+        L, mu, n = 1, 0.1, 5
         gamma = 1 / L
 
-        wc, theory = inSGD.wc_sgdo(L, mu, gamma, R, n, verbose=self.verbose)
+        wc, theory = inSGD.wc_sgdo(L, mu, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_inpsaga(self):
+        L, mu, n = 1, 0.1, 10
+
+        wc, theory = inPSAGA.wc_psaga(L, mu, n, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
 
     def test_opapp(self):
         alpha, n = 2, 10
@@ -380,28 +385,16 @@ class TestExamples(unittest.TestCase):
         wc, theory = inAIFB.wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
-    def test_inORIPPA(self):
-        gamma, sigma, n = 2, 3, 10
-
-        wc, theory = inORIPPA.wc_orippm(n, gamma, sigma, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-
     def test_inPIDRS(self):
         mu, L, gamma, sigma, n = 1, 5., 1.4, 0.2, 5
 
         wc, theory = inPIDRS.wc_pidrs(mu, L, n, gamma, sigma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
-    def test_inRIPP_1(self):
+    def test_inRIPP(self):
         gamma, sigma, n = 2, 0.3, 5
 
-        wc, theory = inRIPP_1.wc_rippm1(n, gamma, sigma, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
-
-    def test_inRIPP_2(self):
-        gamma, sigma, n = 10, 0.01, 8
-
-        wc, theory = inRIPP_2.wc_rippm2(n, gamma, sigma, verbose=self.verbose)
+        wc, theory = inRIPP.wc_rippm(n, gamma, sigma, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
 
     def tearDown(self):

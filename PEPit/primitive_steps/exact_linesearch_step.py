@@ -4,7 +4,11 @@ from PEPit.point import Point
 def exact_linesearch_step(x0, f, directions):
     """
     This routines *mimics* an exact line search.
-    Indeed, at each iteration k:
+    This is used for instance in
+
+    PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_exact_line_search.py
+
+    At each iteration k:
 
     .. math::
 
@@ -27,9 +31,9 @@ def exact_linesearch_step(x0, f, directions):
     Args:
         x0 (Point): the starting point.
         f (Function): the function on which the (sub)gradient will be evaluated.
-        directions: (List of Points) the list of all directions required to be orthogonal to the
-                    (sub)gradient of x. Note that (x-x0) is automatically constrained to be orthogonal
-                    to the subgradient of f at x.
+        directions (List of Points): the list of all directions required to be orthogonal to the (sub)gradient of x.
+                                     Note that (x-x0) is automatically constrained to be orthogonal
+                                     to the subgradient of f at x.
 
     Returns:
         x (Point), such that all vectors in directions are orthogonal to the (sub)gradient of f at x.

@@ -15,11 +15,12 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     :math:`L`-smooth :math:`\\mu`-strongly convex function. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}`
     the resolvent of respectively :math:`A` and :math:`B`, with step size :math:`\\alpha`.
 
-    This code computes a worst-case guarantee for the **three operator splitting** (TOS). That is, given two initial points
-    :math:`w^{(0)}_k` and :math:`w^{(1)}_k`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
+    This code computes a worst-case guarantee for the **three operator splitting** (TOS).
+    That is, given two initial points :math:`w^{(0)}_k` and :math:`w^{(1)}_k`,
+    this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
-    .. math:: || w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta)  || w^{(0)}_{k} - w^{(1)}_{k} ||^2,
+    .. math:: \\|w^{(0)}_{k+1} - w^{(1)}_{k+1}\\|^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta) \|w^{(0)}_{k} - w^{(1)}_{k}\|^2,
 
     is valid, where :math:`w^{(0)}_{k+1}` and :math:`w^{(1)}_{k+1}` are obtained after one iteration of TOS from
     respectively :math:`w^{(0)}_{k}` and :math:`w^{(1)}_{k}`.
@@ -48,18 +49,19 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     [2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
     Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
 
+    Args:
+        L (float): smoothness constant of C.
+        mu (float): strong convexity of C.
+        beta (float): cocoercivity of B.
+        alpha (float): step size (in the resolvants).
+        theta (float): overrelaxation parameter.
+        verbose (bool): if True, print conclusion
 
-    :param L: (float) smoothness constant of C.
-    :param mu: (float) strong convexity of C.
-    :param beta: (float) cocoercivity of B.
-    :param alpha: (float) step size (in the resolvants).
-    :param theta: (float) overrelaxation parameter.
-    :param verbose: (bool) if True, print conclusion
-
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, _  = wc_tos(L=1, mu=.1, beta=1, alpha=1.3, theta=.9, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_tos(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -71,7 +73,8 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-                PEP-it guarantee:	 || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.779689 || w_(k)^0 - w_(k)^1 ||^2
+                PEP-it guarantee:	 ||w_(k+1)^0 - w_(k+1)^1||^2 <= 0.779689 ||w_(k)^0 - w_(k)^1||^2
+
     """
 
     # Instantiate PEP
@@ -111,21 +114,12 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
-        print('\tPEP-it guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t ||w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} ||w_(k)^0 - w_(k)^1||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    L = 1
-    mu = 0.1
-    beta = 1
-    alpha = 0.9
-    theta = 1.3
 
-    pepit_tau, theoretical_tau = wc_tos(L=L,
-                                        mu=mu,
-                                        beta=beta,
-                                        alpha=alpha,
-                                        theta=theta)
+    pepit_tau, theoretical_tau = wc_tos(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)

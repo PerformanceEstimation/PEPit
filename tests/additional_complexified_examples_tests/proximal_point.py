@@ -14,11 +14,14 @@ def wc_ppa(gamma, n, verbose=True):
 
     where :math:`f_1` and :math:`f_2` are closed, proper, and convex (and potentially non-smooth).
 
-    :param gamma: (float) the step size parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        gamma (float): the step size parameter.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
+
     """
 
     # Instantiate PEP
@@ -64,8 +67,5 @@ def wc_ppa(gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    gamma = 1
 
-    pepit_tau, theoretical_tau = wc_ppa(gamma=gamma,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_ppa(gamma=1, n=2)

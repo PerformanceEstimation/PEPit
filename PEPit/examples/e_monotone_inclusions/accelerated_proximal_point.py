@@ -11,24 +11,31 @@ def wc_ppm(alpha, n, verbose=True):
 
     where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 
-    This code computes a worst-case guarantee for the **accelerated proximal point** method, that is the smallest
-    possible :math:`\\tau(n)` such that the guarantee
+    This code computes a worst-case guarantee for the **accelerated proximal point** method,
+    that is the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
 
-        .. math:: ||x_n - y_n||^2 \\leqslant \\tau(n) || x_0 - x_\star||^2,
+        .. math:: ||x_n - y_n||^2 \\leqslant \\tau(n, \\alpha) ||x_0 - x_\star||^2,
 
     is valid, where :math:`x_\star` is such that :math:`0 \\in Ax_\star`.
 
     **Algorithm**:
 
-        .. math:: x_{i+1} = J_{\\alpha A}(y_i)
+        .. math::
 
-        .. math y_{i+1} = x_{i+1} + \\frac{i}{i+2}(x_{i+1} - x_{i}) - \\frac{i}{i+1}(x_i - y_{i-1})
+            \\begin{eqnarray}
+                x_{i+1} & = & J_{\\alpha A}(y_i) \\\\
+                y_{i+1} & = & x_{i+1} + \\frac{i}{i+2}(x_{i+1} - x_{i}) - \\frac{i}{i+1}(x_i - y_{i-1})
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 
-    Theoretical rates can be found in the following paper (section 4, Theorem 4.1)
+    Theoretical rates can be found in [1, Theorem 4.1]
 
-        .. math:: ||x_n - y_n||^2 \\leqslant  \\frac{1}{n^2}  || x_0 - x_\star||^2
+        .. math:: \\|x_n - y_n\\|^2 \\leqslant  \\frac{1}{n^2}  \\|x_0 - x_\star\\|^2.
+
+    Note:
+
+        This rate is independent of :math:`\\alpha`.
 
     **Reference**:
 
@@ -44,7 +51,7 @@ def wc_ppm(alpha, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_ppm(2, 10)
+        >>> pepit_tau, theoretical_tau = wc_ppm(alpha=2, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -52,10 +59,11 @@ def wc_ppm(alpha, n, verbose=True):
                  function 1 : 110 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.010001764316228073
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.010000353550061647
         *** Example file: worst-case performance of the Accelerated Proximal Point Method***
-            PEP-it guarantee:	 ||x_n - y_n||^2 <= 0.0100018 ||x_0 - x_s||^2
-            Theoretical guarantee :	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
+            PEP-it guarantee:		 ||x_n - y_n||^2 <= 0.0100004 ||x_0 - x_s||^2
+            Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
+
     """
 
     # Instantiate PEP
@@ -93,16 +101,13 @@ def wc_ppm(alpha, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Accelerated Proximal Point Method***')
-        print('\tPEP-it guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    alpha = 2
-    n = 10
 
-    pepit_tau, theoretical_tau = wc_ppm(alpha=alpha,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_ppm(alpha=2, n=10, verbose=True)

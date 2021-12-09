@@ -8,30 +8,81 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 def wc_psaga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
-        f_\star = min_x {F(x) = 1/n [f1(x) + ... + fn(x)]},
-    where f1, ..., fn are assumed L-smooth and mu-strongly convex,
+
+    .. math:: f_\\star = \\min_x {F(x) \\equiv \\frac{1}{n} [f_1(x) + ... + f_n(x)]},
+
+    where :math:`f_1, \\dots, f_n` are assumed :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and with proximal operator available.
 
-    This code computes the exact rate for the Lyapunov function from the original Point SAGA paper,
-    given in [1, Theorem 5]. at each iteration k, for a j chosen uniformely at random :
-            z_j^k = x^k + gamma * (g_j^k - 1/n sum_i(g_i^k))
-            x^{k+1} = prox_j^gamma (z_j^k)
-            g_j^{k+1} = 1/gamma*(z_j^k - x^{k+1})
-    That is, it computes the smallest possible tau(n,L,mu) such that a given Lyapunov sequence V1 is
-    decreasing along the trajectory:
-        V1(x_1) <= tau(n,L,mu) V0(x_0),
-    with Vk(x1) = c/n*sum(||g_i^k - g_i^*||^2 + ||x^k - x_\star||^2,
-    with gamma = sqrt((n-1)^2 + 4*n*L/mu)/(2*L*n), and c = 1/(mu*L).
+    This code computes the exact rate for the Lyapunov function from the original **Point SAGA** paper,
+    given in [1, Theorem 5].
 
-    [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite
-        Sums." (2014).
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of functions.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: V_1(x_1) \\leqslant \\tau(n, L, \\mu) V_0(x_0)
 
-    :return: (tuple) worst_case value, theoretical value
+    with
+
+    .. math:: V_k(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
+
+    where :math:`x_\\star` denotes the minimizer of :math:`F`.
+
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`V_1(x_1)` when
+    :math:`V_0(x_0) \\leqslant 1`.
+
+    **Algorithm**:
+    Point SAGA is described by
+
+    .. math::
+        \\begin{eqnarray}
+            \\gamma & = & \\frac{\\sqrt{(n - 1)^2 + 4n\\frac{L}{\\mu}}}{2Ln} - \\frac{\\left(1 - \\frac{1}{n}\\right)}{2L} \\\\
+            j & \\sim & \\mathcal{U}\\left([|1, n|]\\right) \\\\
+            z_k & = & x_k + \\gamma \\left(g_j^k - \\frac{1}{n} \\sum_{i\\leq n}g_i^k\\right) \\\\
+            x_{k+1} & = & \\mathrm{prox}(z_k, f_j, \\gamma) \\\\
+            g_j^{k+1} & = & \\frac{1}{\\gamma}(z_k - x_{k+1})
+        \\end{eqnarray}
+
+    **Theoretical guarantee**:
+    A theoretical upper bound is given in [1, Theorem 5].
+
+    .. math:: V_1(x_1) \\leqslant \\frac{1}{1 + \\mu\\gamma} V_0(x_0)
+
+    **References**:
+    [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite Sums." (2014).
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        n (int): number of functions.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 31x31
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 10 function(s)
+                 function 1 : 2 constraint(s) added
+                 function 2 : 2 constraint(s) added
+                 function 3 : 2 constraint(s) added
+                 function 4 : 2 constraint(s) added
+                 function 5 : 2 constraint(s) added
+                 function 6 : 2 constraint(s) added
+                 function 7 : 2 constraint(s) added
+                 function 8 : 2 constraint(s) added
+                 function 9 : 2 constraint(s) added
+                 function 10 : 2 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.9714053941143999
+        *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
+            PEP-it guarantee:		 V1(x_0, x_*) <= 0.971405 VO(x_0, x_*)
+            Theoretical guarantee:	 V1(x_0, x_*) <= 0.973292 VO(x_0, x_*)
+
     """
 
     # Instantiate PEP
@@ -50,13 +101,13 @@ def wc_psaga(L, mu, n, verbose=True):
 
     # Parameters of the scheme and of the Lyapunov function
     gamma = np.sqrt((n - 1) ** 2 + 4 * n * L / mu) / 2 / L / n - (1 - 1 / n) / 2 / L
-    c = 1 / mu / L
+    c = 1 / (mu * L)
 
     # Compute the initial value of the Lyapunov function
     init_lyapunov = (xs - x0) ** 2
+    gs = [fn[i].gradient(xs) for i in range(n)]
     for i in range(n):
-        gis, fis = fn[i].oracle(xs)
-        init_lyapunov = init_lyapunov + c / n * (gis - phi[i]) ** 2
+        init_lyapunov = init_lyapunov + c / n * (gs[i] - phi[i]) ** 2
 
     # Set the initial constraint as the Lyapunov bounded by 1
     problem.set_initial_condition(init_lyapunov <= 1.)
@@ -71,11 +122,10 @@ def wc_psaga(L, mu, n, verbose=True):
         x1, gx1, _ = proximal_step(w, fn[i], gamma)
         final_lyapunov = (xs - x1) ** 2
         for j in range(n):
-            gjs, fjs = fn[j].oracle(xs)
             if i != j:
-                final_lyapunov = final_lyapunov + c / n * (phi[j] - gjs) ** 2
+                final_lyapunov = final_lyapunov + c / n * (phi[j] - gs[j]) ** 2
             else:
-                final_lyapunov = final_lyapunov + c / n * (gjs - gx1) ** 2
+                final_lyapunov = final_lyapunov + c / n * (gs[j] - gx1) ** 2
         final_lyapunov_avg = final_lyapunov_avg + final_lyapunov / n
 
     # Set the performance metric to the distance average to optimal point
@@ -99,10 +149,5 @@ def wc_psaga(L, mu, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 10
-    L = 1
-    mu = 0.1
 
-    pepit_tau, theoretical_tau = wc_psaga(L=L,
-                                          mu=mu,
-                                          n=n)
+    pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10)

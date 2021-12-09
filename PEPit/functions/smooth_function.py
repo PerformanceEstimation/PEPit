@@ -21,7 +21,7 @@ class SmoothFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 is_differentiable=True):
         """
         Smooth functions are characterized by their smoothness constant L.
 

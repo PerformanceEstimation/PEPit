@@ -25,12 +25,13 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     :math:`\\|x_n - x_\star\\|^2` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-        TODO
-        .. math:: x_{t+1} =
-
-        with
-
         .. math::
+            \\begin{eqnarray}
+                y_t & = & x_t - \\gamma \\nabla f_1(x_t) \\\\
+                x_{t+1} & = & \\arg\\min_x \\left\\{f_2(x)+\\frac{1}{2\gamma}||x-y_t||^2 \\right\\},
+            \\end{eqnarray}
+
+        where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
         TODO
@@ -39,8 +40,10 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
         .. math:: \\tau(n, L, \\mu) =
 
     References:
-
-        TODO
+        TODO: Check reference, I find proximal point, fast proximal gradient and plenty of others but not proximal gradient here:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for
+        composite convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
+        <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

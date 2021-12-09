@@ -15,50 +15,51 @@ def wc_rmm(mu, L, lam, verbose=True):
     This code computes a worst-case guarantee for the **robust momentum method**.
     That is, it verifies that the guarantee
 
-        .. math:: v(x_{n+1}) \\leqslant v(x_{n}),
+        .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
     is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
-        .. math:: q_n = (L - \\mu) (f(x_n) - f_\star - \\frac{\\mu}{2}||y_n - x_\star||^2 - \\frac{1}{2}||\\nabla(y_n) - \\mu (y_n - x_\star)||^2
+        .. math:: q_t = (L - \\mu) \\left(f(x_t) - f_\star - \\frac{\\mu}{2}\|y_t - x_\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\star)\|^2 \\right)
 
-        .. math:: v(x_n) = l||z_n - x_\star||^2 + q_n
+        .. math:: v(x_t) = l\|z_t - x_\star\|^2 + q_t
 
      with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) (1 - \\sqrt{\\frac{1}{\\kappa}})`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
 
     **Algorithm**:
 
-        .. math:: x_{n+1} = x_{n} + \\beta (x_n - x_{n-1}) - \\alpha \\nabla f(y_n)
+        .. math:: x_{t+1} = x_{t} + \\beta (x_t - x_{t-1}) - \\alpha \\nabla f(y_t)
 
-        .. math:: y_{n} + \\gamma (x_n - x_{n-1})
+        .. math:: y_{t} + \\gamma (x_t - x_{t-1})
 
     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
     **Theoretical guarantee**:
 
-    The **Lyapunov is proven to be decreasing** in [1, Theorem 1],
+    The **tight** convergence rate is proven using a **decreasing Lyapunov** in [1, Theorem 1],
     
-        .. math:: v(x_{n+1}) \\leqslant v(x_n)\\tau(n, \\mu, L) = v(x_n)
+        .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n),
+
+    with :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) (1 - \\sqrt{\\frac{1}{\\kappa}})`.
     
     **References**:
 
-    We show how to compute the tight rate for the Lyapunov function developed in [1, Theorem 1]
-
-    [1] Cyrus, S., Hu, B., Van Scoy, B., & Lessard, L. "A robust accelerated
-    optimization algorithm for strongly convex functions." In 2018 Annual
-    American Control Conference (ACC) (pp. 1376-1381). IEEE.
+    `[1] S. Cyrus, B. Hu, B. Van Scoy, & L. Lessard (2018). A robust accelerated
+    optimization algorithm for strongly convex functions (In 2018 Annual
+    American Control Conference (ACC) (pp. 1376-1381). IEEE).
+    <https://arxiv.org/pdf/1710.04753.pdf>`_
          
     Args:    
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        lam (float): if :math:`lam=1` it is the gradient descent, if :math:`lam=0`, it is the Triple Momentum Method.
-        verbose (bool, optional): if True, print conclusion
+        lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
+        verbose (bool, optional): if True, print conclusion.
 
     Returns:
          tuple: worst_case value, theoretical value
     
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_rmm(0.1, 1, 0.2)
+        >>> pepit_tau, theoretical_tau = wc_rmm(0.1, 1, 0.2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -137,10 +138,5 @@ def wc_rmm(mu, L, lam, verbose=True):
 
 
 if __name__ == "__main__":
-    mu = 0.1
-    L = 1.
-    lam = 0.2
 
-    pepit_tau, theoretical_tau = wc_rmm(mu=mu,
-                                        L=L,
-                                        lam=lam)
+    pepit_tau, theoretical_tau = wc_rmm(mu=0.1, L=1, lam=0.2, verbose=True)

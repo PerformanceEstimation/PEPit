@@ -16,7 +16,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS)** method.
     That is, it computes the smallest possible :math:`\\tau(\\mu,L,\\alpha,\\theta,n)` such that the guarantee
 
-        .. math:: ||w_1 - w_1'||^2 \\leqslant \\tau(\\mu,L,\\alpha,\\theta,n) ||w_0 - w_0'||^2.
+        .. math:: \|w_1 - w_1'\|^2 \\leqslant \\tau(\\mu,L,\\alpha,\\theta,n) \|w_0 - w_0'\|^2.
 
     is valid, where :math:`x_n` is the output of the **Douglas Rachford Splitting method**. It is a contraction
     factor computed when the algorithm is started from two different points :math:`w_0` and :math:`w_0`.
@@ -27,13 +27,13 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
 
         .. math:: x_k     = \\mathrm{prox}_{\\alpha f_2}(w_k)
         .. math:: y_k     = \\mathrm{prox}_{\\alpha f_1}(2x_k - w_k)
-        .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)`
+        .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)
 
     **Theoretical guarantee**:
 
     The **tight** theoretial guarantee is obtained in [2, Theorem 2]:
 
-        .. math:: |w_1 - w_1'||^2 \\leqslant  \max(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha }{1 + L \\alpha})^{2n} ||w_0 - w_0'||^2
+        .. math:: \|w_1 - w_1'\|^2 \\leqslant  \\max\\left(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha L }{1 + L \\alpha}\\right)^{2n} \|w_0 - w_0'\|^2
 
     **References**:
 
@@ -116,7 +116,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
-    theoretical_tau = (max(1 / (1 + mu * alpha), alpha * 1 / (1 + alpha * L))) ** (2 * n)
+    theoretical_tau = (max(1 / (1 + mu * alpha), alpha * L / (1 + alpha * L))) ** (2 * n)
 
     # Print conclusion if required
     if verbose:

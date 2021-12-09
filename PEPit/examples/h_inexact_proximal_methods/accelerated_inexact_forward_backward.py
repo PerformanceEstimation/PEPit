@@ -9,42 +9,98 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
-        min_x { F(x) = f(x) + g(x)}
-    where f(x) is smooth convex, and g is non-smooth strongly convex.
-    Both proximal operators are assumed to be available.
 
-    This code computes a worst-case guarantee for an Accelerated Hybrid Proximal Gradient,
-    where x_\star = argmin_x (F(x)).
+    .. math:: \\min_x \\left\\{F(x) \\equiv f(x) + g(x)\\right\\}
 
-    That is, it computes the smallest possible tau(mu,n,sigma,gamma) such that the guarantee
-        Phi_n <= tau(mu,n,sigma,gamma) * Phi_{n+1}
-    is valid, where phi_{n+1} = A_{n+1}(F(x_{n+1} - F_\star) + (1 + mu * A_{n+1})/2 * ||z_{n+1} - x_\star||^2.
-    We are going to verify that :
-        max(Phi_{n+1} - Phi_{n}) <= 0
+    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth
+    (and possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
+    that one has access to an inexact version of the proximal operator of :math:`g`.
 
-    The method originates from [1, Section 4.3].
+    This code verifies a potential (or Lyapunov/energy) function for an **inexact accelerated forward-backward method**
+    presented in [1, Algorithm 3.1]. That is, it verifies that
 
-    [1] M. Barre, A. Taylor, F. Bach. Principled analyses and design of
-    first-order methods with inexact proximal operators (2020).
+    .. math:: \\Phi_{t+1} \\leq \\Phi_t
 
-    :param mu: (float) strong convexity parameter.
-    :param L: (float) smoothness parameter.
-    :param gamma: (float) the step size.
-    :param sigma: (float) noise parameter.
-    :param xi: (float) Lyapunov and scheme parameter.
-    :param zeta: (float) Lyapunov and scheme parameter.
-    :param A0: (float) Lyapunov parameter.
-    :param verbose: (bool) if True, print conclusion
+    is valid, where :math:`\\Phi_t \\triangleq A_t (F(x_t) - F_\\star) + \\frac{1 + \\mu A_t}{2} \\|z_t - x_\\star\\|^2` is a potential function.
+    For doing that, we verify that the maximum value of :math:`\\Phi_{t+1} - \\Phi_t` is less than zero (maximum over all
+    problem instances and initializations).
 
-    :return: (tuple) worst_case value, theoretical value
+    **Algorithm**:
+
+    The algorithm is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
+    values for its parameters: :math:`\\xi_k=0`, :math:`\\sigma_k=0`, :math:`\\lambda_k=\\tfrac{1}{L}` (constant value
+    accross the iterations), and without backtracking, arriving to:
+
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                 \\eta_t && = (1-\\zeta_t^2) \\lambda \\\\
+                 A_{t+1} && = A_t + \\frac{\\eta_t+2A_t \\mu\\eta_t+\\sqrt{\\eta_t^2+4\\eta_t A_t(1+\\eta_t\\mu)(1+A_t\\mu)}}{2},\\\\
+                 y_{t} && = x_t + \\frac{(A_{t+1}-A_t)(1+\\mu A_t)}{A_{t+1}+A_t(2A_{t+1}-A_t)\\mu} (z_t-x_t),\\\\
+                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t,\\mu} \\left(\mathrm{prox}_{\lambda g}\\left(y_t-\\lambda \\nabla f(y_t)\\right),\,
+                 \mathrm{prox}_{ g^*/\\lambda}\\left(\\frac{y_t-\\lambda \\nabla f(y_t)}{\\lambda}\\right)\\right),\\\\
+                 && \\text{with } \\varepsilon_t = \\frac{\\zeta_t^2\\lambda^2}{2(1+\\lambda\\mu)^2}\|v_{t+1}+\\nabla f(y_t) \|^2,\\\\
+                 z_{t+1} && = z_t+\\frac{A_{t+1}-A_t}{1+\\mu A_{t+1}}\\left(\\mu (x_{t+1}-z_t)-(v_{t+1}+\\nabla f(y_t))\\right),\\\\
+            \\end{eqnarray}
+
+    where :math:`\\varepsilon_t` is some accuracy parameter. More precisely, the sign ":math:`\\approx_{\\varepsilon,\\mu}`"
+    can be described as
+
+     .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                 TBC\\\
+            \\end{eqnarray}
+
+    **Theoretical guarantee**: A theoretical guarantee is obtained in [1, Theorem 3.2]:
+
+        .. math:: \\Phi_{t+1} - \\Phi_t \\leq 0.
+
+    **References**: The method and theoretical result can be found in [1, Section 3].
+
+        `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
+        absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v1. <https://arxiv.org/pdf/2106.15536v1.pdf>`_
+
+    Args:
+        mu (float): strong convexity parameter.
+        L (float): smoothness parameter.
+        gamma (float): the step size.
+        sigma (float): noise parameter.
+        xi (float): Lyapunov and scheme parameter.
+        zeta (float): Lyapunov and scheme parameter.
+        A0 (float): Lyapunov parameter.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> L = 2
+        >>> sigma = .2
+        >>> pepit_tau, theoretical_tau = wc_aifb(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 13 constraint(s) added
+                 function 2 : 13 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 2.028195930733028e-05
+        *** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***
+            PEP-it guarantee:		 phi(n+1) - phi(n) <= 2.0282e-05
+            Theoretical guarantee:	 phi(n+1) - phi(n) <= 0.0
+
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a non-smooth strongly convex function, and a smooth convex function.
-    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
     f = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
     F = f + g
 
     # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
@@ -89,7 +145,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***')
-        print('\tPEP-it guarantee:\t  phi(n+1) - phi(n) <= {:.6}'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t phi(n+1) - phi(n) <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t phi(n+1) - phi(n) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -97,23 +153,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
 
 
 if __name__ == "__main__":
-    # Choose the function parameter
-    mu = 1
+
     L = 2
-
-    # Choose scheme parameters
-    sigma = 0.2
-    gamma = (1 - sigma ** 2) / L  # the step size should be in [0, (1 - sigma**2)/L]
-
-    # Choose the scheme (and Lyapunov) parameter
-    zeta = 0.9
-    xi = 3
-    A0 = 1
-
-    pepit_tau, theoretical_tau = wc_aifb(mu=mu,
-                                         L=2,
-                                         gamma=gamma,
-                                         sigma=sigma,
-                                         xi=xi,
-                                         zeta=zeta,
-                                         A0=A0)
+    sigma = .2
+    pepit_tau, theoretical_tau = wc_aifb(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)

@@ -6,42 +6,81 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     """
-    Consider the minimization problem
-        f_\star = min_x f(x),
-    where f is assumed L-smooth and x_\star = argmin f(x) denotes the minimizer of f.
+    Consider the convex minimization problem
 
-    This code computes a worst-case guarantee for the accelerated gradient descent,
-    for a well-chosen Lyapunov function :
-        v(x_{k+1}) = lambda_k^2 (f(x_{k+1}) - f_\star) + L/2 * || z_{k+1} - xs||^2
-        with lambda_{k+1} = 1/2 * (1 - sqrt(4*lambda_k^2 + 1))
-    where :
-        y_{k} = (1 - tau_k) x_k + tau_k z_k
-        x_{k+1} = y_k - 1/L f'(x_k)
-        z_{k+1} = z_k - eta_k f'(y_k)
-    with taux_k = 1/lambda_k and eta_k = (lambda_k^2 - lambda_{k-1}^2) / L
+    .. math:: f_\star = \\min_x f(x),
 
-    That is, it verifies that the Lyapunov v(.) is decreasing on the trajectory :
-        v(x_{k+1}) - v(x_k) <= 0.
-    is valid, where x_k is the output of the accelerated gradient descent.
+    where :math:`f` is :math:`L`-smooth and convex.
 
-    The detailed potential approach is available in [1, Theorem 5.3].
-    [1] Nikhil Bansal, and Anupam Gupta.  "Potential-function proofs for
-         first-order methods." (2019)
+    This code computes a worst-case guarantee for **accelerated gradient descent** with fixed step size :math:`\\gamma`,
+    for a well-chosen Lyapunov function:
 
-    :param L: (float) the smoothness parameter.
-    :param gamma: (float) the step size.
-    :param lam: (float) the initial value for sequence (lambda_k)_k.
-    :param verbose: (bool) if True, print conclusion
+    .. math:: V_k = \\lambda_k^2 (f(x_k) - f_\\star) + \\frac{L}{2} ||z_k - x_\\star||^2
 
-    :return: (tuple) worst_case value, theoretical value
+    That is, it verifies that the above Lyapunov is decreasing on the trajectory:
+
+    .. math :: V_{k+1} \\leq V_k
+
+    is valid, where :math:`x_k`, :math:`z_k`, and :math:`\\lambda_k`
+    are defined by the following algorithm.
+
+    **Algorithm**:
+    Accelerated gradient descent is described by
+
+    .. math::
+
+        \\begin{eqnarray}
+            \\lambda_{k+1} & = & \\frac{1}{2} \\left(1 + \\sqrt{4\\lambda_k^2 + 1}\\right) \\\\
+            \\tau_k & = & \\frac{1}{\\lambda_{k+1}} \\\\
+            y_k & = & (1 - \\tau_k) x_k + \\tau_k z_k \\\\
+            \\eta_k & = & \\frac{\\lambda_{k+1}^2 - \\lambda_{k}^2}{L} \\\\
+            z_{k+1} & = & z_k - \\eta_k \\nabla f(y_k) \\\\
+            x_{k+1} & = & y_k - \\gamma \\nabla f(y_k)
+        \\end{eqnarray}
+
+    **Theoretical guarantee**:
+    The theoretical guarantee can be found in [1, Theorem 5.3]:
+
+    .. math:: V_{k+1} \\leq V_k.
+
+    References:
+
+        The detailed potential approach is available in [1, Theorem 5.3].
+
+        `[1] Nikhil Bansal, and Anupam Gupta. "Potential-function proofs for first-order methods." (2019)
+        <https://arxiv.org/pdf/1712.04581.pdf>`_
+
+    Args:
+        L (float): the smoothness parameter.
+        gamma (float): the step size.
+        lam (float): the initial value for sequence (lambda_k)_k.
+        verbose (bool): if True, print conclusion.
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Examples:
+        >>> L = 1
+        >>> pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10.)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 12 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 5.264872499157039e-14
+        *** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***
+            PEP-it guarantee:		[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2] - [lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] <= 5.26487e-14
+            Theoretical guarantee:	[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2] - [lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] <= 0.0
+
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction,
-                                    param={'L': L})
+    func = problem.declare_function(SmoothConvexFunction, param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -54,13 +93,15 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
     # Run the AGD at iteration (n+1)
     lam_np1 = (1 + np.sqrt(4 * lam ** 2 + 1)) / 2
-    tau = 1 / lam_np1
-    eta = (lam_np1 ** 2 - lam ** 2) / L
 
+    tau = 1 / lam_np1
     yn = (1 - tau) * xn + tau * zn
     gyn = func.gradient(yn)
-    xnp1 = yn - gamma * gyn
+
+    eta = (lam_np1 ** 2 - lam ** 2) / L
     znp1 = zn - eta * gyn
+
+    xnp1 = yn - gamma * gyn
     gnp1, fnp1 = func.oracle(xnp1)
 
     # Compute the Lyapunov function at iteration n and at iteration n+1
@@ -81,14 +122,14 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
         print(
             '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
-              '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
+              '[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2]'
               ' - '
-              '[n*(f(x_n) - f_*) + L/2 || x_n - x_*||^2] '
+              '[lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] '
               '<= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t'
-              '(n+1)*(f(x_(n+1)) - f_*) + L/2 || x_(n+1) - x_*||^2'
+              '[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2]'
               ' - '
-              '[n*(f(x_n) - f_*) + L/2 || x_n - x_*||^2] '
+              '[lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] '
               '<= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -96,10 +137,6 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
 
 if __name__ == "__main__":
-    L = 1
-    lam = 10.
-    gamma = 1 / L
 
-    pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L,
-                                                gamma=gamma,
-                                                lam=lam)
+    L = 1
+    pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10.)
