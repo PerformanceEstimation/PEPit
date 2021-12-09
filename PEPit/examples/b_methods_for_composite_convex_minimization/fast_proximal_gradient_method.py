@@ -8,7 +8,7 @@ def wc_fgm(mu, L, n, verbose=True):
     """
         Consider the composite convex minimization problem
 
-        .. math:: F_\star = \\min_x {F(x) = f(x) + h(x)},
+        .. math:: F_\star = \\min_x {F(x) \equiv f(x) + h(x)},
 
         where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
         and where :math:`h` is closed convex and proper.
