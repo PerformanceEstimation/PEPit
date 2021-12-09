@@ -33,7 +33,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
 
     The **tight** theoretial guarantee is obtained in [2, Theorem 2]:
 
-        .. math:: \|w_1 - w_1'\|^2 \\leqslant  \max(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha L }{1 + L \\alpha})^{2n} \|w_0 - w_0'\|^2
+        .. math:: \|w_1 - w_1'\|^2 \\leqslant  \\max\\left(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha L }{1 + L \\alpha}\\right)^{2n} \|w_0 - w_0'\|^2
 
     **References**:
 

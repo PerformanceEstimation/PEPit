@@ -47,8 +47,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
         The detailed potential approach is available in [1, Theorem 5.3].
 
-        `[1] Nikhil Bansal, and Anupam Gupta. "Potential-function proofs for
-        first-order methods." (2019)<https://arxiv.org/pdf/1712.04581.pdf>`_
+        `[1] Nikhil Bansal, and Anupam Gupta. "Potential-function proofs for first-order methods." (2019)
+        <https://arxiv.org/pdf/1712.04581.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

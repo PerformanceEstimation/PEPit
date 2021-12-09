@@ -45,12 +45,12 @@ def wc_no_lips2(L, gamma, n, verbose=True):
         The detailed approach is availaible in [1]. The formulation as a PEP, and the tightness are proven in [2].
 
         `[1] Heinz H. Bauschke, Jérôme Bolte, and Marc Teboulle. "A Descent Lemma
-        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited
-        and Applications." (2017)<https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
+        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications." (2017)
+        <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
         `[2] Radu-Alexandru Dragomir, Adrien B. Taylor, Alexandre d’Aspremont, and
-        Jérôme Bolte. "Optimal Complexity and Certification of Bregman
-        First-Order Methods". (2019)<https://arxiv.org/pdf/1911.08510.pdf>`_
+        Jérôme Bolte. "Optimal Complexity and Certification of Bregman First-Order Methods". (2019)
+        <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
         Disclaimer: This example requires some experience with PESTO and PEPs ([2], section 4).

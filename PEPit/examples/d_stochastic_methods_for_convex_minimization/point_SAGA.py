@@ -9,9 +9,9 @@ def wc_psaga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: f_\\star = min_x {F(x) \\equiv \\frac{1}{n} [f1(x) + ... + fn(x)]},
+    .. math:: f_\\star = \\min_x {F(x) \\equiv \\frac{1}{n} [f_1(x) + ... + f_n(x)]},
 
-    where :math:`f1, \\dots, fn` are assumed :math:`L`-smooth and :math:`\\mu`-strongly convex,
+    where :math:`f_1, \\dots, f_n` are assumed :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and with proximal operator available.
 
     This code computes the exact rate for the Lyapunov function from the original **Point SAGA** paper,
@@ -23,7 +23,7 @@ def wc_psaga(L, mu, n, verbose=True):
 
     with
 
-    .. math:: V_k(x) = \\frac{\\frac{1}{L \\mu}}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
+    .. math:: V_k(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
 
     where :math:`x_\\star` denotes the minimizer of :math:`F`.
 

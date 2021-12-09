@@ -30,7 +30,7 @@ def wc_km(n, verbose=True):
 
         Let us define :math:`t_n = 1 - \\frac{1}{n+1}`,
 
-            .. math:: \\tau(n) = \\frac{1}{n+1}\\left(\\frac{n}{n+1}\\right)^n \\frac{1}{4 t_n (1 - t_n)} , \ \\text{if} \\frac{1}{2} \\leqslant t_n \\leqslant \\frac{1}{2}(1+\\sqrt{\\frac{n}{n+1}})
+            .. math:: \\tau(n) = \\frac{1}{n+1}\\left(\\frac{n}{n+1}\\right)^n \\frac{1}{4 t_n (1 - t_n)} , \ \\text{if} \\frac{1}{2} \\leqslant t_n \\leqslant \\frac{1}{2}\\left(1+\\sqrt{\\frac{n}{n+1}}\\right)
 
             .. math:: \\tau(n) = (2t_n - 1)^{2n}, \ \\text{otherwise}.
 
@@ -38,9 +38,10 @@ def wc_km(n, verbose=True):
 
         This scheme was first studied using PEPs in [1, Theorem 4.9]:
 
-        [1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
+        `[1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
         Optimal First Order Complexities and Norm Constrained Quasi Newton
         Methods."  PhD thesis (2018)
+        <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
 
     Args:
         L (float): the Lipschitz parameter.
@@ -51,7 +52,7 @@ def wc_km(n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_km(n=n)
+        >>> pepit_tau, theoretical_tau = wc_km(n=3, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -59,10 +60,10 @@ def wc_km(n, verbose=True):
                  function 1 : 20 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.11963406475118304
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.11963406474148795
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
-            PEP-it guarantee:		 1/4|| xN - AxN ||^2 <= 0.119634 ||x0 - x_*||^2
-            Theoretical guarantee:	 1/4|| xN - AxN ||^2 <= 0.140625 ||x0 - x_*||^2
+            PEP-it guarantee:		 1/4||xN - AxN||^2 <= 0.119634 ||x0 - x_*||^2
+            Theoretical guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
 
     """
 
@@ -102,13 +103,13 @@ def wc_km(n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEP-it guarantee:\t\t 1/4|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t 1/4|| xN - AxN ||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 3
-    pepit_tau, theoretical_tau = wc_km(n=n)
+
+    pepit_tau, theoretical_tau = wc_km(n=3, verbose=True)

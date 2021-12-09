@@ -33,7 +33,7 @@ def wc_halpern(n, verbose=True):
 
         The tight worst-case guarantee for Halpern iteration method, obtained in [1, Theorem 2.1], is
 
-        .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left\\frac{2}{n+1}\\right^2 \\|x_0 - x_\\star\\|^2
+        .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2
 
     **References**:
 
