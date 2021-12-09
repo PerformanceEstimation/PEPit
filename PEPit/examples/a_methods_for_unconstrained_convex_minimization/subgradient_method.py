@@ -21,13 +21,18 @@ def wc_subgd(M, N, gamma, verbose=True):
     and where :math:`x_\star` is the minimizer of :math:`f`.
 
     We show how to compute the worst-case value of :math:`\\min_t F(x_t)-F(x_\star)` when :math:`x_t` is
-    obtained by doing :math:`i`steps of a subgradient method starting with an initial
-    iterate satisfying :math:`\|x_0-x_\star\| \\leqslant 1`.
+    obtained by doing :math:`i` steps of a subgradient method starting with an initial
+    iterate satisfying :math:`\\|x_0-x_\\star\\| \\leqslant 1`.
 
     **Algorithm**:
 
-        .. math:: g_{t} \\in \\partial f(x_t)
-        .. math:: x_{t+1} = x_t - \\gamma g_t
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                g_{t} & \\in & \\partial f(x_t) \\\\
+                x_{t+1} & = & x_t - \\gamma g_t
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 
