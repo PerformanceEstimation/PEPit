@@ -34,7 +34,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2` when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    One iteration of the algorithm (see [2]) is described by
+    One iteration of the algorithm (see [1]) is described by
 
         .. math::
             :nowrap:
@@ -45,25 +45,11 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
                 w_{k+1} & = & w_k + \\theta (y_k - x_k)
             \\end{eqnarray}
 
-    **Theoretical guarantee**:
-
-        The **upper** guarantee obtained in [1] is
-
-        .. math:: \|w^{(0)}_{n} - w^{(1)}_{n}\|^2 \\leqslant \\frac{1}{\\sqrt{n}} \|w^{(0)}_{0} - w^{(1)}_{0}\|^2
-
-        for :math:`\\theta=1` and :math:`\\alpha=\\frac{1}{L_3}`.
-
     References:
 
-        Details on the SDP formulations can be found in [1].
-        The TOS and an upper bound is introduced in [2].
+        The TOS is introduced in [1].
 
-        `[1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling,
-        and Pontus Giselsson. "Operator splitting performance estimation:
-        Tight contraction factors and optimal parameter selection." (2018)
-        <https://arxiv.org/pdf/1812.00146.pdf>`_
-
-        `[2] Damek Davis, and Wotao Yin. "A three-operator splitting scheme and its optimization applications."
+        `[1] Damek Davis, and Wotao Yin. "A three-operator splitting scheme and its optimization applications."
         Set-valued and variational analysis  (2017).
         <https://arxiv.org/pdf/1504.01032.pdf>`_
 
@@ -141,13 +127,12 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1 / np.sqrt(n)  # holds for theta = 1
+    theoretical_tau = None
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
         print('\tPEP-it guarantee:\t\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
@@ -156,4 +141,4 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
 if __name__ == "__main__":
 
     L3 = 1
-    pepit_tau, theoretical_tau = wc_tos(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4,  verbose=True)
+    pepit_tau, theoretical_tau = wc_tos(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4, verbose=True)
