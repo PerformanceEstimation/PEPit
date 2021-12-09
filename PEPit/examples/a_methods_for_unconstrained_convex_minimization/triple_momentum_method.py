@@ -20,21 +20,20 @@ def wc_tmm(mu, L, n, verbose=True):
     is valid, where :math:`x_n` is the output of the **triple momentum method.** (TMM),
     and where :math:`x_\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
-        :math:`f(x_n)-f_\star` when :math:`\\| x_0 - x_\star \\|^2 \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`f(x_n)-f_\star` when :math:`\\| x_0 - x_\star \\|^2 \\leqslant 1`.
 
 
     **Algorithm**:
 
-        .. math:: for k \in 1, \dots, n
+        For :math:`k \in \\{ 1, \dots, n\\}`
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-               \\xi_{k+1} = (1 + \\beta) * \\xi_{k} - \\beta * \\xi_{k-1} - \\alpha * \\nabla f(y_k) \\\\
+               \\xi_{k+1} &&= (1 + \\beta)  \\xi_{k} - \\beta  \\xi_{k-1} - \\alpha \\nabla f(y_k) \\\\
                y_{k} &&= (1+\\gamma ) \\xi_{k} -\\gamma \\xi_{k-1} \\\\
-               x_{k} && = (1 + \\delta) * \\xi_{k} - \\delta * \\xi_{k-1}
+               x_{k} && = (1 + \\delta)  \\xi_{k} - \\delta \\xi_{k-1}
             \\end{eqnarray}
 
     with
@@ -43,15 +42,13 @@ def wc_tmm(mu, L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                \\kappa &&= L / \\mu \\\\
-                \\rho &&= 1- \\frac{1}{\\sqrt{\\kappa}}\\\\
-                \\alpha && = \\frac{1+\\rho}{L}\\\\
-                \\beta && = \\frac{\\rho^2}{2-\\rho}\\\\
-                \\gamma  && = \\frac{\\rho^2}{(1+\\rho)(2-\\rho)} \\\\
-                \\delta && = \\frac{\\rho^2}{1-\\rho^2}
+                \\kappa &&= L / \\mu , \\quad \\rho = 1- \\frac{1}{\\sqrt{\\kappa}}\\\\
+                (\\alpha, \\beta, \\gamma,\\delta) && = \\left(\\frac{1+\\rho}{L}, \\frac{\\rho^2}{2-\\rho},
+                \\frac{\\rho^2}{(1+\\rho)(2-\\rho)}, \\frac{\\rho^2}{1-\\rho^2}\\right)
             \\end{eqnarray}
 
     and
+
         .. math::
             :nowrap:
 
@@ -70,17 +67,14 @@ def wc_tmm(mu, L, n, verbose=True):
     **References**:
     The triple momentum method was analyzed in the following work:
 
-    [1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018).
-    "The fastest known globally convergent first-order method for
-    minimizing strongly convex functions."
-    IEEE Control Systems Letters, 2(1), 49-54.
+        `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018). "The fastest known globally convergent first-order method for
+        minimizing strongly convex functions.", IEEE Control Systems Letters, 2(1), 49-54.
+        <http://liberzon.csl.illinois.edu/teaching/freeman-fast-gradient.pdf>`_
 
 
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        alpha (float): parameter of the scheme.
-        beta (float): parameter of the scheme such that :math:`0<\\beta<1` and :math:`0<\\alpha<2(1+\\beta)`.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion.
 
@@ -105,8 +99,8 @@ def wc_tmm(mu, L, n, verbose=True):
         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
         *** Example file: worst-case performance of the Triple Momentum Method ***
-        PEP-it guarantee:		 f(x_n)-f_* <= 0.111704 ||x_0-x_*||^2
-        Theoretical guarantee:	 f(x_n)-f_* <= 0.111708 ||x_0-x_*||^2
+        PEP-it guarantee:       f(x_n)-f_* <= 0.111704 ||x_0-x_*||^2
+        Theoretical guarantee:  f(x_n)-f_* <= 0.111708 ||x_0-x_*||^2
     """
 
 
