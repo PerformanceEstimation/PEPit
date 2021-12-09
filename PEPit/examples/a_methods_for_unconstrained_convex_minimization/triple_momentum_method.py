@@ -25,15 +25,15 @@ def wc_tmm(mu, L, n, verbose=True):
 
     **Algorithm**:
 
-        For :math:`k \in \\{ 1, \dots, n\\}`
+    For :math:`t \in \\{ 1, \dots, n\\}`
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-               \\xi_{k+1} &&= (1 + \\beta)  \\xi_{k} - \\beta  \\xi_{k-1} - \\alpha \\nabla f(y_k) \\\\
-               y_{k} &&= (1+\\gamma ) \\xi_{k} -\\gamma \\xi_{k-1} \\\\
-               x_{k} && = (1 + \\delta)  \\xi_{k} - \\delta \\xi_{k-1}
+               \\xi_{t+1} &&= (1 + \\beta)  \\xi_{t} - \\beta  \\xi_{t-1} - \\alpha \\nabla f(y_t) \\\\
+               y_{t} &&= (1+\\gamma ) \\xi_{t} -\\gamma \\xi_{t-1} \\\\
+               x_{t} && = (1 + \\delta)  \\xi_{t} - \\delta \\xi_{t-1}
             \\end{eqnarray}
 
     with
@@ -42,7 +42,7 @@ def wc_tmm(mu, L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                \\kappa &&= L / \\mu , \\quad \\rho = 1- \\frac{1}{\\sqrt{\\kappa}}\\\\
+                \\kappa &&= \\frac{L}{\\mu} , \\quad \\rho = 1- \\frac{1}{\\sqrt{\\kappa}}\\\\
                 (\\alpha, \\beta, \\gamma,\\delta) && = \\left(\\frac{1+\\rho}{L}, \\frac{\\rho^2}{2-\\rho},
                 \\frac{\\rho^2}{(1+\\rho)(2-\\rho)}, \\frac{\\rho^2}{1-\\rho^2}\\right)
             \\end{eqnarray}
@@ -67,8 +67,8 @@ def wc_tmm(mu, L, n, verbose=True):
     **References**:
     The triple momentum method was analyzed in the following work:
 
-        `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018). "The fastest known globally convergent first-order method for
-        minimizing strongly convex functions.", IEEE Control Systems Letters, 2(1), 49-54.
+        `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018), The fastest known globally convergent first-order method for
+        minimizing strongly convex functions (IEEE Control Systems Letters, 2(1), 49-54).
         <http://liberzon.csl.illinois.edu/teaching/freeman-fast-gradient.pdf>`_
 
 
@@ -83,10 +83,7 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
     Example:
-        >>> mu = 0.1
-        >>> L = 1.
-        >>> n = 4
-        >>> pepit_tau, theoretical_tau = wc_tmm(mu=mu, L=L,  n=n, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1.,  n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -158,10 +155,5 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
 if __name__ == "__main__":
-    mu = 0.1
-    L = 1.
-    n = 4
+    pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1., n=4, verbose=True)
 
-    pepit_tau, theoretical_tau = wc_tmm(mu=mu,
-                                        L=L,
-                                        n=n)

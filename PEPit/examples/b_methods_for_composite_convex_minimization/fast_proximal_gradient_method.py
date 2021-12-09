@@ -48,11 +48,11 @@ def wc_fgm(mu, L, n, verbose=True):
 
     References:
         For an Upper bound (not tight)
-        `[1] A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems, Amir Beck and Marc Teboulle.
+        `[1] A. Beck and M. Teboulle (2009), A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems (SIAM Journal on Imaging Sciences).
         <https://www.ceremade.dauphine.fr/~carlier/FISTA>`_
 
         For an exact bound (non-strongly convex case):
-        `[2] Exact Worst-case Performance of First-order Methods for Composite Convex Optimization, Adrien B. Taylor, Julien M. Hendrickx, François Glineur <https://epubs.siam.org/doi/abs/10.1137/16M108104X?journalCode=sjope8>`_
+        `[2] A. Taylor, J. Hendrickx, F. Glineur (2017) Exact Worst-case Performance of First-order Methods for Composite Convex Optimization, (SIAM Journal on Optimization) <https://epubs.siam.org/doi/abs/10.1137/16M108104X?journalCode=sjope8>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -132,10 +132,4 @@ def wc_fgm(mu, L, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 4
-    mu = 0
-    L = 1
-
-    pepit_tau, theoretical_tau = wc_fgm(mu=mu,
-                                        L=L,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_fgm(L=1, mu=0, n=4, verbose=True)

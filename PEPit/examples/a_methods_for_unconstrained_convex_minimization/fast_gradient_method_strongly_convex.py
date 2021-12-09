@@ -24,6 +24,7 @@ def wc_fgm(mu, L, n, verbose=True):
     :math:`f(x_n)-f_\star` when :math:`f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
+    For :math:`t\\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
@@ -33,17 +34,19 @@ def wc_fgm(mu, L, n, verbose=True):
                 x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)
             \\end{eqnarray}
 
+    with :math:`x_{-1}:= x_0`.
+
     **Theoretical guarantee**:
 
         The **upper** guarantee obtained in [1,  Corollary 4.15] is
 
-        .. math:: f(x_n)-f_\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n (f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2)
+        .. math:: f(x_n)-f_\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n (f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2).
 
     References:
+        TODO: add exact-worst case reference if it exists.
+        A theoretical **upper bound** can be found in [1,  Corollary 4.15].
 
-        Theoretical rates can be found in the following paper [1,  Corollary 4.15]
-
-        `[1] Acceleration Methods, Monograph, Alexandre d’Aspremont, Damien Scieur, Adrien Taylor
+        `[1] A. d’Aspremont, D. Scieur, A. Taylor, (2021),  Acceleration Methods, Monograph.
         <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:
@@ -120,5 +123,4 @@ def wc_fgm(mu, L, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_fgm(mu=0.1, L=1, n=2, verbose=True)

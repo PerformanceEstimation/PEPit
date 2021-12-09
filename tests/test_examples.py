@@ -149,11 +149,11 @@ class TestExamples(unittest.TestCase):
         wc, theory = inHBM.wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=n, verbose=self.verbose)
         self.assertLessEqual(wc, theory * (1 + self.relative_precision))
 
-    def test_fppa(self):
+    def test_fpp(self):
         A0, n = 1, 3
         gammas = [1, 1, 1]
 
-        wc, theory = inFPM.wc_fppa(A0=A0, gammas=gammas, n=n, verbose=self.verbose)
+        wc, theory = inFPM.wc_fpp(A0=A0, gammas=gammas, n=n, verbose=self.verbose)
         self.assertLessEqual(wc, theory * (1 + self.relative_precision))
 
     def test_tmm(self):
