@@ -43,7 +43,8 @@ import PEPit.examples.e_monotone_inclusions.douglas_rachford_splitting as opDRS
 import PEPit.examples.e_monotone_inclusions.proximal_point_method as opPPM
 import PEPit.examples.e_monotone_inclusions.three_operator_splitting as opTOS
 import PEPit.examples.f_fixed_point_iterations.halpern_iteration as inHI
-import PEPit.examples.f_fixed_point_iterations.krasnoselskii_mann as inKM
+import PEPit.examples.f_fixed_point_iterations.krasnoselskii_mann_constant_step_sizes as inKMc
+import PEPit.examples.f_fixed_point_iterations.krasnoselskii_mann_decreasing_step_sizes as inKMd
 import PEPit.examples.g_verify_potential_functions.fast_gradient_descent as potFGD
 import PEPit.examples.g_verify_potential_functions.gradient_descent_1 as potGD1
 import PEPit.examples.g_verify_potential_functions.gradient_descent_2 as potGD2
@@ -331,11 +332,18 @@ class TestExamples(unittest.TestCase):
         wc, theory = inHI.wc_halpern(n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
-    def test_inkm(self):
+    def test_inkmc(self):
         n = 10
 
-        wc, theory = inKM.wc_km(n, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        wc, theory = inKMc.wc_km_cst(n, gamma=3 / 4, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_inkmd(self):
+        n = 10
+
+        ref_pesto_bound = 0.059527
+        wc, _ = inKMd.wc_km_decr(n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, ref_pesto_bound, delta=self.relative_precision * ref_pesto_bound)
 
     def test_potgd1(self):
         L, n = 1, 10
