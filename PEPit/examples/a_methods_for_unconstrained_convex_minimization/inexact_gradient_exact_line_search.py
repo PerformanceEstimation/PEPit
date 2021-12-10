@@ -22,13 +22,11 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
     The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\varepsilon < 1`)
 
-        .. math:: \| f'(x_t) - d \| \\leqslant \\varepsilon \| f'(x_t) \|,
+        .. math:: \\|\\nabla f(x_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
     where :math:`f'(x_t)` is the true gradient, and d is the approximate descent direction that is used.
 
     **Algorithm**:
-
-    Select :math:`d_t` such that
 
         .. math::
             :nowrap:

@@ -21,7 +21,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     This code computes a worst-case guarantee for the **Three Operator Splitting (TOS)**.
     That is, it computes the smallest possible :math:`\\tau(n, L_1, L_3, \\mu_1)` such that the guarantee
 
-    .. math:: \|w^{(0)}_{n} - w^{(1)}_{n}\|^2 \\leqslant \\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta) \|w^{(0)}_{0} - w^{(1)}_{0}\|^2
+    .. math:: \\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2 \\leqslant \\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta) \\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2
 
     is valid, where :math:`w^{(0)}_{0}` and :math:`w^{(1)}_{0}` are two different starting points
     and :math:`w^{(0)}_{n}` and :math:`w^{(1)}_{n}` are the two corresponding :math:`n^{\\mathrm{th}}` outputs of TOS.

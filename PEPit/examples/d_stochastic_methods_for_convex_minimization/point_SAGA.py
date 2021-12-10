@@ -9,7 +9,7 @@ def wc_psaga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv \\frac{1}{n} [f_1(x) + ... + f_n(x)]},
+    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv \\frac{1}{n} \\left(f_1(x) + ... + f_n(x)\\right)},
 
     where :math:`f_1, \\dots, f_n` are assumed :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and with proximal operator available.

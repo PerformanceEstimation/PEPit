@@ -67,9 +67,9 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seul pour aligner les deux résultats.
 
-- Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
+- [done] Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
 
-- Vérifier que l'exemple est bien dans les tests
+- [done] Vérifier que l'exemple est bien dans les tests
 
 - stepsize, step size -> step-size
 
@@ -79,4 +79,4 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] || || -> \\| \\|
 
-- Use left - right to scale brackets etc ...
+- [done] Use left - right to scale brackets etc ...
