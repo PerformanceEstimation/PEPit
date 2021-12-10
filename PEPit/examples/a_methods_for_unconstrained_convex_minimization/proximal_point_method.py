@@ -27,7 +27,7 @@ def wc_ppa(gamma, n, verbose=True):
 
     The proximal point method is described by
 
-        .. math:: x_{k+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_k||^2 \\right\\},
+        .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_t||^2 \\right\\},
 
     where :math:`\\gamma` is a step size.
 

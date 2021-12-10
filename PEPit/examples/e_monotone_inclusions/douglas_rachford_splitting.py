@@ -17,17 +17,17 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     step sizes :math:`\\alpha`.
 
     This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
-    :math:`w^{(0)}_k` and :math:`w^{(1)}_k`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
+    :math:`w^{(0)}_t` and :math:`w^{(1)}_t`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
-    .. math:: || w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2 \\leqslant \\tau(L, \\mu, \\alpha, \\theta)  || w^{(0)}_{k} - w^{(1)}_{k} ||^2,
+    .. math:: \\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, \\mu, \\alpha, \\theta) \\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2,
 
-    is valid, where :math:`w^{(0)}_{k+1}` and :math:`w^{(1)}_{k+1}` are obtained after one iteration of DRS from
-    respectively :math:`w^{(0)}_{k}` and :math:`w^{(1)}_{k}`.
+    is valid, where :math:`w^{(0)}_{t+1}` and :math:`w^{(1)}_{t+1}` are obtained after one iteration of DRS from
+    respectively :math:`w^{(0)}_{t}` and :math:`w^{(1)}_{t}`.
 
     In short, for given values of :math:`L`, :math:`\\mu`, :math:`\\alpha` and :math:`\\theta`, the contraction
     factor :math:`\\tau(L, \\mu, \\alpha, \\theta)` is computed as the worst-case value of
-    :math:`|| w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2` when :math:`|| w^{(0)}_{k} - w^{(1)}_{k} ||^2 \\leqslant 1`.
+    :math:`\\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2` when :math:`\\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     One iteration of the Douglas-Rachford splitting is described by
@@ -36,9 +36,9 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k+1} &&= J_{\\alpha B} (w_k)\\\\
-                y_{k+1} &&= J_{\\alpha A} (2x_{k+1}-w_k)\\\\
-                w_{k+1} &&= w_k - \\theta (x_{k+1}-y_{k+1}).
+                x_{t+1} & = & J_{\\alpha B} (w_t)\\\\
+                y_{t+1} & = & J_{\\alpha A} (2x_{t+1}-w_t)\\\\
+                w_{t+1} & = & w_t - \\theta (x_{t+1}-y_{t+1}).
             \\end{eqnarray}
 
     **References**:
@@ -52,14 +52,15 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     [2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
     Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
 
+    Args:
+        L (float): the Lipschitz parameter.
+        mu (float): the strongly monotone parameter.
+        alpha (float): the step size in the resolvent.
+        theta (float): algorithm parameter.
+        verbose (bool): if True, print conclusion
 
-    :param L: (float) the Lipschitz parameter.
-    :param mu: (float) the strongly monotone parameter.
-    :param alpha: (float) the step size in the resolvent.
-    :param theta: (float) algorithm parameter.
-    :param verbose: (bool) if True, print conclusion
-
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau  = wc_drs(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)
@@ -71,10 +72,11 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
                  function 2 : 2 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9287707078361858
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-            PEP-it guarantee:       || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.928771 || w_(k)^0 - w_(k)^1 ||^2
-            Theoretical guarantee:  || w_(k+1)^0 - w_(k+1)^1||^2 <= 0.928771 || w_(k)^0 - w_(k)^1 ||^2
+            PEP-it guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+            Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+
     """
 
     # Instantiate PEP
@@ -128,20 +130,13 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEP-it guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t || w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} || w_(k)^0 - w_(k)^1 ||^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    L = 1
-    mu = 0.1
-    alpha = 1.3
-    theta = .9
 
-    pepit_tau, theoretical_tau = wc_drs(L=L,
-                                        mu=mu,
-                                        alpha=alpha,
-                                        theta=theta)
+    pepit_tau, theoretical_tau = wc_drs(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)

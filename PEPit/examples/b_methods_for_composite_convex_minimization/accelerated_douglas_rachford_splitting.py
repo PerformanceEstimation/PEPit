@@ -36,18 +36,18 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k} &&= \\mathrm{prox}_{\\alpha f_2} (u_k)\\\\
-                y_{k} &&= \\mathrm{prox}_{\\alpha f_1}(2x_k-u_k)\\\\
-                w_{k+1} &&= u_k+\\theta (y_k-x_k)\\\\
-                x_{k+1} &&= \\left\\{\\begin{array}{ll} u_{k+1} = w_{k+1}+\\frac{k-2}{k+1}(w_{k+1}-w_k)\, & \\text{if } k >1,\\\\
-                w_{k+1}& \\text{otherwise.} \\end{array}\\right.
+                x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t)\\\\
+                y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t)\\\\
+                w_{t+1} & = & u_t + \\theta (y_t-x_t)\\\\
+                x_{t+1} & = & \\left\\{\\begin{array}{ll} u_{t+1} = w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
+                w_{t+1} & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 
     **Theoretical guarantee**:
     There is no theoretical guarantee for this method beyond quadratic minimization.
     For quadratics, an **upper** bound on is provided by [1, Theorem 5]:
 
-    .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta  (n + 3)^ 2},
+    .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta (n + 3)^ 2},
 
     when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha\\leqslant \\frac{1}{L}`.
 
@@ -58,28 +58,31 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     [1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
     variants. In 53rd IEEE Conference on Decision and Control (CDC).
 
-    :param mu: (float) the strong convexity parameter.
-    :param L: (float) the smoothness parameter.
-    :param alpha: (float) the parameter of the scheme.
-    :param n: (int) the number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        mu (float): the strong convexity parameter.
+        L (float): the smoothness parameter.
+        alpha (float): the parameter of the scheme.
+        n (int): the number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value (upper bound for quadratics; not directly comparable)
+    Returns:
+        tuple: worst_case value, theoretical value (upper bound for quadratics; not directly comparable)
 
     Example:
-        >>> pepit_tau, _ = wc_adrs(mu=.1, L=1, alpha=.9, n=10, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 28x28
+        >>> pepit_tau, theoretical_tau = wc_adrs(mu=.1, L=1, alpha=.9, n=2, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
-		         function 1 : 156 constraint(s) added
-		         function 2 : 182 constraint(s) added
+                 function 1 : 20 constraint(s) added
+                 function 2 : 20 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.10812869851093912
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623136473224
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-	        PEP-it guarantee:                       F(y_n)-F_* <= 0.108129 ||x0 - ws||^2
-	        Theoretical guarantee for quadratics:   F(y_n)-F_* <= 0.249836 ||x0 - ws||^2
+    	    PEP-it guarantee:						 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
+            Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
+
     """
 
     # Instantiate PEP
@@ -134,7 +137,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t\t\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -142,14 +145,5 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
 
 
 if __name__ == "__main__":
-    mu = 0.1
-    L = 1.
 
-    # Test scheme parameters
-    alpha = 0.9
-    n = 2
-
-    pepit_tau, theoretical_tau = wc_adrs(mu=mu,
-                                         L=L,
-                                         alpha=alpha,
-                                         n=n)
+    pepit_tau, theoretical_tau = wc_adrs(mu=.1, L=1, alpha=.9, n=2, verbose=True)

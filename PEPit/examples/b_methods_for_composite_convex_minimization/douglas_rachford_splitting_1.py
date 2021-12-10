@@ -25,9 +25,14 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
 
     Our notations for the DRS algorithm are as follows
 
-        .. math:: x_k     = \\mathrm{prox}_{\\alpha f_2}(w_k)
-        .. math:: y_k     = \\mathrm{prox}_{\\alpha f_1}(2x_k - w_k)
-        .. math:: w_{k+1} = w_k +\\theta (y_k - x_k)
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t) \\\\
+                y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t) \\\\
+                w_{t+1} & = & w_t + \\theta (y_t - x_t)
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 

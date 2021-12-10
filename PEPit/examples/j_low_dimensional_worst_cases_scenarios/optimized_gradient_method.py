@@ -8,7 +8,7 @@ def wc_ogm(L, n, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
@@ -16,7 +16,7 @@ def wc_ogm(L, n, verbose=True):
     for trying to find a low-dimensional worst-case example on which this guarantee is achieved. That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L)  || x_0 - x_\star ||^2
+    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of OGM and where :math:`x_\star` is a minimizer of :math:`f`. Then,
     it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is achieved.
@@ -28,8 +28,8 @@ def wc_ogm(L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k+1} &&= y_k - \\frac{1}{L} \\nabla f(y_k)\\\\
-                y_{k+1} &&= x_{k+1} + \\frac{\\theta_{k}-1}{\\theta_{k+1}}(x_{k+1}-x_k)+\\frac{\\theta_{k}}{\\theta_{k+1}}(x_{k+1}-y_k),
+                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)\\\\
+                y_{t+1} & = & x_{t+1} + \\frac{\\theta_{t}-1}{\\theta_{t+1}}(x_{t+1}-x_t)+\\frac{\\theta_{t}}{\\theta_{t+1}}(x_{t+1}-y_t),
             \\end{eqnarray}
 
     with
@@ -39,13 +39,14 @@ def wc_ogm(L, n, verbose=True):
 
             \\begin{eqnarray}
                 \\theta_0 & = & 1 \\\\
-                \\theta_i & = & \\frac{1 + \\sqrt{4 \\theta_{i-1}^2 + 1}}{2}, \\forall i \\in [|1, n-1|] \\\\
+                \\theta_t & = & \\frac{1 + \\sqrt{4 \\theta_{t-1}^2 + 1}}{2}, \\forall t \\in [|1, n-1|] \\\\
                 \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}.
             \\end{eqnarray}
+
     **Theoretical guarantee**:
     The **tight** theoretical guarantee can be found in [2, Theorem 2]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{2\\theta_n^2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2}.
 
     **References**:
     The OGM was developed in [1,2]. Low-dimensional worst-case functions for OGM were obtained in [3, 4]
@@ -76,17 +77,18 @@ def wc_ogm(L, n, verbose=True):
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : 30 constraint(s) added
+                 function 1 : 30 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.07675182659831646
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.07675218017587908
         (PEP-it) Postprocessing: applying trace heuristic. Currently 6 eigenvalue(s) > 1e-05 before resolve.
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); objective value: 0.07674182628815357
+        (PEP-it) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
         (PEP-it) Postprocessing: 1 eigenvalue(s) > 1e-05 after trace heuristic
         *** Example file: worst-case performance of optimized gradient method ***
-	        PEP-it guarantee:		 f(y_n)-f_* <= 0.0767418 || x_0 - x_* ||^2
-	        Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||^2
+            PEP-it guarantee:		 f(y_n)-f_* <= 0.0767422 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
@@ -132,18 +134,13 @@ def wc_ogm(L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
-            theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
 
-    pepit_tau, theoretical_tau = wc_ogm(L=L,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_ogm(L=3, n=4, verbose=True)

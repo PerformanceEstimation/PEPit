@@ -19,14 +19,14 @@ def wc_sgdo(L, mu, gamma, n, verbose=True):
     which happens for example in machine learning in the interpolation regime,
     that is if there exists a model :math:`x_\\star`
     such that the loss :math:`\\mathcal{L}` on any observation :math:`(z_i)_{i \\in [|1, n|]}`,
-    \\mathcal{L}(x_\\star, z_i) = f_i(x_\\star)" is zero.
+    :math:`\\mathcal{L}(x_\\star, z_i) = f_i(x_\\star)` is zero.
 
     This code computes a worst-case guarantee for one step of the **stochastic gradient descent (SGD)** in expectation,
     for the distance to optimal point.
 
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, n)` such that
 
-    .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, n) \\|x_0 - x_\star\\|^2
+    .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, n) \\|x_0 - x_\\star\\|^2
 
     Here, where :math:`x_1` is the output of one step of **stochastic gradient descent (SGD)**.
 

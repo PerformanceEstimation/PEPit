@@ -21,17 +21,17 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     The inexact descent direction is assumed to satisfy a relative inaccuracy
     described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1` )
 
-        .. math:: || \\nabla f(x_i) - d_i || \\leqslant \\epsilon || \\nabla f(x_i) ||,
+        .. math:: || \\nabla f(x_t) - d_t || \\leqslant \\epsilon || \\nabla f(x_t) ||,
 
-    where :math:`\\nabla f(x_i)` is the true gradient, and :math:`d_i` is the approximate descent direction that is used.
+    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
 
     **Algorithm**:
 
     The inexact gradient descent under consideration can be written as
 
-        .. math:: x_{i+1} = x_i - \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}} d_i
+        .. math:: x_{t+1} = x_t - \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}} d_t
 
-    where :math:`d_i` is the inexact search direction, :math:`L_{\\epsilon} = (1 + \\epsilon)L`
+    where :math:`d_t` is the inexact search direction, :math:`L_{\\epsilon} = (1 + \\epsilon)L`
     and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
 
     **Theoretical guarantee**:

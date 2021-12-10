@@ -40,7 +40,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
         The **upper** guarantee obtained in [1,  Corollary 4.15] is
 
-        .. math:: f(x_n)-f_\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n (f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2).
+        .. math:: f(x_n)-f_\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n \\left(f(x_0) -  f(x_\star) + \\frac{\\mu}{2}\\|x_0 - x_\star\\|^2\\right).
 
     References:
         A theoretical **upper** bound can be found in [1,  Corollary 4.15].

@@ -24,7 +24,7 @@ def wc_gd(L, gamma, n, verbose=True):
     **Algorithm**:
     Gradient descent is described by
 
-    .. math:: x_{k+1} = x_k - \\gamma \\nabla f(x_k),
+    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
     where :math:`\\gamma` is a step size.
 

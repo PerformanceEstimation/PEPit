@@ -23,8 +23,8 @@ def wc_ppm(alpha, n, verbose=True):
         .. math::
 
             \\begin{eqnarray}
-                x_{i+1} & = & J_{\\alpha A}(y_i) \\\\
-                y_{i+1} & = & x_{i+1} + \\frac{i}{i+2}(x_{i+1} - x_{i}) - \\frac{i}{i+1}(x_i - y_{i-1})
+                x_{t+1} & = & J_{\\alpha A}(y_t) \\\\
+                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1})
             \\end{eqnarray}
 
     **Theoretical guarantee**:

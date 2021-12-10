@@ -31,7 +31,7 @@ def wc_fgm(mu, L, n, verbose=True):
         :nowrap:
 
         \\begin{eqnarray}
-            x_{t+1} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\\left \\|x-(y_{t} - \\frac{1}{L} \\nabla f(y_t))\\right\\|^2 \\right\\}, \\\\
+            x_{t+1} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\\left \\|x-\\left(y_{t} - \\frac{1}{L} \\nabla f(y_t)\\right)\\right\\|^2 \\right\\}, \\\\
             y_{t+1} & = & x_{t+1} + \\frac{i}{i+3} (x_{t+1} - x_{t})
         \\end{eqnarray}
 

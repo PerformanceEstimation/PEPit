@@ -25,6 +25,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     :math:`\\|x_n - x_\star\\|^2` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
+
         .. math::
             \\begin{eqnarray}
                 y_t & = & x_t - \\gamma \\nabla f_1(x_t) \\\\
@@ -34,6 +35,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
         where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
+
         TODO
         The **?** guarantee obtained in ?? is
 

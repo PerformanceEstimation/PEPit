@@ -8,20 +8,20 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **accelerated gradient descent** with fixed step size :math:`\\gamma`,
     for a well-chosen Lyapunov function:
 
-    .. math:: V_k = \\lambda_k^2 (f(x_k) - f_\\star) + \\frac{L}{2} ||z_k - x_\\star||^2
+    .. math:: V_t = \\lambda_t^2 (f(x_t) - f_\\star) + \\frac{L}{2} \\|z_t - x_\\star\\|^2
 
     That is, it verifies that the above Lyapunov is decreasing on the trajectory:
 
-    .. math :: V_{k+1} \\leq V_k
+    .. math :: V_{t+1} \\leq V_t
 
-    is valid, where :math:`x_k`, :math:`z_k`, and :math:`\\lambda_k`
+    is valid, where :math:`x_t`, :math:`z_t`, and :math:`\\lambda_t`
     are defined by the following algorithm.
 
     **Algorithm**:
@@ -30,18 +30,18 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     .. math::
 
         \\begin{eqnarray}
-            \\lambda_{k+1} & = & \\frac{1}{2} \\left(1 + \\sqrt{4\\lambda_k^2 + 1}\\right) \\\\
-            \\tau_k & = & \\frac{1}{\\lambda_{k+1}} \\\\
-            y_k & = & (1 - \\tau_k) x_k + \\tau_k z_k \\\\
-            \\eta_k & = & \\frac{\\lambda_{k+1}^2 - \\lambda_{k}^2}{L} \\\\
-            z_{k+1} & = & z_k - \\eta_k \\nabla f(y_k) \\\\
-            x_{k+1} & = & y_k - \\gamma \\nabla f(y_k)
+            \\lambda_{t+1} & = & \\frac{1}{2} \\left(1 + \\sqrt{4\\lambda_t^2 + 1}\\right) \\\\
+            \\tau_t & = & \\frac{1}{\\lambda_{t+1}} \\\\
+            y_t & = & (1 - \\tau_t) x_t + \\tau_t z_t \\\\
+            \\eta_t & = & \\frac{\\lambda_{t+1}^2 - \\lambda_{t}^2}{L} \\\\
+            z_{t+1} & = & z_t - \\eta_t \\nabla f(y_t) \\\\
+            x_{t+1} & = & y_t - \\gamma \\nabla f(y_t)
         \\end{eqnarray}
 
     **Theoretical guarantee**:
     The theoretical guarantee can be found in [1, Theorem 5.3]:
 
-    .. math:: V_{k+1} \\leq V_k.
+    .. math:: V_{t+1} \\leq V_t.
 
     References:
 
@@ -53,7 +53,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     Args:
         L (float): the smoothness parameter.
         gamma (float): the step size.
-        lam (float): the initial value for sequence (lambda_k)_k.
+        lam (float): the initial value for sequence :math:`(\\lambda_t)_t`.
         verbose (bool): if True, print conclusion.
 
     Returns:
@@ -71,8 +71,8 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 5.264872499157039e-14
         *** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***
-            PEP-it guarantee:		[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2] - [lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] <= 5.26487e-14
-            Theoretical guarantee:	[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2] - [lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] <= 0.0
+            PEP-it guarantee:		[lambda_(t+1)^2 * (f(x_(t+1)) - f_*) + L / 2 ||z_(t+1) - x_*||^2] - [lambda_t^2 * (f(x_t) - f_*) + L / 2 ||z_t - x_*||^2] <= 5.26487e-14
+            Theoretical guarantee:	[lambda_(t+1)^2 * (f(x_(t+1)) - f_*) + L / 2 ||z_(t+1) - x_*||^2] - [lambda_t^2 * (f(x_t) - f_*) + L / 2 ||z_t - x_*||^2] <= 0.0
 
     """
 
@@ -122,14 +122,14 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
         print(
             '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
-              '[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2]'
+              '[lambda_(t+1)^2 * (f(x_(t+1)) - f_*) + L / 2 ||z_(t+1) - x_*||^2]'
               ' - '
-              '[lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] '
+              '[lambda_t^2 * (f(x_t) - f_*) + L / 2 ||z_t - x_*||^2] '
               '<= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t'
-              '[lambda_(n+1)^2 * (f(x_(n+1)) - f_*) + L / 2 ||z_(n+1) - x_*||^2]'
+              '[lambda_(t+1)^2 * (f(x_(t+1)) - f_*) + L / 2 ||z_(t+1) - x_*||^2]'
               ' - '
-              '[lambda_n^ 2 * (f(x_n) - f_*) + L / 2 ||z_n - x_*||^2] '
+              '[lambda_t^2 * (f(x_t) - f_*) + L / 2 ||z_t - x_*||^2] '
               '<= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

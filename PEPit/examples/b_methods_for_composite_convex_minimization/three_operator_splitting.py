@@ -38,9 +38,9 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_k & = & \\mathrm{prox}_{\\alpha, f_2}(w_k) \\\\
-                y_k & = & \\mathrm{prox}_{\\alpha, f_1}(2 x_k - w_k - \\alpha \\nabla f_3(x_k)) \\\\
-                w_{k+1} & = & w_k + \\theta (y_k - x_k)
+                x_t & = & \\mathrm{prox}_{\\alpha, f_2}(w_t) \\\\
+                y_t & = & \\mathrm{prox}_{\\alpha, f_1}(2 x_t - w_t - \\alpha \\nabla f_3(x_t)) \\\\
+                w_{t+1} & = & w_t + \\theta (y_t - x_t)
             \\end{eqnarray}
 
     References:

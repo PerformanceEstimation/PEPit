@@ -29,12 +29,12 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     :math:`\\min_{t\\leqslant n} D_h(x_{t-1}, x_t)` when :math:`D_h(x_\star, x_0) \\leqslant 1`.
 
     **Algorithm**:
-        This method is presented in [2, Algorithm 1]
+    This method is presented in [2, Algorithm 1]
 
         .. math:: x_{t+1} = \\arg\\min_{u \\in \\mathrm{Dom}(f_2)} \\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)
 
     **Theoretical guarantee**:
-        The **upper** guarantee obtained in [2, Proposition 4] is
+    The **upper** guarantee obtained in [2, Proposition 4] is
 
         .. math:: \\tau(n, L, \\mu) = \\frac{2}{n (n - 1)}
 

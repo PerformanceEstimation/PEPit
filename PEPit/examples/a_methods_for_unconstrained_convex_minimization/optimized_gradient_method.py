@@ -29,8 +29,8 @@ def wc_ogm(L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k+1} &&= y_k - \\frac{1}{L} \\nabla f(y_k)\\\\
-                y_{k+1} &&= x_{k+1} + \\frac{\\theta_{k}-1}{\\theta_{k+1}}(x_{k+1}-x_k)+\\frac{\\theta_{k}}{\\theta_{k+1}}(x_{k+1}-y_k),
+                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)\\\\
+                y_{k+1} & = & x_{t+1} + \\frac{\\theta_{t}-1}{\\theta_{t+1}}(x_{t+1}-x_t)+\\frac{\\theta_{t}}{\\theta_{t+1}}(x_{t+1}-y_t),
             \\end{eqnarray}
 
     with
@@ -40,9 +40,10 @@ def wc_ogm(L, n, verbose=True):
 
             \\begin{eqnarray}
                 \\theta_0 & = & 1 \\\\
-                \\theta_i & = & \\frac{1 + \\sqrt{4 \\theta_{i-1}^2 + 1}}{2}, \\forall i \\in [|1, n-1|] \\\\
+                \\theta_t & = & \\frac{1 + \\sqrt{4 \\theta_{t-1}^2 + 1}}{2}, \\forall t \\in [|1, n-1|] \\\\
                 \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}.
             \\end{eqnarray}
+
     **Theoretical guarantee**:
     The **tight** theoretical guarantee can be found in [2, Theorem 2]:
 
@@ -77,6 +78,7 @@ def wc_ogm(L, n, verbose=True):
         *** Example file: worst-case performance of optimized gradient method ***
 	        PEP-it guarantee:       f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||^2
 	        Theoretical guarantee:  f(y_n)-f_* <= 0.0767518 || x_0 - x_* ||^2
+
     """
 
     # Instantiate PEP
@@ -117,23 +119,18 @@ def wc_ogm(L, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L / 2 / theta_new ** 2
+    theoretical_tau = L / (2 * theta_new ** 2)
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} || x_0 - x_* ||^2'.format(
-            theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
 
-    pepit_tau, theoretical_tau = wc_ogm(L=L,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_ogm(L=3, n=4, verbose=True)

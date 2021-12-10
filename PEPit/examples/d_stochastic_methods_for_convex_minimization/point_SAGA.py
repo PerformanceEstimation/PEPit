@@ -19,17 +19,17 @@ def wc_psaga(L, mu, n, verbose=True):
 
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    .. math:: V_1(x_1) \\leqslant \\tau(n, L, \\mu) V_0(x_0)
+    .. math:: V(x_1) \\leqslant \\tau(n, L, \\mu) V(x_0)
 
     with
 
-    .. math:: V_k(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
+    .. math:: V(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
 
     where :math:`x_\\star` denotes the minimizer of :math:`F`.
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`V_1(x_1)` when
-    :math:`V_0(x_0) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`V(x_1)` when
+    :math:`V(x_0) \\leqslant 1`.
 
     **Algorithm**:
     Point SAGA is described by
@@ -38,15 +38,15 @@ def wc_psaga(L, mu, n, verbose=True):
         \\begin{eqnarray}
             \\gamma & = & \\frac{\\sqrt{(n - 1)^2 + 4n\\frac{L}{\\mu}}}{2Ln} - \\frac{\\left(1 - \\frac{1}{n}\\right)}{2L} \\\\
             j & \\sim & \\mathcal{U}\\left([|1, n|]\\right) \\\\
-            z_k & = & x_k + \\gamma \\left(g_j^k - \\frac{1}{n} \\sum_{i\\leq n}g_i^k\\right) \\\\
-            x_{k+1} & = & \\mathrm{prox}(z_k, f_j, \\gamma) \\\\
-            g_j^{k+1} & = & \\frac{1}{\\gamma}(z_k - x_{k+1})
+            z_t & = & x_t + \\gamma \\left(g_j^t - \\frac{1}{n} \\sum_{i\\leq n}g_i^t \\right) \\\\
+            x_{t+1} & = & \\mathrm{prox}(z_t, f_j, \\gamma) \\\\
+            g_j^{t+1} & = & \\frac{1}{\\gamma}(z_t - x_{t+1})
         \\end{eqnarray}
 
     **Theoretical guarantee**:
     A theoretical **upper** bound is given in [1, Theorem 5].
 
-    .. math:: V_1(x_1) \\leqslant \\frac{1}{1 + \\mu\\gamma} V_0(x_0)
+    .. math:: V(x_1) \\leqslant \\frac{1}{1 + \\mu\\gamma} V(x_0)
 
     **References**:
     [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite Sums." (2014).

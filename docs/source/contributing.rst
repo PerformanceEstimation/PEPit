@@ -31,15 +31,21 @@ Table of content:
 PEPit: Liste des trucs à verifier concernant les exemples:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Virer les hypotheses qui n’en sont pas comme « non-smooth ».
+- [done] Virer les hypotheses qui n’en sont pas comme « non-smooth ».
 
-- Privilégier \equiv au lieu de = quand on minimise F\_\\star \\triangleq F(x) = f_1(x) + f_2(x).
+- [done] Privilégier \equiv au lieu de = quand on minimise F(x) = f_1(x) + f_2(x).
+
+- \star -> \\star
+
+- Add "F\_\\star \\triangleq" before the minimization problem
+
+- \\epsilon -> \\varepsilon
 
 - Mettre un peu plus de "verbose" avant les équations décrivant la méthode.
 
 - Add arrow on gamma if sequence.
 
-- Uniformiser les indices: k->t, n for final step.
+- [done] Uniformiser les indices: k->t, n for final step.
 
 - Only n steps, not n+1
 
@@ -59,7 +65,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
 
-- Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2  « \t » vs 1 seule pour aligner les deux résultats.
+- Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seule pour aligner les deux résultats.
 
 - Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
 
@@ -70,3 +76,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 - algorithm -> method
 
 - fast -> accelerated
+
+- || || -> \\| \\|
+
+- Use left - right to scale brackets etc ...

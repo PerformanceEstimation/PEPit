@@ -28,8 +28,8 @@ def wc_fgm(mu, L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k+1} &&= y_k - \\frac{1}{L} \\nabla f(y_k)\\\\
-                y_{k+1} &&= x_{k+1} + \\frac{k-1}{k + 2}  (x_{k+1} - x_k).
+                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t) \\\\
+                y_{t+1} & = & x_{t+1} + \\frac{t-1}{t+2} (x_{t+1} - x_t).
             \\end{eqnarray}
 
     **Theoretical guarantee**:

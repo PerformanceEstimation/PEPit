@@ -1,10 +1,6 @@
 Inexact proximal methods
 ------------------------
 
-.. automodule:: PEPit.examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_extra_gradient
-   :members:
-   :show-inheritance:
-
 .. automodule:: PEPit.examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward
    :members:
    :show-inheritance:

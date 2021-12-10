@@ -35,30 +35,32 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                \\alpha_k &&= \\frac{\\sqrt{(c_k\\lambda)^2+4c_k\\lambda}-\\lambda c_k}{2}\\\\
-                y_{k} &&=  (1-\\alpha_k) x_k + \\alpha_k z_k\\\\
-                c_{k+1} &&= (1-\\alpha_k)c_k\\\\
-                z_{k+1} &&= \\arg\\min_{z} \\left\\{ \\langle z;\\frac{\\alpha_k}{c_{k+1}}\\nabla f_1(y_k)\\rangle +f_2(z)+D_h(z;z_k)\\right\\} \\\\
-                x_{k+1} &&=(1-\\alpha_k) x_k + \\alpha_k z_{k+1}
+                \\alpha_t & = & \\frac{\\sqrt{(c_t\\lambda)^2+4c_t\\lambda}-\\lambda c_t}{2}\\\\
+                y_t & = & (1-\\alpha_t) x_t + \\alpha_t z_t\\\\
+                c_{t+1} & = & (1-\\alpha_t)c_t\\\\
+                z_{t+1} & = & \\arg\\min_{z} \\left\\{ \\left< z;\\frac{\\alpha_t}{c_{t+1}}\\nabla f_1(y_t)\\right> +f_2(z)+D_h(z;z_t)\\right\\} \\\\
+                x_{t+1} & = & (1-\\alpha_t) x_t + \\alpha_t z_{t+1}
             \\end{eqnarray}
 
     **Theoretical guarantee**:
     The following **upper** bound can be found in [1, Theorem 5.2]:
 
-    .. math:: F(x_n) - F_\\star \\leqslant \\frac{4L}{c n^2}\\left( c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star) \\right).
+    .. math:: F(x_n) - F_\\star \\leqslant \\frac{4L}{c n^2}\\left(c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star) \\right).
 
     **References**:
     [1] A. Auslender, M. Teboulle (2006). Interior gradient and proximal methods for convex and conic optimization.
     SIAM Journal on Optimization 16.3 (2006): 697-725.
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong-convexity parameter
-    :param c: (float) initial value
-    :param lam: (float) the step size.
-    :param n: (int) number of iterations
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong-convexity parameter
+        c (float): initial value
+        lam (float): the step size.
+        n (int): number of iterations
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
         >>> L = 1
@@ -76,6 +78,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
             PEP-it guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs, x0) + f1(x0) - F_ *)
             Theoretical guarantee:  F(x_n)-F_* <= 0.111111 (c * Dh(xs, x0) + f1(x0) - F_ *)
+
     """
 
     # Instantiate PEP
@@ -137,21 +140,13 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
         print('\tPEP-it guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs,x0) + f1(x0) - F_*)'.format(pepit_tau))
-        print(
-            '\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs,x0) + f1(x0) - F_*)'.format(theoretical_tau))
+        print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs,x0) + f1(x0) - F_*)'.format(theoretical_tau))
+
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    L = 1
-    mu = 1
-    c = 1
-    lam = 1 / L
-    n = 5
 
-    pepit_tau, theoretical_tau = wc_iipp(L=L,
-                                         mu=mu,
-                                         c=c,
-                                         lam=lam,
-                                         n=n)
+    L = 1
+    pepit_tau, theoretical_tau = wc_iipp(L=L, mu=1, c=1, lam=1/L, n=5, verbose=True)

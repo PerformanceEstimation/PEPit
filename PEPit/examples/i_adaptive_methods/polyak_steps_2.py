@@ -6,73 +6,77 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`x_\\star=\\arg\\min_x f(x)`.
 
     This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step sizes**.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
 
-    .. math:: f(x_{k+1}) - f_\\star \\leqslant \\tau(L, \\mu, \\gamma) (f(x_k) - f_\\star)
+    .. math:: f(x_{t+1}) - f_\\star \\leqslant \\tau(L, \\mu, \\gamma) (f(x_t) - f_\\star)
 
-    is valid, where :math:`x_k` is the output of the gradient method with PS and :math:`\\gamma` is the effective value
+    is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective value
     of the step size of the gradient method.
 
     In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
-    value of :math:`f(x_{k+1})-f_\star` when :math:`f(x_k)-f_\star \\leqslant 1`.
+    value of :math:`f(x_{t+1})-f_\star` when :math:`f(x_t)-f_\star \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by
 
-    .. math:: x_{k+1} = x_k - \\gamma \\nabla f(x_k),
+    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
     where :math:`\\gamma` is a step size. The Polyak step size rule under consideration here corresponds to choosing
     of :math:`\\gamma` satisfying:
 
-    .. math:: || \\nabla f(x_k) ||^2 = 2  L (2 - \\gamma) (f(x_k) - f_\star).
+    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - \\gamma) (f(x_t) - f_\star).
 
-    **Theoretical guarantee**: The gradient method with the variant of Polyak step sizes under consideration enjoys the
+    **Theoretical guarantee**:
+    The gradient method with the variant of Polyak step sizes under consideration enjoys the
     **tight** theoretical guarantee [1, Proposition 2]:
 
-    .. math:: f(x_{k+1})-f_\\star \\leqslant  \\tau(L,\\mu,\\gamma) (f(x_{k})-f_\\star),
+    .. math:: f(x_{t+1})-f_\\star \\leqslant  \\tau(L,\\mu,\\gamma) (f(x_{t})-f_\\star),
 
-    where :math:`\\gamma` is the effective step size used at iteration :math:`k` and
+    where :math:`\\gamma` is the effective step size used at iteration :math:`t` and
 
     .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                \\tau(L,\\mu,\\gamma) &&= \\left\\{\\begin{array}{ll} (\\gamma L - 1)  (L \\gamma  (3 - \\gamma (L + \\mu)) - 1)  & \\text{if } \\gamma\in[\\tfrac{1}{L},\\tfrac{2L-\mu}{L^2}],\\\\
-                0& \\text{otherwise.} \\end{array}\\right.
+                \\tau(L,\\mu,\\gamma) & = & \\left\\{\\begin{array}{ll} (\\gamma L - 1)  (L \\gamma  (3 - \\gamma (L + \\mu)) - 1)  & \\text{if } \\gamma\in[\\tfrac{1}{L},\\tfrac{2L-\mu}{L^2}],\\\\
+                0 & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 
     **References**:
     [1] M. Barré, A. Taylor, A. d’Aspremont (2020). Complexity guarantees for Polyak steps with momentum.
     In Conference on Learning Theory (pp. 452-478).
 
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        gamma (float): the step size.
+        verbose (bool): if True, print conclusion
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param gamma: (float) the step size.
-    :param verbose: (bool) if True, print conclusion
-
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
-        >>> L, mu = 1, 0.1
-        >>> gamma = 1.5 / L
-        >>> pepit_tau, theoretical_tau = wc_ps_2(L=L, mu=mu, gamma=gamma, verbose=True):
+        >>> L = 1
+        >>> mu = 0.1
+        >>> gamma = 2 / (L + mu)
+        >>> pepit_tau, theoretical_tau = wc_ps_2(L=L, mu=mu, gamma=gamma, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (2 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : 6 constraint(s) added
+                 function 1 : 6 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.5124999654605554
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6694215432773613
         *** Example file: worst-case performance of Polyak steps ***
-	        PEP-it guarantee:       f(x_1) - f_*  <= 0.5125 (f(x_0) - f_*)
-	        Theoretical guarantee:  f(x_1) - f_*  <= 0.5125 (f(x_0) - f_*)
+            PEP-it guarantee:		 f(x_1) - f_* <= 0.669422 (f(x_0) - f_*)
+            Theoretical guarantee:	 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*)
+
     """
 
     # Instantiate PEP
@@ -114,18 +118,16 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEP-it guarantee:\t\t f(x_1) - f_*  <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_1) - f_*  <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
+
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-
-    pepit_tau, theoretical_tau = wc_ps_2(L=L,
-                                         mu=mu,
-                                         gamma=gamma)
+    pepit_tau, theoretical_tau = wc_ps_2(L=L, mu=mu, gamma=gamma, verbose=True)

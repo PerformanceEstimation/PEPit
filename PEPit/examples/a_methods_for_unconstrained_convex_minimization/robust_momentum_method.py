@@ -29,7 +29,7 @@ def wc_rmm(mu, L, lam, verbose=True):
                 v(x_t) & = & l\|z_t - x_\star\|^2 + q_t
             \\end{eqnarray}
 
-     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda \\left(1 - \\frac{1}{\\kappa}\\right) + (1 - \\lambda) \\left(1 - \\sqrt{\\frac{1}{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
+     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda \\left(1 - \\frac{1}{\\kappa}\\right) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
 
     **Algorithm**:
 
@@ -49,7 +49,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     
         .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n),
 
-    with :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\sqrt{\\frac{1}{\\kappa}}\\right)`.
+    with :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`.
 
     **References**:
 

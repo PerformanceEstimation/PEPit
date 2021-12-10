@@ -18,11 +18,11 @@ def wc_saga(L, mu, n, verbose=True):
     This code computes the exact rate for the Lyapunov function from the original SAGA work [1, Theorem 1].
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu)` such a Lyapunov function decreases geometrically
 
-    .. math:: V^{(k+1)} \\leqslant \\tau(n,L,\\mu) V^{(k)},
+    .. math:: V^{(t+1)} \\leqslant \\tau(n, L, \\mu) V^{(t)},
 
     where the value of the Lyapunov function at iteration :math:`k`is denoted by :math:`V_k` is
 
-    .. math:: V^{(k)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(k)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(k)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} ||x^{(k)} - x^\\star||^2,
+    .. math:: V^{(t)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} ||x^{(t)} - x^\\star||^2,
 
     with :math:`\\gamma = \\frac{1}{2(\\mu n+L)}`.
 
@@ -33,25 +33,27 @@ def wc_saga(L, mu, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                \\phi_j^{(k+1)} &&= x^{(k)}\\\\
-                w^{(k+1)} &&= x^{(k)} - \\gamma \\left[ \\nabla f_j (\\phi_j^{(k+1)}) - \\nabla f_j(\\phi_j^{(k)}) + \\frac{1}{n} \\sum_{i=1}^n(\\nabla f_i(\\phi^{(k)}))\\right]\\\\
-                x^{(k+1)} &&= \mathrm{prox}_{\\gamma h} (w^{(k+1)})
+                \\phi_j^{(t+1)} & = & x^{(t)} \\\\
+                w^{(t+1)} & = & x^{(t)} - \\gamma \\left[ \\nabla f_j (\\phi_j^{(t+1)}) - \\nabla f_j(\\phi_j^{(t)}) + \\frac{1}{n} \\sum_{i=1}^n(\\nabla f_i(\\phi^{(t)}))\\right] \\\\
+                x^{(t+1)} & = & \mathrm{prox}_{\\gamma h} (w^{(t+1)})
             \\end{eqnarray}
 
     **Theoretical guarantee**: The following **upper** bound can be found in [1, Theorem 1]:
 
-    .. math:: V^{(k+1)}\\leqslant \\left(1-\\gamma\\mu \\right)V^{(k)}
+    .. math:: V^{(t+1)} \\leqslant \\left(1-\\gamma\\mu \\right)V^{(t)}
 
     **References**:
     [1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
     non-strongly convex composite objectives. Advances in neural information processing systems (NIPS).
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param n: (int) number of functions.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        n (int): number of functions.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)
@@ -67,10 +69,11 @@ def wc_saga(L, mu, n, verbose=True):
                  function 6 : 6 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
-        *** Example file: worst-case performance of SAGA for Lyapunov function V_k ***
-	        PEP-it guarantee:       V^(k+1) <= 0.966667 V^k
-	        Theoretical guarantee:  V^(k+1) <= 0.966667 V^k
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.9666748513396348
+        *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
+            PEP-it guarantee:		 V^(t+1) <= 0.966675 V^t
+            Theoretical guarantee:	 V^(t+1) <= 0.966667 V^t
+
     """
 
     # Instantiate PEP
@@ -138,19 +141,14 @@ def wc_saga(L, mu, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of SAGA for Lyapunov function V_k ***')
-        print('\tPEP-it guarantee:\t V^(k+1) <= {:.6} V^k'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t V^(k+1) <= {:.6} V^k'.format(theoretical_tau))
+        print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
+        print('\tPEP-it guarantee:\t\t V^(t+1) <= {:.6} V^t'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t V^(t+1) <= {:.6} V^t'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 5
-    L = 1
-    mu = 0.1
 
-    pepit_tau, theoretical_tau = wc_saga(L=L,
-                                         mu=mu,
-                                         n=n)
+    pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)

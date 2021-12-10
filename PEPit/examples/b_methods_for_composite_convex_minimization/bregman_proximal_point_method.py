@@ -21,9 +21,9 @@ def wc_bpp(gamma, n, verbose=True):
 
     **Algorithm**:
 
-        .. math:: x_{n+1} = \\arg\\min_{u \\in R^n} \\nabla f(x_n)^T(u - x_n) + \\frac{1}{\\gamma} D_h(u, x_n)
+        .. math:: x_{t+1} = \\arg\\min_{u \\in R^n} \\nabla f(x_t)^T(u - x_t) + \\frac{1}{\\gamma} D_h(u, x_t)
 
-        .. math:: D_h(x_1, x_2) = h(x_1) - h(x_2) - \\nabla h (x_2)^T(x_1 - x_2)
+        .. math:: D_h(x, y) = h(x) - h(y) - \\nabla h (y)^T(x - y)
 
     **Theoretical guarantee**:
 

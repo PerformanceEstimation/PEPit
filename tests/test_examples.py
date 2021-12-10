@@ -52,7 +52,6 @@ import PEPit.examples.i_adaptive_methods.polyak_steps_1 as inPS1
 import PEPit.examples.i_adaptive_methods.polyak_steps_2 as inPS2
 import PEPit.examples.j_low_dimensional_worst_cases_scenarios.inexact_gradient as inLDIGD
 import PEPit.examples.j_low_dimensional_worst_cases_scenarios.optimized_gradient_method as inLDOGM
-import PEPit.examples.h_inexact_proximal_methods.accelerated_hybrid_proximal_extra_gradient as inAHPE
 import PEPit.examples.h_inexact_proximal_methods.accelerated_inexact_forward_backward as inAIFB
 import PEPit.examples.h_inexact_proximal_methods.partially_inexact_douglas_rachford_splitting as inPIDRS
 import PEPit.examples.h_inexact_proximal_methods.relatively_inexact_proximal_point_algorithm as inRIPP
@@ -379,12 +378,6 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = inPS2.wc_ps_2(L, mu, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
-
-    def test_inAHPE(self):
-        mu, gamma, sigma, A0 = 1, 1, 1, 10
-
-        wc, theory = inAHPE.wc_ahpe(mu, gamma, sigma, A0, verbose=self.verbose)
-        self.assertLessEqual(wc, self.absolute_precision)
 
     def test_inAIFB(self):
         mu, L, sigma, zeta, xi, A0 = 1, 2, 0.2, 0.9, 3, 1

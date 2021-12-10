@@ -16,18 +16,18 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     the resolvent of respectively :math:`A` and :math:`B`, with step size :math:`\\alpha`.
 
     This code computes a worst-case guarantee for the **three operator splitting** (TOS).
-    That is, given two initial points :math:`w^{(0)}_k` and :math:`w^{(1)}_k`,
+    That is, given two initial points :math:`w^{(0)}_t` and :math:`w^{(1)}_t`,
     this code computes the smallest possible :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
-    .. math:: \\|w^{(0)}_{k+1} - w^{(1)}_{k+1}\\|^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta) \|w^{(0)}_{k} - w^{(1)}_{k}\|^2,
+    .. math:: \\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, \\mu, \\beta, \\alpha, \\theta) \\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2,
 
-    is valid, where :math:`w^{(0)}_{k+1}` and :math:`w^{(1)}_{k+1}` are obtained after one iteration of TOS from
-    respectively :math:`w^{(0)}_{k}` and :math:`w^{(1)}_{k}`.
+    is valid, where :math:`w^{(0)}_{t+1}` and :math:`w^{(1)}_{t+1}` are obtained after one iteration of TOS from
+    respectively :math:`w^{(0)}_{t}` and :math:`w^{(1)}_{t}`.
 
-    In short, for given values of :math:`L`, :math:`\\mu`, :math:`\\beta`, :math:`\\alpha` and :math:`\\theta`, the contraction
-    factor :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)` is computed as the worst-case value of
-    :math:`|| w^{(0)}_{k+1} - w^{(1)}_{k+1} ||^2` when :math:`|| w^{(0)}_{k} - w^{(1)}_{k} ||^2 \\leqslant 1`.
+    In short, for given values of :math:`L`, :math:`\\mu`, :math:`\\beta`, :math:`\\alpha` and :math:`\\theta`,
+    the contraction factor :math:`\\tau(L, \\mu, \\beta, \\alpha, \\theta)` is computed as the worst-case value of
+    :math:`\\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2` when :math:`\\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     One iteration of the algorithm (see [1]) is described by
@@ -36,9 +36,9 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{k+1} &&= J_{\\alpha B} (w_k)\\\\
-                y_{k+1} &&= J_{\\alpha A} (2x_{k+1}-w_k-C x_{k+1})\\\\
-                w_{k+1} &&= w_k - \\theta (x_{k+1}-y_{k+1}).
+                x_{t+1} & = & J_{\\alpha B} (w_t)\\\\
+                y_{t+1} & = & J_{\\alpha A} (2x_{t+1} - w_t - C x_{t+1})\\\\
+                w_{t+1} & = & w_t - \\theta (x_{t+1} - y_{t+1}).
             \\end{eqnarray}
 
     **References**: The TOS was proposed in [1], the analysis of such operator splitting methods using PEPs was proposed in [2].
@@ -73,7 +73,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-                PEP-it guarantee:	 ||w_(k+1)^0 - w_(k+1)^1||^2 <= 0.779689 ||w_(k)^0 - w_(k)^1||^2
+                PEP-it guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
 
     """
 
@@ -114,7 +114,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
-        print('\tPEP-it guarantee:\t ||w_(k+1)^0 - w_(k+1)^1||^2 <= {:.6} ||w_(k)^0 - w_(k)^1||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
