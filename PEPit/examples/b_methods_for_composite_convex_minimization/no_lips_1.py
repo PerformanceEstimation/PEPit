@@ -59,7 +59,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     Args:
         L (float): relative-smoothness parameter
-        gamma (float): step size.
+        gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
 

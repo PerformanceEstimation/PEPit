@@ -71,9 +71,9 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] Vérifier que l'exemple est bien dans les tests
 
-- stepsize, step size -> step-size
+- [done] stepsize, step size -> step-size
 
-- algorithm -> method
+- [done] algorithm -> method
 
 - fast -> accelerated
 

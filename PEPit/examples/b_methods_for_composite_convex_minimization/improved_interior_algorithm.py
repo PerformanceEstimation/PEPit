@@ -55,7 +55,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong-convexity parameter
         c (float): initial value
-        lam (float): the step size.
+        lam (float): the step-size.
         n (int): number of iterations
         verbose (bool): if True, print conclusion
 

@@ -17,7 +17,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
 
     .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) \\|w_0 - w_\\star\\|^2
 
-    is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the algorithm, and where :math:`y_n` is the output
+    is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the method, and where :math:`y_n` is the output
     of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,
     and :math:`w_\\star` defined such that
 

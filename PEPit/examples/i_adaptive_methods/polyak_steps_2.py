@@ -10,13 +10,13 @@ def wc_ps_2(L, mu, gamma, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`x_\\star=\\arg\\min_x f(x)`.
 
-    This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step sizes**.
+    This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step-sizes**.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
 
     .. math:: f(x_{t+1}) - f_\\star \\leqslant \\tau(L, \\mu, \\gamma) (f(x_t) - f_\\star)
 
     is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective value
-    of the step size of the gradient method.
+    of the step-size of the gradient method.
 
     In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
     value of :math:`f(x_{t+1})-f_\\star` when :math:`f(x_t)-f_\\star \\leqslant 1`.
@@ -26,18 +26,18 @@ def wc_ps_2(L, mu, gamma, verbose=True):
 
     .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
-    where :math:`\\gamma` is a step size. The Polyak step size rule under consideration here corresponds to choosing
+    where :math:`\\gamma` is a step-size. The Polyak step-size rule under consideration here corresponds to choosing
     of :math:`\\gamma` satisfying:
 
     .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - \\gamma) (f(x_t) - f_\\star).
 
     **Theoretical guarantee**:
-    The gradient method with the variant of Polyak step sizes under consideration enjoys the
+    The gradient method with the variant of Polyak step-sizes under consideration enjoys the
     **tight** theoretical guarantee [1, Proposition 2]:
 
     .. math:: f(x_{t+1})-f_\\star \\leqslant  \\tau(L,\\mu,\\gamma) (f(x_{t})-f_\\star),
 
-    where :math:`\\gamma` is the effective step size used at iteration :math:`t` and
+    where :math:`\\gamma` is the effective step-size used at iteration :math:`t` and
 
     .. math::
             :nowrap:
@@ -54,7 +54,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         verbose (bool): if True, print conclusion
 
     Returns:
@@ -100,7 +100,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     x1 = x0 - gamma * g0
     g1, f1 = func.oracle(x1)
 
-    # Set the initial condition to the Polyak step size
+    # Set the initial condition to the Polyak step-size
     problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - gamma) * (f0 - fs))
 
     # Set the performance metric to the distance in function values between x_1 and x_* = xs

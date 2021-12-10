@@ -10,7 +10,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`,
+    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`,
     for a well-chosen Lyapunov function:
 
     .. math:: V_t = t (f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\\|^2
@@ -20,14 +20,14 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
     .. math :: V_{t+1} \\leq V_t
 
     is valid, where :math:`x_t` is the :math:`t^{\\mathrm{th}}`
-    output of the **gradient descent** with fixed step size :math:`\\frac{1}{L}`.
+    output of the **gradient descent** with fixed step-size :math:`\\frac{1}{L}`.
 
     **Algorithm**:
     Gradient descent is described by
 
     .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
-    where :math:`\\gamma` is a step size.
+    where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
     The theoretical guarantee can be found in [1, Theorem 3.3]:
@@ -49,7 +49,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
 
     Args:
         L (float): the smoothness parameter.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         n (int): rank of studied iteration.
         verbose (bool): if True, print conclusion
 
@@ -67,7 +67,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 3.3902995517363515e-18
-        *** Example file: worst-case performance of gradient descent with fixed step size for a given Lyapunov function***
+        *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
             PEP-it guarantee:		[(t+1) * (f(x_(t+1)) - f_*) + L / 2 ||x_(t+1) - x_*||^2] - [t * (f(x_t) - f_*) + L / 2 ||x_t - x_*||^2] <= 3.3903e-18
             Theoretical guarantee:	[(t+1) * (f(x_(t+1)) - f_*) + L / 2 ||x_(t+1) - x_*||^2] - [t * (f(x_t) - f_*) + L / 2 ||x_t - x_*||^2] <= 0.0
 
@@ -107,7 +107,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file:'
-              ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
+              ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
               '[(t+1) * (f(x_(t+1)) - f_*) + L / 2 ||x_(t+1) - x_*||^2]'
               ' - '

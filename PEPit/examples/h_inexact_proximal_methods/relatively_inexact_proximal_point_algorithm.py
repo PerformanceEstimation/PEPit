@@ -19,7 +19,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
 
     .. math:: f(x_n) - f(x_\\star) \\leqslant \\tau(n, \\gamma, \\sigma) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the method, :math:`\\gamma` is some step size, and :math:`\\sigma` is the
+    is valid, where :math:`x_n` is the output of the method, :math:`\\gamma` is some step-size, and :math:`\\sigma` is the
     level of accuracy of the approximate proximal point oracle.
 
     **Algorithm**: The approximate proximal point method under consideration is described by
@@ -32,7 +32,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
         .. math:: x_{t+1}  =  x_t - \\gamma (s_{t+1} - e_{t+1}) \\quad \\quad \\text{with }\\|e_{t+1}\\|^2  \\leqslant  \\frac{\\sigma^2}{\\gamma^2}\\|x_{t+1} - x_t\\|^2.
 
     We note that the case :math:`\\sigma=0` implies :math:`e_{t+1}=0` and this operation reduces to a standard proximal
-    step with step size :math:`\\gamma`.
+    step with step-size :math:`\\gamma`.
 
     **Theoretical guarantee**: The following empirical **upper** bound is provided in [1, Section 3.5.1],
 
@@ -45,7 +45,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
 
     Args:
         n (int): number of iterations.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         sigma (float): noise parameter.
         verbose (bool): if True, print conclusion
 

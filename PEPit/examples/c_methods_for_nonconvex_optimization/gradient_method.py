@@ -10,19 +10,19 @@ def wc_gd(L, gamma, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
     .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\tau(n, L, \\gamma) (f(x_0) - f(x_n))
 
-    is valid, where :math:`x_n` is the n-th iterates obtained with the gradient method with fixed step size.
+    is valid, where :math:`x_n` is the n-th iterates obtained with the gradient method with fixed step-size.
 
     **Algorithm**:
     Gradient descent is described by
 
     .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
-    where :math:`\\gamma` is a step size.
+    where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
@@ -37,7 +37,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     Args:
         L (float): the smoothness parameter.
-        gamma (float): step size.
+        gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
 
@@ -55,7 +55,7 @@ def wc_gd(L, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
-        *** Example file: worst-case performance of gradient descent with fixed step size ***
+        *** Example file: worst-case performance of gradient descent with fixed step-size ***
             PEP-it guarantee:		 min_i (f'(x_i)) ** 2 <= 0.266677 (f(x_0)-f_*)
             Theoretical guarantee:	 min_i (f'(x_i)) ** 2 <= 0.266667 (f(x_0)-f_*)
 
@@ -71,7 +71,7 @@ def wc_gd(L, gamma, n, verbose=True):
     x0 = problem.set_initial_point()
     g0, f0 = func.oracle(x0)
 
-    # Run n steps of GD method with step size gamma
+    # Run n steps of GD method with step-size gamma
     x = x0
     gx, fx = g0, f0
 
@@ -95,7 +95,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of gradient descent with fixed step size ***')
+        print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
         print('\tPEP-it guarantee:\t\t min_i (f\'(x_i)) ** 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i (f\'(x_i)) ** 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 

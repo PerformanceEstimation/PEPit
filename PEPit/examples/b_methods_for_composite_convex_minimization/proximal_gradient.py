@@ -32,7 +32,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
                 x_{t+1} & = & \\arg\\min_x \\left\\{f_2(x)+\\frac{1}{2\gamma}||x-y_t||^2 \\right\\},
             \\end{eqnarray}
 
-        where :math:`\\gamma` is a step size.
+        where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
 
@@ -50,7 +50,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        gamma (float): proximal step size
+        gamma (float): proximal step-size
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
 

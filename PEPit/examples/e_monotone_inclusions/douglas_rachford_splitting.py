@@ -14,7 +14,7 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
 
     where :math:`A` is :math:`L`-Lipschitz and maximally monotone and :math:`B` is (maximally) :math:`\\mu`-strongly
     monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively A and B, with
-    step sizes :math:`\\alpha`.
+    step-sizes :math:`\\alpha`.
 
     This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
     :math:`w^{(0)}_t` and :math:`w^{(1)}_t`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
@@ -55,7 +55,7 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     Args:
         L (float): the Lipschitz parameter.
         mu (float): the strongly monotone parameter.
-        alpha (float): the step size in the resolvent.
+        alpha (float): the step-size in the resolvent.
         theta (float): algorithm parameter.
         verbose (bool): if True, print conclusion
 

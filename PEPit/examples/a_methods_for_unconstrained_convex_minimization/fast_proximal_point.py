@@ -21,7 +21,7 @@ def wc_fpp(A0, gammas, n, verbose=True):
        is valid, where :math:`x_n` is the output of FPP (with step-size :math:`\\gamma_t` at step :math:`t\\in \\{0, \\dots, n-1\\}`) and where :math:`x_\\star` is a minimizer of :math:`f` and :math:`A_0` is a positive number.
 
        In short, for given values of :math:`n`,  :math:`A_0` and :math:`\\vec{\\gamma}`, :math:`\\tau(n)` is computed as the worst-case value
-       of :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\|x_0 - x_\\star\\|^2 \\leqslant 1`, for the following algorithm.
+       of :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\|x_0 - x_\\star\\|^2 \\leqslant 1`, for the following method.
 
        **Algorithm**:
        For :math:`t\\in \\{0, \\dots, n-1\\}`:
@@ -63,7 +63,7 @@ def wc_fpp(A0, gammas, n, verbose=True):
 
        Args:
            A0 (float): initial value for parameter A_0.
-           gammas (list): sequence of step sizes. 
+           gammas (list): sequence of step-sizes.
            n (int): number of iterations.
            verbose (bool): if True, print conclusion
 

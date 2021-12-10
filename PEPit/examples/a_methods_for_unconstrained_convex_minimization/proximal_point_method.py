@@ -11,7 +11,7 @@ def wc_ppa(gamma, n, verbose=True):
 
     where :math:`f` is closed, proper, and convex (and potentially non-smooth).
 
-    This code computes a worst-case guarantee for the **proximal point method** with step size :math:`\\gamma`.
+    This code computes a worst-case guarantee for the **proximal point method** with step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n,\\gamma)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, \\gamma)  \\|x_0 - x_\\star\\|^2
@@ -29,7 +29,7 @@ def wc_ppa(gamma, n, verbose=True):
 
         .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}\\|x-x_t\\|^2 \\right\\},
 
-    where :math:`\\gamma` is a step size.
+    where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
 
@@ -43,7 +43,7 @@ def wc_ppa(gamma, n, verbose=True):
     convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
-        gamma (float): step size.
+        gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
 

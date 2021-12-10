@@ -44,7 +44,7 @@ def wc_bpp(gamma, n, verbose=True):
     First-Order Methods". (2019)
 
     Args:
-        gamma (float): step size.
+        gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool, optional): if True, print conclusion
 

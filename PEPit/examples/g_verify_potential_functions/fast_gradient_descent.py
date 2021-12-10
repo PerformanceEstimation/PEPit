@@ -12,7 +12,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **accelerated gradient descent** with fixed step size :math:`\\gamma`,
+    This code computes a worst-case guarantee for **accelerated gradient descent** with fixed step-size :math:`\\gamma`,
     for a well-chosen Lyapunov function:
 
     .. math:: V_t = \\lambda_t^2 (f(x_t) - f_\\star) + \\frac{L}{2} \\|z_t - x_\\star\\|^2
@@ -22,7 +22,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     .. math :: V_{t+1} \\leq V_t
 
     is valid, where :math:`x_t`, :math:`z_t`, and :math:`\\lambda_t`
-    are defined by the following algorithm.
+    are defined by the following method.
 
     **Algorithm**:
     Accelerated gradient descent is described by
@@ -52,7 +52,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
     Args:
         L (float): the smoothness parameter.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         lam (float): the initial value for sequence :math:`(\\lambda_t)_t`.
         verbose (bool): if True, print conclusion.
 

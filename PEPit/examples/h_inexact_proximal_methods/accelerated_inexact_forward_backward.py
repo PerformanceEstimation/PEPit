@@ -27,7 +27,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
 
     **Algorithm**:
 
-    The algorithm is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
+    The method is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
     values for its parameters (:math:`\\xi_t=0`, :math:`\\sigma_t=0`, :math:`\\lambda_t =\\tfrac{1}{L}` in the notation
     of [1]), and without backtracking, arriving to:
 
@@ -77,7 +77,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     Args: TODOUPDATE: virer les inutiles (aussi dans signature et tests)
         mu (float): strong convexity parameter.
         L (float): smoothness parameter.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         sigma (float): noise parameter.
         xi (float): Lyapunov and scheme parameter.
         zeta (float): Lyapunov and scheme parameter.

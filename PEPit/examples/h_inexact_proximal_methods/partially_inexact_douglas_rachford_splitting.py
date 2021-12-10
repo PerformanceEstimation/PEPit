@@ -21,7 +21,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
         .. math:: \\|z_{n} - z_\\star\\|^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  \\|z_0 - z_\\star\\|^2
 
     is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`), :math:`z_\\star` is its fixed point,
-    :math:`\\gamma` is a step size, and :math:`\\sigma` is the level of inaccuracy.
+    :math:`\\gamma` is a step-size, and :math:`\\sigma` is the level of inaccuracy.
 
     **Algorithm**: The partially inexact Douglas-Rachford splitting under consideration is described by
 
@@ -65,7 +65,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         n (int): number of iterations.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         sigma (float): noise parameter.
         verbose (bool, optional): if True, print conclusion
 

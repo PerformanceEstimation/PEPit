@@ -43,7 +43,7 @@ def wc_ppm(alpha, n, verbose=True):
     for Monotone Inclusions." (2019)
 
     Args:
-        alpha (float): the step size
+        alpha (float): the step-size
         n (int): number of iterations.
         verbose (bool, optional): if True, print conclusion
 

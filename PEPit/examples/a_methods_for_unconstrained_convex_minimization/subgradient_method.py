@@ -52,7 +52,7 @@ def wc_subgd(M, n, gamma, verbose=True):
     Args:
         M (float): the Lipschitz parameter.
         n (int): the number of iterations.
-        gamma (float): step size.
+        gamma (float): step-size.
         verbose (bool, optional): if True, print conclusion.
 
     Returns:

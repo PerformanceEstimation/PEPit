@@ -10,12 +10,12 @@ def wc_gd(L, gamma, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\gamma) || x_0 - x_\\star ||^2
 
-    is valid, where :math:`x_n` is the output of gradient descent with fixed step size :math:`\\gamma`, and
+    is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
@@ -26,7 +26,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
-    where :math:`\\gamma` is a step size.
+    where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
@@ -39,7 +39,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     Args:
         L (float): the smoothness parameter.
-        gamma (float): step size.
+        gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
 
@@ -57,7 +57,7 @@ def wc_gd(L, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.16666666497937685
-        *** Example file: worst-case performance of gradient descent with fixed step sizes ***
+        *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
             PEP-it guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
 
@@ -95,7 +95,7 @@ def wc_gd(L, gamma, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of gradient descent with fixed step sizes ***')
+        print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 

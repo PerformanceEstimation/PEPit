@@ -58,7 +58,7 @@ def wc_sgdo(L, mu, gamma, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        gamma (float): the step size.
+        gamma (float): the step-size.
         n (int): number of functions.
         verbose (bool): if True, print conclusion.
 
@@ -82,7 +82,7 @@ def wc_sgdo(L, mu, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.8100000763718881
-        *** Example file: worst-case performance of stochastic gradient descent with fixed step size and with zero variance at the optimal point ***
+        *** Example file: worst-case performance of stochastic gradient descent with fixed step-size and with zero variance at the optimal point ***
             PEP-it guarantee:		 E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
             Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
 
@@ -123,7 +123,7 @@ def wc_sgdo(L, mu, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of stochastic gradient descent'
-              ' with fixed step size and with zero variance at the optimal point ***')
+              ' with fixed step-size and with zero variance at the optimal point ***')
         print('\tPEP-it guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
