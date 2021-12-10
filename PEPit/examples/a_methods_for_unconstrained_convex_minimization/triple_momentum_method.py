@@ -60,9 +60,9 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
     **Theoretical guarantee**:
-    A theoretical **upper** bound can be found in [1, Theorem 1, Eq. 4]:
+    A theoretical **upper** bound can be found in [1, Theorem 1, eq. 4]:
 
-        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\| x_0 - x_\star \\|^2.
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\|x_0 - x_\\star\\|^2.
 
     **References**:
     The triple momentum method was analyzed in the following work:
@@ -70,8 +70,6 @@ def wc_tmm(mu, L, n, verbose=True):
         `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018), The fastest known globally convergent first-order method for
         minimizing strongly convex functions (IEEE Control Systems Letters, 2(1), 49-54).
         <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
-
-
 
     Args:
         L (float): the smoothness parameter.

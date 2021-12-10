@@ -84,7 +84,8 @@ def wc_fpp(A0, gammas, n, verbose=True):
            *** Example file: worst-case performance of optimized gradient method ***
                PEP-it guarantee:       f(x_n)-f_* <= 0.0159311  (f(x_0) - f_\star + A0/2* ||x_0 - x_\star||^2)
                Theoretical guarantee:  f(x_n)-f_* <= 0.0511881  (f(x_0) - f_\star + A0/2* ||x_0 - x_\star||^2)
-       """
+
+    """
 
     # Instantiate PEP
     problem = PEP()
