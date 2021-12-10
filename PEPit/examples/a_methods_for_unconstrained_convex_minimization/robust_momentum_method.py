@@ -8,7 +8,7 @@ def wc_rmm(mu, L, lam, verbose=True):
     """
     Consider the convex minimization problem
 
-        .. math:: f_\star = \\min_x f(x),
+        .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
@@ -18,15 +18,15 @@ def wc_rmm(mu, L, lam, verbose=True):
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
     is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` iterate of the **robust momentum method**,
-    where :math:`x_\star` is a minimizer of :math:`f`,
+    where :math:`x_\\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                q_t & = & (L - \\mu) \\left(f(x_t) - f_\star - \\frac{\\mu}{2}\|y_t - x_\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\star)\|^2 \\right) \\\\
-                v(x_t) & = & l\|z_t - x_\star\|^2 + q_t
+                q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\\star)\|^2 \\right) \\\\
+                v(x_t) & = & l\|z_t - x_\\star\|^2 + q_t
             \\end{eqnarray}
 
      with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda \\left(1 - \\frac{1}{\\kappa}\\right) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``

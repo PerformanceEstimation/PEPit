@@ -19,7 +19,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     of the step size of the gradient method.
 
     In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
-    value of :math:`f(x_{t+1})-f_\star` when :math:`f(x_t)-f_\star \\leqslant 1`.
+    value of :math:`f(x_{t+1})-f_\\star` when :math:`f(x_t)-f_\\star \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by
@@ -29,7 +29,7 @@ def wc_ps_2(L, mu, gamma, verbose=True):
     where :math:`\\gamma` is a step size. The Polyak step size rule under consideration here corresponds to choosing
     of :math:`\\gamma` satisfying:
 
-    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - \\gamma) (f(x_t) - f_\star).
+    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - \\gamma) (f(x_t) - f_\\star).
 
     **Theoretical guarantee**:
     The gradient method with the variant of Polyak step sizes under consideration enjoys the

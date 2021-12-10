@@ -8,7 +8,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: f_\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: f_\\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
 
     where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and where :math:`f_2` is closed convex and proper.
@@ -16,13 +16,13 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     This code computes a worst-case guarantee for the **proximal gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    .. math :: \\|x_n - x_\star\\|^2 \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\star\\|^2,
+    .. math :: \\|x_n - x_\\star\\|^2 \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_n` is the output of the **proximal gradient**,
-    and where :math:`x_\star` is a minimizer of :math:`F`.
+    and where :math:`x_\\star` is a minimizer of :math:`F`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
-    :math:`\\|x_n - x_\star\\|^2` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
+    :math:`\\|x_n - x_\\star\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 

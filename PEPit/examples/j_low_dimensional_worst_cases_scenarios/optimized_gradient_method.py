@@ -16,9 +16,9 @@ def wc_ogm(L, n, verbose=True):
     for trying to find a low-dimensional worst-case example on which this guarantee is achieved. That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\star` is a minimizer of :math:`f`. Then,
+    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`. Then,
     it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is achieved.
 
     **Algorithm**:

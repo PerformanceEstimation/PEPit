@@ -8,26 +8,26 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: F_\star = \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
+    .. math:: F_\\star = \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is closed convex and proper, and :math:`f_2` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for **accelerated Douglas-Rachford**. That is, it computes
     the smallest possible :math:`\\tau(n, L, \\mu, \\alpha, \\theta)` such that the guarantee
 
-    .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) \\|w_0 - w_\star\\|^2
+    .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) \\|w_0 - w_\\star\\|^2
 
     is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the algorithm, and where :math:`y_n` is the output
     of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,
     and :math:`w_\\star` defined such that
 
-    .. math:: x_\star = \mathrm{prox}_{\\alpha f_2}(w_\\star)
+    .. math:: x_\\star = \mathrm{prox}_{\\alpha f_2}(w_\\star)
 
     is an optimal point.
 
     In short, for given values of :math:`n`, :math:`L`, :math:`\\mu`, :math:`\\alpha` and :math:`\\theta`,
     :math:`\\tau(n,L,\\mu,\\alpha,\\theta)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
-    when :math:`||x_0 - w_\star||^2 \\leqslant 1`.
+    when :math:`||x_0 - w_\\star||^2 \\leqslant 1`.
 
     **Algorithm**:
     The accelerated Douglas-Rachford splitting [1] is described by

@@ -14,9 +14,9 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     This code computes a worst-case guarantee for an **accelerated gradient method** using **inexact first-order
     information**. That is, it computes the smallest possible :math:`\\tau(n, L, \\varepsilon)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\varepsilon)  \\|x_0 - x_\\star\\|^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\varepsilon)  \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of **inexact accelerated gradient descent** and where :math:`x_\star`
+    is valid, where :math:`x_n` is the output of **inexact accelerated gradient descent** and where :math:`x_\\star`
     is a minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy described by

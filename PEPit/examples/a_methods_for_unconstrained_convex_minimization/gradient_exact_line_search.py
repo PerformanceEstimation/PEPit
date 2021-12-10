@@ -7,20 +7,20 @@ def wc_els(L, mu, n, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for the **gradient descent** (GD) with **exact linesearch** (ELS).
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_\star)
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_\\star)
 
     is valid, where :math:`x_n` is the output of the GD with ELS,
-    and where :math:`x_\star` is the minimizer of :math:`f`.
+    and where :math:`x_\\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
-    :math:`f(x_n)-f_\star` when :math:`f(x_0) - f_\star \\leqslant 1`.
+    :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star \\leqslant 1`.
 
     **Algorithm**:
     GD with ELS can be written as
@@ -33,7 +33,7 @@ def wc_els(L, mu, n, verbose=True):
 
         The **tight** worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
 
-        .. math:: f(x_n) - f_\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\star)
+        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\\star)
 
     **References**:
 

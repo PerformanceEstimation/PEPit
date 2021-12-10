@@ -8,7 +8,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: f_\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: f_\\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
 
     where :math:`f_1` is :math:`L`-smooth and convex
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
@@ -16,13 +16,13 @@ def wc_cg_fw(L, D, n, verbose=True):
     This code computes a worst-case guarantee for the **conditional gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, D)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\star) \\leqslant \\tau(n, L, D) \\|x_0 - x_\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, D) \\|x_0 - x_\\star\\|^2,
 
     is valid, where x_n is the output of the **conditional gradient** method,
-    and where :math:`x_\star` is a minimizer of :math:`F`.
+    and where :math:`x_\\star` is a minimizer of :math:`F`.
     In short, for given values of :math:`n`, :math:`L` and :math:`D`,
     :math:`\\tau(n, L, D)` is computed as the worst-case value of
-    :math:`F(x_n) - F(x_\star)` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
+    :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 

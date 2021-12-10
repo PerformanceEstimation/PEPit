@@ -8,19 +8,19 @@ def wc_ogm(L, n, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **optimized gradient method** (OGM). That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math:: f(x_n) - f_\star \\leqslant \\tau(n, L)  || x_0 - x_\star ||^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L)  || x_0 - x_\\star ||^2
 
-    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\star` is a minimizer of :math:`f`.
+    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`.
 
     In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L)` is computed as the worst-case value
-    of :math:`f(x_n)-f_\star` when :math:`||x_0 - x_\star||^2 \\leqslant 1`.
+    of :math:`f(x_n)-f_\\star` when :math:`||x_0 - x_\\star||^2 \\leqslant 1`.
 
     **Algorithm**:
     The optimized gradient method is described by

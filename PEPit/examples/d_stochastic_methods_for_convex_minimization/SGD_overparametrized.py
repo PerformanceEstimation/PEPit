@@ -8,13 +8,13 @@ def wc_sgdo(L, mu, gamma, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: F_\star = \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
+    .. math:: F_\\star = \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
 
     where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     In addition, we assume a zero variance at the optimal point
 
-    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x_\\star)\\|^2 = 0,
+    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x_\\star)\\|^2 = 0,
 
     which happens for example in machine learning in the interpolation regime,
     that is if there exists a model :math:`x_\\star`

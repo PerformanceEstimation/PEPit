@@ -18,9 +18,9 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     This code computes a worst-case guarantee for a **partially inexact Douglas-Rachford Splitting** (DRS). That is, it
     computes the smallest possible :math:`\\tau(n,L,\\mu,\\sigma,\\gamma)` such that the guarantee
 
-        .. math:: ||z_{n} - z_\star||^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  ||z_0 - z_\star||^2
+        .. math:: ||z_{n} - z_\\star||^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  ||z_0 - z_\\star||^2
 
-    is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`), :math:`z_\star` is its fixed point,
+    is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`), :math:`z_\\star` is its fixed point,
     :math:`\\gamma` is a step size, and :math:`\\sigma` is the level of inaccuracy.
 
     **Algorithm**: The partially inexact Douglas-Rachford splitting under consideration is described by
@@ -49,8 +49,8 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
     **Theoretical guarantee**: The following **tight** theoretical bound is due to [2, Theorem 5.1]:
 
-        .. math:: \|z_{n} - z_\star\|^2  \\leqslant \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
-                             \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n} \|z_0 - z_\star\|^2.
+        .. math:: \|z_{n} - z_\\star\|^2  \\leqslant \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
+                             \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n} \|z_0 - z_\\star\|^2.
 
     **References**: The method is from [1], its PEP formulation and the worst-case analysis from [2],
     see [2, Section 4.4] for more details.

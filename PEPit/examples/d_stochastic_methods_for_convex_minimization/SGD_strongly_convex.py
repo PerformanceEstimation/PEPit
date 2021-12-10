@@ -8,7 +8,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: F_\star = \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
+    .. math:: F_\\star = \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
 
     where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
@@ -25,7 +25,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
 
     holds if
 
-    .. math:: \\|x_0 - x_\star\\|^2 \\leqslant R^2
+    .. math:: \\|x_0 - x_\\star\\|^2 \\leqslant R^2
 
     and
 

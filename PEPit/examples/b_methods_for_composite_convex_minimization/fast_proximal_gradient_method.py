@@ -8,7 +8,7 @@ def wc_fgm(mu, L, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: F_\star = \\min_x \\{F(x) \equiv f(x) + h(x)\\},
+    .. math:: F_\\star = \\min_x \\{F(x) \equiv f(x) + h(x)\\},
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and where :math:`h` is closed convex and proper.
@@ -16,14 +16,14 @@ def wc_fgm(mu, L, n, verbose=True):
     This code computes a worst-case guarantee for the **fast proximal gradient (FPGM)** method, also known as **accelerated proximal gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\star) \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_n` is the output of the **fast proximal gradient** method,
-    and where :math:`x_\star` is a minimizer of :math:`F`.
+    and where :math:`x_\\star` is a minimizer of :math:`F`.
 
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
-    :math:`F(x_n) - F(x_\star)` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
+    :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**: for :math:`t \in \\{ 0, \\dots, n-1\\}`
 
@@ -41,7 +41,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
     The **tight** worst-case guarantee for FPGM is obtained in [2, method FPGM1 in Sec. 4.2.1, Table 1], for :math:`\\mu=0`:
 
-    .. math:: F(x_n) - F_\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\star\\|^2.
+    .. math:: F(x_n) - F_\\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\\star\\|^2.
 
 
     References:

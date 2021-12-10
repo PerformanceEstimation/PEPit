@@ -82,8 +82,8 @@ def wc_fpp(A0, gammas, n, verbose=True):
            (PEP-it) Calling SDP solver
            (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.01593113594082973
            *** Example file: worst-case performance of optimized gradient method ***
-               PEP-it guarantee:       f(x_n)-f_* <= 0.0159311  (f(x_0) - f_\star + A0/2* ||x_0 - x_\star||^2)
-               Theoretical guarantee:  f(x_n)-f_* <= 0.0511881  (f(x_0) - f_\star + A0/2* ||x_0 - x_\star||^2)
+               PEP-it guarantee:       f(x_n)-f_* <= 0.0159311  (f(x_0) - f_* + A0/2* ||x_0 - x_*||^2)
+               Theoretical guarantee:  f(x_n)-f_* <= 0.0511881  (f(x_0) - f_* + A0/2* ||x_0 - x_*||^2)
 
     """
 
@@ -128,10 +128,8 @@ def wc_fpp(A0, gammas, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of fast proximal point method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f_\star + A/2* ||x_0 - x_\star||^2)'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_\star + A/2* ||x_0 - x_\star||^2)'.format(
-            theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

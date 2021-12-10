@@ -16,7 +16,7 @@ def wc_km_decr(n, verbose=True):
 
         .. math:: \\frac{1}{4}\\|x_n - Ax_n\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\star` the fixed point of :math:`A.`
+    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\\star` the fixed point of :math:`A.`
 
     **Algorithm**:
 

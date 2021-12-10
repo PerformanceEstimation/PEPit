@@ -17,7 +17,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
     This code computes a worst-case guarantee for an **inexact proximal point method**. That is, it computes the
     smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
 
-    .. math:: f(x_n) - f(x_\star) \\leqslant \\tau(n, \\gamma, \\sigma) \\|x_0 - x_\\star\\|^2
+    .. math:: f(x_n) - f(x_\\star) \\leqslant \\tau(n, \\gamma, \\sigma) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of the method, :math:`\\gamma` is some step size, and :math:`\\sigma` is the
     level of accuracy of the approximate proximal point oracle.
@@ -36,7 +36,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
 
     **Theoretical guarantee**: The following empirical **upper** bound is provided in [1, Section 3.5.1],
 
-        .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2.
+        .. math:: f(x_n) - f(x_\\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2.
 
     **References**: The precise formulation is presented in [1, Section 3.5.1].
 

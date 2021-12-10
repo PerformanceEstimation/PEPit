@@ -10,7 +10,7 @@ def wc_saga(L, mu, n, verbose=True):
     """
     Consider the finite sum convex minimization problem
 
-    .. math:: F^\star = \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
+    .. math:: F^\\star = \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
 
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
     closed, proper, and convex with a proximal operator readily available.
