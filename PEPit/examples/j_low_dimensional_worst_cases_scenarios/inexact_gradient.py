@@ -7,21 +7,22 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     """
     Consider the convex minimization problem
 
-        .. math:: f_\\star = \min_x f(x),
+    .. math:: f_\\star = \min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for an **inexact gradient method**.
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\epsilon)` such that the guarantee
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\epsilon) ( f(x_0) - f_\\star )
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\epsilon) (f(x_0) - f_\\star)
+
     is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction,
     and where :math:`x_\\star` is the minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1` )
+    described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1`)
 
-        .. math:: || \\nabla f(x_t) - d_t || \\leqslant \\epsilon || \\nabla f(x_t) ||,
+    .. math:: \|\\nabla f(x_t) - d_t\| \\leqslant \\epsilon \\|\\nabla f(x_t)\\|,
 
     where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
 
@@ -52,16 +53,18 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
 
         [2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods. Mathematical Programming.
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param epsilon: (float) level of inaccuracy
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        epsilon (float): level of inaccuracy
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
 
-    :return: (tuple) worst_case value, theoretical value
+    Returns:
+        tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_InexactGrad(L=1, mu=0.1, epsilon=0.1, n=2, Verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_InexactGrad(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -69,14 +72,15 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
                  function 1 : 15 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188606799005029
-        (PEP-it) Postprocessing: applying trace heuristic. Currently 5 eigenvalue(s) > 1e-05 before resolve.
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
+        (PEP-it) Postprocessing: applying trace heuristic. Currently 4 eigenvalue(s) > 1e-05 before resolve.
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); objective value: 0.5188668411169357
-        (PEP-it) Postprocessing: 4 eigenvalue(s) > 1e-05 after trace heuristic
+        (PEP-it) Solver status: optimal (solver: SCS); objective value: 0.5188511226295036
+        (PEP-it) Postprocessing: 3 eigenvalue(s) > 1e-05 after trace heuristic
         *** Example file: worst-case performance of inexact gradient ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.518867 (f(x_0)-f_*)
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.518851 (f(x_0)-f_*)
             Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+    
     """
 
     # Instantiate PEP
@@ -127,12 +131,5 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
-    epsilon = .1
 
-    pepit_tau, theoretical_tau = wc_InexactGrad(L=L,
-                                                mu=mu,
-                                                epsilon=epsilon,
-                                                n=n)
+    pepit_tau, theoretical_tau = wc_InexactGrad(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)

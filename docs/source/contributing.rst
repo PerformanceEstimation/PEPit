@@ -35,7 +35,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] Privilégier \equiv au lieu de = quand on minimise F(x) = f_1(x) + f_2(x).
 
-- \star -> \\star
+- [done] \star -> \\star
 
 - Add "F\_\\star \\triangleq" before the minimization problem
 
