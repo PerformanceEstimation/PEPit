@@ -4,45 +4,53 @@ from PEPit.pep import PEP
 from PEPit.functions.convex_lipschitz_function import ConvexLipschitzFunction
 
 
-def wc_subgd(M, N, gamma, verbose=True):
+def wc_subgd(M, n, gamma, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\star = \\min_x f(x),
+    .. math:: f_\\star = \\min_x f(x),
 
     where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a (possibly non-smooth) minimization problem.
 
     This code computes a worst-case guarantee for the **subgradient** method. That is, it computes
-    the smallest possible :math:`\\tau(n, M)` such that the guarantee
+    the smallest possible :math:`\\tau(n, M, \\gamma)` such that the guarantee
 
-    .. math:: \\min_{0 \leqslant t \leqslant N} f(x_t) - f_\star \\leqslant \\tau(n, M)  \|x_0 - x_\star\|^2
+    .. math:: \\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star \\leqslant \\tau(n, M, \\gamma)  \|x_0 - x_\\star\|
 
-    is valid, where :math:`x_i` is the output of the **subgradient** method,
-    and where :math:`x_\star` is the minimizer of :math:`f`.
+    is valid, where :math:`x_t` is the output of the **subgradient** method after :math:`t\\leqslant n` steps,
+    and where :math:`x_\\star` is the minimizer of :math:`f`.
 
-    We show how to compute the worst-case value of :math:`\\min_t F(x_t)-F(x_\star)` when :math:`x_t` is
-    obtained by doing :math:`i`steps of a subgradient method starting with an initial
-    iterate satisfying :math:`\|x_0-x_\star\| \\leqslant 1`.
+    In short, for given values of :math:`M`, the step-size :math:`\\gamma` and the number of iterations :math:`n`,
+    :math:`\\tau(n, M, \\gamma)` is computed as the worst-case value of
+    :math:`\\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star` when  :math:`\\|x_0-x_\\star\\| \\leqslant 1`.
 
     **Algorithm**:
+    For :math:`t\\in \\{0, \\dots, n-1 \\}`
 
-        .. math:: g_{t} \\in \\partial f(x_t)
-        .. math:: x_{t+1} = x_t - \\gamma g_t
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                g_{t} & \\in & \\partial f(x_t) \\\\
+                x_{t+1} & = & x_t - \\gamma g_t
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 
-    The **tight** bound is obtained in [1, Section 3.2.3],
+    The **tight** bound is obtained in [1, Section 3.2.3] and [2, eq (2)],
 
-        .. math:: \\min_{0 \\leqslant t \\leqslant n} F(x_t)-F(x_\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\star\|.
+        .. math:: \\min_{0 \\leqslant t \\leqslant n} f(x_t)- f(x_\\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\\star\|.
 
     **References**:
-
         `[1] Y. Nesterov, Introductory Lectures on Convex Programming, Volume 1: Basic course (1998).
-        <https://scholar.google.com/citations?view_op=view_citation&hl=fr&user=DJ8Ep8YAAAAJ&citation_for_view=DJ8Ep8YAAAAJ:FiDNX6EVdGUC>`_
+        <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
+
+        `[2] S. Boyd, L. Xiao, & A. Mutapcic (2003). Subgradient Methods (Stanford University lecture notes)
+        <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
 
     Args:
         M (float): the Lipschitz parameter.
-        N (int): the number of iterations.
+        n (int): the number of iterations.
         gamma (float): step size.
         verbose (bool, optional): if True, print conclusion.
 
@@ -51,9 +59,9 @@ def wc_subgd(M, N, gamma, verbose=True):
 
     Example:
         >>> M = 2
-        >>> N = 6
-        >>> gamma = 1 / (M * np.sqrt(N + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgd(M, N, gamma, verbose=True)
+        >>> n = 6
+        >>> gamma = 1 / (M * np.sqrt(n + 1))
+        >>> pepit_tau, theoretical_tau = wc_subgd(M, n, gamma, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -63,8 +71,8 @@ def wc_subgd(M, N, gamma, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.755982533173183
         *** Example file: worst-case performance of subgradient method ***
-            PEP-it guarantee:		 min_(0 <= i <= N) f(x_i) - f_*  <= 0.755983 ||x_0 - x_*||**2`
-            Theoretical guarantee:	 min_(0 <= i <= N) f(x_i) - f_*  <= 0.755929 ||x_0 - x_*||**2`
+            PEP-it guarantee:		 min_(0 <= t <= n) f(x_t) - f_*  <= 0.755983 ||x_0 - x_*||`
+            Theoretical guarantee:	 min_(0 <= t <= n) f(x_t) - f_*  <= 0.755929 ||x_0 - x_*||`
     """
 
     # Instantiate PEP
@@ -82,13 +90,13 @@ def wc_subgd(M, N, gamma, verbose=True):
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and xs
-    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
+    problem.set_initial_condition((x0 - xs)**2 <= 1)
 
     # Run n steps of the subgradient method
     x = x0
     gx, fx = func.oracle(x)
 
-    for _ in range(N):
+    for _ in range(n):
         problem.set_performance_metric(fx - fs)
         x = x - gamma * gx
         gx, fx = func.oracle(x)
@@ -100,13 +108,13 @@ def wc_subgd(M, N, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = M / np.sqrt(N + 1)
+    theoretical_tau = M / np.sqrt(n + 1)
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of subgradient method ***')
-        print('\tPEP-it guarantee:\t\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_(0 \leq i \leq N) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||^2'.format(
+        print('\tPEP-it guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||'.format(
             theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -115,7 +123,7 @@ def wc_subgd(M, N, gamma, verbose=True):
 
 if __name__ == "__main__":
     M = 2
-    N = 6
-    gamma = 1 / (M * np.sqrt(N + 1))
+    n = 6
+    gamma = 1 / (M * np.sqrt(n + 1))
 
-    rate = wc_subgd(M=M, N=N, gamma=gamma, verbose=True)
+    pepit_tau, theoretical_tau  = wc_subgd(M=M, n=n, gamma=gamma, verbose=True)

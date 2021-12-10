@@ -31,7 +31,7 @@ def wc_els(L, mu, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        The tight worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
+        The **tight** worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
 
         .. math:: f(x_n) - f_\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\star)
 

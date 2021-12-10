@@ -41,8 +41,8 @@ def wc_gd_lyapunov_2(L, gamma, n, verbose=True):
         The detailed potential approach and the SDP approach are available in:
 
         `[1] Adrien Taylor, and Francis Bach. "Stochastic first-order
-        methods: non-asymptotic and computer-aided analyses via
-        potential functions." (2019)<https://arxiv.org/pdf/1902.00947.pdf>`_
+        methods: non-asymptotic and computer-aided analyses via potential functions." (2019)
+        <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

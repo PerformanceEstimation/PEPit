@@ -42,7 +42,8 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
                 x_{k+1} &&=(1-\\alpha_k) x_k + \\alpha_k z_{k+1}
             \\end{eqnarray}
 
-    **Theoretical guarantee**: The following upper bound can be found in [1, Theorem 5.2]:
+    **Theoretical guarantee**:
+    The following **upper** bound can be found in [1, Theorem 5.2]:
 
     .. math:: F(x_n) - F_\\star \\leqslant \\frac{4L}{c n^2}\\left( c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star) \\right).
 

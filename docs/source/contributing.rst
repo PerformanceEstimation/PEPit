@@ -10,23 +10,23 @@ Pycharm/Preferences…/Tools/Python Integrated Tools/Docstrings/Docstring format
 
 Table of content:
 ^^^^^^^^^^^^^^^^^
-Define Pb it solves
+- Define Pb it solves
 
-Name algo in boldface
+- Name algo in boldface
 
-Introduce perf metric (out < tau * in)
+- Introduce perf metric (out < tau * in)
 
-Describe alg main step
+- Describe alg main step
 
-Write theoretical result (tau + Upper/Lower/Tight in italic bold)
+- Write theoretical result (tau + Upper/Lower/Tight in italic bold)
 
-Refs
+- Refs
 
-Params (indicate optional or not)
+- Params (indicate optional or not)
 
-Returns
+- Returns
 
-Example
+- Example
 
 PEPit: Liste des trucs à verifier concernant les exemples:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

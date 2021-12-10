@@ -22,10 +22,10 @@ def wc_ppm(alpha, n, verbose=True):
 
         .. math::
 
-            \begin{eqnarray}
+            \\begin{eqnarray}
                 x_{i+1} & = & J_{\\alpha A}(y_i) \\\\
                 y_{i+1} & = & x_{i+1} + \\frac{i}{i+2}(x_{i+1} - x_{i}) - \\frac{i}{i+1}(x_i - y_{i-1})
-            \bend{eqnarray}
+            \\end{eqnarray}
 
     **Theoretical guarantee**:
 

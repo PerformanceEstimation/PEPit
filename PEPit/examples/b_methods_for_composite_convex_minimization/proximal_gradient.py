@@ -8,7 +8,7 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: f_\star = \\min_x {F(x) = f_1(x) + f_2(x)},
+    .. math:: f_\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
 
     where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and where :math:`f_2` is closed convex and proper.

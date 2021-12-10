@@ -6,35 +6,79 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_fgm(mu, L, n, verbose=True):
     """
-    Consider the convex minimization problem
-        F_\star = min_x { F(x) = f(x) + h(x) },
-    where f is L-smooth and convex, and where h is closed convex and proper.
-    We further consider the case where the gradient of f can be evaluated, and where the proximal operator
-    of h can be evaluated as well.
+    Consider the composite convex minimization problem
 
-    This code computes a worst-case guarantee for the fast proximal gradient method (a.k.a. accelerated gradient).
-    That is, the code computes the smallest possible tau(mu,L,n) such that the guarantee
-        f(x_n) - f_\star <= tau(mu,L,n) * || x_0 - x_\star ||^2,
-    is valid, where x_n is the output of the fast proximal gradient, and where x_\star is a minimizer of f.
+    .. math:: F_\star = \\min_x \\{F(x) \equiv f(x) + h(x)\\},
 
-    In short, for given values of n and L, tau(n,L) is be computed as the worst-case value of f(x_n)-f_\star when
-    || x_0 - x_\star || == 1.
+    where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
+    and where :math:`h` is closed convex and proper.
 
-    Theoretical rates can be found in the following paper
-    For an Upper bound (not tight)
-    [1] A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems∗
-    Amir Beck† and Marc Teboulle‡
+    This code computes a worst-case guarantee for the **fast proximal gradient (FPGM)** method, also known as **accelerated proximal gradient** method.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-    For an exact bound (convex):
-    [2] Exact Worst-case Performance of First-order Methods for Composite Convex Optimization
-    Adrien B. Taylor, Julien M. Hendrickx, François Glineur
+    .. math :: F(x_n) - F(x_\star) \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\star\\|^2,
 
-    :param L: (float) the smoothness parameter.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    is valid, where :math:`x_n` is the output of the **fast proximal gradient** method,
+    and where :math:`x_\star` is a minimizer of :math:`F`.
 
-    :return: (tuple) worst_case value, theoretical value
-    """
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`F(x_n) - F(x_\star)` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
+
+    **Algorithm**: for :math:`t \in \\{ 0, \\dots, n-1\\}`
+
+    .. math::
+        :nowrap:
+
+        \\begin{eqnarray}
+            x_{t+1} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\\left \\|x-(y_{t} - \\frac{1}{L} \\nabla f(y_t))\\right\\|^2 \\right\\}, \\\\
+            y_{t+1} & = & x_{t+1} + \\frac{i}{i+3} (x_{t+1} - x_{t})
+        \\end{eqnarray}
+
+    where :math:`y_{0} = x_0`.
+
+    **Theoretical guarantee**:
+
+    The **tight** worst-case guarantee for FPGM is obtained in [2, method FPGM1 in Sec. 4.2.1, Table 1], for :math:`\\mu=0`:
+
+    .. math:: F(x_n) - F_\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\star\\|^2.
+
+
+    References:
+        For an Upper bound (not tight)
+        `[1] A. Beck and M. Teboulle (2009), A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems (SIAM Journal on Imaging Sciences).
+        <https://www.ceremade.dauphine.fr/~carlier/FISTA>`_
+
+        For an exact bound (non-strongly convex case):
+        `[2] A. Taylor, J. Hendrickx, F. Glineur (2017) Exact Worst-case Performance of First-order Methods for Composite Convex Optimization, (SIAM Journal on Optimization) <https://epubs.siam.org/doi/abs/10.1137/16M108104X?journalCode=sjope8>`_
+
+    Args:
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_fgm(L=1, mu=0, n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 6 constraint(s) added
+                 function 2 : 2 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.24999998665409573
+        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -1.2e-07 < 0).
+         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        *** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***
+            PEP-it guarantee:       f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
+            Theoretical guarantee:  f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
+        """
 
     # Instantiate PEP
     problem = PEP()
@@ -78,18 +122,12 @@ def wc_fgm(mu, L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    n = 1
-    mu = 0
-    L = 1
-
-    pepit_tau, theoretical_tau = wc_fgm(mu=mu,
-                                        L=L,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_fgm(L=1, mu=0, n=4, verbose=True)

@@ -29,7 +29,7 @@ def wc_gd(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the tight theoretical guarantee can be found in [1, Theorem 1]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2}.
 

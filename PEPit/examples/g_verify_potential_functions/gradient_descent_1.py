@@ -13,7 +13,7 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
     This code computes a worst-case guarantee for **gradient descent** with fixed step size :math:`\\gamma`,
     for a well-chosen Lyapunov function:
 
-    .. math:: V_k = k*(f(x_k) - f_\\star) + \\frac{L}{2} \\|x_k - x_\\star\\|^2
+    .. math:: V_k = k (f(x_k) - f_\\star) + \\frac{L}{2} \\|x_k - x_\\star\\|^2
 
     That is, it verifies that the above Lyapunov is decreasing on the trajectory:
 
@@ -40,12 +40,12 @@ def wc_gd_lyapunov_1(L, gamma, n, verbose=True):
 
         The detailed potential approach is available in [1, Theorem 3.3], and the SDP approach in [2].
 
-        `[1] Nikhil Bansal, and Anupam Gupta.  "Potential-function proofs for
-        first-order methods." (2019)<https://arxiv.org/pdf/1712.04581.pdf>`_
+        `[1] Nikhil Bansal, and Anupam Gupta.  "Potential-function proofs for first-order methods." (2019)
+        <https://arxiv.org/pdf/1712.04581.pdf>`_
 
         `[2] Adrien Taylor, and Francis Bach. "Stochastic first-order
-        methods: non-asymptotic and computer-aided analyses via
-        potential functions." (2019)<https://arxiv.org/pdf/1902.00947.pdf>`_
+        methods: non-asymptotic and computer-aided analyses via potential functions." (2019)
+        <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

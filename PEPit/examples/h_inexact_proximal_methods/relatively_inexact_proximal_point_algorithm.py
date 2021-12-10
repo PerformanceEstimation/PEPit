@@ -34,7 +34,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
     We note that the case :math:`\\sigma=0` implies :math:`e_{t+1}=0` and this operation reduces to a standard proximal
     step with step size :math:`\\gamma`.
 
-    **Theoretical guarantee**: The following empirical upper bound is provided in [1, Section 3.5.1],
+    **Theoretical guarantee**: The following empirical **upper** bound is provided in [1, Section 3.5.1],
 
         .. math:: f(x_n) - f(x_\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2.
 

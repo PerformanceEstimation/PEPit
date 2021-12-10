@@ -25,7 +25,7 @@ def wc_gd(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the tight theoretical guarantee can be found in [1, Theorem 1]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
 
     .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\frac{4}{3}\\frac{L}{n} (f(x_0) - f(x_n))
 

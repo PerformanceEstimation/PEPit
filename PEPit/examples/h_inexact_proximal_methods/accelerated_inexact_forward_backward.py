@@ -10,7 +10,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite non-smooth strongly convex minimization problem,
 
-    .. math:: \\min_x \\left\\{F(x) \\equiv f(x) + g(x)\\right\\}
+    .. math:: \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\}
 
     where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth
     (and possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and

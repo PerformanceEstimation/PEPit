@@ -44,7 +44,7 @@ def wc_ogm(L, n, verbose=True):
                 \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}.
             \\end{eqnarray}
     **Theoretical guarantee**:
-    The tight theoretical guarantee can be found in [2, Theorem 2]:
+    The **tight** theoretical guarantee can be found in [2, Theorem 2]:
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{2\\theta_n^2}.
 
