@@ -8,12 +8,12 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
-    Consider the composite non-smooth strongly convex minimization problem,
+    Consider the composite convex minimization problem,
 
-    .. math:: \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\}
+    .. math:: F_\\star\\triangleq \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\},
 
-    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex not necessarily smooth
-    (and possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
+    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex (possibly non-smooth, and
+    possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
     that one has access to an inexact version of the proximal operator of :math:`g`.
 
     This code verifies a potential (or Lyapunov/energy) function for an **inexact accelerated forward-backward method**
@@ -28,8 +28,8 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     **Algorithm**:
 
     The algorithm is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
-    values for its parameters: :math:`\\xi_k=0`, :math:`\\sigma_k=0`, :math:`\\lambda_k=\\tfrac{1}{L}` (constant value
-    accross the iterations), and without backtracking, arriving to:
+    values for its parameters ( :math:`\\xi_t=0`, :math:`\\sigma_t=0`, :math:`\\lambda_t =\\tfrac{1}{L}` in the notation
+    of [1]), and without backtracking, arriving to:
 
         .. math::
             :nowrap:
@@ -44,26 +44,37 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
                  z_{t+1} && = z_t+\\frac{A_{t+1}-A_t}{1+\\mu A_{t+1}}\\left(\\mu (x_{t+1}-z_t)-(v_{t+1}+\\nabla f(y_t))\\right),\\\\
             \\end{eqnarray}
 
-    where :math:`\\varepsilon_t` is some accuracy parameter. More precisely, the sign ":math:`\\approx_{\\varepsilon,\\mu}`"
-    can be described as
+    where :math:`\\{\\varepsilon_t\\}_{t\\geqslant 0}` is some sequence of accuracy parameters, and :math:`\\{\\eta_t\\}_{t\\geqslant 0}`
+    and :math:`\\{A_t\\}_{t\\geqslant 0}` are some scalar sequences of parameters for the method.
+
+    The line with ":math:`\\approx_{\\varepsilon,\\mu}`" can be described as the pair :math:`(x_{t+1},v_{t+1})` satisfying
+    an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition), it requires
+    the existence of some :math:`w_{t+1}` such that :math:`v_{t+1}-\\mu x_{t+1} + \\mu w_{t+1} \\in \\partial g(w_{t+1})` for
+    which the following condition is satisfied:
 
      .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                 TBC\\\
+                &\\lambda (1+\\lambda \\mu)\\Big(g(x_{t+1})-g(w_{t+1})+\\tfrac{\\mu}{2}\\|x_{t+1}-w_{t+1}\\|^2- \\langle x_{t+1}-w_{t+1},v_{t+1} \\rangle \\Big)\\\\
+                &\\quad+\\tfrac{1}{2} \\|x_{t+1} - y_t +\\lambda (v_{t+1}+\\nabla f(y_t))\\|^2\\\\
+                &\\quad \\leqslant \\tfrac{\\zeta_t^2\\lambda^2}{2}\|v_{t+1}+\\nabla f(y_t)\|^2.
             \\end{eqnarray}
 
-    **Theoretical guarantee**: A theoretical guarantee is obtained in [1, Theorem 3.2]:
+    **Theoretical guarantee**:
+
+    A theoretical guarantee is obtained in [1, Theorem 3.2]:
 
         .. math:: \\Phi_{t+1} - \\Phi_t \\leq 0.
 
-    **References**: The method and theoretical result can be found in [1, Section 3].
+    **References**:
 
-        `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
-        absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v1. <https://arxiv.org/pdf/2106.15536v1.pdf>`_
+    The method and theoretical result can be found in [1, Section 3].
 
-    Args:
+    `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
+    absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v2. <https://arxiv.org/pdf/2106.15536v2.pdf>`_
+
+    Args: TODOUPDATE: virer les inutiles (aussi dans signature et tests)
         mu (float): strong convexity parameter.
         L (float): smoothness parameter.
         gamma (float): the step size.
@@ -77,21 +88,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> L = 2
-        >>> sigma = .2
-        >>> pepit_tau, theoretical_tau = wc_aifb(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 13 constraint(s) added
-                 function 2 : 13 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 2.028195930733028e-05
-        *** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***
-            PEP-it guarantee:		 phi(n+1) - phi(n) <= 2.0282e-05
-            Theoretical guarantee:	 phi(n+1) - phi(n) <= 0.0
+        >>> TODOTODO
 
     """
 
