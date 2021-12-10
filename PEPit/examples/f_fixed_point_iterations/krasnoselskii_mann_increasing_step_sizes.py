@@ -3,7 +3,7 @@ from PEPit.operators.lipschitz import LipschitzOperator
 from PEPit.primitive_steps.fixed_point import fixed_point
 
 
-def wc_km_decr(n, verbose=True):
+def wc_km_incr(n, verbose=True):
     """
     Consider the fixed point problem
 
@@ -39,7 +39,7 @@ def wc_km_decr(n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_km_decr(n=3, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_km_incr(n=3, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -92,4 +92,4 @@ def wc_km_decr(n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_km_decr(n=3, verbose=True)
+    pepit_tau, theoretical_tau = wc_km_incr(n=3, verbose=True)
