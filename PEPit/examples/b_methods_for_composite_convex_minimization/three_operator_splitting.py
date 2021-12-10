@@ -1,5 +1,3 @@
-import numpy as np
-
 from PEPit.pep import PEP
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.functions.smooth_convex_function import SmoothConvexFunction

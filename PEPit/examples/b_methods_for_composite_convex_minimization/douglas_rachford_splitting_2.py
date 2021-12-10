@@ -14,9 +14,9 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     closed and proper. Both proximal operators are assumed to be available.
 
     This code computes a worst-case guarantee for the **Douglas Rachford Splitting (DRS)** method.
-    That is, it computes the smallest possible :math:`\\tau(n,L,\\alpha,\\theta)` such that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\alpha, \\theta)` such that the guarantee
 
-        .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n,L,\\alpha,\\theta) ||x_0 - x_\star||^2.
+        .. math:: F(y_n) - F(x_\star) \\leqslant \\tau(n, L, \\alpha, \\theta) ||x_0 - x_\star||^2.
 
     is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_\star`, but not :math:`w_k`, and hence
     we require the initial condition on :math:`x_0`(arbitrary choice; partially justified by
