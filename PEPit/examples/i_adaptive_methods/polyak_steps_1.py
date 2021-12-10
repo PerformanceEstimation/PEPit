@@ -13,13 +13,13 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step sizes** (PS).
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
 
-    .. math:: ||x_{t+1} - x_\\star||^2 \\leqslant \\tau(L, \\mu, \\gamma) ||x_{t} - x_\\star||^2
+    .. math:: \\|x_{t+1} - x_\\star\\|^2 \\leqslant \\tau(L, \\mu, \\gamma) \\|x_{t} - x_\\star\\|^2
 
     is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective
     value of the step size of the gradient method with PS.
 
     In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
-    value of :math:`||x_{t+1} - x_\\star||^2` when :math:`||x_{t} - x_\\star||^2 \\leqslant 1`.
+    value of :math:`\\|x_{t+1} - x_\\star\\|^2` when :math:`\\|x_{t} - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by

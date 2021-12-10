@@ -15,12 +15,12 @@ def wc_tmm(mu, L, n, verbose=True):
     This code computes a worst-case guarantee for **triple momentum method.** (TMM).
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) \\| x_0 - x_\\star \\|^2
+        .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of the **triple momentum method.** (TMM),
     and where :math:`x_\\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`f(x_n)-f_\\star` when :math:`\\| x_0 - x_\\star \\|^2 \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
 
     **Algorithm**:
@@ -97,6 +97,7 @@ def wc_tmm(mu, L, n, verbose=True):
         *** Example file: worst-case performance of the Triple Momentum Method ***
         PEP-it guarantee:       f(x_n)-f_* <= 0.111704 ||x_0-x_*||^2
         Theoretical guarantee:  f(x_n)-f_* <= 0.111708 ||x_0-x_*||^2
+
     """
 
 

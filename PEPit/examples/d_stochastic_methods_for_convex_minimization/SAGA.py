@@ -22,7 +22,7 @@ def wc_saga(L, mu, n, verbose=True):
 
     where the value of the Lyapunov function at iteration :math:`k`is denoted by :math:`V_k` is
 
-    .. math:: V^{(t)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} ||x^{(t)} - x^\\star||^2,
+    .. math:: V^{(t)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} \\|x^{(t)} - x^\\star\\|^2,
 
     with :math:`\\gamma = \\frac{1}{2(\\mu n+L)}`.
 

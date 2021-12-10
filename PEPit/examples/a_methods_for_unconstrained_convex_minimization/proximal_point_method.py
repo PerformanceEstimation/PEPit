@@ -14,20 +14,20 @@ def wc_ppa(gamma, n, verbose=True):
     This code computes a worst-case guarantee for the **proximal point method** with step size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n,\\gamma)` such that the guarantee
 
-    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, \\gamma)  ||x_0 - x_\\star||^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, \\gamma)  \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of the proximal point method, and where :math:`x_\\star` is a
     minimizer of :math:`f`.
 
     In short, for given values of :math:`n` and :math:`\\gamma`,
     :math:`\\tau(n,\\gamma)` is computed as the worst-case value of :math:`f(x_n)-f_\\star`
-    when :math:`||x_0 - x_\\star||^2 \\leqslant 1`.
+    when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 
     The proximal point method is described by
 
-        .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}||x-x_t||^2 \\right\\},
+        .. math:: x_{t+1} = \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\gamma}\\|x-x_t\\|^2 \\right\\},
 
     where :math:`\\gamma` is a step size.
 
@@ -35,7 +35,7 @@ def wc_ppa(gamma, n, verbose=True):
 
     The **tight** theoretical guarantee can be found in [1, Theorem 4.1]:
 
-        .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\|x_0-x_\\star\\|^2}{4\\gamma n}.
 
     **References**:
 

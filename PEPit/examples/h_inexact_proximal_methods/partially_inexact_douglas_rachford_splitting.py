@@ -18,7 +18,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     This code computes a worst-case guarantee for a **partially inexact Douglas-Rachford Splitting** (DRS). That is, it
     computes the smallest possible :math:`\\tau(n,L,\\mu,\\sigma,\\gamma)` such that the guarantee
 
-        .. math:: ||z_{n} - z_\\star||^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  ||z_0 - z_\\star||^2
+        .. math:: \\|z_{n} - z_\\star\\|^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  \\|z_0 - z_\\star\\|^2
 
     is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`), :math:`z_\\star` is its fixed point,
     :math:`\\gamma` is a step size, and :math:`\\sigma` is the level of inaccuracy.
@@ -29,8 +29,8 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                 x_{t} && \\approx_{\\sigma} \\arg\\min_x \\left\\{ \\gamma f(x)+\\frac{1}{2} \\| x-z_t\\|^2 \\right\\},\\\\
-                 y_{t} && = \\arg\\min_y \\left\\{ \\gamma g(y)+\\frac{1}{2} \\| y-(x_t-\\gamma \\nabla f(x_t))\\|^2 \\right\\},\\\\
+                 x_{t} && \\approx_{\\sigma} \\arg\\min_x \\left\\{ \\gamma f(x)+\\frac{1}{2} \\|x-z_t\\|^2 \\right\\},\\\\
+                 y_{t} && = \\arg\\min_y \\left\\{ \\gamma g(y)+\\frac{1}{2} \\|y-(x_t-\\gamma \\nabla f(x_t))\\|^2 \\right\\},\\\\
                  z_{t+1} && = z_t + y_t - x_t.
             \\end{eqnarray}
 
@@ -42,7 +42,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
 
             \\begin{eqnarray}
                  x_{t} && = z_t - \\gamma (\\nabla f(x_t) - e_t),\\\\
-                 y_{t} && =  \\arg\\min_y \\left\\{ \\gamma g(y)+\\frac{1}{2} \\| y-(x_t-\\gamma \\nabla f(x_t))\\|^2 \\right\\},\\\\
+                 y_{t} && =  \\arg\\min_y \\left\\{ \\gamma g(y)+\\frac{1}{2} \\|y-(x_t-\\gamma \\nabla f(x_t))\\|^2 \\right\\},\\\\
                   && \\text{with } \|e_t\|^2 \\leqslant \\frac{\\sigma^2}{\\gamma^2}\|y_{t} - z_t + \\gamma \\nabla f(x_t) \|^2,\\\\
                  z_{t+1} && = z_t + y_t - x_t.
             \\end{eqnarray}

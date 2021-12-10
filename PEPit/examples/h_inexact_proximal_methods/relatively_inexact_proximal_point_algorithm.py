@@ -24,12 +24,12 @@ def wc_rippm(n, gamma, sigma, verbose=True):
 
     **Algorithm**: The approximate proximal point method under consideration is described by
 
-    .. math:: x_{t+1} \\approx_{\\sigma} \\arg\\min_x \\left\\{ \\gamma f(x)+\\frac{1}{2} \\| x-x_t\\|^2 \\right\\},
+    .. math:: x_{t+1} \\approx_{\\sigma} \\arg\\min_x \\left\\{ \\gamma f(x)+\\frac{1}{2} \\|x-x_t\\|^2 \\right\\},
 
     where the notation ":math:`\\approx_{\\sigma}`" corresponds to require the existence of some vector
     :math:`s_{t+1}\\in\\partial f(x_{t+1})` and :math:`e_{t+1}` such that
 
-        .. math:: x_{t+1}  =  x_t - \\gamma (s_{t+1} - e_{t+1}) \\quad \\quad \\text{with }||e_{t+1}||^2  \\leqslant  \\frac{\\sigma^2}{\\gamma^2}\\|x_{t+1} - x_t\\|^2.
+        .. math:: x_{t+1}  =  x_t - \\gamma (s_{t+1} - e_{t+1}) \\quad \\quad \\text{with }\\|e_{t+1}\\|^2  \\leqslant  \\frac{\\sigma^2}{\\gamma^2}\\|x_{t+1} - x_t\\|^2.
 
     We note that the case :math:`\\sigma=0` implies :math:`e_{t+1}=0` and this operation reduces to a standard proximal
     step with step size :math:`\\gamma`.

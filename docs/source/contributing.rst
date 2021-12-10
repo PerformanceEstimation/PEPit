@@ -77,6 +77,6 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - fast -> accelerated
 
-- || || -> \\| \\|
+- [done] || || -> \\| \\|
 
 - Use left - right to scale brackets etc ...

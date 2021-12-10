@@ -16,12 +16,12 @@ def wc_fpp(A0, gammas, n, verbose=True):
        This code computes a worst-case guarantee for **fast proximal point method** (FPP). That is, it computes
        the smallest possible :math:`\\tau(n, A_0,\\vec{\\gamma})` such that the guarantee
 
-       .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, A_0, \\vec{\\gamma}) \\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\| x_0 - x_\\star \\|^2\\right)
+       .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, A_0, \\vec{\\gamma}) \\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\|x_0 - x_\\star\\|^2\\right)
 
        is valid, where :math:`x_n` is the output of FPP (with step-size :math:`\\gamma_t` at step :math:`t\\in \\{0, \\dots, n-1\\}`) and where :math:`x_\\star` is a minimizer of :math:`f` and :math:`A_0` is a positive number.
 
        In short, for given values of :math:`n`,  :math:`A_0` and :math:`\\vec{\\gamma}`, :math:`\\tau(n)` is computed as the worst-case value
-       of :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\| x_0 - x_\\star \\|^2 \\leqslant 1`, for the following algorithm.
+       of :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\|x_0 - x_\\star\\|^2 \\leqslant 1`, for the following algorithm.
 
        **Algorithm**:
        For :math:`t\\in \\{0, \\dots, n-1\\}`:
@@ -52,7 +52,7 @@ def wc_fpp(A0, gammas, n, verbose=True):
        **Theoretical guarantee**:
        A theoretical **upper** bound can be found in [1, Theorem 2.3.]:
 
-       .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{t=0}^{n-1} \\sqrt{\\gamma_t})^2}\\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\| x_0 - x_\\star \\|^2 \\right).
+       .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{t=0}^{n-1} \\sqrt{\\gamma_t})^2}\\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\|x_0 - x_\\star\\|^2 \\right).
 
        **References**:
        The fast proximal point was analyzed in the following work:
