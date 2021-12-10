@@ -13,24 +13,33 @@ def wc_rmm(mu, L, lam, verbose=True):
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
     This code computes a worst-case guarantee for the **robust momentum method**.
-    That is, it verifies that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
 
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
-    is valid, where :math:`x_n` is the output of the **robust momentum method**, where :math:`x_\star` is a minimizer of :math:`f`,
+    is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` iterate of the **robust momentum method**,
+    where :math:`x_\star` is a minimizer of :math:`f`,
     and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
 
-        .. math:: q_t = (L - \\mu) \\left(f(x_t) - f_\star - \\frac{\\mu}{2}\|y_t - x_\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\star)\|^2 \\right)
+        .. math::
+            :nowrap:
 
-        .. math:: v(x_t) = l\|z_t - x_\star\|^2 + q_t
+            \\begin{eqnarray}
+                q_t & = & (L - \\mu) \\left(f(x_t) - f_\star - \\frac{\\mu}{2}\|y_t - x_\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\star)\|^2 \\right) \\\\
+                v(x_t) & = & l\|z_t - x_\star\|^2 + q_t
+            \\end{eqnarray}
 
-     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) (1 - \\sqrt{\\frac{1}{\\kappa}})`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
+     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda \\left(1 - \\frac{1}{\\kappa}\\right) + (1 - \\lambda) \\left(1 - \\sqrt{\\frac{1}{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
 
     **Algorithm**:
 
-        .. math:: x_{t+1} = x_{t} + \\beta (x_t - x_{t-1}) - \\alpha \\nabla f(y_t)
+        .. math::
+            :nowrap:
 
-        .. math:: y_{t} + \\gamma (x_t - x_{t-1})
+            \\begin{eqnarray}
+                x_{t+1} & = & x_{t} + \\beta (x_t - x_{t-1}) - \\alpha \\nabla f(y_t) \\\\
+                y_{t+1} & = & y_{t} + \\gamma (x_t - x_{t-1})
+            \\end{eqnarray}
 
     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
@@ -40,8 +49,8 @@ def wc_rmm(mu, L, lam, verbose=True):
     
         .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n),
 
-    with :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) (1 - \\sqrt{\\frac{1}{\\kappa}})`.
-    
+    with :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\sqrt{\\frac{1}{\\kappa}}\\right)`.
+
     **References**:
 
     `[1] S. Cyrus, B. Hu, B. Van Scoy, & L. Lessard (2018). A robust accelerated
