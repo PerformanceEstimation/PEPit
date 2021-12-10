@@ -39,7 +39,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
 
         The **upper** guarantee obtained in [2, Theorem 4] is
 
-        .. math:: f(x_n) - f_\star \\leqslant (1 - \\alpha \\mu)^{n + 1} (f(x_0) - f_\star)
+        .. math:: f(x_n) - f_\star \\leqslant (1 - \\alpha \\mu)^n (f(x_0) - f_\star)
 
     References:
 
@@ -67,7 +67,7 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
         >>> L = 1.
         >>> alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
         >>> beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
-        >>> pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=1, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -75,9 +75,9 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
                  function 1 : 12 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.753492450790045
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.8145062493468549
         *** Example file: worst-case performance of the Heavy-Ball method ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.814506 (f(x_0) -  f(x_*))
             Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) -  f(x_*))
 
     """
@@ -100,40 +100,35 @@ def wc_heavyball(mu, L, alpha, beta, n, verbose=True):
     problem.set_initial_condition((f0 - fs) <= 1)
 
     # Run one step of the heavy ball method
-    x_old = x0
-    g_old = func.gradient(x_old)
-    x_new = x_old - alpha * g_old
-    g_new, f_new = func.oracle(x_new)
+    x_new = x0
 
     for _ in range(n):
-        x_new, x_old = x_new - alpha * g_new + beta * (x_new - x_old), x_new
-        g_new, f_new = func.oracle(x_new)
+        x_old = x_new
+        x_new = x_new - alpha * func.gradient(x_new) + beta * (x_new - x_old)
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(f_new - fs)
+    problem.set_performance_metric(func.value(x_new) - fs)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 - alpha * mu) ** (n + 1)
+    theoretical_tau = (1 - alpha * mu) ** n
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Heavy-Ball method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(
-            theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
+
     mu = 0.1
     L = 1.
     alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
     beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
-
-    pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=1, verbose=True)
+    pepit_tau, theoretical_tau = wc_heavyball(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)
