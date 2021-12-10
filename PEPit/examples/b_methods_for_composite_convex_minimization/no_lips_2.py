@@ -79,7 +79,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.022158793967249273
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***
-            PEP-it guarantee:	 min_t Dh(x_(t-1), x_t) <= 0.0221588 Dh(x_*, x_0)
+            PEP-it guarantee:		 min_t Dh(x_(t-1), x_t) <= 0.0221588 Dh(x_*, x_0)
             Theoretical guarantee:	 min_t Dh(x_(t-1), x_t) <= 0.0222222 Dh(x_*, x_0)
 
     """
@@ -88,13 +88,10 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare two convex functions and a convex indicator function
-    d = problem.declare_function(ConvexFunction,
-                                 param={}, is_differentiable=True)
-    func1 = problem.declare_function(ConvexFunction,
-                                     param={}, is_differentiable=True)
+    d = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
+    func1 = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     h = (d + func1) / L
-    func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     param={'D': np.inf})
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
@@ -136,7 +133,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
-        print('\tPEP-it guarantee:\t min_t Dh(x_(t-1), x_t) <= {:.6} Dh(x_*, x_0)'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t min_t Dh(x_(t-1), x_t) <= {:.6} Dh(x_*, x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_t Dh(x_(t-1), x_t) <= {:.6} Dh(x_*, x_0) '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

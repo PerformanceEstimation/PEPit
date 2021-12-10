@@ -81,7 +81,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6666452858806611
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:	 F(x_n) - F_* <= 0.666645 Dh(x_*, x_0)
+            PEP-it guarantee:		 F(x_n) - F_* <= 0.666645 Dh(x_*, x_0)
             Theoretical guarantee :	 F(x_n) - F_* <= 0.666667 Dh(x_*, x_0)
 
     """
@@ -133,7 +133,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEP-it guarantee:\t F(x_n) - F_* <= {:.6} Dh(x_*, x_0)'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*, x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t F(x_n) - F_* <= {:.6} Dh(x_*, x_0) '.format(
             theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

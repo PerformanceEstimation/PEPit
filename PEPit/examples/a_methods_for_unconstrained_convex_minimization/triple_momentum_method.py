@@ -82,21 +82,18 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1.,  n=4, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
+        >>> pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1., n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-             function 1 : 42 constraint(s) added
+                 function 1 : 30 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.1117036959488595
-        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -2.18e-06 < 0).
-        Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
-        In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.23893532450841679
         *** Example file: worst-case performance of the Triple Momentum Method ***
-        PEP-it guarantee:       f(x_n)-f_* <= 0.111704 ||x_0-x_*||^2
-        Theoretical guarantee:  f(x_n)-f_* <= 0.111708 ||x_0-x_*||^2
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.238935 ||x_0-x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
 
     """
 
@@ -157,5 +154,3 @@ def wc_tmm(mu, L, n, verbose=True):
 if __name__ == "__main__":
 
     pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1., n=4, verbose=True)
-
-

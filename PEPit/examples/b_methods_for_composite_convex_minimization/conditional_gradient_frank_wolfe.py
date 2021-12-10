@@ -67,8 +67,8 @@ def wc_cg_fw(L, D, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
         *** Example file: worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***
-            PEP-it guarantee:	     f(y_n)-f_* <= 0.0994521 ||x0 - xs||^2
-            Theoretical guarantee :	 f(y_n)-f_* <= 0.166667 ||x0 - xs||^2
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.0994521 ||x0 - xs||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
 
     """
 
@@ -76,10 +76,8 @@ def wc_cg_fw(L, D, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth convex function and a convex indicator of rayon D
-    func1 = problem.declare_function(function_class=SmoothConvexFunction,
-                                     param={'L': L})
-    func2 = problem.declare_function(function_class=ConvexIndicatorFunction,
-                                     param={'D': D})
+    func1 = problem.declare_function(function_class=SmoothConvexFunction, param={'L': L})
+    func2 = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': D})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -116,8 +114,8 @@ def wc_cg_fw(L, D, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
-        print('\tPEP-it guarantee:\t \t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 

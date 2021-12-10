@@ -65,7 +65,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
 
-- Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seule pour aligner les deux résultats.
+- [done] Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seul pour aligner les deux résultats.
 
 - Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
 

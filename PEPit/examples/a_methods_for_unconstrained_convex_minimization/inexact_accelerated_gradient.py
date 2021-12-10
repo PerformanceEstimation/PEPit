@@ -66,7 +66,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.03944038534724904
         *** Example file: worst-case performance of inexact accelerated gradient method ***
-            PEP-it guarantee:						 f(x_n)-f_* <= 0.0394404 (f(x_0)-f_*)
+            PEP-it guarantee:				 f(x_n)-f_* <= 0.0394404 (f(x_0)-f_*)
             Theoretical guarantee for epsilon = 0 :	 f(x_n)-f_* <= 0.0357143 (f(x_0)-f_*)
 
     """
@@ -109,7 +109,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of inexact accelerated gradient method ***')
-        print('\tPEP-it guarantee:\t\t\t\t\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee for epsilon = 0 :\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

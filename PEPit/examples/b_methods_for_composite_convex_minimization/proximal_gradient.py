@@ -68,9 +68,12 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6560999999942829
+        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -9.18e-11 < 0).
+         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
-            PEP-it guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
-            Theoretical guarantee :	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+            PEP-it guarantee:		 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+            Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
 
     """
 
@@ -109,8 +112,8 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Proximal Gradient Method in function values***')
-        print('\tPEP-it guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -78,10 +78,13 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
                  function 2 : 20 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623136473224
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
+        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -1.1e-06 < 0).
+         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-    	    PEP-it guarantee:						 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
-            Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
+            PEP-it guarantee:				 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
+        	Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
 
     """
 
@@ -137,7 +140,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t\t\t\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
