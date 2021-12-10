@@ -12,17 +12,17 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for an **inexact gradient method**.
-    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\epsilon)` such that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\varepsilon)` such that the guarantee
 
-    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\epsilon) (f(x_0) - f_\\star)
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\varepsilon) (f(x_0) - f_\\star)
 
     is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction,
     and where :math:`x_\\star` is the minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
-    described by (with :math:`0 \\leqslant \\epsilon \\leqslant 1`)
+    described by (with :math:`0 \\leqslant \\varepsilon \\leqslant 1`)
 
-    .. math:: \|\\nabla f(x_t) - d_t\| \\leqslant \\epsilon \\|\\nabla f(x_t)\\|,
+    .. math:: \|\\nabla f(x_t) - d_t\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
     where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
 
@@ -30,18 +30,18 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
 
     The inexact gradient descent under consideration can be written as
 
-        .. math:: x_{t+1} = x_t - \\frac{2}{L_{\\epsilon} + \\mu_{\\epsilon}} d_t
+        .. math:: x_{t+1} = x_t - \\frac{2}{L_{\\varepsilon} + \\mu_{\\varepsilon}} d_t
 
-    where :math:`d_t` is the inexact search direction, :math:`L_{\\epsilon} = (1 + \\epsilon)L`
-    and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
+    where :math:`d_t` is the inexact search direction, :math:`L_{\\varepsilon} = (1 + \\varepsilon)L`
+    and :math:`\mu_{\\varepsilon} = (1-\\varepsilon) \\mu`.
 
     **Theoretical guarantee**:
 
     The **tight** worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}(f(x_0) - f_\\star ),
+        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\varepsilon} - \\mu_{\\varepsilon}}{L_{\\varepsilon} + \\mu_{\\varepsilon}}\\right)^{2n}(f(x_0) - f_\\star ),
 
-    with :math:`L_{\\epsilon} = (1 + \\epsilon)L` and :math:`\mu_{\\epsilon} = (1-\\epsilon) \\mu`.
+    with :math:`L_{\\varepsilon} = (1 + \\varepsilon)L` and :math:`\mu_{\\varepsilon} = (1-\\varepsilon) \\mu`.
 
     **References**:
 

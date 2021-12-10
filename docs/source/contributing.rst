@@ -39,7 +39,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - Add "F\_\\star \\triangleq" before the minimization problem
 
-- \\epsilon -> \\varepsilon
+- [done] \\epsilon -> \\varepsilon
 
 - Mettre un peu plus de "verbose" avant les équations décrivant la méthode.
 

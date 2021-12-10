@@ -39,7 +39,7 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
         .. math:: f(x_n) - f_\\star\\leqslant \\left(\\frac{L_{\\varepsilon} - \\mu_{\\varepsilon}}{L_{\\varepsilon} + \\mu_{\\varepsilon}}\\right)^{2n}( f(x_0) - f_\\star ),
 
-    with :math:`L_{\\epsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`.
+    with :math:`L_{\\varepsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`.
 
     References:
 

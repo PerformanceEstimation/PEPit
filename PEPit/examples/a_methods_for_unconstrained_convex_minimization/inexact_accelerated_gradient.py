@@ -20,7 +20,7 @@ def wc_InexactAGM(L, epsilon, n, verbose=True):
     is a minimizer of :math:`f`.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy described by
-    (with :math:`0\\leqslant \\epsilon \\leqslant 1`)
+    (with :math:`0\\leqslant \\varepsilon \\leqslant 1`)
 
     .. math:: \\|\\nabla f(y_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(y_t)\\|,
 
