@@ -8,7 +8,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
     """
     Consider the convex minimization problem
 
-    .. math:: f_\\star = \\min_x f(x),
+    .. math:: f_\\star \\triangleq \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and convex.
 

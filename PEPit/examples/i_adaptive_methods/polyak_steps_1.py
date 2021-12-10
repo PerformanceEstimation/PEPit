@@ -6,7 +6,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\\star = \\min_x f(x),
+    .. math:: f_\\star \\triangleq \\min_x f(x),
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`x_\\star=\\arg\\min_x f(x)`.
 

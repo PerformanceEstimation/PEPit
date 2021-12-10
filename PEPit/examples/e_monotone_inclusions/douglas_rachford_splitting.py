@@ -10,7 +10,7 @@ def wc_drs(L, mu, alpha, theta, verbose=True):
     """
     Consider the monotone inclusion problem
 
-    .. math:: \mathrm{Find}\\, x:\\, 0\\in Ax + Bx,
+    .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax + Bx,
 
     where :math:`A` is :math:`L`-Lipschitz and maximally monotone and :math:`B` is (maximally) :math:`\\mu`-strongly
     monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively A and B, with

@@ -8,7 +8,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: F_\\star = \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
+    .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is closed convex and proper, and :math:`f_2` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
@@ -21,7 +21,7 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
     of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,
     and :math:`w_\\star` defined such that
 
-    .. math:: x_\\star = \mathrm{prox}_{\\alpha f_2}(w_\\star)
+    .. math:: x_\\star = \\mathrm{prox}_{\\alpha f_2}(w_\\star)
 
     is an optimal point.
 

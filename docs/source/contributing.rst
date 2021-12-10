@@ -37,7 +37,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] \star -> \\star
 
-- Add "F\_\\star \\triangleq" before the minimization problem
+- [done] Add "F\_\\star \\triangleq" before the minimization problem
 
 - [done] \\epsilon -> \\varepsilon
 
@@ -51,13 +51,13 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - Utiliser eqnarray environment quand on enchaine plusieurs equations
 
-- Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
+- [TODO] Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
 
-- Verifier les théorèmes (les taux sont ils tight? Upper? Lower? éventuellement preciser si on connait un tau expérimentalement qui est different du théorème connu.)
+- [TODO] Verifier les théorèmes (les taux sont ils tight? Upper? Lower? éventuellement preciser si on connait un tau expérimentalement qui est different du théorème connu.)
 
-- Vérifier les références et citer les passages exacts, pas juste l article.
+- [TODO] Vérifier les références et citer les passages exacts, pas juste l article.
 
-- Format des références (Initiales des prénoms + noms complets puis année entre parentheses, titre et enfin journal entre parentheses.) Ajouter Egalement une url pour rendre la reference clickable.
+- [TODO] Format des références (Initiales des prénoms + noms complets puis année entre parentheses, titre et enfin journal entre parentheses.) Ajouter Egalement une url pour rendre la reference clickable.
 
 - Presentation des paramètres dans un bloc « Args ». De meme pour Return.
 

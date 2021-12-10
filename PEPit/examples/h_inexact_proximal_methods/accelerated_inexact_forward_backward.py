@@ -10,7 +10,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
     Consider the composite convex minimization problem,
 
-    .. math:: F_\\star\\triangleq \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\},
+    .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\},
 
     where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex (possibly non-smooth, and
     possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
@@ -28,7 +28,7 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     **Algorithm**:
 
     The algorithm is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
-    values for its parameters ( :math:`\\xi_t=0`, :math:`\\sigma_t=0`, :math:`\\lambda_t =\\tfrac{1}{L}` in the notation
+    values for its parameters (:math:`\\xi_t=0`, :math:`\\sigma_t=0`, :math:`\\lambda_t =\\tfrac{1}{L}` in the notation
     of [1]), and without backtracking, arriving to:
 
         .. math::
@@ -38,8 +38,8 @@ def wc_aifb(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
                  \\eta_t && = (1-\\zeta_t^2) \\lambda \\\\
                  A_{t+1} && = A_t + \\frac{\\eta_t+2A_t \\mu\\eta_t+\\sqrt{\\eta_t^2+4\\eta_t A_t(1+\\eta_t\\mu)(1+A_t\\mu)}}{2},\\\\
                  y_{t} && = x_t + \\frac{(A_{t+1}-A_t)(1+\\mu A_t)}{A_{t+1}+A_t(2A_{t+1}-A_t)\\mu} (z_t-x_t),\\\\
-                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t,\\mu} \\left(\mathrm{prox}_{\lambda g}\\left(y_t-\\lambda \\nabla f(y_t)\\right),\,
-                 \mathrm{prox}_{ g^*/\\lambda}\\left(\\frac{y_t-\\lambda \\nabla f(y_t)}{\\lambda}\\right)\\right),\\\\
+                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t,\\mu} \\left(\\mathrm{prox}_{\lambda g}\\left(y_t-\\lambda \\nabla f(y_t)\\right),\,
+                 \\mathrm{prox}_{ g^*/\\lambda}\\left(\\frac{y_t-\\lambda \\nabla f(y_t)}{\\lambda}\\right)\\right),\\\\
                  && \\text{with } \\varepsilon_t = \\frac{\\zeta_t^2\\lambda^2}{2(1+\\lambda\\mu)^2}\|v_{t+1}+\\nabla f(y_t) \|^2,\\\\
                  z_{t+1} && = z_t+\\frac{A_{t+1}-A_t}{1+\\mu A_{t+1}}\\left(\\mu (x_{t+1}-z_t)-(v_{t+1}+\\nabla f(y_t))\\right),\\\\
             \\end{eqnarray}

@@ -7,7 +7,7 @@ def wc_bpp(gamma, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-        .. math:: \min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
+        .. math:: F_\\star \\triangleq \min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
 
     where :math:`f_1(x)` and :math:`f_2(x)` are closed convex proper functions.
 

@@ -9,7 +9,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
     """
     Consider the composite strongly convex minimization problem,
 
-        .. math:: \min_x \\left\\{ F(x) \\equiv f(x) + g(x) \\right\\}
+        .. math:: F_\\star \\triangleq \min_x \\left\\{ F(x) \\equiv f(x) + g(x) \\right\\}
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`g` is closed convex and proper. We
     denote by :math:`x_\\star = \\arg\\min_x F(x)` the minimizer of :math:`F`. The (exact) proximal operator of :math:`g`,

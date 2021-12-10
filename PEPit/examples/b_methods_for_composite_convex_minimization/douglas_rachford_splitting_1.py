@@ -8,7 +8,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-        .. math:: \min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
+        .. math:: F_\\star \\triangleq \min_x \\{F(x) \equiv f_1(x) + f_2(x) \\}
 
     where :math:`f_1(x)` is :math:`L`-smooth and :math:`\mu`-strongly convex, and :math:`f_2` is convex,
     closed and proper. Both proximal operators are assumed to be available.

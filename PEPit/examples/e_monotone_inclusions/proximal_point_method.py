@@ -7,7 +7,7 @@ def wc_ppm(alpha, n, verbose=True):
     """
     Consider the monotone inclusion problem
 
-        .. math:: \\text{Find} \ x, 0 \in Ax,
+        .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax,
 
     where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 

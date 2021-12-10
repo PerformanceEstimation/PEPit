@@ -7,7 +7,7 @@ def wc_ppa(gamma, n, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\\star = \\min_x f(x),
+    .. math:: f_\\star \\triangleq \\min_x f(x),
 
     where :math:`f` is closed, proper, and convex (and potentially non-smooth).
 

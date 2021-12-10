@@ -10,7 +10,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
     """
     Consider the constrainted composite convex minimization problem
 
-    .. math:: F_\\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
 
     where :math:`f_1` is convex and :math:`L`-smooth relatively to :math:`h`,
     :math:`h` being closed proper and convex,

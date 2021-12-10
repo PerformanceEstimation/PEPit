@@ -9,7 +9,7 @@ def wc_tos(L, mu, beta, alpha, theta, verbose=True):
     """
     Consider the monotone inclusion problem
 
-    .. math:: \mathrm{Find}\\, x:\\, 0\\in Ax + Bx + Cx,
+    .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax + Bx + Cx,
 
     where :math:`A` is maximally monotone, :math:`B` is :math:`\\beta`-cocoercive and C is the gradient of some
     :math:`L`-smooth :math:`\\mu`-strongly convex function. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}`

@@ -9,7 +9,7 @@ def wc_rippm(n, gamma, sigma, verbose=True):
     """
     Consider the non-smooth convex minimization problem,
 
-    .. math:: \\min_x  f(x)
+    .. math:: f_\\star \\triangleq \\min_x f(x)
 
     where :math:`f` is closed, convex, and proper. We denote by :math:`x_\\star` some optimal point of :math:`f` (hence
     :math:`0\\in\\partial f(x_\\star)`). An approximate proximal operator is assumed to be available.

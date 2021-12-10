@@ -9,7 +9,7 @@ def wc_km_cst(n, gamma, verbose=True):
     """
     Consider the fixed point problem
 
-        .. math:: \\text{Find} \ x \ \\text{such that} \ x = Ax,
+    .. math:: \\mathrm{Find}\\, x:\\, x = Ax,
 
     where :math:'A' is a non-expansive operator, that is a :math:`L`-Lipschitz operator with :math:`L=1`.
 

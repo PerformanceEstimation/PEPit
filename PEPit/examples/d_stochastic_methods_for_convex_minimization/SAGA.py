@@ -10,7 +10,7 @@ def wc_saga(L, mu, n, verbose=True):
     """
     Consider the finite sum convex minimization problem
 
-    .. math:: F^\\star = \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
+    .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
 
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
     closed, proper, and convex with a proximal operator readily available.
@@ -35,7 +35,7 @@ def wc_saga(L, mu, n, verbose=True):
             \\begin{eqnarray}
                 \\phi_j^{(t+1)} & = & x^{(t)} \\\\
                 w^{(t+1)} & = & x^{(t)} - \\gamma \\left[ \\nabla f_j (\\phi_j^{(t+1)}) - \\nabla f_j(\\phi_j^{(t)}) + \\frac{1}{n} \\sum_{i=1}^n(\\nabla f_i(\\phi^{(t)}))\\right] \\\\
-                x^{(t+1)} & = & \mathrm{prox}_{\\gamma h} (w^{(t+1)})
+                x^{(t+1)} & = & \\mathrm{prox}_{\\gamma h} (w^{(t+1)})
             \\end{eqnarray}
 
     **Theoretical guarantee**: The following **upper** bound can be found in [1, Theorem 1]:

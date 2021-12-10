@@ -7,7 +7,7 @@ def wc_km_decr(n, verbose=True):
     """
     Consider the fixed point problem
 
-        .. math:: \\text{Find} \ x \ \\text{such that} \ x = Ax,
+    .. math:: \\mathrm{Find}\\, x:\\, x = Ax,
 
     where :math:'A' is a non-expansive operator, that is a :math:`L`-Lipschitz operator with :math:`L=1`.
 
@@ -28,7 +28,7 @@ def wc_km_decr(n, verbose=True):
 
         `[1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
         Optimal First Order Complexities and Norm Constrained Quasi Newton
-        Methods."  PhD thesis (2018)
+        Methods." PhD thesis (2018)
         <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
 
     Args:

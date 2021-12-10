@@ -8,7 +8,7 @@ def wc_cg_fw(L, D, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: f_\\star = \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
 
     where :math:`f_1` is :math:`L`-smooth and convex
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.

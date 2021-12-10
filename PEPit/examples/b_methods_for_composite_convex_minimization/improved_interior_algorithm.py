@@ -11,7 +11,7 @@ def wc_iipp(L, mu, c, lam, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: F_\\star = \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
+    .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is a :math:`L`-smooth convex function, and :math:`f_2` is a closed convex indicator function.
     We use a kernel function :math:`h` that is assumed to be closed, proper, and strongly convex (see [1]).

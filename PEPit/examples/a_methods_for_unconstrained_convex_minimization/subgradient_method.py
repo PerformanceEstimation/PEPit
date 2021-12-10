@@ -8,7 +8,7 @@ def wc_subgd(M, n, gamma, verbose=True):
     """
     Consider the minimization problem
 
-    .. math:: f_\\star = \\min_x f(x),
+    .. math:: f_\\star \\triangleq \\min_x f(x),
 
     where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a (possibly non-smooth) minimization problem.
 
@@ -42,6 +42,7 @@ def wc_subgd(M, n, gamma, verbose=True):
         .. math:: \\min_{0 \\leqslant t \\leqslant n} f(x_t)- f(x_\\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\\star\|.
 
     **References**:
+
         `[1] Y. Nesterov, Introductory Lectures on Convex Programming, Volume 1: Basic course (1998).
         <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
 
@@ -79,8 +80,7 @@ def wc_subgd(M, n, gamma, verbose=True):
     problem = PEP()
 
     # Declare a convex lipschitz function
-    func = problem.declare_function(ConvexLipschitzFunction,
-                                    param={'M': M})
+    func = problem.declare_function(ConvexLipschitzFunction, param={'M': M})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

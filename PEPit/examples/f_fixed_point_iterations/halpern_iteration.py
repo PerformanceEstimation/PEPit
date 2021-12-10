@@ -7,7 +7,7 @@ def wc_halpern(n, verbose=True):
     """
     Consider the fixed point problem
 
-    .. math:: \\mathrm{Find~} x ~|~ x = Ax,
+    .. math:: \\mathrm{Find}\\, x:\\, x = Ax,
 
     where :math:`A` is a non-expansive operator,
     that is a :math:`L`-Lipschitz operator with :math:`L=1`.

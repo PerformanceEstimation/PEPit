@@ -9,7 +9,7 @@ def wc_tos(mu1, L1, L3, alpha, theta, n, verbose=True):
     """
     Consider the composite convex minimization problem,
 
-    .. math:: \\min_x {F(x) \\equiv f_1(x) + f_2(x) + f_3(x)}
+    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x) + f_3(x)}
 
     where,
 
