@@ -11,7 +11,7 @@ def wc_ahpe(mu, eta, sigma, Ak, verbose=True):
 
     .. math:: \\min_x { f(x) }
 
-    where :math:`f(x)` is closed, proper and convex (possibly :math:`mu`-strongly convex),
+    where :math:`f(x)` is closed, proper and convex (possibly :math:`\\mu`-strongly convex),
     and for which an approximate proximal operator is available.
 
     This code verifies a potential function
