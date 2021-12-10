@@ -25,8 +25,6 @@ def wc_fgm(mu, L, n, verbose=True):
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`F(x_n) - F(x_\star)` when :math:`\\|x_0 - x_\star\\|^2 \\leqslant 1`.
 
-
-
     **Algorithm**: for :math:`t \in \\{ 0, \\dots, n-1\\}`
 
     .. math::
@@ -41,7 +39,7 @@ def wc_fgm(mu, L, n, verbose=True):
 
     **Theoretical guarantee**:
 
-    The tight worst-case guarantee for FPGM is obtained in [2, method FPGM1 in Sec. 4.2.1, Table 1], for :math:`\\mu=0`:
+    The **tight** worst-case guarantee for FPGM is obtained in [2, method FPGM1 in Sec. 4.2.1, Table 1], for :math:`\\mu=0`:
 
     .. math:: F(x_n) - F_\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\star\\|^2.
 

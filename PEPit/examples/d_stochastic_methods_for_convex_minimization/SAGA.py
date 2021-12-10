@@ -38,7 +38,7 @@ def wc_saga(L, mu, n, verbose=True):
                 x^{(k+1)} &&= \mathrm{prox}_{\\gamma h} (w^{(k+1)})
             \\end{eqnarray}
 
-    **Theoretical guarantee**: The following upper bound can be found in [1, Theorem 1]:
+    **Theoretical guarantee**: The following **upper** bound can be found in [1, Theorem 1]:
 
     .. math:: V^{(k+1)}\\leqslant \\left(1-\\gamma\\mu \\right)V^{(k)}
 

@@ -44,7 +44,7 @@ def wc_psaga(L, mu, n, verbose=True):
         \\end{eqnarray}
 
     **Theoretical guarantee**:
-    A theoretical upper bound is given in [1, Theorem 5].
+    A theoretical **upper** bound is given in [1, Theorem 5].
 
     .. math:: V_1(x_1) \\leqslant \\frac{1}{1 + \\mu\\gamma} V_0(x_0)
 

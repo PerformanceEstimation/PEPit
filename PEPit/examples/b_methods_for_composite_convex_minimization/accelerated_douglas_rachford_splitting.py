@@ -44,8 +44,8 @@ def wc_adrs(mu, L, alpha, n, verbose=True):
             \\end{eqnarray}
 
     **Theoretical guarantee**:
-    There is no theoretical guarantee for this method beyond quadratic minimization. For quadratics, an upper bound on
-    is provided by [1, Theorem 5]:
+    There is no theoretical guarantee for this method beyond quadratic minimization.
+    For quadratics, an **upper** bound on is provided by [1, Theorem 5]:
 
     .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta  (n + 3)^ 2},
 

@@ -33,7 +33,7 @@ def wc_ppa(gamma, n, verbose=True):
 
     **Theoretical guarantee**:
 
-    The tight theoretical guarantee can be found in [1, Theorem 4.1]:
+    The **tight** theoretical guarantee can be found in [1, Theorem 4.1]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\frac{||x_0-x_\\star||^2}{4\\gamma n}.
 

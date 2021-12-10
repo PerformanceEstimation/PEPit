@@ -71,6 +71,7 @@ def wc_rmm(mu, L, lam, verbose=True):
         *** Example file: worst-case performance of the Robust Momentum Method ***
             PEP-it guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
             Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
+
     """
 
     # Instantiate PEP

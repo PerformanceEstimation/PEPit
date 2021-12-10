@@ -26,7 +26,7 @@ def wc_km_cst(n, gamma, verbose=True):
 
     **Theoretical guarantee**:
 
-        The theoretical **upper bound** is given in [1, Theorem 4.9]
+        The theoretical **upper** bound is given in [1, Theorem 4.9]
 
             .. math:: \\tau(n) = \\left\{
                       \\begin{eqnarray}

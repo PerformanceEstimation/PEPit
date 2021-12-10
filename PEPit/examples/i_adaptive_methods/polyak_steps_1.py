@@ -32,7 +32,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     .. math:: \\gamma || \\nabla f(x_k) ||^2 = 2  (f(x_k) - f_\star).
 
     **Theoretical guarantee**: The gradient method with the variant of Polyak step sizes under consideration enjoys the
-    (tight) theoretical guarantee [1, Proposition 1]:
+    **tight** theoretical guarantee [1, Proposition 1]:
 
     .. math:: ||x_{k+1} - x_\\star||^2 \\leqslant  \\tau(L,\\mu,\\gamma) ||x_{k} - x_\\star||^2,
 

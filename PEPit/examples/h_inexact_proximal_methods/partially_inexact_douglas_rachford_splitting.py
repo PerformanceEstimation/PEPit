@@ -47,7 +47,7 @@ def wc_pidrs(mu, L, n, gamma, sigma, verbose=True):
                  z_{t+1} && = z_t + y_t - x_t.
             \\end{eqnarray}
 
-    **Theoretical guarantee**: The following tight theoretical bound is due to [2, Theorem 5.1]:
+    **Theoretical guarantee**: The following **tight** theoretical bound is due to [2, Theorem 5.1]:
 
         .. math:: \|z_{n} - z_\star\|^2  \\leqslant \max\\left(\\frac{1 - \\sigma + \\gamma \\mu \\sigma}{1 - \\sigma + \\gamma \\mu},
                              \\frac{\\sigma + (1 - \\sigma) \\gamma L}{1 + (1 - \\sigma) \\gamma L)}\\right)^{2n} \|z_0 - z_\star\|^2.

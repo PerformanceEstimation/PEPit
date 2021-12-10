@@ -50,7 +50,7 @@ def wc_fpp(A0, gammas, n, verbose=True):
 
 
        **Theoretical guarantee**:
-       A theoretical upper-bound can be found in [1, Theorem 2.3.]:
+       A theoretical **upper** bound can be found in [1, Theorem 2.3.]:
 
        .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{t=1}^n \\sqrt{\\gamma_t})^2}\\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\| x_0 - x_\\star \\|^2 \\right).
 
@@ -137,4 +137,5 @@ def wc_fpp(A0, gammas, n, verbose=True):
 
 
 if __name__ == "__main__":
+
     pepit_tau, theoretical_tau = wc_fpp(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=True)

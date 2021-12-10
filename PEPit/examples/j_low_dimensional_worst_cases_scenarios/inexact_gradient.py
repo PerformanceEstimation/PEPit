@@ -36,7 +36,7 @@ def wc_InexactGrad(L, mu, epsilon, n, verbose=True):
 
     **Theoretical guarantee**:
 
-    The tight worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
+    The **tight** worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
         .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\epsilon} - \\mu_{\\epsilon}}{L_{\\epsilon} + \\mu_{\\epsilon}}\\right)^{2n}(f(x_0) - f_\\star ),
 

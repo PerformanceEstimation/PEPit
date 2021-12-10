@@ -60,7 +60,7 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
     **Theoretical guarantee**:
-    A theoretical upper-bound can be found in [1, Theorem 1]:
+    A theoretical **upper** bound can be found in [1, Theorem 1]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\| x_0 - x_\star \\|^2.
 
