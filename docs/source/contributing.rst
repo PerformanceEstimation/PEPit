@@ -49,7 +49,7 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - Only n steps, not n+1
 
-- Utiliser eqnarray environment quand on enchaine plusieurs equations
+- [done] Utiliser eqnarray environment quand on enchaine plusieurs equations
 
 - [TODO] Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
 

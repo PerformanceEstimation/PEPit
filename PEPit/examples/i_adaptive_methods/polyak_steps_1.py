@@ -34,11 +34,11 @@ def wc_ps_1(L, mu, gamma, verbose=True):
     **Theoretical guarantee**: The gradient method with the variant of Polyak step sizes under consideration enjoys the
     **tight** theoretical guarantee [1, Proposition 1]:
 
-    .. math:: \\|x_{t+1} - x_\\star\\|^2 \\leqslant \\tau(L, \\mu, \\gamma) \\|x_{t} - x_\\star\\|^2,
+        .. math:: \\|x_{t+1} - x_\\star\\|^2 \\leqslant \\tau(L, \\mu, \\gamma) \\|x_{t} - x_\\star\\|^2,
 
-    where :math:`\\gamma` is the effective step size used at iteration :math:`t` and
+        where :math:`\\gamma` is the effective step size used at iteration :math:`t` and
 
-    .. math::
+        .. math::
             :nowrap:
 
             \\begin{eqnarray}

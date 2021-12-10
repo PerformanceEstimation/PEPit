@@ -30,8 +30,13 @@ def wc_InexactGrad_ELS(L, mu, epsilon, n, verbose=True):
 
     Select :math:`d_t` such that
 
-        .. math:: \\gamma = \\arg\\min_{\\gamma \in R^d} f(x_t- \\gamma d_t).
-        .. math:: x_{t+1} = x_t - \\gamma d_t.
+        .. math::
+            :nowrap:
+
+            \\begin{eqnarray}
+                \\gamma_t & = & \\arg\\min_{\\gamma \in R^d} f(x_t- \\gamma d_t) \\\\
+                x_{t+1} & = & x_t - \\gamma_t d_t.
+            \\end{eqnarray}
 
     **Theoretical guarantees**:
 
