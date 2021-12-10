@@ -10,7 +10,7 @@ Pycharm/Preferences…/Tools/Python Integrated Tools/Docstrings/Docstring format
 
 Table of content:
 ^^^^^^^^^^^^^^^^^
-- Define Pb it solves
+- Define Pb it solves (with f\_\star \\triangleq )
 
 - Name algo in boldface
 
@@ -20,7 +20,7 @@ Table of content:
 
 - Write theoretical result (tau + Upper/Lower/Tight in italic bold)
 
-- Refs
+- Refs (preferably arxiv and with arxiv version)
 
 - Params (indicate optional or not)
 
@@ -33,14 +33,17 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - Virer les hypotheses qui n’en sont pas comme « non-smooth ».
 
-- Privilégier \equiv au lieu de = quand on minimise F(x) = f_1(x) + f_2(x).
+- Privilégier \equiv au lieu de = quand on minimise F\_\\star \\triangleq F(x) = f_1(x) + f_2(x).
 
 - Mettre un peu plus de "verbose" avant les équations décrivant la méthode.
 
+- Add arrow on gamma if sequence.
+
 - Uniformiser les indices: k->t, n for final step.
 
-- Utiliser eqnarray environment quand on enchaine plusieurs equations
+- Only n steps, not n+1
 
+- Utiliser eqnarray environment quand on enchaine plusieurs equations
 
 - Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
 
