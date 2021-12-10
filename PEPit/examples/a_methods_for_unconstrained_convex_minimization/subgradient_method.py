@@ -37,14 +37,16 @@ def wc_subgd(M, n, gamma, verbose=True):
 
     **Theoretical guarantee**:
 
-    The **tight** bound is obtained in [1, Section 3.2.3],
+    The **tight** bound is obtained in [1, Section 3.2.3] and [2, eq (2)],
 
         .. math:: \\min_{0 \\leqslant t \\leqslant n} f(x_t)- f(x_\\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\\star\|.
 
     **References**:
-        TODO: correct ref
         `[1] Y. Nesterov, Introductory Lectures on Convex Programming, Volume 1: Basic course (1998).
         <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
+
+        `[2] S. Boyd, L. Xiao, & A. Mutapcic (2003). Subgradient Methods (Stanford University lecture notes)
+        <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
 
     Args:
         M (float): the Lipschitz parameter.
