@@ -29,16 +29,18 @@ def wc_no_lips1(L, gamma, n, verbose=True):
     :math:`F(x_n) - F_\\star` when :math:`D_h(x_\\star, x_0) \\leqslant 1`.
 
     **Algorithm**:
-        This method is presented in [2, Algorithm 1]
+
+    This method is presented in [2, Algorithm 1]
 
         .. math:: x_{t+1} = \\arg\\min_{u \\in \\mathrm{Dom}(f_2)} \\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)
 
     **Theoretical guarantee**:
-        The **tight** guarantee obtained in [2, Theorem 1 and page 23] is
+
+    The **tight** guarantee obtained in [2, Theorem 1 and page 23] is
 
         .. math:: \\tau(n, L, \\mu) = \\frac{1}{\\gamma n}
 
-        for any :math:`\\gamma \\leq \\frac{1}{L}`.
+    for any :math:`\\gamma \\leq \\frac{1}{L}`.
 
     References:
 
@@ -139,7 +141,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
+
     L = 1
     gamma = 1 / (2*L)
-
     pepit_tau, theoretical_tau = wc_no_lips1(L=L, gamma=gamma, n=3, verbose=True)

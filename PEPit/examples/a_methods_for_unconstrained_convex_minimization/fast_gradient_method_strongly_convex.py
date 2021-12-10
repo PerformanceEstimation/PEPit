@@ -122,4 +122,5 @@ def wc_fgm(mu, L, n, verbose=True):
 
 
 if __name__ == "__main__":
+
     pepit_tau, theoretical_tau = wc_fgm(mu=0.1, L=1, n=2, verbose=True)

@@ -61,7 +61,7 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10.)
+        >>> pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10., verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -139,4 +139,4 @@ def wc_gd_lyapunov(L, gamma, lam, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10.)
+    pepit_tau, theoretical_tau = wc_gd_lyapunov(L=L, gamma=1 / L, lam=10., verbose=True)

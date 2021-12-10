@@ -87,10 +87,10 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_subgd(self):
-        M, N = 2, 10
-        gamma = 1 / (np.sqrt(N + 1) * M)
+        M, n = 2, 10
+        gamma = 1 / (np.sqrt(n + 1) * M)
 
-        wc, theory = SG.wc_subgd(M=M, N=N, gamma=gamma, verbose=self.verbose)
+        wc, theory = SG.wc_subgd(M=M, n=n, gamma=gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_cg(self):

@@ -144,7 +144,7 @@ def wc_no_lips2(L, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
+
     L = 1
     gamma = 1 / L
-
     pepit_tau, theoretical_tau = wc_no_lips2(L=L, gamma=gamma, n=10, verbose=True)

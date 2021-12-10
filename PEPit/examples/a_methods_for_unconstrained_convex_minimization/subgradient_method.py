@@ -62,7 +62,7 @@ def wc_subgd(M, n, gamma, verbose=True):
         >>> M = 2
         >>> n = 6
         >>> gamma = 1 / (M * np.sqrt(n + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgd(M, n, gamma, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_subgd(M=M, n=n, gamma=gamma, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -70,10 +70,11 @@ def wc_subgd(M, n, gamma, verbose=True):
                  function 1 : 64 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.755982533173183
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.7559825331741553
         *** Example file: worst-case performance of subgradient method ***
-            PEP-it guarantee:		 min_(0 <= t <= n) f(x_t) - f_*  <= 0.755983 ||x_0 - x_*||`
-            Theoretical guarantee:	 min_(0 <= t <= n) f(x_t) - f_*  <= 0.755929 ||x_0 - x_*||`
+            PEP-it guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
+            Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
+
     """
 
     # Instantiate PEP
@@ -113,8 +114,8 @@ def wc_subgd(M, n, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of subgradient method ***')
-        print('\tPEP-it guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_*  <= {:.6} ||x_0 - x_*||'.format(
+        print('\tPEP-it guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(
             theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -122,8 +123,8 @@ def wc_subgd(M, n, gamma, verbose=True):
 
 
 if __name__ == "__main__":
+
     M = 2
     n = 6
     gamma = 1 / (M * np.sqrt(n + 1))
-
-    pepit_tau, theoretical_tau  = wc_subgd(M=M, n=n, gamma=gamma, verbose=True)
+    pepit_tau, theoretical_tau = wc_subgd(M=M, n=n, gamma=gamma, verbose=True)

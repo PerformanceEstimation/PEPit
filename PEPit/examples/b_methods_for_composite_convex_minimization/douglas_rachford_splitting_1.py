@@ -64,7 +64,7 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_drs(0.1, 1, 3, 1, 2)
+        >>> pepit_tau, theoretical_tau = wc_drs(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -73,10 +73,11 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
                  function 2 : 20 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.35012898383515983
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.35012779919911946
         *** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***
-            PEP-it guarantee:	 ||w - wp||^2 <= 0.350129 ||w0 - w0p||^2
-            Theoretical guarantee:	||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+            PEP-it guarantee:		 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+            Theoretical guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+
     """
 
     # Instantiate PEP
@@ -126,23 +127,13 @@ def wc_drs(mu, L, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***')
-        print('\tPEP-it guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    mu = 0.1
-    L = 1.
-    # Test scheme parameters
-    alpha = 3
-    theta = 1
-    n = 2
 
-    pepit_tau, theoretical_tau = wc_drs(mu=mu,
-                                        L=L,
-                                        alpha=alpha,
-                                        theta=theta,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_drs(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=True)

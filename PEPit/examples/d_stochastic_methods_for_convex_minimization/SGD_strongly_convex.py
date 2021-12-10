@@ -137,8 +137,8 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
 
 
 if __name__ == "__main__":
+
     mu = 0.1
     L = 1
     gamma = 1 / L
-
     pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)

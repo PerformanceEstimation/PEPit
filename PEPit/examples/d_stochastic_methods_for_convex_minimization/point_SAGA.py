@@ -61,7 +61,7 @@ def wc_psaga(L, mu, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10)
+        >>> pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 31x31
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -150,4 +150,4 @@ def wc_psaga(L, mu, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10)
+    pepit_tau, theoretical_tau = wc_psaga(L=1, mu=.01, n=10, verbose=True)

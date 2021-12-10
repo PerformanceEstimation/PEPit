@@ -125,6 +125,7 @@ def wc_ps_1(L, mu, gamma, verbose=True):
 
 
 if __name__ == "__main__":
+
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)

@@ -60,7 +60,7 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_drs_2(1, 1, 1, 10)
+        >>> pepit_tau, theoretical_tau = wc_drs_2(L=1, alpha=1, theta=1, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -69,10 +69,11 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
                  function 2 : 156 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.025006128454582784
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.02501210513106952
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-            PEP-it guarantee:	 f(y_n)-f_* <= 0.0250061 ||x0 - xs||^2
+            PEP-it guarantee:		 f(y_n)-f_* <= 0.0250121 ||x0 - xs||^2
             Theoretical guarantee :	 f(y_n)-f_* <= 0.0909091 ||x0 - xs||^2
+
     """
 
     # Instantiate PEP
@@ -118,21 +119,12 @@ def wc_drs_2(L, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    L = 1.
 
-    # Test scheme parameters
-    alpha = 1
-    theta = 1
-    n = 10
-
-    pepit_tau, theoretical_tau = wc_drs_2(L=L,
-                                          alpha=alpha,
-                                          theta=theta,
-                                          n=n)
+    pepit_tau, theoretical_tau = wc_drs_2(L=1, alpha=1, theta=1, n=10, verbose=True)

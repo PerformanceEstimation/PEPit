@@ -27,7 +27,7 @@ def wc_no_lips1(L, gamma, n, verbose=True):
 
     **Algorithms**:
 
-        .. math:: x_{t+1} = \\arg\\min_{u \\in R^d} \\nabla f(x_t)^T(u - x_t) + \\frac{1}{\\gamma} D_h(u, x_t)
+    .. math:: x_{t+1} = \\arg\\min_{u \\in R^d} \\nabla f(x_t)^T(u - x_t) + \\frac{1}{\\gamma} D_h(u, x_t)
 
     **Theoretical guarantees**:
 

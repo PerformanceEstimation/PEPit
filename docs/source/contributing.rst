@@ -55,15 +55,15 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [TODO] Verifier les théorèmes (les taux sont ils tight? Upper? Lower? éventuellement preciser si on connait un tau expérimentalement qui est different du théorème connu.)
 
-- [TODO] Vérifier les références et citer les passages exacts, pas juste l article.
+- [TODO] Vérifier les références et citer les passages exacts, pas juste l'article.
 
 - [TODO] Format des références (Initiales des prénoms + noms complets puis année entre parentheses, titre et enfin journal entre parentheses.) Ajouter Egalement une url pour rendre la reference clickable.
 
-- Presentation des paramètres dans un bloc « Args ». De meme pour Return.
+- [done] Presentation des paramètres dans un bloc « Args ». De meme pour Return.
 
-- Argument verbose=true explicitement dans Exemple
+- [done] Argument verbose=true explicitement dans Exemple
 
-- Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
+- [done] Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
 
 - Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seule pour aligner les deux résultats.
 
