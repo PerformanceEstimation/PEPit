@@ -60,7 +60,7 @@ def wc_tmm(mu, L, n, verbose=True):
 
 
     **Theoretical guarantee**:
-    A theoretical **upper** bound can be found in [1, Theorem 1]:
+    A theoretical **upper** bound can be found in [1, Theorem 1, Eq. 4]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\| x_0 - x_\star \\|^2.
 
@@ -69,7 +69,8 @@ def wc_tmm(mu, L, n, verbose=True):
 
         `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018), The fastest known globally convergent first-order method for
         minimizing strongly convex functions (IEEE Control Systems Letters, 2(1), 49-54).
-        <http://liberzon.csl.illinois.edu/teaching/freeman-fast-gradient.pdf>`_
+        <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
+
 
 
     Args:
@@ -129,7 +130,7 @@ def wc_tmm(mu, L, n, verbose=True):
     x_old = x0
     x_new = x0
     y = x0
-    for _ in range(n + 1):
+    for _ in range(n):
         x_inter = (1 + beta) * x_new - beta * x_old - alpha * func.gradient(y)
         y = (1 + gamma) * x_inter - gamma * x_new
         x = (1 + delta) * x_inter - delta * x_new
@@ -142,7 +143,7 @@ def wc_tmm(mu, L, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = rho ** (2 * (n + 1)) * L / 2 * kappa
+    theoretical_tau = rho ** (2 * n ) * L / 2 * kappa
 
     # Print conclusion if required
     if verbose:
@@ -156,4 +157,5 @@ def wc_tmm(mu, L, n, verbose=True):
 
 if __name__ == "__main__":
     pepit_tau, theoretical_tau = wc_tmm(mu=0.1, L=1., n=4, verbose=True)
+
 
