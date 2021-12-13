@@ -220,7 +220,7 @@ class TestExamples(unittest.TestCase):
         L, alpha, theta, n = 1, 1, 1, 10
 
         wc, theory = wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_improved_interior_algorithm(self):
         L, mu, c, n = 1, 1, 1, 5

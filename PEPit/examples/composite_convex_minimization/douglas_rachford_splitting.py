@@ -27,7 +27,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
     **Algorithm**:
 
-    Our notations for the DRS algorithm are as follows,  for :math:`t \\in \\{0, \\dots, n-1\\}`,
+    Our notations for the DRS algorithm are as follows, for :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
@@ -42,9 +42,9 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
     **Theoretical guarantee**:
 
-    The following **upper** bound can be verified numerically,
+    The following **tight** bound can be verified numerically,
 
-        .. math:: F(y_n) - F(x_\\star)\\leqslant  \\frac{1}{n} ||x_0 - x_\\star||^2.
+        .. math:: F(y_n) - F(x_\\star) \\leqslant \\frac{1}{4n} ||x_0 - x_\\star||^2.
 
     **References**:
 
@@ -63,19 +63,19 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
         tuple: worst-case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=10, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=15, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 36x36
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 132 constraint(s) added
-                 function 2 : 156 constraint(s) added
+                 function 1 : 272 constraint(s) added
+                 function 2 : 306 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.02501210513106952
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.016670145369644722
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-            PEP-it guarantee:		 f(y_n)-f_* <= 0.0250121 ||x0 - xs||^2
-            Theoretical guarantee :	 f(y_n)-f_* <= 0.0909091 ||x0 - xs||^2
+            PEP-it guarantee:		 f(y_n)-f_* <= 0.0166701 ||x0 - xs||^2
+            Theoretical guarantee :	 f(y_n)-f_* <= 0.0166667 ||x0 - xs||^2
 
     """
 
@@ -115,7 +115,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
-    theoretical_tau = 1 / (n + 1)
+    theoretical_tau = 1 / (4 * n)
 
     # Print conclusion if required
     if verbose:
@@ -128,4 +128,4 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=10, verbose=True)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=15, verbose=True)
