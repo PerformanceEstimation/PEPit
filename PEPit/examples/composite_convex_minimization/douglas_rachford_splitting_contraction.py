@@ -23,16 +23,18 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     **Algorithm**:
 
-    Our notations for the DRS algorithm are as follows
+    Our notations for the DRS algorithm are as follows, for :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t) \\\\
-                y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t) \\\\
-                w_{t+1} & = & w_t + \\theta (y_t - x_t)
+                x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t), \\\\
+                y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t), \\\\
+                w_{t+1} & = & w_t + \\theta (y_t - x_t),
             \\end{eqnarray}
+
+    with :math:`w_0 \\in \\mathrm{R}^d`.
 
     **Theoretical guarantee**:
 
@@ -44,13 +46,15 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     Details on the SDP formulations can be found in
 
-    [1] Ernest K. Ryu, Adrien B. Taylor, Carolina Bergeling, and Pontus Giselsson. "Operator splitting
-    performance estimation: Tight contraction factors and optimal parameter selection." (2018)
+    `[1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson (2018). Operator splitting
+    performance estimation: Tight contraction factors and optimal parameter selection.
+    <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     When :math:`\\theta = 1`, the bound can be compared with that of [2, Theorem 2]
 
-    [2] Giselsson, Pontus, and Stephen Boyd. "Linear convergence and metric selection in
-    Douglas-Rachford splitting and ADMM." IEEE Transactions on Automatic Control (2016).
+    `[2] P. Giselsson, and S. Boyd (2016). Linear convergence and metric selection in
+    Douglas-Rachford splitting and ADMM (IEEE).
+    <https://arxiv.org/pdf/1410.8479.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
