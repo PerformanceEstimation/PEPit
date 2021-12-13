@@ -35,14 +35,14 @@ Heavy Ball momentum
    :members:
    :show-inheritance:
 
-Fast Gradient for convex objective
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Accelerated gradient for convex objective
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_gradient_convex
    :members:
    :show-inheritance:
 
-Fast Gradient for strongly convex objective
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Accelerated gradient for strongly convex objective
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_gradient_strongly_convex
    :members:
    :show-inheritance:
@@ -71,8 +71,8 @@ Proximal point
    :members:
    :show-inheritance:
 
-Fast proximal point
-^^^^^^^^^^^^^^^^^^^
+Accelerated proximal point
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_proximal_point
    :members:
    :show-inheritance:
