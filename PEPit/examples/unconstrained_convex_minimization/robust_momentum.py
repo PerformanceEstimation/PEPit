@@ -18,34 +18,36 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
     is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` iterate of the **robust momentum method**,
-    where :math:`x_\\star` is a minimizer of :math:`f`,
-    and where :math:`v(x_n)` is a well-chosen Lyapunov function decreasing along the sequence
+    and :math:`x_\\star` is a minimizer of :math:`f`. The function :math:`v(.)` is a well-chosen Lyapunov defined as follows,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla(y_t) - \\mu (y_t - x_\\star)\|^2 \\right) \\\\
-                v(x_t) & = & l\|z_t - x_\\star\|^2 + q_t
+                v(x_t) & = & l\|z_t - x_\\star\|^2 + q_t, \\\\
+                q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla f(y_t) - \\mu (y_t - x_\\star)\|^2 \\right),
             \\end{eqnarray}
 
-     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda \\left(1 - \\frac{1}{\\kappa}\\right) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``
+     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
 
     **Algorithm**:
 
+    For :math:`t \\in \\{0, \\dots, n-1\\}`,
+
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_{t+1} & = & x_{t} + \\beta (x_t - x_{t-1}) - \\alpha \\nabla f(y_t) \\\\
-                y_{t+1} & = & y_{t} + \\gamma (x_t - x_{t-1})
+                x_{t+1} & = & x_{t} + \\beta (x_t - x_{t-1}) - \\alpha \\nabla f(y_t), \\\\
+                y_{t+1} & = & y_{t} + \\gamma (x_t - x_{t-1}),
             \\end{eqnarray}
 
-    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}` and :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
+    with :math:`x_{-1}, x_0 \\in \\mathrm{R}^d`,
+    and with parameters :math:`\\alpha = \\frac{\\kappa (1 - \\rho^2)(1 + \\rho)}{L}`, :math:`\\beta = \\frac{\\kappa \\rho^3}{\\kappa - 1}`, :math:`\\gamma = \\frac{\\rho^2}{(\\kappa - 1)(1 - \\rho)^2(1 + \\rho)}`.
     
     **Theoretical guarantee**:
 
-    The **tight** convergence rate is proven using a **decreasing Lyapunov** in [1, Theorem 1],
+    The **tight** convergence convergence guarantee is obtained in [1, Theorem 1],
     
         .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n),
 

@@ -18,8 +18,8 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
         .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n, L, \\alpha, \\theta) ||x_0 - x_\\star||^2.
 
-    is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_\\star`, but not :math:`w_k`, and hence
-    we require the initial condition on :math:`x_0`(arbitrary choice; partially justified by
+    is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_\\star`, but not :math:`w_k` (see definitions in the section **Algorithm**). Hence
+    we require the initial condition on :math:`x_0` (arbitrary choice, partially justified by
     the fact we choose :math:`f_2` to be the smooth function).
 
     Note that :math:`y_N` is feasible as it
@@ -27,27 +27,30 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
     **Algorithm**:
 
-    Our notations for the DRS algorithm are as follows
+    Our notations for the DRS algorithm are as follows,  for :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t) \\\\
-                y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t) \\\\
-                w_{t+1} & = & w_t + \\theta (y_t - x_t)
+                x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t), \\\\
+                y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t), \\\\
+                w_{t+1} & = & w_t + \\theta (y_t - x_t),
             \\end{eqnarray}
+
+    with :math:`w_0 \\in \\mathrm{R}^d`.
 
     **Theoretical guarantee**:
 
-    TODO : find reference for theoretical upper bound?
+    The following **upper** bound can be verified numerically,
 
-        .. math:: F(y_n) - F(x_\\star)\\leqslant  \\frac{1}{n} ||x_0 - x_\\star||^2
+        .. math:: F(y_n) - F(x_\\star)\\leqslant  \\frac{1}{n} ||x_0 - x_\\star||^2.
 
     **References**:
 
-    [1] Giselsson, Pontus, and Stephen Boyd. "Linear convergence and metric selection in
-    Douglas-Rachford splitting and ADMM.
+    `[1] P. Giselsson, and S. Boyd (2016). Linear convergence and metric selection in
+    Douglas-Rachford splitting and ADMM (IEEE).
+    <https://arxi.org/pdf/1410.8479.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

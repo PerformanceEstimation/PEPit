@@ -24,15 +24,17 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=True):
 
         .. math:: \\|\\nabla f(x_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
-    where :math:`f'(x_t)` is the true gradient, and d is the approximate descent direction that is used.
+    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
 
     **Algorithm**:
+
+    For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                \\gamma_t & = & \\arg\\min_{\\gamma \in R^d} f(x_t- \\gamma d_t) \\\\
+                \\gamma_t & = & \\arg\\min_{\\gamma \in R^d} f(x_t- \\gamma d_t), \\\\
                 x_{t+1} & = & x_t - \\gamma_t d_t.
             \\end{eqnarray}
 
