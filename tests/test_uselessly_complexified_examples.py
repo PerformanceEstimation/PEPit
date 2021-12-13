@@ -7,8 +7,8 @@ from PEPit.point import Point
 from tests.additional_complexified_examples_tests.proximal_gradient import wc_pgd
 from tests.additional_complexified_examples_tests.proximal_point import wc_ppa
 
-import PEPit.examples.a_methods_for_unconstrained_convex_minimization.proximal_point_method as ref_ppa
-import PEPit.examples.b_methods_for_composite_convex_minimization.proximal_gradient as ref_pgd
+import PEPit.examples.unconstrained_convex_minimization.proximal_point as ref_ppa
+import PEPit.examples.composite_convex_minimization.proximal_gradient as ref_pgd
 
 
 class TestExamples(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestExamples(unittest.TestCase):
         L, mu, gamma, n = 1, 0.1, 1, 2
 
         wc_modified, theory = wc_pgd(L, mu, gamma, n, verbose=self.verbose)
-        wc, theory = ref_pgd.wc_pgd(L, mu, gamma, n, verbose=self.verbose)
+        wc, theory = ref_pgd.wc_proximal_gradient(L, mu, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
     def test_PPA_modified(self):
@@ -43,7 +43,7 @@ class TestExamples(unittest.TestCase):
         n, gamma = 2, 1
 
         wc_modified, theory = wc_ppa(n, gamma, verbose=self.verbose)
-        wc, theory = ref_ppa.wc_ppa(n, gamma, verbose=self.verbose)
+        wc, theory = ref_ppa.wc_proximal_point(n, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
     def tearDown(self):

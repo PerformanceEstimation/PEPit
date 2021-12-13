@@ -5,14 +5,14 @@ Adaptive methods
    :depth: 2
    :local:
 
-Polyak steps 1
-^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.i_adaptive_methods.polyak_steps_1
+Polyak steps in distance to optimum
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. automodule:: PEPit.examples.adaptive_methods.polyak_steps_in_distance_to_optimum
    :members:
    :show-inheritance:
 
-Polyak steps 2
-^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.i_adaptive_methods.polyak_steps_2
+Polyak steps in function value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. automodule:: PEPit.examples.adaptive_methods.polyak_steps_in_function_value
    :members:
    :show-inheritance:

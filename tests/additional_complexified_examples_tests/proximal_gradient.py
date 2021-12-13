@@ -6,7 +6,7 @@ from PEPit.primitive_steps.proximal_step import proximal_step
 
 def wc_pgd(L, mu, gamma, n, verbose=True):
     """
-    See description in Examples/a_methods_for_unconstrained_convex_minimization/proximal_point_method.py.
+    See description in Examples/unconstrained_convex_minimization/proximal_point.py.
     This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
     but the parameterization is different (convex function to be minimized is explicitly formed as a sum of four convex
     functions). That is, the minimization problem is the composite convex minimization problem

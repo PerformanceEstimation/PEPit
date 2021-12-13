@@ -5,26 +5,26 @@ Stochastic methods for convex minimization
    :depth: 2
    :local:
 
-Point SAGA
-^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.point_SAGA
-   :members:
-   :show-inheritance:
-
-SAGA
-^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SAGA
-   :members:
-   :show-inheritance:
-
 Stochastic gradient descent
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_strongly_convex
+.. automodule:: PEPit.examples.stochastic_convex_minimization.sgd
    :members:
    :show-inheritance:
 
 Stochastic gradient descent in overparametrized setting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_overparametrized
+.. automodule:: PEPit.examples.stochastic_convex_minimization.sgd_overparametrized
+   :members:
+   :show-inheritance:
+
+SAGA
+^^^^
+.. automodule:: PEPit.examples.stochastic_convex_minimization.saga
+   :members:
+   :show-inheritance:
+
+Point SAGA
+^^^^^^^^^^
+.. automodule:: PEPit.examples.stochastic_convex_minimization.point_saga
    :members:
    :show-inheritance:

@@ -6,7 +6,7 @@ def exact_linesearch_step(x0, f, directions):
     This routines *mimics* an exact line search.
     This is used for instance in
 
-    PEPit.examples.a_methods_for_unconstrained_convex_minimization.gradient_exact_line_search.py
+    PEPit.examples.unconstrained_convex_minimization.gradient_exact_line_search.py
 
     At each iteration k:
 
