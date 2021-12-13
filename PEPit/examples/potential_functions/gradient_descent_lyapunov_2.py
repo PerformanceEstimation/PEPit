@@ -51,7 +51,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Examples:
         >>> L = 1

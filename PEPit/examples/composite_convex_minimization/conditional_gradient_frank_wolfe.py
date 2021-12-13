@@ -53,7 +53,7 @@ def wc_conditional_gradient_frank_wolfe(L, D, n, verbose=True):
         verbose (bool): if True, print conclusion.
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_conditional_gradient_frank_wolfe(L=1, D=1, n=10, verbose=True)

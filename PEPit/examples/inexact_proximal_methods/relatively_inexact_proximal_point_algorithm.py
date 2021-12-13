@@ -50,7 +50,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=True)

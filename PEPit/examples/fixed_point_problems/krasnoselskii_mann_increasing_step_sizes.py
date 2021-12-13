@@ -36,7 +36,7 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=True):
         verbose (bool, optional): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, verbose=True)

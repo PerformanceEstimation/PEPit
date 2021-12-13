@@ -60,7 +60,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, verbose=True)

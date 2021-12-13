@@ -65,7 +65,7 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
         verbose (bool, optional): if True, print conclusion.
 
     Returns:
-         tuple: worst_case value, theoretical value
+         tuple: worst-case value, theoretical value
     
     Examples:
         >>> pepit_tau, theoretical_tau = wc_robust_momentum(0.1, 1, 0.2, verbose=True)

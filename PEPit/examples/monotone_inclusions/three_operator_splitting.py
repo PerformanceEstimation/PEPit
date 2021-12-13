@@ -58,7 +58,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)

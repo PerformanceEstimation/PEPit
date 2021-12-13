@@ -85,7 +85,7 @@ def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, v
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> TODOTODO

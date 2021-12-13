@@ -60,7 +60,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
         verbose (bool): if True, print conclusion.
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> mu = 0.1

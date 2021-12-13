@@ -57,7 +57,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> L = 1

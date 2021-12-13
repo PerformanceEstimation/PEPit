@@ -70,7 +70,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
         verbose (bool, optional): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=True)

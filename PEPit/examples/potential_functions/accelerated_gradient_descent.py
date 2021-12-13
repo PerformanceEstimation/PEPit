@@ -57,7 +57,7 @@ def wc_accelerated_gradient_descent(L, gamma, lam, verbose=True):
         verbose (bool): if True, print conclusion.
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Examples:
         >>> L = 1

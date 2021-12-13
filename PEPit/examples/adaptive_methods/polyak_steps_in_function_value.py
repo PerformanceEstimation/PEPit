@@ -58,7 +58,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> L = 1

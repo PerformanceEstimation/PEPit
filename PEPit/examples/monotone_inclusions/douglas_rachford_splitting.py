@@ -60,7 +60,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau  = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)

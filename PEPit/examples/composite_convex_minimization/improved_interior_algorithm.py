@@ -60,7 +60,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> L = 1

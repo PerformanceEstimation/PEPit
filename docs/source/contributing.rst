@@ -73,6 +73,8 @@ PEPit: Liste des trucs à verifier concernant les exemples:
 
 - [done] stepsize, step size -> step-size
 
+- [done] worst case -> worst-case
+
 - [done] algorithm -> method
 
 - fast -> accelerated

@@ -53,7 +53,7 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst_case value, theoretical value
+        tuple: worst-case value, theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=True)
