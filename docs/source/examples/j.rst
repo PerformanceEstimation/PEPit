@@ -1,4 +1,4 @@
-Low dimensional worst cases scenarios
+Low dimensional worst-cases scenarios
 -------------------------------------
 
 .. contents::
