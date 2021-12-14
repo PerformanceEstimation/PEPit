@@ -387,11 +387,10 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_accelerated_inexact_forward_backward(self):
-        mu, L, sigma, zeta, xi, A0 = 1, 2, 0.2, 0.9, 3, 1
-        gamma = (1 - sigma ** 2) / L
+        L, zeta, n= 10, .87, 10
 
-        wc, theory = wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+        wc, theory = wc_accelerated_inexact_forward_backward(L=L, zeta=zeta, n=n, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
 
     def test_partially_inexact_douglas_rachford_splitting(self):
         mu, L, gamma, sigma, n = 1, 5., 1.4, 0.2, 5

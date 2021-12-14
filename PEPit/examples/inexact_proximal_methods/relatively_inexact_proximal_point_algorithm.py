@@ -7,12 +7,13 @@ from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
 
 def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True):
     """
-    Consider the non-smooth convex minimization problem,
+    Consider the (possibly non-smooth) convex minimization problem,
 
     .. math:: f_\\star \\triangleq \\min_x f(x)
 
     where :math:`f` is closed, convex, and proper. We denote by :math:`x_\\star` some optimal point of :math:`f` (hence
-    :math:`0\\in\\partial f(x_\\star)`). An approximate proximal operator is assumed to be available.
+    :math:`0\\in\\partial f(x_\\star)`). We further assume that one has access to an inexact version of the proximal
+    operator of :math:`f`, whose level of accuracy is controlled by some parameter :math:`\\sigma\\geqslant 0`.
 
     This code computes a worst-case guarantee for an **inexact proximal point method**. That is, it computes the
     smallest possible :math:`\\tau(n, \\gamma, \\sigma)` such that the guarantee
@@ -29,12 +30,12 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     where the notation ":math:`\\approx_{\\sigma}`" corresponds to require the existence of some vector
     :math:`s_{t+1}\\in\\partial f(x_{t+1})` and :math:`e_{t+1}` such that
 
-        .. math:: x_{t+1}  =  x_t - \\gamma (s_{t+1} - e_{t+1}) \\quad \\quad \\text{with }\\|e_{t+1}\\|^2  \\leqslant  \\frac{\\sigma^2}{\\gamma^2}\\|x_{t+1} - x_t\\|^2.
+        .. math:: x_{t+1}  =  x_t - \\gamma s_{t+1} + e_{t+1} \\quad \\quad \\text{with }\\|e_{t+1}\\|^2  \\leqslant  \\sigma^2\\|x_{t+1} - x_t\\|^2.
 
     We note that the case :math:`\\sigma=0` implies :math:`e_{t+1}=0` and this operation reduces to a standard proximal
     step with step-size :math:`\\gamma`.
 
-    **Theoretical guarantee**: The following empirical **upper** bound is provided in [1, Section 3.5.1],
+    **Theoretical guarantee**: The following (empirical) upper bound is provided in [1, Section 3.5.1],
 
         .. math:: f(x_n) - f(x_\\star) \\leqslant \\frac{1 + \\sigma}{4 \\gamma n^{\\sqrt{1 - \\sigma^2}}}\\|x_0 - x_\\star\\|^2.
 
@@ -46,7 +47,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     Args:
         n (int): number of iterations.
         gamma (float): the step-size.
-        sigma (float): noise parameter.
+        sigma (float): accuracy parameter of the proximal point computation.
         verbose (bool): if True, print conclusion
 
     Returns:
@@ -62,9 +63,9 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
                  function 1 : 88 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.00810915174704416
+        (PEP-it) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.0076784823888391175
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
-            PEP-it guarantee:		 f(x_n) - f(x_*) <= 0.00810915 ||x_0 - x_*||^2
+            PEP-it guarantee:		 f(x_n) - f(x_*) <= 0.00767848 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
 
     """
@@ -78,17 +79,17 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     # Start by defining its unique optimal point xs = x_*
     xs = f.stationary_point()
 
-    # Then define the starting point z0, that is the previous step of the algorithm.
+    # Then define the starting point x0
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and xs = x_*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Compute n steps of the Inexact Proximal Point Method starting from x0
+    # Compute n steps of an inexact proximal point method starting from x0
     x = [x0 for _ in range(n + 1)]
     for i in range(n):
         x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt='PD_gapII')
-        f.add_constraint(epsVar <= ((sigma / gamma) * (x[i + 1] - x[i])) ** 2)
+        f.add_constraint(epsVar <= (sigma * (x[i + 1] - x[i])) ** 2 /2)
 
     # Set the performance metric to the final distance in function values
     problem.set_performance_metric(f.value(x[n]) - f.value(xs))
