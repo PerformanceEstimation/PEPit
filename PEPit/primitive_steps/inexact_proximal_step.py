@@ -155,34 +155,15 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         This option constrain x, v, and w to satisfy the following requirement: gamma * (fx - fw - v*(x - w) <= epsVar.
         """
         x, gx, w = Point(), Point(), Point()
-        v = (x0 - x)/step
+        v = (z - x)/gamma
         fw, fx = Expression(), Expression()
         f.add_point((x, gx, fx))
         f.add_point((w, v, fw))
         eps_var = Expression()
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(step*eps_sub <= eps_var)
-
-    elif opt == 'PD_gap_stronglyconvexshift':
-        """
-        TBC
-        """
-        v = Point()
-        w = Point()
-        fw = Expression()
-        f.add_point((w, v, fw))
-
-        e = Point()
-        gx = Point()
-        fx = Expression()
-        x = x0 - step * (v - e)
-        f.add_point((x, gx, fx))
-
-        eps_var = Expression()
-        eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(e * v + eps_sub / step <= eps_var)
+        f.add_constraint(gamma*eps_sub <= eps_var)
 
     else:
-        raise ValueError("Input opt must be either PD_gapI, PD_gapII, PD_gapIII or PD_gap_stronglyconvexshift")
+        raise ValueError("Input opt must be either PD_gapI, PD_gapII, or PD_gapIII")
 
     return x, gx, fx, w, v, fw, eps_var
