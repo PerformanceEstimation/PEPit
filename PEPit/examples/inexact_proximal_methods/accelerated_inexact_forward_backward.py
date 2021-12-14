@@ -8,7 +8,7 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
-    Consider the composite convex minimization problem,
+    Consider the composite convex minimization problem, +++TODOTODO: MU IS ZERO!
 
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\},
 
