@@ -8,22 +8,24 @@ from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
     """
-    Consider the composite convex minimization problem, +++TODOTODO: MU IS ZERO!
+    Consider the composite convex minimization problem,
 
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv f(x) + g(x) \\right\\},
 
-    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is :math:`\\mu`-strongly convex (possibly non-smooth, and
-    possibly with :math:`\\mu=0`). We further assume that one can readily evaluate the gradient of :math:`f` and
-    that one has access to an inexact version of the proximal operator of :math:`g`.
+    where :math:`f` is :math:`L`-smooth convex, and :math:`g` is closed, proper, and convex.
+    We further assume that one can readily evaluate the gradient of :math:`f` and that one has access to an inexact
+    version of the proximal operator of :math:`g` (whose level of accuracy is controlled by some parameter :math:`\\sigma`).
 
-    This code verifies a potential (or Lyapunov/energy) function for an **inexact accelerated forward-backward method**
-    presented in [1, Algorithm 3.1]. That is, it verifies that
+    This code computes a worst-case guarantee for an **accelerated inexact forward backward** (AIFB) method (a.k.a.,
+    inexact accelerated proximal gradient method). That is, it computes the smallest possible
+    :math:`\\tau(n, L, \\sigma)` such that the guarantee
 
-    .. math:: \\Phi_{t+1} \\leq \\Phi_t
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\sigma ) \\|x_0 - x_\\star\\|^2,
 
-    is valid, where :math:`\\Phi_t \\triangleq A_t (F(x_t) - F_\\star) + \\frac{1 + \\mu A_t}{2} \\|z_t - x_\\star\\|^2` is a potential function.
-    For doing that, we verify that the maximum value of :math:`\\Phi_{t+1} - \\Phi_t` is less than zero (maximum over all
-    problem instances and initializations).
+    is valid, where :math:`x_n` is the output of the IAFB, and where :math:`x_\\star` is a minimizer of :math:`F`.
+
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\sigma`, :math:`\\tau(n, L, \\sigma)` is computed as
+    the worst-case value of :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
 
