@@ -37,7 +37,7 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=True):
 
     Returns:
         pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        theoretical_tau (None): no theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, verbose=True)
