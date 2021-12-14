@@ -61,8 +61,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(v;z) \\leqslant \\varepsilon.
 
-        This approximation requirement is used in two PEP-it example: accelerated inexact forward backward and
-        accelerated hybrid proximal extragradient.
+        This approximation requirement is used in two PEP-it example: an accelerated hybrid proximal extragradient.
 
         - 'PD_gapII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [1,5]) :
 
@@ -77,7 +76,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(\\tfrac{z - x}{\\gamma};z) \\leqslant \\varepsilon,
 
         where we imposed that :math:`v \\triangleq \\frac{z - x}{\\gamma}`. This approximation requirement is used in
-        one PEP-it example: accelerated inexact forward backward 2.
+        one PEP-it example: an accelerated inexact forward backward.
 
     References:
 
