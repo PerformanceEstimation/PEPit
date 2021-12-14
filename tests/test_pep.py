@@ -1,13 +1,10 @@
 import unittest
 
-from PEPit.tools.dict_operations import prune_dict
-
+from PEPit.pep import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.constraint import Constraint
-from PEPit.pep import PEP
 
 
 class TestPEP(unittest.TestCase):
@@ -86,10 +83,25 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(constraint.dual_variable_value, float)
             self.assertAlmostEqual(constraint.dual_variable_value, 2 * self.gamma * max(abs(1 - self.mu*self.gamma), abs(1 - self.L*self.gamma)), delta=2 * self.gamma * 10 ** 3)
 
+    def test_trace_trick(self):
+
+        # Compute pepit_tau very basically
+        pepit_tau = self.problem.solve(verbose=False)
+
+        # Return the full problem and verify the problem value is still pepit_tau
+        prob = self.problem.solve(verbose=False, return_full_cvxpy_problem=True, tracetrick=False)
+        self.assertAlmostEqual(prob.value, pepit_tau, delta=10**-2)
+
+        # Return the full tracetrick problem and verify that its value is not pepit_tau anymore but the trace value
+        prob2 = self.problem.solve(verbose=False, return_full_cvxpy_problem=True, tracetrick=True)
+        self.assertAlmostEqual(prob2.value, 1/2, delta=10**-2)
+
+        # Verify that, even with tracetrick, the solve method returns the worst-case performance, not the trace value.
+        pepit_tau2 = self.problem.solve(verbose=False, tracetrick=True)
+        self.assertAlmostEqual(pepit_tau, pepit_tau2, delta=10**-2)
+
     def tearDown(self):
 
         Point.counter = 0
         Expression.counter = 0
         Function.counter = 0
-
-
