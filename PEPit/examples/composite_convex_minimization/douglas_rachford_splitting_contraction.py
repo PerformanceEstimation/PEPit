@@ -42,6 +42,8 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
         .. math:: \|w_1 - w_1'\|^2 \\leqslant  \\max\\left(\\frac{1}{1 + \\mu \\alpha}, \\frac{\\alpha L }{1 + L \\alpha}\\right)^{2n} \|w_0 - w_0'\|^2
 
+    for when :math:`\\theta=1`.
+
     **References**:
 
     Details on the SDP formulations can be found in
@@ -98,42 +100,45 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
     # Start by defining its unique optimal point xs = x_*
     xs = func.stationary_point()
 
-    # Then define the starting points x0 and x0p of the algorithm
+    # Then define the starting points w0 and w0p of the algorithm
     w0 = problem.set_initial_point()
     w0p = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x0p
+    # Set the initial constraint that is the distance between w0 and w0p
     problem.set_initial_condition((w0 - w0p) ** 2 <= 1)
 
-    # Compute n steps of the Douglas Rachford Splitting starting from x0
+    # Compute n steps of the Douglas Rachford Splitting starting from w0
     w = w0
     for _ in range(n):
         x, _, _ = proximal_step(w, func2, alpha)
         y, _, _ = proximal_step(2 * x - w, func1, alpha)
         w = w + theta * (y - x)
 
-    # Compute n steps of the Douglas Rachford Splitting starting from x0p
+    # Compute n steps of the Douglas Rachford Splitting starting from w0p
     wp = w0p
     for _ in range(n):
         xp, _, _ = proximal_step(wp, func2, alpha)
         yp, _, _ = proximal_step(2 * xp - wp, func1, alpha)
         wp = wp + theta * (yp - xp)
 
-    # Set the performance metric to the final distance between wp and w
+    # Set the performance metric to the final distance between w and wp
     problem.set_performance_metric((w - wp) ** 2)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
 
-    # Compute theoretical guarantee (for comparison)
-    # when theta = 1
-    theoretical_tau = (max(1 / (1 + mu * alpha), alpha * L / (1 + alpha * L))) ** (2 * n)
+    # Compute theoretical guarantee (for comparison) when theta = 1
+    if theta == 1:
+        theoretical_tau = (max(1 / (1 + mu * alpha), alpha * L / (1 + alpha * L))) ** (2 * n)
+    else:
+        theoretical_tau = None
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***')
+        print('*** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***')
         print('\tPEP-it guarantee:\t\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
+        if theta == 1:
+            print('\tTheoretical guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

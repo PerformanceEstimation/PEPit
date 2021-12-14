@@ -55,8 +55,9 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     An analysis of the accelerated Douglas-Rachford splitting is available in [1] for when the convex minimization
     problem is quadratic.
 
-    [1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
+    `[1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
     variants. In 53rd IEEE Conference on Decision and Control (CDC).
+    <https://arxiv.org/pdf/1407.6723.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter.

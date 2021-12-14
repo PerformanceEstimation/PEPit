@@ -13,7 +13,7 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
     where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
     and where :math:`f_2` is closed convex and proper.
 
-    This code computes a worst-case guarantee for the **proximal gradient** method.
+    This code computes a worst-case guarantee for the **proximal gradient** method (PGM).
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math :: \\|x_n - x_\\star\\|^2 \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2,
@@ -34,18 +34,28 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
 
         where :math:`\\gamma` is a step-size.
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: It is well known that a **tight** guarantee for PGM is provided by
 
-        TODO
-        The **?** guarantee obtained in ?? is
+    .. math :: \\|x_n - x_\\star\\|^2 \\leqslant \\max\\{(1-L\\gamma)^2,(1-\\mu\\gamma)^2\\}^n \\|x_0 - x_\\star\\|^2,
 
-        .. math:: \\tau(n, L, \\mu) =
+    which can be found in, e.g., [1, Theorem 3.1]. It is a folk knowledge and the result can be found in many references
+    for gradient descent; see, e.g.,[2, Section 1.4: Theorem 3], [3, Section 5.1] and [4, Section 4.4].
 
-    References:
-        TODO: Check reference, I find proximal point, fast proximal gradient and plenty of others but not proximal gradient here:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for
-        composite convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
-        <https://arxiv.org/pdf/1512.07516.pdf>`_
+    **References**:
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2018). Exact worst-case convergence rates of the proximal gradient
+    method for composite convex minimization. Journal of Optimization Theory and Applications, 178(2), 455-476.
+    <https://arxiv.org/pdf/1705.04398.pdf>`_
+
+    [2] B. Polyak (1987). Introduction to Optimization. Optimization Software New York.
+
+    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    Applied and Computational Mathematics 15.1: 3-43.
+    <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
+
+    `[4] L. Lessard, B. Recht, A. Packard (2016). Analysis and design of optimization algorithms via
+    integral quadratic constraints. SIAM Journal on Optimization 26(1), 57–95.
+    <https://arxiv.org/pdf/1408.3595.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -69,9 +79,6 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6560999999942829
-        (PEP-it) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -9.18e-11 < 0).
-         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
-         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
             PEP-it guarantee:		 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
             Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
@@ -89,7 +96,7 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
     # Start by defining its unique optimal point xs = x_*
     xs = func.stationary_point()
 
-    # Then define the starting point x0 of the algorithm and its function value f0
+    # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
