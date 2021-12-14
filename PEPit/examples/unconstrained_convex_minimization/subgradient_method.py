@@ -35,19 +35,24 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
                 x_{t+1} & = & x_t - \\gamma g_t
             \\end{eqnarray}
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: The **tight** bound is obtained in [1, Section 3.2.3] and [2, Eq (2)]
 
-    The **tight** bound is obtained in [1, Section 3.2.3] and [2, eq (2)],
+        .. math:: \\min_{0 \\leqslant t \\leqslant n} f(x_t)- f(x_\\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\\star\|,
 
-        .. math:: \\min_{0 \\leqslant t \\leqslant n} f(x_t)- f(x_\\star) \\leqslant \\frac{M}{\\sqrt{n+1}}\|x_0-x_\\star\|.
+    and tightness follows from the lower complexity bound for this class of problems, e.g., [3, Appendix A].
 
-    **References**:
+    **References**: Classical references on this topic include [1, 2].
 
-        `[1] Y. Nesterov, Introductory Lectures on Convex Programming, Volume 1: Basic course (1998).
-        <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
+    `[1] Y. Nesterov (2003). Introductory lectures on convex optimization: A basic course.
+    Springer Science & Business Media.
+    <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
 
-        `[2] S. Boyd, L. Xiao, & A. Mutapcic (2003). Subgradient Methods (Stanford University lecture notes)
-        <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
+    `[2] S. Boyd, L. Xiao, A. Mutapcic (2003). Subgradient Methods (lecture notes).
+    <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
+
+    `[3] Y. Drori, M. Teboulle (2016). An optimal variant of Kelley's cutting-plane method.
+    Mathematical Programming, 160(1), 321-351.
+    <https://arxiv.org/pdf/1409.2636.pdf>`_
 
     Args:
         M (float): the Lipschitz parameter.

@@ -31,11 +31,15 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2},
+
+    which is tight on some Huber loss functions.
 
     **References**:
-    [1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
-    approach. Math. Program. 145(1–2), 451–482.
+
+    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
+    approach. Mathematical Programming 145(1–2), 451–482.
+    <https://arxiv.org/pdf/1206.3209.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

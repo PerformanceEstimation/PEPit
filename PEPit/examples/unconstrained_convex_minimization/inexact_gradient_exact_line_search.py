@@ -45,14 +45,13 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=True):
         .. math:: f(x_n) - f_\\star\\leqslant \\left(\\frac{L_{\\varepsilon} - \\mu_{\\varepsilon}}{L_{\\varepsilon} + \\mu_{\\varepsilon}}\\right)^{2n}( f(x_0) - f_\\star ),
 
     with :math:`L_{\\varepsilon} = (1 + \\varepsilon) L` and :math:`\\mu_{\\varepsilon} = (1 - \\varepsilon) \\mu`.
+    Tightness is achieved on simple quadratic functions.
 
-    References:
+    **References**: The detailed approach (based on convex relaxations) is available in [1],
 
-        The detailed approach (based on convex relaxations) is available in [1],
-
-        `[1] E. De Klerk, F. Glineur, and A. B. Taylor (2017). On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions
-        (Optimization Letter).
-        <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
+    `[1]  E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
+    line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
+    <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

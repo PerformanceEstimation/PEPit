@@ -12,15 +12,14 @@ def wc_triple_momentum(mu, L, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for **triple momentum method.** (TMM).
+    This code computes a worst-case guarantee for **triple momentum method** (TMM).
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
         .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the **triple momentum method.** (TMM),
-    and where :math:`x_\\star` is the minimizer of :math:`f`.
-    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    is valid, where :math:`x_n` is the output of the TMM, and where :math:`x_\\star` is the minimizer of :math:`f`.
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`, :math:`\\tau(n, L, \\mu)` is computed
+    as the worst-case value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
 
     **Algorithm**:
@@ -60,16 +59,16 @@ def wc_triple_momentum(mu, L, n, verbose=True):
 
 
     **Theoretical guarantee**:
-    A theoretical **upper** bound can be found in [1, Theorem 1, eq. 4]:
+    A theoretical **upper** (empirically tight) bound can be found in [1, Theorem 1, eq. 4]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\rho^{2(n+1)} L \\kappa}{2}\\|x_0 - x_\\star\\|^2.
 
     **References**:
-    The triple momentum method was analyzed in the following work:
+    The triple momentum method was discovered and analyzed in [1].
 
-        `[1] Van Scoy, B., Freeman, R. A., & Lynch, K. M. (2018), The fastest known globally convergent first-order method for
-        minimizing strongly convex functions (IEEE Control Systems Letters, 2(1), 49-54).
-        <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
+    `[1] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018), The fastest known globally convergent first-order method for
+    minimizing strongly convex functions. IEEE Control Systems Letters, 2(1), 49-54.
+    <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

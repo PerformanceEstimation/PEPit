@@ -46,15 +46,21 @@ def wc_conjugate_gradient(L, n, verbose=True):
             \\begin{eqnarray}
                 \\theta_0 & = & 1 \\\\
                 \\theta_t & = & \\frac{1 + \\sqrt{4 \\theta_{t-1}^2 + 1}}{2}, \\forall t \\in [|1, n-1|] \\\\
-                \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2}
+                \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2},
             \\end{eqnarray}
 
-    References:
+        and tightness follows from [3, Theorem 3].
 
-        The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
+    **References**:
+    The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
 
-        `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach (Mathematical Programming 184 (1), 183-220).
-        <https://arxiv.org/pdf/1803.05676.pdf>`_
+    `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+    Mathematical Programming 184 (1), 183-220.
+    <https://arxiv.org/pdf/1803.05676.pdf>`_
+
+    `[3] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
+    Journal of Complexity, 39, 1-16.
+    <https://arxiv.org/pdf/1606.01424.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

@@ -35,7 +35,9 @@ def wc_proximal_point(gamma, n, verbose=True):
 
     The **tight** theoretical guarantee can be found in [1, Theorem 4.1]:
 
-        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\|x_0-x_\\star\\|^2}{4\\gamma n}.
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{\\|x_0-x_\\star\\|^2}{4\\gamma n},
+
+    where tightness is obtained on, e.g., one-dimensional linear problems on the positive orthant.
 
     **References**:
 
