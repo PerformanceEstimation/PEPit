@@ -41,7 +41,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
         .. math:: x = z-\\gamma g,
 
-    with :math:`g=v=\mathrm{prox}_{f/\\gamma}(z/\\gamma)\\in\\partial f(x)`, and :math:`x=w`.
+    with :math:`g=v=\mathrm{prox}_{f^*/\\gamma}(z/\\gamma)\\in\\partial f(x)`, and :math:`x=w`.
 
     **Reformulation of the primal-dual gap:** In regard with the exact proximal computation; the inexact case under
     consideration here can be described as performing
