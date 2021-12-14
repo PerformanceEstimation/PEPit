@@ -47,6 +47,8 @@ extensions = [
     'myst_parser',
 ]
 
+napoleon_custom_sections = [('Returns', 'params_style')]
+
 import PEPit
 
 autodocgen_config = [{

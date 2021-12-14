@@ -63,7 +63,8 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=True):
         verbose (bool): if True, print conclusion.
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> mu = 0.1

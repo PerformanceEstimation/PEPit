@@ -66,7 +66,8 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value (upper bound for quadratics; not directly comparable)
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value (upper bound for quadratics; not directly comparable)
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=True)

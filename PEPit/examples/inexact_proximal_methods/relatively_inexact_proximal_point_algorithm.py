@@ -50,7 +50,8 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=True)
@@ -85,9 +86,8 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
 
     # Compute n steps of the Inexact Proximal Point Method starting from x0
     x = [x0 for _ in range(n + 1)]
-    opt = 'PD_gapII'
     for i in range(n):
-        x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt)
+        x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt='PD_gapII')
         f.add_constraint(epsVar <= ((sigma / gamma) * (x[i + 1] - x[i])) ** 2)
 
     # Set the performance metric to the final distance in function values

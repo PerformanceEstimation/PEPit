@@ -85,7 +85,8 @@ def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, v
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> TODOTODO
@@ -115,14 +116,13 @@ def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, v
 
     # Set the scheme parameters
     eta = (1 - zeta ** 2) * gamma
-    opt = 'PD_gapI'
     a0 = (eta + 2 * A0 * eta * mu + np.sqrt(4 * eta * A0 * (A0 * mu + 1) * (eta * mu + 1) + eta ** 2)) / 2
     A1 = A0 + a0
 
     # Compute one step of the Accelerated Hybrid Proximal Gradient starting from x0
     y = x0 + (A1 - A0) * (A0 * mu + 1) / (A0 * mu * (2 * A1 - A0) + A1) * (z0 - x0)
     dfy, fy = f.oracle(y)
-    x1, _, g1, w, v, _, epsVar = inexact_proximal_step(y - gamma * dfy, g, gamma, opt)
+    x1, _, g1, w, v, _, epsVar = inexact_proximal_step(y - gamma * dfy, g, gamma, opt='PD_gapI')
     f.add_constraint(epsVar <= sigma ** 2 / 2 * (y - x1) ** 2 + gamma ** 2 * zeta ** 2 / 2 * (v + dfy) ** 2 + xi / 2)
     f1 = f.value(x1)
     z1 = z0 + (A1 - A0) / (A1 * mu + 1) * (mu * (w - z0) - (v + dfy))

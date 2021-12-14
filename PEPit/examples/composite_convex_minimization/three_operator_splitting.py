@@ -61,7 +61,8 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> L3 = 1

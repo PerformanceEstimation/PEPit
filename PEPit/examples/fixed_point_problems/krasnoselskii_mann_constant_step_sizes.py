@@ -50,7 +50,8 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
         verbose (bool, optional): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3/4, verbose=True)

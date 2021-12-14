@@ -107,13 +107,13 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         opt (string): option (type of error requirement) among 'PD_gapI', 'PD_gapII', and  'PD_gapIII'.
 
     Returns:
-        - x (Point) -- the approximated proximal point.
-        - gx (Point) -- a (sub)gradient of f at x (subgradient used in evaluating the accuracy criterion).
-        - fx (Expression) -- f evaluated at x.
-        - w (Point) -- a point w such that v (see next output) is a subgradient of f at w.
-        - v (Point) -- the approximated proximal point of the dual problem, (sub)gradient of f evaluated at w.
-        - fw (Expression) -- f evaluated at w.
-        - eps_var (Expression) -- value of the primal-dual gap (which can be further bounded by the user).
+        x (Point): the approximated proximal point.
+        gx (Point): a (sub)gradient of f at x (subgradient used in evaluating the accuracy criterion).
+        fx (Expression): f evaluated at x.
+        w (Point): a point w such that v (see next output) is a subgradient of f at w.
+        v (Point): the approximated proximal point of the dual problem, (sub)gradient of f evaluated at w.
+        fw (Expression): f evaluated at w.
+        eps_var (Expression): value of the primal-dual gap (which can be further bounded by the user).
 
     """
 

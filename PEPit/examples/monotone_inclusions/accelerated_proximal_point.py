@@ -48,7 +48,8 @@ def wc_accelerated_proximal_point(alpha, n, verbose=True):
         verbose (bool, optional): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(alpha=2, n=10, verbose=True)

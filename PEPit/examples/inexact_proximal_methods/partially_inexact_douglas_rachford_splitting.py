@@ -70,7 +70,8 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
         verbose (bool, optional): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=True)
@@ -112,9 +113,8 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
 
     # Compute n steps of the partially inexact Douglas Rachford Splitting starting from z0
     z = z0
-    opt = 'PD_gapII'
     for _ in range(n):
-        x, dfx, _, _, _, _, epsVar = inexact_proximal_step(z, f, gamma, opt)
+        x, dfx, _, _, _, _, epsVar = inexact_proximal_step(z, f, gamma, opt='PD_gapII')
         y, _, _ = proximal_step(x - gamma * dfx, g, gamma)
         f.add_constraint(epsVar <= ((sigma / gamma) * (y - z + gamma * dfx)) ** 2)
         z = z + (y - x)
@@ -132,7 +132,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
-        print('\tPEP-it guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
