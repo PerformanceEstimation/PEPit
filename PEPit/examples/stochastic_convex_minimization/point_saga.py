@@ -58,7 +58,8 @@ def wc_point_saga(L, mu, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, verbose=True)

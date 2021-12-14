@@ -48,7 +48,8 @@ def wc_proximal_point(gamma, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=True)

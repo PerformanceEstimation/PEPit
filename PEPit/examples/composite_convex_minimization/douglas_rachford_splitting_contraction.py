@@ -65,7 +65,8 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
         verbose (bool, optional): if True, print conclusion.
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Examples:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=True)

@@ -56,7 +56,8 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
         verbose (bool, optional): if True, print conclusion.
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> M = 2

@@ -63,7 +63,8 @@ def wc_optimized_gradient(L, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, verbose=True)

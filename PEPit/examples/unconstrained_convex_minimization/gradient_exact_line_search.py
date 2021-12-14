@@ -49,7 +49,8 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=True):
         verbose (bool, optional): if True, print conclusion.
     
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_gradient_exact_line_search(L=1, mu=.1, n=2, verbose=True)

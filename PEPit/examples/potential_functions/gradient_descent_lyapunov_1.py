@@ -54,7 +54,8 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
         verbose (bool): if True, print conclusion
 
     Returns:
-        tuple: worst-case value, theoretical value
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
 
     Examples:
         >>> L = 1
