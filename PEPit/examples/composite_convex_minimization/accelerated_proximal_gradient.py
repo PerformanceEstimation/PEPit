@@ -101,7 +101,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=True):
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Compute n steps of the Fast Proximal Gradient method starting from x0
+    # Compute n steps of the accelerated proximal gradient method starting from x0
     x_new = x0
     y = x0
     for i in range(n):

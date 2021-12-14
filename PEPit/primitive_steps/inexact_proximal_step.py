@@ -61,7 +61,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(v;z) \\leqslant \\varepsilon.
 
-        This approximation requirement is used in one PEP-it example: an accelerated hybrid proximal extragradient.
+        This approximation requirement is used in one PEP-it example: an accelerated inexact forward backward.
 
         - 'PD_gapII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [1,5]) :
 
@@ -75,8 +75,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(\\tfrac{z - x}{\\gamma};z) \\leqslant \\varepsilon,
 
-        where we imposed that :math:`v \\triangleq \\frac{z - x}{\\gamma}`. This approximation requirement is used in
-        one PEP-it example: an accelerated inexact forward backward.
+        where we imposed that :math:`v \\triangleq \\frac{z - x}{\\gamma}`.
 
     References:
 
@@ -138,7 +137,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
     elif opt == 'PD_gapII':
         """
-        This option constrain x to satisfy the following requirement: gamma^2 * ||e||^2 <= epsVar, with 
+        This option constrain x to satisfy the following requirement:  ||e||^2 / 2 <= epsVar, with 
         x = z - gamma * g + e.
         """
         e = Point()
@@ -147,12 +146,12 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         fx = Expression()
         f.add_point((x, gx, fx))
         eps_var = Expression()
-        f.add_constraint(gamma**2 * e ** 2 <= eps_var)
+        f.add_constraint( e ** 2 /2 <= eps_var)
         w, v, fw = x, gx, fx
 
     elif opt == 'PD_gapIII':
         """
-        This option constrain x, v, and w to satisfy the following requirement: gamma * (fx - fw - v*(x - w) <= epsVar.
+        This option constrain x, v, and w to satisfy the following requirement: gamma * (fx - fw - v*(x - w)) <= epsVar.
         """
         x, gx, w = Point(), Point(), Point()
         v = (z - x)/gamma

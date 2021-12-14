@@ -1,12 +1,12 @@
-import numpy as np
+from math import sqrt
 
 from PEPit.pep import PEP
 from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
-from PEPit.functions.strongly_convex import StronglyConvexFunction
+from PEPit.functions.convex_function import ConvexFunction
 from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 
-def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, verbose=True):
+def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     """
     Consider the composite convex minimization problem,
 
@@ -14,138 +14,137 @@ def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, v
 
     where :math:`f` is :math:`L`-smooth convex, and :math:`g` is closed, proper, and convex.
     We further assume that one can readily evaluate the gradient of :math:`f` and that one has access to an inexact
-    version of the proximal operator of :math:`g` (whose level of accuracy is controlled by some parameter :math:`\\sigma`).
+    version of the proximal operator of :math:`g` (whose level of accuracy is controlled by some
+    parameter :math:`\\zeta\\in (0,1)`).
 
     This code computes a worst-case guarantee for an **accelerated inexact forward backward** (AIFB) method (a.k.a.,
     inexact accelerated proximal gradient method). That is, it computes the smallest possible
-    :math:`\\tau(n, L, \\sigma)` such that the guarantee
+    :math:`\\tau(n, L, \\zeta)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\sigma ) \\|x_0 - x_\\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\zeta ) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_n` is the output of the IAFB, and where :math:`x_\\star` is a minimizer of :math:`F`.
 
-    In short, for given values of :math:`n`, :math:`L` and :math:`\\sigma`, :math:`\\tau(n, L, \\sigma)` is computed as
+    In short, for given values of :math:`n`, :math:`L` and :math:`\\zeta`, :math:`\\tau(n, L, \\zeta)` is computed as
     the worst-case value of :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**:
-
-    The method is presented in [1, Algorithm 3.1]. For simplicity, we instantiate [1, Algorithm 3.1] using simple
-    values for its parameters (:math:`\\xi_t=0`, :math:`\\sigma_t=0`, :math:`\\lambda_t =\\tfrac{1}{L}` in the notation
-    of [1]), and without backtracking, arriving to:
+    **Algorithm**: Let :math:`t\\in\\{0,1,\\ldots,n\\}`. The method is presented in, e.g., [1, Algorithm 3.1].
+    For simplicity, we instantiate [1, Algorithm 3.1] using simple values for its parameters and for the problem
+    setting (in the notation of [1]: :math:`A_0\\triangleq 0`, :math:`\\mu=0`, :math:`\\xi_t \\triangleq0`,
+    :math:`\\sigma_t\\triangleq 0`, :math:`\\lambda_t \\triangleq\\gamma\\triangleq\\tfrac{1}{L}`,
+    :math:`\\zeta_t\\triangleq\\zeta`, :math:`\\eta \\triangleq (1-\\zeta^2) \\gamma`), and without backtracking,
+    arriving to:
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                 \\eta_t && = (1-\\zeta_t^2) \\lambda \\\\
-                 A_{t+1} && = A_t + \\frac{\\eta_t+2A_t \\mu\\eta_t+\\sqrt{\\eta_t^2+4\\eta_t A_t(1+\\eta_t\\mu)(1+A_t\\mu)}}{2},\\\\
-                 y_{t} && = x_t + \\frac{(A_{t+1}-A_t)(1+\\mu A_t)}{A_{t+1}+A_t(2A_{t+1}-A_t)\\mu} (z_t-x_t),\\\\
-                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t,\\mu} \\left(\\mathrm{prox}_{\lambda g}\\left(y_t-\\lambda \\nabla f(y_t)\\right),\,
-                 \\mathrm{prox}_{ g^*/\\lambda}\\left(\\frac{y_t-\\lambda \\nabla f(y_t)}{\\lambda}\\right)\\right),\\\\
-                 && \\text{with } \\varepsilon_t = \\frac{\\zeta_t^2\\lambda^2}{2(1+\\lambda\\mu)^2}\|v_{t+1}+\\nabla f(y_t) \|^2,\\\\
-                 z_{t+1} && = z_t+\\frac{A_{t+1}-A_t}{1+\\mu A_{t+1}}\\left(\\mu (x_{t+1}-z_t)-(v_{t+1}+\\nabla f(y_t))\\right),\\\\
+                 A_{t+1} && = A_t + \\frac{\\eta+\\sqrt{\\eta^2+4\\eta A_t}}{2},\\\\
+                 y_{t} && = x_t + \\frac{A_{t+1}-A_t}{A_{t+1}} (z_t-x_t),\\\\
+                 (x_{t+1},v_{t+1}) && \\approx_{\\varepsilon_t} \\left(\\mathrm{prox}_{\\gamma g}\\left(y_t-\\gamma \\nabla f(y_t)\\right),\,
+                 \\mathrm{prox}_{ g^*/\\gamma}\\left(\\frac{y_t-\\gamma \\nabla f(y_t)}{\\gamma}\\right)\\right),\\\\
+                 && \\text{with } \\varepsilon_t = \\frac{\\zeta^2\\gamma^2}{2}\|v_{t+1}+\\nabla f(y_t) \|^2,\\\\
+                 z_{t+1} && = z_t-(A_{t+1}-A_t)\\left(v_{t+1}+\\nabla f(y_t)\\right),\\\\
             \\end{eqnarray}
 
-    where :math:`\\{\\varepsilon_t\\}_{t\\geqslant 0}` is some sequence of accuracy parameters, and :math:`\\{\\eta_t\\}_{t\\geqslant 0}`
-    and :math:`\\{A_t\\}_{t\\geqslant 0}` are some scalar sequences of parameters for the method.
+    where :math:`\\{\\varepsilon_t\\}_{t\\geqslant 0}` is some sequence of accuracy parameters (whose values are fixed
+    within the algorithm as it runs), and :math:`\\{A_t\\}_{t\\geqslant 0}` is some scalar sequence of parameters
+    for the method (typical of accelerated methods).
 
-    The line with ":math:`\\approx_{\\varepsilon,\\mu}`" can be described as the pair :math:`(x_{t+1},v_{t+1})` satisfying
+    The line with ":math:`\\approx_{\\varepsilon}`" can be described as the pair :math:`(x_{t+1},v_{t+1})` satisfying
     an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition), it requires
-    the existence of some :math:`w_{t+1}` such that :math:`v_{t+1}-\\mu x_{t+1} + \\mu w_{t+1} \\in \\partial g(w_{t+1})` for
-    which the following condition is satisfied:
+    the existence of some :math:`w_{t+1}` such that :math:`v_{t+1} \\in \\partial g(w_{t+1})` and for which the accuracy
+    requirement
 
-     .. math::
-            :nowrap:
+     .. math:: \\gamma^2 || x_{t+1} - y_t + \\gamma v_{t+1} ||^2 + \\gamma  (g(x_{t+1}) - g(w_{t+1}) - v_{t+1}(x_{t+1} - w_{t+1})) \\leqslant \\varepsilon_t,
 
-            \\begin{eqnarray}
-                &\\lambda (1+\\lambda \\mu)\\Big(g(x_{t+1})-g(w_{t+1})+\\tfrac{\\mu}{2}\\|x_{t+1}-w_{t+1}\\|^2- \\langle x_{t+1}-w_{t+1},v_{t+1} \\rangle \\Big)\\\\
-                &\\quad+\\tfrac{1}{2} \\|x_{t+1} - y_t +\\lambda (v_{t+1}+\\nabla f(y_t))\\|^2\\\\
-                &\\quad \\leqslant \\tfrac{\\zeta_t^2\\lambda^2}{2}\|v_{t+1}+\\nabla f(y_t)\|^2.
-            \\end{eqnarray}
+    is valid.
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: A theoretical upper bound is obtained in [1, Corollary 3.5]:
 
-    A theoretical guarantee is obtained in [1, Theorem 3.2]:
+        .. math:: F(x_n)-F_\\star\\leqslant \\frac{2L \\|x_0-x_\\star\\|^2}{(1-\\zeta^2)n^2}.
 
-        .. math:: \\Phi_{t+1} - \\Phi_t \\leq 0.
-
-    **References**:
-
-    The method and theoretical result can be found in [1, Section 3].
+    **References**: The method and theoretical result can be found in [1, Section 3].
 
     `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
-    absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v2. <https://arxiv.org/pdf/2106.15536v2.pdf>`_
+    absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v2.
+    <https://arxiv.org/pdf/2106.15536v2.pdf>`_
 
-    Args: TODOUPDATE: virer les inutiles (aussi dans signature et tests)
-        mu (float): strong convexity parameter.
+    Args:
         L (float): smoothness parameter.
-        gamma (float): the step-size.
-        sigma (float): noise parameter.
-        xi (float): Lyapunov and scheme parameter.
-        zeta (float): Lyapunov and scheme parameter.
-        A0 (float): Lyapunov parameter.
+        zeta (float): relative approximation parameter in (0,1).
+        n (int): number of iterations.
         verbose (bool): if True, print conclusion
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
-        >>> TODOTODO
+        >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 59x59
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 156 constraint(s) added
+                 function 2 : 528 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.018734084607959313
+        *** Example file: worst-case performance of an inexact accelerated forward backward method ***
+	        PEP-it guarantee:       F(x_n)-F_* <= 0.0187341
+	        Theoretical guarantee:  F(x_n)-F_* <= 0.0269437
 
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a non-smooth strongly convex function, and a smooth convex function.
+    # Declare a smooth convex and a convex function
     f = problem.declare_function(SmoothConvexFunction, param={'L': L})
-    g = problem.declare_function(StronglyConvexFunction, param={'mu': mu})
-    F = f + g
+    h = problem.declare_function(ConvexFunction, param={})
+    F = f + h
 
-    # Start by defining its unique optimal point xs = x_*, and its associated function value xs = x_*.
+    # Start by defining its unique optimal point xs = x_* and its function value Fs = F(x_*)
     xs = F.stationary_point()
-    fs = F.value(xs)
+    Fs = F.value(xs)
 
-    # Then define the starting point z0 and x0, that is the previous step of the algorithm.
+    # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
-    z0 = problem.set_initial_point()
-    f0 = f.value(x0)
-    g0 = g.value(x0)
 
-    # Set the initial constraint that is the distance between x0 and xs = x_*
+    # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Set the scheme parameters
-    eta = (1 - zeta ** 2) * gamma
-    a0 = (eta + 2 * A0 * eta * mu + np.sqrt(4 * eta * A0 * (A0 * mu + 1) * (eta * mu + 1) + eta ** 2)) / 2
-    A1 = A0 + a0
+    # Some algorithmic parameters (for convenience)
+    gamma = 1/L
+    eta = (1-zeta**2) * gamma
+    A = [0]
 
-    # Compute one step of the Accelerated Hybrid Proximal Gradient starting from x0
-    y = x0 + (A1 - A0) * (A0 * mu + 1) / (A0 * mu * (2 * A1 - A0) + A1) * (z0 - x0)
-    dfy, fy = f.oracle(y)
-    x1, _, g1, w, v, _, epsVar = inexact_proximal_step(y - gamma * dfy, g, gamma, opt='PD_gapI')
-    f.add_constraint(epsVar <= sigma ** 2 / 2 * (y - x1) ** 2 + gamma ** 2 * zeta ** 2 / 2 * (v + dfy) ** 2 + xi / 2)
-    f1 = f.value(x1)
-    z1 = z0 + (A1 - A0) / (A1 * mu + 1) * (mu * (w - z0) - (v + dfy))
+    # Compute n steps of the IAFB method starting from x0
+    x = x0
+    z = x0
+    for i in range(n):
+        A.append( A[i] + (eta + sqrt( eta ** 2 + 4 * eta * A[i] ) )/2)
+        y = x + ( 1 - A[i] / A[i+1] ) * ( z - x )
+        gy = f.gradient(y)
+        x, sx, hx, _, vx, _, epsVar = inexact_proximal_step(y - gamma * gy, h, gamma, opt='PD_gapI')
+        h.add_constraint(epsVar <= ( zeta * gamma ) ** 2 / 2 * ( vx + gy ) ** 2) # this is the accuracy requirement
+        z = z - (A[i+1]-A[i]) * (vx + gy)
 
-    phi0 = A0 * (f0 + g0 - fs) + (1 + mu * A0) / 2 * (z0 - xs) ** 2
-    phi1 = A1 * (f1 + g1 - fs) + (1 + mu * A1) / 2 * (z1 - xs) ** 2
-
-    # Set the performance metric to the final distance between zn and zs
-    problem.set_performance_metric(phi1 - phi0 - A1 / 2 / gamma * xi)
+    # Set the performance metric to the function value accuracy
+    problem.set_performance_metric((f.value(x) + hx) - Fs)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 0.
+    theoretical_tau = 2*L/(1-zeta**2)/n**2
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the Accelerated Hybrid Proximal gradient in distance ***')
-        print('\tPEP-it guarantee:\t\t phi(n+1) - phi(n) <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t phi(n+1) - phi(n) <= {:.6}'.format(theoretical_tau))
+        print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
+        print('\tPEP-it guarantee:\t\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
@@ -153,6 +152,4 @@ def wc_accelerated_inexact_forward_backward(mu, L, gamma, sigma, xi, zeta, A0, v
 
 if __name__ == "__main__":
 
-    L = 2
-    sigma = .2
-    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(mu=1, L=L, gamma=(1 - sigma ** 2) / L, sigma=sigma, xi=3, zeta=0.9, A0=1, verbose=True)
+    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)

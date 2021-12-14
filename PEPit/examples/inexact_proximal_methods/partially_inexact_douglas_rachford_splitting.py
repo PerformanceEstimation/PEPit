@@ -116,7 +116,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     for _ in range(n):
         x, dfx, _, _, _, _, epsVar = inexact_proximal_step(z, f, gamma, opt='PD_gapII')
         y, _, _ = proximal_step(x - gamma * dfx, g, gamma)
-        f.add_constraint(epsVar <= ((sigma / gamma) * (y - z + gamma * dfx)) ** 2)
+        f.add_constraint(epsVar <= 1/2 * (sigma  * (y - z + gamma * dfx)) ** 2)
         z = z + (y - x)
 
     # Set the performance metric to the final distance between zn and zs
