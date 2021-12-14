@@ -28,12 +28,12 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
         .. math:: (x,v)  \\approx_{\\varepsilon} \\left(\\mathrm{prox}_{\\gamma f}(z),\\,\mathrm{prox}_{f^*/\\gamma}(z/\\gamma)\\right),
 
-    where :math:`\\approx_{\\varepsilon}` correspond to require the primal-dual pair :math:`(x,v)` to satisfy some
+    where :math:`\\approx_{\\varepsilon}` corresponds to require the primal-dual pair :math:`(x,v)` to satisfy some
     primal-dual accuracy requirement:
 
         .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(v;z) \\leqslant \\varepsilon,
 
-    where :math:`\\varepsilon\\geqslant` is the error magnitude, which is returned to the user so that one can constrain
+    where :math:`\\varepsilon\\geqslant 0` is the error magnitude, which is returned to the user so that one can constrain
     it to be bounded by some other values.
 
     **Relation to the exact proximal operation:**  In the exact case (no error in the computation, :math:`\\varepsilon=0`),
