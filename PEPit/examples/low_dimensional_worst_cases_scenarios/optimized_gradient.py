@@ -48,20 +48,23 @@ def wc_optimized_gradient(L, n, verbose=True):
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2}.
 
-    **References**:
-    The OGM was developed in [1,2]. Low-dimensional worst-case functions for OGM were obtained in [3, 4]
+    **References**: The OGM was developed in [1,2]. Low-dimensional worst-case functions for OGM were obtained in [3, 4].
 
-    [1] Y. Drori, M. Teboulle (2014).Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145.1-2: 451-482.
+    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
+    approach. Mathematical Programming 145(1–2), 451–482.
+    <https://arxiv.org/pdf/1206.3209.pdf>`_
 
-    [2] D. Kim, J. Fessler (2016).Optimized first-order methods for smooth convex minimization. Mathematical
-    programming 159.1-2: 81-107.
+    `[2] D. Kim, J. Fessler (2016). Optimized first-order methods for smooth convex minimization. Mathematical
+    Programming 159.1-2: 81-107.
+    <https://arxiv.org/pdf/1406.5468.pdf>`_
 
-    [3] A. Taylor, J. Hendrickx, F. Glineur (2017). Smooth strongly convex interpolation and exact worst-case
+    `[3] A. Taylor, J. Hendrickx, F. Glineur (2017). Smooth strongly convex interpolation and exact worst-case
     performance of first-order methods. Mathematical Programming, 161(1-2), 307-345.
+    <https://arxiv.org/pdf/1502.05666.pdf>`_
 
-    [4] D. Kim, J. Fessler (2017). On the convergence analysis of the optimized gradient method. Journal of
+    `[4] D. Kim, J. Fessler (2017). On the convergence analysis of the optimized gradient method. Journal of
     Optimization Theory and Applications, 172(1), 187-205.
+    <https://arxiv.org/pdf/1510.08573.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

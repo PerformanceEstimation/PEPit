@@ -47,8 +47,10 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=True):
             \\end{eqnarray}
 
     **References**:
-    [1] M. Barré, A. Taylor, A. d’Aspremont (2020). Complexity guarantees for Polyak steps with momentum.
-    In Conference on Learning Theory (pp. 452-478).
+
+    `[1] M. Barré, A. Taylor, A. d’Aspremont (2020). Complexity guarantees for Polyak steps with momentum.
+    In Conference on Learning Theory (COLT).
+    <https://arxiv.org/pdf/2002.00915.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
