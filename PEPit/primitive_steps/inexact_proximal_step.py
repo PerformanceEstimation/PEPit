@@ -163,6 +163,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         f.add_constraint(gamma * eps_sub <= eps_var)
 
     else:
-        raise ValueError("Input opt must be either PD_gapI, PD_gapII, or PD_gapIII")
+        raise ValueError("inexact_proximal_step supports only opt in ['PD_gapI', 'PD_gapII', 'PD_gapIII'],"
+                         " got {}".format(opt))
 
     return x, gx, fx, w, v, fw, eps_var

@@ -209,7 +209,8 @@ class PEP(object):
                 constraints_list.append(self.expression_to_cvxpy(condition.expression, F, G) == 0)
             else:
                 raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
-                                 ' must either be \'equality\' or \'inequality\'.')
+                                 ' must either be \'equality\' or \'inequality\'.'
+                                 'Got {}'.format(condition.equality_or_inequality))
         if verbose:
             print('(PEP-it) Setting up the problem:'
                   ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
@@ -229,7 +230,8 @@ class PEP(object):
                     constraints_list.append(self.expression_to_cvxpy(constraint.expression, F, G) == 0)
                 else:
                     raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
-                                     ' must either be \'equality\' or \'inequality\'.')
+                                     ' must either be \'equality\' or \'inequality\'.'
+                                     'Got {}'.format(constraint.equality_or_inequality))
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
 

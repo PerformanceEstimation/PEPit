@@ -286,7 +286,8 @@ class Expression(object):
                         value += weight
                     # Raise Exception out of those 3 cases
                     else:
-                        raise TypeError("Expressions are made of function values, inner products and constants only!")
+                        raise TypeError("Expressions are made of function values, inner products and constants only!"
+                                        "Got {}".format(type(key)))
                 # Store the value
                 self.value = value
 

@@ -140,7 +140,8 @@ class Point(object):
             return Expression(is_function_value=False, decomposition_dict=decomposition_dict)
         else:
             # Raise an error if the user tries to multiply a point by anything else
-            raise TypeError("Points can be multiplied by scalar constants and other points only!")
+            raise TypeError("Points can be multiplied by scalar constants and other points only!"
+                            "Got {}".format(type(other)))
 
     def __mul__(self, other):
         """
