@@ -39,7 +39,7 @@ def wc_no_lips_2(L, gamma, n, verbose=True):
 
         .. math:: \\min_{0 \\leqslant t \\leqslant n-1}D_h(x_t;x_{t+1}) \\leqslant \\frac{\\gamma}{n}(F(x_0) - F(x_n)).
 
-    **References**: The detailed setup and results are availaible in [1]. The PEP approach for studying such settings
+    **References**: The detailed setup is presented in [1]. The PEP approach for studying such settings
     is presented in [2].
 
     `[1] J. Bolte, S. Sabach, M. Teboulle, Y. Vaisbourd (2018). First order methods beyond convexity and Lipschitz
