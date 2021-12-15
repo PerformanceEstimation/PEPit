@@ -1,5 +1,5 @@
-Methods for composite convex minimization
------------------------------------------
+Composite convex minimization
+-----------------------------
 
 .. contents::
    :depth: 1

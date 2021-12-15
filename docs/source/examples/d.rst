@@ -1,5 +1,5 @@
-Stochastic methods for convex minimization
-------------------------------------------
+Stochastic convex minimization
+------------------------------
 
 .. contents::
    :depth: 1

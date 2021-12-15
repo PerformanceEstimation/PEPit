@@ -1,5 +1,5 @@
-Methods for nonconvex optimization
-----------------------------------
+Non-convex optimization
+-----------------------
 
 .. contents::
    :depth: 1

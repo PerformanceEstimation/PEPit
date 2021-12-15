@@ -1,5 +1,5 @@
-Fixed point iterations
-----------------------
+Fixed point
+-----------
 
 .. contents::
    :depth: 1

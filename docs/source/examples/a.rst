@@ -1,5 +1,5 @@
-Methods for unconstrained convex minimization
----------------------------------------------
+Unconstrained convex minimization
+---------------------------------
 
 .. contents::
    :depth: 1

@@ -1,5 +1,5 @@
-Verify potential functions
---------------------------
+Potential functions
+-------------------
 
 .. contents::
    :depth: 1
