@@ -1,15 +1,8 @@
-Create new example
-==================
+Contributing
+============
 
-Google style docstring
-----------------------
-
-Pycharm setting:
-^^^^^^^^^^^^^^^^
-Pycharm/Preferences…/Tools/Python Integrated Tools/Docstrings/Docstring format -> Google
-
-Table of content:
-^^^^^^^^^^^^^^^^^
+Creating new example:
+^^^^^^^^^^^^^^^^^^^^^
 - Define Pb it solves (with f\_\star \\triangleq )
 
 - Name algo in boldface
@@ -30,6 +23,8 @@ Table of content:
 
 PEPit: Liste des trucs à verifier concernant les exemples:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- [done] Google style docstring
 
 - [done] Virer les hypotheses qui n’en sont pas comme « non-smooth ».
 

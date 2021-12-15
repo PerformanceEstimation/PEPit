@@ -12,47 +12,18 @@ Welcome to PEPit's documentation!
 
    self
    quickstart
-   functions_and_operators
-   steps
-   tools
+   api
    examples
    contributing
 
-PEPit.pep
----------
+Using and citing the toolbox
+============================
 
-.. automodule:: PEPit.pep
-   :members:
-   :show-inheritance:
+Installation
+============
 
-PEPit.point
------------
-
-.. automodule:: PEPit.point
-   :members:
-   :show-inheritance:
-
-PEPit.expression
-----------------
-
-.. automodule:: PEPit.expression
-   :members:
-   :show-inheritance:
-
-PEPit.constraint
-----------------
-
-.. automodule:: PEPit.constraint
-   :members:
-   :show-inheritance:
-
-PEPit.function
---------------
-
-.. automodule:: PEPit.function
-   :members:
-   :show-inheritance:
-
+Dependencies
+============
 
 Indices and tables
 ==================
