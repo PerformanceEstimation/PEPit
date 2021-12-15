@@ -26,7 +26,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
     and the dual proximal problems, and where :math:`f^*` is the Fenchel conjugate of :math:`f`. The options below
     encode different meanings of ":math:`\\approx`" by specifying accuracy requirements on primal-dual pairs:
 
-        .. math:: (x,v)  \\approx_{\\varepsilon} \\left(\\mathrm{prox}_{\\gamma f}(z),\\,\mathrm{prox}_{f^*/\\gamma}(z/\\gamma)\\right),
+        .. math:: (x,v) \\approx_{\\varepsilon} \\left(\\mathrm{prox}_{\\gamma f}(z),\\,\mathrm{prox}_{f^*/\\gamma}(z/\\gamma)\\right),
 
     where :math:`\\approx_{\\varepsilon}` corresponds to require the primal-dual pair :math:`(x,v)` to satisfy some
     primal-dual accuracy requirement:
@@ -52,7 +52,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
     and :math:`e` is some additional computation error. Those elements allow for a common convenient reformulation of
     the primal-dual gap, written in terms of the magnitudes of :math:`\\epsilon` and of :math:`e`:
 
-        .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(v;z) = \\frac{1}{2} \| e\|^2 + \\gamma \\epsilon.
+        .. math:: \\Phi^{(p)}_{\\gamma f}(x;z)-\\Phi^{(d)}_{\\gamma f}(v;z) = \\frac{1}{2} \|e\|^2 + \\gamma \\epsilon.
 
     **Options:** The following options are available (a list of such choices is presented in [4]; we provide a reference
     for each of those choices below).
@@ -146,7 +146,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         fx = Expression()
         f.add_point((x, gx, fx))
         eps_var = Expression()
-        f.add_constraint( e ** 2 /2 <= eps_var)
+        f.add_constraint(e ** 2 / 2 <= eps_var)
         w, v, fw = x, gx, fx
 
     elif opt == 'PD_gapIII':
@@ -154,13 +154,13 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
         This option constrain x, v, and w to satisfy the following requirement: gamma * (fx - fw - v*(x - w)) <= epsVar.
         """
         x, gx, w = Point(), Point(), Point()
-        v = (z - x)/gamma
+        v = (z - x) / gamma
         fw, fx = Expression(), Expression()
         f.add_point((x, gx, fx))
         f.add_point((w, v, fw))
         eps_var = Expression()
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(gamma*eps_sub <= eps_var)
+        f.add_constraint(gamma * eps_sub <= eps_var)
 
     else:
         raise ValueError("Input opt must be either PD_gapI, PD_gapII, or PD_gapIII")
