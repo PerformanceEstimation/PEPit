@@ -42,14 +42,14 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
 
     **References**:
 
-        `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
-        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
-        Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
-        <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
+    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
+    Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
+    Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
+    <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
-        `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
-        first-order methods. Mathematical Programming, 1-43.
-        <https://arxiv.org/pdf/1911.08510.pdf>`_
+    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
+    first-order methods. Mathematical Programming, 1-43.
+    <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
         Disclaimer: This example requires some experience with PESTO and PEPs ([2], section 4).
@@ -64,7 +64,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
-    Example:
+    Example: **TOUPDATE**
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_no_lips_in_bregman_divergence(L=L, gamma=gamma, n=10, verbose=True)

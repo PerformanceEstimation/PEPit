@@ -43,13 +43,11 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
                 w_{t+1} & = & w_t + \\theta (y_t - x_t)
             \\end{eqnarray}
 
-    References:
+    **References**: The TOS was introduced in [1].
 
-        The TOS is introduced in [1].
-
-        `[1] Damek Davis, and Wotao Yin. "A three-operator splitting scheme and its optimization applications."
-        Set-valued and variational analysis  (2017).
-        <https://arxiv.org/pdf/1504.01032.pdf>`_
+    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
+    Set-valued and variational analysis 25, no. 4 (2017): 829-858.
+    <https://arxiv.org/pdf/1504.01032.pdf>`_
 
     Args:
         mu1 (float): the strong convexity parameter.
