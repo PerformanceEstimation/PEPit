@@ -36,20 +36,19 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     **Theoretical guarantee**:
     The **upper** guarantee obtained in [2, Proposition 4] is
 
-        .. math:: \\tau(n, L, \\mu) = \\frac{2}{n (n - 1)}
+        .. math:: \\min_{t\\leqslant n} D_h(x_{t-1}, x_t) \\leqslant \\frac{2}{n (n - 1)} D_h(x_\\star, x_0),
 
-        for any :math:`\\gamma \\leq \\frac{1}{L}`.
+    for any :math:`\\gamma \\leq \\frac{1}{L}`. It is empirically tight.
 
-    References:
+    **References**:
 
-        The detailed approach is availaible in [1]. The formulation as a PEP, and the tightness are proven in [2].
-
-        `[1] Heinz H. Bauschke, Jérôme Bolte, and Marc Teboulle. "A Descent Lemma
-        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications." (2017)
+        `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
+        Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
+        Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
         <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
-        `[2] Radu-Alexandru Dragomir, Adrien B. Taylor, Alexandre d’Aspremont, and
-        Jérôme Bolte. "Optimal Complexity and Certification of Bregman First-Order Methods". (2019)
+        `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
+        first-order methods. Mathematical Programming, 1-43.
         <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
@@ -92,7 +91,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     d = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     func1 = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     h = (d + func1) / L
-    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf}, is_differentiable=True)
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
