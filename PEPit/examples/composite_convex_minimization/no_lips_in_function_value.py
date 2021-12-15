@@ -117,7 +117,7 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
         x, _, _ = bregman_gradient_step(gfx, ghx, func2 + h, gamma)
         gdx, _ = d.oracle(x)
         gfx, ffx = func1.oracle(x)
-        ghx = (gdx + gfx) / L #h.gradient(x)
+        ghx = (gdx + gfx) / L
 
     # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric(ffx - fs)
