@@ -111,7 +111,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison) when theta = 1
-    if theta == 1 and alpha == 1 and L == 1 and n <= 10:
+    if theta == 1 and alpha == 1 and L == 1 and 0 < n <= 10:
         pesto_tau = [1/4, 0.1273, 0.0838, 0.0627, 0.0501, 0.0417, 0.0357, 0.0313, 0.0278, 0.0250]
         theoretical_tau = pesto_tau[n-1]
     else:
