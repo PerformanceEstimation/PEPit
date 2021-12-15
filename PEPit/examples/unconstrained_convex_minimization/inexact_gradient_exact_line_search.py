@@ -1,7 +1,7 @@
 from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
-from PEPit.primitive_steps.inexact_gradient import inexact_gradient
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.primitive_steps import inexact_gradient_step
+from PEPit.primitive_steps import exact_linesearch_step
 
 
 def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=True):
@@ -92,19 +92,18 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=True):
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()
-    g0, f0 = func.oracle(x0)
 
     # Set the initial constraint that is the distance between f0 and f_*
-    problem.set_initial_condition(f0 - fs <= 1)
+    problem.set_initial_condition(func.value(x0) - fs <= 1)
 
     # Run n steps of the inexact gradient method with ELS
     x = x0
     for i in range(n):
-        dx, _ = inexact_gradient(x, func, epsilon, notion='relative')
+        _, dx, _ = inexact_gradient_step(x, func, gamma=0, epsilon=epsilon, notion='relative')
         x, gx, fx = exact_linesearch_step(x, func, [dx])
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(fx - fs)
+    problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)

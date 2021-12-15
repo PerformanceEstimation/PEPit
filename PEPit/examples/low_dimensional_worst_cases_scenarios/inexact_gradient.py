@@ -1,6 +1,6 @@
 from PEPit.pep import PEP
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.primitive_steps.inexact_gradient import inexact_gradient
+from PEPit.primitive_steps import inexact_gradient_step
 
 
 def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
@@ -97,23 +97,21 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
     # Then define the starting point x0 of the algorithm
     # as well as corresponding inexact gradient and function value g0 and f0
     x0 = problem.set_initial_point()
-    d0, f0 = inexact_gradient(x0, func, epsilon, notion='relative')
 
     # Set the initial constraint that is the distance between f0 and f_*
-    problem.set_initial_condition(f0 - fs <= 1)
+    problem.set_initial_condition(func.value(x0) - fs <= 1)
 
     # Run n steps of the inexact gradient method
     Leps = (1 + epsilon) * L
     meps = (1 - epsilon) * mu
     gamma = 2 / (Leps + meps)
+
     x = x0
-    dx = d0
     for i in range(n):
-        x = x - gamma * dx
-        dx, fx = inexact_gradient(x, func, epsilon, notion='relative')
+        x, dx, fx = inexact_gradient_step(x, func, gamma=gamma, epsilon=epsilon, notion='relative')
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(fx - fs)
+    problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose, tracetrick=True)

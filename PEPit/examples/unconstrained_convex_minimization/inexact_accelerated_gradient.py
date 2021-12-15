@@ -1,6 +1,6 @@
 from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.primitive_steps.inexact_gradient import inexact_gradient
+from PEPit.functions import SmoothConvexFunction
+from PEPit.primitive_steps import inexact_gradient_step
 
 
 def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
@@ -92,9 +92,8 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
     x_new = x0
     y = x0
     for i in range(n):
-        dy, fy = inexact_gradient(y, func, epsilon, notion='relative')
         x_old = x_new
-        x_new = y - 1 / L * dy
+        x_new, dy, fy = inexact_gradient_step(y, func, gamma=1 / L, epsilon=epsilon, notion='relative')
         y = x_new + i / (i + 3) * (x_new - x_old)
     _, fx = func.oracle(x_new)
 
