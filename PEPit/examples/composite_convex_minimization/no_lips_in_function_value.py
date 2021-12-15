@@ -96,7 +96,7 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     d = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     func1 = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     h = (d + func1) / L
-    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf}, is_differentiable=True)
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -118,8 +118,9 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     ffx = f0
     ghx = gh0
     for i in range(n):
-        x, ghx, hx = bregman_gradient_step(gfx, ghx, func2 + h, gamma)
-        gfx, ffx = func.oracle(x)
+        x, _, _ = bregman_gradient_step(gfx, ghx, func2 + h, gamma)
+        ghx, _ = h.oracle(x)
+        gfx, ffx = func1.oracle(x)
 
     # Set the performance metric to the final distance in function values to optimum
     problem.set_performance_metric(ffx - fs)
