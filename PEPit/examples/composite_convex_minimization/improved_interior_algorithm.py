@@ -48,8 +48,9 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     .. math:: F(x_n) - F_\\star \\leqslant \\frac{4L}{c n^2}\\left(c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star) \\right).
 
     **References**:
-    [1] A. Auslender, M. Teboulle (2006). Interior gradient and proximal methods for convex and conic optimization.
+    `[1] A. Auslender, M. Teboulle (2006). Interior gradient and proximal methods for convex and conic optimization.
     SIAM Journal on Optimization 16.3 (2006): 697-725.
+    <https://epubs.siam.org/doi/pdf/10.1137/S1052623403427823>`_
 
     Args:
         L (float): the smoothness parameter.

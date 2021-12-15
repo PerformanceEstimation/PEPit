@@ -8,25 +8,24 @@ def wc_frank_wolfe(L, D, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
-    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is :math:`L`-smooth and convex
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
 
     This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method.
-    That is, it computes the smallest possible :math:`\\tau(n, L, D)` such that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, D) \\|x_0 - x_\\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L) D^2,
 
     is valid, where x_n is the output of the **conditional gradient** method,
     and where :math:`x_\\star` is a minimizer of :math:`F`.
-    In short, for given values of :math:`n`, :math:`L` and :math:`D`,
-    :math:`\\tau(n, L, D)` is computed as the worst-case value of
-    :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L)` is computed as the worst-case value of
+    :math:`F(x_n) - F(x_\\star)` when :math:`D \\leqslant 1`.
 
     **Algorithm**:
 
-        This method is presented in [1, Algorithm 1].
+    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1].
 
         .. math::
             \\begin{eqnarray}
@@ -36,15 +35,18 @@ def wc_frank_wolfe(L, D, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        The **upper** guarantee obtained in [1, Theorem 1] is
+    An **upper** guarantee obtained in [2, Theorem 1] is
 
-        .. math:: \\tau(n, L, D) = \\frac{2LD^2}{n+2}
+        .. math :: F(x_n) - F(x_\\star) \\leqslant \\frac{2L D^2}{n+2}.
 
     References:
 
-        `[1] J. Martin (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization
-        (Proceedings of the 30th International Conference on Machine Learning (ICML-13), pp. 427–435).
-        <http://proceedings.mlr.press/v28/jaggi13.pdf>`_
+    [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
+    Naval research logistics quarterly, 3(1-2), 95-110.
+
+    `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
+    In 30th International Conference on Machine Learning (ICML).
+    <http://proceedings.mlr.press/v28/jaggi13.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
