@@ -39,7 +39,7 @@ def wc_frank_wolfe(L, D, n, verbose=True):
 
         .. math :: F(x_n) - F(x_\\star) \\leqslant \\frac{2L D^2}{n+2}.
 
-    References:
+    **References**:
 
     [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
