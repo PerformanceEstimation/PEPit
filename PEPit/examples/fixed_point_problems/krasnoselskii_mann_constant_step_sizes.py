@@ -11,38 +11,34 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
 
     .. math:: \\mathrm{Find}\\, x:\\, x = Ax,
 
-    where :math:'A' is a non-expansive operator, that is a :math:`L`-Lipschitz operator with :math:`L=1`.
+    where :math:`A` is a non-expansive operator, that is a :math:`L`-Lipschitz operator with :math:`L=1`.
 
-    This code computes a worst-case guarantee for the **Krasnolselskii-Mann** method. That is, it computes
-    the smallest possible :math:`\tau(n)` such that the guarantee
+    This code computes a worst-case guarantee for the **Krasnolselskii-Mann** (KM) method with constant step-size.
+    That is, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
 
         .. math:: \\frac{1}{4}\\|x_n - Ax_n\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the Krasnolseskii-Mann iterations, and :math:`x_\\star` the fixed point of :math:`A.`
+    is valid, where :math:`x_n` is the output of the KM method, and :math:`x_\\star` is some fixed point of :math:`A`
+    (i.e., :math:`x_\\star=Ax_\\star`).
 
-    **Algorithm**:
+    **Algorithm**: The constant step-size KM method is described by
 
-        .. math:: x_{t+1} = \\left(1 - \\gamma\\right) x_{t} + \\gamma Ax_{t}
+        .. math:: x_{t+1} = \\left(1 - \\gamma\\right) x_{t} + \\gamma Ax_{t}.
 
-    **Theoretical guarantee**:
-
-        The theoretical **upper** bound is given in [1, Theorem 4.9]
+    **Theoretical guarantee**: A theoretical **upper** bound is provided by [1, Theorem 4.9]
 
             .. math:: \\tau(n) = \\left\{
                       \\begin{eqnarray}
-                          \\frac{1}{n+1}\\left(\\frac{n}{n+1}\\right)^n \\frac{1}{4 \\gamma (1 - \\gamma)}, & ~~~ \\text{if} & ~~~~~~~~~~~~~~~~ \\frac{1}{2} & \\leqslant & \\gamma & \\leqslant & \\frac{1}{2}\\left(1+\\sqrt{\\frac{n}{n+1}}\\right) \\\\
-                          (\\gamma - 1)^{2n} ~~~~~~~~~~~~~~~~, & ~~~ \\text{if} & \\frac{1}{2}\\left(1+\\sqrt{\\frac{n}{n+1}}\\right) & < & \\gamma & \\leqslant & 1. ~~~~~~~~~~~~~~~~
+                          \\frac{1}{n+1}\\left(\\frac{n}{n+1}\\right)^n \\frac{1}{4 \\gamma (1 - \\gamma)}\quad & \\text{if } \\frac{1}{2}\\leqslant \\gamma  \\leqslant \\frac{1}{2}\\left(1+\\sqrt{\\frac{n}{n+1}}\\right) \\\\
+                          (\\gamma - 1)^{2n} \quad & \\text{if } \\frac{1}{2}\\left(1+\\sqrt{\\frac{n}{n+1}}\\right) <  \\gamma \\leqslant  1.
                       \\end{eqnarray}
                       \\right.
 
     **Reference**:
 
-        This scheme was first studied using PEPs in [1, Theorem 4.9]:
-
-        `[1] Felix Lieder. "Projection Based Methods for Conic Linear Programming
-        Optimal First Order Complexities and Norm Constrained Quasi Newton
-        Methods."  PhD thesis (2018)
-        <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
+    `[1] F. Lieder (2018). Projection Based Methods for Conic Linear Programming
+    Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.  PhD thesis, HHU Düsseldorf.
+    <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
 
     Args:
         n (int): number of iterations.

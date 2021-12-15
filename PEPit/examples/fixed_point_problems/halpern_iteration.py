@@ -24,22 +24,18 @@ def wc_halpern_iteration(n, verbose=True):
     :math:`\\tau(n)` is computed as the worst-case value of
     :math:`\\|x_n - Ax_n\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**:
-    Halpern iteration method can be written as
+    **Algorithm**: The Halpern iteration can be written as
 
-        .. math:: x_{t+1} = \\frac{1}{t + 2} x_0 + \\left(1 - \\frac{1}{t + 2}\\right) Ax_t
+        .. math:: x_{t+1} = \\frac{1}{t + 2} x_0 + \\left(1 - \\frac{1}{t + 2}\\right) Ax_t.
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for Halpern iteration can be found in [1, Theorem 2.1]:
 
-        The **tight** worst-case guarantee for Halpern iteration method, obtained in [1, Theorem 2.1], is
+        .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2.
 
-        .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2
+    **References**: The detailed approach and tight bound are available in [1].
 
-    **References**:
-
-        The detailed approach and the tight bound are available in [1, Theorem 2.1].
-
-        [1] Lieder, Felix. "On the Convergence Rate of the Halpern-Iteration." (2017)
+    `[1] F. Lieder (2021). On the convergence rate of the Halpern-iteration. Optimization Letters, 15(2), 405-418.
+    <http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf>`_
 
     Args:
         n (int): number of iterations.
