@@ -11,8 +11,8 @@ def wc_accelerated_proximal_point(alpha, n, verbose=True):
 
     where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 
-    This code computes a worst-case guarantee for the **accelerated proximal point** method,
-    that is the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
+    This code computes a worst-case guarantee for the **accelerated proximal point** method proposed in [1].
+    That, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
 
         .. math:: \\|x_n - y_n\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
@@ -27,20 +27,15 @@ def wc_accelerated_proximal_point(alpha, n, verbose=True):
                 y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1})
             \\end{eqnarray}
 
-    **Theoretical guarantee**:
-
-    Theoretical rates can be found in [1, Theorem 4.1]
+    **Theoretical guarantee**: A tight theoretical worst-case guarantee can be found in [1, Theorem 4.1]:
 
         .. math:: \\|x_n - y_n\\|^2 \\leqslant  \\frac{1}{n^2}  \\|x_0 - x_\\star\\|^2.
 
-    Note:
-
-        This rate is independent of :math:`\\alpha`.
-
     **Reference**:
 
-    [1] Donghwan Kim. "Accelerated Proximal Point Method  and Forward Method
-    for Monotone Inclusions." (2019)
+    `[1] D. Kim (2021). Accelerated proximal point method for maximally monotone operators.
+    Mathematical Programming, 1-31.
+    <https://arxiv.org/pdf/1905.05149v4.pdf>`_
 
     Args:
         alpha (float): the step-size

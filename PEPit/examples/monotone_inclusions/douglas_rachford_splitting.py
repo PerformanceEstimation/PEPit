@@ -41,16 +41,19 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
                 w_{t+1} & = & w_t - \\theta (x_{t+1}-y_{t+1}).
             \\end{eqnarray}
 
-    **References**:
-    Theoretical rates can be found in the following paper [1, section 4, Theorem 4.1].  Since the results of [2]
-    tighten that of [1], we compare with [2, Theorem 3] below. The detailed PEP methodology for studying operator
-    splitting is provided in [2].
+    **Theoretical guarantee**: Theoretical worst-case guarantees can be found in [1, section 4, Theorem 4.1].
+    Since the results of [2] tighten that of [1], we compare with [2, Theorem 3] below. The theoretical results
+    are complicated and we do not copy them here.
 
-    [1] W. Moursi, L. Vandenberghe (2019). Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and
+    **References**: The detailed PEP methodology for studying operator splitting is provided in [2].
+
+    `[1] W. Moursi, L. Vandenberghe (2019). Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and
     a Strongly Monotone Operator. Journal of Optimization Theory and Applications 183, 179–198.
+    <https://arxiv.org/pdf/1805.09396.pdf>`_
 
-    [2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+    `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
     Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+    <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     Args:
         L (float): the Lipschitz parameter.

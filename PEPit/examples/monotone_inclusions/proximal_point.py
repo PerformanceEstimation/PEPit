@@ -11,35 +11,28 @@ def wc_proximal_point(alpha, n, verbose=True):
 
     where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 
-    This code computes a worst-case guarantee for the **proximal point** method,
-    that is the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
+    This code computes a worst-case guarantee for the **proximal point** method.
+    That, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
 
         .. math:: \\|x_n - y_n\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
 
-    **Algorithm**:
+    **Algorithm**: The proximal point algorithm for monotone inclusions is described by
 
-        .. math::
+        .. math:: x_{t+1} = J_{\\alpha A}(x_t),
 
-            \\begin{eqnarray}
-                x_{t+1} & = & J_{\\alpha A}(y_t) \\\\
-                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1})
-            \\end{eqnarray}
+    where :math:`\\alpha` is a step-size.
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: A tight theoretical guarantee can be found in [1, section 4].
 
-    Theoretical rates can be found in [1, section 4].
-
-        .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\frac{\\left(1 - \\frac{1}{n}\\right)^{n - 1}}{n} \\|x_0 - x_\\star\\|^2
+        .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\frac{\\left(1 - \\frac{1}{n}\\right)^{n - 1}}{n} \\|x_0 - x_\\star\\|^2.
 
     **Reference**:
 
-        Theoretical rates can be found in [1, section 4].
-
-        [1] Guoyong Gu, and Junfeng Yang. "Optimal nonergodic sublinear
-        convergence rate of proximal point algorithm for maximal monotone
-        inclusion problems." (2019)
+    `[1] G. Gu, J. Yang (2020). Tight sublinear convergence rate of the proximal point algorithm for maximal
+    monotone inclusion problems. SIAM Journal on Optimization, 30(3), 1905-1921.
+    <https://epubs.siam.org/doi/abs/10.1137/19M1299049>`_
 
     Args:
         alpha (float): the step-size
