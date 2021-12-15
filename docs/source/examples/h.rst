@@ -2,7 +2,7 @@ Inexact proximal methods
 ------------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Accelerated inexact forward backward

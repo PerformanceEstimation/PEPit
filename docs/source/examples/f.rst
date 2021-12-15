@@ -2,7 +2,7 @@ Fixed point iterations
 ----------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Halpern iteration

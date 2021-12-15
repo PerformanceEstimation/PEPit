@@ -2,7 +2,7 @@ Methods for nonconvex optimization
 ----------------------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Gradient Descent

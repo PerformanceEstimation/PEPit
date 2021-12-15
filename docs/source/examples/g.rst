@@ -2,7 +2,7 @@ Verify potential functions
 --------------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Gradient Descent Lyapunov 1

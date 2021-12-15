@@ -2,7 +2,7 @@ Stochastic methods for convex minimization
 ------------------------------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Stochastic gradient descent

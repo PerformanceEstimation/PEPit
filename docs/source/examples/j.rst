@@ -2,7 +2,7 @@ Low dimensional worst-cases scenarios
 -------------------------------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Inexact gradient

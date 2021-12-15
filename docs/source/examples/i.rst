@@ -2,7 +2,7 @@ Adaptive methods
 ----------------
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
 Polyak steps in distance to optimum
