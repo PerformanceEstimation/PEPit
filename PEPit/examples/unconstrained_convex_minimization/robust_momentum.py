@@ -12,13 +12,13 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
-    This code computes a worst-case guarantee for the **robust momentum method**.
-    That is, it computes the smallest possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
+    This code computes a worst-case guarantee for the **robust momentum method** (RMM). That is, it computes the smallest
+    possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
 
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
-    is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` iterate of the **robust momentum method**,
-    and :math:`x_\\star` is a minimizer of :math:`f`. The function :math:`v(.)` is a well-chosen Lyapunov defined as follows,
+    is valid, where :math:`x_n` is the :math:`n^{\\mathrm{th}}` iterate of the RMM, and :math:`x_\\star` is a minimizer
+    of :math:`f`. The function :math:`v(.)` is a well-chosen Lyapunov defined as follows,
 
         .. math::
             :nowrap:
@@ -47,7 +47,7 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
     
     **Theoretical guarantee**:
 
-    The **tight** convergence convergence guarantee is obtained in [1, Theorem 1],
+    A convergence guarantee (empirically tight) is obtained in [1, Theorem 1],
     
         .. math:: v(x_{n+1}) \\leqslant \\rho^2 v(x_n),
 
@@ -55,9 +55,8 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
 
     **References**:
 
-    `[1] S. Cyrus, B. Hu, B. Van Scoy, & L. Lessard (2018). A robust accelerated
-    optimization algorithm for strongly convex functions (In 2018 Annual
-    American Control Conference (ACC) (pp. 1376-1381). IEEE).
+    `[1] S. Cyrus, B. Hu, B. Van Scoy, L. Lessard (2018). A robust accelerated optimization algorithm for strongly
+    convex functions. American Control Conference (ACC).
     <https://arxiv.org/pdf/1710.04753.pdf>`_
          
     Args:    

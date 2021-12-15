@@ -27,20 +27,17 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=True):
 
         .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t)
 
-        with :math:`\\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_t) \\right)`.
+    with :math:`\\gamma_t = \\arg\\min_{\\gamma} f \\left( x_t - \\gamma \\nabla f(x_t) \\right)`.
 
-    **Theoretical guarantee**:
+    **Theoretical guarantee**: The **tight** worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
 
-        The **tight** worst-case guarantee for GD with ELS, obtained in [1, Theorem 1.2], is
+        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\\star).
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\\star)
+    **References**: The detailed approach (based on convex relaxations) is available in [1], along with theoretical bound.
 
-    **References**:
-
-        The detailed approach (based on convex relaxations) is available in
-
-        [1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
-        line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
+    `[1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
+    line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
+    <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

@@ -40,18 +40,20 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
 
     The **tight** worst-case guarantee obtained in [1, Theorem 5.3] or [2, Remark 1.6] is
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}(f(x_0) - f_\\star).
+        .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L_{\\varepsilon}-\\mu_{\\varepsilon}}{L_{\\varepsilon}+\\mu_{\\varepsilon}}\\right)^{2n}(f(x_0) - f_\\star),
 
-    References:
-        The detailed approach (based on convex relaxations) is available in [1].
+    where tightness is achieved on simple quadratic functions.
 
-        `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
-        inexact gradient and Newton methods through semidefinite programming performance estimation.
-        (SIAM Journal on Optimization, 30(3), 2053-2082).
-        <https://arxiv.org/pdf/1709.05191.pdf>`_
+    **References**: The detailed analyses can be found in [1, 2].
 
-        `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods (Mathematical Programming).
-        <https://arxiv.org/pdf/1912.13494.pdf>`_
+    `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
+    inexact gradient and Newton methods through semidefinite programming performance estimation.
+    SIAM Journal on Optimization, 30(3), 2053-2082.
+    <https://arxiv.org/pdf/1709.05191.pdf>`_
+
+    `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods.
+    Mathematical Programming (to appear).
+    <https://arxiv.org/pdf/1912.13494.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

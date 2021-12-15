@@ -55,10 +55,10 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
        .. math:: f(x_n)-f_\\star \\leqslant \\frac{4}{A_0 (\\sum_{t=0}^{n-1} \\sqrt{\\gamma_t})^2}\\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\|x_0 - x_\\star\\|^2 \\right).
 
        **References**:
-       The fast proximal point was analyzed in the following work:
+       The accelerated proximal point was first obtained and analyzed in [1].
 
-            `[1] O. Güler. New proximal point algorithms for convex minimization, SIAM Journal on Optimization, 2(4):649–664, 1992.
-            <https://epubs.siam.org/doi/abs/10.1137/0802032?mobileUi=0>`_
+       `[1] O. Güler (1992). New proximal point algorithms for convex minimization, SIAM Journal on Optimization, 2(4):649–664.
+       <https://epubs.siam.org/doi/abs/10.1137/0802032?mobileUi=0>`_
         
 
        Args:

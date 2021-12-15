@@ -38,15 +38,15 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
 
     **Theoretical guarantee**:
 
-        The **upper** guarantee obtained in [1,  Corollary 4.15] is
+        The following **upper** guarantee can be found in [1,  Corollary 4.15]:
 
         .. math:: f(x_n)-f_\\star \\leqslant \\left(1 - \\sqrt{\\frac{\\mu}{L}}\\right)^n \\left(f(x_0) -  f(x_\\star) + \\frac{\\mu}{2}\\|x_0 - x_\\star\\|^2\\right).
 
-    References:
-        A theoretical **upper** bound can be found in [1,  Corollary 4.15].
+    **References**:
 
-        `[1] A. d’Aspremont, D. Scieur, A. Taylor, (2021),  Acceleration Methods, Monograph.
-        <https://arxiv.org/pdf/2101.09545.pdf>`_
+    `[1] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
+    in Optimization: Vol. 5, No. 1-2.
+    <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter

@@ -47,15 +47,24 @@ def wc_optimized_gradient(L, n, verbose=True):
     **Theoretical guarantee**:
     The **tight** theoretical guarantee can be found in [2, Theorem 2]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2},
+
+    where tightness follows from [3, Theorem 3].
 
     **References**:
-    The optimized gradient method was developed in the following two works:
-    [1] Y. Drori, M. Teboulle (2014).Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145.1-2: 451-482.
+    The optimized gradient method was developed in [1, 2]; the corresponding lower bound was first obtained in [3].
 
-    [2] D. Kim, J. Fessler (2016).Optimized first-order methods for smooth convex minimization. Mathematical
-    programming 159.1-2: 81-107.
+    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
+    approach. Mathematical Programming 145(1–2), 451–482.
+    <https://arxiv.org/pdf/1206.3209.pdf>`_
+
+    `[2] D. Kim, J. Fessler (2016). Optimized first-order methods for smooth convex minimization. Mathematical
+    Programming 159.1-2: 81-107.
+    <https://arxiv.org/pdf/1406.5468.pdf>`_
+
+    `[3] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
+    Journal of Complexity, 39, 1-16.
+    <https://arxiv.org/pdf/1606.01424.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

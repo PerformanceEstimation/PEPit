@@ -33,13 +33,17 @@ def wc_accelerated_gradient_convex(mu, L, n, verbose=True):
             \\end{eqnarray}
 
     **Theoretical guarantee**:
-    When :math:`\\mu=0`, a **tight** theoretical guarantee can be found in [1, Table 1]:
+    When :math:`\\mu=0`, a tight **empirical** guarantee can be found in [1, Table 1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{2L\\|x_0-x_\\star\\|^2}{n^2 + 5 n + 6}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{2L\\|x_0-x_\\star\\|^2}{n^2 + 5 n + 6},
+
+    where tightness is obtained on some Huber loss functions.
 
     **References**:
-    [1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
     convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
+    <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter
