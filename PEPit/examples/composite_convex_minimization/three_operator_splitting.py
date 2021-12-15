@@ -9,11 +9,9 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
     """
     Consider the composite convex minimization problem,
 
-    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x) + f_3(x)}
+    .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x) + f_3(x)\\}
 
-    where,
-
-    :math:`f_1` is :math:`L_1`-smooth and :math:`\\mu_1`-strongly convex,
+    where, :math:`f_1` is :math:`L_1`-smooth and :math:`\\mu_1`-strongly convex,
     :math:`f_2` is closed, convex and proper,
     and :math:`f_3` is :math:`L_3`-smooth convex.
     Proximal operators are assumed to be available for :math:`f_1` and :math:`f_2`.
@@ -77,7 +75,6 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.4752811057240984
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
             PEP-it guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475281 ||x0 - ws||^2
-            Theoretical guarantee :	 ||w^2_n - w^1_n||^2 <= 0.5 ||x0 - ws||^2
 
     """
 

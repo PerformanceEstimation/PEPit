@@ -28,11 +28,9 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     :math:`\\tau(n, L)` is computed as the worst-case value of
     :math:`F(x_n) - F_\\star` when :math:`D_h(x_\\star, x_0) \\leqslant 1`.
 
-    **Algorithm**:
+    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]
 
-    This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]
-
-        .. math:: x_{t+1} = \\arg\\min_{u} \\{f_2(u)+\\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)\\}
+        .. math:: x_{t+1} = \\arg\\min_{u} \\{f_2(u)+\\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)\\}.
 
     **Theoretical guarantee**:
 

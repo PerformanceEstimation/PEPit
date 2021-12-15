@@ -10,7 +10,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     """
     Consider the constrainted composite convex minimization problem
 
-    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv f_1(x) + f_2(x)},
+    .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is convex and :math:`L`-smooth relatively to :math:`h`,
     :math:`h` being closed proper and convex,
@@ -28,10 +28,9 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     :math:`\\tau(n, L)` is computed as the worst-case value of
     :math:`\\min_{t\\leqslant n} D_h(x_{t-1}, x_t)` when :math:`D_h(x_\\star, x_0) \\leqslant 1`.
 
-    **Algorithm**:
-    This method is presented in [2, Algorithm 1]
+    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]
 
-        .. math:: x_{t+1} = \\arg\\min_{u \\in \\mathrm{Dom}(f_2)} \\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)
+        .. math:: x_{t+1} = \\arg\\min_{u} \\{f_2(u)+\\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u, x_t)\\}.
 
     **Theoretical guarantee**:
     The **upper** guarantee obtained in [2, Proposition 4] is
