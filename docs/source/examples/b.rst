@@ -5,68 +5,57 @@ Methods for composite convex minimization
    :depth: 1
    :local:
 
+
 Proximal gradient
 ^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.proximal_gradient
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_proximal_gradient
+
 
 Accelerated proximal gradient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.accelerated_proximal_gradient
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_proximal_gradient
+
 
 Bregman proximal point
 ^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.bregman_proximal_point
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_bregman_proximal_point
+   
 
 Douglas Rachford splitting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.douglas_rachford_splitting
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_douglas_rachford_splitting
+
 
 Douglas Rachford splitting contraction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.douglas_rachford_splitting_contraction
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_douglas_rachford_splitting_contraction
+
 
 Accelerated Douglas Rachford splitting
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.accelerated_douglas_rachford_splitting
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_douglas_rachford_splitting
+
 
 Frank Wolfe
 ^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.frank_wolfe
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_frank_wolfe
+
 
 Improved interior method
 ^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.improved_interior_algorithm
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_improved_interior_algorithm
+
 
 No Lips in function value
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.no_lips_in_function_value
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_no_lips_in_function_value
+
 
 No Lips in Bregman divergence
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.no_lips_in_bregman_divergence
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_no_lips_in_bregman_divergence
+
 
 Three operator splitting
 ^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.three_operator_splitting
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_three_operator_splitting

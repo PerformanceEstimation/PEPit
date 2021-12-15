@@ -5,20 +5,17 @@ Verify potential functions
    :depth: 1
    :local:
 
+
 Gradient Descent Lyapunov 1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.potential_functions.gradient_descent_lyapunov_1
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.potential_functions.wc_gradient_descent_lyapunov_1
+
 
 Gradient Descent Lyapunov 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.potential_functions.gradient_descent_lyapunov_2
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.potential_functions.wc_gradient_descent_lyapunov_2
+
 
 Fast gradient descent
 ^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.potential_functions.accelerated_gradient_descent
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.potential_functions.wc_accelerated_gradient_descent

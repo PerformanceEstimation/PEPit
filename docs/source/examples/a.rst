@@ -5,92 +5,77 @@ Methods for unconstrained convex minimization
    :depth: 1
    :local:
 
+
 Gradient Descent
 ^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.gradient_descent
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent
+
 
 Subgradient method
 ^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.subgradient_method
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method
+
 
 Gradient Descent with exact line search
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.gradient_exact_line_search
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search
+
 
 Conjugate Gradient
 ^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.conjugate_gradient
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient
+
 
 Heavy Ball momentum
 ^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.heavy_ball_momentum
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_heavy_ball_momentum
+
 
 Accelerated gradient for convex objective
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_gradient_convex
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_gradient_convex
+
 
 Accelerated gradient for strongly convex objective
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_gradient_strongly_convex
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_gradient_strongly_convex
+
 
 Optimized gradient
 ^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.optimized_gradient
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_optimized_gradient
+
 
 Robust momentum
 ^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.robust_momentum
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_robust_momentum
+
 
 Triple momentum
 ^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.triple_momentum
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_triple_momentum
+
 
 Proximal point
 ^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.proximal_point
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_proximal_point
+
 
 Accelerated proximal point
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.accelerated_proximal_point
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_proximal_point
+
 
 Inexact gradient descent
 ^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.inexact_gradient_descent
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_gradient_descent
+
 
 Inexact gradient descent with exact line search
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.inexact_gradient_exact_line_search
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_gradient_exact_line_search
+
 
 Inexact accelerated gradient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.unconstrained_convex_minimization.inexact_accelerated_gradient
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_accelerated_gradient

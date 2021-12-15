@@ -5,20 +5,17 @@ Methods for nonconvex optimization
    :depth: 1
    :local:
 
+
 Gradient Descent
 ^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.nonconvex_optimization.gradient_descent
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent
+
 
 No Lips 1
 ^^^^^^^^^
-.. automodule:: PEPit.examples.nonconvex_optimization.no_lips_1
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_no_lips_1
+
 
 No Lips 2
 ^^^^^^^^^
-.. automodule:: PEPit.examples.nonconvex_optimization.no_lips_2
-   :members:
-   :show-inheritance:
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_no_lips_2
