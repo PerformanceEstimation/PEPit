@@ -25,15 +25,21 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, an empirically tight theoretical worst-case guarantee is
 
-    .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\frac{4}{3}\\frac{L}{n} (f(x_0) - f(x_n))
+    .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\frac{4}{3}\\frac{L}{n} (f(x_0) - f(x_n)),
 
-    References:
+    see discussions in [1, page 190] and [2].
 
-        The detailed approach is available in [1].
+    **References**:
 
-        [1] Polyak, Boris. "Introduction to optimization" (1987)
+    `[1] Taylor, A. B. (2017). Convex interpolation and performance estimation of first-order methods for
+    convex optimization. PhD Thesis, UCLouvain.
+    <https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01>`_
+
+    `[2] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021). The exact worst-case convergence rate of the
+    gradient method with fixed step lengths for L-smooth functions.
+    <https://arxiv.org/pdf/2104.05468v3.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
