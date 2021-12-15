@@ -91,7 +91,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     d = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     func1 = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
     h = (d + func1) / L
-    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf}, is_differentiable=True)
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
