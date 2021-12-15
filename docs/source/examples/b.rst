@@ -41,9 +41,9 @@ Accelerated Douglas Rachford splitting
    :members:
    :show-inheritance:
 
-Conditional gradient Frank Wolfe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.composite_convex_minimization.conditional_gradient_frank_wolfe
+Frank Wolfe
+^^^^^^^^^^^
+.. automodule:: PEPit.examples.composite_convex_minimization.frank_wolfe
    :members:
    :show-inheritance:
 

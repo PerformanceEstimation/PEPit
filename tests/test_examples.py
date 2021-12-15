@@ -24,7 +24,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_triple_momentum
 from PEPit.examples.composite_convex_minimization import wc_accelerated_douglas_rachford_splitting
 from PEPit.examples.composite_convex_minimization import wc_accelerated_proximal_gradient
 from PEPit.examples.composite_convex_minimization import wc_bregman_proximal_point
-from PEPit.examples.composite_convex_minimization import wc_conditional_gradient_frank_wolfe
+from PEPit.examples.composite_convex_minimization import wc_frank_wolfe
 from PEPit.examples.composite_convex_minimization import wc_douglas_rachford_splitting
 from PEPit.examples.composite_convex_minimization import wc_douglas_rachford_splitting_contraction
 from PEPit.examples.composite_convex_minimization import wc_improved_interior_algorithm
@@ -207,7 +207,7 @@ class TestExamples(unittest.TestCase):
     def test_conditional_gradient_frank_wolfe(self):
         D, L, n = 1., 1., 10
 
-        wc, theory = wc_conditional_gradient_frank_wolfe(L, D, n, verbose=self.verbose)
+        wc, theory = wc_frank_wolfe(L, D, n, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
 
     def test_douglas_rachford_splitting_contraction(self):

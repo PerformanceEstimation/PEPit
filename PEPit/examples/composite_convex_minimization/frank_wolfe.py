@@ -4,7 +4,7 @@ from PEPit.functions.convex_indicator import ConvexIndicatorFunction
 from PEPit.primitive_steps.linear_optimization_step import linear_optimization_step
 
 
-def wc_conditional_gradient_frank_wolfe(L, D, n, verbose=True):
+def wc_frank_wolfe(L, D, n, verbose=True):
     """
     Consider the composite convex minimization problem
 
@@ -13,7 +13,7 @@ def wc_conditional_gradient_frank_wolfe(L, D, n, verbose=True):
     where :math:`f_1` is :math:`L`-smooth and convex
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
 
-    This code computes a worst-case guarantee for the **conditional gradient** method.
+    This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, D)` such that the guarantee
 
     .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, D) \\|x_0 - x_\\star\\|^2,
@@ -57,7 +57,7 @@ def wc_conditional_gradient_frank_wolfe(L, D, n, verbose=True):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_conditional_gradient_frank_wolfe(L=1, D=1, n=10, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 26x26
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -123,4 +123,4 @@ def wc_conditional_gradient_frank_wolfe(L, D, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_conditional_gradient_frank_wolfe(L=1, D=1, n=10, verbose=True)
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=True)
