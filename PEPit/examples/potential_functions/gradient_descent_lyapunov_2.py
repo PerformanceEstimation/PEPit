@@ -10,44 +10,40 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`,
-    for a well-chosen Lyapunov function:
+    This code verifies a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
+    That is, it verifies that the Lyapunov (or potential/energy) function
 
-    .. math:: V_t = (2t + 1) L \\left(f(x_t) - f_\\star\\right) + t(t+2) \\|\\nabla f(x_t)\\|^2 + L^2 \\|x_t - x_\\star\\|^2
+    .. math:: V_n \\triangleq (2n + 1) L \\left(f(x_n) - f_\\star\\right) + n(n+2) \\|\\nabla f(x_n)\\|^2 + L^2 \\|x_n - x_\\star\\|^2
 
-    That is, it verifies that the above Lyapunov is decreasing on the trajectory:
+    is decreasing along all trajectories and all smooth convex function :math:`f` (i.e., in the worst-case):
 
-    .. math :: V_{t+1} \\leq V_t
+    .. math :: V_{n+1} \\leqslant V_n
 
-    is valid, where :math:`x_t` is the :math:`t^{\\mathrm{th}}`
-    output of the **gradient descent** with fixed step-size :math:`\\frac{1}{L}`.
+    where :math:`x_{n+1}` is obtained from a gradient step from :math:`x_{n}` with fixed step-size :math:`\\gamma=\\frac{1}{L}`.
 
-    **Algorithm**:
-    Gradient descent is described by
+    **Algorithm**: Gradient descent is described by
 
-    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
+    .. math:: x_{n+1} = x_n - \\gamma \\nabla f(x_n),
 
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
     The theoretical guarantee can be found in [1, Theorem 3]:
 
-    .. math:: V_{t+1} \\leq V_t,
+    .. math:: V_{n+1} - V_n \\leqslant 0,
 
     when :math:`\\gamma=\\frac{1}{L}`.
 
-    References:
+    **References**: The detailed potential function and SDP approach can be found in [1].
 
-        The detailed potential approach and the SDP approach are available in:
-
-        `[1] Adrien Taylor, and Francis Bach. "Stochastic first-order
-        methods: non-asymptotic and computer-aided analyses via potential functions." (2019)
-        <https://arxiv.org/pdf/1902.00947.pdf>`_
+    `[1] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
+    via potential functions. Conference on Learning Theory (COLT).
+    <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
         gamma (float): the step-size.
-        n (int): rank of studied iteration.
+        n (int):  current iteration number.
         verbose (bool): if True, print conclusion
 
     Returns:
@@ -61,13 +57,13 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 6 constraint(s) added
+		         function 1 : 6 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 1.894425729310791e-17
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 6.173593192215776e-09
         *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
-            PEP-it guarantee:		[(2t + 3)L*(f(x_(t+1)) - f_*) + (t+1)(t+3) ||f'(x_(t+1))||^2 + L^2 ||x_(t+1) - x_*||^2] - [(2t + 1)L*(f(x_t) - f_*) + t(t+2) ||f'(x_t)||^2 + L^2 ||x_t - x_*||^2] <= 1.89443e-17
-            Theoretical guarantee:	[(2t + 3)L*(f(x_(t+1)) - f_*) + (t+1)(t+3) ||f'(x_(t+1))||^2 + L^2 ||x_(t+1) - x_*||^2] - [(2t + 1)L*(f(x_t) - f_*) + t(t+2) ||f'(x_t)||^2 + L^2 ||x_t - x_*||^2] <= 0.0
+            PEP-it guarantee:		V_(n+1) - V_(n) <= 6.17359e-09
+            Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0
 
     """
 
@@ -100,22 +96,20 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 0.
+    if gamma == 1/L:
+        theoretical_tau = 0.
+    else:
+        theoretical_tau = None
 
     # Print conclusion if required
     if verbose:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
-              '[(2t + 3)L*(f(x_(t+1)) - f_*) + (t+1)(t+3) ||f\'(x_(t+1))||^2 + L^2 ||x_(t+1) - x_*||^2]'
-              ' - '
-              '[(2t + 1)L*(f(x_t) - f_*) + t(t+2) ||f\'(x_t)||^2 + L^2 ||x_t - x_*||^2]'
-              ' <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t'
-              '[(2t + 3)L*(f(x_(t+1)) - f_*) + (t+1)(t+3) ||f\'(x_(t+1))||^2 + L^2 ||x_(t+1) - x_*||^2]'
-              ' - '
-              '[(2t + 1)L*(f(x_t) - f_*) + t(t+2) ||f\'(x_t)||^2 + L^2 ||x_t - x_*||^2]'
-              ' <= {:.6}'.format(theoretical_tau))
+              'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
+        if gamma == 1/L:
+            print('\tTheoretical guarantee:\t'
+                  'V_(n+1) - V_(n) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
