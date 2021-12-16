@@ -15,19 +15,23 @@ def wc_saga(L, mu, n, verbose=True):
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
     closed, proper, and convex with a proximal operator readily available.
 
-    This code computes the exact rate for the Lyapunov function from the original SAGA work [1, Theorem 1].
-    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu)` such a Lyapunov function decreases geometrically
+    This code computes the exact rate for a Lyapunov (or energy) function for **SAGA** [1].
+    That is, it computes the smallest possible :math:`\\tau(n,L,\\mu)` such this Lyapunov function decreases geometrically
 
-    .. math:: V^{(t+1)} \\leqslant \\tau(n, L, \\mu) V^{(t)},
+    .. math:: \\mathbb{E}[V^{(1)}] \\leqslant \\tau(n, L, \\mu) V^{(0)},
 
-    where the value of the Lyapunov function at iteration :math:`k`is denoted by :math:`V_k` is
+    where the value of the Lyapunov function at iteration :math:`t` is denoted by :math:`V^{(t)}` and is defined as
 
-    .. math:: V^{(t)} = \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} \\|x^{(t)} - x^\\star\\|^2,
+    .. math:: V^{(t)} \\triangleq \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} \\|x^{(t)} - x^\\star\\|^2,
 
-    with :math:`\\gamma = \\frac{1}{2(\\mu n+L)}`.
+    with :math:`\\gamma = \\frac{1}{2(\\mu n+L)}` (this Lyapunov function was proposed in [1, Theorem 1]).
+    We consider the case :math:`t=0` in the code below, without loss of generality.
 
-    **Algorithm**:
-    One iteration of SAGA [1] is described as follows: at iteration :math:`k`, pick :math:`j\\in\\{1,\ldots,n\\}` uniformely at random and set:
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V^{(1)}]` when :math:`V(x^{(0)}) \\leqslant 1`.
+
+    **Algorithm**: One iteration of SAGA [1] is described as follows: at iteration :math:`t`, pick
+    :math:`j\\in\\{1,\ldots,n\\}` uniformely at random and set:
 
         .. math::
             :nowrap:
@@ -35,16 +39,18 @@ def wc_saga(L, mu, n, verbose=True):
             \\begin{eqnarray}
                 \\phi_j^{(t+1)} & = & x^{(t)} \\\\
                 w^{(t+1)} & = & x^{(t)} - \\gamma \\left[ \\nabla f_j (\\phi_j^{(t+1)}) - \\nabla f_j(\\phi_j^{(t)}) + \\frac{1}{n} \\sum_{i=1}^n(\\nabla f_i(\\phi^{(t)}))\\right] \\\\
-                x^{(t+1)} & = & \\mathrm{prox}_{\\gamma h} (w^{(t+1)})
+                x^{(t+1)} & = & \\mathrm{prox}_{\\gamma h} (w^{(t+1)})\\triangleq \\arg\\min_x \\left\\{ \\gamma h(x)+\\frac{1}{2}\\|x-w^{(t+1)}\\|^2\\right\\}
             \\end{eqnarray}
 
-    **Theoretical guarantee**: The following **upper** bound can be found in [1, Theorem 1]:
+    **Theoretical guarantee**: The following **upper** bound (empirically tight) can be found in [1, Theorem 1]:
 
-    .. math:: V^{(t+1)} \\leqslant \\left(1-\\gamma\\mu \\right)V^{(t)}
+    .. math:: \\mathbb{E}[V^{(t+1)}] \\leqslant \\left(1-\\gamma\\mu \\right)V^{(t)}
 
     **References**:
-    [1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
-    non-strongly convex composite objectives. Advances in neural information processing systems (NIPS).
+
+    `[1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
+    non-strongly convex composite objectives. In Advances in Neural Information Processing Systems (NIPS).
+    <http://papers.nips.cc/paper/2014/file/ede7e2b6d13a41ddf9f4bdef84fdc737-Paper.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -70,10 +76,10 @@ def wc_saga(L, mu, n, verbose=True):
                  function 6 : 6 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.9666748513396348
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
         *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
-            PEP-it guarantee:		 V^(t+1) <= 0.966675 V^t
-            Theoretical guarantee:	 V^(t+1) <= 0.966667 V^t
+            PEP-it guarantee:		 V^(1) <= 0.966667 V^(0)
+            Theoretical guarantee:	 V^(1) <= 0.966667 V^(0)
 
     """
 
@@ -143,8 +149,8 @@ def wc_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
-        print('\tPEP-it guarantee:\t\t V^(t+1) <= {:.6} V^t'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t V^(t+1) <= {:.6} V^t'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t V^(1) <= {:.6} V^(0)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

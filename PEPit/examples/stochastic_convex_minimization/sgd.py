@@ -8,55 +8,55 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: F_\\star \\triangleq \\min_x \{F(x) \\equiv \\frac{1}{n} (f_1(x) + ... + f_n(x))\},
+    .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
-    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex.
-
-    In addition, we assume a bounded variance at the optimal point:
-
-    .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x_\\star)\\|^2 \\leqslant v^2,
-
-    This code computes a worst-case guarantee for one step of the **stochastic gradient descent (SGD)** in expectation,
-    for the distance to optimal point.
-
-    That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, v, R, n)` such that
-
-    .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, v, R, n)
-
-    holds if
-
-    .. math:: \\|x_0 - x_\\star\\|^2 \\leqslant R^2
-
-    and
+    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex. In addition, we assume a bounded
+    variance at the optimal point (which is denoted by :math:`x_\\star`):
 
     .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x_\\star)\\|^2 \\leqslant v^2.
 
-    Here, where :math:`x_1` is the output of one step of **stochastic gradient descent (SGD)**.
+    This code computes a worst-case guarantee for one step of the **stochastic gradient descent** (SGD) in expectation,
+    for the distance to an optimal point. That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, v, R, n)` such that
 
-    **Algorithm**:
+    .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, v, R, n)
 
-        .. math:: x_{t+1} = x_t - \\gamma \\nabla f_{i_t}(x_t)
+    where :math:`\\|x_0 - x_\\star\\|^2 \\leqslant R^2`, where :math:`v` is the variance at :math:`x_\\star`, and where
+    :math:`x_1` is the output of one step of SGD (note that we use the notation :math:`x_0,x_1` to denote two
+    consecutive iterates for convenience; as the bound is valid for all :math:`x_0`, it is also valid for
+    any pair of consecutive iterates of the algorithm).
 
-        with
+    **Algorithm**: One iteration of SGD is described by:
 
-        .. math:: i_t \\sim \\mathcal{U}\\left([|1, n|]\\right)
+    .. math::
+        \\begin{eqnarray}
+            \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, n|]\\right), \\\\
+            x_{t+1} & = & x_t - \\gamma \\nabla f_{i}(x_t),
+        \\end{eqnarray}
 
-    **Theoretical guarantee**:
+    where :math:`\\gamma` is a step-size.
 
-        TODO
+    **Theoretical guarantee**: An empirically tight one-iteration guarantee is provided in the code of PESTO [1]:
 
-        The **tight** guarantee obtained in ?? is
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2},
 
-        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2}.
+    when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number `math:`n` of
+    functions for this particular setting, thereby implying that the guarantees are also valid for expectation
+    minimization settings (i.e., when :math:`n` goes to infinity).
 
-    Notes:
+    **References**: Empirically tight guarantee provided in code of [1]. Using SDPs for analyzing SGD-type method was
+    proposed in [2, 3].
 
-        We will observe it does not depend on the number `math:`n` of functions for this particular setting,
-        hence the guarantees are also valid for expectation minimization settings (i.e., when :math:`n` goes to infinity).
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Performance Estimation Toolbox (PESTO): automated worst-case
+    analysis of first-order optimization methods. In 56th IEEE Conference on Decision and Control (CDC).
+    <https://github.com/AdrienTaylor/Performance-Estimation-Toolbox>`_
 
-    References:
+    `[2] B. Hu, P. Seiler, L. Lessard (2020). Analysis of biased stochastic gradient descent using sequential
+    semidefinite programs. Mathematical programming (to appear).
+    <https://arxiv.org/pdf/1711.00987.pdf>`_
 
-        TODO
+    `[3] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
+    via potential functions. Conference on Learning Theory (COLT).
+    <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -76,20 +76,20 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
         >>> L = 1
         >>> gamma = 1/L
         >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 16x16
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (2 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 5 function(s)
-                 function 1 : 6 constraint(s) added
-                 function 2 : 6 constraint(s) added
-                 function 3 : 6 constraint(s) added
-                 function 4 : 6 constraint(s) added
-                 function 5 : 6 constraint(s) added
+		         function 1 : 2 constraint(s) added
+		         function 2 : 2 constraint(s) added
+		         function 3 : 2 constraint(s) added
+		         function 4 : 2 constraint(s) added
+		         function 5 : 2 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 5.042581134257876
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 5.0416521649156865
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-            PEP-it guarantee:		 E[||x_1 - x_*||^2] <= 5.04258 ||x0 - x_*||^2
+            PEP-it guarantee:		 E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
             Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
 
     """

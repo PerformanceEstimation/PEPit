@@ -9,47 +9,48 @@ def wc_point_saga(L, mu, n, verbose=True):
     """
     Consider the finite sum minimization problem
 
-    .. math:: F_\\star \\triangleq \\min_x {F(x) \\equiv \\frac{1}{n} \\left(f_1(x) + ... + f_n(x)\\right)},
+    .. math:: F^\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
-    where :math:`f_1, \\dots, f_n` are assumed :math:`L`-smooth and :math:`\\mu`-strongly convex,
-    and with proximal operator available.
+    where :math:`f_1, \\dots, f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex, and with proximal operator
+    readily available.
 
-    This code computes the exact rate for the Lyapunov function from the original **Point SAGA** paper,
-    given in [1, Theorem 5].
+    This code computes a tight (one-step) worst-case guarantee using a Lyapunov function for **Point SAGA** [1].
+    The Lyapunov (or energy) function at a point :math:`x` is given in [1, Theorem 5]:
 
-    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+    .. math:: V(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x^\\star\\|^2,
 
-    .. math:: V(x_1) \\leqslant \\tau(n, L, \\mu) V(x_0)
+    where :math:`x^\\star` denotes the minimizer of :math:`F`. The code computes the smallest possible
+    :math:`\\tau(n, L, \\mu)` such that the guarantee (in expectation):
 
-    with
+    .. math:: \\mathbb{E}[V(x^{(1)})] \\leqslant \\tau(n, L, \\mu) V(x^{(0)}),
 
-    .. math:: V(x) = \\frac{1}{L \\mu}\\frac{1}{n} \\sum_{i \\leq n} \\|\\nabla f_i(x) - \\nabla f_i(x_\\star)\\|^2 + \\|x - x_\\star\\|^2,
-
-    where :math:`x_\\star` denotes the minimizer of :math:`F`.
+    is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience; as the
+    bound is valid for all :math:`x^{(0)}`, it is also valid for any pair of consecutive iterates of the algorithm).
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`V(x_1)` when
-    :math:`V(x_0) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V(x^{(1)})]` when :math:`V(x^{(0)}) \\leqslant 1`.
 
     **Algorithm**:
     Point SAGA is described by
 
     .. math::
         \\begin{eqnarray}
-            \\gamma & = & \\frac{\\sqrt{(n - 1)^2 + 4n\\frac{L}{\\mu}}}{2Ln} - \\frac{\\left(1 - \\frac{1}{n}\\right)}{2L} \\\\
-            j & \\sim & \\mathcal{U}\\left([|1, n|]\\right) \\\\
-            z_t & = & x_t + \\gamma \\left(g_j^t - \\frac{1}{n} \\sum_{i\\leq n}g_i^t \\right) \\\\
-            x_{t+1} & = & \\mathrm{prox}(z_t, f_j, \\gamma) \\\\
-            g_j^{t+1} & = & \\frac{1}{\\gamma}(z_t - x_{t+1})
+            \\text{Set }\\gamma & = & \\frac{\\sqrt{(n - 1)^2 + 4n\\frac{L}{\\mu}}}{2Ln} - \\frac{\\left(1 - \\frac{1}{n}\\right)}{2L} \\\\
+            \\text{Pick random }j & \\sim & \\mathcal{U}\\left([|1, n|]\\right) \\\\
+            z^{(t)} & = & x_t + \\gamma \\left(g_j^{(t)} - \\frac{1}{n} \\sum_{i\\leq n}g_i^{(t)} \\right), \\\\
+            x^{(t+1)} & = & \\mathrm{prox}_{\\gamma f_j}(z^{(t)})\\triangleq \\arg\\min_x\\left\\{ \\gamma f_j(x)+\\frac{1}{2} \\|x-z^{(t)}\\|^2 \\right\\}, \\\\
+            g_j^{(t+1)} & = & \\frac{1}{\\gamma}(z^{(t)} - x^{(t+1)}).
         \\end{eqnarray}
 
-    **Theoretical guarantee**:
-    A theoretical **upper** bound is given in [1, Theorem 5].
+    **Theoretical guarantee**: A theoretical **upper** bound is given in [1, Theorem 5].
 
-    .. math:: V(x_1) \\leqslant \\frac{1}{1 + \\mu\\gamma} V(x_0)
+    .. math:: \\mathbb{E}[V(x^{(t+1)})] \\leqslant \\frac{1}{1 + \\mu\\gamma} V(x^{(t)})
 
     **References**:
-    [1] Aaron Defazio. "A Simple Practical Accelerated Method for Finite Sums." (2014).
+
+    `[1] A. Defazio (2016). A simple practical accelerated method for finite sums.
+    Advances in Neural Information Processing Systems (NIPS), 29, 676-684.
+    <https://proceedings.neurips.cc/paper/2016/file/4f6ffe13a5d75b2d6a3923922b3922e5-Paper.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -67,22 +68,22 @@ def wc_point_saga(L, mu, n, verbose=True):
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 10 function(s)
-                 function 1 : 2 constraint(s) added
-                 function 2 : 2 constraint(s) added
-                 function 3 : 2 constraint(s) added
-                 function 4 : 2 constraint(s) added
-                 function 5 : 2 constraint(s) added
-                 function 6 : 2 constraint(s) added
-                 function 7 : 2 constraint(s) added
-                 function 8 : 2 constraint(s) added
-                 function 9 : 2 constraint(s) added
-                 function 10 : 2 constraint(s) added
+		         function 1 : 2 constraint(s) added
+		         function 2 : 2 constraint(s) added
+		         function 3 : 2 constraint(s) added
+		         function 4 : 2 constraint(s) added
+		         function 5 : 2 constraint(s) added
+		         function 6 : 2 constraint(s) added
+		         function 7 : 2 constraint(s) added
+		         function 8 : 2 constraint(s) added
+		         function 9 : 2 constraint(s) added
+		         function 10 : 2 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.9714053941143999
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9714053958034508
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-            PEP-it guarantee:		 V1(x_0, x_*) <= 0.971405 VO(x_0, x_*)
-            Theoretical guarantee:	 V1(x_0, x_*) <= 0.973292 VO(x_0, x_*)
+	        PEP-it guarantee:       E[V(x^(1))] <= 0.971405 V(x^(0))
+	        Theoretical guarantee:  E[V(x^(1))] <= 0.973292 V(x^(0))
 
     """
 
@@ -142,8 +143,8 @@ def wc_point_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***')
-        print('\tPEP-it guarantee:\t\t V1(x_0, x_*) <= {:.6} VO(x_0, x_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t V1(x_0, x_*) <= {:.6} VO(x_0, x_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
