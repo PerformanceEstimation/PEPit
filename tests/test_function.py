@@ -1,4 +1,3 @@
-
 import unittest
 
 from PEPit.tools.dict_operations import prune_dict
@@ -129,8 +128,41 @@ class TestFunction(unittest.TestCase):
         # The new gradients must match with the composite function gradient
         self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-other_grad1 + 9/5*other_grad2).decomposition_dict))
 
-    def test_optimal_point(self):
+    def test_oracle_with_predetermined_values_and_gradients(self):
 
+        # First make self.func1 and self.func2 differentiable
+        self.func1.is_differentiable = True
+        self.func2.is_differentiable = True
+
+        # Compute composite function
+        new_function = self.compute_linear_combination()
+
+        # Verify the composite function is differentiable as well
+        self.assertTrue(new_function.is_differentiable)
+
+        # Compute oracle of each basis function
+        grad1, val1 = self.func1.oracle(point=self.point)
+        grad2, val2 = self.func2.oracle(point=self.point)
+
+        # Verifies the number of registered points
+        self.assertEqual(len(self.func1.list_of_points), 1)
+        self.assertEqual(len(self.func2.list_of_points), 1)
+
+        # Compute oracle of composite function
+        grad, val = new_function.oracle(point=self.point)
+
+        # The value and gradient of composite must be determined
+        self.assertEqual(prune_dict(val.decomposition_dict), prune_dict((-val1 + 9/5*val2).decomposition_dict))
+        self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-grad1 + 9/5*grad2).decomposition_dict))
+
+        # Verifies the number of registered points
+        # The latest must have not increased after calling for oracle on the composite function
+        self.assertEqual(len(self.func1.list_of_points), 1)
+        self.assertEqual(len(self.func2.list_of_points), 1)
+
+    def test_stationary_point(self):
+
+        # Compute composite function and define its stationary point
         new_function = self.compute_linear_combination()
         new_function.stationary_point()
 

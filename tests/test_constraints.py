@@ -1,11 +1,12 @@
 import unittest
 
+from PEPit.pep import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
-from PEPit.function import Function
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.constraint import Constraint
-from PEPit.pep import PEP
+from PEPit.function import Function
+
+from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
 class TestConstraints(unittest.TestCase):
@@ -21,7 +22,7 @@ class TestConstraints(unittest.TestCase):
         self.problem = PEP()
 
         # Declare a strongly convex smooth function
-        self.func = self.problem.declare_function(SmoothStronglyConvexFunction, param={'L':self.L, 'mu':self.mu})
+        self.func = self.problem.declare_function(SmoothStronglyConvexFunction, param={'L': self.L, 'mu': self.mu})
 
         # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
         self.xs = self.func.stationary_point()
@@ -54,8 +55,6 @@ class TestConstraints(unittest.TestCase):
             self.assertIsInstance(self.func.list_of_constraints[i], Constraint)
             self.assertIsInstance(self.func.list_of_constraints[i].expression, Expression)
 
-
-
     def test_counter(self):
 
         self.assertIs(self.func.counter, 0)
@@ -69,7 +68,7 @@ class TestConstraints(unittest.TestCase):
 
         # class constraints are added after initial conditions in PEP
         for i in range(len(self.func.list_of_constraints)):
-            self.assertIs(self.func.list_of_constraints[i].counter, i+len(self.problem.list_of_conditions))
+            self.assertIs(self.func.list_of_constraints[i].counter, i + len(self.problem.list_of_conditions))
 
     def test_equality_inequality(self):
 
@@ -88,7 +87,6 @@ class TestConstraints(unittest.TestCase):
 
         for i in range(len(self.problem.list_of_conditions)):
             self.assertIsInstance(self.problem.list_of_conditions[i].dual_variable_value, float)
-
 
     def tearDown(self):
 

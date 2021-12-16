@@ -305,14 +305,21 @@ class Function(object):
             # Separate all basis function in 3 categories based on their need
             tuple_of_lists_of_functions = self.separate_basis_functions_regarding_their_need_on_point(point=point)
 
-            # Store the number of such basis function and the gradient and function value of self on point
-            total_number_of_involved_basis_functions = len(self.decomposition_dict.keys())
-            gradient_of_last_basis_function = g
-            value_of_last_basis_function = f
-            number_of_currently_computed_gradients_and_values = 0
+            # Reduce into 2 lists according to the fact a function needs something of not
+            list_of_functions_which_need_nothing = tuple_of_lists_of_functions[0]
+            list_of_functions_which_need_something = tuple_of_lists_of_functions[1] + tuple_of_lists_of_functions[2]
 
-            for list_of_functions in tuple_of_lists_of_functions:
-                for function, weight in list_of_functions:
+            # If no function needs something, we are done!
+            # If any function needs something, we build it
+            if list_of_functions_which_need_something != list():
+
+                # Store the number of such basis function and the gradient and function value of self on point
+                total_number_of_involved_basis_functions = len(self.decomposition_dict.keys())
+                gradient_of_last_basis_function = g
+                value_of_last_basis_function = f
+                number_of_currently_computed_gradients_and_values = 0
+
+                for function, weight in list_of_functions_which_need_nothing + list_of_functions_which_need_something:
 
                     # Keep track of the gradient and function value of self minus those from visited basis functions
                     if number_of_currently_computed_gradients_and_values < total_number_of_involved_basis_functions - 1:

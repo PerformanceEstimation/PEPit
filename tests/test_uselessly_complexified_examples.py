@@ -1,14 +1,10 @@
 import unittest
 
-from PEPit.expression import Expression
-from PEPit.function import Function
-from PEPit.point import Point
+import PEPit.examples.unconstrained_convex_minimization.proximal_point as ref_ppa
+import PEPit.examples.composite_convex_minimization.proximal_gradient as ref_pgd
 
 from tests.additional_complexified_examples_tests.proximal_gradient import wc_pgd
 from tests.additional_complexified_examples_tests.proximal_point import wc_ppa
-
-import PEPit.examples.unconstrained_convex_minimization.proximal_point as ref_ppa
-import PEPit.examples.composite_convex_minimization.proximal_gradient as ref_pgd
 
 
 class TestExamples(unittest.TestCase):
@@ -45,8 +41,3 @@ class TestExamples(unittest.TestCase):
         wc_modified, theory = wc_ppa(n, gamma, verbose=self.verbose)
         wc, theory = ref_ppa.wc_proximal_point(n, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
-
-    def tearDown(self):
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0

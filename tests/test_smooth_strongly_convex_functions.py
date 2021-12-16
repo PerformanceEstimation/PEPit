@@ -2,9 +2,9 @@ import unittest
 
 from PEPit.point import Point
 from PEPit.expression import Expression
+from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.constraint import Constraint
 
 
 class TestConstraintsStronglyConvex(unittest.TestCase):
@@ -54,7 +54,7 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
 
         self.assertIs(len(function.list_of_constraints), 0)
 
-        ## Add points and constraints
+        # Add points and constraints
         function.oracle(self.point1)
         function.oracle(self.point2)
         function.add_class_constraints()
@@ -84,7 +84,6 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
             self.assertIsInstance(self.func1.list_of_constraints[i], Constraint)
             self.assertIsInstance(self.func2.list_of_constraints[i], Constraint)
 
-
     def test_sum_smooth_strongly_convex_functions(self):
 
         new_function = self.compute_linear_combination()
@@ -106,15 +105,15 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
                 xj, gj, fj = point_j
 
                 if i != j:
-
                     # Interpolation conditions of smooth strongly convex functions class
                     self.assertLessEqual(- fi + fj +
-                                        gj * (xi - xj)
-                                        + 1/(2*L) * (gi - gj) ** 2
-                                        + mu / (2 * (1 - mu / L)) * (xi - xj - 1/L * (gi - gj))**2, 0)
+                                         gj * (xi - xj)
+                                         + 1 / (2 * L) * (gi - gj) ** 2
+                                         + mu / (2 * (1 - mu / L)) * (xi - xj - 1 / L * (gi - gj)) ** 2, 0)
 
     def tearDown(self):
 
         Point.counter = 0
         Expression.counter = 0
+        Constraint.counter = 0
         Function.counter = 0
