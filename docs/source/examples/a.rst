@@ -6,7 +6,7 @@ Unconstrained convex minimization
    :local:
 
 
-Gradient Descent
+Gradient descent
 ^^^^^^^^^^^^^^^^
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent
 
@@ -16,12 +16,12 @@ Subgradient method
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method
 
 
-Gradient Descent with exact line search
+Gradient descent with exact line search
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search
 
 
-Conjugate Gradient
+Conjugate gradient
 ^^^^^^^^^^^^^^^^^^
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient
 

@@ -4,7 +4,7 @@ from PEPit.pep import PEP
 from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 
-def wc_accelerated_gradient_descent(L, gamma, lam, verbose=True):
+def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     """
     Consider the convex minimization problem
 
@@ -66,7 +66,7 @@ def wc_accelerated_gradient_descent(L, gamma, lam, verbose=True):
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_descent(L=L, gamma=1 / L, lam=10., verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -129,11 +129,9 @@ def wc_accelerated_gradient_descent(L, gamma, lam, verbose=True):
     if verbose:
         print(
             '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
-        print('\tPEP-it guarantee:\t\t'
-              'V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
-            print('\tTheoretical guarantee:\t'
-                  'V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
+            print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -142,4 +140,4 @@ def wc_accelerated_gradient_descent(L, gamma, lam, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_descent(L=L, gamma=1 / L, lam=10., verbose=True)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=True)

@@ -46,7 +46,7 @@ from PEPit.examples.monotone_inclusions import wc_three_operator_splitting as wc
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
-from PEPit.examples.potential_functions import wc_accelerated_gradient_descent
+from PEPit.examples.potential_functions import wc_accelerated_gradient_method
 from PEPit.examples.potential_functions import wc_gradient_descent_lyapunov_1
 from PEPit.examples.potential_functions import wc_gradient_descent_lyapunov_2
 from PEPit.examples.adaptive_methods import wc_polyak_steps_in_distance_to_optimum
@@ -365,11 +365,11 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
-    def test_accelerated_gradient_descent(self):
+    def test_accelerated_gradient_method(self):
         L, lam = 1, 10
         gamma = 1 / L
 
-        wc, theory = wc_accelerated_gradient_descent(L, gamma, lam, verbose=self.verbose)
+        wc, theory = wc_accelerated_gradient_method(L, gamma, lam, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_polyak_steps_in_distance_to_optimum(self):
