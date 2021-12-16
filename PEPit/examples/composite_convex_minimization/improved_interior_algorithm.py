@@ -87,12 +87,9 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     problem = PEP()
 
     # Declare three convex functions
-    func1 = problem.declare_function(SmoothConvexFunction,
-                                     param={'L': L})
-    func2 = problem.declare_function(ConvexIndicatorFunction,
-                                     param={'D': np.inf})
-    h = problem.declare_function(SmoothStronglyConvexFunction,
-                                 param={'mu': mu, 'L': np.inf}, is_differentiable=True)
+    func1 = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
+    h = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': np.inf}, reuse_gradient=True)
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2

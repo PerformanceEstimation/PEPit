@@ -21,7 +21,7 @@ class StronglyConvexFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
         Strongly convex functions are characterized by their strong convexity constant mu.
 
@@ -33,7 +33,7 @@ class StronglyConvexFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
         # Store mu and L
         self.mu = param['mu']

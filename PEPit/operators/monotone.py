@@ -21,19 +21,19 @@ class MonotoneOperator(Function):
                  _,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
         Monotone operators are are not characterized by any parameter.
 
         Args:
             is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
             decomposition_dict (dict): Decomposition in the basis of functions.
-            is_differentiable (bool): If true, the function can have only one subgradient per point.
+            reuse_gradient (bool): If true, the function can have only one subgradient per point.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
     def add_class_constraints(self):
         """

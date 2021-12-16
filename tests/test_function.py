@@ -131,14 +131,14 @@ class TestFunction(unittest.TestCase):
     def test_oracle_with_predetermined_values_and_gradients(self):
 
         # First make self.func1 and self.func2 differentiable
-        self.func1.is_differentiable = True
-        self.func2.is_differentiable = True
+        self.func1.reuse_gradient = True
+        self.func2.reuse_gradient = True
 
         # Compute composite function
         new_function = self.compute_linear_combination()
 
         # Verify the composite function is differentiable as well
-        self.assertTrue(new_function.is_differentiable)
+        self.assertTrue(new_function.reuse_gradient)
 
         # Compute oracle of each basis function
         grad1, val1 = self.func1.oracle(point=self.point)
@@ -252,7 +252,7 @@ class TestFunction(unittest.TestCase):
 
     def test_separate_basis_functions_regarding_their_needs_on_points_differentiable(self):
         # Non differentiable case
-        new_function = Function(is_leaf=True, decomposition_dict=None, is_differentiable=True)
+        new_function = Function(is_leaf=True, decomposition_dict=None, reuse_gradient=True)
         point1 = Point(is_leaf=True, decomposition_dict=None)
         point2 = Point(is_leaf=True, decomposition_dict=None)
         new_function.oracle(point1)

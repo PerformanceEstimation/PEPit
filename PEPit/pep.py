@@ -43,14 +43,14 @@ class PEP(object):
         self.list_of_conditions = list()
         self.list_of_performance_metrics = list()
 
-    def declare_function(self, function_class, param, is_differentiable=None):
+    def declare_function(self, function_class, param, reuse_gradient=None):
         """
         Instantiate a function
 
         Args:
             function_class (class): a class of function that overwrites the class Function
             param (dict): dictionary of variables needed to define the function
-            is_differentiable (bool): whether the function can admit different gradients in a same point
+            reuse_gradient (bool): whether the function can admit different gradients in a same point
 
         Returns:
             Function: the newly created function
@@ -58,10 +58,10 @@ class PEP(object):
         """
 
         # Create the function
-        if is_differentiable is None:
+        if reuse_gradient is None:
             f = function_class(param, is_leaf=True, decomposition_dict=None)
         else:
-            f = function_class(param, is_leaf=True, decomposition_dict=None, is_differentiable=is_differentiable)
+            f = function_class(param, is_leaf=True, decomposition_dict=None, reuse_gradient=reuse_gradient)
 
         # Store it in list_of_functions
         self.list_of_functions.append(f)

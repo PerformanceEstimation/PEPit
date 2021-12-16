@@ -11,7 +11,7 @@ class Function(object):
     Attributes:
         _is_leaf (bool): True if self is defined from scratch.
                          False is self is defined as linear combination of leaf functions.
-        is_differentiable (bool)
+        reuse_gradient (bool)
         decomposition_dict (dict): decomposition of self as linear combination of leaf functions.
         counter (int)
         list_of_stationary_points (list)
@@ -31,7 +31,7 @@ class Function(object):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False,
+                 reuse_gradient=False,
                  ):
         """
         A function is a linear combination of basis functions.
@@ -39,13 +39,13 @@ class Function(object):
         Args:
             is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
             decomposition_dict (dict): Decomposition in the basis of functions.
-            is_differentiable (bool): If true, the function can have only one subgradient per point.
+            reuse_gradient (bool): If true, the function can have only one subgradient per point.
 
         """
 
         # Store inputs
         self._is_leaf = is_leaf
-        self.is_differentiable = is_differentiable
+        self.reuse_gradient = reuse_gradient
 
         # If basis function, the decomposition is updated,
         # the object counter is set
@@ -91,7 +91,7 @@ class Function(object):
         # Create and return the newly created function
         return Function(is_leaf=False,
                         decomposition_dict=merged_decomposition_dict,
-                        is_differentiable=self.is_differentiable and other.is_differentiable)
+                        reuse_gradient=self.reuse_gradient and other.reuse_gradient)
 
     def __sub__(self, other):
         """
@@ -143,7 +143,7 @@ class Function(object):
         # Create and return the newly created Function
         return Function(is_leaf=False,
                         decomposition_dict=new_decomposition_dict,
-                        is_differentiable=self.is_differentiable)
+                        reuse_gradient=self.reuse_gradient)
 
     def __mul__(self, other):
         """
@@ -252,7 +252,7 @@ class Function(object):
             if function.is_already_evaluated_on_point(point=point):
 
                 # If function is differentiable, one should keep both previous gradient and previous function value.
-                if function.is_differentiable:
+                if function.reuse_gradient:
                     list_of_functions_which_need_nothing.append((function, weight))
 
                 # If function is not differentiable, one should keep only previous function value.
@@ -359,13 +359,13 @@ class Function(object):
 
         # If "self" has already been evaluated on "point" and is differentiable,
         # then break the loop and return the previously computed values.
-        if associated_grad_and_function_val and self.is_differentiable:
+        if associated_grad_and_function_val and self.reuse_gradient:
             return associated_grad_and_function_val
 
         # If "self" has already been evaluated on "point" but is not differentiable,
         # then the function value is fixed by the previously computed one,
         # but a new sub-gradient remains to be defined
-        if associated_grad_and_function_val and not self.is_differentiable:
+        if associated_grad_and_function_val and not self.reuse_gradient:
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of basis functions according to their needs

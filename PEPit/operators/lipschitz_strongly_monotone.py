@@ -25,7 +25,7 @@ class LipschitzStronglyMonotoneOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):
+                 reuse_gradient=True):
         """
         Lipschitz strongly monotone operators are characterized by
         their Lipschitz constant L
@@ -34,12 +34,12 @@ class LipschitzStronglyMonotoneOperator(Function):
         Args:
             is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
             decomposition_dict (dict): Decomposition in the basis of functions.
-            is_differentiable (bool): If true, the function can have only one subgradient per point.
+            reuse_gradient (bool): If true, the function can have only one subgradient per point.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
         # Store L and mu
         self.mu = param['mu']
         self.L = param['L']

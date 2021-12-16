@@ -84,7 +84,7 @@ def wc_saga(L, mu, n, verbose=True):
     h = problem.declare_function(ConvexFunction,
                                  param={})
     fn = [problem.declare_function(SmoothStronglyConvexFunction,
-                                   param={'L': L, 'mu': mu}, is_differentiable=True) for _ in range(n)]
+                                   param={'L': L, 'mu': mu}, reuse_gradient=True) for _ in range(n)]
 
     # Define the objective as a linear combination of the former
     func = h + np.mean(fn)

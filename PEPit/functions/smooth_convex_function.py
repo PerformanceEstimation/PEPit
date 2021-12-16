@@ -21,7 +21,7 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=True):
+                 reuse_gradient=True):
         """
         Convex smooth functions are characterized by their smoothness constant L.
         They are necessarily differentiable.
@@ -36,4 +36,4 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         super().__init__(param={'mu': 0, 'L': param['L']},
                          is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)

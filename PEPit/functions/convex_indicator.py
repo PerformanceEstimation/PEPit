@@ -33,7 +33,7 @@ class ConvexIndicatorFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
         Convex indicator functions are characterized by the diameter of the feasible set.
 
@@ -44,7 +44,7 @@ class ConvexIndicatorFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
         # Store the diameter D in an attribute
         self.D = param['D']

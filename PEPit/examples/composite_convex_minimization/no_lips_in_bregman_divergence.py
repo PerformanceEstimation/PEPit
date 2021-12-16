@@ -87,8 +87,8 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare two convex functions and a convex indicator function
-    d = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
-    func1 = problem.declare_function(ConvexFunction, param={}, is_differentiable=True)
+    d = problem.declare_function(ConvexFunction, param={}, reuse_gradient=True)
+    func1 = problem.declare_function(ConvexFunction, param={}, reuse_gradient=True)
     h = (d + func1) / L
     func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
 

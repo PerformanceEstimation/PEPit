@@ -21,7 +21,7 @@ class ConvexLipschitzFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
         Convex Lipschitz functions are characterized by their lipschitz parameter L.
 
@@ -34,7 +34,7 @@ class ConvexLipschitzFunction(Function):
         # Inherit directly from Function.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
         # param M
         self.M = param['M']
