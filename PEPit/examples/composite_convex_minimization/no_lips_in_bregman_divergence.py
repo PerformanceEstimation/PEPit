@@ -72,13 +72,13 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
                  function 1 : 132 constraint(s) added
-                 function 2 : 462 constraint(s) added
+                 function 2 : 132 constraint(s) added
                  function 3 : 121 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.022158793967249273
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.022279210584840024
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***
-            PEP-it guarantee:		 min_t Dh(x_(t-1), x_t) <= 0.0221588 Dh(x_*, x_0)
+            PEP-it guarantee:		 min_t Dh(x_(t-1), x_t) <= 0.0222792 Dh(x_*, x_0)
             Theoretical guarantee:	 min_t Dh(x_(t-1), x_t) <= 0.0222222 Dh(x_*, x_0)
 
     """

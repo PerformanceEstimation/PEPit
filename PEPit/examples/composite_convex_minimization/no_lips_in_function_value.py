@@ -75,12 +75,12 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
         (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
                  function 1 : 20 constraint(s) added
                  function 2 : 20 constraint(s) added
-                 function 3 : 49 constraint(s) added
+                 function 3 : 16 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6666452858806611
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6666714558260607
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:		 F(x_n) - F_* <= 0.666645 Dh(x_*, x_0)
+            PEP-it guarantee:		 F(x_n) - F_* <= 0.666671 Dh(x_*, x_0)
             Theoretical guarantee :	 F(x_n) - F_* <= 0.666667 Dh(x_*, x_0)
 
     """
