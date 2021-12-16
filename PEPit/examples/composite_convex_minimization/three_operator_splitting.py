@@ -30,39 +30,40 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
     :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2` when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    One iteration of the algorithm (see [1]) is described by
+    One iteration of the algorithm is described in [1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_t & = & \\mathrm{prox}_{\\alpha, f_2}(w_t) \\\\
-                y_t & = & \\mathrm{prox}_{\\alpha, f_1}(2 x_t - w_t - \\alpha \\nabla f_3(x_t)) \\\\
-                w_{t+1} & = & w_t + \\theta (y_t - x_t)
+                x_t & = & \\mathrm{prox}_{\\alpha, f_2}(w_t), \\\\
+                y_t & = & \\mathrm{prox}_{\\alpha, f_1}(2 x_t - w_t - \\alpha \\nabla f_3(x_t)), \\\\
+                w_{t+1} & = & w_t + \\theta (y_t - x_t).
             \\end{eqnarray}
 
     **References**: The TOS was introduced in [1].
 
-    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
-    Set-valued and variational analysis 25, no. 4 (2017): 829-858.
+    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications
+    (Set-valued and variational analysis 25, no. 4).
     <https://arxiv.org/pdf/1504.01032.pdf>`_
 
     Args:
-        mu1 (float): the strong convexity parameter.
-        L1 (float): the smoothness parameter of function f1.
-        L3 (float): the smoothness parameter of function f3.
+        mu1 (float): the strong convexity parameter of function :math:`f_1`.
+        L1 (float): the smoothness parameter of function :math:`f_1`.
+        L3 (float): the smoothness parameter of function :math:`f_3`.
         alpha (float): parameter of the scheme.
         theta (float): parameter of the scheme.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (None): no theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (None): no theoretical value.
 
     Example:
         >>> L3 = 1
-        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4, verbose=True)
+        >>> alpha = 1/L3
+        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 29x29
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -72,9 +73,9 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
                  function 3 : 72 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.4752811057240984
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.4754523883370414
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
-            PEP-it guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475281 ||x0 - ws||^2
+            PEP-it guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475452 ||x0 - ws||^2
 
     """
 
@@ -135,4 +136,5 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
 if __name__ == "__main__":
 
     L3 = 1
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=1 / L3, theta=1, n=4, verbose=True)
+    alpha = 1/L3
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=True)

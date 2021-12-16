@@ -24,15 +24,15 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`\\|x_n - x_\\star\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**:
+    **Algorithm**: Proximal gradient is described by
 
         .. math::
             \\begin{eqnarray}
-                y_t & = & x_t - \\gamma \\nabla f_1(x_t) \\\\
-                x_{t+1} & = & \\arg\\min_x \\left\\{f_2(x)+\\frac{1}{2\gamma}||x-y_t||^2 \\right\\},
+                y_t & = & x_t - \\gamma \\nabla f_1(x_t), \\\\
+                x_{t+1} & = & \\arg\\min_x \\left\\{f_2(x)+\\frac{1}{2\gamma}\|x-y_t\|^2 \\right\\},
             \\end{eqnarray}
 
-        where :math:`\\gamma` is a step-size.
+    for :math:`t \in \\{ 0, \\dots, n-1\\}` and where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**: It is well known that a **tight** guarantee for PGM is provided by
 
@@ -60,13 +60,13 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        gamma (float): proximal step-size
+        gamma (float): proximal step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, verbose=True)

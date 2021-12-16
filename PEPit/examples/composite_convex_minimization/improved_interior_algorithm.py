@@ -14,7 +14,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is a :math:`L`-smooth convex function, and :math:`f_2` is a closed convex indicator function.
-    We use a kernel function :math:`h` that is assumed to be closed, proper, and strongly convex (see [1]).
+    We use a kernel function :math:`h` that is assumed to be closed, proper, and strongly convex (see [1, Section 5]).
 
     This code computes a worst-case guarantee for **Improved interior gradient algorithm** (IGA). That is, it computes the
     smallest possible :math:`\\tau(\\mu,L,c,\\lambda,n)` such that the guarantee
@@ -29,17 +29,17 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     when :math:`c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star)\\leqslant 1`.
 
     **Algorithm**:
-    The IGA [1, "Improved Interior Gradient Algorithm"] is described by
+    The IGA is described in [1, "Improved Interior Gradient Algorithm"]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                \\alpha_t & = & \\frac{\\sqrt{(c_t\\lambda)^2+4c_t\\lambda}-\\lambda c_t}{2}\\\\
-                y_t & = & (1-\\alpha_t) x_t + \\alpha_t z_t\\\\
-                c_{t+1} & = & (1-\\alpha_t)c_t\\\\
-                z_{t+1} & = & \\arg\\min_{z} \\left\\{ \\left< z;\\frac{\\alpha_t}{c_{t+1}}\\nabla f_1(y_t)\\right> +f_2(z)+D_h(z;z_t)\\right\\} \\\\
-                x_{t+1} & = & (1-\\alpha_t) x_t + \\alpha_t z_{t+1}
+                \\alpha_t & = & \\frac{\\sqrt{(c_t\\lambda)^2+4c_t\\lambda}-\\lambda c_t}{2},\\\\
+                y_t & = & (1-\\alpha_t) x_t + \\alpha_t z_t,\\\\
+                c_{t+1} & = & (1-\\alpha_t)c_t,\\\\
+                z_{t+1} & = & \\arg\\min_{z} \\left\\{ \\left< z;\\frac{\\alpha_t}{c_{t+1}}\\nabla f_1(y_t)\\right> +f_2(z)+D_h(z;z_t)\\right\\}, \\\\
+                x_{t+1} & = & (1-\\alpha_t) x_t + \\alpha_t z_{t+1}.
             \\end{eqnarray}
 
     **Theoretical guarantee**:
@@ -48,25 +48,27 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     .. math:: F(x_n) - F_\\star \\leqslant \\frac{4L}{c n^2}\\left(c  D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star) \\right).
 
     **References**:
+
     `[1] A. Auslender, M. Teboulle (2006). Interior gradient and proximal methods for convex and conic optimization.
     SIAM Journal on Optimization 16.3 (2006): 697-725.
     <https://epubs.siam.org/doi/pdf/10.1137/S1052623403427823>`_
 
     Args:
         L (float): the smoothness parameter.
-        mu (float): the strong-convexity parameter
-        c (float): initial value
+        mu (float): the strong-convexity parameter.
+        c (float): initial value.
         lam (float): the step-size.
-        n (int): number of iterations
-        verbose (bool): if True, print conclusion
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=1/L, n=5, verbose=True)
+        >>> lam = 1/L
+        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 22x22
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -78,8 +80,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.0680763240358105
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-            PEP-it guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs, x0) + f1(x0) - F_ *)
-            Theoretical guarantee:  F(x_n)-F_* <= 0.111111 (c * Dh(xs, x0) + f1(x0) - F_ *)
+            PEP-it guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs; x0) + f1(x0) - F_ *)
+            Theoretical guarantee:  F(x_n)-F_* <= 0.111111 (c * Dh(xs; x0) + f1(x0) - F_ *)
 
     """
 
@@ -138,8 +140,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEP-it guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs,x0) + f1(x0) - F_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs,x0) + f1(x0) - F_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t \t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
@@ -148,4 +150,5 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=1 / L, n=5, verbose=True)
+    lam = 1/L
+    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)

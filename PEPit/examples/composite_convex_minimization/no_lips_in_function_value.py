@@ -28,7 +28,7 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     :math:`\\tau(n, L)` is computed as the worst-case value of
     :math:`F(x_n) - F_\\star` when :math:`D_h(x_\\star; x_0) \\leqslant 1`.
 
-    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]
+    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math:: x_{t+1} = \\arg\\min_{u} \\{f_2(u)+\\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u; x_t)\\}.
 
@@ -56,14 +56,14 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
         Disclaimer: This example requires some experience with PEPit and PEPs ([2], section 4).
 
     Args:
-        L (float): relative-smoothness parameter
+        L (float): relative-smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example: **TOUPDATE**
         >>> L = 1
@@ -78,10 +78,10 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
                  function 3 : 16 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6666714558260607
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.6666666666481623
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:		 F(x_n) - F_* <= 0.666671 Dh(x_*, x_0)
-            Theoretical guarantee :	 F(x_n) - F_* <= 0.666667 Dh(x_*, x_0)
+            PEP-it guarantee:		 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
+            Theoretical guarantee :	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
 
     """
 
@@ -131,8 +131,8 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEP-it guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*, x_0)'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t F(x_n) - F_* <= {:.6} Dh(x_*, x_0) '.format(
+        print('\tPEP-it guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0) '.format(
             theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
