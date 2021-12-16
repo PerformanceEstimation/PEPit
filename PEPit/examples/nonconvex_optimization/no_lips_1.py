@@ -12,10 +12,10 @@ def wc_no_lips_1(L, gamma, n, verbose=True):
 
     .. math:: F_\\star \\triangleq \\min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
 
-    where :math:`f_2` is a closed convex indicator function and :math:`f_1` is :math:`L`-smooth relatively to :math:`h` (possibly non-convex),
-    and :math:`h` is closed proper and convex.
+    where :math:`f_2` is a closed convex indicator function and :math:`f_1` is possibly non-convex and :math:`L`-smooth relatively to :math:`h`,
+    and where :math:`h` is closed proper and convex.
 
-    This code computes a worst-case guarantee for the **NoLips** method solving this problem.
+    This code computes a worst-case guarantee for the **NoLips** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
     .. math:: \\min_{0 \\leqslant t \\leqslant n-1} D_h(x_{t+1}; x_t) \\leqslant \\tau(n, L, \\gamma)  (F(x_0) - F(x_n))
@@ -25,12 +25,11 @@ def wc_no_lips_1(L, gamma, n, verbose=True):
 
     .. math:: D_h(x; y) \\triangleq h(x) - h(y) - \\nabla h (y)^T(x - y).
 
-
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed
     as the worst-case value of :math:`\\min_{0 \\leqslant t \\leqslant n-1}D_h(x_{t+1}; x_t)` when
     :math:`F(x_0) - F(x_n) \\leqslant 1`.
 
-    **Algorithms**: For :math:`t \\in \\{0, \\dots, n-1\\}`,
+    **Algorithms**:  This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [1, Section 3]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
     .. math:: x_{t+1} = \\arg\\min_{u \\in R^d} \\nabla f(x_t)^T(u - x_t) + \\frac{1}{\\gamma} D_h(u; x_t).
 
@@ -58,26 +57,26 @@ def wc_no_lips_1(L, gamma, n, verbose=True):
         verbose (bool, optional): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=1 / (2 * L), n=5, verbose=True)
+        >>> gamma = 1 / (2 * L)
+        >>> pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=gamma, n=5, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 20x20
         (PEP-it) Setting up the problem: performance measure is minimum of 5 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 132 constraint(s) added
-                 function 2 : 110 constraint(s) added
-                 function 3 : 49 constraint(s) added
+		        function 1 : 30 constraint(s) added
+		        function 2 : 30 constraint(s) added
+		        function 3 : 49 constraint(s) added
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.2000008155245043
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.19999999999153698
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:		 min_t Dh(x_(t+1)), x_(t)) <= 0.200001 (F(x_0) - F(x_n))
-            Theoretical guarantee :	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
-
+	    PEP-it guarantee:		 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
+	    Theoretical guarantee :	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
     """
 
     # Instantiate PEP
@@ -124,8 +123,8 @@ def wc_no_lips_1(L, gamma, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEP-it guarantee:\t\t min_t Dh(x_(t+1)), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
+        print('*** Example file: worst-case performance of the NoLips in Bregman divergence ***')
+        print('\tPEP-it guarantee:\t\t min_t Dh(x_(t+1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
         print('\tTheoretical guarantee :\t min_t Dh(x_(t+1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -135,4 +134,5 @@ def wc_no_lips_1(L, gamma, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=1 / (2 * L), n=5, verbose=True)
+    gamma = 1 / (2 * L)
+    pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=gamma, n=5, verbose=True)

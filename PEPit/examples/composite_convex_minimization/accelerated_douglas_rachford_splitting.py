@@ -36,10 +36,10 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t)\\\\
-                y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t)\\\\
-                w_{t+1} & = & u_t + \\theta (y_t-x_t)\\\\
-                u_{t+1} & = & \\left\\{\\begin{array}{ll} w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t \\geqslant 1,\\\\
+                x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t),\\\\
+                y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t),\\\\
+                w_{t+1} & = & u_t + \\theta (y_t-x_t),\\\\
+                u_{t+1} & = & \\left\\{\\begin{array}{ll} w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
                 w_{t+1} & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 

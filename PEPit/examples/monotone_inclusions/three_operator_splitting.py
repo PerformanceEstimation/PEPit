@@ -30,25 +30,25 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
     :math:`\\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2` when :math:`\\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    One iteration of the algorithm (see [1]) is described by
+    One iteration of the algorithm is described in [1]. For :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_{t+1} & = & J_{\\alpha B} (w_t)\\\\
-                y_{t+1} & = & J_{\\alpha A} (2x_{t+1} - w_t - C x_{t+1})\\\\
+                x_{t+1} & = & J_{\\alpha B} (w_t),\\\\
+                y_{t+1} & = & J_{\\alpha A} (2x_{t+1} - w_t - C x_{t+1}),\\\\
                 w_{t+1} & = & w_t - \\theta (x_{t+1} - y_{t+1}).
             \\end{eqnarray}
 
     **References**: The TOS was proposed in [1], the analysis of such operator splitting methods using PEPs was proposed in [2].
 
-    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
-    Set-valued and variational analysis 25, no. 4 (2017): 829-858.
+    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications
+    (Set-valued and variational analysis 25, no. 4 : 829-858.)
     <https://arxiv.org/pdf/1504.01032.pdf>`_
 
     `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
-    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+    Tight contraction factors and optimal parameter selection (SIAM Journal on Optimization, 30(3), 2251-2271).
     <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     Args:
@@ -57,11 +57,11 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
         beta (float): cocoercivity of B.
         alpha (float): step-size (in the resolvants).
         theta (float): overrelaxation parameter.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (None): no theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (None): no theoretical value.
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)

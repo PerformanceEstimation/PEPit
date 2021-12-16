@@ -26,15 +26,17 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=True):
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**: Accelerated proximal gradient is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}` and where :math:`y_{0} = x_0`,
+    **Algorithm**: Accelerated proximal gradient is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
     .. math::
         :nowrap:
 
         \\begin{eqnarray}
             x_{t+1} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\|x-\\left(y_{t} - \\frac{1}{L} \\nabla f(y_t)\\right)\\|^2 \\right\\}, \\\\
-            y_{t+1} & = & x_{t+1} + \\frac{i}{i+3} (x_{t+1} - x_{t}).
+            y_{t+1} & = & x_{t+1} + \\frac{i}{i+3} (x_{t+1} - x_{t}),
         \\end{eqnarray}
+
+    where :math:`y_{0} = x_0`.
 
     **Theoretical guarantee**: A **tight** (empirical) worst-case guarantee for FPGM is obtained in [1, method FPGM1 in Sec. 4.2.1, Table 1 in sec 4.2.2], for :math:`\\mu=0`:
 

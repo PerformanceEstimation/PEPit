@@ -67,7 +67,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
 
     Example:
         >>> L = 1
-        >>> lam = 1/L
+        >>> lam = 1 / L
         >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 22x22
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
@@ -150,5 +150,5 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    lam = 1/L
+    lam = 1 / L
     pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)

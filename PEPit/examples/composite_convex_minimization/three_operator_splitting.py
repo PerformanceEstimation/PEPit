@@ -62,7 +62,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
 
     Example:
         >>> L3 = 1
-        >>> alpha = 1/L3
+        >>> alpha = 1 / L3
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 29x29
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
@@ -136,5 +136,5 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
 if __name__ == "__main__":
 
     L3 = 1
-    alpha = 1/L3
+    alpha = 1 / L3
     pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=True)

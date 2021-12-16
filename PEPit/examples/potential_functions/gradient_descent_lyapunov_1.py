@@ -17,11 +17,11 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
 
     is decreasing along all trajectories and all smooth convex function :math:`f` (i.e., in the worst-case):
 
-    .. math :: V_{n+1} \\leqslant V_n
+    .. math :: V_{n+1} \\leqslant V_n,
 
     where :math:`x_{n+1}` is obtained from a gradient step from :math:`x_{n}` with fixed step-size :math:`\\gamma=\\frac{1}{L}`.
 
-    **Algorithm**: Gradient descent is described by
+    **Algorithm**: Onte iteration of gradient descent is described by
 
     .. math:: x_{n+1} = x_n - \\gamma \\nabla f(x_n),
 
@@ -35,27 +35,28 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
 
     **References**: The detailed potential function can found in [1] and the SDP approach can be found in [2].
 
-    `[1] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods.
-    Theory of Computing, 15(1), 1-32.
+    `[1] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods
+    (Theory of Computing, 15(1), 1-32).
     <https://arxiv.org/pdf/1712.04581.pdf>`_
 
     `[2] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
-    via potential functions. Conference on Learning Theory (COLT).
+    via potential functions (Conference on Learning Theory (COLT)).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
         gamma (float): the step-size.
         n (int): current iteration number.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, verbose=True)
+        >>> gamma = 1 / L
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -122,4 +123,5 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, verbose=True)
+    gamma = 1 / L
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=True)

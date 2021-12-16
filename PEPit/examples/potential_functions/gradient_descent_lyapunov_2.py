@@ -17,11 +17,11 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
 
     is decreasing along all trajectories and all smooth convex function :math:`f` (i.e., in the worst-case):
 
-    .. math :: V_{n+1} \\leqslant V_n
+    .. math :: V_{n+1} \\leqslant V_n,
 
     where :math:`x_{n+1}` is obtained from a gradient step from :math:`x_{n}` with fixed step-size :math:`\\gamma=\\frac{1}{L}`.
 
-    **Algorithm**: Gradient descent is described by
+    **Algorithm**: Onte iteration of radient descent is described by
 
     .. math:: x_{n+1} = x_n - \\gamma \\nabla f(x_n),
 
@@ -44,15 +44,16 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
         L (float): the smoothness parameter.
         gamma (float): the step-size.
         n (int):  current iteration number.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, verbose=True)
+        >>> gamma = 1 / L
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=gamma, n=10, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -104,7 +105,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file:'
-              ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
+              ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
@@ -118,4 +119,5 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, verbose=True)
+    gamma = 1 / L
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=gamma, n=10, verbose=True)
