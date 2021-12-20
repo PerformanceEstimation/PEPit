@@ -1,8 +1,8 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
+from PEPit import PEP
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import inexact_proximal_step
 
 
 def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True):

@@ -1,7 +1,7 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
 
 
 def wc_sgd(L, mu, gamma, v, R, n, verbose=True):

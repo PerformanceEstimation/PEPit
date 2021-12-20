@@ -1,5 +1,5 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
 
 
 def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):

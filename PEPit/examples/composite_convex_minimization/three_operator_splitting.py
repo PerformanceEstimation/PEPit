@@ -1,8 +1,8 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):

@@ -1,8 +1,8 @@
 from math import sqrt
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
+from PEPit.primitive_steps import exact_linesearch_step
 
 
 def wc_conjugate_gradient(L, n, verbose=True):

@@ -1,5 +1,5 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
 
 
 def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=True):

@@ -1,4 +1,4 @@
-from PEPit.pep import PEP
+from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import inexact_gradient_step
 

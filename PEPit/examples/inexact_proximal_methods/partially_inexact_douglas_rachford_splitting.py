@@ -1,8 +1,8 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import proximal_step
+from PEPit.primitive_steps import inexact_proximal_step
 
 
 def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verbose=True):

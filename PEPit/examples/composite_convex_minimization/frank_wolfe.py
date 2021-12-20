@@ -1,7 +1,7 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.functions.convex_indicator import ConvexIndicatorFunction
-from PEPit.primitive_steps.linear_optimization_step import linear_optimization_step
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import ConvexIndicatorFunction
+from PEPit.primitive_steps import linear_optimization_step
 
 
 def wc_frank_wolfe(L, D, n, verbose=True):

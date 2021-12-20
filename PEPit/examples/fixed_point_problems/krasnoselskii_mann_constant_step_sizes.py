@@ -1,8 +1,8 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.operators.lipschitz import LipschitzOperator
-from PEPit.primitive_steps.fixed_point import fixed_point
+from PEPit import PEP
+from PEPit.operators import LipschitzOperator
+from PEPit.primitive_steps import fixed_point
 
 
 def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):

@@ -1,8 +1,8 @@
-from PEPit.pep import PEP
-from PEPit.operators.monotone import MonotoneOperator
-from PEPit.operators.cocoercive import CocoerciveOperator
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction  # TODO Check is Function?
+from PEPit.operators import MonotoneOperator
+from PEPit.operators import CocoerciveOperator
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):

@@ -1,7 +1,7 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
 
 
 def wc_triple_momentum(mu, L, n, verbose=True):
@@ -97,7 +97,6 @@ def wc_triple_momentum(mu, L, n, verbose=True):
 
     """
 
-
     # Instantiate PEP
     problem = PEP()
 
@@ -139,7 +138,7 @@ def wc_triple_momentum(mu, L, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = rho ** (2 * n ) * L / 2 * kappa
+    theoretical_tau = rho ** (2 * n) * L / 2 * kappa
 
     # Print conclusion if required
     if verbose:

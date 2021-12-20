@@ -1,10 +1,10 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.functions.convex_indicator import ConvexIndicatorFunction
-from PEPit.primitive_steps.bregman_gradient_step import bregman_gradient_step
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import ConvexIndicatorFunction
+from PEPit.primitive_steps import bregman_gradient_step
 
 
 def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):

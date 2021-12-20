@@ -1,6 +1,6 @@
-from PEPit.pep import PEP
-from PEPit.operators.monotone import MonotoneOperator
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.operators import MonotoneOperator
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_accelerated_proximal_point(alpha, n, verbose=True):

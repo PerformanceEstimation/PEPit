@@ -1,9 +1,9 @@
 from math import sqrt
 
-from PEPit.pep import PEP
-from PEPit.primitive_steps.inexact_proximal_step import inexact_proximal_step
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
+from PEPit import PEP
+from PEPit.functions import ConvexFunction
+from PEPit.functions import SmoothConvexFunction
+from PEPit.primitive_steps import inexact_proximal_step
 
 
 def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):

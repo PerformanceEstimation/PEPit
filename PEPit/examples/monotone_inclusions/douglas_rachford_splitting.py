@@ -1,9 +1,9 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.operators.lipschitz_strongly_monotone import LipschitzStronglyMonotoneOperator
-from PEPit.operators.strongly_monotone import StronglyMonotoneOperator
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.operators import LipschitzStronglyMonotoneOperator
+from PEPit.operators import StronglyMonotoneOperator
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):

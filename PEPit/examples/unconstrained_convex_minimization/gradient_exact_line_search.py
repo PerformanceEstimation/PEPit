@@ -1,6 +1,6 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.primitive_steps.exact_linesearch_step import exact_linesearch_step
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.primitive_steps import exact_linesearch_step
 
 
 def wc_gradient_exact_line_search(L, mu, n, verbose=True):

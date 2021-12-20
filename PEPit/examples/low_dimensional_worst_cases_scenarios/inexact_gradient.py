@@ -1,5 +1,5 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import inexact_gradient_step
 
 

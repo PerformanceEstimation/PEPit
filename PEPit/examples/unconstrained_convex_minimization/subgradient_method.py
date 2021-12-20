@@ -1,7 +1,7 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.convex_lipschitz_function import ConvexLipschitzFunction
+from PEPit import PEP
+from PEPit.functions import ConvexLipschitzFunction
 
 
 def wc_subgradient_method(M, n, gamma, verbose=True):

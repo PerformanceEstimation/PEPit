@@ -1,6 +1,6 @@
-from PEPit.pep import PEP
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.bregman_proximal_step import bregman_proximal_step
+from PEPit import PEP
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import bregman_proximal_step
 
 
 def wc_bregman_proximal_point(gamma, n, verbose=True):

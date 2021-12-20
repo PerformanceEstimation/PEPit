@@ -1,5 +1,5 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_function import SmoothFunction
+from PEPit import PEP
+from PEPit.functions import SmoothFunction
 
 
 def wc_gradient_descent(L, gamma, n, verbose=True):

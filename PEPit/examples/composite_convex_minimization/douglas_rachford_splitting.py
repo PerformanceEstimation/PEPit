@@ -1,7 +1,7 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):

@@ -1,7 +1,7 @@
 from math import sqrt
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
 
 
 def wc_optimized_gradient(L, n, verbose=True):

@@ -1,9 +1,9 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.functions.convex_indicator import ConvexIndicatorFunction
-from PEPit.primitive_steps.bregman_gradient_step import bregman_gradient_step
+from PEPit import PEP
+from PEPit.functions import ConvexFunction
+from PEPit.functions import ConvexIndicatorFunction
+from PEPit.primitive_steps import bregman_gradient_step
 
 
 def wc_no_lips_1(L, gamma, n, verbose=True):

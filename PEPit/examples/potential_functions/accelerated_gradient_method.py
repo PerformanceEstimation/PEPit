@@ -1,7 +1,7 @@
 import numpy as np
 
-from PEPit.pep import PEP
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothConvexFunction
 
 
 def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
