@@ -220,17 +220,17 @@ class TestFunction(unittest.TestCase):
         new_function = self.compute_linear_combination()
 
         # Before adding a point
-        self.assertEqual(new_function.is_already_evaluated_on_point(self.point), None)
-        self.assertEqual(self.func1.is_already_evaluated_on_point(self.point), None)
-        self.assertEqual(self.func2.is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(new_function._is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(self.func1._is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(self.func2._is_already_evaluated_on_point(self.point), None)
 
         # Add a point
         new_function.oracle(point=self.point)
 
         # After adding a point
-        self.assertEqual(new_function.is_already_evaluated_on_point(self.point), new_function.list_of_points[0][1:])
-        self.assertEqual(self.func1.is_already_evaluated_on_point(self.point), self.func1.list_of_points[0][1:])
-        self.assertEqual(self.func2.is_already_evaluated_on_point(self.point), self.func2.list_of_points[0][1:])
+        self.assertEqual(new_function._is_already_evaluated_on_point(self.point), new_function.list_of_points[0][1:])
+        self.assertEqual(self.func1._is_already_evaluated_on_point(self.point), self.func1.list_of_points[0][1:])
+        self.assertEqual(self.func2._is_already_evaluated_on_point(self.point), self.func2.list_of_points[0][1:])
 
     def test_separate_basis_functions_regarding_their_needs_on_points_non_differentiable(self):
         # Non differentiable case
@@ -239,12 +239,12 @@ class TestFunction(unittest.TestCase):
         point2 = Point(is_leaf=True, decomposition_dict=None)
         new_function.oracle(point1)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(point1)
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_basis_functions_regarding_their_need_on_point(point1)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 2)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 0)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_basis_functions_regarding_their_need_on_point(
             point2)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
@@ -257,13 +257,13 @@ class TestFunction(unittest.TestCase):
         point2 = Point(is_leaf=True, decomposition_dict=None)
         new_function.oracle(point1)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_basis_functions_regarding_their_need_on_point(
             point1)
         self.assertEqual(len(list_of_functions_which_need_nothing), 1)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 0)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_basis_functions_regarding_their_need_on_point(
             point2)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)

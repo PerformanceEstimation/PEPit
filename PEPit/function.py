@@ -6,21 +6,43 @@ from PEPit.constraint import Constraint
 
 class Function(object):
     """
-    Function or Operator
+    A :class:`Function` object encodes a function or an operator.
+
+    Warnings:
+        This class must be overwritten by a child class that encodes some conditions on the :class:`Function`.
+        In particular, the method `add_class_constraints` must be overwritten.
+        See the :class:`PEPit.functions` and :class:`PEPit.operators` modules.
+
+    Some :class:`Function` objects are defined from scratch as **leaf** :class:`Function` objects,
+    and some are linear combinations of pre-existing ones.
 
     Attributes:
         _is_leaf (bool): True if self is defined from scratch.
-                         False is self is defined as linear combination of leaf functions.
-        reuse_gradient (bool)
-        decomposition_dict (dict): decomposition of self as linear combination of leaf functions.
-        counter (int)
-        list_of_stationary_points (list)
-        list_of_points (list)
-        list_of_constraints (list)
+                         False is self is defined as linear combination of leaf .
+        decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                   Keys are :class:`Function` objects and values are their associated coefficients.
+        reuse_gradient (bool): If True, the same subgradient is returned
+                               when one requires it several times on the same :class:`Point`.
+                               If False, a new subgradient is computed each time one is required.
+        list_of_points (list): A list of triplets storing the points where this :class:`Function` has been evaluated,
+                               as well as the associated subgradients and function values.
+        list_of_stationary_points (list): The sublist of `self.list_of_points` of
+                                          stationary points (characterized by subgradient=0).
+        list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
+        counter (int): counts the **leaf** :class:`Function` objects.
 
     Note:
         PEPit was initially tough for evaluating performances of optimization algorithms.
-        Operators are represented in the same way as functions, but function values are not accessible.
+        Operators are represented in the same way as functions, but function values must not be used.
+        Use gradient to access an operator value.
+
+    :class:`Function` objects can be added or subtracted together.
+    They can also be multiplied and divided by a scalar value.
+
+    Example:
+        >>> func1 = Function()
+        >>> func2 = Function()
+        >>> new_func = (- func1 + func2) / 5
 
     """
     # Class counter.
@@ -34,12 +56,31 @@ class Function(object):
                  reuse_gradient=False,
                  ):
         """
-        A function is a linear combination of basis functions.
+        :class:`Function` objects can also be instantiating providing the following arguments
 
         Args:
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
-            reuse_gradient (bool): If true, the function can have only one subgradient per point.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            If `is_leaf` is True, then `decomposition_dict` must be provided as None.
+            Then `self.decomposition_dict` will be set to `{self: 1}`.
+
+        Note:
+            `reuse_gradient` is typically set to True when this :class:`Function` is differentiable,
+            that is there exists only one subgradient per :class:`Point`.
+
+        Instantiating the :class:`Function` object of the first example can be done by
+
+        Example:
+            >>> func1 = Function()
+            >>> func2 = Function()
+            >>> new_func = Function(is_leaf=False, decomposition_dict = {func1: -1/5, func2: 1/5})
 
         """
 
@@ -68,17 +109,26 @@ class Function(object):
         self.list_of_constraints = list()
 
     def get_is_leaf(self):
+        """
+
+        Returns:
+            self._is_leaf (bool): allows to access the protected attribute `_is_leaf`.
+
+        """
         return self._is_leaf
 
     def __add__(self, other):
         """
-        Add 2 functions together, leading to a new function.
+        Add 2 :class:`Function` objects together, leading to a new :class:`Function` object.
 
         Args:
-            other (Function): Any other function
+            other (Function): any other :class:`Function` object.
 
         Returns:
-            Function: The sum of the 2 functions
+            self + other (Function): The sum of the 2 :class:`Function` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a :class:`Function`.
 
         """
 
@@ -95,13 +145,16 @@ class Function(object):
 
     def __sub__(self, other):
         """
-        Subtract 2 functions together, leading to a new function.
+        Subtract 2 :class:`Function` objects together, leading to a new :class:`Function` object.
 
         Args:
-            other (Function): Any other function
+            other (Function): any other :class:`Function` object.
 
         Returns:
-            Function: The difference between the 2 functions
+            self - other (Function): The difference between the 2 :class:`Function` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a :class:`Function`.
 
         """
 
@@ -110,10 +163,10 @@ class Function(object):
 
     def __neg__(self):
         """
-        Compute the opposite of a function.
+        Compute the opposite of a :class:`Function`.
 
         Returns:
-            Function: -self
+            - self (Function): the opposite of self
 
         """
 
@@ -122,13 +175,16 @@ class Function(object):
 
     def __rmul__(self, other):
         """
-        Multiply a function by a scalar value
+        Multiply this :class:`Function` with a scalar value, leading to a new :class:`Function` object.
 
         Args:
-            other (int or float): Any scalar constant
+            other (int or float): any scalar value.
 
         Returns:
-            Function: other * self
+            other * self (Function): The product of this function and `other`.
+
+        Raises:
+            AssertionError: if provided `other` is not a python scalar value.
 
         """
 
@@ -147,26 +203,32 @@ class Function(object):
 
     def __mul__(self, other):
         """
-        Multiply a function by a scalar value
+        Multiply this :class:`Function` with a scalar value, leading to a new :class:`Function` object.
 
         Args:
-            other (int or float): Any scalar constant
+            other (int or float): any scalar value.
 
         Returns:
-            Function: self * other
+            self * other (Function): The product of this function and `other`.
+
+        Raises:
+            AssertionError: if provided `other` is not a python scalar value.
 
         """
         return self.__rmul__(other=other)
 
     def __truediv__(self, denominator):
         """
-        Divide a function by a scalar value
+        Divide this :class:`Function` with a scalar value, leading to a new :class:`Function` object.
 
         Args:
-            denominator (int or float): the value to divide by.
+            denominator (int or float): any scalar value.
 
         Returns:
-            Function: The resulting function
+            self / denominator (Function): The ratio between of function and `other`.
+
+        Raises:
+            AssertionError: if provided `other` is not a python scalar value.
 
         """
 
@@ -175,10 +237,13 @@ class Function(object):
 
     def add_constraint(self, constraint):
         """
-        Add a constraint to the list of constraints of the function
+        Store a new :class:`Constraint` to the list of constraints of this :class:`Function`.
 
         Args:
-            constraint (Constraint): typically resulting from an inequality between 2 expressions.
+            constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `constraint` is not a :class:`Constraint` object.
 
         """
 
@@ -190,9 +255,11 @@ class Function(object):
 
     def add_class_constraints(self):
         """
-        Needs to be overwritten with interpolation conditions.
-        This methods is run by the PEP just before solving,
-        applying the interpolation condition from the 2 lists of points.
+        Warnings:
+            Needs to be overwritten with interpolation conditions.
+
+        This method is run by the :class:`PEP` just before solving the problem,
+        applying the interpolation conditions from the 2 lists of points this :class:`Function` stores.
 
         Raises:
             NotImplementedError: This method must be overwritten in children classes
@@ -201,9 +268,9 @@ class Function(object):
 
         raise NotImplementedError("This method must be overwritten in children classes")
 
-    def is_already_evaluated_on_point(self, point):
+    def _is_already_evaluated_on_point(self, point):
         """
-        Check whether the "self" function is already evaluated on the point "point" or not.
+        Check whether this :class:`Function` is already evaluated on the :class:`Point` "point" or not.
 
         Args:
             point (Point): the point we want to check whether the function is evaluated on or not.
@@ -224,17 +291,17 @@ class Function(object):
         # If "self" has not been evaluated on "point" yet, then return None.
         return None
 
-    def separate_basis_functions_regarding_their_need_on_point(self, point):
+    def _separate_basis_functions_regarding_their_need_on_point(self, point):
         """
         Separate basis functions in 3 categories depending whether they need new evaluation or not of
-        gradient and function value on the point "point".
+        gradient and function value on the :class:`Point` "point".
 
         Args:
             point (Point): the point we look at
 
         Returns:
-            tuple of lists: 3 lists or functions arranged with respect to their need. Note functions are returned
-                            with their corresponding weight in the decomposition of self.
+            tuple of lists: 3 lists or functions arranged with respect to their need.
+                            Note functions are returned with their corresponding weight in the decomposition of self.
 
         """
 
@@ -249,7 +316,7 @@ class Function(object):
             # Note the method "is_already_evaluated_on_point" returns a non empty tuple if the function has already
             # been evaluated, and None otherwise.
             # Those outputs are respectively evaluated as True and False by the following test.
-            if function.is_already_evaluated_on_point(point=point):
+            if function._is_already_evaluated_on_point(point=point):
 
                 # If function is differentiable, one should keep both previous gradient and previous function value.
                 if function.reuse_gradient:
@@ -271,7 +338,10 @@ class Function(object):
         Add a triplet (point, gradient, function_value) to the list of points of this function.
 
         Args:
-            triplet (tuple): A tuple containing 3 elements: point, gradient, and function value
+            triplet (tuple): A tuple containing 3 elements:
+                             point (:class:`Point`),
+                             gradient (:class:`Point`),
+                             and function value (:class:`Expression`).
 
         """
 
@@ -303,7 +373,7 @@ class Function(object):
             self.decomposition_dict = prune_dict(self.decomposition_dict)
 
             # Separate all basis function in 3 categories based on their need
-            tuple_of_lists_of_functions = self.separate_basis_functions_regarding_their_need_on_point(point=point)
+            tuple_of_lists_of_functions = self._separate_basis_functions_regarding_their_need_on_point(point=point)
 
             # Reduce into 2 lists according to the fact a function needs something of not
             list_of_functions_which_need_nothing = tuple_of_lists_of_functions[0]
@@ -338,13 +408,13 @@ class Function(object):
 
     def oracle(self, point):
         """
-        Return the gradient and the function value of self in point
+        Return the gradient and the function value of self on point.
 
         Args:
-            point (Point): Any point
+            point (Point): any point.
 
         Returns:
-            tuple: A gradient and a function value
+            tuple: a gradient (:class:`Point`) and a function value (:class:`Expression`).
 
         """
 
@@ -354,7 +424,7 @@ class Function(object):
         # If those values already exist, simply return them.
         # If not, instantiate them before returning.
         # Note if the non differentiable case, the gradient is recomputed anyway.
-        associated_grad_and_function_val = self.is_already_evaluated_on_point(point=point)
+        associated_grad_and_function_val = self._is_already_evaluated_on_point(point=point)
         # "associated_grad_and_function_val" is a tuple (True) or None (False)
 
         # If "self" has already been evaluated on "point" and is differentiable,
@@ -369,7 +439,7 @@ class Function(object):
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of basis functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self.separate_basis_functions_regarding_their_need_on_point(point=point)
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self._separate_basis_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
         # Here we deal with the function value computation
@@ -408,13 +478,16 @@ class Function(object):
 
     def gradient(self, point):
         """
-        Return the gradient of self in point.
+        Return the gradient of this :class:`Function` on point.
 
         Args:
-            point (Point): Any point
+            point (Point): any point.
 
         Returns:
-            Point: The gradient of self in point
+            Point: the gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
+
+        Note:
+            the method subgradient does the exact same thing.
 
         """
 
@@ -422,13 +495,16 @@ class Function(object):
 
     def subgradient(self, point):
         """
-        Return the gradient of self in point.
+        Return the subgradient of this :class:`Function` on point.
 
         Args:
-            point (Point): Any point
+            point (Point): any point.
 
         Returns:
-            Point: The gradient of self in point
+            Point: the gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
+
+        Note:
+            the method gradient does the exact same thing.
 
         """
 
@@ -442,13 +518,13 @@ class Function(object):
 
     def value(self, point):
         """
-        Return the function value of self in point.
+        Return the function value of this :class:`Function` on point.
 
         Args:
-            point (Point): Any point
+            point (Point): any point.
 
         Returns:
-            Point: The function value of self in point
+            Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
 
         """
 
@@ -456,7 +532,7 @@ class Function(object):
         assert isinstance(point, Point)
 
         # Check whether "self" has already been evaluated on "point"
-        associated_grad_and_function_val = self.is_already_evaluated_on_point(point=point)
+        associated_grad_and_function_val = self._is_already_evaluated_on_point(point=point)
 
         # "associated_grad_and_function_val" is a tuple (True) or None (False)
         if associated_grad_and_function_val:
@@ -471,7 +547,7 @@ class Function(object):
 
     def stationary_point(self, return_gradient_and_function_value=False):
         """
-        Create a new stationary point, as well as its null gradient and its function value
+        Create a new stationary point, as well as its null gradient and its function value.
 
         Args:
             return_gradient_and_function_value (bool): If True, return the triplet point, gradient, function value.

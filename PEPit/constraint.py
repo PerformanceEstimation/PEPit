@@ -1,12 +1,27 @@
 class Constraint(object):
     """
-    Equality or inequality between two expressions
+    A :class:`Constraint` encodes either an equality or an inequality between two :class:`Expression` objects.
+
+    A :class:`Constraint` must be understood either as
+    `self.expression` = 0 or `self.expression` :math:`leq` 0
+    depending on the value of `self.equality_or_inequality`.
 
     Attributes:
-        counter (int)
-        expression (Expression)
-        equality_or_inequality (str): self is Expression = 0 or Expression :math:`\\leqslant` 0
-        dual_variable_value (float)
+        expression (Expression): The :class:`Expression` that is compared to 0.
+        equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
+        dual_variable_value (float): the associated dual variable at optimal point of the solved PEP.
+                                     Set to None before evaluation via the :class:`PEP` solving method PEP.solve.
+        counter (int): counts the :class:`Constraint` objects.
+
+    A :class:`Constraint` results from a comparison between two :class:`Expression` objects.
+
+    Example:
+        >>> from PEPit import Expression
+        >>> expr1 = Expression()
+        >>> expr2 = Expression()
+        >>> inequality1 = expr1 <= expr2
+        >>> inequality2 = expr1 >= expr2
+        >>> equality = expr1 == expr2
 
     """
     # Class counter.
@@ -15,12 +30,24 @@ class Constraint(object):
 
     def __init__(self, expression, equality_or_inequality):
         """
-        A constraint is defined by an expression that is either equal to or non-greater than 0.
-        The constraint must be understood as Expression == 0 or Expression <=0.
+        :class:`Constraint` objects can also be instantiating providing the following arguments
 
         Args:
             expression (Expression): an object of class Expression
             equality_or_inequality (str): either 'equality' or 'inequality'.
+
+        Instantiating the :class:`Constraint` objects of the first example can be done by
+
+        Example:
+            >>> from PEPit import Expression
+            >>> expr1 = Expression()
+            >>> expr2 = Expression()
+            >>> inequality1 = Constraint(expression=expr1-expr2, equality_or_inequality="inequality")
+            >>> inequality2 = Constraint(expression=expr2-expr1, equality_or_inequality="inequality")
+            >>> equality = Constraint(expression=expr1-expr2, equality_or_inequality="equality")
+
+        Raises:
+            AssertionError: if provided `equality_or_inequality` argument is neither "equality" nor "inequality".
 
         """
 

@@ -8,14 +8,40 @@ from PEPit.constraint import Constraint
 
 class Expression(object):
     """
-    Function value, inner product, or constant
+    An :class:`Expression` is a linear combination of
+    functions values,
+    inner products of points and / or gradients (product of 2 :class:`Point` objects),
+    and constant scalar values.
 
     Attributes:
-        _is_function_value (bool): True if self is a function value defined from scratch.
-                                   False if self is a linear combination of function values or inner product of points.
+        _is_function_value (bool): True if self is a function value defined from scratch
+                                   (not as linear combination of other function values).
+                                   False if self is a linear combination of existing Expression objects.
         value (float): the value of self at optimum.
-        decomposition_dict (dict): decomposition of self as a linear combination of basis expressions.
-        counter (int)
+                       Set to None before evaluation via the :class:`PEP` solving method PEP.solve.
+        decomposition_dict (dict): decomposition of self as a linear combination of **basic** :class:`Expression` objects.
+                                   Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
+                                   And values are their associated coefficients.
+        counter (int): counts the **basic** :class:`Expression` objects.
+
+    :class:`Expression` objects can be added or subtracted together.
+    They can also be added, subtracted, multiplied and divided by a scalar value.
+
+    Example:
+        >>> expr1 = Expression()
+        >>> expr2 = Expression()
+        >>> new_expr = (- expr1 + expr2 - 1) / 5
+
+    :class:`Expression` objects can also be compared together
+
+    Example:
+        >>> expr1 = Expression()
+        >>> expr2 = Expression()
+        >>> inequality1 = expr1 <= expr2
+        >>> inequality2 = expr1 >= expr2
+        >>> equality = expr1 == expr2
+
+    The three outputs `inequality1`, `inequality2` and `equality` are then :class:`Constraint` objects.
 
     """
     # Class counter.
@@ -27,11 +53,26 @@ class Expression(object):
                  decomposition_dict=None,
                  ):
         """
-        An expression is a linear combination of functions values, inner products and constant scalar values.
+        :class:`Expression` objects can also be instantiating providing the following arguments
 
         Args:
-            is_function_value (bool): If true, the expression is a basis function value.
-            decomposition_dict (dict): Decomposition in the basis of function values, inner products and constants.
+            is_function_value (bool): True if self is a function value defined from scratch
+                                      (not as linear combination of other function values).
+                                      False if self is a linear combination of existing :class:`Expression` objects.
+            decomposition_dict (dict): decomposition of self as a linear combination of **basic** :class:`Expression` objects.
+                                       Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
+                                       And values are their associated coefficients.
+
+        Note:
+            If `is_function_value` is True, then `decomposition_dict` must be provided as None.
+            Then `self.decomposition_dict` will be set to `{self: 1}`.
+
+        Instantiating the :class:`Expression` object of the first example can be done by
+
+        Example:
+            >>> expr1 = Expression()
+            >>> expr2 = Expression()
+            >>> new_expr = Expression(is_function_value=False, decomposition_dict = {expr1: -1/5, expr2: 1/5, 1: -1/5})
 
         """
         # Store is_function_value in a protected attribute
@@ -40,7 +81,7 @@ class Expression(object):
         # Initialize the value attribute to None until the PEP is solved
         self.value = None
 
-        # If basis function value, the decomposition is updated,
+        # If basic function value, the decomposition is updated,
         # the object counter is set
         # and the class counter updated.
         # Otherwise, the decomposition_dict is stored in an attribute and the object counter is set to None
@@ -55,17 +96,27 @@ class Expression(object):
             self.counter = None
 
     def get_is_function_value(self):
+        """
+
+        Returns:
+            self._is_function_value (bool): allows to access the protected attribute `_is_function_value`.
+
+        """
         return self._is_function_value
 
     def __add__(self, other):
         """
-        Add 2 expressions together, leading to a new expression. Note an expression can also be added to a constant.
+        Add 2 :class:`Expression` objects together, leading to a new :class:`Expression` object.
+        Note an :class:`Expression` can also be added to a python `float` or `int`.
 
         Args:
-            other (Expression or int or float): Any other expression or scalar constant
+            other (Expression or int or float): any other :class:`Expression` object or scalar constant.
 
         Returns:
-            Expression: The sum of the 2 expressions
+            self + other (Expression): The sum of the 2 :class:`Expression` objects.
+
+        Raises:
+            TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
 
         """
 
@@ -84,25 +135,28 @@ class Expression(object):
 
     def __sub__(self, other):
         """
-        Subtract 2 Expressions together, leading to a new expression.
+        Subtract 2 :class:`Expression` objects together, leading to a new :class:`Expression` object.
+        Note a python `float` or `int` can also be subtracted from an :class:`Expression`.
 
         Args:
-            other (Expression or int or float): Any other expression or scalar constant
+            other (Expression or int or float): any other :class:`Expression` object or scalar constant.
 
         Returns:
-            Expression: The difference between the 2 expressions
+            self - other (Expression): the difference between the 2 :class:`Expression` objects.
+
+        Raises:
+            TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
 
         """
-
         # A-B = A+(-B)
         return self.__add__(-other)
 
     def __neg__(self):
         """
-        Compute the opposite of an expression.
+        Compute the opposite of an :class:`Expression`.
 
         Returns:
-            Expression: -self
+            - self (Expression): the opposite of self.
 
         """
 
@@ -111,13 +165,16 @@ class Expression(object):
 
     def __rmul__(self, other):
         """
-        Multiply an expression by a scalar value
+        Multiply an :class:`Expression` by a scalar value.
 
         Args:
-            other (int or float): Any scalar constant
+            other (int or float): any scalar constant
 
         Returns:
-            Expression: other * self
+            other * self (Expression): the product of the 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a scalar value.
 
         """
 
@@ -134,13 +191,16 @@ class Expression(object):
 
     def __mul__(self, other):
         """
-        Multiply an expression by a scalar value
+        Multiply an :class:`Expression` by a scalar value.
 
         Args:
-            other (int or float): Any scalar constant
+            other (int or float): any scalar constant
 
         Returns:
-            Expression: self * other
+            self * other (Expression): the product of the 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a scalar value.
 
         """
 
@@ -148,13 +208,16 @@ class Expression(object):
 
     def __truediv__(self, denominator):
         """
-        Divide an expression by a scalar value
+        Divide an :class:`Expression` by a scalar value.
 
         Args:
-            denominator (int or float): the value to divide by.
+            denominator (int or float): the scalar value to divide by.
 
         Returns:
-            Expression: The resulting expression
+            self / other (Expression): the ratio between the 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a scalar value.
 
         """
 
@@ -163,13 +226,13 @@ class Expression(object):
 
     def __le__(self, other):
         """
-        Create a non-positive expression from an inequality
+        Create an inequality :class:`Constraint` object from an inequality between two :class:`Expression` objects.
 
         Args:
-            other (Expression of int or float)
+            other (Expression of int or float): any :class:`Expression` of python scalar object.
 
         Returns:
-            Expression: Expression <= 0 must be equivalent to the input inequality
+            self :math:`\\leq` other (Expression): :class:`Constraint` object encoding the corresponding inequality.
 
         """
 
@@ -177,17 +240,18 @@ class Expression(object):
 
     def __lt__(self, other):
         """
-        Create a non-positive expression from an inequality
+        Create an inequality :class:`Constraint` object from an inequality between two :class:`Expression` objects.
 
         Args:
-            other (Expression of int or float)
+            other (Expression of int or float): any :class:`Expression` of python scalar object.
 
         Returns:
-            Expression: Expression <= 0 must be equivalent to the input inequality
+            self < other (Expression): :class:`Constraint` object encoding the corresponding inequality.
 
         Note:
-            The input inequality is strict, but optimizing over the interior set is equivalent,
-            so we refer to the large inequality.
+            The input inequality is strict,
+            but optimizing over the interior set is equivalent to considering the large one,
+            so we refer to the latest.
 
         Raises:
             Warnings("Strict constraints will lead to the same solution as under soft constraints")
@@ -199,30 +263,31 @@ class Expression(object):
 
     def __ge__(self, other):
         """
-        Create a non-positive expression from an inequality
+        Create an inequality :class:`Constraint` object from an inequality between two :class:`Expression` objects.
 
         Args:
-            other (Expression of int or float)
+            other (Expression of int or float): any :class:`Expression` of python scalar object.
 
         Returns:
-            Expression: Expression <= 0 must be equivalent to the input inequality
+            other :math:`\\leq` self (Expression): :class:`Constraint` object encoding the corresponding inequality.
 
         """
         return -self <= -other
 
     def __gt__(self, other):
         """
-        Create a non-positive expression from an inequality
+        Create an inequality :class:`Constraint` object from an inequality between two :class:`Expression` objects.
 
         Args:
-            other (Expression of int or float)
+            other (Expression of int or float): any :class:`Expression` of python scalar object.
 
         Returns:
-            Expression: Expression <= 0 must be equivalent to the input inequality
+            other < self (Expression): :class:`Constraint` object encoding the corresponding inequality.
 
         Note:
-            The input inequality is strict, but optimizing over the interior set is equivalent,
-            so we refer to the large inequality.
+            The input inequality is strict,
+            but optimizing over the interior set is equivalent to considering the large one,
+            so we refer to the latest.
 
         Raises:
             Warnings("Strict constraints will lead to the same solution as under soft constraints")
@@ -234,13 +299,13 @@ class Expression(object):
 
     def __eq__(self, other):
         """
-        Create a null expression from an equality
+        Create an equality :class:`Constraint` object from an equality between two :class:`Expression` objects.
 
         Args:
-            other (Expression of int or float)
+            other (Expression of int or float): any :class:`Expression` of python scalar object.
 
         Returns:
-            Expression: Expression <= 0 must be equivalent to the input inequality
+            self = other (Expression): :class:`Constraint` object encoding the corresponding equality.
 
         """
 
@@ -251,10 +316,10 @@ class Expression(object):
 
     def eval(self):
         """
-        Compute, store and return the value of an expression.
+        Compute, store and return the value of this :class:`Expression`.
 
         Returns:
-            np.array: The value of the expression.
+            self.value (np.array): The value of this :class:`Expression` after evaluation of a PEP solution.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
@@ -266,10 +331,10 @@ class Expression(object):
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self.value is None:
-            # If basis function value, the PEP would have filled the attribute at the end of the solve.
+            # If basic function value, the PEP would have filled the attribute at the end of the solve.
             if self._is_function_value:
                 raise ValueError("The PEP must be solved to evaluate Points!")
-            # If linear combination, combine the values of the basis, and store the result before returning it.
+            # If linear combination, combine the values of the basic, and store the result before returning it.
             else:
                 value = 0
                 for key, weight in self.decomposition_dict.items():
