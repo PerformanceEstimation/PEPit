@@ -25,12 +25,12 @@ def wc_frank_wolfe(L, D, n, verbose=True):
 
     **Algorithm**:
 
-    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1].
+    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             \\begin{eqnarray}
-                y_t & = & \\arg\\min_{s \\in \\mathcal{D}} \\langle s \\mid \\nabla f_1(x_t) \\rangle \\\\
-                x_{t+1} & = & \\frac{t - 1}{t + 1} x_t + \\frac{2}{t + 1} y_t
+                y_t & = & \\arg\\min_{s \\in \\mathcal{D}} \\langle s \\mid \\nabla f_1(x_t) \\rangle, \\\\
+                x_{t+1} & = & \\frac{t - 1}{t + 1} x_t + \\frac{2}{t + 1} y_t.
             \\end{eqnarray}
 
     **Theoretical guarantee**:
@@ -42,7 +42,7 @@ def wc_frank_wolfe(L, D, n, verbose=True):
     **References**:
 
     [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
-    Naval research logistics quarterly, 3(1-2), 95-110.
+    (Naval research logistics quarterly).
 
     `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
     In 30th International Conference on Machine Learning (ICML).
@@ -55,8 +55,8 @@ def wc_frank_wolfe(L, D, n, verbose=True):
         verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=True)

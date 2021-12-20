@@ -13,11 +13,11 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     where :math:`f_1` is closed convex and proper, and :math:`f_2` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for **accelerated Douglas-Rachford**. That is, it computes
-    the smallest possible :math:`\\tau(n, L, \\mu, \\alpha, \\theta)` such that the guarantee
+    the smallest possible :math:`\\tau(n, L, \\mu, \\alpha)` such that the guarantee
 
-    .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n,L,\\mu,\\alpha,\\theta) \\|w_0 - w_\\star\\|^2
+    .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n,L,\\mu,\\alpha) \\|w_0 - w_\\star\\|^2
 
-    is valid, :math:`\\alpha` and :math:`\\theta` are parameters of the method, and where :math:`y_n` is the output
+    is valid, :math:`\\alpha` is a parameter of the method, and where :math:`y_n` is the output
     of the accelerated Douglas-Rachford Splitting method, where :math:`x_\\star` is a minimizer of :math:`F`,
     and :math:`w_\\star` defined such that
 
@@ -25,21 +25,21 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
 
     is an optimal point.
 
-    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu`, :math:`\\alpha` and :math:`\\theta`,
-    :math:`\\tau(n,L,\\mu,\\alpha,\\theta)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
-    when :math:`||x_0 - w_\\star||^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu`, :math:`\\alpha`,
+    :math:`\\tau(n,L,\\mu,\\alpha)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
+    when :math:`\|x_0 - w_\\star\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    The accelerated Douglas-Rachford splitting [1] is described by
+    The accelerated Douglas-Rachford splitting is described in [1, Section 4]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t)\\\\
-                y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t)\\\\
-                w_{t+1} & = & u_t + \\theta (y_t-x_t)\\\\
-                x_{t+1} & = & \\left\\{\\begin{array}{ll} u_{t+1} = w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
+                x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t),\\\\
+                y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t),\\\\
+                w_{t+1} & = & u_t + \\theta (y_t-x_t),\\\\
+                u_{t+1} & = & \\left\\{\\begin{array}{ll} w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
                 w_{t+1} & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 
@@ -52,7 +52,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha\\leqslant \\frac{1}{L}`.
 
     **References**:
-    An analysis of the accelerated Douglas-Rachford splitting is available in [1] for when the convex minimization
+    An analysis of the accelerated Douglas-Rachford splitting is available in [1, Theorem 5] for when the convex minimization
     problem is quadratic.
 
     `[1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
@@ -64,11 +64,11 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
         L (float): the smoothness parameter.
         alpha (float): the parameter of the scheme.
         n (int): the number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value (upper bound for quadratics; not directly comparable)
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value (upper bound for quadratics; not directly comparable).
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=True)
@@ -82,9 +82,8 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-            PEP-it guarantee:				 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
-        	Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
-
+	        PEP-it guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
+	        Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
     """
 
     # Instantiate PEP
@@ -113,7 +112,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     ws = xs + alpha * g2s
     problem.set_initial_condition((ws - x0) ** 2 <= 1)
 
-    # Compute n steps of the Fast Douglas Rachford Splitting starting from x0
+    # Compute n steps of the Accelerated Douglas Rachford Splitting starting from x0
     x = [x0 for _ in range(n)]
     w = [x0 for _ in range(n + 1)]
     u = [x0 for _ in range(n + 1)]
@@ -140,7 +139,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         if alpha <= 1/L:
             print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 

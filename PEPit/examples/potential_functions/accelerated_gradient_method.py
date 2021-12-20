@@ -19,9 +19,9 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
 
     is decreasing along all trajectories and all smooth convex function :math:`f` (i.e., in the worst-case):
 
-    .. math :: V_{n+1} \\leqslant V_n
+    .. math :: V_{n+1} \\leqslant V_n,
 
-    is valid, where :math:`x_{n+1}`, :math:`z_{n+1}`, and :math:`\\lambda_{n+1}` are obtained from one iteration of
+    where :math:`x_{n+1}`, :math:`z_{n+1}`, and :math:`\\lambda_{n+1}` are obtained from one iteration of
     the accelerated gradient method below, from some arbitrary :math:`x_{n}`, :math:`z_{n}`, and :math:`\\lambda_{n}`.
 
     **Algorithm**: One iteration of accelerated gradient method is described by
@@ -75,7 +75,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 7.946321396432764e-09
-        *** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***
+        *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
             PEP-it guarantee:       V_(n+1) - V_n <= 7.94632e-09
             Theoretical guarantee:  V_(n+1) - V_n <= 0.0
 
@@ -128,7 +128,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     # Print conclusion if required
     if verbose:
         print(
-            '*** Example file: worst-case performance of accelerated gradient descent for a given Lyapunov function***')
+            '*** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***')
         print('\tPEP-it guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))

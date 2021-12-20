@@ -18,18 +18,20 @@ def wc_accelerated_proximal_point(alpha, n, verbose=True):
 
     is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
 
-    **Algorithm**:
+    **Algorithm**: Accelerated proximal point is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`
 
         .. math::
 
             \\begin{eqnarray}
-                x_{t+1} & = & J_{\\alpha A}(y_t) \\\\
-                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1})
+                x_{t+1} & = & J_{\\alpha A}(y_t), \\\\
+                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1}),
             \\end{eqnarray}
 
-    **Theoretical guarantee**: A tight theoretical worst-case guarantee can be found in [1, Theorem 4.1]:
+    where :math:`x_0=y_0=y_{-1}`
 
-        .. math:: \\|x_n - y_n\\|^2 \\leqslant  \\frac{1}{n^2}  \\|x_0 - x_\\star\\|^2.
+    **Theoretical guarantee**: A tight theoretical worst-case guarantee can be found in [1, Theorem 4.1], for :math:`n \\geqslant 1`,
+
+        .. math:: \\|x_n - y_{n-1}\\|^2 \\leqslant  \\frac{1}{n^2}  \\|x_0 - x_\\star\\|^2.
 
     **Reference**:
 

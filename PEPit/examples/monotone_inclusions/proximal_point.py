@@ -14,11 +14,11 @@ def wc_proximal_point(alpha, n, verbose=True):
     This code computes a worst-case guarantee for the **proximal point** method.
     That, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
 
-        .. math:: \\|x_n - y_n\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
+        .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
 
-    **Algorithm**: The proximal point algorithm for monotone inclusions is described by
+    **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math:: x_{t+1} = J_{\\alpha A}(x_t),
 
@@ -31,17 +31,17 @@ def wc_proximal_point(alpha, n, verbose=True):
     **Reference**:
 
     `[1] G. Gu, J. Yang (2020). Tight sublinear convergence rate of the proximal point algorithm for maximal
-    monotone inclusion problems. SIAM Journal on Optimization, 30(3), 1905-1921.
-    <https://epubs.siam.org/doi/abs/10.1137/19M1299049>`_
+    monotone inclusion problem (SIAM Journal on Optimization, 30(3), 1905-1921).
+    <https://epubs.siam.org/doi/pdf/10.1137/19M1299049>`_
 
     Args:
-        alpha (float): the step-size
+        alpha (float): the step-size.
         n (int): number of iterations.
-        verbose (bool, optional): if True, print conclusion
+        verbose (bool, optional): if True, print conclusion.
 
     Returns:
-        pepit_tau (float): worst-case value
-        theoretical_tau (float): theoretical value
+        pepit_tau (float): worst-case value.
+        theoretical_tau (float): theoretical value.
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, verbose=True)

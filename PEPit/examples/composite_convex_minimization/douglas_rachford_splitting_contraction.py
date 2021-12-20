@@ -23,7 +23,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     **Algorithm**:
 
-    Our notations for the DRS algorithm are as follows, for :math:`t \\in \\{0, \\dots, n-1\\}`,
+    Our notations for the DRS method are as follows [3, Section 7.3], for :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
@@ -31,10 +31,8 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
             \\begin{eqnarray}
                 x_t & = & \\mathrm{prox}_{\\alpha f_2}(w_t), \\\\
                 y_t & = & \\mathrm{prox}_{\\alpha f_1}(2x_t - w_t), \\\\
-                w_{t+1} & = & w_t + \\theta (y_t - x_t),
+                w_{t+1} & = & w_t + \\theta (y_t - x_t).
             \\end{eqnarray}
-
-    with :math:`w_0 \\in \\mathrm{R}^d`.
 
     **Theoretical guarantee**:
 
@@ -57,6 +55,12 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
     `[2] P. Giselsson, and S. Boyd (2016). Linear convergence and metric selection in
     Douglas-Rachford splitting and ADMM (IEEE).
     <https://arxiv.org/pdf/1410.8479.pdf>`_
+
+    A description for the DRS method can be found in [3, 7.3]
+
+    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods
+    (Applied and Computational Mathematics).
+    <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
