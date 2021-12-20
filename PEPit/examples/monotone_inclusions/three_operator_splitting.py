@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction  # TODO Check is Function?
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.operators import MonotoneOperator
 from PEPit.operators import CocoerciveOperator
 from PEPit.primitive_steps import proximal_step
