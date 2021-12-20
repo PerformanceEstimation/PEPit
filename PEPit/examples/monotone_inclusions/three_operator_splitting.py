@@ -44,7 +44,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
     **References**: The TOS was proposed in [1], the analysis of such operator splitting methods using PEPs was proposed in [2].
 
     `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
-    Set-valued and variational analysis 25, no. 4 : 829-858.
+    Set-valued and variational analysis, 25(4), 829-858.
     <https://arxiv.org/pdf/1504.01032.pdf>`_
 
     `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:

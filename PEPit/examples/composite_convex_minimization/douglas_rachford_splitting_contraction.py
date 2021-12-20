@@ -46,20 +46,20 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     Details on the SDP formulations can be found in
 
-    `[1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson (2018). Operator splitting
-    performance estimation: Tight contraction factors and optimal parameter selection.
+    `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
     <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     When :math:`\\theta = 1`, the bound can be compared with that of [2, Theorem 2]
 
     `[2] P. Giselsson, and S. Boyd (2016). Linear convergence and metric selection in
-    Douglas-Rachford splitting and ADMM (IEEE).
+    Douglas-Rachford splitting and ADMM. IEEE Transactions on Automatic Control, 62(2), 532-544.
     <https://arxiv.org/pdf/1410.8479.pdf>`_
 
     A description for the DRS method can be found in [3, 7.3]
 
-    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods
-    (Applied and Computational Mathematics).
+    `[1] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
     Args:
