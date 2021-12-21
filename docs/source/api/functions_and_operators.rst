@@ -1,5 +1,5 @@
 Functions classes
------------------
+=================
 
 .. toctree::
    :maxdepth: 2
