@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import ConvexFunction
@@ -90,7 +90,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     x = [x0 for _ in range(n + 1)]
     for i in range(n):
         x[i + 1], _, fx, _, _, _, epsVar = inexact_proximal_step(x[i], f, gamma, opt='PD_gapII')
-        f.add_constraint(epsVar <= (sigma * (x[i + 1] - x[i])) ** 2 /2)
+        f.add_constraint(epsVar <= (sigma * (x[i + 1] - x[i])) ** 2 / 2)
 
     # Set the performance metric to the final distance in function values
     problem.set_performance_metric(f.value(x[n]) - f.value(xs))
@@ -99,7 +99,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 + sigma) / (4 * gamma * n ** np.sqrt(1 - sigma ** 2))
+    theoretical_tau = (1 + sigma) / (4 * gamma * n ** sqrt(1 - sigma ** 2))
 
     # Print conclusion if required
     if verbose:

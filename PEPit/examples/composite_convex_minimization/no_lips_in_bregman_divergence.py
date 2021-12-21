@@ -117,7 +117,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
         gfx, _ = func1.oracle(x2)
         ghx, hx2 = h.oracle(x2)
         Dhx = hx1 - hx2 - ghx * (x1 - x2)
-        # update the iterates
+        # Update the iterates
         x1 = x2
         hx1 = hx2
         # Set the performance metric to the Bregman distance to the optimum

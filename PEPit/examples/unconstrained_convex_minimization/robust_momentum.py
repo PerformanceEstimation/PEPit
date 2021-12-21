@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
@@ -101,7 +101,7 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
 
     # Set the parameters of the robust momentum method
     kappa = L / mu
-    rho = lam * (1 - 1 / kappa) + (1 - lam) * (1 - 1 / float(np.sqrt(kappa)))
+    rho = lam * (1 - 1 / kappa) + (1 - lam) * (1 - 1 / sqrt(kappa))
     alpha = kappa * (1 - rho) ** 2 * (1 + rho) / L
     beta = kappa * rho ** 3 / (kappa - 1)
     gamma = rho ** 3 / ((kappa - 1) * (1 - rho) ** 2 * (1 + rho))

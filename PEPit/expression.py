@@ -1,9 +1,9 @@
 import warnings
 import numpy as np
 
-from PEPit.tools.dict_operations import merge_dict
-
 from PEPit.constraint import Constraint
+
+from PEPit.tools.dict_operations import merge_dict
 
 
 class Expression(object):

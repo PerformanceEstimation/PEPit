@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
@@ -97,7 +97,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     zn = problem.set_initial_point()
 
     # Run the AGD at iteration (n+1)
-    lam_np1 = (1 + np.sqrt(4 * lam ** 2 + 1)) / 2
+    lam_np1 = (1 + sqrt(4 * lam ** 2 + 1)) / 2
 
     tau = 1 / lam_np1
     yn = (1 - tau) * xn + tau * zn

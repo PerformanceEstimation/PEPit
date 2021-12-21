@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import ConvexLipschitzFunction
@@ -115,7 +115,7 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = M / np.sqrt(n + 1)
+    theoretical_tau = M / sqrt(n + 1)
 
     # Print conclusion if required
     if verbose:
@@ -132,5 +132,5 @@ if __name__ == "__main__":
 
     M = 2
     n = 6
-    gamma = 1 / (M * np.sqrt(n + 1))
+    gamma = 1 / (M * sqrt(n + 1))
     pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=True)

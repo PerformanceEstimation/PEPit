@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.operators import LipschitzStronglyMonotoneOperator
@@ -115,7 +115,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
     # Compute theoretical guarantee (for comparison), see [2, Theorem 3]
     mu = alpha * mu
     L = alpha * L
-    c = np.sqrt(((2 * (theta - 1) * mu + theta - 2) ** 2 + L ** 2 * (theta - 2 * (mu + 1)) ** 2) / (L ** 2 + 1))
+    c = sqrt(((2 * (theta - 1) * mu + theta - 2) ** 2 + L ** 2 * (theta - 2 * (mu + 1)) ** 2) / (L ** 2 + 1))
     if theta * (theta + c) / (mu + 1) ** 2 / c * (
             c + mu * ((2 * (theta - 1) * mu + theta - 2) - L ** 2 * (theta - 2 * (mu + 1))) / (L ** 2 + 1)) >= 0:
         theoretical_tau = ((theta + c) / 2 / (mu + 1)) ** 2

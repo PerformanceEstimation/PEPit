@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
@@ -131,5 +131,5 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1.
     alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
-    beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
+    beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
     pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)

@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
@@ -115,7 +115,7 @@ def wc_triple_momentum(mu, L, n, verbose=True):
 
     # Set the parameters of the Triple Momentum Method
     kappa = L / mu
-    rho = (1 - 1 / np.sqrt(kappa))
+    rho = (1 - 1 / sqrt(kappa))
     alpha = (1 + rho) / L
     beta = rho ** 2 / (2 - rho)
     gamma = rho ** 2 / (1 + rho) / (2 - rho)

@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.functions import ConvexFunction
@@ -30,9 +30,9 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
                :nowrap:
 
                \\begin{eqnarray}
-                   y_{t+1} &&= (1-\\alpha_{t} ) x_{t} + \\alpha_{t} v_t \\\\
-                   x_{t+1} &&= \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\\gamma_t}\\|x-y_{t+1}\\|^2 \\right\\}, \\\\
-                   v_{t+1} &&= v_t + \\frac{1}{\\alpha_{t}} (x_{t+1}-y_{t+1})
+                   y_{t+1} & = & (1-\\alpha_{t} ) x_{t} + \\alpha_{t} v_t \\\\
+                   x_{t+1} & = & \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\\gamma_t}\\|x-y_{t+1}\\|^2 \\right\\}, \\\\
+                   v_{t+1} & = & v_t + \\frac{1}{\\alpha_{t}} (x_{t+1}-y_{t+1})
                \\end{eqnarray}
 
        with
@@ -41,8 +41,8 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
                :nowrap:
 
                \\begin{eqnarray}
-                   \\alpha_{t} &&= \\frac{\\sqrt{(A_t \\gamma_t)^2 + 4 A_t \\gamma_t} - A_t \\gamma_t }{2} \\\\
-                   A_{t+1} &&= (1 - \\alpha_{t})  A_t
+                   \\alpha_{t} & = & \\frac{\\sqrt{(A_t \\gamma_t)^2 + 4 A_t \\gamma_t} - A_t \\gamma_t}{2} \\\\
+                   A_{t+1} & = & (1 - \\alpha_{t}) A_t
                \\end{eqnarray}
 
        and :math:`v_0=x_0`.
@@ -108,7 +108,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
     x, v = x0, x0
     A = A0
     for i in range(n):
-        alpha = (np.sqrt((A * gammas[i]) ** 2 + 4 * A * gammas[i]) - A * gammas[i]) / 2
+        alpha = (sqrt((A * gammas[i]) ** 2 + 4 * A * gammas[i]) - A * gammas[i]) / 2
         y = (1 - alpha) * x + alpha * v
         x, _, _ = proximal_step(y, func, gammas[i])
         v = v + 1 / alpha * (x - y)
@@ -123,7 +123,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
     # Compute theoretical guarantee (for comparison)
     accumulation = 0
     for i in range(n):
-        accumulation += np.sqrt(gammas[i])
+        accumulation += sqrt(gammas[i])
     theoretical_tau = 4 / A0 / accumulation ** 2
 
     # Print conclusion if required

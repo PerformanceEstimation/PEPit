@@ -1,5 +1,6 @@
-from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
 from PEPit.expression import Expression
+
+from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
 
 
 class Point(object):

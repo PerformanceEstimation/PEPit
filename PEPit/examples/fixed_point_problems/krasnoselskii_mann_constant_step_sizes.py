@@ -1,4 +1,4 @@
-import numpy as np
+from math import sqrt
 
 from PEPit import PEP
 from PEPit.operators import LipschitzOperator
@@ -91,9 +91,9 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if 1/2 <= gamma <= 1 / 2 * (1 + np.sqrt(n / (n + 1))):
+    if 1/2 <= gamma <= 1 / 2 * (1 + sqrt(n / (n + 1))):
         theoretical_tau = 1 / (n + 1) * (n / (n + 1)) ** n / (4 * gamma * (1 - gamma))
-    elif 1 / 2 * (1 + np.sqrt(n / (n + 1))) < gamma <= 1:
+    elif 1 / 2 * (1 + sqrt(n / (n + 1))) < gamma <= 1:
         theoretical_tau = (2 * gamma - 1) ** (2 * n)
     else:
         raise ValueError("{} is not a valid value for the step-size \'gamma\'."
