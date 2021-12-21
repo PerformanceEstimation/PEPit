@@ -1,79 +1,54 @@
 Contributing
 ============
 
-Creating new example:
-^^^^^^^^^^^^^^^^^^^^^
-- Define Pb it solves (with f\_\star \\triangleq )
+PEPit allows to study a lot of optimization methods.
+Some of them can be found in ``PEPit.examples``.
+If you publish or have published a result on a new method or a new guarantee of an existing method,
+you are very welcome to contribute to PEPit by adding a file in ``PEPit/examples``.
 
-- Name algo in boldface
+You are also welcome to add features you might need to the pipeline.
 
-- Introduce perf metric (out < tau * in)
+General guidelines
+------------------
 
-- Describe alg main step
+We only ask you follow common guidelines, namely that the provided code:
 
-- Write theoretical result (tau + Upper/Lower/Tight in italic bold)
+- sticks as much as possible to the PEP8 convention.
 
-- Refs (preferably arxiv and with arxiv version)
+- is commented with Google style docstring.
 
-- Params (indicate optional or not)
+- is well tested.
 
-- Returns
+For new example, the guidelines follow.
 
-- Example
+Creating new example
+--------------------
 
-PEPit: Liste des trucs à verifier concernant les exemples:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We don't require a specific code format for a new example.
+However, we ask the associated docstring to be organized as follow:
 
-- [done] Google style docstring
+- Define Problem solved (introducing function notations and assumptions).
 
-- [done] Virer les hypotheses qui n’en sont pas comme « non-smooth ».
+- Name method in boldface formatting.
 
-- [done] Privilégier \equiv au lieu de = quand on minimise F(x) = f_1(x) + f_2(x).
+- Introduce performance metric, initial condition and parameters (``performance_metric < tau(parameters) initialization``).
 
-- [done] \star -> \\star
+- Describe method main step and cite reference with specified algorithm.
 
-- [done] Add "F\_\\star \\triangleq" before the minimization problem
+- Provide theoretical result (``Upper/Lower/Tight`` in boldface formatting + ``performance_metric < theoretical_bound initialization``).
 
-- [done] \\epsilon -> \\varepsilon
+- Reference block containing relevant clickable references (preferably to arxiv with specified version of the paper) in the format:
+  (``First name initial letter``, ``last name`` (``YEAR``). ``Title``. ``Journal or conference`` (``Acronym of journal or conference``).
 
-- Mettre un peu plus de "verbose" avant les équations décrivant la méthode.
+- Args block containing parameters with their type and short description.
 
-- Add arrow on gamma if sequence.
+- Returns block containing ``pepit_tau`` and ``theoretical_tau``.
 
-- [done] Uniformiser les indices: k->t, n for final step.
+- Example block containing a minimal work example of the coded function.
 
-- Only n steps, not n+1
+New example template
+^^^^^^^^^^^^^^^^^^^^
 
-- [done] Utiliser eqnarray environment quand on enchaine plusieurs equations
+We provide an example template in ``PEPit/examples/example_template.py``.
 
-- [TODO] Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
-
-- [TODO] Verifier les théorèmes (les taux sont ils tight? Upper? Lower? éventuellement preciser si on connait un tau expérimentalement qui est different du théorème connu.)
-
-- [TODO] Vérifier les références et citer les passages exacts, pas juste l'article.
-
-- [TODO] Format des références (Initiales des prénoms + noms complets puis année entre parentheses, titre et enfin journal entre parentheses.) Ajouter Egalement une url pour rendre la reference clickable.
-
-- [done] Presentation des paramètres dans un bloc « Args ». De meme pour Return.
-
-- [done] Argument verbose=true explicitement dans Exemple
-
-- [done] Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
-
-- [done] Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seul pour aligner les deux résultats.
-
-- [done] Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
-
-- [done] Vérifier que l'exemple est bien dans les tests
-
-- [done] stepsize, step size -> step-size
-
-- [done] worst case -> worst-case
-
-- [done] algorithm -> method
-
-- fast -> accelerated
-
-- [done] || || -> \\| \\|
-
-- [done] Use left - right to scale brackets etc ...
+.. autofunction:: PEPit.examples.example_template.wc_example_template
