@@ -33,7 +33,7 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     Raises:
         ValueError: if notion is not set in ['absolute', 'relative'].
 
-    Notes:
+    Note:
         When :math:`\\gamma` is set to 0, then the this routine returns
         :math:`x_0`, :math:`d_{x_0}`, and :math:`f_{x_0}`.
         It is used as is in the example of unconstrained convex minimization scheme called
