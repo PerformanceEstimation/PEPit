@@ -1,4 +1,4 @@
-Non=convex optimization
+Non-convex optimization
 =======================
 
 .. contents::

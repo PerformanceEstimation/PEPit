@@ -73,7 +73,7 @@ class Point(object):
         Example:
             >>> point1 = Point()
             >>> point2 = Point()
-            >>> new_point = Expression(is_function_value=False, decomposition_dict = {point1: -1/5, point2: 1/5})
+            >>> new_point = Point(is_function_value=False, decomposition_dict = {point1: -1/5, point2: 1/5})
 
         """
 

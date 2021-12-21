@@ -3,7 +3,7 @@ from PEPit.point import Point
 
 def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     """
-    This routines performs a step :math:`x_0 \\leftarrow x_0 - \\gamma d_{x_0}`
+    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma d_{x_0}`
     where :math:`d_{x_0}` is close to the gradient of :math:`f` in :math:`x_0`
     in the following sense:
 
