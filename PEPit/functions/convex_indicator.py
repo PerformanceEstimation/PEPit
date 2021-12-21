@@ -21,11 +21,13 @@ class ConvexIndicatorFunction(Function):
     References:
         `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
         Smooth strongly convex interpolation and exact worst-case performance of first-order method.
-        Mathematical Programming.<https://arxiv.org/pdf/1502.05666.pdf>`_
+        Mathematical Programming.
+        <https://arxiv.org/pdf/1502.05666.pdf>`_
 
         `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
         Exact Worst-case Performance of First-order Methods for Composite Convex Optimization.
-        SIAM Journal on Optimization.<https://arxiv.org/pdf/1512.07516.pdf>`_
+        SIAM Journal on Optimization.
+        <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     """
 

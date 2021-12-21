@@ -19,8 +19,8 @@ class MonotoneOperator(Function):
     References:
         For details about interpolation conditions, we refer to the following:
         `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation:
-        Tight contraction factors and optimal parameter selection.<https://arxiv.org/pdf/1812.00146.pdf>`_
+        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
