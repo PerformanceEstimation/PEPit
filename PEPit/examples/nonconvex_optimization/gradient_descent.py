@@ -38,7 +38,7 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     <https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01>`_
 
     `[2] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021). The exact worst-case convergence rate of the
-    gradient method with fixed step lengths for L-smooth functions.
+    gradient method with fixed step lengths for L-smooth functions. arXiv 2104.05468.
     <https://arxiv.org/pdf/2104.05468v3.pdf>`_
 
     Args:

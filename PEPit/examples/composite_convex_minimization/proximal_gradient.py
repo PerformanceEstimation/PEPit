@@ -49,8 +49,8 @@ def wc_proximal_gradient(L, mu, gamma, n, verbose=True):
 
     [2] B. Polyak (1987). Introduction to Optimization. Optimization Software New York.
 
-    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
-    Applied and Computational Mathematics 15.1: 3-43.
+    `[1] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
     `[4] L. Lessard, B. Recht, A. Packard (2016). Analysis and design of optimization algorithms via

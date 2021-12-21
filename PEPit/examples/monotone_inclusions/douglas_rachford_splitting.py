@@ -47,11 +47,11 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
     **References**: The detailed PEP methodology for studying operator splitting is provided in [2].
 
     `[1] W. Moursi, L. Vandenberghe (2019). Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and
-    a Strongly Monotone Operator (Journal of Optimization Theory and Applications 183, 179–198).
+    a Strongly Monotone Operator. Journal of Optimization Theory and Applications 183, 179–198.
     <https://arxiv.org/pdf/1805.09396.pdf>`_
 
     `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
-    Tight contraction factors and optimal parameter selection (SIAM Journal on Optimization, 30(3), 2251-2271).
+    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
     <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     Args:

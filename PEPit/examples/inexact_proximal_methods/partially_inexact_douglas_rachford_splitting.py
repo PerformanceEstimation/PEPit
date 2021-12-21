@@ -56,10 +56,12 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     see [2, Section 4.4] for more details.
 
     `[1] J. Eckstein and W. Yao (2018). Relative-error approximate versions of Douglas–Rachford splitting and
-    special cases of the ADMM. Mathematical Programming, 170(2), 417-444. <https://link.springer.com/article/10.1007/s10107-017-1160-5>`_
+    special cases of the ADMM. Mathematical Programming, 170(2), 417-444.
+    <https://link.springer.com/article/10.1007/s10107-017-1160-5>`_
 
     `[2] M. Barre, A. Taylor, F. Bach (2020). Principled analyses and design of
-    first-order methods with inexact proximal operators, arXiv 2006.06041v2. <https://arxiv.org/pdf/2006.06041v2.pdf>`_
+    first-order methods with inexact proximal operators, arXiv 2006.06041v2.
+    <https://arxiv.org/pdf/2006.06041v2.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

@@ -48,7 +48,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
     <https://www.sciencedirect.com/science/article/pii/0041555364901375>`_
 
     `[2] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015). Global convergence of the Heavy-ball method for
-    convex optimization. European Control Conference.
+    convex optimization. European Control Conference (ECC).
     <https://arxiv.org/pdf/1412.7457.pdf>`_
 
     Args:

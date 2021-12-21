@@ -31,7 +31,7 @@ def wc_proximal_point(alpha, n, verbose=True):
     **Reference**:
 
     `[1] G. Gu, J. Yang (2020). Tight sublinear convergence rate of the proximal point algorithm for maximal
-    monotone inclusion problem (SIAM Journal on Optimization, 30(3), 1905-1921).
+    monotone inclusion problem. SIAM Journal on Optimization, 30(3), 1905-1921.
     <https://epubs.siam.org/doi/pdf/10.1137/19M1299049>`_
 
     Args:
