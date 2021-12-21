@@ -3,19 +3,26 @@ from PEPit.function import Function
 
 class CocoerciveOperator(Function):
     """
-    CocoerciveOperator class
+    The :class:`CocoerciveOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of cocoercive operators.
+
+    Note:
+        Operators'values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
         beta (float): cocoercivity constant
 
+    Cocoercive operators are characterized by the parameter :math:`\\beta`, hence can be instantiated as
+
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
+        >>> func = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
 
     References:
-        [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-        "Operator Splitting Performance Estimation: Tight contraction factors
-        and optimal parameter selection," arXiv:1812.00146, 2018.
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
+        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -25,24 +32,31 @@ class CocoerciveOperator(Function):
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
-        Cocoercive operators are not characterized by any parameter.
 
         Args:
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
-            reuse_gradient (bool): If true, the function can have only one subgradient per point.
+            param (dict): contains the values of beta.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            Cocoercive operators are necessarily continuous, hence `reuse_gradient` is set to True.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=True)
 
         # Store the beta parameter
         self.beta = param['beta']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the cocoercive operator
+        Add all the interpolation conditions of the cocoercive operators.
         """
 
         for i, point_i in enumerate(self.list_of_points):

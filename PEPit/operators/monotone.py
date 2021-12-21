@@ -3,17 +3,24 @@ from PEPit.function import Function
 
 class MonotoneOperator(Function):
     """
-    MonotoneOperator class
+    The :class:`MonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of monotone operators.
+
+    Note:
+        Operators'values can be requested through `gradient` and `function values` should not be used.
+
+    Monotone operators are not characterized by any parameter, hence can be instantiated as
 
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
         >>> h = problem.declare_function(function_class=MonotoneOperator, param=dict())
 
     References:
-        For details about interpolation conditions, we refer to the fllowing :
-        [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-        "Operator Splitting Performance Estimation: Tight contraction factors
-        and optimal parameter selection," arXiv:1812.00146, 2018.
+        For details about interpolation conditions, we refer to the following:
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
+        Operator Splitting Performance Estimation:
+        Tight contraction factors and optimal parameter selection.<https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -23,12 +30,14 @@ class MonotoneOperator(Function):
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
-        Monotone operators are are not characterized by any parameter.
-
         Args:
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
-            reuse_gradient (bool): If true, the function can have only one subgradient per point.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
 
         """
         super().__init__(is_leaf=is_leaf,
@@ -37,7 +46,7 @@ class MonotoneOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the monotone operator
+        Add all the interpolation conditions of the monotone operators provided in [1].
         """
 
         for i, point_i in enumerate(self.list_of_points):

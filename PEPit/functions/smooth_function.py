@@ -3,17 +3,18 @@ from PEPit.function import Function
 
 class SmoothFunction(Function):
     """
-    SmoothFunction class
+    The :class:`SmoothFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of smooth functions.
 
     Attributes:
         L (float): smoothness constant
 
+    Smooth functions are characterized by the smoothness parameter `L`, hence can be instantiated as
+
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=SmoothFunction, param={'L': 1})
-
-    References:
-
+        >>> func = problem.declare_function(function_class=SmoothFunction, param={'L': 1})
 
     """
 
@@ -23,23 +24,31 @@ class SmoothFunction(Function):
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
-        Smooth functions are characterized by their smoothness constant L.
 
         Args:
             param (dict): contains the values L
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            Smooth functions are necessarily differentiable, hence `reuse_gradient` is set to True.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=True)
 
         # Store L
         self.L = param['L']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the strongly convex smooth functions
+        Add all the interpolation conditions of the strongly convex smooth functions.
         """
 
         for i, point_i in enumerate(self.list_of_points):

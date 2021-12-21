@@ -3,17 +3,18 @@ from PEPit.function import Function
 
 class StronglyConvexFunction(Function):
     """
-    StronglyConvexFunction class
+    The :class:`StronglyConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of strongly convex functions.
 
     Attributes:
         mu (float): strong convexity constant
 
+    Strongly convex functions are characterized by the strong convexity parameter :math:`\\mu`, hence can be instantiated as
+
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=StronglyConvexFunction, param={'mu': .1})
-
-    References:
-
+        >>> func = problem.declare_function(function_class=StronglyConvexFunction, param={'mu': .1})
 
     """
 
@@ -23,12 +24,16 @@ class StronglyConvexFunction(Function):
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
-        Strongly convex functions are characterized by their strong convexity constant mu.
 
         Args:
-            param (dict): contains the values of mu and L
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
+            param (dict): contains the values of mu
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
 
         """
         super().__init__(is_leaf=is_leaf,
@@ -40,7 +45,7 @@ class StronglyConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the strongly convex smooth functions
+        Add all the interpolation conditions of the strongly convex smooth functions.
         """
 
         for i, point_i in enumerate(self.list_of_points):

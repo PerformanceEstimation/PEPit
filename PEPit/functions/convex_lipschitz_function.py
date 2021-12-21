@@ -3,17 +3,18 @@ from PEPit.function import Function
 
 class ConvexLipschitzFunction(Function):
     """
-    ConvexLipschitzFunction class
+    The :class:`ConvexLipschitzFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of convex Lipschitz continuous functions.
 
     Attributes:
-        L (float): Lipschitz constant
+        M (float): Lipschitz constant
+
+    Convex Lipschitz continuous functions are characterized by the parameter `M`, hence can be instantiated as
 
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=ConvexLipschitzFunction, param={'L': 1})
-
-    References:
-
+        >>> func = problem.declare_function(function_class=ConvexLipschitzFunction, param={'M': 1})
 
     """
 
@@ -23,12 +24,16 @@ class ConvexLipschitzFunction(Function):
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
-        Convex Lipschitz functions are characterized by their lipschitz parameter L.
 
         Args:
-            param (dict): contains the value of L
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
+            param (dict): contains the value of M
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
 
         """
         # Inherit directly from Function.
@@ -41,7 +46,7 @@ class ConvexLipschitzFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the convex functions
+        Add all the interpolation conditions of the convex Lipschitz continuous functions.
         """
 
         for i, point_i in enumerate(self.list_of_points):

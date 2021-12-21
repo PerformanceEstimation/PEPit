@@ -3,18 +3,24 @@ from PEPit.function import Function
 
 class SmoothStronglyConvexFunction(Function):
     """
-    SmoothStronglyConvexFunction class
+    The :class:`SmoothStronglyConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of smooth strongly convex functions.
 
     Attributes:
         mu (float): strong convexity constant
         L (float): smoothness constant
 
+    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and `L`, hence can be instantiated as
+
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=SmoothStronglyConvexFunction, param={'mu': .1, 'L': 1})
+        >>> func = problem.declare_function(function_class=SmoothStronglyConvexFunction, param={'mu': .1, 'L': 1})
 
     References:
-
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+        Smooth strongly convex interpolation and exact worst-case performance of first-order method.
+        Mathematical Programming.<https://arxiv.org/pdf/1502.05666.pdf>`_
 
     """
 
@@ -24,21 +30,24 @@ class SmoothStronglyConvexFunction(Function):
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
-        Strongly convex smooth functions are characterized by
-        their strong convexity constant mu
-        and their smoothness constant L.
-
-        They are necessarily differentiable.
 
         Args:
             param (dict): contains the values of mu and L
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            Smooth strongly convex functions are necessarily differentiable, hence `reuse_gradient` is set to True.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=True)
 
         # Store mu and L
         self.mu = param['mu']
@@ -46,7 +55,7 @@ class SmoothStronglyConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the strongly convex smooth functions
+        Add all the interpolation conditions of the smooth strongly convex functions provided in [1, Theorem 4].
         """
 
         for i, point_i in enumerate(self.list_of_points):
