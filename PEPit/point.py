@@ -73,7 +73,7 @@ class Point(object):
         Example:
             >>> point1 = Point()
             >>> point2 = Point()
-            >>> new_point = Point(is_function_value=False, decomposition_dict = {point1: -1/5, point2: 1/5})
+            >>> new_point = Point(is_leaf=False, decomposition_dict = {point1: -1/5, point2: 1/5})
 
         """
 
@@ -124,7 +124,7 @@ class Point(object):
         # Verify that other is a Point
         assert isinstance(other, Point)
 
-        # Update the linear decomposition of the sum of 2 points from their respective basis decomposition
+        # Update the linear decomposition of the sum of 2 points from their respective leaf decomposition
         merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
         merged_decomposition_dict = prune_dict(merged_decomposition_dict)
 
@@ -189,7 +189,7 @@ class Point(object):
             # Compute the decomposition dict of the new expression
             decomposition_dict = multiply_dicts(self.decomposition_dict, other.decomposition_dict)
             # Create and return the new expression
-            return Expression(is_function_value=False, decomposition_dict=decomposition_dict)
+            return Expression(is_leaf=False, decomposition_dict=decomposition_dict)
         else:
             # Raise an error if the user tries to multiply a point by anything else
             raise TypeError("Points can be multiplied by scalar constants and other points only!"
@@ -268,7 +268,7 @@ class Point(object):
             # If leaf, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
-            # If linear combination, combine the values of the basis, and store the result before returning it.
+            # If linear combination, combine the values of the leaf, and store the result before returning it.
             else:
                 value = 0
                 for point, weight in self.decomposition_dict.items():

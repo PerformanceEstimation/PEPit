@@ -146,14 +146,14 @@ class PEP(object):
         Gweights = np.zeros((Point.counter, Point.counter))
 
         # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_function_value():
+        if expression.get_is_leaf():
             Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from basis expressions
+        # If composite, combine all the cvxpy expression found from leaf expressions
         else:
             for key, weight in expression.decomposition_dict.items():
                 # Function values are stored in F
                 if type(key) == Expression:
-                    assert key.get_is_function_value()
+                    assert key.get_is_leaf()
                     Fweights[key.counter] += weight
                 # Inner products are stored in G
                 elif type(key) == tuple:
@@ -346,7 +346,7 @@ class PEP(object):
                         point.value = points_values[:, point.counter]
                     if gradient.get_is_leaf():
                         gradient.value = points_values[:, gradient.counter]
-                    if function_value.get_is_function_value():
+                    if function_value.get_is_leaf():
                         function_value.value = F_value[function_value.counter]
 
     def _eval_constraint_dual_values(self, cvx_constraints):

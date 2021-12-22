@@ -89,7 +89,7 @@ class Function(object):
         self._is_leaf = is_leaf
         self.reuse_gradient = reuse_gradient
 
-        # If basis function, the decomposition is updated,
+        # If leaf function, the decomposition is updated,
         # the object counter is set
         # and the class counter updated.
         # Otherwise, the decomposition_dict is stored in an attribute and the object counter is set to None
@@ -293,9 +293,9 @@ class Function(object):
         # If "self" has not been evaluated on "point" yet, then return None.
         return None
 
-    def _separate_basis_functions_regarding_their_need_on_point(self, point):
+    def _separate_leaf_functions_regarding_their_need_on_point(self, point):
         """
-        Separate basis functions in 3 categories depending whether they need new evaluation or not of
+        Separate leaf functions in 3 categories depending whether they need new evaluation or not of
         gradient and function value on the :class:`Point` "point".
 
         Args:
@@ -312,7 +312,7 @@ class Function(object):
         list_of_functions_which_need_gradient_only = list()
         list_of_functions_which_need_gradient_and_function_value = list()
 
-        # Separate all basis function in 3 categories based on their need
+        # Separate all leaf function in 3 categories based on their need
         for function, weight in self.decomposition_dict.items():
             # If function has already been evaluated on point, then one should reuse some evaluation.
             # Note the method "is_already_evaluated_on_point" returns a non empty tuple if the function has already
@@ -366,16 +366,16 @@ class Function(object):
         if g.decomposition_dict == dict():
             self.list_of_stationary_points.append(triplet)
 
-        # If self is not a basis function, create gradient and function value for each of the latest
+        # If self is not a leaf function, create gradient and function value for each of the latest
         # and combine under the constraint that the full gradient and function value is fixed.
         if not self._is_leaf:
 
-            # Remove the basis functions that are not really involved in the decomposition of self
+            # Remove the leaf functions that are not really involved in the decomposition of self
             # to avoid division by zero at the end.
             self.decomposition_dict = prune_dict(self.decomposition_dict)
 
-            # Separate all basis function in 3 categories based on their need
-            tuple_of_lists_of_functions = self._separate_basis_functions_regarding_their_need_on_point(point=point)
+            # Separate all leaf function in 3 categories based on their need
+            tuple_of_lists_of_functions = self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
             # Reduce into 2 lists according to the fact a function needs something of not
             list_of_functions_which_need_nothing = tuple_of_lists_of_functions[0]
@@ -385,28 +385,28 @@ class Function(object):
             # If any function needs something, we build it
             if list_of_functions_which_need_something != list():
 
-                # Store the number of such basis function and the gradient and function value of self on point
-                total_number_of_involved_basis_functions = len(self.decomposition_dict.keys())
-                gradient_of_last_basis_function = g
-                value_of_last_basis_function = f
+                # Store the number of such leaf function and the gradient and function value of self on point
+                total_number_of_involved_leaf_functions = len(self.decomposition_dict.keys())
+                gradient_of_last_leaf_function = g
+                value_of_last_leaf_function = f
                 number_of_currently_computed_gradients_and_values = 0
 
                 for function, weight in list_of_functions_which_need_nothing + list_of_functions_which_need_something:
 
-                    # Keep track of the gradient and function value of self minus those from visited basis functions
-                    if number_of_currently_computed_gradients_and_values < total_number_of_involved_basis_functions - 1:
+                    # Keep track of the gradient and function value of self minus those from visited leaf functions
+                    if number_of_currently_computed_gradients_and_values < total_number_of_involved_leaf_functions - 1:
                         grad, val = function.oracle(point)
-                        gradient_of_last_basis_function = gradient_of_last_basis_function - weight * grad
-                        value_of_last_basis_function = value_of_last_basis_function - weight * val
+                        gradient_of_last_leaf_function = gradient_of_last_leaf_function - weight * grad
+                        value_of_last_leaf_function = value_of_last_leaf_function - weight * val
 
                         number_of_currently_computed_gradients_and_values += 1
 
                     # The latest function must receive fully conditioned gradient and function value
                     else:
-                        gradient_of_last_basis_function = gradient_of_last_basis_function / weight
-                        value_of_last_basis_function = value_of_last_basis_function / weight
+                        gradient_of_last_leaf_function = gradient_of_last_leaf_function / weight
+                        value_of_last_leaf_function = value_of_last_leaf_function / weight
 
-                        function.add_point((point, gradient_of_last_basis_function, value_of_last_basis_function))
+                        function.add_point((point, gradient_of_last_leaf_function, value_of_last_leaf_function))
 
     def oracle(self, point):
         """
@@ -440,29 +440,29 @@ class Function(object):
         if associated_grad_and_function_val and not self.reuse_gradient:
             f = associated_grad_and_function_val[-1]
 
-        # Here we separate the list of basis functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self._separate_basis_functions_regarding_their_need_on_point(point=point)
+        # Here we separate the list of leaf functions according to their needs
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
         # Here we deal with the function value computation
         if associated_grad_and_function_val is None:
 
-            # If no basis function need a new function value, it means that they all have one,
+            # If no leaf function need a new function value, it means that they all have one,
             # and then "self"'s one is determined by linear combination.
             if list_of_functions_which_need_gradient_and_function_value == list():
-                f = Expression(is_function_value=False, decomposition_dict=dict())
+                f = Expression(is_leaf=False, decomposition_dict=dict())
                 for function, weight in self.decomposition_dict.items():
                     f += weight * function.value(point=point)
 
             # Otherwise, we define a new one.
             else:
-                f = Expression(is_function_value=True, decomposition_dict=None)
+                f = Expression(is_leaf=True, decomposition_dict=None)
 
         # Here we deal with the gradient computation.
         # We come to this point if "self" need a new gradient,
         # either because it is not differentiable or because it had never been computed so far.
 
-        # If "self" gradient is determined by its basis functions, then we compute it.
+        # If "self" gradient is determined by its leaf functions, then we compute it.
         if list_of_functions_which_need_gradient_and_function_value == list() and list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
@@ -564,7 +564,7 @@ class Function(object):
         # Create a new point, null gradient and new function value
         point = Point(is_leaf=True, decomposition_dict=None)
         g = Point(is_leaf=False, decomposition_dict=dict())
-        f = Expression(is_function_value=True, decomposition_dict=None)
+        f = Expression(is_leaf=True, decomposition_dict=None)
 
         # Add the triplet to the list of points of the function as well as to its list of stationary points
         self.add_point((point, g, f))

@@ -14,15 +14,15 @@ class Expression(object):
     and constant scalar values.
 
     Attributes:
-        _is_function_value (bool): True if self is a function value defined from scratch
+        _is_leaf (bool): True if self is a function value defined from scratch
                                    (not as linear combination of other function values).
                                    False if self is a linear combination of existing :class:`Expression` objects.
         value (float): numerical value of self obtained after solving the PEP via SDP solver.
                           Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
-        decomposition_dict (dict): decomposition of self as a linear combination of **basic** :class:`Expression` objects.
+        decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
                                    Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                    And values are their associated coefficients.
-        counter (int): counts the number of **basic** :class:`Expression` objects.
+        counter (int): counts the number of **leaf** :class:`Expression` objects.
 
     :class:`Expression` objects can be added or subtracted together.
     They can also be added, subtracted, multiplied and divided by a scalar value.
@@ -49,22 +49,22 @@ class Expression(object):
     counter = 0
 
     def __init__(self,
-                 is_function_value=True,
+                 is_leaf=True,
                  decomposition_dict=None,
                  ):
         """
         :class:`Expression` objects can also be instantiated via the following arguments
 
         Args:
-            is_function_value (bool): True if self is a function value defined from scratch
+            is_leaf (bool): True if self is a function value defined from scratch
                                       (not as linear combination of other function values).
                                       False if self is a linear combination of existing :class:`Expression` objects.
-            decomposition_dict (dict): decomposition of self as a linear combination of **basic** :class:`Expression` objects.
+            decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
                                        Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                        And values are their associated coefficients.
 
         Note:
-            If `is_function_value` is True, then `decomposition_dict` must be provided as None.
+            If `is_leaf` is True, then `decomposition_dict` must be provided as None.
             Then `self.decomposition_dict` will be set to `{self: 1}`.
 
         Instantiating the :class:`Expression` object of the first example can be done by
@@ -72,20 +72,20 @@ class Expression(object):
         Example:
             >>> expr1 = Expression()
             >>> expr2 = Expression()
-            >>> new_expr = Expression(is_function_value=False, decomposition_dict = {expr1: -1/5, expr2: 1/5, 1: -1/5})
+            >>> new_expr = Expression(is_leaf=False, decomposition_dict = {expr1: -1/5, expr2: 1/5, 1: -1/5})
 
         """
-        # Store is_function_value in a protected attribute
-        self._is_function_value = is_function_value
+        # Store is_leaf in a protected attribute
+        self._is_leaf = is_leaf
 
         # Initialize the value attribute to None until the PEP is solved
         self.value = None
 
-        # If basic function value, the decomposition is updated,
+        # If leaf function value, the decomposition is updated,
         # the object counter is set
         # and the class counter updated.
         # Otherwise, the decomposition_dict is stored in an attribute and the object counter is set to None
-        if is_function_value:
+        if is_leaf:
             assert decomposition_dict is None
             self.decomposition_dict = {self: 1}
             self.counter = Expression.counter
@@ -95,14 +95,14 @@ class Expression(object):
             self.decomposition_dict = decomposition_dict
             self.counter = None
 
-    def get_is_function_value(self):
+    def get_is_leaf(self):
         """
 
         Returns:
-            self._is_function_value (bool): allows to access the protected attribute `_is_function_value`.
+            self._is_leaf (bool): allows to access the protected attribute `_is_leaf`.
 
         """
-        return self._is_function_value
+        return self._is_leaf
 
     def __add__(self, other):
         """
@@ -131,7 +131,7 @@ class Expression(object):
             raise TypeError("Expression can be added only to other expression or scalar values")
 
         # Create and return the newly created Expression
-        return Expression(is_function_value=False, decomposition_dict=merged_decomposition_dict)
+        return Expression(is_leaf=False, decomposition_dict=merged_decomposition_dict)
 
     def __sub__(self, other):
         """
@@ -187,7 +187,7 @@ class Expression(object):
             new_decomposition_dict[key] = value * other
 
         # Create and return the newly created Expression
-        return Expression(is_function_value=False, decomposition_dict=new_decomposition_dict)
+        return Expression(is_leaf=False, decomposition_dict=new_decomposition_dict)
 
     def __mul__(self, other):
         """
@@ -331,16 +331,18 @@ class Expression(object):
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self.value is None:
-            # If basic function value, the PEP would have filled the attribute at the end of the solve.
-            if self._is_function_value:
+            # If leaf function value, the PEP would have filled the attribute at the end of the solve.
+            if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
-            # If linear combination, combine the values of the basic, and store the result before returning it.
+            # If linear combination,
+            # combine the values of the leaf expressions,
+            # and store the result before returning it.
             else:
                 value = 0
                 for key, weight in self.decomposition_dict.items():
                     # Distinguish 3 cases: function values, inner products, and constant values
                     if type(key) == Expression:
-                        assert key.get_is_function_value()
+                        assert key.get_is_leaf()
                         value += weight * key.eval()
                     elif type(key) == tuple:
                         point1, point2 = key
