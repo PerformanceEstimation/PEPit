@@ -4,13 +4,13 @@ from PEPit.function import Function
 class CocoerciveOperator(Function):
     """
     The :class:`CocoerciveOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of cocoercive operators.
+    implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.
 
     Note:
         Operators'values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        beta (float): cocoercivity constant
+        beta (float): cocoercivity parameter
 
     Cocoercive operators are characterized by the parameter :math:`\\beta`, hence can be instantiated as
 
@@ -20,8 +20,8 @@ class CocoerciveOperator(Function):
         >>> func = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
 
     References:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
@@ -56,7 +56,8 @@ class CocoerciveOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the cocoercive operators.
+        Formulates the list of interpolation constraints for self (cocoercive maximally monotone operator),
+        see, e.g., [1, Proposition 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):
