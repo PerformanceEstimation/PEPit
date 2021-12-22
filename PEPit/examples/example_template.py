@@ -41,15 +41,18 @@ def wc_example_template(arg1, arg2, arg3, verbose=True):
 
     **References**:
 
-    `[1] F. Name, F. Name, F. Name (YEAR). Title.
+    `[1] F. Name, F. Name, F. Name (YEAR).
+    Title.
     Conference or journal (Acronym of conference or journal).
     <https://arxiv.org/pdf/KEY.pdf OR OTHER URL>`_
 
-    `[2] F. Name, F. Name, F. Name (YEAR). Title.
+    `[2] F. Name, F. Name, F. Name (YEAR).
+    Title.
     Conference or journal (Acronym of journal or conference).
     <https://arxiv.org/pdf/KEY.pdf OR OTHER URL>`_
 
-    `[3] F. Name, F. Name, F. Name (YEAR). Title.
+    `[3] F. Name, F. Name, F. Name (YEAR).
+    Title.
     Conference or journal (Acronym of journal or conference).
     <https://arxiv.org/pdf/KEY.pdf OR OTHER URL>`_
 
