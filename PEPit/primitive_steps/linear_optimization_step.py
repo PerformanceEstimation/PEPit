@@ -14,7 +14,7 @@ def linear_optimization_step(dir, ind):
 
     Args:
         dir (Point): direction of optimization
-        ind (Function): convex indicator function
+        ind (ConvexIndicatorFunction): convex indicator function
 
     Returns:
         x (Point): the optimal point.
