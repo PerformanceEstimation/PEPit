@@ -7,7 +7,7 @@ Welcome to PEPit's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    self
@@ -16,14 +16,6 @@ Welcome to PEPit's documentation!
    examples
    contributing
 
-Using and citing the toolbox
-----------------------------
-
-Installation
-------------
-
-Dependencies
-------------
 
 Indices and tables
 ------------------

@@ -6,95 +6,175 @@
 [![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
 [![License](https://img.shields.io/github/license/bgoujaud/PEPit.svg)](https://github.com/bgoujaud/PEPit/blob/master/LICENSE)
 
+This open source Python library provides a generic way to use PEP framework in Python.
+
+Website and documentation: [https://pepit.readthedocs.io/](https://pepit.readthedocs.io/)
+
+Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgoujaud/PEPit)
+
+A lot of common optimization methods can be studied through this framework,
+using numerous steps and under a large variety of function / operator classes.
+
+PEPit provides the following [steps]():
+
+- [Inexact gradient step]()
+- [Exact line-search step]()
+- [Proximal step]()
+- [Inexact proximal step]()
+- [Bregman gradient step]()
+- [Bregman proximal step]()
+- [Linear optimization step]()
+- [Fixed point]()
+
+PEPit provides the following [function classes]() CNIs:
+
+- [Convex]()
+- [Strongly convex]()
+- [Smooth]()
+- [Convex and smooth]()
+- [Strongly convex and smooth]()
+- [Convex and Lipschitz continuous]()
+- [Convex indicator]()
+
+PEPit provides the following [operator classes]() CNIs:
+
+- [Monotone]()
+- [Strongly monotone]()
+- [Lipschitz continuous]()
+- [Strongly monotone and Lipschitz continuous]()
+- [Cocoercive]()
+
+
+#### Using and citing the toolbox
+
 This code comes jointly with the following [`reference`](.pdf):
 
-> [1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut. "PEP-it: computer-assisted worst-case analyses of first-order optimization methods in Python." 
+    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
+    "PEP-it: computer-assisted worst-case analyses of first-order optimization methods in Python."
 
-please refer to this note when using the toolbox in a project.
+When using the toolbox in a project, please refer to this note via this Bibtex entry:
 
-Version: November 2021
+```bibtex
+TODO add bibtex entry
+```
 
-#### Authors
+### Installation
 
-- [**Baptiste Goujaud**]() (main contributor #1) 
-- [**Céline Moucer**]() (main contributor #2)
-- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) (project supervision)
-- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) (project supervision)
-- [**Adrien Taylor**](http://www.di.ens.fr/~ataylor/) (contributor & main project supervision)
-- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) (contributor & main project supervision)
+The library has been tested on Linux and MacOSX.
+It relies on the following Python modules:
 
-#### Acknowledgments
+- Numpy
+- Scipy
+- Cvxpy
 
+#### Pip installation
 
-The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/) for his feedbacks on preliminary versions of the toolbox, as well as for support regarding the continuous integration and overall organization.
+You can install the toolbox through PyPI with:
 
+```console
+pip install pepit
+```
 
-## Installing the toolbox
+or get the very latest version by running:
 
-This code runs under Python 3.6+.
-- Please run ``pip install -r requirements.txt``
-- Then run ``pip install -e .``
+```console
+pip install -U https://github.com/bgoujaud/PEPit/archive/master.zip # with --user for user install (no root)
+```
 
-You are all set; it remains to test the installation by running the tests:
-- ``python -m unittest``
+#### Post installation check
+After a correct installation, you should be able to import the module without errors:
 
-## When to use PEP-it?
+```python
+import PEPit
+```
 
-The general purpose of the toolbox is to help the researchers producing worst-case guarantees for their favorite first-order methods. A gentle introduction to the toolbox is provided in [1].
+### Example
 
-The toolbox implements the performance estimation approach, pioneered by Drori and Teboulle [2]. The PEP-it implementation is in line with the framework as exposed in [3,4] and follow-up works (for which proper references are provided in the example files). A gentle introduction to performance estimation problems is provided in this [blog post](https://francisbach.com/computer-aided-analyses/).
+The folder [Examples](https://pepit.readthedocs.io/en/latest/#Examples) contains numerous introductory examples to the toolbox.
 
- > [2] Drori, Yoel, and Marc Teboulle. "Performance of first-order methods for smooth convex minimization: a novel approach." Mathematical Programming 145.1-2 (2014): 451-482
- >
- > [3] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur. "Smooth strongly convex interpolation and exact worst-case performance of first-order methods." Mathematical Programming 161.1-2 (2017): 307-345.
- >
- > [4] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur. "Exact worst-case performance of first-order methods for composite convex optimization." SIAM Journal on Optimization 27.3 (2017): 1283-1313
-
- 
- 
-## Example
-
-The folder [Examples](/examples) contains numerous introductory examples to the toolbox.
-
-
-Among the other examples, the following code (see [`GradientMethod`](PEPit/examples/unconstrained_convex_minimization/gradient_descent.py)) generates a worst-case scenario for <img src="https://render.githubusercontent.com/render/math?math=N"> iterations of the gradient method, applied to the minimization of a smooth (possibly strongly) convex function f(x). More precisely, this code snippet allows computing the worst-case value of <img src="https://render.githubusercontent.com/render/math?math=f(x_N)-f_\star"> when <img src="https://render.githubusercontent.com/render/math?math=x_N"> is generated by gradient descent, and when <img src="https://render.githubusercontent.com/render/math?math=\|x_0-x_\star\|=1">.
-
+Among the other examples, the following code (see [`GradientMethod`](https://pepit.readthedocs.io/en/latest/#Examples/unconstrained_convex_minimization/wc_gradient_descent))
+generates a worst-case scenario for <img src="https://render.githubusercontent.com/render/math?math=N"> iterations of the gradient method, applied to the minimization of a smooth (possibly strongly) convex function f(x).
+More precisely, this code snippet allows computing the worst-case value of <img src="https://render.githubusercontent.com/render/math?math=f(x_N)-f_\star"> when <img src="https://render.githubusercontent.com/render/math?math=x_N"> is generated by gradient descent, and when <img src="https://render.githubusercontent.com/render/math?math=\|x_0-x_\star\|=1">.
 
 ```Python
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_gd(mu, L, gamma, n, verbose=True):
+def wc_gradient_descent(L, gamma, n, verbose=True):
     """
-    Consider the minimization problem
-        f_* = min_x f(x),
-    where f is L-smooth and mu-strongly convex.
-    This code computes a worst-case guarantee for the gradient method with fixed step size. That is, it computes
-    the smallest possible tau(n, L, mu) such that the guarantee
-        f(x_n) - f_* <= tau(n, L, mu) * || x_0 - x_* ||^2
-    is valid, where x_n is the output of the gradient descent with fixed step size,
-    and where x_* is the minimizer of f.
-    Result to be compared with that of
-    [1] Yoel Drori. "Contributions to the Complexity Analysis of
-        Optimization Algorithms." PhD thesis, Tel-Aviv University, 2014.
-    :param mu: (float) the strong convexity parameter.
-    :param L: (float) the smoothness parameter.
-    :param gamma: (float) step size.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
-    :return: (tuple) worst_case value, theoretical value
+    Consider the convex minimization problem
+
+    .. math:: f_\\star \\triangleq \\min_x f(x),
+
+    where :math:`f` is :math:`L`-smooth and convex.
+
+    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
+
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\gamma) || x_0 - x_\\star ||^2
+
+    is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
+    where :math:`x_\\star` is a minimizer of :math:`f`.
+
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
+    value of :math:`f(x_n)-f_\\star` when :math:`||x_0 - x_\\star||^2 \\leqslant 1`.
+
+    **Algorithm**:
+    Gradient descent is described by
+
+    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
+
+    where :math:`\\gamma` is a step-size.
+
+    **Theoretical guarantee**:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
+
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2},
+
+    which is tight on some Huber loss functions.
+
+    **References**:
+
+    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
+    approach. Mathematical Programming 145(1–2), 451–482.
+    <https://arxiv.org/pdf/1206.3209.pdf>`_
+
+    Args:
+        L (float): the smoothness parameter.
+        gamma (float): step-size.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
+
+    Example:
+        >>> L = 3
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=True)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 30 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.16666666497937685
+        *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+
     """
 
     # Instantiate PEP
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction,
-                                    {'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': 0, 'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.optimal_point()
+    xs = func.stationary_point()
     fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm
@@ -112,14 +192,14 @@ def wc_gd(mu, L, gamma, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve()
+    pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L / (2 * (2 * n + 1))
+    theoretical_tau = L / (2 * (2 * n * L * gamma + 1))
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of gradient descent with fixed step sizes ***')
+        print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
@@ -127,20 +207,35 @@ def wc_gd(mu, L, gamma, n, verbose=True):
     return pepit_tau, theoretical_tau
 
 
+if __name__ == "__main__":
+
+    L = 3
+    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=True)
+
 ```
 
-## Code: conventions and external contributions
+### Authors
 
-**Convention of the code**
+This toolbox has been created by
 
-- The ``PEPit`` directory contains the main code while ``Tests`` directory contains all the associated tests. 
-- We use PEP8 convention rules.
+- [**Baptiste Goujaud**]() (main contributor #1) 
+- [**Céline Moucer**]() (main contributor #2)
+- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) (project supervision)
+- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) (project supervision)
+- [**Adrien Taylor**](http://www.di.ens.fr/~ataylor/) (contributor & main project supervision)
+- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) (contributor & main project supervision)
 
-**Convention of the VCS**
+#### Acknowledgments
 
-- The ``master`` branch is exclusively used for deployed versions of the code.
-- The ``develop`` branch must be the main one and must not be broken at any time.
-- The other branches are named either ``feature/...`` or ``fix/..`` or eventually ``hotfix/..`` to highlight the importance of the PR.
-- All branches must be approved before merge. We use PRs and the ``git rebase`` command to sync any branch on ``develop``.
+The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/)
+for his feedbacks on preliminary versions of the toolbox,
+as well as for support regarding the continuous integration.
 
-## Documentation
+#### Contributions
+
+All external contributions are welcome.
+Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/#Contributing).
+
+#### References
+
+
