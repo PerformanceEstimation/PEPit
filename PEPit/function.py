@@ -57,11 +57,11 @@ class Function(object):
                  reuse_gradient=False,
                  ):
         """
-        :class:`Function` objects can also be instantiating providing the following arguments
+        :class:`Function` objects can also be instantiated via the following arguments.
 
         Args:
             is_leaf (bool): True if self is defined from scratch.
-                            False is self is defined as linear combination of leaf .
+                            False is self is defined as a linear combination of leafs.
             decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
@@ -551,11 +551,12 @@ class Function(object):
         Create a new stationary point, as well as its null gradient and its function value.
 
         Args:
-            return_gradient_and_function_value (bool): If True, return the triplet point, gradient, function value.
-                                                       Otherwise, return only the point.
+            return_gradient_and_function_value (bool): If True, return the triplet point (:class:`Point`),
+                                                       gradient (:class:`Point`), function value (:class:`Expression`).
+                                                       Otherwise, return only the point (:class:`Point`).
 
         Returns:
-            Point or tuple: The optimal point
+            Point or tuple: An optimal point
 
         """
 

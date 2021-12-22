@@ -48,7 +48,7 @@ class SmoothFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the strongly convex smooth functions.
+        Add all the interpolation conditions of the smooth (not necessarily convex) functions.
         """
 
         for i, point_i in enumerate(self.list_of_points):

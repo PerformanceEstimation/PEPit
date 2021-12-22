@@ -4,11 +4,16 @@ from PEPit.function import Function
 class LipschitzStronglyMonotoneOperator(Function):
     """
     The :class:`LipschitzStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
-    of :class:`Function`, implementing the interpolation constraints of the class of
-    Lipschitz continuous strongly monotone operators.
+    of :class:`Function`, implementing the constraints (which are not necessary and sufficient for interpolation)
+    of the class of Lipschitz continuous strongly monotone operators.
 
     Note:
         Operators'values can be requested through `gradient` and `function values` should not be used.
+
+    Warning:
+        Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
+        in this class are necessary but a priori not sufficient for interpolation. Hence the numerical results
+        obtained when using this class might be non-tight upper bounds (see [1]).
 
     Attributes:
         mu (float): strong monotonicity constant

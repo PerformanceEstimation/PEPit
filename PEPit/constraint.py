@@ -3,7 +3,7 @@ class Constraint(object):
     A :class:`Constraint` encodes either an equality or an inequality between two :class:`Expression` objects.
 
     A :class:`Constraint` must be understood either as
-    `self.expression` = 0 or `self.expression` :math:`leq` 0
+    `self.expression` = 0 or `self.expression` :math:`\\leqslant` 0
     depending on the value of `self.equality_or_inequality`.
 
     Attributes:
@@ -30,7 +30,7 @@ class Constraint(object):
 
     def __init__(self, expression, equality_or_inequality):
         """
-        :class:`Constraint` objects can also be instantiating providing the following arguments
+        :class:`Constraint` objects can also be instantiated via the following arguments.
 
         Args:
             expression (Expression): an object of class Expression

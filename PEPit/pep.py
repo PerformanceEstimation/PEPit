@@ -58,7 +58,7 @@ class PEP(object):
 
     def declare_function(self, function_class, param, reuse_gradient=None):
         """
-        Instantiate a leaf function and store it in the attribute `list_of_functions`.
+        Instantiate a leaf :class:`Function` and store it in the attribute `list_of_functions`.
 
         Args:
             function_class (class): a subclass of :class:`Function` that overwrite the `add_class_constraints` method.
@@ -180,7 +180,7 @@ class PEP(object):
         Args:
             solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
-            tracetrick (bool): Apply trace trick or not to minimize the dimension of the solution.
+            tracetrick (bool): Apply trace heuristic to minimize the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
