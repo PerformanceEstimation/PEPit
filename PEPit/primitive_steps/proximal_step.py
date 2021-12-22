@@ -2,10 +2,10 @@ from PEPit.point import Point
 from PEPit.expression import Expression
 
 
-def proximal_step(x0, f, step):
+def proximal_step(x0, f, gamma):
     """
-    This routine performs a proximal step of step size **step**, starting from **x0**, and on function **f**.
-    That is, it performs :
+    This routine performs a proximal step of step-size **gamma**, starting from **x0**, and on function **f**.
+    That is, it performs:
 
     .. math::
         :nowrap:
@@ -21,7 +21,7 @@ def proximal_step(x0, f, step):
     Args:
         x0 (Point): starting point x0.
         f (Function): function on which the proximal step is computed.
-        step (float): step size of the proximal step.
+        gamma (float): step-size of the proximal step.
 
     Returns:
         x (Point): proximal point.
@@ -35,7 +35,7 @@ def proximal_step(x0, f, step):
     fx = Expression()
 
     # Compute x from the docstring equation.
-    x = x0 - step * gx
+    x = x0 - gamma * gx
 
     # Add point to Function f.
     f.add_point((x, gx, fx))
