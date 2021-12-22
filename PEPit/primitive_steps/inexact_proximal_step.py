@@ -9,7 +9,7 @@ def inexact_proximal_step(z, f, gamma, opt='PD_gapII'):
 
     First, :math:`x` is an approximation to the proximal point of :math:`z` on function :math:`f`:
 
-        .. math:: x \\approx \\mathrm{prox}_{\\gamma f}\\triangleq\\arg\\min_x \\left\\{ \\gamma f(x) + \\frac{1}{2}\\|x-z\\|^2\\right\\},
+        .. math:: x \\approx \\mathrm{prox}_{\\gamma f}(z)\\triangleq\\arg\\min_x \\left\\{ \\gamma f(x) + \\frac{1}{2}\\|x-z\\|^2\\right\\},
 
     where the meaning of :math:`\\approx` depends on the option "opt" and is explained below.
     The notions of inaccuracy implemented within this routine are specified using primal and dual proximal problems, denoted by

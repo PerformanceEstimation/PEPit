@@ -3,74 +3,60 @@ from PEPit.point import Point
 
 def exact_linesearch_step(x0, f, directions):
     """
-    This routines *mimics* an exact line search in specified directions.
+    This routines outputs some :math:`x` by *mimicking* an exact line/span search in specified directions.
+    It is used for instance in ``PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search``
+    and in ``PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient``.
 
-    At each iteration :math:`t`:
-
-    .. math::
-        :nowrap:
-
-        \\begin{eqnarray}
-            x_{t+1} & = & x_t - \\sum_i \\gamma_t^{(i)} d_t^{(i)} \\\\
-            \\text{with } \\overrightarrow{\\gamma_t} & = & \\arg\\min_\\overrightarrow{\\gamma} f\\left(x_t - \\sum_i \\gamma^{(i)} d_t^{(i)}\\right)
-        \\end{eqnarray}
-
-    This is used for instance in
-    ``PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search``
-    in the last gradient direction:
+    The routine aims at mimicking the operation:
 
     .. math::
         :nowrap:
 
         \\begin{eqnarray}
-            x_{t+1} & = & x_t - \\gamma_t \\nabla f(x_t) \\\\
-            \\text{with } \\gamma_t & = & \\arg\\min_\\gamma f\\left(x_t - \\gamma \\nabla f(x_t)\\right)
+            x & = & x_0 - \\sum_{i=1}^{T} \\gamma_i d_i,\\\\
+            \\text{with } \\overrightarrow{\\gamma} & = & \\arg\\min_\\overrightarrow{\\gamma} f\\left(x_0 - \\sum_{i=1}^{T} \\gamma_i d_i\\right),
         \\end{eqnarray}
 
-    and in
-    ``PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient``
-    in all the previous directions:
+    where :math:`T` denotes the number of directions :math:`d_i`. This operation can equivalently be described
+    in terms of the following conditions:
 
     .. math::
         :nowrap:
 
         \\begin{eqnarray}
-            x_{t+1} & = & x_t - \\sum_{i=0}^{t} \\gamma_t^{(i)} \\nabla f(x_i) \\\\
-            \\text{with } \\overrightarrow{\\gamma_t} & = & \\arg\\min_\\overrightarrow{\\gamma} f\\left(x_t - \\sum_{i=0}^{t} \\gamma^{(i)} \\nabla f(x_i)\\right)
+            x - x_0 & \\in & \\text{span}\\left\{d_1,\\ldots,d_T\\right\}, \\\\
+            \\nabla f(x) & \\perp & \\text{span}\\left\{d_1,\\ldots,d_T\\right\}.
         \\end{eqnarray}
 
-    This iteration is then characterized by the 2 following conditions:
+    In this routine, we instead constrain :math:`x_{t}` and :math:`\\nabla f(x_{t})` to satisfy
 
     .. math::
         :nowrap:
 
         \\begin{eqnarray}
-            x_{t+1} - x_t & \\in & \\text{span}\\left\{\\left(d_t^{(i)}\\right)_i\\right\} \\\\
-            \\nabla f(x_{t+1}) & \\in & \\text{span}\\left\{\\left(d_t^{(i)}\\right)_i\\right\}^T
+            \\forall i=1,\\ldots,T: & \\left< \\nabla f(x);\, d_i \\right>  & = & 0,\\\\
+            \\text{and } & \\left< \\nabla f(x);\, x - x_0 \\right> & = & 0,
         \\end{eqnarray}
 
-    In this routine, we define each new triplet :math:`\\left(x_{t+1}, \\nabla f(x_{t+1}), f(x_{t+1})\\right)` such that
-
-    .. math::
-        :nowrap:
-
-        \\begin{eqnarray}
-            \\forall i, & \\left< \\nabla f(x_{t+1}) \\Big| d_t^{(i)} \\right>  & = & 0 \\\\
-            \\text{and } & \\left< \\nabla f(x_{t+1}) \\Big| x_{t+1} - x_t \\right> & = & 0
-        \\end{eqnarray}
+    which is a relaxation of the true line/span search conditions.
 
     Note:
         The latest condition is automatically implied by the 2 previous ones.
 
     Warning:
         One can notice this routine does not encode completely the fact that
-        :math:`x_{t+1} - x_t` must be a linear combination of the provided directions.
-        Hence, if this routine is included in one PEP,
-        the obtained value is an upper bound of the real worst-case value.
+        :math:`x_{t+1} - x_t` must be a linear combination of the provided directions
+        (i.e., this routine performs a relaxation). Therefore, if this routine is included in a PEP,
+        the obtained value might be an upper bound on the true worst-case value.
 
-        On the other hand,
-        it can be shown that the optimum of commons PEPs using this routine
-        verifies the aforementioned implicit constraint.
+        Although not always tight, this relaxation is often observed to deliver pretty accurate results
+        (in particular, it automatically produces tight results under some specific conditions, see, e.g., [1]).
+        Two such examples are provided in the `conjugate gradient` and `gradient with exact line search` example files.
+
+    References:
+        `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+        Mathematical Programming 184 (1), 183-220.
+        <https://arxiv.org/pdf/1803.05676.pdf>`_
 
     Args:
         x0 (Point): the starting point.

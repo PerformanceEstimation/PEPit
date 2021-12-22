@@ -9,8 +9,8 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
 
     .. math:: \\|d_{x_0} - \\nabla f(x_0)\\|^2 \\leqslant \\left\{
               \\begin{eqnarray}
-                  & \\varepsilon^2                        & \\text{if notion is set to 'absolute'} \\\\
-                  & \\varepsilon^2 \\|\\nabla f(x_0)\\|^2 & \\text{if notion is set to 'relative'}
+                  & \\varepsilon^2                        & \\text{if notion is set to 'absolute'}, \\\\
+                  & \\varepsilon^2 \\|\\nabla f(x_0)\\|^2 & \\text{if notion is set to 'relative'}.
               \\end{eqnarray}
               \\right.
 
@@ -27,7 +27,7 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
 
     Returns:
         x (Point): the output point.
-        dx0 (Point): the approximate (sub)gradient of f at x0, hence the descent direction.
+        dx0 (Point): the approximate (sub)gradient of f at x0.
         fx0 (Expression): the value of the function f at x0.
 
     Raises:

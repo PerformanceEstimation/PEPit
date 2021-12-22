@@ -11,11 +11,11 @@ def proximal_step(x0, f, step):
         :nowrap:
 
         \\begin{eqnarray}
-            x \\triangleq \\text{prox}_{\\gamma f}(x_0) & = & \\arg\\min_x { \\gamma f(x) + \\frac{1}{2} \\|x - x_0\\|^2 } \\\\
+            x \\triangleq \\text{prox}_{\\gamma f}(x_0) & \\triangleq & \\arg\\min_x \\left\\{ \\gamma f(x) + \\frac{1}{2} \\|x - x_0\\|^2 \\right\\}, \\\\
             & \\Updownarrow & \\\\
-            0 & \\in & \\gamma \\partial f(x) + x - x_0 \\\\
+            0 & = & \\gamma g_x + x - x_0 \\text{ for some } g_x\\in\\partial f(x),\\\\
             & \\Updownarrow & \\\\
-            x & \\in & x_0 - \\gamma \\partial f(x)
+            x & = & x_0 - \\gamma g_x \\text{ for some } g_x\\in\\partial f(x).
         \\end{eqnarray}
 
     Args:
