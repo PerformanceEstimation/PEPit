@@ -49,7 +49,7 @@ def wc_conjugate_gradient(L, n, verbose=True):
                 \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2},
             \\end{eqnarray}
 
-        and tightness follows from [3, Theorem 3].
+        and tightness follows from [2, Theorem 3].
 
     **References**:
     The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
@@ -58,7 +58,7 @@ def wc_conjugate_gradient(L, n, verbose=True):
     Mathematical Programming 184 (1), 183-220.
     <https://arxiv.org/pdf/1803.05676.pdf>`_
 
-    `[3] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
+    `[2] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
     Journal of Complexity, 39, 1-16.
     <https://arxiv.org/pdf/1606.01424.pdf>`_
 

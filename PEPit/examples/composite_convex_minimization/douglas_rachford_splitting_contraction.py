@@ -46,7 +46,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     Details on the SDP formulations can be found in
 
-    `[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
     Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
     <https://arxiv.org/pdf/1812.00146.pdf>`_
 
@@ -58,7 +58,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
     A description for the DRS method can be found in [3, 7.3]
 
-    `[1] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
     Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
