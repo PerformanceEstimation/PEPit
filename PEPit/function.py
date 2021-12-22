@@ -19,7 +19,7 @@ class Function(object):
 
     Attributes:
         _is_leaf (bool): True if self is defined from scratch.
-                         False is self is defined as linear combination of leaf .
+                         False is self is defined as linear combination of leaves.
         decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
                                    Keys are :class:`Function` objects and values are their associated coefficients.
         reuse_gradient (bool): If True, the same subgradient is returned
@@ -61,7 +61,7 @@ class Function(object):
 
         Args:
             is_leaf (bool): True if self is defined from scratch.
-                            False is self is defined as a linear combination of leafs.
+                            False is self is defined as a linear combination of leaves.
             decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
@@ -551,12 +551,12 @@ class Function(object):
         Create a new stationary point, as well as its null gradient and its function value.
 
         Args:
-            return_gradient_and_function_value (bool): If True, return the triplet point (:class:`Point`),
+            return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
                                                        gradient (:class:`Point`), function value (:class:`Expression`).
                                                        Otherwise, return only the point (:class:`Point`).
 
         Returns:
-            Point or tuple: An optimal point
+            Point or tuple: an optimal point
 
         """
 
