@@ -3,8 +3,11 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 
 class SmoothConvexFunction(SmoothStronglyConvexFunction):
     """
-    The :class:`SmoothConvexFunction` is an implementation of smooth convex functions
-    as particular case of smooth strongly convex functions.
+    The :class:`SmoothConvexFunction` implements smooth convex functions as particular cases
+    of :class:`SmoothStronglyConvexFunction`.
+
+    Attributes:
+        L (float): smoothness parameter
 
     Smooth convex functions are characterized by the smoothness parameter `L`, hence can be instantiated as
 

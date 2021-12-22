@@ -4,10 +4,10 @@ from PEPit.function import Function
 class SmoothFunction(Function):
     """
     The :class:`SmoothFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of smooth functions.
+    implementing the interpolation constraints of the class of smooth (not necessarily convex) functions.
 
     Attributes:
-        L (float): smoothness constant
+        L (float): smoothness parameter
 
     Smooth functions are characterized by the smoothness parameter `L`, hence can be instantiated as
 
@@ -16,6 +16,9 @@ class SmoothFunction(Function):
         >>> problem = PEP()
         >>> func = problem.declare_function(function_class=SmoothFunction, param={'L': 1})
 
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
     """
 
     def __init__(self,
@@ -48,7 +51,8 @@ class SmoothFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the smooth (not necessarily convex) functions.
+        Formulates the list of interpolation constraints for self (smooth (not necessarily convex) function),
+        see [1, Theorem 3.10].
         """
 
         for i, point_i in enumerate(self.list_of_points):

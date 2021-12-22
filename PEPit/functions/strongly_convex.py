@@ -4,10 +4,11 @@ from PEPit.function import Function
 class StronglyConvexFunction(Function):
     """
     The :class:`StronglyConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of strongly convex functions.
+    implementing the interpolation constraints of the class of strongly convex closed proper functions (strongly convex
+    functions whose epigraphs are non-empty closed sets).
 
     Attributes:
-        mu (float): strong convexity constant
+        mu (float): strong convexity parameter
 
     Strongly convex functions are characterized by the strong convexity parameter :math:`\\mu`, hence can be instantiated as
 
@@ -16,6 +17,10 @@ class StronglyConvexFunction(Function):
         >>> problem = PEP()
         >>> func = problem.declare_function(function_class=StronglyConvexFunction, param={'mu': .1})
 
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Smooth strongly convex interpolation and exact worst-case
+        performance of first-order methods. Mathematical Programming, 161(1-2), 307-345.
+        <https://arxiv.org/pdf/1502.05666.pdf>`_
     """
 
     def __init__(self,
@@ -45,7 +50,8 @@ class StronglyConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the strongly convex functions.
+        Formulates the list of interpolation constraints for self (strongly convex closed proper function),
+        see [1, Corollary 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):

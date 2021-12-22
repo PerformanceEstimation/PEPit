@@ -6,12 +6,12 @@ from PEPit.function import Function
 class ConvexIndicatorFunction(Function):
     """
     The :class:`ConvexIndicatorFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of convex indicator functions.
+    implementing interpolation constraints for the class of closed convex indicator functions.
 
     Attributes:
-        D (float): diameter of the feasible set
+        D (float): upper bound on the diameter of the feasible set
 
-    Convex indicator functions are characterized by the parameter `D`, hence can be instantiated as
+    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -19,15 +19,8 @@ class ConvexIndicatorFunction(Function):
         >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
 
     References:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
-        Smooth strongly convex interpolation and exact worst-case performance of first-order method.
-        Mathematical Programming.
-        <https://arxiv.org/pdf/1502.05666.pdf>`_
-
-        `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
-        Exact Worst-case Performance of First-order Methods for Composite Convex Optimization.
-        SIAM Journal on Optimization.
-        <https://arxiv.org/pdf/1512.07516.pdf>`_
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     """
 
@@ -58,7 +51,8 @@ class ConvexIndicatorFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add constraints of convex indicator functions.
+        Formulates the list of interpolation constraints for self (closed convex indicator function),
+        see [1, Theorem 3.6].
         """
 
         for i, point_i in enumerate(self.list_of_points):
