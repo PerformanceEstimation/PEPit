@@ -18,10 +18,6 @@ def bregman_gradient_step(gx0, sx0, mirror_map, gamma):
     Warning:
         The mirror map :math:`h` is assumed differentiable.
 
-    Note:
-        When :math:`h(x) = \\frac{1}{2}\\|x\\|^2`, :math:`D_h(x; x_0) = \\frac{1}{2}\\|x - x_0\\|^2`,
-        and this step reduces to classical gradient descent step with step-size :math:`\\gamma`.
-
     By differentiating the previous objective function, one can observe that
 
     .. math:: \\nabla h(x) = \\nabla h(x_0) - \\gamma \\nabla f(x_0).
