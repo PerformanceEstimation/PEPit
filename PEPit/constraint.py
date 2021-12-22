@@ -9,9 +9,9 @@ class Constraint(object):
     Attributes:
         expression (Expression): The :class:`Expression` that is compared to 0.
         equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
-        dual_variable_value (float): the associated dual variable at optimal point of the solved PEP.
-                                     Set to None before evaluation via the :class:`PEP` solving method PEP.solve.
-        counter (int): counts the :class:`Constraint` objects.
+        dual_variable_value (float): the associated dual variable from the numerical solution to the corresponding PEP.
+                                     Set to None before the call to `PEP.solve` from the :class:`PEP`
+        counter (int): counts the number of :class:`Constraint` objects.
 
     A :class:`Constraint` results from a comparison between two :class:`Expression` objects.
 

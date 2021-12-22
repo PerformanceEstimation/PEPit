@@ -10,7 +10,7 @@ from PEPit.function import Function
 class PEP(object):
     """
     The class :class:`PEP` is the main class of this framework.
-    A :class:`PEP` object encodes the full performance estimation problem.
+    A :class:`PEP` object encodes a complete performance estimation problem.
     It stores the following information.
 
     Attributes:
@@ -21,7 +21,7 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
-        counter (int): counts the :class:`PEP` objects.
+        counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
     """
@@ -117,7 +117,7 @@ class PEP(object):
     def set_performance_metric(self, expression):
         """
         Store a performance metric in the attribute `list_of_performance_metrics`.
-        The minimum between this metric and all the others is then maximized.
+        The objective of the PEP (which is maximized) is the minimum of the elements of `list_of_performance_metrics`.
 
         Args:
             expression (Expression): a new performance metric.
@@ -180,7 +180,8 @@ class PEP(object):
         Args:
             solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
-            tracetrick (bool): Apply trace heuristic to minimize the dimension of the solution (rank of the Gram matrix).
+            tracetrick (bool): Apply trace heuristic as a proxy for minimizing
+             the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.

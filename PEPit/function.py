@@ -28,14 +28,14 @@ class Function(object):
         list_of_points (list): A list of triplets storing the points where this :class:`Function` has been evaluated,
                                as well as the associated subgradients and function values.
         list_of_stationary_points (list): The sublist of `self.list_of_points` of
-                                          stationary points (characterized by subgradient=0).
+                                          stationary points (characterized by some subgradient=0).
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
-        counter (int): counts the **leaf** :class:`Function` objects.
+        counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
         PEPit was initially tough for evaluating performances of optimization algorithms.
-        Operators are represented in the same way as functions, but function values must not be used.
-        Use gradient to access an operator value.
+        Operators are represented in the same way as functions, but function values must not be used (they don't have
+        any sense in this framework). Use gradient to access an operator value.
 
     :class:`Function` objects can be added or subtracted together.
     They can also be multiplied and divided by a scalar value.
@@ -257,10 +257,11 @@ class Function(object):
     def add_class_constraints(self):
         """
         Warnings:
-            Needs to be overwritten with interpolation conditions.
+            Needs to be overwritten with interpolation conditions (or necessary conditions for interpolation for
+            obtaining possibly non-tight upper bounds on the worst-case performance).
 
-        This method is run by the :class:`PEP` just before solving the problem,
-        applying the interpolation conditions from the 2 lists of points this :class:`Function` stores.
+        This method is run by the :class:`PEP` just before solving the problem.
+        It evaluates interpolation conditions for the 2 lists of points that is stored in this :class:`Function`.
 
         Raises:
             NotImplementedError: This method must be overwritten in children classes
@@ -409,13 +410,13 @@ class Function(object):
 
     def oracle(self, point):
         """
-        Return the gradient and the function value of self on point.
+        Return a gradient (or a subgradient) and the function value of self evaluated at `point`.
 
         Args:
             point (Point): any point.
 
         Returns:
-            tuple: a gradient (:class:`Point`) and a function value (:class:`Expression`).
+            tuple: a (sub)gradient (:class:`Point`) and a function value (:class:`Expression`).
 
         """
 
@@ -479,13 +480,13 @@ class Function(object):
 
     def gradient(self, point):
         """
-        Return the gradient of this :class:`Function` on point.
+        Return the gradient (or a subgradient) of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
 
         Returns:
-            Point: the gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
+            Point: a gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
 
         Note:
             the method subgradient does the exact same thing.
@@ -496,13 +497,13 @@ class Function(object):
 
     def subgradient(self, point):
         """
-        Return the subgradient of this :class:`Function` on point.
+        Return a subgradient of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
 
         Returns:
-            Point: the gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
+            Point: a subgradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
 
         Note:
             the method gradient does the exact same thing.
@@ -548,7 +549,7 @@ class Function(object):
 
     def stationary_point(self, return_gradient_and_function_value=False):
         """
-        Create a new stationary point, as well as its null gradient and its function value.
+        Create a new stationary point, as well as its zero gradient and its function value.
 
         Args:
             return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),

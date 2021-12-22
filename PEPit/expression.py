@@ -16,13 +16,13 @@ class Expression(object):
     Attributes:
         _is_function_value (bool): True if self is a function value defined from scratch
                                    (not as linear combination of other function values).
-                                   False if self is a linear combination of existing Expression objects.
-        value (float): the value of self at optimum.
-                       Set to None before evaluation via the :class:`PEP` solving method PEP.solve.
+                                   False if self is a linear combination of existing :class:`Expression` objects.
+        value (float): numerical value of self obtained after solving the PEP via SDP solver.
+                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         decomposition_dict (dict): decomposition of self as a linear combination of **basic** :class:`Expression` objects.
                                    Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                    And values are their associated coefficients.
-        counter (int): counts the **basic** :class:`Expression` objects.
+        counter (int): counts the number of **basic** :class:`Expression` objects.
 
     :class:`Expression` objects can be added or subtracted together.
     They can also be added, subtracted, multiplied and divided by a scalar value.
@@ -53,7 +53,7 @@ class Expression(object):
                  decomposition_dict=None,
                  ):
         """
-        :class:`Expression` objects can also be instantiating providing the following arguments
+        :class:`Expression` objects can also be instantiated via the following arguments
 
         Args:
             is_function_value (bool): True if self is a function value defined from scratch
@@ -319,7 +319,7 @@ class Expression(object):
         Compute, store and return the value of this :class:`Expression`.
 
         Returns:
-            self.value (np.array): The value of this :class:`Expression` after evaluation of a PEP solution.
+            self.value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.

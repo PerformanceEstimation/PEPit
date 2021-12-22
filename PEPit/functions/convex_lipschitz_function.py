@@ -4,18 +4,21 @@ from PEPit.function import Function
 class ConvexLipschitzFunction(Function):
     """
     The :class:`ConvexLipschitzFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of convex Lipschitz continuous functions.
+    implementing the interpolation constraints of the class of convex closed proper (CCP) Lipschitz continuous functions.
 
     Attributes:
-        M (float): Lipschitz constant
+        M (float): Lipschitz parameter
 
-    Convex Lipschitz continuous functions are characterized by the parameter `M`, hence can be instantiated as
+    CCP Lipschitz continuous functions are characterized by a parameter `M`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
         >>> problem = PEP()
         >>> func = problem.declare_function(function_class=ConvexLipschitzFunction, param={'M': 1})
 
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
     """
 
     def __init__(self,
@@ -46,7 +49,8 @@ class ConvexLipschitzFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the convex Lipschitz continuous functions.
+        Formulates the list of interpolation constraints for self (CCP Lipschitz continuous function),
+        see [1, Theorem 3.5].
         """
 
         for i, point_i in enumerate(self.list_of_points):

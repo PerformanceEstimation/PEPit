@@ -4,9 +4,10 @@ from PEPit.function import Function
 class ConvexFunction(Function):
     """
     The :class:`ConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of convex functions.
+    implementing the interpolation constraints of the class of convex, closed and proper (CCP) functions (i.e., convex
+    functions whose epigraphs are non-empty closed sets).
 
-    Convex functions are not characterized by any parameter, hence can be instantiated as
+    General CCP functions are not characterized by any parameter, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -38,7 +39,7 @@ class ConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of convex functions.
+        Formulates the list of interpolation constraints for self (CCP function).
         """
 
         for i, point_i in enumerate(self.list_of_points):

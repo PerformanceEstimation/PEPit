@@ -4,11 +4,11 @@ from PEPit.function import Function
 class SmoothStronglyConvexFunction(Function):
     """
     The :class:`SmoothStronglyConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of smooth strongly convex functions.
+    by implementing interpolation constraints of the class of smooth strongly convex functions.
 
     Attributes:
-        mu (float): strong convexity constant
-        L (float): smoothness constant
+        mu (float): strong convexity parameter
+        L (float): smoothness parameter
 
     Smooth strongly convex functions are characterized by parameters :math:`\\mu` and `L`, hence can be instantiated as
 
@@ -18,9 +18,8 @@ class SmoothStronglyConvexFunction(Function):
         >>> func = problem.declare_function(function_class=SmoothStronglyConvexFunction, param={'mu': .1, 'L': 1})
 
     References:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
-        Smooth strongly convex interpolation and exact worst-case performance of first-order method.
-        Mathematical Programming.
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Smooth strongly convex interpolation and exact worst-case
+        performance of first-order methods. Mathematical Programming, 161(1-2), 307-345.
         <https://arxiv.org/pdf/1502.05666.pdf>`_
 
     """
@@ -56,7 +55,7 @@ class SmoothStronglyConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the smooth strongly convex functions provided in [1, Theorem 4].
+        Formulates the list of interpolation constraints for self (smooth strongly convex function); see [1, Theorem 4].
         """
 
         for i, point_i in enumerate(self.list_of_points):
