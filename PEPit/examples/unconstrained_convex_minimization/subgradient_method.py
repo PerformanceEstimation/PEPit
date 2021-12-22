@@ -67,7 +67,7 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
     Example:
         >>> M = 2
         >>> n = 6
-        >>> gamma = 1 / (M * np.sqrt(n + 1))
+        >>> gamma = 1 / (M * sqrt(n + 1))
         >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
         (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)

@@ -13,7 +13,7 @@ class TestExpression(unittest.TestCase):
         self.point2 = Point(is_leaf=True, decomposition_dict=None)
 
         self.inner_product = self.point1 * self.point2
-        self.function_value = Expression(is_function_value=True, decomposition_dict=None)
+        self.function_value = Expression(is_leaf=True, decomposition_dict=None)
 
     def test_is_instance(self):
 
@@ -28,7 +28,7 @@ class TestExpression(unittest.TestCase):
         self.assertIs(composite_expression.counter, None)
         self.assertIs(Expression.counter, 1)
 
-        new_expression = Expression(is_function_value=True, decomposition_dict=None)
+        new_expression = Expression(is_leaf=True, decomposition_dict=None)
         self.assertIs(new_expression.counter, 1)
         self.assertIs(Expression.counter, 2)
 
