@@ -10,7 +10,7 @@ class LipschitzOperator(Function):
         Operators'values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        L (float) Lipschitz constant
+        L (float) Lipschitz parameter
 
     Cocoercive operators are characterized by the parameter :math:`L`, hence can be instantiated as
 
@@ -25,10 +25,21 @@ class LipschitzOperator(Function):
         By setting L<1, we define a contracting operator.
 
     References:
-        For details about interpolation conditions, we refer to the following:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+
+        [1] M. Kirszbraun (1934).  Uber die zusammenziehende und Lipschitzsche transformationen.
+        Fundamenta Mathematicae, 22 (1934).
+
+        [2] F.A. Valentine (1943). On the extension of a vector function so as to preserve a Lipschitz condition.
+        Bulletin of the American Mathematical Society, 49 (2).
+
+        [3] F.A. Valentine (1945). A Lipschitz condition preserving extension for a vector function.
+        American Journal of Mathematics, 67(1).
+
+        Discussions and appropriate pointers for the interpolation problem can be found in:
+        `[4] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
+
 
     """
 
@@ -61,7 +72,8 @@ class LipschitzOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the strongly monotone operators provided in [1].
+        Formulates the list of interpolation constraints for self (Lipschitz operator),
+        see [1, 2, 3] or e.g., [4, Fact 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):

@@ -4,16 +4,17 @@ from PEPit.function import Function
 class StronglyMonotoneOperator(Function):
     """
     The :class:`StronglyMonotoneOperator` class overwrites the `add_class_constraints` method
-    of :class:`Function`, implementing the interpolation constraints of the class of
-    Strongly monotone operators.
+    of :class:`Function`, implementing interpolation constraints of the class of strongly monotone
+    (maximally monotone) operators.
 
     Note:
         Operators'values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        mu (float): strong monotonicity constant
+        mu (float): strong monotonicity parameter
 
-    Strongly monotone operators are characterized by the parameter :math:`\\mu`, hence can be instantiated as
+    Strongly monotone (and maximally monotone) operators are characterized by the parameter :math:`\\mu`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -21,9 +22,9 @@ class StronglyMonotoneOperator(Function):
         >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, param={'mu': .1})
 
     References:
-        For details about interpolation conditions, we refer to the following:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+        Discussions and appropriate pointers for the problem of interpolation of maximally monotone operators can be found in:
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
@@ -54,7 +55,8 @@ class StronglyMonotoneOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the strongly monotone operators provided in [1].
+        Formulates the list of interpolation constraints for self (strongly monotone maximally monotone operator),
+        see, e.g., [1, Proposition 1].
         """
 
         for i, point_i in enumerate(self.list_of_points):

@@ -4,8 +4,8 @@ from PEPit.function import Function
 class LipschitzStronglyMonotoneOperator(Function):
     """
     The :class:`LipschitzStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
-    of :class:`Function`, implementing the constraints (which are not necessary and sufficient for interpolation)
-    of the class of Lipschitz continuous strongly monotone operators.
+    of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
+    for the class of Lipschitz continuous strongly monotone (and maximally monotone) operators.
 
     Note:
         Operators'values can be requested through `gradient` and `function values` should not be used.
@@ -13,11 +13,11 @@ class LipschitzStronglyMonotoneOperator(Function):
     Warning:
         Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
         in this class are necessary but a priori not sufficient for interpolation. Hence the numerical results
-        obtained when using this class might be non-tight upper bounds (see [1]).
+        obtained when using this class might be non-tight upper bounds (see Discussions in [1, Section 2]).
 
     Attributes:
-        mu (float): strong monotonicity constant
-        L (float): Lipschitz constant
+        mu (float): strong monotonicity parameter
+        L (float): Lipschitz parameter
 
     Lipschitz continuous strongly monotone operators are characterized by parameters :math:`\\mu` and `L`,
     hence can be instantiated as
@@ -28,9 +28,8 @@ class LipschitzStronglyMonotoneOperator(Function):
         >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperator, param={'mu': .1, 'L': 1})
 
     References:
-        For details about interpolation conditions, we refer to the following:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
@@ -66,7 +65,8 @@ class LipschitzStronglyMonotoneOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the Lipschitz strongly-monotone operators provided in [1].
+        Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
+        maximally monotone operator), see, e.g., discussions in [1, Section 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):

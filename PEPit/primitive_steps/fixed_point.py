@@ -4,7 +4,8 @@ from PEPit.expression import Expression
 
 def fixed_point(A):
     """
-    This routine allows to find a fixed point of the operator :math:`A`, that is :math:`x` such that :math:`Ax = x`.
+    This routine outputs a fixed point of an operator :math:`A`, that is :math:`x` such that :math:`Ax = x`.
+    If :math:`A` is a function, the fixed point is computed for its gradient, that is :math:`x\\in\\partial f(x)`.
 
     Args:
         A (Function): an operator or a function.

@@ -4,12 +4,12 @@ from PEPit.function import Function
 class MonotoneOperator(Function):
     """
     The :class:`MonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of monotone operators.
+    implementing interpolation constraints for the class of maximally monotone operators.
 
     Note:
         Operators'values can be requested through `gradient` and `function values` should not be used.
 
-    Monotone operators are not characterized by any parameter, hence can be instantiated as
+    General maximally monotone operators are not characterized by any parameter, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -17,10 +17,8 @@ class MonotoneOperator(Function):
         >>> h = problem.declare_function(function_class=MonotoneOperator, param=dict())
 
     References:
-        For details about interpolation conditions, we refer to the following:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2018).
-        Operator Splitting Performance Estimation: Tight contraction factors and optimal parameter selection.
-        <https://arxiv.org/pdf/1812.00146.pdf>`_
+        [1] H. H. Bauschke and P. L. Combettes (2017). Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
+        Springer New York, 2nd ed.
 
     """
 
@@ -46,7 +44,8 @@ class MonotoneOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add all the interpolation conditions of the monotone operators provided in [1].
+        Formulates the list of interpolation constraints for self (maximally monotone operator),
+        see, e.g., [1, Theorem 20.21].
         """
 
         for i, point_i in enumerate(self.list_of_points):
