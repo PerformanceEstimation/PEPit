@@ -1,5 +1,11 @@
 # PEP-it: Performance Estimation in Python
 
+[![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
+[![Build Status](https://github.com/bgoujaud/PEPit/workflows/build/badge.svg?branch=master&event=push)](https://github.com/bgoujaud/PEPit/actions)
+[![Codecov Status](https://codecov.io/gh/bgoujaud/PEPit/branch/master/graph/badge.svg)](https://codecov.io/gh/bgoujaud/PEPit)
+[![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
+[![License](https://img.shields.io/github/license/bgoujaud/PEPit.svg)](https://github.com/bgoujaud/PEPit/blob/master/LICENSE)
+
 This code comes jointly with the following [`reference`](.pdf):
 
 > [1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut. "PEP-it: computer-assisted worst-case analyses of first-order optimization methods in Python." 
