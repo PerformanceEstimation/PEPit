@@ -1,6 +1,5 @@
 from PEPit import PEP
 from PEPit.operators import LipschitzOperator
-from PEPit.primitive_steps import fixed_point
 
 
 def wc_halpern_iteration(n, verbose=True):
@@ -68,7 +67,7 @@ def wc_halpern_iteration(n, verbose=True):
     A = problem.declare_function(LipschitzOperator, param={'L': 1.})
 
     # Start by defining its unique optimal point xs = x_*
-    xs, _, _ = fixed_point(A)
+    xs, _, _ = A.fixed_point()
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()

@@ -574,3 +574,26 @@ class Function(object):
             return point, g, f
         else:
             return point
+
+    def fixed_point(self):
+
+        """
+        This routine outputs a fixed point of this function, that is :math:`x` such that :math:`x\\in\\partial f(x)`.
+        If self is an operator :math:`A`, the fixed point is such that :math:`Ax = x`.
+
+        Returns:
+            x (Point): a fixed point of the differential of self.
+            x (Point): \\nabla f(x) = x.
+            fx (Expression): a function value (useful only if self is a function).
+
+        """
+
+        # Define a point and function value
+        x = Point()
+        fx = Expression()
+
+        # Add triplet to self's list of points (by definition gx = x)
+        self.add_point((x, x, fx))
+
+        # Return the aforementioned triplet
+        return x, x, fx

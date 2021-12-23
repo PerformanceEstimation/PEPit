@@ -2,7 +2,6 @@ from math import sqrt
 
 from PEPit import PEP
 from PEPit.operators import LipschitzOperator
-from PEPit.primitive_steps import fixed_point
 
 
 def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
@@ -50,7 +49,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3/4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -72,7 +71,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
     A = problem.declare_function(LipschitzOperator, param={'L': 1.})
 
     # Start by defining its unique optimal point xs = x_*
-    xs, _, _ = fixed_point(A)
+    xs, _, _ = A.fixed_point()
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
