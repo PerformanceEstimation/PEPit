@@ -1,11 +1,15 @@
 def merge_dict(dict1, dict2):
     """
-    Merge keys of dict1 and dict2
-    If a key is in the 2 dictionaries, then add the values
+    Merge keys of dict1 and dict2.
+    If a key is in the 2 dictionaries, then add the values.
 
-    :param dict1: (dict)
-    :param dict2: (dict)
-    :return: (dict) the union of the 2 inputs with added values
+    Args:
+        dict1 (dict): any dictionary
+        dict2 (dict): any dictionary
+
+    Returns:
+        merged_dict (dict): the union of the 2 inputs with added values.
+
     """
 
     # Start from dict1
@@ -30,10 +34,14 @@ def merge_dict(dict1, dict2):
 
 def prune_dict(my_dict):
     """
-    Remove all keys associated to a null value
+    Remove all keys associated to a null value.
 
-    :param my_dict: (dict)
-    :return: (dict) pruned dict
+    Args:
+        my_dict (dict): any dictionary
+
+    Returns:
+        pruned_dict (dict): pruned dictionary
+
     """
 
     # Start from empty dict
@@ -52,12 +60,16 @@ def prune_dict(my_dict):
 
 def multiply_dicts(dict1, dict2):
     """
-    Multiply dicts in the sense of developing a product of 2 sums
+    Multiply 2 dictionaries in the sense of developing a product of 2 sums.
 
-    :param dict1: (dict)
-    :param dict2: (dict)
-    :return: (dict) the keys are the couple of keys of dict1 and dict2
-                    and the values the product of values of dict1 and dict2
+    Args:
+        dict1 (dict): any dictionary
+        dict2 (dict): any dictionary
+
+    Returns:
+        product_dict (dict): the keys are the couple of keys of dict1 and dict2
+                             and the values the product of values of dict1 and dict2.
+
     """
 
     # Start from empty dict

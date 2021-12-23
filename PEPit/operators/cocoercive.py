@@ -3,19 +3,26 @@ from PEPit.function import Function
 
 class CocoerciveOperator(Function):
     """
-    Tis routine implements the interpolation conditions for cocoercive operators.
+    The :class:`CocoerciveOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.
 
-    To generate a 1-cocoercive operator 'h' from an instance of PEP called P :
-    >> problem = pep()
-    >> h = problem.DeclareFunction(CocoerciveOperator, {'beta': 1})
+    Note:
+        Operators'values can be requested through `gradient` and `function values` should not be used.
 
-    NOTE : PEPit was initially tough for evaluating performances of optimization algorithms.
-    Operators are represented in the same way as functions, but function values are not accessible.
+    Attributes:
+        beta (float): cocoercivity parameter
 
-    For details about interpolation conditions, we refer to the fllowing :
-    [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-      "Operator Splitting Performance Estimation: Tight contraction factors
-      and optimal parameter selection," arXiv:1812.00146, 2018.
+    Cocoercive operators are characterized by the parameter :math:`\\beta`, hence can be instantiated as
+
+    Example:
+        >>> from PEPit import PEP
+        >>> problem = PEP()
+        >>> func = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
+
+    References:
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -23,24 +30,34 @@ class CocoerciveOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=True):
         """
-        Class of cocoercive operators.
-        It does not need any additional parameter.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            param (dict): contains the values of beta.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            Cocoercive operators are necessarily continuous, hence `reuse_gradient` is set to True.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=True)
+
         # Store the beta parameter
         self.beta = param['beta']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the cocoercive operator
+        Formulates the list of interpolation constraints for self (cocoercive maximally monotone operator),
+        see, e.g., [1, Proposition 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):

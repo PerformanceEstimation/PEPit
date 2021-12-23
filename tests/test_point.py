@@ -41,7 +41,7 @@ class TestPoint(unittest.TestCase):
         inner_product = self.A * self.B
 
         self.assertIsInstance(inner_product, Expression)
-        self.assertFalse(inner_product._is_function_value)
+        self.assertFalse(inner_product._is_leaf)
         self.assertEqual(inner_product.decomposition_dict, {(self.A, self.B): 1})
 
     def test_pow(self):
@@ -49,7 +49,7 @@ class TestPoint(unittest.TestCase):
         norm_square = (self.A - self.B) ** 2
 
         self.assertIsInstance(norm_square, Expression)
-        self.assertFalse(norm_square._is_function_value)
+        self.assertFalse(norm_square._is_leaf)
         self.assertEqual(norm_square.decomposition_dict, {(self.A, self.A): 1,
                                                           (self.A, self.B): -1,
                                                           (self.B, self.A): -1,

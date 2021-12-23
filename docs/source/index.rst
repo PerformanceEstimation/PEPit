@@ -7,77 +7,18 @@ Welcome to PEPit's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-TODO : write it!
-
-PEPit.Function_classes
-----------------------
-
-.. automodule:: PEPit.Function_classes.convex_function
-   :members:
-   :show-inheritance:
-
-
-.. automodule:: PEPit.Function_classes.convex_indicator
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.convex_lipschitz_function
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.smooth_convex_function
-   :members:
-   :show-inheritance:
-
-.. automodule:: PEPit.Function_classes.smooth_strongly_convex_function
-   :members:
-   :show-inheritance:
-
-PEPit.function
---------------
-
-.. automodule:: PEPit.function
-   :members:
-   :show-inheritance:
-
-
-PEPit.expression
-----------------
-
-.. automodule:: PEPit.expression
-   :members:
-   :show-inheritance:
-
-PEPit.constraint
-----------------
-
-.. automodule:: PEPit.constraint
-   :members:
-   :show-inheritance:
-
-PEPit.pep
-----------------
-
-.. automodule:: PEPit.pep
-
-   :members:
-   :show-inheritance:
-
-PEPit.point
-----------------
-
-.. automodule:: PEPit.point
-
-   :members:
-   :show-inheritance:
-
+   self
+   quickstart
+   api
+   examples
+   contributing
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

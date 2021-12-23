@@ -4,7 +4,8 @@ from .function import Function
 from .pep import PEP
 from .point import Point
 
-__all__ = ['functions',
+__all__ = ['examples',
+           'functions',
            'operators',
            'primitive_steps',
            'tools',

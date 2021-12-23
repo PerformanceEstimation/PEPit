@@ -3,33 +3,54 @@ from PEPit.function import Function
 
 class ConvexLipschitzFunction(Function):
     """
-    Convex Smooth Function
+    The :class:`ConvexLipschitzFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of convex closed proper (CCP) Lipschitz continuous functions.
+
+    Attributes:
+        M (float): Lipschitz parameter
+
+    CCP Lipschitz continuous functions are characterized by a parameter `M`, hence can be instantiated as
+
+    Example:
+        >>> from PEPit import PEP
+        >>> problem = PEP()
+        >>> func = problem.declare_function(function_class=ConvexLipschitzFunction, param={'M': 1})
+
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
     """
 
     def __init__(self,
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
-        Class of convex smooth functions.
-        The differentiability is necessarily verified.
 
-        :param param: (dict) contains the value of L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        Args:
+            param (dict): contains the value of M
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
         """
         # Inherit directly from Function.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
         # param M
         self.M = param['M']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the convex functions
+        Formulates the list of interpolation constraints for self (CCP Lipschitz continuous function),
+        see [1, Theorem 3.5].
         """
 
         for i, point_i in enumerate(self.list_of_points):

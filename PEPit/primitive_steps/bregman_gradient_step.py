@@ -4,30 +4,46 @@ from PEPit.expression import Expression
 
 def bregman_gradient_step(gx0, sx0, mirror_map, gamma):
     """
-    [x,gx,hx] = mirror(gx0, sx0, func, gamma, tag)
+    This routine outputs :math:`x` by performing a mirror step of step-size :math:`\\gamma`.
+    That is, denoting :math:`f` the function to be minimized
+    and :math:`h` the **mirror map**, it performs
 
-    This routine performs a mirror step of step size gamma.
-    That is, denoting by h(.) the mirror map, it performs
-        h'(x) = h'(x0) - gamma*gx0, where h'(x) and h'(x0) are respectively
-                                 gradients of the mirror map at x and x0.
+    .. math:: x = \\arg\\min_x \\left[ f(x_0) + \\left< \\nabla f(x_0);\, x - x_0 \\right>
+              + \\frac{1}{\\gamma} D_h(x; x_0) \\right],
 
-    NOTE: it assumes the mirror map is differentiable.
+    where :math:`D_h(x; x_0)` denotes the Bregman divergence of :math:`h` on :math:`x` with respect to :math:`x_0`.
 
+    .. math:: D_h(x; x_0) \\triangleq h(x) - h(x_0) - \\left< \\nabla h(x_0);\, x - x_0 \\right>.
 
-    :param sx0: starting gradient sx0 (e.g., gradient at x0 of 'mirror_map'),
-    :param gx0: step gx0 (e.g., gradient at x0 of the function to be minimized),
-    :param mirror_map: on which the (sub)gradient will be evaluated,
-    :param gamma: step size.
-    :return:
-            - x:  mirror point,
-             - sx: subgradient of the mirror_map at x that was used in the procedure,
-             - hx: value of the mirror_map evaluated at x.
+    Warning:
+        The mirror map :math:`h` is assumed differentiable.
+
+    By differentiating the previous objective function, one can observe that
+
+    .. math:: \\nabla h(x) = \\nabla h(x_0) - \\gamma \\nabla f(x_0).
+
+    Args:
+        sx0 (Point): starting gradient :math:`\\textbf{sx0} \\triangleq \\nabla h(x_0)`.
+        gx0 (Point): descent direction :math:`\\textbf{gx0} \\triangleq \\nabla f(x_0)`.
+        mirror_map (Function): the reference function :math:`h` we computed Bregman divergence of.
+        gamma (float): step size.
+
+    Returns:
+        x (Point): new iterate :math:`\\textbf{x} \\triangleq x`.
+        sx (Point): :math:`h`'s gradient on new iterate :math:`x` :math:`\\textbf{sx} \\triangleq \\nabla h(x)`.
+        hx (Expression): :math:`h`'s value on new iterate :math:`\\textbf{hx} \\triangleq h(x)`.
+
     """
 
-    hx = Expression()
+    # Instantiating point and function value.
     x = Point()
+    hx = Expression()
 
+    # Apply Bregman gradient step.
     sx = sx0 - gamma * gx0
+
+    # Store triplet in mirror map list of points.
     mirror_map.add_point((x, sx, hx))
 
+    # Return the aforementioned triplet.
     return x, sx, hx
