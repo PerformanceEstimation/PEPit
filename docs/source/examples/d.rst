@@ -1,30 +1,26 @@
-Stochastic methods for convex minimization
-------------------------------------------
+Stochastic convex minimization
+==============================
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
-Point SAGA
-^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.point_SAGA
-   :members:
-   :show-inheritance:
-
-SAGA
-^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SAGA
-   :members:
-   :show-inheritance:
 
 Stochastic gradient descent
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_strongly_convex
-   :members:
-   :show-inheritance:
+---------------------------
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_sgd
+
 
 Stochastic gradient descent in overparametrized setting
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.d_stochastic_methods_for_convex_minimization.SGD_overparametrized
-   :members:
-   :show-inheritance:
+-------------------------------------------------------
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_sgd_overparametrized
+
+
+SAGA
+----
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_saga
+
+
+Point SAGA
+----------
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_point_saga

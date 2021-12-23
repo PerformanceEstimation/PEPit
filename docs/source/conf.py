@@ -47,6 +47,9 @@ extensions = [
     'myst_parser',
 ]
 
+napoleon_custom_sections = [('Returns', 'params_style'),
+                            ('Attributes', 'params_style')]
+
 import PEPit
 
 autodocgen_config = [{
@@ -69,8 +72,10 @@ autodocgen_config = [{
     'module_title_decider': lambda modulename: 'API Reference' if modulename == 'mymodule' else modulename,
 }]
 
+autoclass_content = 'both'
+
 # Include or not the special methods
-napoleon_include_special_with_doc = True
+napoleon_include_special_with_doc = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -1,30 +1,26 @@
 Monotone inclusions
--------------------
+===================
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
-Accelerated proximal point
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.e_monotone_inclusions.accelerated_proximal_point
-   :members:
-   :show-inheritance:
-
-Douglas Rachford Splitting
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.e_monotone_inclusions.douglas_rachford_splitting
-   :members:
-   :show-inheritance:
 
 Proximal point
-^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.e_monotone_inclusions.proximal_point_method
-   :members:
-   :show-inheritance:
+--------------
+.. autofunction:: PEPit.examples.monotone_inclusions.wc_proximal_point
+
+
+Accelerated proximal point
+--------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions.wc_accelerated_proximal_point
+
+
+Douglas Rachford Splitting
+--------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions.wc_douglas_rachford_splitting
+
 
 Three operator splitting
-^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.e_monotone_inclusions.three_operator_splitting
-   :members:
-   :show-inheritance:
+------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions.wc_three_operator_splitting

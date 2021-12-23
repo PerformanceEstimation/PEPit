@@ -7,55 +7,18 @@ Welcome to PEPit's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    self
    quickstart
-   functions_and_operators
-   steps
-   tools
+   api
    examples
    contributing
 
-PEPit.pep
----------
-
-.. automodule:: PEPit.pep
-   :members:
-   :show-inheritance:
-
-PEPit.point
------------
-
-.. automodule:: PEPit.point
-   :members:
-   :show-inheritance:
-
-PEPit.expression
-----------------
-
-.. automodule:: PEPit.expression
-   :members:
-   :show-inheritance:
-
-PEPit.constraint
-----------------
-
-.. automodule:: PEPit.constraint
-   :members:
-   :show-inheritance:
-
-PEPit.function
---------------
-
-.. automodule:: PEPit.function
-   :members:
-   :show-inheritance:
-
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

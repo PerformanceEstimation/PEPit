@@ -4,11 +4,11 @@ def merge_dict(dict1, dict2):
     If a key is in the 2 dictionaries, then add the values.
 
     Args:
-        dict1 (dict)
-        dict2 (dict)
+        dict1 (dict): any dictionary
+        dict2 (dict): any dictionary
 
     Returns:
-        dict: the union of the 2 inputs with added values.
+        merged_dict (dict): the union of the 2 inputs with added values.
 
     """
 
@@ -37,10 +37,10 @@ def prune_dict(my_dict):
     Remove all keys associated to a null value.
 
     Args:
-     my_dict (dict)
+        my_dict (dict): any dictionary
 
     Returns:
-        dict: pruned dict
+        pruned_dict (dict): pruned dictionary
 
     """
 
@@ -60,15 +60,15 @@ def prune_dict(my_dict):
 
 def multiply_dicts(dict1, dict2):
     """
-    Multiply dicts in the sense of developing a product of 2 sums.
+    Multiply 2 dictionaries in the sense of developing a product of 2 sums.
 
     Args:
-        dict1 (dict)
-        dict2 (dict)
+        dict1 (dict): any dictionary
+        dict2 (dict): any dictionary
 
     Returns:
-        dict: the keys are the couple of keys of dict1 and dict2
-              and the values the product of values of dict1 and dict2.
+        product_dict (dict): the keys are the couple of keys of dict1 and dict2
+                             and the values the product of values of dict1 and dict2.
 
     """
 

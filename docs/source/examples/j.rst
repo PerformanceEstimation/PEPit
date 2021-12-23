@@ -1,18 +1,16 @@
-Low dimensional worst cases scenarios
--------------------------------------
+Low dimensional worst=cases scenarios
+=====================================
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
+
 Inexact gradient
-^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.j_low_dimensional_worst_cases_scenarios.inexact_gradient
-   :members:
-   :show-inheritance:
+----------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_inexact_gradient
+
 
 Optimized gradient
-^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.j_low_dimensional_worst_cases_scenarios.optimized_gradient_method
-   :members:
-   :show-inheritance:
+------------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_optimized_gradient

@@ -1,6 +1,0 @@
-Functions
----------
-
-.. automodule:: PEPit.functions
-   :members:
-   :show-inheritance:

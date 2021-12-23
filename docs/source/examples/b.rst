@@ -1,72 +1,61 @@
-Methods for composite convex minimization
------------------------------------------
+Composite convex minimization
+=============================
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
-Accelerated Douglas Rachford splitting
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.accelerated_douglas_rachford_splitting
-   :members:
-   :show-inheritance:
-
-Bregman proximmal point
-^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.bregman_proximal_point_method
-   :members:
-   :show-inheritance:
-
-Conditional gradient Frank Wolfe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.conditional_gradient_frank_wolfe
-   :members:
-   :show-inheritance:
-
-Douglas Rachford splitting 1
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.douglas_rachford_splitting_1
-   :members:
-   :show-inheritance:
-
-Douglas Rachford splitting 2
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.douglas_rachford_splitting_2
-   :members:
-   :show-inheritance:
-
-Fast proximal gradient
-^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.fast_proximal_gradient_method
-   :members:
-   :show-inheritance:
-
-Improved interior method
-^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.improved_interior_algorithm
-   :members:
-   :show-inheritance:
-
-No Lips 1
-^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.no_lips_1
-   :members:
-   :show-inheritance:
-
-No Lips 2
-^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.no_lips_2
-   :members:
-   :show-inheritance:
 
 Proximal gradient
-^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.proximal_gradient
-   :members:
-   :show-inheritance:
+-----------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_proximal_gradient
+
+
+Accelerated proximal gradient
+-----------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_proximal_gradient
+
+
+Bregman proximal point
+-----------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_bregman_proximal_point
+   
+
+Douglas Rachford splitting
+--------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_douglas_rachford_splitting
+
+
+Douglas Rachford splitting contraction
+--------------------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_douglas_rachford_splitting_contraction
+
+
+Accelerated Douglas Rachford splitting
+--------------------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_douglas_rachford_splitting
+
+
+Frank Wolfe
+-----------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_frank_wolfe
+
+
+Improved interior method
+------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_improved_interior_algorithm
+
+
+No Lips in function value
+-------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_no_lips_in_function_value
+
+
+No Lips in Bregman divergence
+-----------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_no_lips_in_bregman_divergence
+
 
 Three operator splitting
-^^^^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.b_methods_for_composite_convex_minimization.three_operator_splitting
-   :members:
-   :show-inheritance:
+------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_three_operator_splitting

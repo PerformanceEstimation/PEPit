@@ -9,14 +9,20 @@ from PEPit.function import Function
 
 class PEP(object):
     """
-    PEP class
+    The class :class:`PEP` is the main class of this framework.
+    A :class:`PEP` object encodes a complete performance estimation problem.
+    It stores the following information.
 
     Attributes:
-        counter (int)
-        list_of_functions (list)
-        list_of_points (list)
-        list_of_conditions (list)
-        list_of_performance_metrics (list): the pep maximizes the minimum of all performance metrics.
+        list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
+        list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
+                               Typically the initial :class:`Point`.
+        list_of_conditions (list): list of :class:`Constraint` objects that are defined out of the scope of a :class:`Function`.
+                                   Typically the initial :class:`Constraint`.
+        list_of_performance_metrics (list): list of :class:`Expression` objects.
+                                            The pep maximizes the minimum of all performance metrics.
+        counter (int): counts the number of :class:`PEP` objects.
+                       Ideally, only one is defined at a time.
 
     """
     # Class counter.
@@ -24,6 +30,13 @@ class PEP(object):
     counter = 0
 
     def __init__(self):
+        """
+        A :class:`PEP` object can be instantiated without any argument
+
+        Example:
+            >>> pep = PEP()
+
+        """
 
         # Set all counters to 0 to recreate points, expressions and functions from scratch at the beginning of each PEP.
         Point.counter = 0
@@ -43,25 +56,26 @@ class PEP(object):
         self.list_of_conditions = list()
         self.list_of_performance_metrics = list()
 
-    def declare_function(self, function_class, param, is_differentiable=None):
+    def declare_function(self, function_class, param, reuse_gradient=None):
         """
-        Instantiate a function
+        Instantiate a leaf :class:`Function` and store it in the attribute `list_of_functions`.
 
         Args:
-            function_class (class): a class of function that overwrites the class Function
-            param (dict): dictionary of variables needed to define the function
-            is_differentiable (bool): whether the function can admit different gradients in a same point
+            function_class (class): a subclass of :class:`Function` that overwrite the `add_class_constraints` method.
+            param (dict): dictionary of parameters that characterize the function class.
+            reuse_gradient (bool): whether the function only admit one gradient on a given :class:`Point`.
+                                   Typically True when the function is assumed differentiable.
 
         Returns:
-            Function: the newly created function
+            f (Function): the newly created function.
 
         """
 
         # Create the function
-        if is_differentiable is None:
+        if reuse_gradient is None:
             f = function_class(param, is_leaf=True, decomposition_dict=None)
         else:
-            f = function_class(param, is_leaf=True, decomposition_dict=None, is_differentiable=is_differentiable)
+            f = function_class(param, is_leaf=True, decomposition_dict=None, reuse_gradient=reuse_gradient)
 
         # Store it in list_of_functions
         self.list_of_functions.append(f)
@@ -71,10 +85,10 @@ class PEP(object):
 
     def set_initial_point(self):
         """
-        Create a new point from scratch
+        Create a new leaf :class:`Point` and store it in the attribute `list_of_points`.
 
         Returns:
-            Point
+            x (Point): the newly created :class:`Point`.
 
         """
 
@@ -89,10 +103,11 @@ class PEP(object):
 
     def set_initial_condition(self, condition):
         """
-        Add a constraint manually, typically an initial condition
+        Store a :class:`Constraint` in the attribute `list_of_conditions`.
+        Typically an initial condition.
 
         Args:
-            condition (Expression): typically an inequality between expressions
+            condition (Constraint): the given constraint.
 
         """
 
@@ -101,10 +116,11 @@ class PEP(object):
 
     def set_performance_metric(self, expression):
         """
-        Define a performance metric
+        Store a performance metric in the attribute `list_of_performance_metrics`.
+        The objective of the PEP (which is maximized) is the minimum of the elements of `list_of_performance_metrics`.
 
         Args:
-            expression (Expression)
+            expression (Expression): a new performance metric.
 
         """
 
@@ -112,17 +128,17 @@ class PEP(object):
         self.list_of_performance_metrics.append(expression)
 
     @staticmethod
-    def expression_to_cvxpy(expression, F, G):
+    def _expression_to_cvxpy(expression, F, G):
         """
-        Create a cvxpy compatible expression from an Expression
+        Create a cvxpy compatible expression from an :class:`Expression`.
 
         Args:
-            expression (Expression): Any expression
-            F (cvxpy Variable): A vector representing the function values
-            G (cvxpy Variable): A matrix representing the gram of all points
+            expression (Expression): any expression.
+            F (cvxpy Variable): a vector representing the function values.
+            G (cvxpy Variable): a matrix representing the Gram matrix of all leaf :class:`Point` objects.
 
         Returns:
-            cvxpy Variable: The expression in terms of F and G
+            cvxpy_variable (cvxpy Variable): The expression in terms of F and G.
 
         """
         cvxpy_variable = 0
@@ -130,14 +146,14 @@ class PEP(object):
         Gweights = np.zeros((Point.counter, Point.counter))
 
         # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_function_value():
+        if expression.get_is_leaf():
             Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from basis expressions
+        # If composite, combine all the cvxpy expression found from leaf expressions
         else:
             for key, weight in expression.decomposition_dict.items():
                 # Function values are stored in F
                 if type(key) == Expression:
-                    assert key.get_is_function_value()
+                    assert key.get_is_leaf()
                     Fweights[key.counter] += weight
                 # Inner products are stored in G
                 elif type(key) == tuple:
@@ -159,12 +175,13 @@ class PEP(object):
 
     def solve(self, solver=None, verbose=1, tracetrick=False, return_full_cvxpy_problem=False):
         """
-        Solve the PEP
+        Transform the :class:`PEP` under the SDP form, and solve it.
 
         Args:
-            solver (str): The name of the underlying solver.
+            solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
-            tracetrick (bool): Apply trace trick or not
+            tracetrick (bool): Apply trace heuristic as a proxy for minimizing
+             the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
@@ -195,7 +212,7 @@ class PEP(object):
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            constraints_list.append(objective <= self.expression_to_cvxpy(performance_metric, F, G))
+            constraints_list.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
         if verbose:
             print('(PEP-it) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
@@ -204,12 +221,13 @@ class PEP(object):
         for condition in self.list_of_conditions:
             assert isinstance(condition, Constraint)
             if condition.equality_or_inequality == 'inequality':
-                constraints_list.append(self.expression_to_cvxpy(condition.expression, F, G) <= 0)
+                constraints_list.append(self._expression_to_cvxpy(condition.expression, F, G) <= 0)
             elif condition.equality_or_inequality == 'equality':
-                constraints_list.append(self.expression_to_cvxpy(condition.expression, F, G) == 0)
+                constraints_list.append(self._expression_to_cvxpy(condition.expression, F, G) == 0)
             else:
                 raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
-                                 ' must either be \'equality\' or \'inequality\'.')
+                                 ' must either be \'equality\' or \'inequality\'.'
+                                 'Got {}'.format(condition.equality_or_inequality))
         if verbose:
             print('(PEP-it) Setting up the problem:'
                   ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
@@ -224,12 +242,13 @@ class PEP(object):
             for constraint in function.list_of_constraints:
                 assert isinstance(constraint, Constraint)
                 if constraint.equality_or_inequality == 'inequality':
-                    constraints_list.append(self.expression_to_cvxpy(constraint.expression, F, G) <= 0)
+                    constraints_list.append(self._expression_to_cvxpy(constraint.expression, F, G) <= 0)
                 elif constraint.equality_or_inequality == 'equality':
-                    constraints_list.append(self.expression_to_cvxpy(constraint.expression, F, G) == 0)
+                    constraints_list.append(self._expression_to_cvxpy(constraint.expression, F, G) == 0)
                 else:
                     raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
-                                     ' must either be \'equality\' or \'inequality\'.')
+                                     ' must either be \'equality\' or \'inequality\'.'
+                                     'Got {}'.format(constraint.equality_or_inequality))
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
 
@@ -272,10 +291,10 @@ class PEP(object):
                                                                                                     eig_threshold))
 
         # Store all the values of points and function values
-        self.eval_points_and_function_values(F.value, G.value, verbose=verbose)
+        self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
 
         # Store all the dual values in constraints
-        self.eval_constraint_dual_values(prob.constraints)
+        self._eval_constraint_dual_values(prob.constraints)
 
         # Return the value of the minimal performance metric or the full cvxpy Problem object
         if return_full_cvxpy_problem:
@@ -285,9 +304,9 @@ class PEP(object):
             # Return the value of the minimal performance metric
             return wc_value
 
-    def eval_points_and_function_values(self, F_value, G_value, verbose):
+    def _eval_points_and_function_values(self, F_value, G_value, verbose):
         """
-        Store values of points and function values from the result of the PEP
+        Store values of :class:`Point` and :class:`Expression objects at optimum after the PEP has been solved.
 
         Args:
             F_value (nd.array): value of the cvxpy variable F
@@ -327,18 +346,19 @@ class PEP(object):
                         point.value = points_values[:, point.counter]
                     if gradient.get_is_leaf():
                         gradient.value = points_values[:, gradient.counter]
-                    if function_value.get_is_function_value():
+                    if function_value.get_is_leaf():
                         function_value.value = F_value[function_value.counter]
 
-    def eval_constraint_dual_values(self, cvx_constraints):
+    def _eval_constraint_dual_values(self, cvx_constraints):
         """
-        Store all dual values in appropriate constraints
+        Store all dual values in associated :class:`Constraint` objects.
 
         Args:
-            cvx_constraints (list): a list of cvxpy constraints
+            cvx_constraints (list): a list of cvxpy formatted constraints.
 
         Returns:
-             np.float: the position, in the list of performance metric, of the one that is actually reached
+             np.float: the position, in the list of performance metric, of the one that is actually reached.
+
         """
 
         # Set counter

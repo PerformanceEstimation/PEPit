@@ -1,82 +1,54 @@
-Create new example
-==================
+Contributing
+============
 
-Google style docstring
-----------------------
+PEPit allows to study a lot of optimization methods.
+Some of them can be found in ``PEPit.examples``.
+If you publish or have published a result on a new method or a new guarantee of an existing method,
+you are very welcome to contribute to PEPit by adding a file in ``PEPit/examples``.
 
-Pycharm setting:
-^^^^^^^^^^^^^^^^
-Pycharm/Preferences…/Tools/Python Integrated Tools/Docstrings/Docstring format -> Google
+You are also welcome to add features you might need to the pipeline.
 
-Table of content:
-^^^^^^^^^^^^^^^^^
-- Define Pb it solves (with f\_\star \\triangleq )
+General guidelines
+------------------
 
-- Name algo in boldface
+We only ask you follow common guidelines, namely that the provided code:
 
-- Introduce perf metric (out < tau * in)
+- sticks as much as possible to the PEP8 convention.
 
-- Describe alg main step
+- is commented with Google style docstring.
 
-- Write theoretical result (tau + Upper/Lower/Tight in italic bold)
+- is well tested.
 
-- Refs (preferably arxiv and with arxiv version)
+For new example, the guidelines follow.
 
-- Params (indicate optional or not)
+Creating new example
+--------------------
 
-- Returns
+We don't require a specific code format for a new example.
+However, we ask the associated docstring to be organized as follow:
 
-- Example
+- Define Problem solved (introducing function notations and assumptions).
 
-PEPit: Liste des trucs à verifier concernant les exemples:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Name method in boldface formatting.
 
-- [done] Virer les hypotheses qui n’en sont pas comme « non-smooth ».
+- Introduce performance metric, initial condition and parameters (``performance_metric < tau(parameters) initialization``).
 
-- [done] Privilégier \equiv au lieu de = quand on minimise F(x) = f_1(x) + f_2(x).
+- Describe method main step and cite reference with specified algorithm.
 
-- [done] \star -> \\star
+- Provide theoretical result (``Upper/Lower/Tight`` in boldface formatting + ``performance_metric < theoretical_bound initialization``).
 
-- [done] Add "F\_\\star \\triangleq" before the minimization problem
+- Reference block containing relevant clickable references (preferably to arxiv with specified version of the paper) in the format:
+  (``First name initial letter``, ``last name`` (``YEAR``). ``Title``. ``Journal or conference`` (``Acronym of journal or conference``).
 
-- [done] \\epsilon -> \\varepsilon
+- Args block containing parameters with their type and short description.
 
-- Mettre un peu plus de "verbose" avant les équations décrivant la méthode.
+- Returns block containing ``pepit_tau`` and ``theoretical_tau``.
 
-- Add arrow on gamma if sequence.
+- Example block containing a minimal work example of the coded function.
 
-- [done] Uniformiser les indices: k->t, n for final step.
+New example template
+^^^^^^^^^^^^^^^^^^^^
 
-- Only n steps, not n+1
+We provide an example template in ``PEPit/examples/example_template.py``.
 
-- [done] Utiliser eqnarray environment quand on enchaine plusieurs equations
-
-- [TODO] Aligner les examples sur les papiers respectifs (éviter les formulations différentes)
-
-- [TODO] Verifier les théorèmes (les taux sont ils tight? Upper? Lower? éventuellement preciser si on connait un tau expérimentalement qui est different du théorème connu.)
-
-- [TODO] Vérifier les références et citer les passages exacts, pas juste l'article.
-
-- [TODO] Format des références (Initiales des prénoms + noms complets puis année entre parentheses, titre et enfin journal entre parentheses.) Ajouter Egalement une url pour rendre la reference clickable.
-
-- [done] Presentation des paramètres dans un bloc « Args ». De meme pour Return.
-
-- [done] Argument verbose=true explicitement dans Exemple
-
-- [done] Alignement entre exemple docstrings et if name==main (mettre exactement la meme formule)
-
-- [done] Dans le texte qui s’affiche pour comparer theoretical tau et PEPit-tau, verifier qu’il y ait bien 2 « \t » vs 1 seul pour aligner les deux résultats.
-
-- [done] Enlever les espaces dans les normes (entre le symbole norme et le vecteur concerné)
-
-- [done] Vérifier que l'exemple est bien dans les tests
-
-- [done] stepsize, step size -> step-size
-
-- [done] algorithm -> method
-
-- fast -> accelerated
-
-- [done] || || -> \\| \\|
-
-- [done] Use left - right to scale brackets etc ...
+.. autofunction:: PEPit.examples.example_template.wc_example_template

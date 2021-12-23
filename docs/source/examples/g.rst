@@ -1,24 +1,21 @@
-Verify potential functions
---------------------------
+Potential functions
+===================
 
 .. contents::
-   :depth: 2
+   :depth: 1
    :local:
 
-Fast gradient descent
-^^^^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.g_verify_potential_functions.fast_gradient_descent
-   :members:
-   :show-inheritance:
 
-Gradient Descent 1
-^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.g_verify_potential_functions.gradient_descent_1
-   :members:
-   :show-inheritance:
+Gradient descent Lyapunov 1
+---------------------------
+.. autofunction:: PEPit.examples.potential_functions.wc_gradient_descent_lyapunov_1
 
-Gradient Descent 2
-^^^^^^^^^^^^^^^^^^
-.. automodule:: PEPit.examples.g_verify_potential_functions.gradient_descent_2
-   :members:
-   :show-inheritance:
+
+Gradient descent Lyapunov 2
+---------------------------
+.. autofunction:: PEPit.examples.potential_functions.wc_gradient_descent_lyapunov_2
+
+
+Accelerated gradient method
+---------------------------
+.. autofunction:: PEPit.examples.potential_functions.wc_accelerated_gradient_method

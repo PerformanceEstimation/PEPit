@@ -3,20 +3,29 @@ from PEPit.function import Function
 
 class StronglyMonotoneOperator(Function):
     """
-    StronglyMonotoneOperator class
+    The :class:`StronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    of :class:`Function`, implementing interpolation constraints of the class of strongly monotone
+    (maximally monotone) operators.
+
+    Note:
+        Operators'values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        mu (float): strong monotonicity constant
+        mu (float): strong monotonicity parameter
+
+    Strongly monotone (and maximally monotone) operators are characterized by the parameter :math:`\\mu`,
+    hence can be instantiated as
 
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
         >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, param={'mu': .1})
 
     References:
-        For details about interpolation conditions, we refer to the following :
-        [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-        "Operator Splitting Performance Estimation: Tight contraction factors
-        and optimal parameter selection," arXiv:1812.00146, 2018.
+        Discussions and appropriate pointers for the problem of interpolation of maximally monotone operators can be found in:
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -24,25 +33,30 @@ class StronglyMonotoneOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
-        Strongly monotone operators are characterized by their strong monotony constant mu.
 
         Args:
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
-            is_differentiable (bool): If true, the function can have only one subgradient per point.
+            param (dict): contains the values of mu.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
         # Store mu
         self.mu = param['mu']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the strongly monotone operator
+        Formulates the list of interpolation constraints for self (strongly monotone maximally monotone operator),
+        see, e.g., [1, Proposition 1].
         """
 
         for i, point_i in enumerate(self.list_of_points):

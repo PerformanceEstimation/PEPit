@@ -5,27 +5,22 @@ from PEPit.function import Function
 
 class ConvexIndicatorFunction(Function):
     """
-    ConvexIndicatorFunction class
+    The :class:`ConvexIndicatorFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing interpolation constraints for the class of closed convex indicator functions.
 
     Attributes:
-        D (float): diameter of the feasible set
+        D (float): upper bound on the diameter of the feasible set
+
+    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
 
     Example:
+        >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
-
-    Note:
-        The default value of D is infinity, which is equivalent to no constraint.
+        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
 
     References:
-        [1] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-        "Smooth strongly convex interpolation and exact worst-case
-        performance of first-order methods."
-        Mathematical Programming 161.1-2 (2017): 307-345.
-
-        [2] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-        "Exact Worst-case Performance of First-order Methods for Composite
-        Convex Optimization."to appear in SIAM Journal on Optimization (2017)
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     """
 
@@ -33,25 +28,31 @@ class ConvexIndicatorFunction(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
-        Convex indicator functions are characterized by the diameter of the feasible set.
 
         Args:
-            param (dict): contains the values of mu and L
-            is_leaf (bool): If True, it is a basis function. Otherwise it is a linear combination of such functions.
-            decomposition_dict (dict): Decomposition in the basis of functions.
+            param (dict): contains the values of D
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
         # Store the diameter D in an attribute
         self.D = param['D']
 
     def add_class_constraints(self):
         """
-        Add constraints of convex indicator functions
+        Formulates the list of interpolation constraints for self (closed convex indicator function),
+        see [1, Theorem 3.6].
         """
 
         for i, point_i in enumerate(self.list_of_points):

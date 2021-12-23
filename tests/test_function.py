@@ -1,4 +1,3 @@
-
 import unittest
 
 from PEPit.tools.dict_operations import prune_dict
@@ -63,7 +62,7 @@ class TestFunction(unittest.TestCase):
 
         self.assertIs(point, self.point)
         self.assertTrue(grad._is_leaf)
-        self.assertTrue(val._is_function_value)
+        self.assertTrue(val._is_leaf)
 
         # On func1
         self.assertEqual(len(self.func1.list_of_points), 1)
@@ -74,7 +73,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val1, Expression)
 
         self.assertTrue(grad1._is_leaf)
-        self.assertTrue(val1._is_function_value)
+        self.assertTrue(val1._is_leaf)
 
         # On func2
         self.assertEqual(len(self.func2.list_of_points), 1)
@@ -85,7 +84,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val2, Expression)
 
         self.assertFalse(grad2._is_leaf)
-        self.assertFalse(val2._is_function_value)
+        self.assertFalse(val2._is_leaf)
 
         # Combination
         self.assertIs(point1, self.point)
@@ -99,7 +98,7 @@ class TestFunction(unittest.TestCase):
         # Compute composite function
         new_function = self.compute_linear_combination()
 
-        # Compute oracle of each basis function
+        # Compute oracle of each leaf function
         grad1, val1 = self.func1.oracle(point=self.point)
         grad2, val2 = self.func2.oracle(point=self.point)
 
@@ -118,7 +117,7 @@ class TestFunction(unittest.TestCase):
         self.assertEqual(len(self.func1.list_of_points), 2)
         self.assertEqual(len(self.func2.list_of_points), 2)
 
-        # Grab the new gradients and function values created for basis functions
+        # Grab the new gradients and function values created for leaf functions
         other_grad1, other_val1 = self.func1.list_of_points[1][1:]
         other_grad2, other_val2 = self.func2.list_of_points[1][1:]
 
@@ -129,8 +128,41 @@ class TestFunction(unittest.TestCase):
         # The new gradients must match with the composite function gradient
         self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-other_grad1 + 9/5*other_grad2).decomposition_dict))
 
-    def test_optimal_point(self):
+    def test_oracle_with_predetermined_values_and_gradients(self):
 
+        # First make self.func1 and self.func2 differentiable
+        self.func1.reuse_gradient = True
+        self.func2.reuse_gradient = True
+
+        # Compute composite function
+        new_function = self.compute_linear_combination()
+
+        # Verify the composite function is differentiable as well
+        self.assertTrue(new_function.reuse_gradient)
+
+        # Compute oracle of each leaf function
+        grad1, val1 = self.func1.oracle(point=self.point)
+        grad2, val2 = self.func2.oracle(point=self.point)
+
+        # Verifies the number of registered points
+        self.assertEqual(len(self.func1.list_of_points), 1)
+        self.assertEqual(len(self.func2.list_of_points), 1)
+
+        # Compute oracle of composite function
+        grad, val = new_function.oracle(point=self.point)
+
+        # The value and gradient of composite must be determined
+        self.assertEqual(prune_dict(val.decomposition_dict), prune_dict((-val1 + 9/5*val2).decomposition_dict))
+        self.assertEqual(prune_dict(grad.decomposition_dict), prune_dict((-grad1 + 9/5*grad2).decomposition_dict))
+
+        # Verifies the number of registered points
+        # The latest must have not increased after calling for oracle on the composite function
+        self.assertEqual(len(self.func1.list_of_points), 1)
+        self.assertEqual(len(self.func2.list_of_points), 1)
+
+    def test_stationary_point(self):
+
+        # Compute composite function and define its stationary point
         new_function = self.compute_linear_combination()
         new_function.stationary_point()
 
@@ -144,7 +176,7 @@ class TestFunction(unittest.TestCase):
 
         self.assertTrue(point._is_leaf)
         self.assertFalse(grad._is_leaf)
-        self.assertTrue(val._is_function_value)
+        self.assertTrue(val._is_leaf)
 
         self.assertEqual(grad.decomposition_dict, dict())
         self.assertEqual((grad ** 2).decomposition_dict, dict())
@@ -160,7 +192,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val1, Expression)
 
         self.assertTrue(grad1._is_leaf)
-        self.assertTrue(val1._is_function_value)
+        self.assertTrue(val1._is_leaf)
 
         self.assertEqual(len(self.func1.list_of_stationary_points), 0)
 
@@ -173,7 +205,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(val2, Expression)
 
         self.assertFalse(grad2._is_leaf)
-        self.assertFalse(val2._is_function_value)
+        self.assertFalse(val2._is_leaf)
 
         self.assertEqual(len(self.func2.list_of_stationary_points), 0)
 
@@ -188,50 +220,50 @@ class TestFunction(unittest.TestCase):
         new_function = self.compute_linear_combination()
 
         # Before adding a point
-        self.assertEqual(new_function.is_already_evaluated_on_point(self.point), None)
-        self.assertEqual(self.func1.is_already_evaluated_on_point(self.point), None)
-        self.assertEqual(self.func2.is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(new_function._is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(self.func1._is_already_evaluated_on_point(self.point), None)
+        self.assertEqual(self.func2._is_already_evaluated_on_point(self.point), None)
 
         # Add a point
         new_function.oracle(point=self.point)
 
         # After adding a point
-        self.assertEqual(new_function.is_already_evaluated_on_point(self.point), new_function.list_of_points[0][1:])
-        self.assertEqual(self.func1.is_already_evaluated_on_point(self.point), self.func1.list_of_points[0][1:])
-        self.assertEqual(self.func2.is_already_evaluated_on_point(self.point), self.func2.list_of_points[0][1:])
+        self.assertEqual(new_function._is_already_evaluated_on_point(self.point), new_function.list_of_points[0][1:])
+        self.assertEqual(self.func1._is_already_evaluated_on_point(self.point), self.func1.list_of_points[0][1:])
+        self.assertEqual(self.func2._is_already_evaluated_on_point(self.point), self.func2.list_of_points[0][1:])
 
-    def test_separate_basis_functions_regarding_their_needs_on_points_non_differentiable(self):
+    def test_separate_leaf_functions_regarding_their_needs_on_points_non_differentiable(self):
         # Non differentiable case
         new_function = self.compute_linear_combination()
         point1 = Point(is_leaf=True, decomposition_dict=None)
         point2 = Point(is_leaf=True, decomposition_dict=None)
         new_function.oracle(point1)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(point1)
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_leaf_functions_regarding_their_need_on_point(point1)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 2)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 0)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_leaf_functions_regarding_their_need_on_point(
             point2)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 2)
 
-    def test_separate_basis_functions_regarding_their_needs_on_points_differentiable(self):
+    def test_separate_leaf_functions_regarding_their_needs_on_points_differentiable(self):
         # Non differentiable case
-        new_function = Function(is_leaf=True, decomposition_dict=None, is_differentiable=True)
+        new_function = Function(is_leaf=True, decomposition_dict=None, reuse_gradient=True)
         point1 = Point(is_leaf=True, decomposition_dict=None)
         point2 = Point(is_leaf=True, decomposition_dict=None)
         new_function.oracle(point1)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_leaf_functions_regarding_their_need_on_point(
             point1)
         self.assertEqual(len(list_of_functions_which_need_nothing), 1)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 0)
 
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function.separate_basis_functions_regarding_their_need_on_point(
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = new_function._separate_leaf_functions_regarding_their_need_on_point(
             point2)
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
