@@ -32,7 +32,3 @@ Bregman proximal step
 Linear optimization step
 ------------------------
 .. autofunction:: PEPit.primitive_steps.linear_optimization_step
-
-Fixed point
------------
-.. autofunction:: PEPit.primitive_steps.fixed_point
