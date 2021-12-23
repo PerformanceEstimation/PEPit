@@ -1,31 +1,58 @@
-from PEPit.pep import PEP
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import proximal_step
 
 
-def wc_pgd(L, mu, gamma, n, verbose=True):
+def wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=True):
     """
-    See description in Examples/unconstrained_convex_minimization/proximal_point.py.
+    See description in `PEPit/examples/unconstrained_convex_minimization/proximal_point.py`.
     This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
     but the parameterization is different (convex function to be minimized is explicitly formed as a sum of four convex
     functions). That is, the minimization problem is the composite convex minimization problem
 
-    .. math:: f_\star = \\min_x \\{f(x) = f_1(x) + f_2(x)\\},
+    .. math:: f_\\star = \\min_x \\{f(x) = f_1(x) + f_2(x)\\},
 
-    where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and where :math:`f_2` is closed convex and
-    proper. We further let :math:`f_1=(3 F_1+2F_2)/2` and :math:`f_2=5 F_2+2F_4`
-        - F1 mu/3-strongly convex and L/3 smooth,
-        - F2 mu/2-strongly convex and L/2 smooth,
-        - F3 and F4 two closed proper convex functions.
+    where :math:`f_1` is :math:`L`-smooth and :math:`\\mu`-strongly convex,
+    and where :math:`f_2` is closed convex and proper.
+    We further set :math:`f_1 = \\frac{3 F_1 + 2 F_2}{2}` and :math:`f_2 = 5 F_3 + 2 F_4` where
 
-    :param L: (float) the smoothness parameter.
-    :param mu: (float) the strong convexity parameter.
-    :param gamma: (float) the step size.
-    :param n: (int) number of iterations.
-    :param verbose: (bool) if True, print conclusion
+    .. math::
+        \\begin{eqnarray}
+            F_1 & \\text{ is } & \\frac{\\mu}{3}\\text{-strongly convex and } \\frac{L}{3}\\text{-smooth} \\\\
+            F_2 & \\text{ is } & \\frac{\\mu}{2}\\text{-strongly convex and } \\frac{L}{2}\\text{-smooth} \\\\
+            F_3 & \\text{ is } & \\text{closed proper and convex.} \\\\
+            F_4 & \\text{ is } & \\text{closed proper and convex.}
+        \\end{eqnarray}
 
-    :return: (tuple) worst_case value, theoretical value
+    Args
+        L (float): the smoothness parameter.
+        mu (float): the strong convexity parameter.
+        gamma (float): the step size.
+        n (int): number of iterations.
+        verbose (bool): if True, print conclusion
+
+    Returns:
+        pepit_tau (float): worst-case value
+        theoretical_tau (float): theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 13x13
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 4 function(s)
+                 function 1 : 6 constraint(s) added
+                 function 2 : 6 constraint(s) added
+                 function 3 : 6 constraint(s) added
+                 function 4 : 6 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6561016829295551
+        *** Example file: worst-case performance of gradient descent ***
+            PEP-it guarantee:		 ||x_n-x_*||^2 <= 0.656102 ||x_0-x_*||^2
+            Theoretical guarantee:	 ||x_n-x_*||^2 <= 0.6561 ||x_0-x_*||^2
+
     """
 
     # Instantiate PEP
@@ -36,11 +63,11 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
     smooth_strongly_convex_2 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu / 2, 'L': L / 2})
 
     # Declare convex smooth functions
-    smooth_convex_1 = problem.declare_function(ConvexFunction, param={})
-    smooth_convex_2 = problem.declare_function(ConvexFunction, param={})
+    convex_1 = problem.declare_function(ConvexFunction, param={})
+    convex_2 = problem.declare_function(ConvexFunction, param={})
 
     f1 = (3 * smooth_strongly_convex_1 + 2 * smooth_strongly_convex_2) / 2
-    f2 = 5 * smooth_convex_1 + 2 * smooth_convex_2
+    f2 = 5 * convex_1 + 2 * convex_2
     func = f1 + f2
 
     # Start by defining its unique optimal point
@@ -78,12 +105,5 @@ def wc_pgd(L, mu, gamma, n, verbose=True):
 
 
 if __name__ == "__main__":
-    n = 2
-    L = 1
-    mu = .1
-    gamma = 1
 
-    pepit_tau, theoretical_tau = wc_pgd(L=L,
-                                        mu=mu,
-                                        gamma=gamma,
-                                        n=n)
+    pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2)

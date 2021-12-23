@@ -1,18 +1,18 @@
-from PEPit.pep import PEP
-from PEPit.functions.convex_function import ConvexFunction
-from PEPit.primitive_steps.proximal_step import proximal_step
+from PEPit import PEP
+from PEPit.functions import ConvexFunction
+from PEPit.primitive_steps import proximal_step
 
 
-def wc_ppa(gamma, n, verbose=True):
+def wc_proximal_point_complexified(gamma, n, verbose=True):
     """
-    See description in Examples/unconstrained_convex_minimization/proximal_point.py.
+    See description in `PEPit/examples/unconstrained_convex_minimization/proximal_point.py`.
     This example is for testing purposes; the worst-case result is supposed to be the same as that of the other routine,
     but the parameterization is different (convex function to be minimized is explicitly formed as a sum of two convex
     functions). That is, the minimization problem is
 
-    .. math:: f_\star = \\min_x \\{f(x)\\equiv f_1(x)+f_2(x)\\},
+    .. math:: f_\\star = \\min_x \\{f(x) \\equiv f_1(x) + f_2(x)\\},
 
-    where :math:`f_1` and :math:`f_2` are closed, proper, and convex (and potentially non-smooth).
+    where :math:`f_1` and :math:`f_2` are closed, proper, and convex (and potentially non-smooth) functions.
 
     Args:
         gamma (float): the step size parameter.
@@ -21,6 +21,21 @@ def wc_ppa(gamma, n, verbose=True):
 
     Returns:
         tuple: worst_case value, theoretical value
+
+    Example:
+        >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+                 function 1 : 6 constraint(s) added
+                 function 2 : 6 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
+        *** Example file: worst-case performance of the Proximal Point Method in function values***
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+            Theoretical guarantee :	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
 
     """
 
@@ -59,8 +74,8 @@ def wc_ppa(gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Proximal Point Method in function values***')
-        print('\tPEP-it guarantee:\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -68,4 +83,4 @@ def wc_ppa(gamma, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_ppa(gamma=1, n=2)
+    pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2)
