@@ -16,6 +16,9 @@ Welcome to PEPit's documentation!
    examples
    contributing
 
+.. include:: ../../README.md
+   :parser: myst_parser.sphinx_
+
 
 Indices and tables
 ------------------
