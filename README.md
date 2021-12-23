@@ -186,7 +186,7 @@ if __name__ == "__main__":
 A lot of common optimization methods can be studied through this framework,
 using numerous steps and under a large variety of function / operator classes.
 
-PEPit provides the following [steps]():
+PEPit provides the following [steps]() (often referred to as "oracles"):
 
 - [Inexact gradient step]()
 - [Exact line-search step]()
