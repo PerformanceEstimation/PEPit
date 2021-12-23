@@ -12,40 +12,7 @@ Website and documentation: [https://pepit.readthedocs.io/](https://pepit.readthe
 
 Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgoujaud/PEPit)
 
-A lot of common optimization methods can be studied through this framework,
-using numerous steps and under a large variety of function / operator classes.
-
-PEPit provides the following [steps]():
-
-- [Inexact gradient step]()
-- [Exact line-search step]()
-- [Proximal step]()
-- [Inexact proximal step]()
-- [Bregman gradient step]()
-- [Bregman proximal step]()
-- [Linear optimization step]()
-- [Fixed point]()
-
-PEPit provides the following [function classes]() CNIs:
-
-- [Convex]()
-- [Strongly convex]()
-- [Smooth]()
-- [Convex and smooth]()
-- [Strongly convex and smooth]()
-- [Convex and Lipschitz continuous]()
-- [Convex indicator]()
-
-PEPit provides the following [operator classes]() CNIs:
-
-- [Monotone]()
-- [Strongly monotone]()
-- [Lipschitz continuous]()
-- [Strongly monotone and Lipschitz continuous]()
-- [Cocoercive]()
-
-
-#### Using and citing the toolbox
+## Using and citing the toolbox
 
 This code comes jointly with the following [`reference`](.pdf):
 
@@ -58,7 +25,7 @@ When using the toolbox in a project, please refer to this note via this Bibtex e
 TODO add bibtex entry
 ```
 
-### Installation
+## Installation
 
 The library has been tested on Linux and MacOSX.
 It relies on the following Python modules:
@@ -67,7 +34,7 @@ It relies on the following Python modules:
 - Scipy
 - Cvxpy
 
-#### Pip installation
+### Pip installation
 
 You can install the toolbox through PyPI with:
 
@@ -81,14 +48,14 @@ or get the very latest version by running:
 pip install -U https://github.com/bgoujaud/PEPit/archive/master.zip # with --user for user install (no root)
 ```
 
-#### Post installation check
+### Post installation check
 After a correct installation, you should be able to import the module without errors:
 
 ```python
 import PEPit
 ```
 
-### Example
+## Example
 
 The folder [Examples](https://pepit.readthedocs.io/en/latest/#Examples) contains numerous introductory examples to the toolbox.
 
@@ -214,7 +181,42 @@ if __name__ == "__main__":
 
 ```
 
-### Authors
+### Included tools
+
+A lot of common optimization methods can be studied through this framework,
+using numerous steps and under a large variety of function / operator classes.
+
+PEPit provides the following [steps]():
+
+- [Inexact gradient step]()
+- [Exact line-search step]()
+- [Proximal step]()
+- [Inexact proximal step]()
+- [Bregman gradient step]()
+- [Bregman proximal step]()
+- [Linear optimization step]()
+- [Fixed point]()
+
+PEPit provides the following [function classes]() CNIs:
+
+- [Convex]()
+- [Strongly convex]()
+- [Smooth]()
+- [Convex and smooth]()
+- [Strongly convex and smooth]()
+- [Convex and Lipschitz continuous]()
+- [Convex indicator]()
+
+PEPit provides the following [operator classes]() CNIs:
+
+- [Monotone]()
+- [Strongly monotone]()
+- [Lipschitz continuous]()
+- [Strongly monotone and Lipschitz continuous]()
+- [Cocoercive]()
+
+
+## Authors
 
 This toolbox has been created by
 
@@ -225,18 +227,18 @@ This toolbox has been created by
 - [**Adrien Taylor**](http://www.di.ens.fr/~ataylor/) (contributor & main project supervision)
 - [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) (contributor & main project supervision)
 
-#### Acknowledgments
+### Acknowledgments
 
 The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/)
 for his feedbacks on preliminary versions of the toolbox,
 as well as for support regarding the continuous integration.
 
-#### Contributions
+## Contributions
 
 All external contributions are welcome.
 Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/#Contributing).
 
-#### References
+## References
 
 [1] A. Taylor, J. Hendrickx, F. Glineur (2017).
 [Exact worst-case performance of first-order methods for composite convex optimization.](https://arxiv.org/pdf/1512.07516.pdf)
