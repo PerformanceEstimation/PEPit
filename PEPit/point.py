@@ -1,10 +1,47 @@
-from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
 from PEPit.expression import Expression
+
+from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
 
 
 class Point(object):
     """
-    Point or Gradient
+    A :class:`Point` encodes an element of a pre-Hilbert space, either a point or a gradient.
+
+    Attributes:
+        _is_leaf (bool): True if self is defined from scratch
+                         (not as linear combination of other :class:`Point` objects).
+                         False if self is defined as linear combination of other points.
+        value (nd.array): numerical value of self obtained after solving the PEP via SDP solver.
+                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        decomposition_dict (dict): decomposition of self as a linear combination of leaf :class:`Point` objects.
+                                   Keys are :class:`Point` objects.
+                                   And values are their associated coefficients.
+        counter (int): counts the number of leaf :class:`Point` objects.
+
+    :class:`Point` objects can be added or subtracted together.
+    They can also be multiplied and divided by a scalar value.
+
+    Example:
+        >>> point1 = Point()
+        >>> point2 = Point()
+        >>> new_point = (- point1 + point2) / 5
+
+    As in any pre-Hilbert space, there exists a scalar product.
+    Therefore, :class:`Point` objects can be multiplied together.
+
+    Example:
+        >>> point1 = Point()
+        >>> point2 = Point()
+        >>> new_expr = point1 * point2
+
+    The output is a scalar of type :class:`Expression`.
+
+    The corresponding squared norm can also be computed.
+
+    Example:
+        >>> point = Point()
+        >>> new_expr = point ** 2
+
     """
 
     # Class counter.
@@ -17,14 +54,27 @@ class Point(object):
                  decomposition_dict=None,
                  ):
         """
-        A point can either be a basis point, or a linear combination of basis points.
-        The decomposition dict encodes the decomposition of the point in the basis.
-        A point contains also a value that is computed only when the pep is solved.
-        Finally, a basis point contains a counter to keep track of the order in which they where defined.
+        :class:`Point` objects can also be instantiated via the following arguments
 
-        :param is_leaf: (bool) if True, the point defines a new dimension, hence linearly independent from the others.
-        :param decomposition_dict: (dict) the decomposition in the basis of points.
-                                          None if the point defines a new direction.
+        Args:
+            is_leaf (bool): True if self is a :class:`Point` defined from scratch
+                            (not as linear combination of other :class:`Point` objects).
+                            False if self is a linear combination of existing :class:`Point` objects.
+            decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Point` objects.
+                                       Keys are :class:`Point` objects.
+                                       And values are their associated coefficients.
+
+        Note:
+            If `is_leaf` is True, then `decomposition_dict` must be provided as None.
+            Then `self.decomposition_dict` will be set to `{self: 1}`.
+
+        Instantiating the :class:`Point` object of the first example can be done by
+
+        Example:
+            >>> point1 = Point()
+            >>> point2 = Point()
+            >>> new_point = Point(is_leaf=False, decomposition_dict = {point1: -1/5, point2: 1/5})
+
         """
 
         # Store is_leaf in a protected attribute
@@ -48,20 +98,33 @@ class Point(object):
             self.counter = None
 
     def get_is_leaf(self):
+        """
+
+        Returns:
+            self._is_leaf (bool): allows to access the protected attribute `_is_leaf`.
+
+        """
         return self._is_leaf
 
     def __add__(self, other):
         """
-        Add 2 points together, leading to a new point.
+        Add 2 :class:`Point` objects together, leading to a new :class:`Point`.
 
-        :param other: (Point) Any other point
-        :return: (Point) The sum of the 2 points
+        Args:
+            other (Point): any other :class:`Point` object.
+
+        Returns:
+            self + other (Expression): The sum of the 2 :class:`Point` objects.
+
+        Raises:
+            TypeError: if provided `other` is not a :class:`Point`.
+
         """
 
         # Verify that other is a Point
         assert isinstance(other, Point)
 
-        # Update the linear decomposition of the sum of 2 points from their respective basis decomposition
+        # Update the linear decomposition of the sum of 2 points from their respective leaf decomposition
         merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
         merged_decomposition_dict = prune_dict(merged_decomposition_dict)
 
@@ -70,10 +133,17 @@ class Point(object):
 
     def __sub__(self, other):
         """
-        Subtract 2 points together, leading to a new point.
+        Subtract 2 :class:`Point` objects together, leading to a new :class:`Point`.
 
-        :param other: (Point) Any other point
-        :return: (Point) The difference between the 2 points
+        Args:
+            other (Point): any other :class:`Point` object.
+
+        Returns:
+            self - other (Expression): The difference between the 2 :class:`Point` objects.
+
+        Raises:
+            TypeError: if provided `other` is not a :class:`Point`.
+
         """
 
         # A-B = A+(-B)
@@ -81,9 +151,11 @@ class Point(object):
 
     def __neg__(self):
         """
-        Compute the opposite of a point.
+        Compute the opposite of a :class:`Point`.
 
-        :return: (Point) - point
+        Returns:
+            - self (Point): the opposite of self.
+
         """
 
         # -A = (-1)*A
@@ -91,10 +163,17 @@ class Point(object):
 
     def __rmul__(self, other):
         """
-        Multiply 1 point to the left by a constant scalar value or another point.
+        Multiply a :class:`Point` by a scalar value or another :class:`Point`.
 
-        :param other: (int or float or Point) Any scalar value or any Point.
-        :return: (Expression) other * self
+        Args:
+            other (int or float or Point): any scalar constant or :class:`Point` object.
+
+        Returns:
+            other * self (Point or Expression): resulting product.
+
+        Raises:
+            TypeError: if provided `other` is neither a scalar value nor a :class:`Point`.
+
         """
 
         # Multiplying by a scalar value is applying an homothety
@@ -110,40 +189,61 @@ class Point(object):
             # Compute the decomposition dict of the new expression
             decomposition_dict = multiply_dicts(self.decomposition_dict, other.decomposition_dict)
             # Create and return the new expression
-            return Expression(is_function_value=False, decomposition_dict=decomposition_dict)
+            return Expression(is_leaf=False, decomposition_dict=decomposition_dict)
         else:
             # Raise an error if the user tries to multiply a point by anything else
-            raise TypeError("Points can be multiplied by scalar constants and other points only!")
+            raise TypeError("Points can be multiplied by scalar constants and other points only!"
+                            "Got {}".format(type(other)))
 
     def __mul__(self, other):
         """
-        Multiply 1 point to the right by a constant scalar value or another point.
+        Multiply a :class:`Point` by a scalar value or another :class:`Point`.
 
-        :param other: (int or float or Point) Any scalar value or any Point.
-        :return: (Expression) self * other
+        Args:
+            other (int or float or Point): any scalar constant or :class:`Point` object.
+
+        Returns:
+            self * other (Point or Expression): resulting product.
+
+        Raises:
+            TypeError: if provided `other` is neither a scalar value nor a :class:`Point`.
+
         """
 
         return self.__rmul__(other=other)
 
     def __truediv__(self, denominator):
         """
-        Divide a point by a scalar value
+        Divide a :class:`Point` by a scalar value.
 
-        :param denominator: (int or float) the value to divide by.
-        :return: (Point) The resulting point
+        Args:
+            denominator (int or float): any scalar constant.
+
+        Returns:
+            self / other (Point): The ratio between this :class:`Point` and the scalar value `other`.
+
+        Raises:
+            TypeError: if provided `other` is not a scalar value.
+
         """
         # Verify the type of denominator
         assert isinstance(denominator, float) or isinstance(denominator, int)
+
         # P / v = P * (1/v)
         return self.__rmul__(1 / denominator)
 
     def __pow__(self, power):
         """
-        Compute the square norm of a point.
+        Compute the squared norm of this :class:`Point`.
 
-        :param power: (int) must be 2.
-        :return: (Expression) Inner product of point by itself.
+        Returns:
+            self ** 2 (Expression): square norm of self.
+
+        Raises:
+            AssertionError: if provided `power` is not 2.
+
         """
+
         # Works only for power=2
         assert power == 2
 
@@ -152,10 +252,14 @@ class Point(object):
 
     def eval(self):
         """
-        Compute, store and return the value of a point.
-        Raise Exception if the PEP did not run yet.
+        Compute, store and return the value of this :class:`Point`.
 
-        :return: (np.array) The value of the point.
+        Returns:
+            self.value (np.array): The value of this :class:`Point` after the corresponding PEP was solved numerically.
+
+        Raises:
+            ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
+
         """
 
         # If the attribute value is not None, then simply return it.
@@ -164,7 +268,7 @@ class Point(object):
             # If leaf, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
-            # If linear combination, combine the values of the basis, and store the result before returning it.
+            # If linear combination, combine the values of the leaf, and store the result before returning it.
             else:
                 value = 0
                 for point, weight in self.decomposition_dict.items():

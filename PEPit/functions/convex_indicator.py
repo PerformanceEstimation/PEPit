@@ -5,59 +5,54 @@ from PEPit.function import Function
 
 class ConvexIndicatorFunction(Function):
     """
-    This routine implements the interpolation conditions for convex
-    indicator functions with bounded domains. Two parameters may be provided:
-           - a diameter D (D is nonnegative, and possibly infinite).
+    The :class:`ConvexIndicatorFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing interpolation constraints for the class of closed convex indicator functions.
 
-    Note: not defining the value of D automatically corresponds to
-          set D to infinite.
+    Attributes:
+        D (float): upper bound on the diameter of the feasible set
 
-    To generate a convex indicator function 'h' with diameter D=infinite and
-    a radius R=1 from an instance of PEP called P:
-    >> problem = pep()
-    >> D= np.inf
-    >> h = problem.declare_function('ConvexIndicator',{'D' :D});
+    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
 
-    For details about interpolation conditions, we refer to the following
-    references:
+    Example:
+        >>> from PEPit import PEP
+        >>> problem = PEP()
+        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
 
-    [1] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-    "Smooth strongly convex interpolation and exact worst-case
-    performance of first-order methods."
-    Mathematical Programming 161.1-2 (2017): 307-345.
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
+        convex optimization. SIAM Journal on Optimization, 27(3):1283–1313. <https://arxiv.org/pdf/1512.07516.pdf>`_
 
-    [2] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
-    "Exact Worst-case Performance of First-order Methods for Composite
-    Convex Optimization."to appear in SIAM Journal on Optimization (2017)
-
-    :param D:
-    :param R:
-    :return:
     """
 
     def __init__(self,
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
-        Class of convex indicator functions.
-        The differentiability is not necessarily verified.
 
-        :param param: (dict) contains the values of mu and L
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
+        Args:
+            param (dict): contains the values of D
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
-        # Store D
-        self.D = param['D']  # diameter
+        # Store the diameter D in an attribute
+        self.D = param['D']
 
     def add_class_constraints(self):
         """
-        Add constraints of convex indicator functions
+        Formulates the list of interpolation constraints for self (closed convex indicator function),
+        see [1, Theorem 3.6].
         """
 
         for i, point_i in enumerate(self.list_of_points):

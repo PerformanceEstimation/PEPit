@@ -3,29 +3,43 @@ from PEPit.function import Function
 
 class ConvexFunction(Function):
     """
-    Convex Function
+    The :class:`ConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints of the class of convex, closed and proper (CCP) functions (i.e., convex
+    functions whose epigraphs are non-empty closed sets).
+
+    General CCP functions are not characterized by any parameter, hence can be instantiated as
+
+    Example:
+        >>> from PEPit import PEP
+        >>> problem = PEP()
+        >>> func = problem.declare_function(function_class=ConvexFunction, param=dict())
+
     """
 
     def __init__(self,
                  _,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=False):
         """
-        Class of convex functions.
-        It does not need any additional parameter.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=reuse_gradient)
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the convex functions
+        Formulates the list of interpolation constraints for self (CCP function).
         """
 
         for i, point_i in enumerate(self.list_of_points):

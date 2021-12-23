@@ -1,95 +1,92 @@
 import unittest
 
+from PEPit.pep import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
-from PEPit.function import Function
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from PEPit.constraint import Constraint
+from PEPit.function import Function
+
+from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
 class TestConstraints(unittest.TestCase):
 
     def setUp(self):
 
-        self.L1 = 1.
-        self.mu1 = 0.1
-        self.L2 = 10.
-        self.mu2 = 0.001
+        # smooth-strongly convex gradient descent set up
+        self.L = 1.
+        self.mu = 0.1
+        self.gamma = 1 / self.L
 
-        self.func1 = SmoothStronglyConvexFunction({'L': self.L1, 'mu': self.mu1})
-        self.func2 = SmoothStronglyConvexFunction({'L': self.L2, 'mu': self.mu2})
+        # Instantiate PEP
+        self.problem = PEP()
 
-        self.point1 = Point(is_leaf=True, decomposition_dict=None)
-        self.point2 = Point(is_leaf=True, decomposition_dict=None)
+        # Declare a strongly convex smooth function
+        self.func = self.problem.declare_function(SmoothStronglyConvexFunction, param={'L': self.L, 'mu': self.mu})
+
+        # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
+        self.xs = self.func.stationary_point()
+
+        # Then define the starting point x0 of the algorithm
+        self.x0 = self.problem.set_initial_point()
+
+        # Set the initial constraint that is the distance between x0 and x^*
+        self.problem.set_initial_condition((self.x0 - self.xs) ** 2 <= 1)
+
+        # Run n steps of the GD method
+        self.x1 = self.x0 - self.gamma * self.func.gradient(self.x0)
+
+        # Set the performance metric to the function values accuracy
+        self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
+
+        self.solution = self.problem.solve(verbose=False)
 
     def test_is_instance(self):
 
-        self.assertIsInstance(self.func1, Function)
-        self.assertIsInstance(self.func2, Function)
-        self.assertIsInstance(self.func2, SmoothStronglyConvexFunction)
-        self.assertIsInstance(self.func1, SmoothStronglyConvexFunction)
+        self.assertIsInstance(self.func, Function)
+        self.assertIsInstance(self.func, SmoothStronglyConvexFunction)
+        self.assertIsInstance(self.xs, Point)
+        self.assertIsInstance(self.x0, Point)
+        self.assertIsInstance(self.x1, Point)
+        for i in range(len(self.problem.list_of_conditions)):
+            self.assertIsInstance(self.problem.list_of_conditions[i], Constraint)
+            self.assertIsInstance(self.problem.list_of_conditions[i].expression, Expression)
+        for i in range(len(self.func.list_of_constraints)):
+            self.assertIsInstance(self.func.list_of_constraints[i], Constraint)
+            self.assertIsInstance(self.func.list_of_constraints[i].expression, Expression)
 
-    def compute_linear_combination(self):
+    def test_counter(self):
 
-        new_function = self.func1 + self.func2
+        self.assertIs(self.func.counter, 0)
+        self.assertIs(self.xs.counter, 0)
+        self.assertIs(self.x0.counter, 1)
+        self.assertIs(self.x1.counter, None)
 
-        return new_function
+        # conditions are first added as Constraint in PEP
+        for i in range(len(self.problem.list_of_conditions)):
+            self.assertIs(self.problem.list_of_conditions[i].counter, i)
 
-    def test_linear_combination(self):
+        # class constraints are added after initial conditions in PEP
+        for i in range(len(self.func.list_of_constraints)):
+            self.assertIs(self.func.list_of_constraints[i].counter, i + len(self.problem.list_of_conditions))
 
-        new_function = self.compute_linear_combination()
+    def test_equality_inequality(self):
 
-        self.assertIsInstance(new_function, Function)
-        self.assertEqual(new_function.decomposition_dict, {self.func1: 1, self.func2: 1})
+        for i in range(len(self.func.list_of_constraints)):
+            self.assertIsInstance(self.func.list_of_constraints[i].equality_or_inequality, str)
+            self.assertIn(self.func.list_of_constraints[i].equality_or_inequality, {'equality', 'inequality'})
 
-    def test_add_constraints(self):
-        new_function = self.compute_linear_combination()
-        point3 = Point(is_leaf=True, decomposition_dict=None)
+        for i in range(len(self.problem.list_of_conditions)):
+            self.assertIsInstance(self.problem.list_of_conditions[i].equality_or_inequality, str)
+            self.assertIn(self.problem.list_of_conditions[i].equality_or_inequality, {'equality', 'inequality'})
 
-        # Add three points
-        new_function.oracle(self.point1)
-        new_function.oracle(self.point2)
-        new_function.oracle(point3)
-        self.func1.add_class_constraints()
-        self.func2.add_class_constraints()
+    def test_dual_variable_value(self):
 
-        # Count constraints
-        self.assertEqual(len(new_function.list_of_constraints), 0)
-        self.assertEqual(len(self.func1.list_of_constraints), 6)
-        self.assertEqual(len(self.func2.list_of_constraints), 6)
+        for i in range(len(self.func.list_of_constraints)):
+            self.assertIsInstance(self.func.list_of_constraints[i].dual_variable_value, float)
 
-        # Test constraints type
-        for i in range(len(self.func1.list_of_constraints)):
-            self.assertIsInstance(self.func1.list_of_constraints[i], Constraint)
-            self.assertIsInstance(self.func2.list_of_constraints[i], Constraint)
-
-    def test_sum_smooth_strongly_convex_functions(self):
-
-        new_function = self.compute_linear_combination()
-        new_function.oracle(self.point1)
-        new_function.oracle(self.point2)
-        self.func1.add_class_constraints()
-        self.func2.add_class_constraints()
-
-        # Test sum of smooth strongly convex functions
-        L = self.L1 + self.L2
-        mu = self.mu1 + self.mu2
-
-        for i, point_i in enumerate(new_function.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(new_function.list_of_points):
-
-                xj, gj, fj = point_j
-
-                if i != j:
-
-                    # Interpolation conditions of smooth strongly convex functions class
-                    self.assertLessEqual(- fi + fj +
-                                        gj * (xi - xj)
-                                        + 1/(2*L) * (gi - gj) ** 2
-                                        + mu / (2 * (1 - mu / L)) * (xi - xj - 1/L * (gi - gj))**2, 0)
+        for i in range(len(self.problem.list_of_conditions)):
+            self.assertIsInstance(self.problem.list_of_conditions[i].dual_variable_value, float)
 
     def tearDown(self):
 

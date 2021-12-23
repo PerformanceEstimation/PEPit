@@ -3,20 +3,34 @@ from PEPit.function import Function
 
 class LipschitzStronglyMonotoneOperator(Function):
     """
-    Tis routine implements the quadratic contraints (no interpolation conditions) for operators
-    that are both Lipschitz and strongly monotone.
+    The :class:`LipschitzStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
+    for the class of Lipschitz continuous strongly monotone (and maximally monotone) operators.
 
-    To generate a monotone operator 'h' from an instance of PEP called P :
-    >> problem = pep()
-    >> h = problem.DeclareFunction(LipschitzStronglyMonotoneOperator, {'mu': mu, 'L': L})
+    Note:
+        Operators'values can be requested through `gradient` and `function values` should not be used.
 
-    NOTE : PEPit was initially tough for evaluating performances of optimization algorithms.
-    Operators are represented in the same way as functions, but function values are not accessible.
+    Warning:
+        Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
+        in this class are necessary but a priori not sufficient for interpolation. Hence the numerical results
+        obtained when using this class might be non-tight upper bounds (see Discussions in [1, Section 2]).
 
-    For details about interpolation conditions, we refer to the fllowing :
-    [1] E. K. Ryu, A. B. Taylor, C. Bergeling, and P. Giselsson,
-      "Operator Splitting Performance Estimation: Tight contraction factors
-      and optimal parameter selection," arXiv:1812.00146, 2018.
+    Attributes:
+        mu (float): strong monotonicity parameter
+        L (float): Lipschitz parameter
+
+    Lipschitz continuous strongly monotone operators are characterized by parameters :math:`\\mu` and `L`,
+    hence can be instantiated as
+
+    Example:
+        >>> from PEPit import PEP
+        >>> problem = PEP()
+        >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperator, param={'mu': .1, 'L': 1})
+
+    References:
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
+        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+        <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -24,25 +38,35 @@ class LipschitzStronglyMonotoneOperator(Function):
                  param,
                  is_leaf=True,
                  decomposition_dict=None,
-                 is_differentiable=False):
+                 reuse_gradient=True):
         """
-        Class of Lipschitz strongly monotone operators.
-        It does not need any additional parameter.
 
-        :param is_leaf: (bool) If True, it is a basis function. Otherwise it is a linear combination of such functions.
-        :param decomposition_dict: (dict) Decomposition in the basis of functions.
-        :param is_differentiable: (bool) If true, the function can have only one subgradient per point.
+        Args:
+            param (dict): contains the values of mu and L.
+            is_leaf (bool): True if self is defined from scratch.
+                            False is self is defined as linear combination of leaf .
+            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+
+        Note:
+            Lipschitz continuous strongly monotone operators are necessarily continuous,
+            hence `reuse_gradient` is set to True.
+
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         is_differentiable=is_differentiable)
+                         reuse_gradient=True)
         # Store L and mu
         self.mu = param['mu']
         self.L = param['L']
 
     def add_class_constraints(self):
         """
-        Add all the interpolation condition of the Lipschitz strongly-monotone operator
+        Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
+        maximally monotone operator), see, e.g., discussions in [1, Section 2].
         """
 
         for i, point_i in enumerate(self.list_of_points):

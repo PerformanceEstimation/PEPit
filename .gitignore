@@ -133,3 +133,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Documentation
+docs/autodocgen-output
+docs/build
