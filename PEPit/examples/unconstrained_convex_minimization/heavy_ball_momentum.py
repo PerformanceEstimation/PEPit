@@ -66,8 +66,8 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
     Example:
         >>> mu = 0.1
         >>> L = 1.
-        >>> alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
-        >>> beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
+        >>> alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
+        >>> beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
         >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
@@ -78,7 +78,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.8145062493468549
         *** Example file: worst-case performance of the Heavy-Ball method ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.814506 (f(x_0) -  f(x_*))
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
             Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) -  f(x_*))
 
     """
@@ -102,10 +102,12 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
 
     # Run one step of the heavy ball method
     x_new = x0
+    x_old = x0
 
     for _ in range(n):
+        x_next = x_new - alpha * func.gradient(x_new) + beta * (x_new - x_old)
         x_old = x_new
-        x_new = x_new - alpha * func.gradient(x_new) + beta * (x_new - x_old)
+        x_new = x_next
 
     # Set the performance metric to the final distance to optimum
     problem.set_performance_metric(func.value(x_new) - fs)
@@ -130,6 +132,6 @@ if __name__ == "__main__":
 
     mu = 0.1
     L = 1.
-    alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
+    alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
     beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
     pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)
