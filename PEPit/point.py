@@ -13,8 +13,8 @@ class Point(object):
         _is_leaf (bool): True if self is defined from scratch
                          (not as linear combination of other :class:`Point` objects).
                          False if self is defined as linear combination of other points.
-        value (nd.array): numerical value of self obtained after solving the PEP via SDP solver.
-                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        _value (nd.array): numerical value of self obtained after solving the PEP via SDP solver.
+                           Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         decomposition_dict (dict): decomposition of self as a linear combination of leaf :class:`Point` objects.
                                    Keys are :class:`Point` objects.
                                    And values are their associated coefficients.
@@ -257,7 +257,7 @@ class Point(object):
         Compute, store and return the value of this :class:`Point`.
 
         Returns:
-            self.value (np.array): The value of this :class:`Point` after the corresponding PEP was solved numerically.
+            self._value (np.array): The value of this :class:`Point` after the corresponding PEP was solved numerically.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.

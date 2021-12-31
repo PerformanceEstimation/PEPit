@@ -17,8 +17,8 @@ class Expression(object):
         _is_leaf (bool): True if self is a function value defined from scratch
                                    (not as linear combination of other function values).
                                    False if self is a linear combination of existing :class:`Expression` objects.
-        value (float): numerical value of self obtained after solving the PEP via SDP solver.
-                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        _value (float): numerical value of self obtained after solving the PEP via SDP solver.
+                        Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
                                    Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                    And values are their associated coefficients.
@@ -319,7 +319,7 @@ class Expression(object):
         Compute, store and return the value of this :class:`Expression`.
 
         Returns:
-            self.value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
+            self._value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
