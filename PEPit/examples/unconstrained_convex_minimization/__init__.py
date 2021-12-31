@@ -2,6 +2,7 @@ from .accelerated_gradient_convex import wc_accelerated_gradient_convex
 from .accelerated_gradient_strongly_convex import wc_accelerated_gradient_strongly_convex
 from .accelerated_proximal_point import wc_accelerated_proximal_point
 from .conjugate_gradient import wc_conjugate_gradient
+from .conjugate_gradient_qg_convex import wc_conjugate_gradient_qg_convex
 from .gradient_descent import wc_gradient_descent
 from .gradient_exact_line_search import wc_gradient_exact_line_search
 from .heavy_ball_momentum import wc_heavy_ball_momentum
@@ -20,6 +21,7 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'accelerated_gradient_strongly_convex', 'wc_accelerated_gradient_strongly_convex',
            'accelerated_proximal_point', 'wc_accelerated_proximal_point',
            'conjugate_gradient', 'wc_conjugate_gradient',
+           'conjugate_gradient_qg_convex', 'wc_conjugate_gradient_qg_convex',
            'gradient_descent', 'wc_gradient_descent',
            'gradient_exact_line_search', 'wc_gradient_exact_line_search',
            'heavy_ball_momentum', 'wc_heavy_ball_momentum',

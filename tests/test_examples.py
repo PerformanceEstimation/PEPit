@@ -7,6 +7,7 @@ from PEPit.function import Function
 from PEPit.point import Point
 
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
+from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
@@ -114,6 +115,12 @@ class TestExamples(unittest.TestCase):
         L, n = 3, 2
 
         wc, theory = wc_conjugate_gradient(L=L, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_conjugate_gradient_qg_convex(self):
+        L, n = 3.5, 12
+
+        wc, theory = wc_conjugate_gradient_qg_convex(L=L, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_inexact_gradient_exact_line_search(self):

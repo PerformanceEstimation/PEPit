@@ -16,7 +16,7 @@ def wc_conjugate_gradient(L, n, verbose=1):
     This code computes a worst-case guarantee for the **conjugate gradient (CG)** method (with exact span searches).
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0-x_\\star\\|^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0-x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of the **conjugate gradient** method,
     and where :math:`x_\\star` is a minimizer of :math:`f`.

@@ -36,7 +36,7 @@ class StronglyConvexFunction(Function):
         Args:
             mu (float): The strong convexity parameter.
             is_leaf (bool): True if self is defined from scratch.
-                            False is self is defined as linear combination of leaf .
+                            False is self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
