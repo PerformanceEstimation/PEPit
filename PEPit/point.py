@@ -272,7 +272,7 @@ class Point(object):
                 raise ValueError("The PEP must be solved to evaluate Points!")
             # If linear combination, combine the values of the leaf, and store the result before returning it.
             else:
-                value = 0
+                value = np.zeros(Point.counter)
                 for point, weight in self.decomposition_dict.items():
                     value += weight * point.eval()
                 self._value = value

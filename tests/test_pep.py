@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from PEPit.pep import PEP
 from PEPit.point import Point
@@ -59,12 +60,9 @@ class TestPEP(unittest.TestCase):
 
             point, gradient, function_value = triplet
 
-            if point.get_is_leaf():
-                self.assertIsNot(point._value, None)
-            if gradient.get_is_leaf():
-                self.assertIsNot(gradient._value, None)
-            if function_value.get_is_leaf():
-                self.assertIsNot(function_value._value, None)
+            self.assertIsInstance(point.eval(), np.ndarray)
+            self.assertIsInstance(gradient.eval(), np.ndarray)
+            self.assertIsInstance(function_value.eval(), float)
 
     def test_eval_constraint_dual_values(self):
 
