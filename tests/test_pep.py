@@ -71,12 +71,12 @@ class TestPEP(unittest.TestCase):
         self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
 
         for condition in self.problem.list_of_conditions:
-            self.assertIsInstance(condition.dual_variable_value, float)
-            self.assertAlmostEqual(condition.dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
+            self.assertIsInstance(condition._dual_variable_value, float)
+            self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 
         for constraint in self.func.list_of_constraints:
-            self.assertIsInstance(constraint.dual_variable_value, float)
-            self.assertAlmostEqual(constraint.dual_variable_value,
+            self.assertIsInstance(constraint._dual_variable_value, float)
+            self.assertAlmostEqual(constraint._dual_variable_value,
                                    2 * self.gamma * max(abs(1 - self.mu * self.gamma), abs(1 - self.L * self.gamma)),
                                    delta=2 * self.gamma * 10 ** 3)
 

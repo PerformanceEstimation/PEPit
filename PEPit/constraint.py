@@ -9,8 +9,10 @@ class Constraint(object):
     Attributes:
         expression (Expression): The :class:`Expression` that is compared to 0.
         equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
-        dual_variable_value (float): the associated dual variable from the numerical solution to the corresponding PEP.
-                                     Set to None before the call to `PEP.solve` from the :class:`PEP`
+        _value (float): numerical value of self.expression obtained after solving the PEP via SDP solver.
+                        Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        _dual_variable_value (float): the associated dual variable from the numerical solution to the corresponding PEP.
+                                      Set to None before the call to `PEP.solve` from the :class:`PEP`
         counter (int): counts the number of :class:`Constraint` objects.
 
     A :class:`Constraint` results from a comparison between two :class:`Expression` objects.
@@ -62,6 +64,54 @@ class Constraint(object):
         assert equality_or_inequality in {'equality', 'inequality'}
         self.equality_or_inequality = equality_or_inequality
 
-        # After solving the PEP, one can find the value of the underlying expression in self.expression.value.
-        # Moreover, the associated dual variable value must be stored in self.dual_variable_value.
-        self.dual_variable_value = None
+        # The value of the underlying expression must be stored in self._value.
+        self._value = None
+
+        # Moreover, the associated dual variable value must be stored in self._dual_variable_value.
+        self._dual_variable_value = None
+
+    def eval(self):
+        """
+        Compute, store and return the value of the underlying :class:`Expression` of this :class:`Constraint`.
+
+        Returns:
+            self._value (np.array): The value of the underlying :class:`Expression` of this :class:`Constraint`
+                                    after the corresponding PEP was solved numerically.
+
+        Raises:
+            ValueError("The PEP must be solved to evaluate Constraints!") if the PEP has not been solved yet.
+
+        """
+
+        # If the attribute value is not None, then simply return it.
+        # Otherwise, compute it and return it.
+        if self._value is None:
+
+            try:
+                self._value = self.expression.eval()
+            except ValueError("The PEP must be solved to evaluate Expressions!"):
+                raise ValueError("The PEP must be solved to evaluate Constraints!")
+
+        return self._value
+
+    def eval_dual(self):
+        """
+        Compute, store and return the value of the dual variable of this :class:`Constraint`.
+
+        Returns:
+            self._dual_variable_value (float): The value of the dual variable of this :class:`Constraint`
+                                               after the corresponding PEP was solved numerically.
+
+        Raises:
+            ValueError("The PEP must be solved to evaluate Constraints dual variables!")
+            if the PEP has not been solved yet.
+
+        """
+
+        # If the attribute _dual_variable_value is not None, then simply return it.
+        # Otherwise, raise a ValueError.
+        if self._dual_variable_value is None:
+            # The PEP would have filled the attribute at the end of the solve.
+            raise ValueError("The PEP must be solved to evaluate Constraints dual variables!")
+
+        return self._dual_variable_value

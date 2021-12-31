@@ -374,13 +374,13 @@ class PEP(object):
 
         # Store all dual values of initial conditions (Generally the rate)
         for condition in self.list_of_conditions:
-            condition.dual_variable_value = cvx_constraints[counter].dual_value
+            condition._dual_variable_value = cvx_constraints[counter].dual_value
             counter += 1
 
         # Store all the class constraints dual values, providing the proof of the desired rate.
         for function in self.list_of_functions:
             for constraint in function.list_of_constraints:
-                constraint.dual_variable_value = cvx_constraints[counter].dual_value
+                constraint._dual_variable_value = cvx_constraints[counter].dual_value
                 counter += 1
 
         # Return the position of the reached performance metric

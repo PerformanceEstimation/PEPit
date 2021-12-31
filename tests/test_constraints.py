@@ -80,13 +80,21 @@ class TestConstraints(unittest.TestCase):
             self.assertIsInstance(self.problem.list_of_conditions[i].equality_or_inequality, str)
             self.assertIn(self.problem.list_of_conditions[i].equality_or_inequality, {'equality', 'inequality'})
 
-    def test_dual_variable_value(self):
+    def test_eval(self):
 
         for i in range(len(self.func.list_of_constraints)):
-            self.assertIsInstance(self.func.list_of_constraints[i].dual_variable_value, float)
+            self.assertIsInstance(self.func.list_of_constraints[i].eval(), float)
 
         for i in range(len(self.problem.list_of_conditions)):
-            self.assertIsInstance(self.problem.list_of_conditions[i].dual_variable_value, float)
+            self.assertIsInstance(self.problem.list_of_conditions[i].eval(), float)
+
+    def test_eval_dual(self):
+
+        for i in range(len(self.func.list_of_constraints)):
+            self.assertIsInstance(self.func.list_of_constraints[i].eval_dual(), float)
+
+        for i in range(len(self.problem.list_of_conditions)):
+            self.assertIsInstance(self.problem.list_of_conditions[i].eval_dual(), float)
 
     def tearDown(self):
 
