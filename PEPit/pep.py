@@ -337,17 +337,17 @@ class PEP(object):
         # Note the other ones are not stored until user asks to eval them
         for point in self.list_of_points:
             if point.get_is_leaf():
-                point.value = points_values[:, point.counter]
+                point._value = points_values[:, point.counter]
         for function in self.list_of_functions:
             if function.get_is_leaf():
                 for triplet in function.list_of_points:
                     point, gradient, function_value = triplet
                     if point.get_is_leaf():
-                        point.value = points_values[:, point.counter]
+                        point._value = points_values[:, point.counter]
                     if gradient.get_is_leaf():
-                        gradient.value = points_values[:, gradient.counter]
+                        gradient._value = points_values[:, gradient.counter]
                     if function_value.get_is_leaf():
-                        function_value.value = F_value[function_value.counter]
+                        function_value._value = F_value[function_value.counter]
 
     def _eval_constraint_dual_values(self, cvx_constraints):
         """

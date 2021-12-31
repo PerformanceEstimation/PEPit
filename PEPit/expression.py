@@ -79,7 +79,7 @@ class Expression(object):
         self._is_leaf = is_leaf
 
         # Initialize the value attribute to None until the PEP is solved
-        self.value = None
+        self._value = None
 
         # If leaf function value, the decomposition is updated,
         # the object counter is set
@@ -330,7 +330,7 @@ class Expression(object):
 
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
-        if self.value is None:
+        if self._value is None:
             # If leaf function value, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
@@ -356,7 +356,7 @@ class Expression(object):
                         raise TypeError("Expressions are made of function values, inner products and constants only!"
                                         "Got {}".format(type(key)))
                 # Store the value
-                self.value = value
+                self._value = value
 
         # Return the value
-        return self.value
+        return self._value

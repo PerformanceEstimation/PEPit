@@ -1,3 +1,5 @@
+import numpy as np
+
 from PEPit.expression import Expression
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
@@ -81,7 +83,7 @@ class Point(object):
         self._is_leaf = is_leaf
 
         # Initialize the value attribute to None until the PEP is solved
-        self.value = None
+        self._value = None
 
         # If leaf, the decomposition is updated w.r.t the new direction,
         # the object counter is set
@@ -264,7 +266,7 @@ class Point(object):
 
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
-        if self.value is None:
+        if self._value is None:
             # If leaf, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
@@ -273,6 +275,6 @@ class Point(object):
                 value = 0
                 for point, weight in self.decomposition_dict.items():
                     value += weight * point.eval()
-                self.value = value
+                self._value = value
 
-        return self.value
+        return self._value

@@ -60,11 +60,11 @@ class TestPEP(unittest.TestCase):
             point, gradient, function_value = triplet
 
             if point.get_is_leaf():
-                self.assertIsNot(point.value, None)
+                self.assertIsNot(point._value, None)
             if gradient.get_is_leaf():
-                self.assertIsNot(gradient.value, None)
+                self.assertIsNot(gradient._value, None)
             if function_value.get_is_leaf():
-                self.assertIsNot(function_value.value, None)
+                self.assertIsNot(function_value._value, None)
 
     def test_eval_constraint_dual_values(self):
 
