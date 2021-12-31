@@ -181,7 +181,7 @@ class PEP(object):
             solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
             tracetrick (bool): Apply trace heuristic as a proxy for minimizing
-             the dimension of the solution (rank of the Gram matrix).
+                               the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
@@ -357,7 +357,8 @@ class PEP(object):
             cvx_constraints (list): a list of cvxpy formatted constraints.
 
         Returns:
-             np.float: the position, in the list of performance metric, of the one that is actually reached.
+             position_of_minimal_objective (np.float): the position, in the list of performance metric,
+                                                       of the one that is actually reached.
 
         """
 
