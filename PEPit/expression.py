@@ -322,7 +322,7 @@ class Expression(object):
             self._value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
 
         Raises:
-            ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
+            ValueError("The PEP must be solved to evaluate Expressions!") if the PEP has not been solved yet.
 
             TypeError("Expressions are made of function values, inner products and constants only!")
 
@@ -333,7 +333,7 @@ class Expression(object):
         if self._value is None:
             # If leaf function value, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
-                raise ValueError("The PEP must be solved to evaluate Points!")
+                raise ValueError("The PEP must be solved to evaluate Expressions!")
             # If linear combination,
             # combine the values of the leaf expressions,
             # and store the result before returning it.
