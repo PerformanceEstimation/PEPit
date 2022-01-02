@@ -15,7 +15,7 @@ def wc_optimized_gradient(L, n, verbose=True):
     This code computes a worst-case guarantee for **optimized gradient method** (OGM). That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L)  \\|x_0 - x_\\star\\|^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`.
 
@@ -30,7 +30,7 @@ def wc_optimized_gradient(L, n, verbose=True):
 
             \\begin{eqnarray}
                 x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t)\\\\
-                y_{k+1} & = & x_{t+1} + \\frac{\\theta_{t}-1}{\\theta_{t+1}}(x_{t+1}-x_t)+\\frac{\\theta_{t}}{\\theta_{t+1}}(x_{t+1}-y_t),
+                y_{t+1} & = & x_{t+1} + \\frac{\\theta_{t}-1}{\\theta_{t+1}}(x_{t+1}-x_t)+\\frac{\\theta_{t}}{\\theta_{t+1}}(x_{t+1}-y_t),
             \\end{eqnarray}
 
     with
