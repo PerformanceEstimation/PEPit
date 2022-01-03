@@ -56,6 +56,7 @@ from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_optimized_gr
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
+from PEPit.examples.unconstrained_convex_minimization import wc_information_theoretic
 
 
 class TestExamples(unittest.TestCase):
@@ -72,6 +73,12 @@ class TestExamples(unittest.TestCase):
         L, n = 3, 4
 
         wc, theory = wc_optimized_gradient(L, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_information_theoretic(self):
+        mu, L, n = .01, 3, 3
+
+        wc, theory = wc_information_theoretic(mu, L, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_gradient_descent(self):
