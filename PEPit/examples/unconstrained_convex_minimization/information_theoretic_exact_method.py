@@ -62,10 +62,10 @@ def wc_information_theoretic(mu, L, n, verbose=True):
     <https://arxiv.org/pdf/2101.09741v2.pdf>`_
 
     Args:
-        mu (float): the strong convexity parameter
+        mu (float): the strong convexity parameter.
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -92,14 +92,13 @@ def wc_information_theoretic(mu, L, n, verbose=True):
     # Declare a strongly convex smooth function
     func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
+    # Start by defining its unique optimal point xs = x_*
     xs = func.stationary_point()
-    fs = func.value(xs)
 
-    # Then define the starting point x0 of the algorithm
+    # Then define the starting point z0 of the algorithm
     z0 = problem.set_initial_point()
 
-    # Set the initial constraint that is the distance between x0 and x^*
+    # Set the initial constraint that is the distance between z0 and x^*
     problem.set_initial_condition((z0 - xs) ** 2 <= 1)
 
     # Run n steps of the information theoretic exact method
@@ -111,17 +110,16 @@ def wc_information_theoretic(mu, L, n, verbose=True):
 
     for i in range(n):
         A_old = A_new
-        A_new = ( (1 + q) * A_old + 2 * (1 + sqrt( (1 + A_old) * (1 + q * A_old))) ) / (1-q)**2
+        A_new = ((1 + q) * A_old + 2 * (1 + sqrt((1 + A_old) * (1 + q * A_old)))) / (1-q)**2
         beta = A_old / (1 - q) / A_new
-        delta = 1 / 2 * ( (1 - q)**2 * A_new - (1 + q) * A_old ) / (1 + q + q * A_old)
+        delta = 1 / 2 * ((1 - q)**2 * A_new - (1 + q) * A_old) / (1 + q + q * A_old)
 
         y = (1 - beta) * z + beta * x
         x = y - 1 / L * func.gradient(y)
-        z = (1 - q * delta ) * z + q * delta * y - delta / L * func.gradient(y)
-
+        z = (1 - q * delta) * z + q * delta * y - delta / L * func.gradient(y)
 
     # Set the performance metric to the distance accuracy
-    problem.set_performance_metric( (z - xs)**2)
+    problem.set_performance_metric((z - xs)**2)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)

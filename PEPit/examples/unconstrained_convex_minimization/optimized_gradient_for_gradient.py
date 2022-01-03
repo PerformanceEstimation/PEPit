@@ -45,7 +45,7 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
             \\end{eqnarray}
 
     **Theoretical guarantee**:
-    The **tight** worst-case guarantee can be found in [2, Theorem 6.1]:
+    The **tight** worst-case guarantee can be found in [1, Theorem 6.1]:
 
     .. math:: \\|\\nabla f(x_n)\\|^2 \\leqslant \\frac{2L(f(x_0)-f_\\star)}{\\tilde{\\theta}_0^2},
 
@@ -61,7 +61,7 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (bool): if True, print conclusion.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -78,8 +78,8 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.30700730460985826
         *** Example file: worst-case performance of optimized gradient method for gradient ***
-	        PEP-it guarantee:       f(y_n)-f_* <= 0.307007 ||x_0 - x_*||^2
-	        Theoretical guarantee:  f(y_n)-f_* <= 0.307007 ||x_0 - x_*||^2
+	        PEP-it guarantee:       ||f'(x_n)|| ^ 2 <= 0.307007 (f(x_0) - f_*)
+	        Theoretical guarantee:  ||f'(x_n)|| ^ 2 <= 0.307007 (f(x_0) - f_*)
 
     """
 
@@ -87,18 +87,18 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction, param={'mu': 0, 'L': L})
+    func = problem.declare_function(SmoothConvexFunction, param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
     fs = func.value(xs)
 
-    # Then Define the starting point of the algorithm
+    # Then define x0 the starting point of the algorithm and its function value f(x_0)
     x0 = problem.set_initial_point()
     f0 = func.value(x0)
 
     # Set the initial constraint that is f(x_0) - f(x_*)
-    problem.set_initial_condition( f0 - fs <= 1)
+    problem.set_initial_condition(f0 - fs <= 1)
 
     # Compute scalar sequence of \tilde{theta}_t
     theta_tilde = [1] # compute \tilde{theta}_{t} from \tilde{theta}_{t+1} (sequence in reverse order)
@@ -120,7 +120,7 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
             + (2 * theta_tilde[i+1] - 1) / (2 * theta_tilde[i] - 1) * (y_new - x)
 
     # Set the performance metric to the gradient norm
-    problem.set_performance_metric( func.gradient(x) ** 2 )
+    problem.set_performance_metric(func.gradient(x) ** 2)
 
     # Solve the PEP
     pepit_tau = problem.solve(verbose=verbose)
@@ -131,8 +131,8 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of optimized gradient method for gradient ***')
-        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
