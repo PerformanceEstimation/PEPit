@@ -29,9 +29,11 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 1]:
+    The **tight** theoretical guarantee can be found is
 
-    .. math:: || x_n - y_n ||^2 \\leqslant  \\max\\{(1-L\\gamma)^2,(1-\\mu \\gamma)^2\\}^n|| x_0 - y_0 ||^2.
+    .. math:: || x_n - y_n ||^2 \\leqslant  \\max\\{(1-L\\gamma)^2,(1-\\mu \\gamma)^2\\}^n|| x_0 - y_0 ||^2,
+    
+    which is tight on simple quadratic functions.
 
     Args:
         L (float): the smoothness parameter.
@@ -67,7 +69,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     # Declare a strongly convex smooth function
     func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
 
-    # Then define the starting point x0, and y0 of the algorithm
+    # Then define the starting points x0 and y0 of the algorithm
     x_0 = problem.set_initial_point()
     y_0 = problem.set_initial_point()
 

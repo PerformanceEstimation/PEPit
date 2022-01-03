@@ -422,7 +422,7 @@ class TestExamples(unittest.TestCase):
         L, mu, n = 1, 0.1, 1
         gamma = 1 / L
 
-        wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, verbose=True)
+        wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def tearDown(self):
