@@ -72,7 +72,7 @@ def wc_information_theoretic(mu, L, n, verbose=True):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=.001, L=1, n=15, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, verbose=True)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 17x17
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -81,9 +81,9 @@ def wc_information_theoretic(mu, L, n, verbose=True):
         (PEP-it) Compiling SDP
         (PEP-it) Calling SDP solver
         (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7566088333863754
-        *** Example file: worst-case performance of accelerated gradient method ***
-            PEP-it guarantee:		 ||z_n - x_* ||^2 <= 0.756609 ||z_0 - x_*||^2
-            Theoretical guarantee:	 ||z_n - x_* ||^2 <= 0.756605 ||z_0 - x_*||^2
+        *** Example file: worst-case performance of the information theoretic exact method ***
+	        PEP-it guarantee:       ||z_n - x_* ||^2 <= 0.756609 ||z_0 - x_*||^2
+	        Theoretical guarantee:  ||z_n - x_* ||^2 <= 0.756605 ||z_0 - x_*||^2
 
     """
     # Instantiate PEP
@@ -131,7 +131,7 @@ def wc_information_theoretic(mu, L, n, verbose=True):
 
     # Print conclusion if required
     if verbose:
-        print('*** Example file: worst-case performance of accelerated gradient method ***')
+        print('*** Example file: worst-case performance of the information theoretic exact method ***')
         print('\tPEP-it guarantee:\t\t ||z_n - x_* ||^2 <= {:.6} ||z_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - x_* ||^2 <= {:.6} ||z_0 - x_*||^2'.format(theoretical_tau))
 
