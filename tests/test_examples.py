@@ -21,6 +21,8 @@ from PEPit.examples.unconstrained_convex_minimization import wc_optimized_gradie
 from PEPit.examples.unconstrained_convex_minimization import wc_robust_momentum
 from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method
 from PEPit.examples.unconstrained_convex_minimization import wc_triple_momentum
+from PEPit.examples.unconstrained_convex_minimization import wc_information_theoretic
+from PEPit.examples.unconstrained_convex_minimization import wc_optimized_gradient_for_gradient
 from PEPit.examples.composite_convex_minimization import wc_accelerated_douglas_rachford_splitting
 from PEPit.examples.composite_convex_minimization import wc_accelerated_proximal_gradient
 from PEPit.examples.composite_convex_minimization import wc_bregman_proximal_point
@@ -56,8 +58,7 @@ from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_optimized_gr
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
-from PEPit.examples.unconstrained_convex_minimization import wc_information_theoretic
-from PEPit.examples.unconstrained_convex_minimization import wc_optimized_gradient_for_gradient
+from PEPit.examples.tutorials import wc_gradient_descent_contraction
 
 class TestExamples(unittest.TestCase):
 
@@ -416,6 +417,13 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
+
+    def test_gradient_descent_contraction(self):
+        L, mu, n = 1, 0.1, 1
+        gamma = 1 / L
+
+        wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, verbose=True)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def tearDown(self):
         Point.counter = 0
