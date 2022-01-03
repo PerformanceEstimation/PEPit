@@ -6,7 +6,7 @@ Tutorials
    :local:
 
 
-Gradient descent in contraction
+Contraction rate of gradient descent
 ----------------
 .. autofunction:: PEPit.examples.tutorials.wc_gradient_descent_contraction
 
