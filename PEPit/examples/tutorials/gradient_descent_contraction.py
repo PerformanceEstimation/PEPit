@@ -29,7 +29,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    The **tight** theoretical guarantee can be found is
+    The **tight** theoretical guarantee is
 
     .. math:: || x_n - y_n ||^2 \\leqslant  \\max\\{(1-L\\gamma)^2,(1-\\mu \\gamma)^2\\}^n|| x_0 - y_0 ||^2,
     
