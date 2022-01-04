@@ -181,7 +181,7 @@ class PEP(object):
             solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
             tracetrick (bool): Apply trace heuristic as a proxy for minimizing
-             the dimension of the solution (rank of the Gram matrix).
+                               the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
@@ -337,17 +337,17 @@ class PEP(object):
         # Note the other ones are not stored until user asks to eval them
         for point in self.list_of_points:
             if point.get_is_leaf():
-                point.value = points_values[:, point.counter]
+                point._value = points_values[:, point.counter]
         for function in self.list_of_functions:
             if function.get_is_leaf():
                 for triplet in function.list_of_points:
                     point, gradient, function_value = triplet
                     if point.get_is_leaf():
-                        point.value = points_values[:, point.counter]
+                        point._value = points_values[:, point.counter]
                     if gradient.get_is_leaf():
-                        gradient.value = points_values[:, gradient.counter]
+                        gradient._value = points_values[:, gradient.counter]
                     if function_value.get_is_leaf():
-                        function_value.value = F_value[function_value.counter]
+                        function_value._value = F_value[function_value.counter]
 
     def _eval_constraint_dual_values(self, cvx_constraints):
         """
@@ -357,7 +357,8 @@ class PEP(object):
             cvx_constraints (list): a list of cvxpy formatted constraints.
 
         Returns:
-             np.float: the position, in the list of performance metric, of the one that is actually reached.
+             position_of_minimal_objective (np.float): the position, in the list of performance metric,
+                                                       of the one that is actually reached.
 
         """
 
@@ -373,13 +374,13 @@ class PEP(object):
 
         # Store all dual values of initial conditions (Generally the rate)
         for condition in self.list_of_conditions:
-            condition.dual_variable_value = cvx_constraints[counter].dual_value
+            condition._dual_variable_value = cvx_constraints[counter].dual_value
             counter += 1
 
         # Store all the class constraints dual values, providing the proof of the desired rate.
         for function in self.list_of_functions:
             for constraint in function.list_of_constraints:
-                constraint.dual_variable_value = cvx_constraints[counter].dual_value
+                constraint._dual_variable_value = cvx_constraints[counter].dual_value
                 counter += 1
 
         # Return the position of the reached performance metric

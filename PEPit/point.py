@@ -1,3 +1,5 @@
+import numpy as np
+
 from PEPit.expression import Expression
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
@@ -11,8 +13,8 @@ class Point(object):
         _is_leaf (bool): True if self is defined from scratch
                          (not as linear combination of other :class:`Point` objects).
                          False if self is defined as linear combination of other points.
-        value (nd.array): numerical value of self obtained after solving the PEP via SDP solver.
-                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        _value (nd.array): numerical value of self obtained after solving the PEP via SDP solver.
+                           Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         decomposition_dict (dict): decomposition of self as a linear combination of leaf :class:`Point` objects.
                                    Keys are :class:`Point` objects.
                                    And values are their associated coefficients.
@@ -81,7 +83,7 @@ class Point(object):
         self._is_leaf = is_leaf
 
         # Initialize the value attribute to None until the PEP is solved
-        self.value = None
+        self._value = None
 
         # If leaf, the decomposition is updated w.r.t the new direction,
         # the object counter is set
@@ -255,7 +257,7 @@ class Point(object):
         Compute, store and return the value of this :class:`Point`.
 
         Returns:
-            self.value (np.array): The value of this :class:`Point` after the corresponding PEP was solved numerically.
+            self._value (np.array): The value of this :class:`Point` after the corresponding PEP was solved numerically.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
@@ -264,15 +266,15 @@ class Point(object):
 
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
-        if self.value is None:
+        if self._value is None:
             # If leaf, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
             # If linear combination, combine the values of the leaf, and store the result before returning it.
             else:
-                value = 0
+                value = np.zeros(Point.counter)
                 for point, weight in self.decomposition_dict.items():
                     value += weight * point.eval()
-                self.value = value
+                self._value = value
 
-        return self.value
+        return self._value

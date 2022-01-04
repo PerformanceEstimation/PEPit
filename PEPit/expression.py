@@ -17,8 +17,8 @@ class Expression(object):
         _is_leaf (bool): True if self is a function value defined from scratch
                                    (not as linear combination of other function values).
                                    False if self is a linear combination of existing :class:`Expression` objects.
-        value (float): numerical value of self obtained after solving the PEP via SDP solver.
-                          Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
+        _value (float): numerical value of self obtained after solving the PEP via SDP solver.
+                        Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
                                    Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                    And values are their associated coefficients.
@@ -79,7 +79,7 @@ class Expression(object):
         self._is_leaf = is_leaf
 
         # Initialize the value attribute to None until the PEP is solved
-        self.value = None
+        self._value = None
 
         # If leaf function value, the decomposition is updated,
         # the object counter is set
@@ -319,10 +319,10 @@ class Expression(object):
         Compute, store and return the value of this :class:`Expression`.
 
         Returns:
-            self.value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
+            self._value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
 
         Raises:
-            ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
+            ValueError("The PEP must be solved to evaluate Expressions!") if the PEP has not been solved yet.
 
             TypeError("Expressions are made of function values, inner products and constants only!")
 
@@ -330,10 +330,10 @@ class Expression(object):
 
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
-        if self.value is None:
+        if self._value is None:
             # If leaf function value, the PEP would have filled the attribute at the end of the solve.
             if self._is_leaf:
-                raise ValueError("The PEP must be solved to evaluate Points!")
+                raise ValueError("The PEP must be solved to evaluate Expressions!")
             # If linear combination,
             # combine the values of the leaf expressions,
             # and store the result before returning it.
@@ -356,7 +356,7 @@ class Expression(object):
                         raise TypeError("Expressions are made of function values, inner products and constants only!"
                                         "Got {}".format(type(key)))
                 # Store the value
-                self.value = value
+                self._value = value
 
         # Return the value
-        return self.value
+        return self._value

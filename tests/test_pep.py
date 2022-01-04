@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from PEPit.pep import PEP
 from PEPit.point import Point
@@ -59,12 +60,9 @@ class TestPEP(unittest.TestCase):
 
             point, gradient, function_value = triplet
 
-            if point.get_is_leaf():
-                self.assertIsNot(point.value, None)
-            if gradient.get_is_leaf():
-                self.assertIsNot(gradient.value, None)
-            if function_value.get_is_leaf():
-                self.assertIsNot(function_value.value, None)
+            self.assertIsInstance(point.eval(), np.ndarray)
+            self.assertIsInstance(gradient.eval(), np.ndarray)
+            self.assertIsInstance(function_value.eval(), float)
 
     def test_eval_constraint_dual_values(self):
 
@@ -73,12 +71,12 @@ class TestPEP(unittest.TestCase):
         self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
 
         for condition in self.problem.list_of_conditions:
-            self.assertIsInstance(condition.dual_variable_value, float)
-            self.assertAlmostEqual(condition.dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
+            self.assertIsInstance(condition._dual_variable_value, float)
+            self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 
         for constraint in self.func.list_of_constraints:
-            self.assertIsInstance(constraint.dual_variable_value, float)
-            self.assertAlmostEqual(constraint.dual_variable_value,
+            self.assertIsInstance(constraint._dual_variable_value, float)
+            self.assertAlmostEqual(constraint._dual_variable_value,
                                    2 * self.gamma * max(abs(1 - self.mu * self.gamma), abs(1 - self.L * self.gamma)),
                                    delta=2 * self.gamma * 10 ** 3)
 
