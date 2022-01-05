@@ -40,7 +40,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     #TODO add ref
 
     Args:
-        L (float): the smoothness parameter.
+        L (float): the quadratic growth parameter.
         gamma (float): step-size.
         n (int): number of iterations.
         verbose (bool): if True, print conclusion
