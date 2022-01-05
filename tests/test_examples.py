@@ -9,12 +9,14 @@ from PEPit.point import Point
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_proximal_point
 from PEPit.examples.unconstrained_convex_minimization import wc_proximal_point
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_exact_line_search
 from PEPit.examples.unconstrained_convex_minimization import wc_heavy_ball_momentum
+from PEPit.examples.unconstrained_convex_minimization import wc_heavy_ball_momentum_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_inexact_accelerated_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_inexact_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_inexact_gradient_exact_line_search
@@ -96,6 +98,13 @@ class TestExamples(unittest.TestCase):
         gamma = 1/L
         
         wc, theory = wc_gradient_descent(L, gamma, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_gradient_descent_qg_convex(self):
+        L, n = 1, 4
+        gamma = .1 / L
+
+        wc, theory = wc_gradient_descent_qg_convex(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
     def test_gradient_exact_line_search(self):
@@ -186,6 +195,11 @@ class TestExamples(unittest.TestCase):
         beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
 
         wc, theory = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=n, verbose=self.verbose)
+        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
+
+    def test_heavy_ball_momentum_qg_convex(self):
+        L, n = 1, 5
+        wc, theory = wc_heavy_ball_momentum_qg_convex(L=L, n=n, verbose=self.verbose)
         self.assertLessEqual(wc, theory * (1 + self.relative_precision))
 
     def test_accelerated_proximal_point(self):

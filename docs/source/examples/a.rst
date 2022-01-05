@@ -89,3 +89,18 @@ Inexact gradient descent with exact line search
 Inexact accelerated gradient
 ----------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_accelerated_gradient
+
+
+Gradient descent for QG convex objective
+----------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex
+
+
+Conjugate gradient for QG convex objective
+------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient_qg_convex
+
+
+Heavy Ball momentum for QG convex objective
+-------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_heavy_ball_momentum_qg_convex
