@@ -51,16 +51,16 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_gradient_exact_line_search(L=1, mu=.1, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 16 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.44812204883466417
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.44812204883466417
         *** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.448122 (f(x_0)-f_*)
+            PEPit guarantee:		 f(x_n)-f_* <= 0.448122 (f(x_0)-f_*)
             Theoretical guarantee:	 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
 
     """
@@ -100,7 +100,7 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

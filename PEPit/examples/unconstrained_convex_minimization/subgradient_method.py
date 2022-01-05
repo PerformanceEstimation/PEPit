@@ -69,16 +69,16 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
         >>> n = 6
         >>> gamma = 1 / (M * sqrt(n + 1))
         >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 9x9
-        (PEP-it) Setting up the problem: performance measure is minimum of 7 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
+        (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 64 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.7559825331741553
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7559825331741553
         *** Example file: worst-case performance of subgradient method ***
-            PEP-it guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
+            PEPit guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
             Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
 
     """
@@ -120,7 +120,7 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of subgradient method ***')
-        print('\tPEP-it guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(
             theoretical_tau))
 

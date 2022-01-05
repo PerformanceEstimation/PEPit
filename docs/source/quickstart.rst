@@ -6,11 +6,11 @@ A gentle introduction to performance estimation problems is provided in this
 `blog post
 <https://francisbach.com/computer-aided-analyses/>`_.
 
-The PEP-it implementation is in line with the framework as exposed in [3,4]
+The PEPit implementation is in line with the framework as exposed in [3,4]
 and follow-up works (for which proper references are provided in the example files).
 A gentle introduction to the toolbox is provided in [1].
 
-When to use PEP-it?
+When to use PEPit?
 -------------------
 
 The general purpose of the toolbox is to help the researchers producing worst-case guarantees
@@ -21,7 +21,7 @@ For people who are more comfortable with Matlab, we report to
 `PESTO
 <https://github.com/AdrienTaylor/Performance-Estimation-Toolbox>`_.
 
-How tu use PEP-it?
+How tu use PEPit?
 ------------------
 
 Installation
@@ -217,7 +217,7 @@ This tool will be based on the very recent work [7].
 References
 ----------
 
-[1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut. "PEP-it: computer-assisted worst-case analyses of first-order optimization methods in Python."
+[1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut. "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
 
 [2] Drori, Yoel, and Marc Teboulle. "Performance of first-order methods for smooth convex minimization: a novel approach." Mathematical Programming 145.1-2 (2014): 451-482
 

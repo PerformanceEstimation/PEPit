@@ -201,7 +201,7 @@ class PEP(object):
         F = cp.Variable((Expression.counter,))
         G = cp.Variable((Point.counter, Point.counter), PSD=True)
         if verbose:
-            print('(PEP-it) Setting up the problem:'
+            print('(PEPit) Setting up the problem:'
                   ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
 
         # Express the constraints from F, G and objective
@@ -214,7 +214,7 @@ class PEP(object):
             assert isinstance(performance_metric, Expression)
             constraints_list.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
         if verbose:
-            print('(PEP-it) Setting up the problem:'
+            print('(PEPit) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions
@@ -229,12 +229,12 @@ class PEP(object):
                                  ' must either be \'equality\' or \'inequality\'.'
                                  'Got {}'.format(condition.equality_or_inequality))
         if verbose:
-            print('(PEP-it) Setting up the problem:'
+            print('(PEPit) Setting up the problem:'
                   ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
 
         # Defining class constraints
         if verbose:
-            print('(PEP-it) Setting up the problem:'
+            print('(PEPit) Setting up the problem:'
                   ' interpolation conditions for {} function(s)'.format(len(self.list_of_functions)))
         function_counter = 0
         for function in self.list_of_functions:
@@ -254,15 +254,15 @@ class PEP(object):
 
         # Create the cvxpy problem
         if verbose:
-            print('(PEP-it) Compiling SDP')
+            print('(PEPit) Compiling SDP')
         prob = cp.Problem(objective=cp.Maximize(objective), constraints=constraints_list)
 
         # Solve it
         if verbose:
-            print('(PEP-it) Calling SDP solver')
+            print('(PEPit) Calling SDP solver')
         prob.solve(solver=solver)
         if verbose:
-            print('(PEP-it) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
+            print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
                                                                                       prob.solver_stats.solver_name,
                                                                                       prob.value))
 
@@ -272,22 +272,22 @@ class PEP(object):
             if verbose:
                 eig_val, _ = np.linalg.eig(G.value)
                 nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEP-it) Postprocessing: applying trace heuristic.'
+                print('(PEPit) Postprocessing: applying trace heuristic.'
                       ' Currently {} eigenvalue(s) > {} before resolve.'.format(nb_eigen, eig_threshold))
-                print('(PEP-it) Calling SDP solver')
+                print('(PEPit) Calling SDP solver')
             tol_tracetrick = 1e-5
             constraints_list.append(objective >= wc_value - tol_tracetrick)
             prob = cp.Problem(objective=cp.Minimize(cp.trace(G)), constraints=constraints_list)
             prob.solve(solver=solver)
             wc_value = objective.value[0]
             if verbose:
-                print('(PEP-it) Solver status: {} (solver: {});'
+                print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
                 eig_val, _ = np.linalg.eig(G.value)
                 nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEP-it) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
+                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
                                                                                                     eig_threshold))
 
         # Store all the values of points and function values
@@ -321,7 +321,7 @@ class PEP(object):
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
             if verbose:
-                print("\033[93m(PEP-it) Postprocessing: solver\'s output is not entirely feasible"
+                print("\033[93m(PEPit) Postprocessing: solver\'s output is not entirely feasible"
                       " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
                       " Small deviation from 0 may simply be due to numerical error."
                       " Big ones should be deeply investigated.\n"

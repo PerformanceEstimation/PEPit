@@ -57,16 +57,16 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 18x18
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 88 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.0076784823888391175
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.0076784823888391175
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
-            PEP-it guarantee:		 f(x_n) - f(x_*) <= 0.00767848 ||x_0 - x_*||^2
+            PEPit guarantee:		 f(x_n) - f(x_*) <= 0.00767848 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
 
     """
@@ -104,7 +104,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact proximal point method in distance in function values ***')
-        print('\tPEP-it guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

@@ -62,16 +62,16 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 13x13
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 47 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.03944038534724904
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03944038534724904
         *** Example file: worst-case performance of inexact accelerated gradient method ***
-            PEP-it guarantee:				 f(x_n)-f_* <= 0.0394404 (f(x_0)-f_*)
+            PEPit guarantee:				 f(x_n)-f_* <= 0.0394404 (f(x_0)-f_*)
             Theoretical guarantee for epsilon = 0 :	 f(x_n)-f_* <= 0.0357143 (f(x_0)-f_*)
 
     """
@@ -113,7 +113,7 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of inexact accelerated gradient method ***')
-        print('\tPEP-it guarantee:\t\t\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee for epsilon = 0 :\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

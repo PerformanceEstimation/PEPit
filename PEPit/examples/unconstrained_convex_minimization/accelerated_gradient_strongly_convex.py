@@ -60,16 +60,16 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 12 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.34758587217463155
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.34758587217463155
         *** Example file: worst-case performance of the accelerated gradient method ***
-            PEP-it guarantee:		 f(x_n)-f_*  <= 0.347586 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
+            PEPit guarantee:		 f(x_n)-f_*  <= 0.347586 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
             Theoretical guarantee:	 f(x_n)-f_*  <= 0.467544 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
 
     """
@@ -113,7 +113,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the accelerated gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
+        print('\tPEPit guarantee:\t\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
             theoretical_tau))

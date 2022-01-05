@@ -68,20 +68,20 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 15 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
-        (PEP-it) Postprocessing: applying trace heuristic. Currently 4 eigenvalue(s) > 1e-05 before resolve.
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); objective value: 0.5188511226295036
-        (PEP-it) Postprocessing: 3 eigenvalue(s) > 1e-05 after trace heuristic
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
+        (PEPit) Postprocessing: applying trace heuristic. Currently 4 eigenvalue(s) > 1e-05 before resolve.
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.5188511226295036
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 1e-05 after trace heuristic
         *** Example file: worst-case performance of inexact gradient ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.518851 (f(x_0)-f_*)
+            PEPit guarantee:		 f(x_n)-f_* <= 0.518851 (f(x_0)-f_*)
             Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
     
     """
@@ -124,7 +124,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of inexact gradient ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

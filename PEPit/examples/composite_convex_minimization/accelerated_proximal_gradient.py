@@ -63,16 +63,16 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 6 constraint(s) added
                  function 2 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
         *** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***
-            PEP-it guarantee:       f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
+            PEPit guarantee:       f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
             Theoretical guarantee:  f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
 
     """
@@ -119,7 +119,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***')
-        print('\tPEP-it guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

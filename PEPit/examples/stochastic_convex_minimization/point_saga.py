@@ -64,10 +64,10 @@ def wc_point_saga(L, mu, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 31x31
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 10 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 31x31
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 10 function(s)
 		         function 1 : 2 constraint(s) added
 		         function 2 : 2 constraint(s) added
 		         function 3 : 2 constraint(s) added
@@ -78,11 +78,11 @@ def wc_point_saga(L, mu, n, verbose=True):
 		         function 8 : 2 constraint(s) added
 		         function 9 : 2 constraint(s) added
 		         function 10 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9714053958034508
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.9714053958034508
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-	        PEP-it guarantee:       E[V(x^(1))] <= 0.971405 V(x^(0))
+	        PEPit guarantee:       E[V(x^(1))] <= 0.971405 V(x^(0))
 	        Theoretical guarantee:  E[V(x^(1))] <= 0.973292 V(x^(0))
 
     """
@@ -143,7 +143,7 @@ def wc_point_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***')
-        print('\tPEP-it guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
