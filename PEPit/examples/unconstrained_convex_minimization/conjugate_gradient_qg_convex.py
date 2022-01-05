@@ -34,7 +34,7 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=True):
 
         The **tight** guarantee obtained in [1, Theorem ?] is  #TODO add theorem
 
-        .. math:: f(x_n) - f_\\star \\leqslant \\frac{L}{2 (n + 1)}\|x_0-x_\\star\|^2.
+        .. math:: f(x_n) - f_\\star \\leqslant \\frac{L}{2 (n + 1)} \\|x_0-x_\\star\\|^2.
 
     **References**:
     The detailed approach is available in [1, Theorem ?].  #TODO add theorem
