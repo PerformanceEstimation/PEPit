@@ -24,17 +24,17 @@ def wc_proximal_point_complexified(gamma, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 6 constraint(s) added
                  function 2 : 6 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
         *** Example file: worst-case performance of the Proximal Point Method in function values***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+            PEPit guarantee:		 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
             Theoretical guarantee :	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
 
     """
@@ -74,7 +74,7 @@ def wc_proximal_point_complexified(gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Proximal Point Method in function values***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

@@ -66,17 +66,17 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 22x22
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
 		         function 1 : 90 constraint(s) added
 		         function 2 : 110 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.027791729882647262
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.027791729882647262
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-	        PEP-it guarantee:       f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+	        PEPit guarantee:       f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
 	        Theoretical guarantee:  f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
 
     """
@@ -124,7 +124,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
         if theta == 1 and alpha == 1 and L == 1 and n <= 10:
             print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2 '.format(theoretical_tau))
 

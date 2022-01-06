@@ -69,18 +69,18 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
         >>> L = 1
         >>> lam = 1 / L
         >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 22x22
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
                  function 1 : 42 constraint(s) added
                  function 2 : 49 constraint(s) added
                  function 3 : 42 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.0680763240358105
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.0680763240358105
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-            PEP-it guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs; x0) + f1(x0) - F_ *)
+            PEPit guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs; x0) + f1(x0) - F_ *)
             Theoretical guarantee:  F(x_n)-F_* <= 0.111111 (c * Dh(xs; x0) + f1(x0) - F_ *)
 
     """
@@ -132,7 +132,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     cvxpy_prob = problem.solve(verbose=verbose, return_full_cvxpy_problem=True)
     pepit_tau = cvxpy_prob.value
     if cvxpy_prob.solver_stats.solver_name == "SCS":
-        print("\033[93m(PEP-it) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
+        print("\033[93m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
@@ -140,7 +140,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEP-it guarantee:\t \t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t \t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

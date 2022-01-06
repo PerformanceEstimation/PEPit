@@ -39,7 +39,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
                 x_{t} & = & \\mathrm{prox}_{\\alpha f_2} (u_t),\\\\
                 y_{t} & = & \\mathrm{prox}_{\\alpha f_1}(2x_t-u_t),\\\\
                 w_{t+1} & = & u_t + \\theta (y_t-x_t),\\\\
-                u_{t+1} & = & \\left\\{\\begin{array}{ll} w_{t+1}+\\frac{t-2}{t+1}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
+                u_{t+1} & = & \\left\\{\\begin{array}{ll} w_{t+1}+\\frac{t-1}{t+2}(w_{t+1}-w_t)\, & \\text{if } t >1,\\\\
                 w_{t+1} & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 
@@ -49,7 +49,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
 
     .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta (n + 3)^ 2},
 
-    when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha\\leqslant \\frac{1}{L}`.
+    when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha < \\frac{1}{L}`.
 
     **References**:
     An analysis of the accelerated Douglas-Rachford splitting is available in [1, Theorem 5] for when the convex minimization
@@ -72,17 +72,17 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 20 constraint(s) added
                  function 2 : 20 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-	        PEP-it guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
+	        PEPit guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
 	        Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
     """
 
@@ -132,15 +132,15 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if alpha <= 1/L:
+    if alpha < 1/L:
         theoretical_tau = 2 / (alpha * theta * (n + 3) ** 2)
 
     # Print conclusion if required
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
-        if alpha <= 1/L:
+        print('\tPEPit guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        if alpha < 1/L:
             print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

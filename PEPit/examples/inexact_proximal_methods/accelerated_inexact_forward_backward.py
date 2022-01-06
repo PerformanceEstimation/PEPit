@@ -82,17 +82,17 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 59x59
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 59x59
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 156 constraint(s) added
                  function 2 : 528 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.018734084607959313
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.018734084607959313
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-	        PEP-it guarantee:       F(x_n)-F_* <= 0.0187341
+	        PEPit guarantee:       F(x_n)-F_* <= 0.0187341
 	        Theoretical guarantee:  F(x_n)-F_* <= 0.0269437
 
     """
@@ -143,7 +143,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEP-it guarantee:\t\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

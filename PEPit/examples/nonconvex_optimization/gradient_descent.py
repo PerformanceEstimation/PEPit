@@ -55,16 +55,16 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEP-it) Setting up the problem: performance measure is minimum of 6 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 30 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-            PEP-it guarantee:		 min_i ||f'(x_i)|| ^ 2 <= 0.266677 (f(x_0)-f_*)
+            PEPit guarantee:		 min_i ||f'(x_i)|| ^ 2 <= 0.266677 (f(x_0)-f_*)
             Theoretical guarantee:	 min_i ||f'(x_i)|| ^ 2 <= 0.266667 (f(x_0)-f_*)
 
     """
@@ -104,7 +104,7 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEP-it guarantee:\t\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

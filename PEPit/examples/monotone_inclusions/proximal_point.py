@@ -45,16 +45,16 @@ def wc_proximal_point(alpha, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 12x12
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 110 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.03874199421010509
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03874199421010509
         *** Example file: worst-case performance of the Proximal Point Method***
-            PEP-it guarantee:		 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
+            PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
             Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
 
     """
@@ -92,7 +92,7 @@ def wc_proximal_point(alpha, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEP-it guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

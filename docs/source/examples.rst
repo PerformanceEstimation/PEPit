@@ -16,3 +16,4 @@ Examples
    examples/h
    examples/i
    examples/j
+   examples/k

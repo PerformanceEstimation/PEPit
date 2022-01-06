@@ -65,18 +65,18 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 8x8
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
                  function 1 : 2 constraint(s) added
                  function 2 : 2 constraint(s) added
                  function 3 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-                PEP-it guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
+                PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
 
     """
 
@@ -117,7 +117,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
-        print('\tPEP-it guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -67,17 +67,17 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau  = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 4 constraint(s) added
                  function 2 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-            PEP-it guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+            PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
             Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
 
     """
@@ -133,7 +133,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEP-it guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

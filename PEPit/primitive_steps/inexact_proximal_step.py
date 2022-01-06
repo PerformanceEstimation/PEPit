@@ -61,14 +61,14 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;x_0)-\\Phi^{(d)}_{\\gamma f}(v;x_0) \\leqslant \\varepsilon.
 
-        This approximation requirement is used in one PEP-it example: an accelerated inexact forward backward.
+        This approximation requirement is used in one PEPit example: an accelerated inexact forward backward.
 
         - 'PD_gapII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [1,5]) :
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;x_0)-\\Phi^{(d)}_{\\gamma f}(g;x_0) \\leqslant \\varepsilon,
 
         where we imposed that :math:`v\\triangleq g\\in\\partial f(x)` and :math:`w\\triangleq x`. This approximation
-        requirement is used in two PEP-it examples: in a relatively inexact proximal point algorithm and in a partially
+        requirement is used in two PEPit examples: in a relatively inexact proximal point algorithm and in a partially
         inexact Douglas-Rachford splitting.
 
         - 'PD_gapIII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [3]):

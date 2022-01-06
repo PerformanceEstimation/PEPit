@@ -44,8 +44,9 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
 
     **References**: The potential can be found in the historical [1]; and in more recent works, e.g., [2, 3].
 
-    [1] Y. Nesterov (1983). A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
+    `[1] Y. Nesterov (1983). A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
     In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
+    <http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf>`_
 
     `[2] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods. Theory of Computing, 15(1), 1-32.
     <https://arxiv.org/pdf/1712.04581.pdf>`_
@@ -67,16 +68,16 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     Examples:
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 12 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 7.946321396432764e-09
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 7.946321396432764e-09
         *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
-            PEP-it guarantee:       V_(n+1) - V_n <= 7.94632e-09
+            PEPit guarantee:       V_(n+1) - V_n <= 7.94632e-09
             Theoretical guarantee:  V_(n+1) - V_n <= 0.0
 
     """
@@ -129,7 +130,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     if verbose:
         print(
             '*** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***')
-        print('\tPEP-it guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 
