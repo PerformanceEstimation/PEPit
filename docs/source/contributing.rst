@@ -49,13 +49,17 @@ Adding a step / an oracle
 To add a new oracle / step,
 please add a new file containing the oracle function in ``PEPit/primitive_steps``.
 
-Generally, one has to trick to transform the mathematical formulation of an oracle
-to its PEP equivalent.
+Remark that transforming the mathematical formulation of an oracle into its PEP equivalent
+may require additional tricks,
+see e.g. `PEPit/primitive_steps/proximal_step.py
+<https://pepit.readthedocs.io/en/latest/api/steps.html#proximal-step>`_,
+or `PEPit/primitive_steps/linear_optimization_step.py
+<https://pepit.readthedocs.io/en/latest/api/steps.html#linear-optimization-step>`_.
 
 Please make sure that your docstring contains the mathematical derivation of the latest from the previous.
 
-Creating new example
---------------------
+Adding a new method as an example
+---------------------------------
 
 We don't require a specific code format for a new example.
 However, we ask the associated docstring to be precisely organized as follow:
