@@ -9,9 +9,12 @@ by following the canvas from respectively
 (or `PEPit/operators/
 <https://pepit.readthedocs.io/en/latest/api/operators.html>`_
 and `PEPit/primitive_steps/
-<https://pepit.readthedocs.io/en/latest/api/steps.html>`_.
+<https://pepit.readthedocs.io/en/latest/api/steps.html>`_).
 
-We encourage authors of research papers presenting novel optimization methods and/or a novel convergence results to submit the corresponding PEPit files in the directory ``PEPit/examples/``.
+We encourage authors of research papers presenting novel optimization methods
+and/or a novel convergence results to submit the corresponding PEPit files in the directory
+`PEPit/examples/
+<https://pepit.readthedocs.io/en/latest/examples.html>`_.
 
 .. contents::
    :depth: 1
@@ -105,4 +108,7 @@ New example test template
         self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
 
         # If theoretical upper bound is not tight
+        self.assertLessEqual(wc, theory * (1 + self.relative_precision))
+
+        # If theoretical lower bound is not tight
         self.assertLessEqual(theory, wc * (1 + self.relative_precision))
