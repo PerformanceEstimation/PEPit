@@ -30,7 +30,7 @@ def wc_information_theoretic(mu, L, n, verbose=True):
             :nowrap:
 
             \\begin{eqnarray}
-                y_{t} & = & (1-\\beta_t) z_t + \\beta_t x_t  \\\\
+                y_{t} & = & (1-\\beta_t) z_t + \\beta_t x_t \\\\
                 x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t) \\\\
                 z_{t+1} & = & \\left(1-q\\delta_t\\right) z_t+q\\delta_t y_t-\\frac{\\delta_t}{L}\\nabla f(y_t),
             \\end{eqnarray}
@@ -57,7 +57,8 @@ def wc_information_theoretic(mu, L, n, verbose=True):
 
     **References**:
 
-    `[1] A. Taylor, Y. Drori (2021). An optimal gradient method for smooth strongly convex minimization.
+    `[1] A. Taylor, Y. Drori (2021).
+    An optimal gradient method for smooth strongly convex minimization.
     arXiv 2101.09741v2.
     <https://arxiv.org/pdf/2101.09741v2.pdf>`_
 

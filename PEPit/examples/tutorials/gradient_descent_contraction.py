@@ -13,13 +13,15 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\gamma)` such that the guarantee
 
-    .. math:: || x_n - y_n ||^2 \\leqslant \\tau(n, L, \\mu, \\gamma) || x_0 - y_0 ||^2
+    .. math:: \\| x_n - y_n \\|^2 \\leqslant \\tau(n, L, \\mu, \\gamma) \\| x_0 - y_0 \\|^2
 
-    is valid, where :math:`x_n` and :math:`y_n` are the outputs of gradient descent with fixed step-size :math:`\\gamma`,
+    is valid, where :math:`x_n` and :math:`y_n` are the outputs of
+    the gradient descent method with fixed step-size :math:`\\gamma`,
     starting respectively from :math:`x_0` and :math:`y_0`.
 
-    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu` and :math:`\\gamma`, :math:`\\tau(n, L, \\mu \\gamma)` is computed as the worst-case
-    value of :math:`|| x_n - y_n ||^2` when :math:`|| x_0 - y_0 ||^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L`, :math:`\\mu` and :math:`\\gamma`,
+    :math:`\\tau(n, L, \\mu \\gamma)` is computed as the worst-case value of :math:`\\| x_n - y_n \\|^2`
+    when :math:`\\| x_0 - y_0 \\|^2 \\leqslant 1`.
 
     **Algorithm**:
     For :math:`t\\in\\{0,1,\\ldots,n-1\\}`, gradient descent is described by
@@ -31,7 +33,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     **Theoretical guarantee**:
     The **tight** theoretical guarantee is
 
-    .. math:: || x_n - y_n ||^2 \\leqslant  \\max\\{(1-L\\gamma)^2,(1-\\mu \\gamma)^2\\}^n|| x_0 - y_0 ||^2,
+    .. math:: \\| x_n - y_n \\|^2 \\leqslant  \\max\\{(1-L\\gamma)^2,(1-\\mu \\gamma)^2\\}^n\\| x_0 - y_0 \\|^2,
     
     which is tight on simple quadratic functions.
 

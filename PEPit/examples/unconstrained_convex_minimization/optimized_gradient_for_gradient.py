@@ -54,8 +54,9 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     **References**:
     The optimized gradient method for gradient was developed in [1].
 
-    `[1] D. Kim, J. Fessler (2021). Optimizing the efficiency of first-order methods for decreasing the gradient
-    of smooth convex functions. Journal of optimization theory and applications, 188(1), 192-219.
+    `[1] D. Kim, J. Fessler (2021).
+    Optimizing the efficiency of first-order methods for decreasing the gradient of smooth convex functions.
+    Journal of optimization theory and applications, 188(1), 192-219.
     <https://arxiv.org/pdf/1803.06600.pdf>`_
 
     Args:

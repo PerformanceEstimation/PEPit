@@ -32,5 +32,5 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'subgradient_method', 'wc_subgradient_method',
            'triple_momentum', 'wc_triple_momentum',
            'information_theoretic_exact_method', 'wc_information_theoretic',
-           'optimized_gradient_for_gradient', 'wc_optimized_gradient_for_gradient'
+           'optimized_gradient_for_gradient', 'wc_optimized_gradient_for_gradient',
            ]

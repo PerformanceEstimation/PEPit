@@ -60,6 +60,7 @@ from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
 from PEPit.examples.tutorials import wc_gradient_descent_contraction
 
+
 class TestExamples(unittest.TestCase):
 
     def setUp(self):
@@ -401,7 +402,7 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_accelerated_inexact_forward_backward(self):
-        L, zeta, n= 10, .87, 10
+        L, zeta, n = 10, .87, 10
 
         wc, theory = wc_accelerated_inexact_forward_backward(L=L, zeta=zeta, n=n, verbose=self.verbose)
         self.assertLessEqual(wc, theory)

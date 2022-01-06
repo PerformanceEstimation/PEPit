@@ -8,5 +8,5 @@ __all__ = ['unconstrained_convex_minimization',
            'inexact_proximal_methods',
            'adaptive_methods',
            'low_dimensional_worst_cases_scenarios',
-           'tutorials'
+           'tutorials',
            ]
