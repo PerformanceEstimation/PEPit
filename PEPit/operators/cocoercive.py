@@ -20,8 +20,9 @@ class CocoerciveOperator(Function):
         >>> func = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
 
     References:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
-        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+        Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+        SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
