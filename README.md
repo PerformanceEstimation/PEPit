@@ -418,7 +418,7 @@ Optimization Letters, 15(2), 405-418.
 PhD thesis, HHU Düsseldorf.
 
 [45] Y. Nesterov (1983).
-[A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
+[A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.](http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf)
 In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
 
 [46] N. Bansal, A. Gupta (2019).
