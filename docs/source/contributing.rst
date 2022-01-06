@@ -1,12 +1,22 @@
 Contributing
 ============
 
-PEPit allows to study a lot of optimization methods.
-Some of them can be found in ``PEPit.examples``.
-If you publish or have published a result on a new method or a new guarantee of an existing method,
-you are very welcome to contribute to PEPit by adding a file in ``PEPit/examples``.
+PEPit is designed for empowering users to easily contribute to add features to the package.
+Classes of functions (or operators) as well as black-box oracles can be implemented
+by following the canvas from respectively
+`PEPit/functions/
+<https://pepit.readthedocs.io/en/latest/api/functions.html>`_
+(or `PEPit/operators/
+<https://pepit.readthedocs.io/en/latest/api/operators.html>`_
+and `PEPit/primitive_steps/
+<https://pepit.readthedocs.io/en/latest/api/steps.html>`_.
 
-You are also welcome to add features you might need to the pipeline.
+Authors of a research paper presenting a novel optimization method of a novel convergence result
+are very welcome to add the corresponding PEPit analysis file in the directory ``PEPit/examples/``.
+
+.. contents::
+   :depth: 1
+   :local:
 
 General guidelines
 ------------------
@@ -17,15 +27,39 @@ We only ask you follow common guidelines, namely that the provided code:
 
 - is commented with Google style docstring.
 
-- is well tested.
+- is well covered by tests.
 
-For new example, the guidelines follow.
+Adding a new function or operator class
+---------------------------------------
+
+To add a new function / operator class,
+please follow the format used for the other function / operator classes.
+
+In particular:
+
+- your class must inherit from the class ``Function`` and overwrite its ``add_class_constraints`` method.
+
+- the docstring must be complete.
+  In particular, it must contains the list of attributes and arguments
+  as well as an example of usage via the ``declare_function`` method of the class ``PEP``.
+  It must also contain a clickable reference to the paper introducing it.
+
+Adding a step / an oracle
+-------------------------
+
+To add a new oracle / step,
+please add a new file containing the oracle function in ``PEPit/primitive_steps``.
+
+Generally, one has to trick to transform the mathematical formulation of an oracle
+to its PEP equivalent.
+
+Please make sure that your docstring contains the mathematical derivation of the latest from the previous.
 
 Creating new example
 --------------------
 
 We don't require a specific code format for a new example.
-However, we ask the associated docstring to be organized as follow:
+However, we ask the associated docstring to be precisely organized as follow:
 
 - Define Problem solved (introducing function notations and assumptions).
 
@@ -46,9 +80,10 @@ However, we ask the associated docstring to be organized as follow:
 
 - Example block containing a minimal work example of the coded function.
 
+We provide, in ``PEPit/examples/example_template.py``, a template that can be filled very quickly
+to help the contributor to share their method easily.
+
 New example template
 ^^^^^^^^^^^^^^^^^^^^
-
-We provide an example template in ``PEPit/examples/example_template.py``.
 
 .. autofunction:: PEPit.examples.example_template.wc_example_template
