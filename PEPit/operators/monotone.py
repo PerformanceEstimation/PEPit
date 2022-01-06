@@ -17,7 +17,8 @@ class MonotoneOperator(Function):
         >>> h = problem.declare_function(function_class=MonotoneOperator, param=dict())
 
     References:
-        [1] H. H. Bauschke and P. L. Combettes (2017). Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
+        [1] H. H. Bauschke and P. L. Combettes (2017).
+        Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
         Springer New York, 2nd ed.
 
     """

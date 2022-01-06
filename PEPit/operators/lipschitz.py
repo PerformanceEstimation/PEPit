@@ -26,20 +26,23 @@ class LipschitzOperator(Function):
 
     References:
 
-        [1] M. Kirszbraun (1934).  Uber die zusammenziehende und Lipschitzsche transformationen.
+        [1] M. Kirszbraun (1934).
+        Uber die zusammenziehende und Lipschitzsche transformationen.
         Fundamenta Mathematicae, 22 (1934).
 
-        [2] F.A. Valentine (1943). On the extension of a vector function so as to preserve a Lipschitz condition.
+        [2] F.A. Valentine (1943).
+        On the extension of a vector function so as to preserve a Lipschitz condition.
         Bulletin of the American Mathematical Society, 49 (2).
 
-        [3] F.A. Valentine (1945). A Lipschitz condition preserving extension for a vector function.
+        [3] F.A. Valentine (1945).
+        A Lipschitz condition preserving extension for a vector function.
         American Journal of Mathematics, 67(1).
 
         Discussions and appropriate pointers for the interpolation problem can be found in:
-        `[4] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
-        Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+        `[4] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+        Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+        SIAM Journal on Optimization, 30(3), 2251-2271.
         <https://arxiv.org/pdf/1812.00146.pdf>`_
-
 
     """
 
