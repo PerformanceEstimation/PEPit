@@ -1,7 +1,7 @@
 Contributing
 ============
 
-PEPit is designed for empowering users to easily contribute to add features to the package.
+PEPit is designed for allowing users to easily contribute to add new features to the package.
 Classes of functions (or operators) as well as black-box oracles can be implemented
 by following the canvas from respectively
 `PEPit/functions/
@@ -11,8 +11,7 @@ by following the canvas from respectively
 and `PEPit/primitive_steps/
 <https://pepit.readthedocs.io/en/latest/api/steps.html>`_.
 
-Authors of a research paper presenting a novel optimization method of a novel convergence result
-are very welcome to add the corresponding PEPit analysis file in the directory ``PEPit/examples/``.
+We encourage authors of research papers presenting novel optimization methods and/or a novel convergence results to submit the corresponding PEPit files in the directory ``PEPit/examples/``.
 
 .. contents::
    :depth: 1
@@ -21,7 +20,7 @@ are very welcome to add the corresponding PEPit analysis file in the directory `
 General guidelines
 ------------------
 
-We only ask you follow common guidelines, namely that the provided code:
+We kindly ask you follow common guidelines, namely that the provided code:
 
 - sticks as much as possible to the PEP8 convention.
 
