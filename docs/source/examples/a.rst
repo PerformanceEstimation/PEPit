@@ -46,6 +46,11 @@ Optimized gradient
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_optimized_gradient
 
 
+Optimized gradient for gradient
+-------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_optimized_gradient_for_gradient
+
+
 Robust momentum
 ---------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_robust_momentum
@@ -54,6 +59,11 @@ Robust momentum
 Triple momentum
 ---------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_triple_momentum
+
+
+Information theoretic exact method
+----------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_information_theoretic
 
 
 Proximal point
