@@ -90,3 +90,19 @@ New example template
 ^^^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: PEPit.examples.example_template.wc_example_template
+
+New example test template
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def test_[NAME_METHOD](self):
+        PARAMS = PARAMS
+
+        wc, theory = wc_[NAME_METHOD](PARAMS=PARAMS, verbose=self.verbose)
+
+        # If theoretical upper bound is tight
+        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
+
+        # If theoretical upper bound is not tight
+        self.assertLessEqual(theory, wc * (1 + self.relative_precision))
