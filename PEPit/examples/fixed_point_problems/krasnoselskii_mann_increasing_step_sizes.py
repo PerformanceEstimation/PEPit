@@ -38,16 +38,16 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 20 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.11963406474148795
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.11963406474148795
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
-            PEP-it guarantee:		 1/4||xN - AxN||^2 <= 0.119634 ||x0 - x_*||^2
+            PEPit guarantee:		 1/4||xN - AxN||^2 <= 0.119634 ||x0 - x_*||^2
 
     """
 
@@ -82,7 +82,7 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEP-it guarantee:\t\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

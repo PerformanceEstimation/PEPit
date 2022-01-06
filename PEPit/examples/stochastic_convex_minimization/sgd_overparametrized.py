@@ -76,20 +76,20 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=True):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (2 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 5 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
                  function 1 : 2 constraint(s) added
                  function 2 : 2 constraint(s) added
                  function 3 : 2 constraint(s) added
                  function 4 : 2 constraint(s) added
                  function 5 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.8099999998856641
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.8099999998856641
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size and with zero variance at the optimal point ***
-            PEP-it guarantee:		 E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
+            PEPit guarantee:		 E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
             Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
 
     """
@@ -130,7 +130,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of stochastic gradient descent'
               ' with fixed step-size and with zero variance at the optimal point ***')
-        print('\tPEP-it guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

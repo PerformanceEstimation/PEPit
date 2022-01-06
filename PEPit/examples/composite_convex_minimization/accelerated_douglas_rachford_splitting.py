@@ -72,17 +72,17 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 11x11
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 2 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
                  function 1 : 20 constraint(s) added
                  function 2 : 20 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-	        PEP-it guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
+	        PEPit guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
 	        Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
     """
 
@@ -139,7 +139,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEP-it guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         if alpha < 1/L:
             print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
 

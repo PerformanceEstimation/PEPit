@@ -55,16 +55,16 @@ def wc_proximal_point(gamma, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 6x6
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 20 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.020833335685727362
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.020833335685727362
         *** Example file: worst-case performance of proximal point method ***
-            PEP-it guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+            PEPit guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
             Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
 
     """
@@ -102,7 +102,7 @@ def wc_proximal_point(gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of proximal point method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

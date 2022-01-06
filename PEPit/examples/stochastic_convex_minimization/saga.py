@@ -64,21 +64,21 @@ def wc_saga(L, mu, n, verbose=True):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 27x27
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 6 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 6 function(s)
                  function 1 : 30 constraint(s) added
                  function 2 : 6 constraint(s) added
                  function 3 : 6 constraint(s) added
                  function 4 : 6 constraint(s) added
                  function 5 : 6 constraint(s) added
                  function 6 : 6 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
         *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
-            PEP-it guarantee:		 V^(1) <= 0.966667 V^(0)
+            PEPit guarantee:		 V^(1) <= 0.966667 V^(0)
             Theoretical guarantee:	 V^(1) <= 0.966667 V^(0)
 
     """
@@ -149,7 +149,7 @@ def wc_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
-        print('\tPEP-it guarantee:\t\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t V^(1) <= {:.6} V^(0)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

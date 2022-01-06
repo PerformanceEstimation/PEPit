@@ -69,18 +69,18 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
         >>> L = 1
         >>> gamma = 1 / (2*L)
         >>> pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 15x15
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 3 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
                  function 1 : 20 constraint(s) added
                  function 2 : 20 constraint(s) added
                  function 3 : 16 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.6666666666481623
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.6666666666481623
         *** Example file: worst-case performance of the NoLips in function values ***
-            PEP-it guarantee:		 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
+            PEPit guarantee:		 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
             Theoretical guarantee :	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
 
     """
@@ -131,7 +131,7 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEP-it guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0) '.format(
             theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

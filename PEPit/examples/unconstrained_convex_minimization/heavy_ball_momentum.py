@@ -69,16 +69,16 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
         >>> alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
         >>> beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
         >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 12 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.8145062493468549
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8145062493468549
         *** Example file: worst-case performance of the Heavy-Ball method ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
+            PEPit guarantee:		 f(x_n)-f_* <= 0.753492 (f(x_0) -  f(x_*))
             Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) -  f(x_*))
 
     """
@@ -121,7 +121,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Heavy-Ball method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) -  f(x_*))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

@@ -71,16 +71,16 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
     
     Examples:
         >>> pepit_tau, theoretical_tau = wc_robust_momentum(0.1, 1, 0.2, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 5x5
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 6 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.5285548355257013
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5285548355257013
         *** Example file: worst-case performance of the Robust Momentum Method ***
-            PEP-it guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
+            PEPit guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
             Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
 
     """
@@ -140,7 +140,7 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEP-it guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
+        print('\tPEPit guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             theoretical_tau))

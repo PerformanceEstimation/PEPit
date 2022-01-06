@@ -54,16 +54,16 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=gamma, n=10, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (0 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
 		         function 1 : 6 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 6.173593192215776e-09
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 6.173593192215776e-09
         *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
-            PEP-it guarantee:		V_(n+1) - V_(n) <= 6.17359e-09
+            PEPit guarantee:		V_(n+1) - V_(n) <= 6.17359e-09
             Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0
 
     """
@@ -106,7 +106,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
-        print('\tPEP-it guarantee:\t\t'
+        print('\tPEPit guarantee:\t\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
             print('\tTheoretical guarantee:\t'

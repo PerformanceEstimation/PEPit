@@ -68,16 +68,16 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         >>> mu = 0.1
         >>> gamma = 2 / (L + mu)
         >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (2 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
                  function 1 : 6 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.6694215432773613
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6694215432773613
         *** Example file: worst-case performance of Polyak steps ***
-            PEP-it guarantee:		 f(x_1) - f_* <= 0.669422 (f(x_0) - f_*)
+            PEPit guarantee:		 f(x_1) - f_* <= 0.669422 (f(x_0) - f_*)
             Theoretical guarantee:	 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*)
 
     """
@@ -121,7 +121,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEP-it guarantee:\t\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

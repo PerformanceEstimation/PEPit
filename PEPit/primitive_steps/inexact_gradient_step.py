@@ -14,7 +14,7 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
               \\end{eqnarray}
               \\right.
 
-    This relative approximation is used at least in in 3 PEP-it examples,
+    This relative approximation is used at least in in 3 PEPit examples,
     in particular in 2 unconstrained convex minimizations:
     an inexact gradient descent, and an inexact accelerated gradient.
 
