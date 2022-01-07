@@ -26,5 +26,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     packages=[element for element in setuptools.find_packages() if element[:5] == 'PEPit'],
-    python_requires=">=3.5",
+    python_requires=">=3.6",
 )
