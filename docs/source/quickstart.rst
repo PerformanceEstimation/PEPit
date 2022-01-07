@@ -31,10 +31,6 @@ PEPit is available on pypi, hence can be installed very simply by running
 
 ``pip install pepit``
 
-To solve the SDPs, PEPit relies on CVXPY [5, 6]. Please also run
-
-``pip install cvxpy``
-
 Now you are all set!
 You should be able to run
 
