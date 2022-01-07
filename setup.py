@@ -5,10 +5,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="PEPit",
-    version="0.0.0a0",
+    version="0.0.1",
     author="Baptiste Goujaud, Céline Moucer, Julien Hendrickx, Francois Glineur, Adrien Taylor and Aymeric Dieuleveut",
     author_email="baptiste.goujaud@gmail.com",
-    description="PEPit is a package that allows users to pep their optimization algorithms as easy as they code them",
+    description="PEPit is a package that allows users "
+                "to pep their optimization algorithms as easily as they implement them",
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["cvxpy>=1.1.17"],
