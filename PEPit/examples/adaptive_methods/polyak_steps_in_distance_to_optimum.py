@@ -120,7 +120,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEPit guarantee:\t\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2 '.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2 '.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
