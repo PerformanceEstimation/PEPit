@@ -29,9 +29,9 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, ?]:  #TODO add theorem
+    When :math:`\\gamma < \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, ?]:  #TODO add theorem
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\max{\\frac{1}{2nL\\gamma + 1}, \\gamma} \\|x_0-x_\\star\\|^2.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\max{\\frac{1}{2n L \\gamma + 1}, L \\gamma} \\|x_0-x_\\star\\|^2.
 
     **References**:
 
@@ -94,7 +94,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = max(L / (2 * (2 * n * L * gamma + 1)), L*gamma / 2)
+    theoretical_tau = L / 2 * max(1 / (2 * n * L * gamma + 1), L * gamma)
 
     # Print conclusion if required
     if verbose:
