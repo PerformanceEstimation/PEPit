@@ -26,8 +26,8 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     is an optimal point.
 
     In short, for given values of :math:`n`, :math:`L`, :math:`\\mu`, :math:`\\alpha`,
-    :math:`\\tau(n,L,\\mu,\\alpha)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
-    when :math:`\|x_0 - w_\\star\|^2 \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu, \\alpha)` is computed as the worst-case value of :math:`F(y_n)-F_\\star`
+    when :math:`\|w_0 - w_\\star\|^2 \\leqslant 1`.
 
     **Algorithm**:
     The accelerated Douglas-Rachford splitting is described in [1, Section 4]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
@@ -44,10 +44,10 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
             \\end{eqnarray}
 
     **Theoretical guarantee**:
-    There is no theoretical guarantee for this method beyond quadratic minimization.
+    There is no known worst-case guarantee for this method beyond quadratic minimization.
     For quadratics, an **upper** bound on is provided by [1, Theorem 5]:
 
-    .. math:: F(y_n) - F_\\star \\leqslant \\frac{2\|x_0-w_\\star\|^2}{\\alpha \\theta (n + 3)^ 2},
+    .. math:: F(y_n) - F_\\star \\leqslant \\frac{2}{\\alpha \\theta (n + 3)^ 2} \|w_0-w_\\star\|^2,
 
     when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha < \\frac{1}{L}`.
 

@@ -12,7 +12,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for the **accelerated gradient** method, a.k.a **fast gradient** method.
+    This code computes a worst-case guarantee for an **accelerated gradient** method, a.k.a **fast gradient** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) \\left(f(x_0) -  f(x_\\star) + \\frac{\\mu}{2}\\|x_0 - x_\\star\\|^2\\right),
