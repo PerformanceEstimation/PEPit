@@ -446,3 +446,18 @@ In Conference on Learning Theory (COLT).
 [50] D. Kim, J. Fessler (2017).
 [On the convergence analysis of the optimized gradient method.](https://arxiv.org/pdf/1510.08573.pdf)
 Journal of Optimization Theory and Applications, 172(1), 187-205.
+
+[51] Steven Diamond and Stephen Boyd (2016).
+[CVXPY: A Python-embedded modeling language for convex optimization.](https://arxiv.org/pdf/1603.00943.pdf)
+Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
+
+[52] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen (2018).
+[A rewriting system for convex optimization problems.](https://arxiv.org/pdf/1709.04494.pdf)
+Journal of Control and Decision (JCD) 5.1.42--60 (2018).
+
+[53] Adrien Taylor, Bryan Van Scoy, Laurent Lessard (2018).
+[Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.](https://arxiv.org/pdf/1803.06073.pdf)
+International Conference on Machine Learning (ICML).
+
+[54] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)
