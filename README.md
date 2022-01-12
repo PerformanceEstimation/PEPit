@@ -17,7 +17,7 @@ Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgouja
 
 ## Using and citing the toolbox
 
-This code comes jointly with the following [`reference`](.pdf):
+This code comes jointly with the following [`reference`](https://arxiv.org/pdf/2201.04040.pdf):
 
     B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
     "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
@@ -25,7 +25,13 @@ This code comes jointly with the following [`reference`](.pdf):
 When using the toolbox in a project, please refer to this note via this Bibtex entry:
 
 ```bibtex
-TODO add bibtex entry
+@article{pepit2022,
+  title={{PEPit}: computer-assisted worst-case analyses of first-order optimization methods in {P}ython},
+  author={Goujaud, Baptiste and Moucer, C\'eline and Glineur, Fran\c{c}ois and Hendrickx, Julien and Taylor, Adrien and Dieuleveut, Aymeric},
+  journal={arXiv preprint arXiv:2201.04040},
+  year={2022}
+}
+
 ```
 
 ## Installation
