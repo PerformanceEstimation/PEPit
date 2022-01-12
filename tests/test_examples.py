@@ -149,9 +149,18 @@ class TestExamples(unittest.TestCase):
         L, epsilon, n = 3, 0, 5
 
         wc, theory = wc_inexact_accelerated_gradient(L=L, epsilon=epsilon, n=n, verbose=self.verbose)
-        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
+
+        # Less accurate requirement due to ill conditioning of this specific SDP (no Slater point)
+        local_relative_precision = 10**-2
+        self.assertAlmostEqual(theory, wc, delta=local_relative_precision * theory)
 
     def test_inexact_accelerated_gradient_2(self):
+        L, epsilon, n = 2, .01, 5
+
+        wc, theory = wc_inexact_accelerated_gradient(L=L, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertLessEqual(theory, wc * (1 + self.relative_precision))
+
+    def test_inexact_accelerated_gradient_3(self):
         L, epsilon, n = 2, .1, 5
 
         wc, theory = wc_inexact_accelerated_gradient(L=L, epsilon=epsilon, n=n, verbose=self.verbose)

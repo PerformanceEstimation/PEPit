@@ -1,15 +1,13 @@
 # PEPit: Performance Estimation in Python
 
 [![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
-[![Build Status](https://github.com/bgoujaud/PEPit/workflows/build/badge.svg?branch=master&event=push)](https://github.com/bgoujaud/PEPit/actions)
-[![Codecov Status](https://codecov.io/gh/bgoujaud/PEPit/branch/master/graph/badge.svg)](https://codecov.io/gh/bgoujaud/PEPit)
-[![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
 [![License](https://img.shields.io/github/license/bgoujaud/PEPit.svg)](https://github.com/bgoujaud/PEPit/blob/master/LICENSE)
 
 This open source Python library provides a generic way to use PEP framework in Python.
 Performance estimation problems were introduced in 2014 by **Yoel Drori** and **Marc Teboulle**, see [1].
 PEPit is mainly based on the formalism and developments from [2, 3] by a subset of the authors of this toolbox.
-A corresponding Matlab library is presented in [4] ([PESTO](https://github.com/AdrienTaylor/Performance-Estimation-Toolbox)).
+A friendly informal introduction to this formalism is available in this [blog post](https://francisbach.com/computer-aided-analyses/)
+and a corresponding Matlab library is presented in [4] ([PESTO](https://github.com/AdrienTaylor/Performance-Estimation-Toolbox)).
 
 Website and documentation of PEPit: [https://pepit.readthedocs.io/](https://pepit.readthedocs.io/)
 
