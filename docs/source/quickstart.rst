@@ -217,16 +217,36 @@ This tool will be based on the very recent work [7].
 References
 ----------
 
-[1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut. "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
+[1] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
+`PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.
+<https://arxiv.org/pdf/2201.04040.pdf>`_
 
-[2] Drori, Yoel, and Marc Teboulle. "Performance of first-order methods for smooth convex minimization: a novel approach." Mathematical Programming 145.1-2 (2014): 451-482
+[2] Drori, Yoel, and Marc Teboulle.
+`Performance of first-order methods for smooth convex minimization: a novel approach.
+<https://arxiv.org/pdf/1206.3209.pdf>`_
+Mathematical Programming 145.1-2 (2014): 451-482
 
-[3] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur. "Smooth strongly convex interpolation and exact worst-case performance of first-order methods." Mathematical Programming 161.1-2 (2017): 307-345.
+[3] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
+`Smooth strongly convex interpolation and exact worst-case performance of first-order methods.
+<https://arxiv.org/pdf/1502.05666.pdf>`_
+Mathematical Programming 161.1-2 (2017): 307-345.
 
-[4] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur. "Exact worst-case performance of first-order methods for composite convex optimization." SIAM Journal on Optimization 27.3 (2017): 1283-1313.
+[4] Taylor, Adrien B., Julien M. Hendrickx, and François Glineur.
+`Exact worst-case performance of first-order methods for composite convex optimization.
+<https://arxiv.org/pdf/1512.07516.pdf>`_
+SIAM Journal on Optimization 27.3 (2017): 1283-1313.
 
-[5] Steven Diamond and Stephen Boyd. "CVXPY: A Python-embedded modeling language for convex optimization." Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
+[5] Steven Diamond and Stephen Boyd.
+`CVXPY: A Python-embedded modeling language for convex optimization.
+<https://arxiv.org/pdf/1603.00943.pdf>`_
+Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
 
-[6] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen. "A rewriting system for convex optimization problems." Journal of Control and Decision (JCD) 5.1.42--60 (2018).
+[6] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen.
+`A rewriting system for convex optimization problems.
+<https://arxiv.org/pdf/1709.04494.pdf>`_
+Journal of Control and Decision (JCD) 5.1.42--60 (2018).
 
-[7] Adrien Taylor, Bryan Van Scoy, Laurent Lessard. "Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees." International Conference on Machine Learning (ICML).
+[7] Adrien Taylor, Bryan Van Scoy, Laurent Lessard.
+`Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.
+<https://arxiv.org/pdf/1803.06073.pdf>`_
+International Conference on Machine Learning (ICML).
