@@ -131,7 +131,7 @@ def wc_information_theoretic(mu, L, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the information theoretic exact method ***')
-        print('\tPEP-it guarantee:\t\t ||z_n - x_* ||^2 <= {:.6} ||z_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t ||z_n - x_* ||^2 <= {:.6} ||z_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - x_* ||^2 <= {:.6} ||z_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

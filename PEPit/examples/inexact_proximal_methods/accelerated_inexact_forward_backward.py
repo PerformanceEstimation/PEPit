@@ -143,7 +143,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

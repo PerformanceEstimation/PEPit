@@ -140,7 +140,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***')
-        print('\tPEPit guarantee:\t\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
         if theta == 1:
             print('\tTheoretical guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
 

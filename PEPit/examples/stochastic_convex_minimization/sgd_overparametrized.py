@@ -130,7 +130,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=True):
     if verbose:
         print('*** Example file: worst-case performance of stochastic gradient descent'
               ' with fixed step-size and with zero variance at the optimal point ***')
-        print('\tPEPit guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

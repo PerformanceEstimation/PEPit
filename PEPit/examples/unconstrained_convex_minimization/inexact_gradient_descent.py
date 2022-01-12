@@ -120,7 +120,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of inexact gradient method in distance in function values ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

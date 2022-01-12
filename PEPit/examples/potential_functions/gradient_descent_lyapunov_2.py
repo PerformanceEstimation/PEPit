@@ -106,7 +106,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t\t'
+        print('\tPEPit guarantee:\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
             print('\tTheoretical guarantee:\t'

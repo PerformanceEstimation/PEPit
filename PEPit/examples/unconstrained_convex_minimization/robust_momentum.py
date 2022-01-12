@@ -140,7 +140,7 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEPit guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
+        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             theoretical_tau))
