@@ -35,7 +35,7 @@ When using the toolbox in a project, please refer to this note via this Bibtex e
 ## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
 
 
-This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/educational/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
+This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
 
 
 
