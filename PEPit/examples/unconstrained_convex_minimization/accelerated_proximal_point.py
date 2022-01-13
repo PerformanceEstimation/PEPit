@@ -13,7 +13,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
 
     where :math:`f` is  convex and possibly non-smooth.
 
-    This code computes a worst-case guarantee for **accelerated proximal point** method, aka **fast proximal point** method (FPP).
+    This code computes a worst-case guarantee an **accelerated proximal point** method, aka **fast proximal point** method (FPP).
     That is, it computes the smallest possible :math:`\\tau(n, A_0,\\vec{\\gamma})` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, A_0, \\vec{\\gamma}) \\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\|x_0 - x_\\star\\|^2\\right)
@@ -131,7 +131,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of fast proximal point method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

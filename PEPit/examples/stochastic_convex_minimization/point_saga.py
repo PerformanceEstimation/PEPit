@@ -22,13 +22,13 @@ def wc_point_saga(L, mu, n, verbose=True):
     where :math:`x^\\star` denotes the minimizer of :math:`F`. The code computes the smallest possible
     :math:`\\tau(n, L, \\mu)` such that the guarantee (in expectation):
 
-    .. math:: \\mathbb{E}[V(x^{(1)})] \\leqslant \\tau(n, L, \\mu) V(x^{(0)}),
+    .. math:: \\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right] \\leqslant \\tau(n, L, \\mu) V\\left(x^{(0)}\\right),
 
     is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience; as the
     bound is valid for all :math:`x^{(0)}`, it is also valid for any pair of consecutive iterates of the algorithm).
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V(x^{(1)})]` when :math:`V(x^{(0)}) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right]` when :math:`V\\left(x^{(0)}\\right) \\leqslant 1`.
 
     **Algorithm**:
     Point SAGA is described by
@@ -44,7 +44,7 @@ def wc_point_saga(L, mu, n, verbose=True):
 
     **Theoretical guarantee**: A theoretical **upper** bound is given in [1, Theorem 5].
 
-    .. math:: \\mathbb{E}[V(x^{(t+1)})] \\leqslant \\frac{1}{1 + \\mu\\gamma} V(x^{(t)})
+    .. math:: \\mathbb{E}\\left[V\\left(x^{(t+1)}\\right)\\right] \\leqslant \\frac{1}{1 + \\mu\\gamma} V\\left(x^{(t)}\\right)
 
     **References**:
 
@@ -82,7 +82,7 @@ def wc_point_saga(L, mu, n, verbose=True):
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.9714053958034508
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-	        PEPit guarantee:       E[V(x^(1))] <= 0.971405 V(x^(0))
+	        PEPit guarantee:        E[V(x^(1))] <= 0.971405 V(x^(0))
 	        Theoretical guarantee:  E[V(x^(1))] <= 0.973292 V(x^(0))
 
     """
@@ -143,7 +143,7 @@ def wc_point_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***')
-        print('\tPEPit guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

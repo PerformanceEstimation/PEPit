@@ -130,7 +130,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=True):
     if verbose:
         print(
             '*** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1/L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 

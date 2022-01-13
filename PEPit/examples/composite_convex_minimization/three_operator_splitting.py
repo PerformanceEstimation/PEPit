@@ -127,7 +127,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
-        print('\tPEPit guarantee:\t\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

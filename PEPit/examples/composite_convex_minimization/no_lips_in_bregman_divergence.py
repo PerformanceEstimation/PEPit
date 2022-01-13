@@ -132,7 +132,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman divergence ***')
-        print('\tPEPit guarantee:\t\t min_t Dh(x_(t-1); x_t) <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_t Dh(x_(t-1); x_t) <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_t Dh(x_(t-1); x_t) <= {:.6} Dh(x_*; x_0) '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

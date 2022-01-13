@@ -124,7 +124,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
-        print('\tPEPit guarantee:\t\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
         if theta == 1 and alpha == 1 and L == 1 and n <= 10:
             print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2 '.format(theoretical_tau))
 

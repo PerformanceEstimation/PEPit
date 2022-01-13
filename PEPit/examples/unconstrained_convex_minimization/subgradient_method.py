@@ -120,7 +120,7 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of subgradient method ***')
-        print('\tPEPit guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(
             theoretical_tau))
 

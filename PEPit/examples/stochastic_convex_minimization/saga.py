@@ -149,7 +149,7 @@ def wc_saga(L, mu, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
-        print('\tPEPit guarantee:\t\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t V^(1) <= {:.6} V^(0)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

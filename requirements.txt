@@ -1,3 +1,4 @@
 cvxpy
 numpy
 scipy
+matplotlib

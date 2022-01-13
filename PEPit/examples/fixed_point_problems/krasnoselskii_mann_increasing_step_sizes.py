@@ -82,7 +82,7 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEPit guarantee:\t\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

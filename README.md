@@ -15,18 +15,32 @@ Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgouja
 
 ## Using and citing the toolbox
 
-This code comes jointly with the following [`reference`](.pdf):
+This code comes jointly with the following [`reference`](https://arxiv.org/pdf/2201.04040.pdf):
 
-    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
+    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
     "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
 
 When using the toolbox in a project, please refer to this note via this Bibtex entry:
 
 ```bibtex
-TODO add bibtex entry
+@article{pepit2022,
+  title={{PEPit}: computer-assisted worst-case analyses of first-order optimization methods in {P}ython},
+  author={Goujaud, Baptiste and Moucer, C\'eline and Glineur, Fran\c{c}ois and Hendrickx, Julien and Taylor, Adrien and Dieuleveut, Aymeric},
+  journal={arXiv preprint arXiv:2201.04040},
+  year={2022}
+}
 ```
 
-## Installation
+
+## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
+
+
+This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/educational/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
+
+
+
+
+## Installation 
 
 The library has been tested on Linux and MacOSX.
 It relies on the following Python modules:
@@ -34,6 +48,8 @@ It relies on the following Python modules:
 - Numpy
 - Scipy
 - Cvxpy
+- Matplotlib (for the demo notebook)
+
 
 ### Pip installation
 
@@ -55,6 +71,9 @@ After a correct installation, you should be able to import the module without er
 ```python
 import PEPit
 ```
+
+### Online environment
+You can also try the package in this Binder repository. [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bgoujaud/PEPit/HEAD)
 
 ## Example
 
@@ -438,3 +457,18 @@ In Conference on Learning Theory (COLT).
 [50] D. Kim, J. Fessler (2017).
 [On the convergence analysis of the optimized gradient method.](https://arxiv.org/pdf/1510.08573.pdf)
 Journal of Optimization Theory and Applications, 172(1), 187-205.
+
+[51] Steven Diamond and Stephen Boyd (2016).
+[CVXPY: A Python-embedded modeling language for convex optimization.](https://arxiv.org/pdf/1603.00943.pdf)
+Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
+
+[52] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen (2018).
+[A rewriting system for convex optimization problems.](https://arxiv.org/pdf/1709.04494.pdf)
+Journal of Control and Decision (JCD) 5.1.42--60 (2018).
+
+[53] Adrien Taylor, Bryan Van Scoy, Laurent Lessard (2018).
+[Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.](https://arxiv.org/pdf/1803.06073.pdf)
+International Conference on Machine Learning (ICML).
+
+[54] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)

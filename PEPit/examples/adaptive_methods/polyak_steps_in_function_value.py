@@ -121,7 +121,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEPit guarantee:\t\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
