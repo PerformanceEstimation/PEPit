@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
+def wc_polyak_steps_in_function_value(L, mu, R, gamma, verbose=True):
     """
     Consider the minimization problem
 
@@ -104,7 +104,8 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     g1, f1 = func.oracle(x1)
 
     # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - gamma) * (f0 - fs))
+    problem.set_initial_condition(R * g0 ** 2 == 2 * (f0 - fs))  # R = 1/ [L * (2 - gamma)]
+    # problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - gamma) * (f0 - fs))
 
     # Set the performance metric to the distance in function values between x_1 and x_* = xs
     problem.set_performance_metric(f1 - fs)
@@ -113,10 +114,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if gamma >= 1/L and gamma <= (2*L-mu)/L**2:
-        theoretical_tau = (gamma * L - 1) * (L * gamma * (3 - gamma * (L + mu)) - 1)
-    else:
-        theoretical_tau = 0.
+    theoretical_tau = 0.
 
     # Print conclusion if required
     if verbose:
@@ -130,7 +128,41 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
 
 if __name__ == "__main__":
 
+    from tqdm import tqdm
+    import numpy as np
+    import matplotlib.pyplot as plt
+
     L = 1
     mu = 0.1
-    gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+    n = 10
+
+    R_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
+    th_gammas = 2 - 1/(L*np.array(R_list))
+
+    gamma_list = np.logspace(-np.log(L**2/mu)/np.log(10), -np.log(mu)/np.log(10), n)
+    gamma_list = np.concatenate((gamma_list, th_gammas))
+    best_gammas = list()
+    best_pepit_taus = list()
+
+    for R in tqdm(R_list):
+        pepit_taus = list()
+        for gamma in gamma_list:
+            pepit_tau, _ = wc_polyak_steps_in_function_value(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
+            pepit_taus.append(pepit_tau)
+        best_idx = np.argmin(pepit_taus)
+        best_gammas.append(gamma_list[best_idx])
+        best_pepit_taus.append(pepit_taus[best_idx])
+
+    print(np.max(best_pepit_taus))
+    print(R_list)
+    print(best_gammas)
+    print((best_gammas - R_list) / ((R_list - 1/mu) * (R_list - 1/L)))
+
+    plt.plot(R_list, best_gammas, marker="x")
+    plt.plot(R_list, R_list, 'r')
+    plt.plot(R_list, th_gammas, 'g')
+    plt.plot(R_list, R_list + .2 * (R_list - 1/mu) * (R_list - 1/L), 'k')
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.legend(["gammas", "Id", "Th_gammas", "Tentative"])
+    plt.show()
