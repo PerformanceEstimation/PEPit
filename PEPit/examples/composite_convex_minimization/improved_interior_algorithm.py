@@ -78,10 +78,10 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
                  function 3 : 42 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.0680763240358105
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.06675394483126838
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-            PEPit guarantee:       F(x_n)-F_* <= 0.0680763 (c * Dh(xs; x0) + f1(x0) - F_ *)
-            Theoretical guarantee:  F(x_n)-F_* <= 0.111111 (c * Dh(xs; x0) + f1(x0) - F_ *)
+            PEPit guarantee:	     F(x_n)-F_* <= 0.0667539 (c * Dh(xs;x0) + f1(x0) - F_*)
+            Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
 
     """
 
@@ -140,8 +140,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEPit guarantee:\t \t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

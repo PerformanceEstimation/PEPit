@@ -21,7 +21,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     inexact accelerated proximal gradient method). That is, it computes the smallest possible
     :math:`\\tau(n, L, \\zeta)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\zeta ) \\|x_0 - x_\\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\zeta) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_n` is the output of the IAFB, and where :math:`x_\\star` is a minimizer of :math:`F`.
 
@@ -90,10 +90,10 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
                  function 2 : 528 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.018734084607959313
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018869997698251897
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-	        PEPit guarantee:       F(x_n)-F_* <= 0.0187341
-	        Theoretical guarantee:  F(x_n)-F_* <= 0.0269437
+        PEPit guarantee:	     F(x_n)-F_* <= 0.01887 ||x_0 - x_*||^2
+        Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
 
     """
 
@@ -143,8 +143,8 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6}'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

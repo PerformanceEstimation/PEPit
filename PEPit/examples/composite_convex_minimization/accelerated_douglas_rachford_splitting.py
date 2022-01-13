@@ -82,8 +82,9 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-	        PEPit guarantee:	 	 	 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
-	        Theoretical guarantee for quadratics :	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
+            PEPit guarantee:		                 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
+            Theoretical guarantee for quadratics:	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
+
     """
 
     # Instantiate PEP
@@ -139,9 +140,9 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEPit guarantee:\t \t \t \t \t \t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         if alpha < 1/L:
-            print('\tTheoretical guarantee for quadratics :\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2 '.format(theoretical_tau))
+            print('\tTheoretical guarantee for quadratics:\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
