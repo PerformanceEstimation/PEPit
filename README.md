@@ -40,9 +40,7 @@ This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/educati
 
 
 
-## Installation [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bgoujaud/PEPit/HEAD)
-
-You can try the package in the Binder repository above.
+## Installation 
 
 The library has been tested on Linux and MacOSX.
 It relies on the following Python modules:
@@ -73,6 +71,9 @@ After a correct installation, you should be able to import the module without er
 ```python
 import PEPit
 ```
+
+### Online environment
+You can also try the package in this Binder repository. [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bgoujaud/PEPit/HEAD)
 
 ## Example
 
