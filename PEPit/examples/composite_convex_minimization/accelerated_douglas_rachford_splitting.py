@@ -140,7 +140,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=True):
     if verbose:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
-        print('\tPEPit guarantee:\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
         if alpha < 1/L:
             print('\tTheoretical guarantee for quadratics:\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(theoretical_tau))
 
