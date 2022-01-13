@@ -33,14 +33,17 @@ When using the toolbox in a project, please refer to this note via this Bibtex e
 ```
 
 
-### Demo
+## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
+
+
 This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/educational/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
 
 
 
-## Installation
+## Installation [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bgoujaud/PEPit/HEAD)
+
+You can try the package in the Binder repository above.
 
 The library has been tested on Linux and MacOSX.
 It relies on the following Python modules:
@@ -48,6 +51,7 @@ It relies on the following Python modules:
 - Numpy
 - Scipy
 - Cvxpy
+
 
 ### Pip installation
 
@@ -70,7 +74,7 @@ After a correct installation, you should be able to import the module without er
 import PEPit
 ```
 
-### Example
+## Example
 
 The folder [Examples](https://pepit.readthedocs.io/en/latest/examples.html#) contains numerous introductory examples to the toolbox.
 
