@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="PEPit",
-    version="0.0.1",
+    version="0.0.2",
     author="Baptiste Goujaud, Céline Moucer, Julien Hendrickx, Francois Glineur, Adrien Taylor and Aymeric Dieuleveut",
     author_email="baptiste.goujaud@gmail.com",
     description="PEPit is a package that allows users "
