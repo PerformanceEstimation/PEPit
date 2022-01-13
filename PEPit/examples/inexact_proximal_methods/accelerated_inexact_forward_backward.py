@@ -116,20 +116,20 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Some algorithmic parameters (for convenience)
-    gamma = 1/L
-    eta = (1-zeta**2) * gamma
+    gamma = 1 / L
+    eta = (1 - zeta ** 2) * gamma
     A = [0]
 
     # Compute n steps of the IAFB method starting from x0
     x = x0
     z = x0
     for i in range(n):
-        A.append( A[i] + (eta + sqrt( eta ** 2 + 4 * eta * A[i] ) )/2)
-        y = x + ( 1 - A[i] / A[i+1] ) * ( z - x )
+        A.append(A[i] + (eta + sqrt(eta ** 2 + 4 * eta * A[i])) / 2)
+        y = x + (1 - A[i] / A[i + 1]) * (z - x)
         gy = f.gradient(y)
         x, sx, hx, _, vx, _, epsVar = inexact_proximal_step(y - gamma * gy, h, gamma, opt='PD_gapI')
-        h.add_constraint(epsVar <= ( zeta * gamma ) ** 2 / 2 * ( vx + gy ) ** 2) # this is the accuracy requirement
-        z = z - (A[i+1]-A[i]) * (vx + gy)
+        h.add_constraint(epsVar <= (zeta * gamma) ** 2 / 2 * (vx + gy) ** 2)  # this is the accuracy requirement
+        z = z - (A[i + 1] - A[i]) * (vx + gy)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric((f.value(x) + hx) - Fs)
@@ -138,7 +138,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2*L/(1-zeta**2)/n**2
+    theoretical_tau = 2 * L / (1 - zeta ** 2) / n ** 2
 
     # Print conclusion if required
     if verbose:
@@ -151,5 +151,4 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)
