@@ -132,7 +132,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     cvxpy_prob = problem.solve(verbose=verbose, return_full_cvxpy_problem=True)
     pepit_tau = cvxpy_prob.value
     if cvxpy_prob.solver_stats.solver_name == "SCS":
-        print("\033[93m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
+        print("\033[96m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
