@@ -21,7 +21,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     inexact accelerated proximal gradient method). That is, it computes the smallest possible
     :math:`\\tau(n, L, \\zeta)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\zeta ) \\|x_0 - x_\\star\\|^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\zeta) \\|x_0 - x_\\star\\|^2,
 
     is valid, where :math:`x_n` is the output of the IAFB, and where :math:`x_\\star` is a minimizer of :math:`F`.
 
@@ -90,10 +90,10 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
                  function 2 : 528 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.018734084607959313
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018869997698251897
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-	        PEPit guarantee:       F(x_n)-F_* <= 0.0187341
-	        Theoretical guarantee:  F(x_n)-F_* <= 0.0269437
+        PEPit guarantee:	     F(x_n)-F_* <= 0.01887 ||x_0 - x_*||^2
+        Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
 
     """
 
@@ -116,20 +116,20 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Some algorithmic parameters (for convenience)
-    gamma = 1/L
-    eta = (1-zeta**2) * gamma
+    gamma = 1 / L
+    eta = (1 - zeta ** 2) * gamma
     A = [0]
 
     # Compute n steps of the IAFB method starting from x0
     x = x0
     z = x0
     for i in range(n):
-        A.append( A[i] + (eta + sqrt( eta ** 2 + 4 * eta * A[i] ) )/2)
-        y = x + ( 1 - A[i] / A[i+1] ) * ( z - x )
+        A.append(A[i] + (eta + sqrt(eta ** 2 + 4 * eta * A[i])) / 2)
+        y = x + (1 - A[i] / A[i + 1]) * (z - x)
         gy = f.gradient(y)
         x, sx, hx, _, vx, _, epsVar = inexact_proximal_step(y - gamma * gy, h, gamma, opt='PD_gapI')
-        h.add_constraint(epsVar <= ( zeta * gamma ) ** 2 / 2 * ( vx + gy ) ** 2) # this is the accuracy requirement
-        z = z - (A[i+1]-A[i]) * (vx + gy)
+        h.add_constraint(epsVar <= (zeta * gamma) ** 2 / 2 * (vx + gy) ** 2)  # this is the accuracy requirement
+        z = z - (A[i + 1] - A[i]) * (vx + gy)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric((f.value(x) + hx) - Fs)
@@ -138,18 +138,17 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 2*L/(1-zeta**2)/n**2
+    theoretical_tau = 2 * L / (1 - zeta ** 2) / n ** 2
 
     # Print conclusion if required
     if verbose:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6}'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)

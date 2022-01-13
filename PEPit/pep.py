@@ -321,7 +321,7 @@ class PEP(object):
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
             if verbose:
-                print("\033[93m(PEPit) Postprocessing: solver\'s output is not entirely feasible"
+                print("\033[96m(PEPit) Postprocessing: solver\'s output is not entirely feasible"
                       " (smallest eigenvalue of the Gram matrix is: {:.3} < 0).\n"
                       " Small deviation from 0 may simply be due to numerical error."
                       " Big ones should be deeply investigated.\n"
