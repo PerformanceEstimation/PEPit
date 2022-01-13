@@ -17,7 +17,7 @@ Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgouja
 
 This code comes jointly with the following [`reference`](https://arxiv.org/pdf/2201.04040.pdf):
 
-    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
+    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
     "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
 
 When using the toolbox in a project, please refer to this note via this Bibtex entry:
@@ -50,6 +50,7 @@ It relies on the following Python modules:
 - Numpy
 - Scipy
 - Cvxpy
+- Matplotlib (for the demo notebook)
 
 
 ### Pip installation
