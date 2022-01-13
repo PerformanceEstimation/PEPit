@@ -1,4 +1,2 @@
-cvxpy
-numpy
-scipy
 matplotlib
+-r ../requirements.txt
