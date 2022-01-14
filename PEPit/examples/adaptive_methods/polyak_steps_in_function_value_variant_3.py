@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value(L, mu, R, gamma, verbose=True):
+def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
     """
     Consider the minimization problem
 
@@ -133,40 +133,58 @@ def wc_polyak_steps_in_function_value(L, mu, R, gamma, verbose=True):
 
 if __name__ == "__main__":
 
-    from tqdm import tqdm
+    # from tqdm import tqdm
     import numpy as np
     import matplotlib.pyplot as plt
 
-    L = 2.7
-    mu = 0.12
+    L = 1
+    mu = 0.1
     n = 30
 
     R_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
     th_gammas = (2 - 1/(L*np.array(R_list))) / L
     guess = 1/(L+mu - L*mu*R_list)
-    constant = np.array([2/(L+mu)])
+    # constant = np.array([2/(L+mu)])
 
-    gamma_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
-    gamma_list = np.concatenate((gamma_list, R_list, th_gammas, guess, constant))
-    best_gammas = list()
-    best_pepit_taus = list()
+    # gamma_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
+    # gamma_list = np.concatenate((gamma_list, R_list, th_gammas, guess, constant))
+    # best_gammas = list()
+    # best_pepit_taus = list()
+    #
+    # for R in tqdm(R_list):
+    #     pepit_taus = list()
+    #     for gamma in gamma_list:
+    #         pepit_tau, _ = wc_polyak_steps_in_function_value(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
+    #         pepit_taus.append(pepit_tau)
+    #     best_idx = np.argmin(pepit_taus)
+    #     best_gammas.append(gamma_list[best_idx])
+    #     best_pepit_taus.append(pepit_taus[best_idx])
+    #
+    # print("{} ?<? {}".format(np.max(best_pepit_taus), (L-mu)**2 / (L+mu)**2))
+    # print(R_list)
+    # print(best_gammas)
+    #
+    # plt.plot(R_list, best_gammas, marker="x")
+    # plt.plot(R_list, guess, 'r')
+    # plt.xscale("log")
+    # plt.yscale("log")
+    # plt.legend(["gammas", "guess"])
+    # plt.show()
 
-    for R in tqdm(R_list):
-        pepit_taus = list()
-        for gamma in gamma_list:
-            pepit_tau, _ = wc_polyak_steps_in_function_value(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
-            pepit_taus.append(pepit_tau)
-        best_idx = np.argmin(pepit_taus)
-        best_gammas.append(gamma_list[best_idx])
-        best_pepit_taus.append(pepit_taus[best_idx])
+    from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value
+    constants = list()
+    pepit_taus_old = list()
+    pepit_taus = list()
+    for R, old_gamma, gamma in zip(R_list, th_gammas, guess):
+        pepit_tau_constant, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=2/(L+mu), verbose=False)
+        constants.append(pepit_tau_constant)
+        pepit_tau_old, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=old_gamma, verbose=False)
+        pepit_taus_old.append(pepit_tau_old)
+        pepit_tau, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
+        pepit_taus.append(pepit_tau)
 
-    print("{} ?<? {}".format(np.max(best_pepit_taus), (L-mu)**2 / (L+mu)**2))
-    print(R_list)
-    print(best_gammas)
-
-    plt.plot(R_list, best_gammas, marker="x")
-    plt.plot(R_list, guess, 'r')
-    plt.xscale("log")
-    plt.yscale("log")
-    plt.legend(["gammas", "guess"])
+    plt.plot(R_list, pepit_taus_old)
+    plt.plot(R_list, pepit_taus, 'r')
+    plt.plot(R_list, constants, 'g')
+    plt.legend(["old", "prop", "constant"])
     plt.show()
