@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
+def wc_polyak_steps_in_function_value_variant_2(L, mu, gamma, verbose=True):
     """
     Consider the minimization problem
 
@@ -67,7 +67,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         >>> L = 1
         >>> mu = 0.1
         >>> gamma = 2 / (L + mu)
-        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value_variant_2(L=L, mu=mu, gamma=gamma, verbose=True)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
@@ -99,12 +99,12 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     # Set the initial condition to the distance betwenn x0 and xs
     problem.set_initial_condition(f0 - fs <= 1)
 
+    # Set the initial condition to the Polyak step-size
+    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
+
     # Run the Polayk steps at iteration 1
     x1 = x0 - gamma * g0
     g1, f1 = func.oracle(x1)
-
-    # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
 
     # Set the performance metric to the distance in function values between x_1 and x_* = xs
     problem.set_performance_metric(f1 - fs)
@@ -133,4 +133,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value_variant_2(L=L, mu=mu, gamma=gamma, verbose=True)

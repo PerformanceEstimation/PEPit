@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
+def wc_polyak_steps_in_function_value_variant_3(L, mu, R, verbose=True):
     """
     Consider the minimization problem
 
@@ -11,14 +11,14 @@ def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`x_\\star=\\arg\\min_x f(x)`.
 
     This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step-sizes**.
-    That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(L, \\mu, R)` such that the guarantee
 
-    .. math:: f(x_{t+1}) - f_\\star \\leqslant \\tau(L, \\mu, \\gamma) (f(x_t) - f_\\star)
+    .. math:: f(x_{t+1}) - f_\\star \\leqslant \\tau(L, \\mu, R) (f(x_t) - f_\\star)
 
-    is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective value
-    of the step-size of the gradient method.
+    is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`R` is
+    the observed ratio between the double function value and the squared norm of the gradient.
 
-    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
+    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`R`, :math:`\\tau(L, \\mu, R)` is computed as the worst-case
     value of :math:`f(x_{t+1})-f_\\star` when :math:`f(x_t)-f_\\star \\leqslant 1`.
 
     **Algorithm**:
@@ -27,58 +27,61 @@ def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
     .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
     where :math:`\\gamma` is a step-size. The Polyak step-size rule under consideration here corresponds to choosing
-    of :math:`\\gamma` satisfying:
+    of :math:`\\gamma` as:
 
-    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - L \\gamma) (f(x_t) - f_\\star).
+    .. math:: \\frac{1}{L + \\mu - 2 L \\mu \\frac{f(x_t) - f_\\star}{\\| \\nabla f(x_t) \\|^2}}
 
     **Theoretical guarantee**:
     The gradient method with the variant of Polyak step-sizes under consideration enjoys the
-    **tight** theoretical guarantee [1, Proposition 2]:
+    **tight** theoretical guarantee [1, ?]:  # TODO add reference to Th
 
-    .. math:: f(x_{t+1})-f_\\star \\leqslant  \\tau(L,\\mu,\\gamma) (f(x_{t})-f_\\star),
+    .. math:: f(x_{t+1})-f_\\star \\leqslant  \\tau(L, \\mu, R) (f(x_{t})-f_\\star),
 
-    where :math:`\\gamma` is the effective step-size used at iteration :math:`t` and
+    where
+
+    .. math:: R = 2\\frac{f(x_t) - f_\\star}{\\| \\nabla f(x_t) \\|^2}
+
+    and
 
     .. math::
             :nowrap:
 
             \\begin{eqnarray}
-                \\tau(L,\\mu,\\gamma) & = & \\left\\{\\begin{array}{ll} (\\gamma L - 1)  (L \\gamma  (3 - \\gamma (L + \\mu)) - 1)  & \\text{if } \\gamma\in[\\tfrac{1}{L},\\tfrac{2L-\mu}{L^2}],\\\\
+                \\tau(L, \\mu, R) & = & \\left\\{\\begin{array}{ll} \\left| \\frac{1}{R(L + \\mu - L \\mu R)} - 1 \\right| & \\text{if } R\in[\\tfrac{1}{L},\\tfrac{1}{\\mu}],\\\\
                 0 & \\text{otherwise.} \\end{array}\\right.
             \\end{eqnarray}
 
     **References**:
 
-    `[1] M. Barré, A. Taylor, A. d’Aspremont (2020). Complexity guarantees for Polyak steps with momentum.
-    In Conference on Learning Theory (COLT).
-    <https://arxiv.org/pdf/2002.00915.pdf>`_
+    `[1]  ## TODO complete
+    <>`_
 
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        gamma (float): the step-size.
-        verbose (bool): if True, print conclusion
+        R (float): the observed ratio between the double function value and the squared norm of the gradient.
+        verbose (bool): if True, print conclusion.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> L = 1
-        >>> mu = 0.1
-        >>> gamma = 2 / (L + mu)
-        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+        >>> L = 5
+        >>> mu = 0.36
+        >>> R = .7  # Worst case is for R = (1/mu + 1/L) / 2
+        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, verbose=True)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 6 constraint(s) added
+                         function 1 : 6 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6694215432773613
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6515679341908411
         *** Example file: worst-case performance of Polyak steps ***
-            PEPit guarantee:		 f(x_1) - f_* <= 0.669422 (f(x_0) - f_*)
-            Theoretical guarantee:	 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*)
+                PEPit guarantee:         f(x_1) - f_* <= 0.651568 (f(x_0) - f_*)
+                Theoretical guarantee:   f(x_1) - f_* <= 0.651568 (f(x_0) - f_*)
 
     """
 
@@ -99,18 +102,13 @@ def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
     # Set the initial condition to the distance betwenn x0 and xs
     problem.set_initial_condition(f0 - fs <= 1)
 
+    # Set the initial condition to the Polyak step-size
+    problem.set_initial_condition(R * g0 ** 2 == 2 * (f0 - fs))
+
     # Run the Polayk steps at iteration 1
+    gamma = 1/(L+mu - L*mu*R)
     x1 = x0 - gamma * g0
     g1, f1 = func.oracle(x1)
-
-    # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(R * g0 ** 2 == 2 * (f0 - fs))  # R = 1/ [L * (2 - L * gamma)]
-
-    # problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
-
-    # Previous wrong
-    # problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - gamma) * (f0 - fs))
-    # Previous wrong
 
     # Set the performance metric to the distance in function values between x_1 and x_* = xs
     problem.set_performance_metric(f1 - fs)
@@ -119,7 +117,7 @@ def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 0.
+    theoretical_tau = abs(1 / (R * (L + mu - L * mu * R)) - 1)
 
     # Print conclusion if required
     if verbose:
@@ -133,58 +131,7 @@ def wc_polyak_steps_in_function_value_variant_3(L, mu, R, gamma, verbose=True):
 
 if __name__ == "__main__":
 
-    # from tqdm import tqdm
-    import numpy as np
-    import matplotlib.pyplot as plt
-
-    L = 1
-    mu = 0.1
-    n = 30
-
-    R_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
-    th_gammas = (2 - 1/(L*np.array(R_list))) / L
-    guess = 1/(L+mu - L*mu*R_list)
-    # constant = np.array([2/(L+mu)])
-
-    # gamma_list = np.logspace(-np.log(L)/np.log(10), -np.log(mu)/np.log(10), n)
-    # gamma_list = np.concatenate((gamma_list, R_list, th_gammas, guess, constant))
-    # best_gammas = list()
-    # best_pepit_taus = list()
-    #
-    # for R in tqdm(R_list):
-    #     pepit_taus = list()
-    #     for gamma in gamma_list:
-    #         pepit_tau, _ = wc_polyak_steps_in_function_value(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
-    #         pepit_taus.append(pepit_tau)
-    #     best_idx = np.argmin(pepit_taus)
-    #     best_gammas.append(gamma_list[best_idx])
-    #     best_pepit_taus.append(pepit_taus[best_idx])
-    #
-    # print("{} ?<? {}".format(np.max(best_pepit_taus), (L-mu)**2 / (L+mu)**2))
-    # print(R_list)
-    # print(best_gammas)
-    #
-    # plt.plot(R_list, best_gammas, marker="x")
-    # plt.plot(R_list, guess, 'r')
-    # plt.xscale("log")
-    # plt.yscale("log")
-    # plt.legend(["gammas", "guess"])
-    # plt.show()
-
-    from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value
-    constants = list()
-    pepit_taus_old = list()
-    pepit_taus = list()
-    for R, old_gamma, gamma in zip(R_list, th_gammas, guess):
-        pepit_tau_constant, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=2/(L+mu), verbose=False)
-        constants.append(pepit_tau_constant)
-        pepit_tau_old, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=old_gamma, verbose=False)
-        pepit_taus_old.append(pepit_tau_old)
-        pepit_tau, _ = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, gamma=gamma, verbose=False)
-        pepit_taus.append(pepit_tau)
-
-    plt.plot(R_list, pepit_taus_old)
-    plt.plot(R_list, pepit_taus, 'r')
-    plt.plot(R_list, constants, 'g')
-    plt.legend(["old", "prop", "constant"])
-    plt.show()
+    L = 5
+    mu = 0.36
+    R = .7  # Worst case is for R = (1/mu + 1/L) / 2
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value_variant_3(L=L, mu=mu, R=R, verbose=True)

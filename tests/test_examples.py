@@ -52,7 +52,8 @@ from PEPit.examples.potential_functions import wc_accelerated_gradient_method
 from PEPit.examples.potential_functions import wc_gradient_descent_lyapunov_1
 from PEPit.examples.potential_functions import wc_gradient_descent_lyapunov_2
 from PEPit.examples.adaptive_methods import wc_polyak_steps_in_distance_to_optimum
-from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value
+from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value_variant_2
+from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value_variant_3
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_inexact_gradient as wc_inexact_gradient_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_optimized_gradient as wc_optimized_gradient_low_dim
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
@@ -403,11 +404,19 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
-    def test_polyak_steps_in_function_value(self):
+    def test_polyak_steps_in_function_value_variant_2(self):
         L, mu = 1, 0.1
         gamma = 2 / L
 
-        wc, theory = wc_polyak_steps_in_function_value(L, mu, gamma, verbose=self.verbose)
+        wc, theory = wc_polyak_steps_in_function_value_variant_2(L, mu, gamma, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+
+    def test_polyak_steps_in_function_value_variant_3(self):
+        L = 5
+        mu = 0.36
+        R = .7  # Worst case is for R = (1/mu + 1/L) / 2
+
+        wc, theory = wc_polyak_steps_in_function_value_variant_3(L, mu, R, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_accelerated_inexact_forward_backward(self):
