@@ -1,5 +1,3 @@
-from math import sqrt
-
 from PEPit import PEP
 from PEPit.functions import ConvexQGFunction
 
