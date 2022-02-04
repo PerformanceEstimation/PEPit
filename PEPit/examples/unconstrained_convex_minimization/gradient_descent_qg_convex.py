@@ -70,7 +70,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(ConvexQGFunction, param={'mu': 0, 'L': L})
+    func = problem.declare_function(ConvexQGFunction, param={'L': L})
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
