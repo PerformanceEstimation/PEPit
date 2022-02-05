@@ -116,9 +116,25 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
 
 
 if __name__ == "__main__":
+    import numpy as np
+    import matplotlib.pyplot as plt
 
     mu = 0.1
     L = 1.
-    alpha = mu/L**2
-    beta = 0
-    pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=True)
+    nb = 50
+
+    beta_list = list()
+    alpha_list = list()
+    pepit_taus = list()
+    for beta in np.linspace(0, 1, nb):
+        for alpha in np.linspace(0, 4 * mu / L**2, nb):
+            beta_list.append(beta)
+            alpha_list.append(alpha)
+            pepit_tau, _ = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=False)
+            pepit_taus.append(min(pepit_tau, 1))
+    plt.scatter(alpha_list, beta_list, c=pepit_taus)
+    plt.colorbar()
+    plt.xlabel("alpha")
+    plt.ylabel("beta")
+    plt.title("Performance of Heavy-Ball algorithm on RSI(.1) EB(1) functions.")
+    plt.show()
