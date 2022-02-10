@@ -29,7 +29,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     where :math:`\\gamma` is a step-size. The Polyak step-size rule under consideration here corresponds to choosing
     of :math:`\\gamma` satisfying:
 
-    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - \\gamma) (f(x_t) - f_\\star).
+    .. math:: \\|\\nabla f(x_t)\\|^2 = 2  L (2 - L \\gamma) (f(x_t) - f_\\star).
 
     **Theoretical guarantee**:
     The gradient method with the variant of Polyak step-sizes under consideration enjoys the
@@ -99,12 +99,12 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     # Set the initial condition to the distance betwenn x0 and xs
     problem.set_initial_condition(f0 - fs <= 1)
 
+    # Set the initial condition to the Polyak step-size
+    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
+
     # Run the Polayk steps at iteration 1
     x1 = x0 - gamma * g0
     g1, f1 = func.oracle(x1)
-
-    # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - gamma) * (f0 - fs))
 
     # Set the performance metric to the distance in function values between x_1 and x_* = xs
     problem.set_performance_metric(f1 - fs)
@@ -113,7 +113,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     pepit_tau = problem.solve(verbose=verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if gamma >= 1/L and gamma <= (2*L-mu)/L**2:
+    if 1/L <= gamma <= (2 * L - mu)/L**2:
         theoretical_tau = (gamma * L - 1) * (L * gamma * (3 - gamma * (L + mu)) - 1)
     else:
         theoretical_tau = 0.
