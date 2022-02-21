@@ -3,9 +3,11 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+version = "0.0.3a1"
+
 setuptools.setup(
     name="PEPit",
-    version="0.0.2",
+    version=version,
     author="Baptiste Goujaud, Céline Moucer, Julien Hendrickx, Francois Glineur, Adrien Taylor and Aymeric Dieuleveut",
     author_email="baptiste.goujaud@gmail.com",
     description="PEPit is a package that allows users "
@@ -13,11 +15,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["cvxpy>=1.1.17"],
-    url="https://github.com/bgoujaud/PEPit",
+    url="https://github.com/PerformanceEstimation/PEPit",
     project_urls={
-        "Documentation": "https://github.com/bgoujaud/PEPit/docs",
+        "Documentation": "https://pepit.readthedocs.io/en/{}/".format(version),
     },
-    download_url='https://github.com/bgoujaud/PEPit/archive/refs/tags/0.0.1.tar.gz',
+    download_url="https://github.com/PerformanceEstimation/PEPit/archive/refs/tags/{}.tar.gz".format(version),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

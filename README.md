@@ -1,7 +1,7 @@
 # PEPit: Performance Estimation in Python
 
 [![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
-[![License](https://img.shields.io/github/license/bgoujaud/PEPit.svg)](https://github.com/bgoujaud/PEPit/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/PerformanceEstimation/PEPit.svg)](https://github.com/PerformanceEstimation/PEPit/blob/master/LICENSE)
 
 This open source Python library provides a generic way to use PEP framework in Python.
 Performance estimation problems were introduced in 2014 by **Yoel Drori** and **Marc Teboulle**, see [1].
@@ -11,7 +11,7 @@ and a corresponding Matlab library is presented in [4] ([PESTO](https://github.c
 
 Website and documentation of PEPit: [https://pepit.readthedocs.io/](https://pepit.readthedocs.io/)
 
-Source Code (MIT): [https://github.com/bgoujaud/PEPit](https://github.com/bgoujaud/PEPit)
+Source Code (MIT): [https://github.com/PerformanceEstimation/PEPit](https://github.com/PerformanceEstimation/PEPit)
 
 ## Using and citing the toolbox
 
@@ -32,10 +32,10 @@ When using the toolbox in a project, please refer to this note via this Bibtex e
 ```
 
 
-## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
+## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/PerformanceEstimation/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
 
 
-This [notebook](https://github.com/bgoujaud/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
+This [notebook](https://github.com/PerformanceEstimation/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb) provides a demonstration of how to use PEPit to obtain a worst-case guarantee on a simple algorithm (gradient descent), and a more advanced analysis of three other examples.
 
 
 
@@ -62,7 +62,7 @@ pip install pepit
 or get the very latest version by running:
 
 ```console
-pip install -U https://github.com/bgoujaud/PEPit/archive/master.zip # with --user for user install (no root)
+pip install -U https://github.com/PerformanceEstimation/PEPit/archive/master.zip # with --user for user install (no root)
 ```
 
 ### Post installation check
@@ -73,7 +73,7 @@ import PEPit
 ```
 
 ### Online environment
-You can also try the package in this Binder repository. [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bgoujaud/PEPit/HEAD)
+You can also try the package in this Binder repository. [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/PerformanceEstimation/PEPit/HEAD)
 
 ## Example
 
