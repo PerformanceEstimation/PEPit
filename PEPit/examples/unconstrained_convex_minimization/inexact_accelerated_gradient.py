@@ -3,7 +3,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import inexact_gradient_step
 
 
-def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
+def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=1):
     """
     Consider the minimization problem
 
@@ -54,14 +54,18 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
         L (float): smoothness parameter.
         epsilon (float): level of inaccuracy
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -105,13 +109,14 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (n ** 2 + 5 * n + 6)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of inexact accelerated gradient method ***')
         print('\tPEPit guarantee:\t\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee for epsilon = 0 :\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
@@ -122,4 +127,4 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=True)
+    pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, verbose=1)

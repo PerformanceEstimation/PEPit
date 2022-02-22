@@ -6,7 +6,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
+def wc_no_lips_in_function_value(L, gamma, n, verbose=1):
     """
     Consider the constrainted composite convex minimization problem
 
@@ -59,7 +59,11 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
         L (float): relative-smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -68,7 +72,7 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     Example: **TOUPDATE**
         >>> L = 1
         >>> gamma = 1 / (2*L)
-        >>> pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -123,13 +127,14 @@ def wc_no_lips_in_function_value(L, gamma, n, verbose=True):
     problem.set_performance_metric(ffx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1 / (gamma * n)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
         print('\tPEPit guarantee:\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee :\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0) '.format(
@@ -142,4 +147,4 @@ if __name__ == "__main__":
 
     L = 1
     gamma = 1 / (2*L)
-    pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, verbose=True)
+    pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, verbose=1)

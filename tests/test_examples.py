@@ -67,7 +67,7 @@ class TestExamples(unittest.TestCase):
         self.n = 6
         self.mu = .1
         self.L = 1
-        self.verbose = False
+        self.verbose = -1
         self.relative_precision = 10 ** -3
         self.absolute_precision = 5 * 10 ** -5
 

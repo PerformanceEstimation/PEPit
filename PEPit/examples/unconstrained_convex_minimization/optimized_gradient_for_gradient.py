@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_optimized_gradient_for_gradient(L, n, verbose=True):
+def wc_optimized_gradient_for_gradient(L, n, verbose=1):
     """
     Consider the minimization problem
 
@@ -62,14 +62,18 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     Args:
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=1)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -124,13 +128,14 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
     problem.set_performance_metric(func.gradient(x) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (theta_tilde[0] ** 2)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method for gradient ***')
         print('\tPEP-it guarantee:\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
@@ -141,4 +146,4 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=True)
+    pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=1)

@@ -6,7 +6,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import inexact_proximal_step
 
 
-def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
+def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
     """
     Consider the composite convex minimization problem,
 
@@ -74,14 +74,18 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
         L (float): smoothness parameter.
         zeta (float): relative approximation parameter in (0,1).
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 59x59
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -135,13 +139,14 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
     problem.set_performance_metric((f.value(x) + hx) - Fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (1 - zeta ** 2) / n ** 2
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
         print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
@@ -151,4 +156,4 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=True):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=True)
+    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)

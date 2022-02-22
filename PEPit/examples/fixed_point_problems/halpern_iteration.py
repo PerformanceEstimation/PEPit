@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
 
-def wc_halpern_iteration(n, verbose=True):
+def wc_halpern_iteration(n, verbose=1):
     """
     Consider the fixed point problem
 
@@ -38,14 +38,18 @@ def wc_halpern_iteration(n, verbose=True):
 
     Args:
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 28x28
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -84,13 +88,14 @@ def wc_halpern_iteration(n, verbose=True):
     problem.set_performance_metric((x - A.gradient(x)) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (2 / (n + 1)) ** 2
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of Halpern Iterations ***')
         print('\tPEPit guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
@@ -101,4 +106,4 @@ def wc_halpern_iteration(n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=True)
+    pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)

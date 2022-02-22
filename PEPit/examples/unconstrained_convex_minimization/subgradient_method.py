@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexLipschitzFunction
 
 
-def wc_subgradient_method(M, n, gamma, verbose=True):
+def wc_subgradient_method(M, n, gamma, verbose=1):
     """
     Consider the minimization problem
 
@@ -58,7 +58,11 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
         M (float): the Lipschitz parameter.
         n (int): the number of iterations.
         gamma (float): step-size.
-        verbose (bool, optional): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -68,7 +72,7 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
         >>> M = 2
         >>> n = 6
         >>> gamma = 1 / (M * sqrt(n + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -112,13 +116,14 @@ def wc_subgradient_method(M, n, gamma, verbose=True):
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = M / sqrt(n + 1)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of subgradient method ***')
         print('\tPEPit guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(
@@ -133,4 +138,4 @@ if __name__ == "__main__":
     M = 2
     n = 6
     gamma = 1 / (M * sqrt(n + 1))
-    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=True)
+    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)

@@ -6,7 +6,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_saga(L, mu, n, verbose=True):
+def wc_saga(L, mu, n, verbose=1):
     """
     Consider the finite sum convex minimization problem
 
@@ -56,14 +56,18 @@ def wc_saga(L, mu, n, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         n (int): number of functions.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -141,13 +145,14 @@ def wc_saga(L, mu, n, verbose=True):
     problem.set_performance_metric(final_lyapunov_avg)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) : the bound is given in Theorem 1 of [1]
     theoretical_tau = (1 - gamma * mu)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
         print('\tPEPit guarantee:\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t V^(1) <= {:.6} V^(0)'.format(theoretical_tau))
@@ -158,4 +163,4 @@ def wc_saga(L, mu, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=True)
+    pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)

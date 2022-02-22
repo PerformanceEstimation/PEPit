@@ -5,7 +5,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import inexact_proximal_step
 
 
-def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True):
+def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=1):
     """
     Consider the (possibly non-smooth) convex minimization problem,
 
@@ -49,14 +49,18 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
         n (int): number of iterations.
         gamma (float): the step-size.
         sigma (float): accuracy parameter of the proximal point computation.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -96,13 +100,14 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
     problem.set_performance_metric(f.value(x[n]) - f.value(xs))
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 + sigma) / (4 * gamma * n ** sqrt(1 - sigma ** 2))
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of an inexact proximal point method in distance in function values ***')
         print('\tPEPit guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
@@ -113,4 +118,4 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=True
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=True)
+    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, verbose=1)

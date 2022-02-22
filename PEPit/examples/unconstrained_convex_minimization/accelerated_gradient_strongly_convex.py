@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
+def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -52,14 +52,18 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
         mu (float): the strong convexity parameter
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -103,7 +107,8 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
     problem.set_performance_metric(func.value(x_new) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - sqrt(kappa)) ** n
@@ -111,7 +116,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
         print("Warning: momentum is tuned for strongly convex functions!")
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the accelerated gradient method ***')
         print('\tPEPit guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
             pepit_tau))
@@ -124,4 +129,4 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=True)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=1)

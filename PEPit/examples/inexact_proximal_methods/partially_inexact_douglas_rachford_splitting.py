@@ -5,7 +5,7 @@ from PEPit.primitive_steps import proximal_step
 from PEPit.primitive_steps import inexact_proximal_step
 
 
-def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verbose=True):
+def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verbose=1):
     """
     Consider the composite strongly convex minimization problem,
 
@@ -69,14 +69,18 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
         n (int): number of iterations.
         gamma (float): the step-size.
         sigma (float): noise parameter.
-        verbose (bool, optional): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -125,14 +129,15 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     problem.set_performance_metric((z - zs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max(((1 - sigma + gamma * mu * sigma) / (1 - sigma + gamma * mu)) ** 2,
                           ((sigma + (1 - sigma) * gamma * L) / (1 + (1 - sigma) * gamma * L)) ** 2) ** n
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
         print('\tPEPit guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
@@ -143,4 +148,4 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=True)
+    pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=1)

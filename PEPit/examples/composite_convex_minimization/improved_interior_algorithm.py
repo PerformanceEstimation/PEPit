@@ -7,7 +7,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
+def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -59,7 +59,11 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
         c (float): initial value.
         lam (float): the step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -68,7 +72,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     Example:
         >>> L = 1
         >>> lam = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -129,7 +133,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    cvxpy_prob = problem.solve(verbose=verbose, return_full_cvxpy_problem=True)
+    pepit_verbose = max(verbose, 0)
+    cvxpy_prob = problem.solve(verbose=pepit_verbose, return_full_cvxpy_problem=True)
     pepit_tau = cvxpy_prob.value
     if cvxpy_prob.solver_stats.solver_name == "SCS":
         print("\033[96m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
@@ -138,7 +143,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=True):
     theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
         print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
@@ -151,4 +156,4 @@ if __name__ == "__main__":
 
     L = 1
     lam = 1 / L
-    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=True)
+    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)

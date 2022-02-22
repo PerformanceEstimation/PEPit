@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
+def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -47,7 +47,11 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
         L (float): the smoothness parameter.
         gamma (float): the step-size.
         n (int): current iteration number.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -56,7 +60,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
     Examples:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -97,7 +101,8 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
     problem.set_performance_metric(final_lyapunov - init_lyapunov)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if gamma == 1/L:
@@ -107,7 +112,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=True):
 
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
         print('\tPEPit guarantee:\t'
@@ -124,4 +129,4 @@ if __name__ == "__main__":
 
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=True)
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=1)

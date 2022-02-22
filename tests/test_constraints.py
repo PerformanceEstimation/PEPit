@@ -39,7 +39,7 @@ class TestConstraints(unittest.TestCase):
         # Set the performance metric to the function values accuracy
         self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
 
-        self.solution = self.problem.solve(verbose=False)
+        self.solution = self.problem.solve(verbose=0)
 
     def test_is_instance(self):
 

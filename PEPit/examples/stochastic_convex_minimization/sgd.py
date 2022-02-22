@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
+def wc_sgd(L, mu, gamma, v, R, n, verbose=1):
     """
     Consider the finite sum minimization problem
 
@@ -65,7 +65,11 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
         v (float): the variance bound.
         R (float): the initial distance.
         n (int): number of functions.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -75,7 +79,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
         >>> mu = 0.1
         >>> L = 1
         >>> gamma = 1/L
-        >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
@@ -120,7 +124,8 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     problem.set_performance_metric(distavg)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     kappa = L / mu
@@ -128,7 +133,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
         (1 - 1 / kappa) ** 2 * R ** 2 + 4 * v ** 2 / L ** 2) + v ** 2 / L ** 2
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***')
         print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
@@ -142,4 +147,4 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=True)
+    pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=1)

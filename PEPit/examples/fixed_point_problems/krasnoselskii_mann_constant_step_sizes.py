@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
 
-def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
+def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
     """
     Consider the fixed point problem
 
@@ -42,14 +42,18 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
     Args:
         n (int): number of iterations.
         gamma (float): step-size between 1/2 and 1
-        verbose (bool, optional): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -87,7 +91,8 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
     problem.set_performance_metric((1 / 2 * (x - A.gradient(x))) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if 1/2 <= gamma <= 1 / 2 * (1 + sqrt(n / (n + 1))):
@@ -99,7 +104,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
                          " \'gamma\' must be a number between 1/2 and 1".format(gamma))
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
         print('\tPEPit guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
@@ -110,4 +115,4 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=True)
+    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=1)

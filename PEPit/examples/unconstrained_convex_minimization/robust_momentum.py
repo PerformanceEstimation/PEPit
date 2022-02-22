@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_robust_momentum(mu, L, lam, verbose=True):
+def wc_robust_momentum(mu, L, lam, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -63,14 +63,18 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
-        verbose (bool, optional): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
          pepit_tau (float): worst-case value
          theoretical_tau (float): theoretical value
     
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_robust_momentum(0.1, 1, 0.2, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_robust_momentum(0.1, 1, 0.2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -132,13 +136,14 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
     problem.set_performance_metric(finalLyapunov)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = rho ** 2
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
         print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
             pepit_tau))
@@ -151,4 +156,4 @@ def wc_robust_momentum(mu, L, lam, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, verbose=True)
+    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, verbose=1)
