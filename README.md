@@ -1,6 +1,8 @@
 # PEPit: Performance Estimation in Python
 
 [![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
+[![Documentation Status](https://readthedocs.org/projects/pepit/badge/?version=latest)](https://pepit.readthedocs.io/en/latest/?badge=latest)
+[![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
 [![License](https://img.shields.io/github/license/PerformanceEstimation/PEPit.svg)](https://github.com/PerformanceEstimation/PEPit/blob/master/LICENSE)
 
 This open source Python library provides a generic way to use PEP framework in Python.
