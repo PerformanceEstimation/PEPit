@@ -217,7 +217,8 @@ class PEP(object):
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
-            dimension_reduction (bool): Minimize the dimension of the solution (rank of the Gram matrix).
+            dimension_reduction (bool): Activate heuristics for minimizing the dimension of the solution
+                                        (rank of the Gram matrix).
             dimension_reduction_heuristic (str, optional): The heuristic to be minimized to reduce the dimension.
                                                            (only used when "dimension_reduction" is set to True)
                                                            Only "trace" available.

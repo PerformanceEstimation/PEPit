@@ -100,4 +100,5 @@ class TestConstraints(unittest.TestCase):
 
         Point.counter = 0
         Expression.counter = 0
+        Constraint.counter = 0
         Function.counter = 0
