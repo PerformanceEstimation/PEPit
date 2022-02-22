@@ -17,7 +17,8 @@ class PEP(object):
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
-        list_of_conditions (list): list of :class:`Constraint` objects that are defined out of the scope of a :class:`Function`.
+        list_of_conditions (list): list of :class:`Constraint` objects that are defined
+                                   out of the scope of a :class:`Function`.
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
@@ -173,18 +174,29 @@ class PEP(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=None, verbose=1, tracetrick=False, return_full_cvxpy_problem=False):
+    def solve(self, solver=None, verbose=1, return_full_cvxpy_problem=False,
+              dimension_reduction=False, dimension_reduction_heuristic="trace",
+              eig_threshold=1e-5, tol_dimension_reduction=1e-5):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
 
         Args:
             solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
-            tracetrick (bool): Apply trace heuristic as a proxy for minimizing
-                               the dimension of the solution (rank of the Gram matrix).
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
+            dimension_reduction (bool): Minimize the dimension of the solution (rank of the Gram matrix).
+            dimension_reduction_heuristic (str, optional): The heuristic to be minimized to reduce the dimension.
+                                                           (only used when "dimension_reduction" is set to True)
+                                                           Only "trace" available.
+            eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
+                                             (only used when "dimension_reduction" is set to True)
+                                             The default value is 1e-5.
+            tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
+                                                       Precisely, the second problem minimizes "optimal_value - tol"
+                                                       (only used when "dimension_reduction" is set to True)
+                                                       The default value is 1e-5.
 
         Returns:
             float or cp.Problem: Value of the performance metric of cp.Problem object corresponding to the SDP.
@@ -263,32 +275,50 @@ class PEP(object):
         prob.solve(solver=solver)
         if verbose:
             print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
-                                                                                      prob.solver_stats.solver_name,
-                                                                                      prob.value))
+                                                                                     prob.solver_stats.solver_name,
+                                                                                     prob.value))
 
+        # Store the obtaine value
         wc_value = prob.value
-        if tracetrick:
-            eig_threshold = 1e-5
+
+        # Perform a dimension reduction if required
+        if dimension_reduction:
+
+            # Print the estimated dimension before dimension reduction
             if verbose:
                 eig_val, _ = np.linalg.eig(G.value)
-                nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEPit) Postprocessing: applying trace heuristic.'
-                      ' Currently {} eigenvalue(s) > {} before resolve.'.format(nb_eigen, eig_threshold))
+                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
+                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
+                                                                                                        eig_threshold))
                 print('(PEPit) Calling SDP solver')
-            tol_tracetrick = 1e-5
-            constraints_list.append(objective >= wc_value - tol_tracetrick)
-            prob = cp.Problem(objective=cp.Minimize(cp.trace(G)), constraints=constraints_list)
+
+            # Add the constraint that the objective stay close to its actual value
+            constraints_list.append(objective >= wc_value - tol_dimension_reduction)
+
+            # Translate the heuristic into cvxpy objective
+            if dimension_reduction_heuristic == "trace":
+                heuristic = cp.trace(G)
+            else:
+                raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'."
+                                 "Got {}".format(dimension_reduction_heuristic))
+
+            # Solve the new problem
+            prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
             prob.solve(solver=solver)
+
+            # Store the actualized obtained value
             wc_value = objective.value[0]
+
+            # Print the estimated dimension after dimension reduction
             if verbose:
                 print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
                 eig_val, _ = np.linalg.eig(G.value)
-                nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
-                                                                                                    eig_threshold))
+                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
+                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
+                                                                                                       eig_threshold))
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)

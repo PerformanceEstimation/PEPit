@@ -116,7 +116,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose, tracetrick=True)
+    pepit_tau = problem.solve(verbose=verbose, dimension_reduction=True)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = ((Leps - meps) / (Leps + meps)) ** (2 * n)
