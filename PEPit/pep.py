@@ -181,7 +181,10 @@ class PEP(object):
         Transform the :class:`PEP` under the SDP form, and solve it.
 
         Args:
-            verbose (int): Level of information details to print (0 or 1)
+            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+                           0: No verbose at all
+                           1: PEPit information is printed but not CVXPY's
+                           2: Both PEPit and CVXPY details are printed
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
@@ -203,6 +206,8 @@ class PEP(object):
                                  The value only is returned by default.
 
         """
+        # Set CVXPY verbose to True if verbose mode is at least 2
+        kwargs["verbose"] = verbose >= 2
 
         # Create all class constraints
         for function in self.list_of_functions:
