@@ -11,6 +11,8 @@ on:
     branches:
       - 'master'
       - 'develop'
+      - 'feature/codecov'
+
   create:
     branches:
       - 'master'
@@ -49,6 +51,9 @@ jobs:
     - name: Run tests
       run: |
         python -m unittest tests/test_*
+    - name: Codecov
+      uses: codecov/codecov-action@v2.1.0
+
 
 #  pep8:
 #    runs-on: ubuntu-latest

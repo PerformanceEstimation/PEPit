@@ -1,7 +1,9 @@
 # PEPit: Performance Estimation in Python
 
 [![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
+[![Build Status](https://github.com/PerformanceEstimation/PEPit/workflows/build/badge.svg?branch=master&event=push)](https://github.com/PerformanceEstimation/PEPit/actions)
 [![Documentation Status](https://readthedocs.org/projects/pepit/badge/?version=latest)](https://pepit.readthedocs.io/en/latest/?badge=latest)
+[![Codecov Status](https://codecov.io/gh/PerformanceEstimation/PEPit/branch/master/graph/badge.svg)](https://codecov.io/gh/PerformanceEstimation/PEPit)
 [![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
 [![License](https://img.shields.io/github/license/PerformanceEstimation/PEPit.svg)](https://github.com/PerformanceEstimation/PEPit/blob/master/LICENSE)
 
