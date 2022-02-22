@@ -201,7 +201,7 @@ You can use it  by specifying
 
 .. code-block::
 
-    problem.solve(tracetrick=True)
+    problem.solve(dimension_reduction=True)
 
 Finding Lyapunov
 ^^^^^^^^^^^^^^^^
