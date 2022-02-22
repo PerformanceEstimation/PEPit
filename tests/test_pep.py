@@ -42,7 +42,7 @@ class TestPEP(unittest.TestCase):
         self.assertIsInstance(self.problem, PEP)
         self.assertEqual(len(self.problem.list_of_functions), 1)
         self.assertEqual(len(self.problem.list_of_points), 1)
-        self.assertEqual(len(self.problem.list_of_conditions), 1)
+        self.assertEqual(len(self.problem.list_of_constraints), 1)
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
         self.assertEqual(len(self.func.list_of_constraints), 0)
 
@@ -70,7 +70,7 @@ class TestPEP(unittest.TestCase):
         theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
         self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
 
-        for condition in self.problem.list_of_conditions:
+        for condition in self.problem.list_of_constraints:
             self.assertIsInstance(condition._dual_variable_value, float)
             self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 

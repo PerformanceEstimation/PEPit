@@ -17,7 +17,7 @@ class PEP(object):
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
-        list_of_conditions (list): list of :class:`Constraint` objects that are defined
+        list_of_constraints (list): list of :class:`Constraint` objects that are defined
                                    out of the scope of a :class:`Function`.
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
@@ -54,7 +54,7 @@ class PEP(object):
         # The PEP will maximize the minimum of the latest.
         self.list_of_functions = list()
         self.list_of_points = list()
-        self.list_of_conditions = list()
+        self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
 
     def declare_function(self, function_class, param, reuse_gradient=None):
@@ -104,16 +104,37 @@ class PEP(object):
 
     def set_initial_condition(self, condition):
         """
-        Store a :class:`Constraint` in the attribute `list_of_conditions`.
-        Typically an initial condition.
+        Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
+        Typically an condition of the form :math:`\\|x_0 - x_\\star\||^2 \\leq 1`.
 
         Args:
-            condition (Constraint): the given constraint.
+            condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `constraint` is not a :class:`Constraint` object.
 
         """
 
-        # Store condition in the appropriate list
-        self.list_of_conditions.append(condition)
+        # Call add_constraint method
+        self.add_constraint(constraint=condition)
+
+    def add_constraint(self, constraint):
+        """
+        Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
+
+        Args:
+            constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `constraint` is not a :class:`Constraint` object.
+
+        """
+
+        # Verify constraint is an actual Constraint object
+        assert isinstance(constraint, Constraint)
+
+        # Add constraint to the list of self's constraints
+        self.list_of_constraints.append(constraint)
 
     def set_performance_metric(self, expression):
         """
@@ -235,7 +256,7 @@ class PEP(object):
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions
-        for condition in self.list_of_conditions:
+        for condition in self.list_of_constraints:
             assert isinstance(condition, Constraint)
             if condition.equality_or_inequality == 'inequality':
                 constraints_list.append(self._expression_to_cvxpy(condition.expression, F, G) <= 0)
@@ -247,7 +268,7 @@ class PEP(object):
                                  'Got {}'.format(condition.equality_or_inequality))
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
+                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_constraints)))
 
         # Defining class constraints
         if verbose:
@@ -408,7 +429,7 @@ class PEP(object):
         position_of_minimal_objective = np.argmax(performance_metric_dual_values)
 
         # Store all dual values of initial conditions (Generally the rate)
-        for condition in self.list_of_conditions:
+        for condition in self.list_of_constraints:
             condition._dual_variable_value = cvx_constraints[counter].dual_value
             counter += 1
 

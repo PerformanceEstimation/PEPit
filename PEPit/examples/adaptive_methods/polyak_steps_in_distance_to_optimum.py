@@ -103,7 +103,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=True):
     _, _ = func.oracle(x1)
 
     # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(gamma * g0 ** 2 == 2 * (f0 - fs))
+    problem.add_constraint(gamma * g0 ** 2 == 2 * (f0 - fs))
 
     # Set the performance metric to the distance between x_1 and x_* = xs
     problem.set_performance_metric((x1 - xs) ** 2)

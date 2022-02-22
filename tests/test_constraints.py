@@ -48,9 +48,9 @@ class TestConstraints(unittest.TestCase):
         self.assertIsInstance(self.xs, Point)
         self.assertIsInstance(self.x0, Point)
         self.assertIsInstance(self.x1, Point)
-        for i in range(len(self.problem.list_of_conditions)):
-            self.assertIsInstance(self.problem.list_of_conditions[i], Constraint)
-            self.assertIsInstance(self.problem.list_of_conditions[i].expression, Expression)
+        for i in range(len(self.problem.list_of_constraints)):
+            self.assertIsInstance(self.problem.list_of_constraints[i], Constraint)
+            self.assertIsInstance(self.problem.list_of_constraints[i].expression, Expression)
         for i in range(len(self.func.list_of_constraints)):
             self.assertIsInstance(self.func.list_of_constraints[i], Constraint)
             self.assertIsInstance(self.func.list_of_constraints[i].expression, Expression)
@@ -63,12 +63,12 @@ class TestConstraints(unittest.TestCase):
         self.assertIs(self.x1.counter, None)
 
         # conditions are first added as Constraint in PEP
-        for i in range(len(self.problem.list_of_conditions)):
-            self.assertIs(self.problem.list_of_conditions[i].counter, i)
+        for i in range(len(self.problem.list_of_constraints)):
+            self.assertIs(self.problem.list_of_constraints[i].counter, i)
 
         # class constraints are added after initial conditions in PEP
         for i in range(len(self.func.list_of_constraints)):
-            self.assertIs(self.func.list_of_constraints[i].counter, i + len(self.problem.list_of_conditions))
+            self.assertIs(self.func.list_of_constraints[i].counter, i + len(self.problem.list_of_constraints))
 
     def test_equality_inequality(self):
 
@@ -76,25 +76,25 @@ class TestConstraints(unittest.TestCase):
             self.assertIsInstance(self.func.list_of_constraints[i].equality_or_inequality, str)
             self.assertIn(self.func.list_of_constraints[i].equality_or_inequality, {'equality', 'inequality'})
 
-        for i in range(len(self.problem.list_of_conditions)):
-            self.assertIsInstance(self.problem.list_of_conditions[i].equality_or_inequality, str)
-            self.assertIn(self.problem.list_of_conditions[i].equality_or_inequality, {'equality', 'inequality'})
+        for i in range(len(self.problem.list_of_constraints)):
+            self.assertIsInstance(self.problem.list_of_constraints[i].equality_or_inequality, str)
+            self.assertIn(self.problem.list_of_constraints[i].equality_or_inequality, {'equality', 'inequality'})
 
     def test_eval(self):
 
         for i in range(len(self.func.list_of_constraints)):
             self.assertIsInstance(self.func.list_of_constraints[i].eval(), float)
 
-        for i in range(len(self.problem.list_of_conditions)):
-            self.assertIsInstance(self.problem.list_of_conditions[i].eval(), float)
+        for i in range(len(self.problem.list_of_constraints)):
+            self.assertIsInstance(self.problem.list_of_constraints[i].eval(), float)
 
     def test_eval_dual(self):
 
         for i in range(len(self.func.list_of_constraints)):
             self.assertIsInstance(self.func.list_of_constraints[i].eval_dual(), float)
 
-        for i in range(len(self.problem.list_of_conditions)):
-            self.assertIsInstance(self.problem.list_of_conditions[i].eval_dual(), float)
+        for i in range(len(self.problem.list_of_constraints)):
+            self.assertIsInstance(self.problem.list_of_constraints[i].eval_dual(), float)
 
     def tearDown(self):
 

@@ -110,7 +110,7 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=True):
     # Set the initial constraint that is the bounded variance and the distance between initial point and optimal one
     var = np.mean([f.gradient(xs) ** 2 for f in fn])
 
-    problem.set_initial_condition(var <= v ** 2)
+    problem.add_constraint(var <= v ** 2)
     problem.set_initial_condition((x0 - xs) ** 2 <= R ** 2)
 
     # Compute the *expected* distance to optimality after running one step of the stochastic gradient descent

@@ -100,7 +100,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     problem.set_initial_condition(f0 - fs <= 1)
 
     # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
+    problem.add_constraint(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
 
     # Run the Polayk steps at iteration 1
     x1 = x0 - gamma * g0
