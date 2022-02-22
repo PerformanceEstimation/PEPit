@@ -174,14 +174,13 @@ class PEP(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=None, verbose=1, return_full_cvxpy_problem=False,
+    def solve(self, verbose=1, return_full_cvxpy_problem=False,
               dimension_reduction=False, dimension_reduction_heuristic="trace",
-              eig_threshold=1e-5, tol_dimension_reduction=1e-5):
+              eig_threshold=1e-5, tol_dimension_reduction=1e-5, **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
 
         Args:
-            solver (str or None): The name of the underlying solver.
             verbose (int): Level of information details to print (0 or 1)
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
@@ -197,6 +196,7 @@ class PEP(object):
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction" is set to True)
                                                        The default value is 1e-5.
+            kwargs (keywords, optional): Additional CVXPY solver specific arguments.
 
         Returns:
             float or cp.Problem: Value of the performance metric of cp.Problem object corresponding to the SDP.
@@ -272,7 +272,7 @@ class PEP(object):
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        prob.solve(solver=solver)
+        prob.solve(**kwargs)
         if verbose:
             print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
                                                                                      prob.solver_stats.solver_name,
@@ -304,7 +304,7 @@ class PEP(object):
 
             # Solve the new problem
             prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
-            prob.solve(solver=solver)
+            prob.solve(**kwargs)
 
             # Store the actualized obtained value
             wc_value = objective.value[0]
