@@ -22,6 +22,10 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
+        null_point (Point): a :class:`Point` initialized to 0,
+                            easily callable to initialize a :class:`Point` before a for loop.
+        null_expression (Expression): a :class:`Expression` initialized to 0,
+                                      easily callable to initialize a :class:`Expression` before a for loop.
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -56,6 +60,10 @@ class PEP(object):
         self.list_of_points = list()
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
+
+        # Add useful attributes of Point and Expression initialized to 0 in their respective space.
+        self.null_point = Point(is_leaf=False, decomposition_dict=dict())
+        self.null_expression = Expression(is_leaf=False, decomposition_dict=dict())
 
     def declare_function(self, function_class, param, reuse_gradient=None):
         """
