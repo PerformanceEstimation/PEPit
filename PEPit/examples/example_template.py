@@ -5,7 +5,7 @@ from PEPit import PEP
 # from primitive_steps import ``THE PRIMITIVE STEPS YOU NEED``
 
 
-def wc_example_template(arg1, arg2, arg3, verbose=True):
+def wc_example_template(arg1, arg2, arg3, verbose=1):
     """
     Consider the ``CHARACTERISTIC (eg., convex)`` minimization problem
 
@@ -60,14 +60,18 @@ def wc_example_template(arg1, arg2, arg3, verbose=True):
         arg1 (type1): description of arg1.
         arg2 (type2): description of arg2.
         arg3 (type3): description of arg3.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=1)
         ``OUTPUT MESSAGE``
 
     """
@@ -103,13 +107,14 @@ def wc_example_template(arg1, arg2, arg3, verbose=True):
     # problem.set_performance_metric(performance_metric)  # TODO specify
     #
     # # Solve the PEP
-    # pepit_tau = problem.solve(verbose=verbose)
+    # pepit_verbose = max(verbose, 0)
+    # pepit_tau = problem.solve(verbose=pepit_verbose)
     #
     # # Theoretical guarantee (for comparison)
     # theoretical_tau = theoretical_tau  # TODO specify
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of ``NAME OF THE METHOD`` ***')
         print('\tPEPit guarantee:\t ``PERFORMANCE METRIC`` <= {:.6} ``INITIALIZATION``'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ``PERFORMANCE METRIC`` <= {:.6} ``INITIALIZATION``'.format(theoretical_tau))
@@ -120,4 +125,4 @@ def wc_example_template(arg1, arg2, arg3, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=True)
+    pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=1)

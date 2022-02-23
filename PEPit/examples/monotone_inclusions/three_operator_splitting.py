@@ -5,7 +5,7 @@ from PEPit.operators import CocoerciveOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
+def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -57,14 +57,18 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
         beta (float): cocoercivity of B.
         alpha (float): step-size (in the resolvants).
         theta (float): overrelaxation parameter.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (None): no theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -109,13 +113,14 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
     problem.set_performance_metric((z0 - z1) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
         print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
 
@@ -125,4 +130,4 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=True)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)

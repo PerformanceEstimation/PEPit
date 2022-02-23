@@ -6,7 +6,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_no_lips_2(L, gamma, n, verbose=True):
+def wc_no_lips_2(L, gamma, n, verbose=1):
     """
     Consider the constrainted composite convex minimization problem
 
@@ -54,7 +54,11 @@ def wc_no_lips_2(L, gamma, n, verbose=True):
         L (float): relative-smoothness parameter.
         gamma (float): step-size (equal to :math:`\\frac{1}{2L}` for guarantee).
         n (int): number of iterations.
-        verbose (bool, optional): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -63,7 +67,7 @@ def wc_no_lips_2(L, gamma, n, verbose=True):
     Example:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 3 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -118,13 +122,14 @@ def wc_no_lips_2(L, gamma, n, verbose=True):
     problem.set_initial_condition(F0 - Fx <= 1)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = gamma / n
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
         print('\tPEPit guarantee:\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
         print('\tTheoretical guarantee :\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
@@ -137,4 +142,4 @@ if __name__ == "__main__":
 
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=True)
+    pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=1)

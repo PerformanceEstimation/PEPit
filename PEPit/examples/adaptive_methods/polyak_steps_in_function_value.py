@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
+def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=1):
     """
     Consider the minimization problem
 
@@ -57,7 +57,11 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         gamma (float): the step-size.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -67,7 +71,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         >>> L = 1
         >>> mu = 0.1
         >>> gamma = 2 / (L + mu)
-        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
@@ -100,7 +104,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     problem.set_initial_condition(f0 - fs <= 1)
 
     # Set the initial condition to the Polyak step-size
-    problem.set_initial_condition(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
+    problem.add_constraint(g0 ** 2 == 2 * L * (2 - L * gamma) * (f0 - fs))
 
     # Run the Polayk steps at iteration 1
     x1 = x0 - gamma * g0
@@ -110,7 +114,8 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
     problem.set_performance_metric(f1 - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if 1/L <= gamma <= (2 * L - mu)/L**2:
@@ -119,7 +124,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=True):
         theoretical_tau = 0.
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of Polyak steps ***')
         print('\tPEPit guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
@@ -133,4 +138,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=True)
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, verbose=1)

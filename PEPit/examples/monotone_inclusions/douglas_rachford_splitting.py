@@ -6,7 +6,7 @@ from PEPit.operators import StronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
+def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -59,14 +59,18 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
         mu (float): the strongly monotone parameter.
         alpha (float): the step-size in the resolvent.
         theta (float): algorithm parameter.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau  = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)
+        >>> pepit_tau, theoretical_tau  = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -110,7 +114,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
     problem.set_performance_metric((z0 - z1) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison), see [2, Theorem 3]
     mu = alpha * mu
@@ -131,7 +136,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
                                       theta * (1 + 2 * mu - L ** 2) - 2 * (mu + 1) * (1 - L ** 2))
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
         print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
@@ -142,4 +147,4 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=True)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)

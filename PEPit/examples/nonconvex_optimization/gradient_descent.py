@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothFunction
 
 
-def wc_gradient_descent(L, gamma, n, verbose=True):
+def wc_gradient_descent(L, gamma, n, verbose=1):
     """
     Consider the minimization problem
 
@@ -45,7 +45,11 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
         L (float): the smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -54,7 +58,7 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     Example:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -96,13 +100,14 @@ def wc_gradient_descent(L, gamma, n, verbose=True):
     problem.set_initial_condition(f0 - fx <= 1)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 4 / 3 * L / n
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
         print('\tPEPit guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
@@ -115,4 +120,4 @@ if __name__ == "__main__":
 
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=True)
+    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)

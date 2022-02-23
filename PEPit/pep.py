@@ -17,10 +17,15 @@ class PEP(object):
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
-        list_of_conditions (list): list of :class:`Constraint` objects that are defined out of the scope of a :class:`Function`.
+        list_of_constraints (list): list of :class:`Constraint` objects that are defined
+                                   out of the scope of a :class:`Function`.
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
+        null_point (Point): a :class:`Point` initialized to 0,
+                            easily callable to initialize a :class:`Point` before a for loop.
+        null_expression (Expression): a :class:`Expression` initialized to 0,
+                                      easily callable to initialize a :class:`Expression` before a for loop.
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -53,8 +58,12 @@ class PEP(object):
         # The PEP will maximize the minimum of the latest.
         self.list_of_functions = list()
         self.list_of_points = list()
-        self.list_of_conditions = list()
+        self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
+
+        # Add useful attributes of Point and Expression initialized to 0 in their respective space.
+        self.null_point = Point(is_leaf=False, decomposition_dict=dict())
+        self.null_expression = Expression(is_leaf=False, decomposition_dict=dict())
 
     def declare_function(self, function_class, param, reuse_gradient=None):
         """
@@ -103,16 +112,37 @@ class PEP(object):
 
     def set_initial_condition(self, condition):
         """
-        Store a :class:`Constraint` in the attribute `list_of_conditions`.
-        Typically an initial condition.
+        Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
+        Typically an condition of the form :math:`\\|x_0 - x_\\star\||^2 \\leq 1`.
 
         Args:
-            condition (Constraint): the given constraint.
+            condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `constraint` is not a :class:`Constraint` object.
 
         """
 
-        # Store condition in the appropriate list
-        self.list_of_conditions.append(condition)
+        # Call add_constraint method
+        self.add_constraint(constraint=condition)
+
+    def add_constraint(self, constraint):
+        """
+        Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
+
+        Args:
+            constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+
+        Raises:
+            AssertionError: if provided `constraint` is not a :class:`Constraint` object.
+
+        """
+
+        # Verify constraint is an actual Constraint object
+        assert isinstance(constraint, Constraint)
+
+        # Add constraint to the list of self's constraints
+        self.list_of_constraints.append(constraint)
 
     def set_performance_metric(self, expression):
         """
@@ -173,24 +203,41 @@ class PEP(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
 
-    def solve(self, solver=None, verbose=1, tracetrick=False, return_full_cvxpy_problem=False):
+    def solve(self, verbose=1, return_full_cvxpy_problem=False,
+              dimension_reduction=False, dimension_reduction_heuristic="trace",
+              eig_threshold=1e-5, tol_dimension_reduction=1e-5, **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
 
         Args:
-            solver (str or None): The name of the underlying solver.
-            verbose (int): Level of information details to print (0 or 1)
-            tracetrick (bool): Apply trace heuristic as a proxy for minimizing
-                               the dimension of the solution (rank of the Gram matrix).
+            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+                           0: No verbose at all
+                           1: PEPit information is printed but not CVXPY's
+                           2: Both PEPit and CVXPY details are printed
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
+            dimension_reduction (bool): Activate heuristics for minimizing the dimension of the solution
+                                        (rank of the Gram matrix).
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension.
+                                                           (only used when "dimension_reduction" is set to True)
+                                                           Only "trace" available.
+            eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
+                                             (only used when "dimension_reduction" is set to True)
+                                             The default value is 1e-5.
+            tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
+                                                       Precisely, the second problem minimizes "optimal_value - tol"
+                                                       (only used when "dimension_reduction" is set to True)
+                                                       The default value is 1e-5.
+            kwargs (keywords, optional): Additional CVXPY solver specific arguments.
 
         Returns:
             float or cp.Problem: Value of the performance metric of cp.Problem object corresponding to the SDP.
                                  The value only is returned by default.
 
         """
+        # Set CVXPY verbose to True if verbose mode is at least 2
+        kwargs["verbose"] = verbose >= 2
 
         # Create all class constraints
         for function in self.list_of_functions:
@@ -218,7 +265,7 @@ class PEP(object):
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions
-        for condition in self.list_of_conditions:
+        for condition in self.list_of_constraints:
             assert isinstance(condition, Constraint)
             if condition.equality_or_inequality == 'inequality':
                 constraints_list.append(self._expression_to_cvxpy(condition.expression, F, G) <= 0)
@@ -230,7 +277,7 @@ class PEP(object):
                                  'Got {}'.format(condition.equality_or_inequality))
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_conditions)))
+                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_constraints)))
 
         # Defining class constraints
         if verbose:
@@ -260,35 +307,53 @@ class PEP(object):
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        prob.solve(solver=solver)
+        prob.solve(**kwargs)
         if verbose:
             print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
-                                                                                      prob.solver_stats.solver_name,
-                                                                                      prob.value))
+                                                                                     prob.solver_stats.solver_name,
+                                                                                     prob.value))
 
+        # Store the obtaine value
         wc_value = prob.value
-        if tracetrick:
-            eig_threshold = 1e-5
+
+        # Perform a dimension reduction if required
+        if dimension_reduction:
+
+            # Print the estimated dimension before dimension reduction
             if verbose:
                 eig_val, _ = np.linalg.eig(G.value)
-                nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEPit) Postprocessing: applying trace heuristic.'
-                      ' Currently {} eigenvalue(s) > {} before resolve.'.format(nb_eigen, eig_threshold))
+                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
+                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
+                                                                                                        eig_threshold))
                 print('(PEPit) Calling SDP solver')
-            tol_tracetrick = 1e-5
-            constraints_list.append(objective >= wc_value - tol_tracetrick)
-            prob = cp.Problem(objective=cp.Minimize(cp.trace(G)), constraints=constraints_list)
-            prob.solve(solver=solver)
+
+            # Add the constraint that the objective stay close to its actual value
+            constraints_list.append(objective >= wc_value - tol_dimension_reduction)
+
+            # Translate the heuristic into cvxpy objective
+            if dimension_reduction_heuristic == "trace":
+                heuristic = cp.trace(G)
+            else:
+                raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'."
+                                 "Got {}".format(dimension_reduction_heuristic))
+
+            # Solve the new problem
+            prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
+            prob.solve(**kwargs)
+
+            # Store the actualized obtained value
             wc_value = objective.value[0]
+
+            # Print the estimated dimension after dimension reduction
             if verbose:
                 print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
                 eig_val, _ = np.linalg.eig(G.value)
-                nb_eigen = len([element for element in eig_val if element > eig_threshold])
-                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after trace heuristic'.format(nb_eigen,
-                                                                                                    eig_threshold))
+                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
+                print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
+                                                                                                       eig_threshold))
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
@@ -373,7 +438,7 @@ class PEP(object):
         position_of_minimal_objective = np.argmax(performance_metric_dual_values)
 
         # Store all dual values of initial conditions (Generally the rate)
-        for condition in self.list_of_conditions:
+        for condition in self.list_of_constraints:
             condition._dual_variable_value = cvx_constraints[counter].dual_value
             counter += 1
 

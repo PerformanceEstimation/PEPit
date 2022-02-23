@@ -4,7 +4,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import linear_optimization_step
 
 
-def wc_frank_wolfe(L, D, n, verbose=True):
+def wc_frank_wolfe(L, D, n, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -52,14 +52,18 @@ def wc_frank_wolfe(L, D, n, verbose=True):
         L (float): the smoothness parameter.
         D (float): diameter of :math:`f_2`.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
@@ -107,14 +111,15 @@ def wc_frank_wolfe(L, D, n, verbose=True):
     problem.set_performance_metric((func.value(x)) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
     theoretical_tau = 2 * L * D ** 2 / (n + 2)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Franck-Wolfe) in function value ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
@@ -125,4 +130,4 @@ def wc_frank_wolfe(L, D, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=True)
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)

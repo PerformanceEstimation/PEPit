@@ -4,7 +4,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=True):
+def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -68,14 +68,18 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
         alpha (float): parameter of the scheme.
         theta (float): parameter of the scheme.
         n (int): number of iterations.
-        verbose (bool, optional): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -129,7 +133,8 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
     problem.set_performance_metric((w - wp) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) when theta = 1
     if theta == 1:
@@ -138,7 +143,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
         theoretical_tau = None
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***')
         print('\tPEPit guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
         if theta == 1:
@@ -150,4 +155,4 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=Tr
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=True)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=1)

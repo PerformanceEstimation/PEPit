@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
+def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -42,7 +42,11 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
         mu (float): the strong-convexity parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion.
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -50,7 +54,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=1)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -89,13 +93,14 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
     problem.set_performance_metric((x - y) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - gamma * L) ** 2, (1 - gamma * mu) ** 2) ** n
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***')
         print('\tPEP-it guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(theoretical_tau))
@@ -107,4 +112,4 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=True)
+    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=1)

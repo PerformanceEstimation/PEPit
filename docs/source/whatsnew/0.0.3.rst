@@ -1,4 +1,18 @@
 What's new in PEPit 0.0.3
 =========================
 
+- The `tracetrick` option of the method ``PEP.solve`` has been renamed `dimension_reduction`,
+and the 3 parameters `dimension_reduction_heuristic`, `eig_threshold` and `tol_dimension_reduction`
+have been introduced.
 
+- CVXPY solver options can be provided to the method ``PEP.solve`` directly.
+
+- The method ``add_constraint`` has been added to the class ``PEP`` and should be preferred to
+the method ``set_initial_condition`` when the constraint is not the initial one
+but still independent of the different functions.
+
+- The attributes ``null_point`` and ``null_expression`` have been added to the class ``PEP``
+to facilitate the access to a ``Point`` or an ``Expression`` initialized to 0.
+
+- The verbose mode of the method ``PEP.solve`` and of the provided examples files
+are now integers, allowing a bigger granularity.

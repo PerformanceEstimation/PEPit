@@ -3,7 +3,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import inexact_gradient_step
 
 
-def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
+def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -60,14 +60,18 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
         mu (float): the strong convexity parameter.
         epsilon (float): level of inaccuracy
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -116,13 +120,14 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose, tracetrick=True)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction=True)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = ((Leps - meps) / (Leps + meps)) ** (2 * n)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
@@ -133,4 +138,4 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=True)
+    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)

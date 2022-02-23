@@ -42,11 +42,11 @@ class TestPEP(unittest.TestCase):
         self.assertIsInstance(self.problem, PEP)
         self.assertEqual(len(self.problem.list_of_functions), 1)
         self.assertEqual(len(self.problem.list_of_points), 1)
-        self.assertEqual(len(self.problem.list_of_conditions), 1)
+        self.assertEqual(len(self.problem.list_of_constraints), 1)
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
         self.assertEqual(len(self.func.list_of_constraints), 0)
 
-        pepit_tau = self.problem.solve(verbose=False)
+        pepit_tau = self.problem.solve(verbose=0)
         self.assertEqual(len(self.func.list_of_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 2)
@@ -54,7 +54,7 @@ class TestPEP(unittest.TestCase):
 
     def test_eval_points_and_function_values(self):
 
-        self.problem.solve(verbose=False)
+        self.problem.solve(verbose=0)
 
         for triplet in self.func.list_of_points:
 
@@ -66,11 +66,11 @@ class TestPEP(unittest.TestCase):
 
     def test_eval_constraint_dual_values(self):
 
-        pepit_tau = self.problem.solve(verbose=False)
+        pepit_tau = self.problem.solve(verbose=0)
         theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
         self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
 
-        for condition in self.problem.list_of_conditions:
+        for condition in self.problem.list_of_constraints:
             self.assertIsInstance(condition._dual_variable_value, float)
             self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 
@@ -83,18 +83,18 @@ class TestPEP(unittest.TestCase):
     def test_trace_trick(self):
 
         # Compute pepit_tau very basically
-        pepit_tau = self.problem.solve(verbose=False)
+        pepit_tau = self.problem.solve(verbose=0)
 
         # Return the full problem and verify the problem value is still pepit_tau
-        prob = self.problem.solve(verbose=False, return_full_cvxpy_problem=True, tracetrick=False)
+        prob = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction=False)
         self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
 
         # Return the full tracetrick problem and verify that its value is not pepit_tau anymore but the trace value
-        prob2 = self.problem.solve(verbose=False, return_full_cvxpy_problem=True, tracetrick=True)
+        prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction=True)
         self.assertAlmostEqual(prob2.value, 1 / 2, delta=10 ** -2)
 
         # Verify that, even with tracetrick, the solve method returns the worst-case performance, not the trace value.
-        pepit_tau2 = self.problem.solve(verbose=False, tracetrick=True)
+        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction=True)
         self.assertAlmostEqual(pepit_tau, pepit_tau2, delta=10 ** -2)
 
     def tearDown(self):

@@ -5,7 +5,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
+def wc_accelerated_proximal_point(A0, gammas, n, verbose=1):
     """
     Consider the minimization problem
 
@@ -67,7 +67,11 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
        A0 (float): initial value for parameter A_0.
        gammas (list): sequence of step-sizes.
        n (int): number of iterations.
-       verbose (bool): if True, print conclusion
+       verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
        pepit_tau (float): worst-case value
@@ -75,7 +79,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
 
 
     Example:
-       >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=True)
+       >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=1)
        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -120,7 +124,8 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     accumulation = 0
@@ -129,7 +134,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
     theoretical_tau = 4 / A0 / accumulation ** 2
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of fast proximal point method ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(theoretical_tau))
@@ -140,4 +145,4 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=True):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=True)
+    pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=1)
