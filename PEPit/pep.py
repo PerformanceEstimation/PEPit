@@ -219,7 +219,7 @@ class PEP(object):
                                               Set to False by default.
             dimension_reduction (bool): Activate heuristics for minimizing the dimension of the solution
                                         (rank of the Gram matrix).
-            dimension_reduction_heuristic (str, optional): The heuristic to be minimized to reduce the dimension.
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension.
                                                            (only used when "dimension_reduction" is set to True)
                                                            Only "trace" available.
             eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
