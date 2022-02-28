@@ -11,7 +11,8 @@ class ConvexIndicatorFunction(Function):
     Attributes:
         D (float): upper bound on the diameter of the feasible set
 
-    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
+    Convex indicator functions are characterized by a parameter :math:`D`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

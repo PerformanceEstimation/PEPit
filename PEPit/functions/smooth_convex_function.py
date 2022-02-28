@@ -9,7 +9,8 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
     Attributes:
         L (float): smoothness parameter
 
-    Smooth convex functions are characterized by the smoothness parameter `L`, hence can be instantiated as
+    Smooth convex functions are characterized by the smoothness parameter :math:`L`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

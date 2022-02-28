@@ -26,14 +26,14 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=1):
     **Algorithm**:
     For :math:`t\\in \\{0, \\dots, n-1\\}`:
 
-       .. math::
-           :nowrap:
+        .. math::
+            :nowrap:
 
-           \\begin{eqnarray}
-               y_{t+1} & = & (1-\\alpha_{t} ) x_{t} + \\alpha_{t} v_t \\\\
-               x_{t+1} & = & \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\\gamma_t}\\|x-y_{t+1}\\|^2 \\right\\}, \\\\
-               v_{t+1} & = & v_t + \\frac{1}{\\alpha_{t}} (x_{t+1}-y_{t+1})
-           \\end{eqnarray}
+            \\begin{eqnarray}
+                y_{t+1} & = & (1-\\alpha_{t} ) x_{t} + \\alpha_{t} v_t \\\\
+                x_{t+1} & = & \\arg\\min_x \\left\\{f(x)+\\frac{1}{2\\gamma_t}\\|x-y_{t+1}\\|^2 \\right\\}, \\\\
+                v_{t+1} & = & v_t + \\frac{1}{\\alpha_{t}} (x_{t+1}-y_{t+1})
+            \\end{eqnarray}
 
     with
 

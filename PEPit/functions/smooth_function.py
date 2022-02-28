@@ -9,7 +9,8 @@ class SmoothFunction(Function):
     Attributes:
         L (float): smoothness parameter
 
-    Smooth functions are characterized by the smoothness parameter `L`, hence can be instantiated as
+    Smooth functions are characterized by the smoothness parameter :math:`L`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

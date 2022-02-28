@@ -9,7 +9,8 @@ class ConvexLipschitzFunction(Function):
     Attributes:
         M (float): Lipschitz parameter
 
-    CCP Lipschitz continuous functions are characterized by a parameter `M`, hence can be instantiated as
+    CCP Lipschitz continuous functions are characterized by a parameter :math:`M`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

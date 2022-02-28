@@ -12,7 +12,8 @@ class LipschitzOperator(Function):
     Attributes:
         L (float) Lipschitz parameter
 
-    Cocoercive operators are characterized by the parameter :math:`L`, hence can be instantiated as
+    Cocoercive operators are characterized by the parameter :math:`L`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

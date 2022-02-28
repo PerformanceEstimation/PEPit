@@ -12,7 +12,8 @@ class CocoerciveOperator(Function):
     Attributes:
         beta (float): cocoercivity parameter
 
-    Cocoercive operators are characterized by the parameter :math:`\\beta`, hence can be instantiated as
+    Cocoercive operators are characterized by the parameter :math:`\\beta`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

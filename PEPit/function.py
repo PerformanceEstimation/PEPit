@@ -549,11 +549,12 @@ class Function(object):
 
     def stationary_point(self, return_gradient_and_function_value=False):
         """
-        Create a new stationary point, as well as its zero gradient and its function value.
+        Create a new stationary point, as well as its zero subgradient and its function value.
 
         Args:
             return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
-                                                       gradient (:class:`Point`), function value (:class:`Expression`).
+                                                       subgradient (:class:`Point`),
+                                                       function value (:class:`Expression`).
                                                        Otherwise, return only the point (:class:`Point`).
 
         Returns:
@@ -561,7 +562,7 @@ class Function(object):
 
         """
 
-        # Create a new point, null gradient and new function value
+        # Create a new point, null subgradient and new function value
         point = Point(is_leaf=True, decomposition_dict=None)
         g = Point(is_leaf=False, decomposition_dict=dict())
         f = Expression(is_leaf=True, decomposition_dict=None)

@@ -19,7 +19,7 @@ class LipschitzStronglyMonotoneOperator(Function):
         mu (float): strong monotonicity parameter
         L (float): Lipschitz parameter
 
-    Lipschitz continuous strongly monotone operators are characterized by parameters :math:`\\mu` and `L`,
+    Lipschitz continuous strongly monotone operators are characterized by parameters :math:`\\mu` and :math:`L`,
     hence can be instantiated as
 
     Example:
