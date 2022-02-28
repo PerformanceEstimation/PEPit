@@ -6,7 +6,10 @@
 # - if h is not necessarily differentiable, create "new_grad" and "new_function_value" in Function
 #                                           + overwrite those instead of oracle
 #                                           + don't forget to update list_of_points
-
+# TODO:
+#  - Add euclidean distance
+# TODO:
+#  - Add list of Bregman divergences to bound convex_indicator
 
 from PEPit.point import Point
 from PEPit.expression import Expression
