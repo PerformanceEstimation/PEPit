@@ -13,7 +13,7 @@ class TestFunction(unittest.TestCase):
     def setUp(self):
 
         self.func1 = Function(is_leaf=True, decomposition_dict=None)
-        self.func2 = ConvexFunction(dict(), is_leaf=True, decomposition_dict=None)
+        self.func2 = ConvexFunction(is_leaf=True, decomposition_dict=None)
 
         self.point = Point(is_leaf=True, decomposition_dict=None)
 

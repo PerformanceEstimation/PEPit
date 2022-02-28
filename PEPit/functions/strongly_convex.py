@@ -14,8 +14,9 @@ class StronglyConvexFunction(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.functions import StronglyConvexFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=StronglyConvexFunction, param={'mu': .1})
+        >>> func = problem.declare_function(function_class=StronglyConvexFunction, mu=.1)
 
     References:
         `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
@@ -26,17 +27,17 @@ class StronglyConvexFunction(Function):
     """
 
     def __init__(self,
-                 param,
+                 mu,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the values of mu
+            mu (float): The strong convexity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -47,8 +48,8 @@ class StronglyConvexFunction(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=reuse_gradient)
 
-        # Store mu and L
-        self.mu = param['mu']
+        # Store mu
+        self.mu = mu
 
     def add_class_constraints(self):
         """

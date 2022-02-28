@@ -67,7 +67,7 @@ def wc_proximal_point(alpha, n, verbose=1):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(MonotoneOperator, param={})
+    A = problem.declare_function(MonotoneOperator)
 
     # Start by defining its unique optimal point xs = x_*
     xs = A.stationary_point()

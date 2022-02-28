@@ -77,7 +77,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothFunction, param={'L': L})
+    func = problem.declare_function(SmoothFunction, L=L)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()

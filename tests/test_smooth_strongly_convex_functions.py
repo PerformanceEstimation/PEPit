@@ -16,8 +16,8 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.L2 = 10.
         self.mu2 = 0.001
 
-        self.func1 = SmoothStronglyConvexFunction({'L': self.L1, 'mu': self.mu1})
-        self.func2 = SmoothStronglyConvexFunction({'L': self.L2, 'mu': self.mu2})
+        self.func1 = SmoothStronglyConvexFunction(L=self.L1, mu=self.mu1)
+        self.func2 = SmoothStronglyConvexFunction(L=self.L2, mu=self.mu2)
 
         self.point1 = Point(is_leaf=True, decomposition_dict=None)
         self.point2 = Point(is_leaf=True, decomposition_dict=None)
@@ -44,7 +44,7 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
 
     def test_counter(self):
 
-        function = SmoothStronglyConvexFunction({'L': self.L2, 'mu': self.mu1})
+        function = SmoothStronglyConvexFunction(L=self.L2, mu=self.mu1)
 
         self.assertIs(self.func1.counter, 0)
         self.assertIs(self.func2.counter, 1)

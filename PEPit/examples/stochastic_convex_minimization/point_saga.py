@@ -95,7 +95,7 @@ def wc_point_saga(L, mu, n, verbose=1):
     problem = PEP()
 
     # Declare a sum of strongly convex functions
-    fn = [problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu}) for _ in range(n)]
+    fn = [problem.declare_function(SmoothStronglyConvexFunction, L=L, mu=mu) for _ in range(n)]
     func = np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_*

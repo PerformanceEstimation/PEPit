@@ -74,8 +74,8 @@ def wc_bregman_proximal_point(gamma, n, verbose=1):
     problem = PEP()
 
     # Declare three convex functions
-    func1 = problem.declare_function(ConvexFunction, param={})
-    func2 = problem.declare_function(ConvexFunction, param={})
+    func1 = problem.declare_function(ConvexFunction)
+    func2 = problem.declare_function(ConvexFunction)
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func1.stationary_point()

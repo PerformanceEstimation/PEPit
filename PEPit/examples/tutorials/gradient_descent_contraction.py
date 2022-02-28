@@ -73,7 +73,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
+    func = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
 
     # Then define the starting points x0 and y0 of the algorithm
     x_0 = problem.set_initial_point()

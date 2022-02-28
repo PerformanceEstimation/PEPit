@@ -16,8 +16,9 @@ class LipschitzOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import LipschitzOperator
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=LipschitzOperator, param={'L': 1})
+        >>> func = problem.declare_function(function_class=LipschitzOperator, L=1.)
 
     Notes:
         By setting L=1, we define a non expansive operator.
@@ -47,17 +48,17 @@ class LipschitzOperator(Function):
     """
 
     def __init__(self,
-                 param,
+                 L=1.,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
 
         Args:
-            param (dict): contains the values of L.
+            L (float): Lipschitz continuity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -71,7 +72,7 @@ class LipschitzOperator(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True)
         # Store L
-        self.L = param['L']
+        self.L = L
 
     def add_class_constraints(self):
         """

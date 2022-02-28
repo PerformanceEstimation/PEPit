@@ -87,9 +87,9 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth strongly convex function, a smooth function and a convex function.
-    func1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu1, 'L': L1})
-    func2 = problem.declare_function(ConvexFunction, param={})
-    func3 = problem.declare_function(SmoothConvexFunction, param={'L': L3})
+    func1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu1, L=L1)
+    func2 = problem.declare_function(ConvexFunction)
+    func3 = problem.declare_function(SmoothConvexFunction, L=L3)
     # Define the function to optimize as the sum of func1, func2 and func3
     func = func1 + func2 + func3
 

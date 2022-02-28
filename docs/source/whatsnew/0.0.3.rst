@@ -16,3 +16,7 @@ to facilitate the access to a ``Point`` or an ``Expression`` initialized to 0.
 
 - The verbose mode of the method ``PEP.solve`` and of the provided examples files
 are now integers, allowing a bigger granularity.
+
+- The parameters that caracterize a function class must be provided directly as an argument of this function class,
+not through the dict "param" anymore.
+Example: `PEP.declare_function(function_class=SmoothStronglyConvexFunction, mu=.1, L=1.)`

@@ -91,7 +91,7 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
     problem = PEP()
 
     # Declare a convex lipschitz function
-    func = problem.declare_function(ConvexLipschitzFunction, param={'M': M})
+    func = problem.declare_function(ConvexLipschitzFunction, M=M)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

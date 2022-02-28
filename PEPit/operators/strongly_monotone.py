@@ -19,10 +19,11 @@ class StronglyMonotoneOperator(Function):
     Example:
         >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, param={'mu': .1})
+        >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, mu=.1)
 
     References:
-        Discussions and appropriate pointers for the problem of interpolation of maximally monotone operators can be found in:
+        Discussions and appropriate pointers for the problem of
+        interpolation of maximally monotone operators can be found in:
         `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
         Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
         SIAM Journal on Optimization, 30(3), 2251-2271.
@@ -31,17 +32,17 @@ class StronglyMonotoneOperator(Function):
     """
 
     def __init__(self,
-                 param,
+                 mu,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the values of mu.
+            mu (float): Strong monotonicity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -52,7 +53,7 @@ class StronglyMonotoneOperator(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=reuse_gradient)
         # Store mu
-        self.mu = param['mu']
+        self.mu = mu
 
     def add_class_constraints(self):
         """

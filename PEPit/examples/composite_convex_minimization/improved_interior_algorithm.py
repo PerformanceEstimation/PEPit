@@ -2,7 +2,7 @@ import numpy as np
 
 from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
-from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import StronglyConvexFunction
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
@@ -93,9 +93,9 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
     problem = PEP()
 
     # Declare three convex functions
-    func1 = problem.declare_function(SmoothConvexFunction, param={'L': L})
-    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
-    h = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': np.inf}, reuse_gradient=True)
+    func1 = problem.declare_function(SmoothConvexFunction, L=L)
+    func2 = problem.declare_function(ConvexIndicatorFunction, D=np.inf)
+    h = problem.declare_function(StronglyConvexFunction, mu=mu, reuse_gradient=True)
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2

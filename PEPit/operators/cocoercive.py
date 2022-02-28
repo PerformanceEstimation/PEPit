@@ -16,8 +16,9 @@ class CocoerciveOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import CocoerciveOperator
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=CocoerciveOperator, param={'beta': 1})
+        >>> func = problem.declare_function(function_class=CocoerciveOperator, beta=1.)
 
     References:
         `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
@@ -28,17 +29,17 @@ class CocoerciveOperator(Function):
     """
 
     def __init__(self,
-                 param,
+                 beta=1.,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
 
         Args:
-            param (dict): contains the values of beta.
+            beta (float): The cocoercivity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -53,7 +54,7 @@ class CocoerciveOperator(Function):
                          reuse_gradient=True)
 
         # Store the beta parameter
-        self.beta = param['beta']
+        self.beta = beta
 
     def add_class_constraints(self):
         """

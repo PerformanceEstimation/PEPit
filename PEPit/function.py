@@ -62,7 +62,7 @@ class Function(object):
         Args:
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as a linear combination of leaves.
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.

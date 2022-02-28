@@ -11,13 +11,13 @@ class ConvexFunction(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.functions import ConvexFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexFunction, param=dict())
+        >>> func = problem.declare_function(function_class=ConvexFunction)
 
     """
 
     def __init__(self,
-                 _,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
@@ -26,7 +26,7 @@ class ConvexFunction(Function):
         Args:
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.

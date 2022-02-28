@@ -22,7 +22,7 @@ class TestConstraints(unittest.TestCase):
         self.problem = PEP()
 
         # Declare a strongly convex smooth function
-        self.func = self.problem.declare_function(SmoothStronglyConvexFunction, param={'L': self.L, 'mu': self.mu})
+        self.func = self.problem.declare_function(SmoothStronglyConvexFunction, L=self.L, mu=self.mu)
 
         # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
         self.xs = self.func.stationary_point()

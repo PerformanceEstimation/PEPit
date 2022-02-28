@@ -81,8 +81,7 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
 
     # # Declare functions
     # func = problem.declare_function(function_class=function_class,  # TODO specify
-    #                                 param=param,  # TODO specify
-    #                                 reuse_gradient=reuse_gradient,  # TODO specify
+    #                                 **kwargs=parameters,            # TODO specify
     #                                 )
     #
     # # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*

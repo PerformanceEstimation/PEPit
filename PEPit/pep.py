@@ -65,15 +65,15 @@ class PEP(object):
         self.null_point = Point(is_leaf=False, decomposition_dict=dict())
         self.null_expression = Expression(is_leaf=False, decomposition_dict=dict())
 
-    def declare_function(self, function_class, param, reuse_gradient=None):
+    def declare_function(self, function_class, **kwargs):
         """
         Instantiate a leaf :class:`Function` and store it in the attribute `list_of_functions`.
 
         Args:
             function_class (class): a subclass of :class:`Function` that overwrite the `add_class_constraints` method.
-            param (dict): dictionary of parameters that characterize the function class.
-            reuse_gradient (bool): whether the function only admit one gradient on a given :class:`Point`.
-                                   Typically True when the function is assumed differentiable.
+            kwargs (dict): dictionary of parameters that characterize the function class.
+                           Can also contains the boolean `reuse_gradient`,
+                           that enforces using only one subgradient per point.
 
         Returns:
             f (Function): the newly created function.
@@ -81,10 +81,7 @@ class PEP(object):
         """
 
         # Create the function
-        if reuse_gradient is None:
-            f = function_class(param, is_leaf=True, decomposition_dict=None)
-        else:
-            f = function_class(param, is_leaf=True, decomposition_dict=None, reuse_gradient=reuse_gradient)
+        f = function_class(is_leaf=True, decomposition_dict=None, **kwargs)
 
         # Store it in list_of_functions
         self.list_of_functions.append(f)

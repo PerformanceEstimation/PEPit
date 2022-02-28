@@ -105,8 +105,8 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth convex and a convex function
-    f = problem.declare_function(SmoothConvexFunction, param={'L': L})
-    h = problem.declare_function(ConvexFunction, param={})
+    f = problem.declare_function(SmoothConvexFunction, L=L)
+    h = problem.declare_function(ConvexFunction)
     F = f + h
 
     # Start by defining its unique optimal point xs = x_* and its function value Fs = F(x_*)
