@@ -44,8 +44,8 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
 
     **References**:
 
-    `[1] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
-    in Optimization: Vol. 5, No. 1-2.
+    `[1] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+    Acceleration Methods. Foundations and Trends in Optimization: Vol. 5, No. 1-2.
     <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:

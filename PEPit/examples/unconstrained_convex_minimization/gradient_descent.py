@@ -37,8 +37,9 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     **References**:
 
-    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145(1–2), 451–482.
+    `[1] Y. Drori, M. Teboulle (2014).
+    Performance of first-order methods for smooth convex minimization: a novel approach.
+    Mathematical Programming 145(1–2), 451–482.
     <https://arxiv.org/pdf/1206.3209.pdf>`_
 
     Args:

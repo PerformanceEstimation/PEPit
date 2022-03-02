@@ -381,7 +381,7 @@ class Function(object):
             list_of_functions_which_need_nothing = tuple_of_lists_of_functions[0]
             list_of_functions_which_need_something = tuple_of_lists_of_functions[1] + tuple_of_lists_of_functions[2]
 
-            # If no function needs something, we are done!
+            # If no function needs something, we are done! # TODO verify that the triplet is good!
             # If any function needs something, we build it
             if list_of_functions_which_need_something != list():
 

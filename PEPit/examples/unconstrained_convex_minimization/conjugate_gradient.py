@@ -54,7 +54,8 @@ def wc_conjugate_gradient(L, n, verbose=1):
     **References**:
     The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
 
-    `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+    `[1] Y. Drori and A. Taylor (2020).
+    Efficient first-order methods for convex minimization: a constructive approach.
     Mathematical Programming 184 (1), 183-220.
     <https://arxiv.org/pdf/1803.05676.pdf>`_
 
