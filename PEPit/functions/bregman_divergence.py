@@ -5,7 +5,7 @@ from PEPit.function import Function
 
 class BregmanDivergenceTo(Function):
     """
-    The :class:`BregmanDivergence` class is a special :class:`Function`.
+    The :class:`BregmanDivergenceTo` class is a special :class:`Function`.
     Its functions values and subgradients benefit from the closed form formulations
 
     .. math::
@@ -28,9 +28,6 @@ class BregmanDivergenceTo(Function):
     Hence, this class overwrites the `oracle`, `stationary_point` and `fixed_point` methods of :class:`Function`,
     and their is no complementary class constraint.
 
-    Bregman divergences are characterized by parameters :math:`h` and `x_0`,
-    hence can be instantiated as
-
     **References**:
     Definition and analyses of Bregman divergence can be found in [1].
 
@@ -39,25 +36,30 @@ class BregmanDivergenceTo(Function):
     Mathematical Programming: 1-43.
     <https://arxiv.org/pdf/1911.08510.pdf>`_
 
+    Bregman divergences are characterized by parameters :math:`h` and `x_0`,
+    hence can be instantiated as
+
     Example:
         >>> from PEPit import PEP, Point, Function
-        >>> from PEPit.functions import BregmanDivergence
+        >>> from PEPit.functions import BregmanDivergenceTo
         >>> problem = PEP()
         >>> h = Function()
         >>> x0 = Point()
-        >>> func = problem.declare_function(function_class=BregmanDivergence, param={'h': h, 'x0': x0})
+        >>> func = problem.declare_function(function_class=BregmanDivergenceTo, x0=x0, h=h)
 
     """
 
     def __init__(self,
-                 param,
+                 x0,
+                 h,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
 
         Args:
-            param (dict): contains the values h and x0
+            x0 (Point): Point which the Bregman divergence is computing on.
+            h (Function): The function the Bregman divergence is based on.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
             decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -71,9 +73,9 @@ class BregmanDivergenceTo(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=reuse_gradient)
 
-        # Store the function h and the point x0
-        self.h = param['h']
-        self.x0 = param['x0']
+        # Store the point x0 and the function h.
+        self.x0 = x0
+        self.h = h
 
         # Warn if h.reuse_gradient if False
         if not self.h.reuse_gradient:

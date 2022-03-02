@@ -1,6 +1,8 @@
 import numpy as np
 
 from PEPit.function import Function
+# TODO:
+#  - Add list of Bregman divergences to bound convex_indicator
 
 
 class ConvexIndicatorFunction(Function):
