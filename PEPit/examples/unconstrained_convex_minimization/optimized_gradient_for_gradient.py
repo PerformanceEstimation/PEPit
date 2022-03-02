@@ -92,7 +92,7 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    func = problem.declare_function(SmoothConvexFunction, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

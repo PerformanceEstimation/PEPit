@@ -102,7 +102,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    fn = [problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu}) for _ in range(n)]
+    fn = [problem.declare_function(SmoothStronglyConvexFunction, L=L, mu=mu) for _ in range(n)]
     func = np.mean(fn)
 
     # Start by defining its unique optimal point xs = x_*

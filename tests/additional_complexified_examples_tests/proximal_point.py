@@ -47,8 +47,8 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a convex function
-    convex_1 = problem.declare_function(ConvexFunction, param={})
-    convex_2 = problem.declare_function(ConvexFunction, param={})
+    convex_1 = problem.declare_function(ConvexFunction)
+    convex_2 = problem.declare_function(ConvexFunction)
     func = convex_1 + convex_2
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)

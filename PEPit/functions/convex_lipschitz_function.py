@@ -13,8 +13,9 @@ class ConvexLipschitzFunction(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.functions import ConvexLipschitzFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexLipschitzFunction, param={'M': 1})
+        >>> func = problem.declare_function(function_class=ConvexLipschitzFunction, M=1.)
 
     References:
         `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
@@ -25,17 +26,17 @@ class ConvexLipschitzFunction(Function):
     """
 
     def __init__(self,
-                 param,
+                 M=1.,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the value of M
+            M (float): The Lipschitz continuity parameter of self.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -48,7 +49,7 @@ class ConvexLipschitzFunction(Function):
                          reuse_gradient=reuse_gradient)
 
         # param M
-        self.M = param['M']
+        self.M = M
 
     def add_class_constraints(self):
         """

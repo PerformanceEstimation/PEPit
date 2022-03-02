@@ -88,11 +88,11 @@ def wc_no_lips_2(L, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare two convex functions and a convex function
-    d1 = problem.declare_function(ConvexFunction, param={}, reuse_gradient=True)
-    d2 = problem.declare_function(ConvexFunction, param={}, reuse_gradient=True)
+    d1 = problem.declare_function(ConvexFunction, reuse_gradient=True)
+    d2 = problem.declare_function(ConvexFunction, reuse_gradient=True)
     func1 = (d2 - d1) / 2
     h = (d1 + d2) / L / 2
-    func2 = problem.declare_function(ConvexIndicatorFunction, param={'D': np.inf})
+    func2 = problem.declare_function(ConvexIndicatorFunction, D=np.inf)
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2

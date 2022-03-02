@@ -89,8 +89,8 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
     problem = PEP()
 
     # Declare a convex and a smooth convex function.
-    func1 = problem.declare_function(ConvexFunction, param={})
-    func2 = problem.declare_function(SmoothConvexFunction, param={'L': L})
+    func1 = problem.declare_function(ConvexFunction)
+    func2 = problem.declare_function(SmoothConvexFunction, L=L)
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 

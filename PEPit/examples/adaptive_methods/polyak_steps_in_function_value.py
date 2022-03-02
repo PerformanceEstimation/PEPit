@@ -90,7 +90,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, verbose=1):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction, param={'L': L, 'mu': mu})
+    func = problem.declare_function(SmoothStronglyConvexFunction, L=L, mu=mu)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

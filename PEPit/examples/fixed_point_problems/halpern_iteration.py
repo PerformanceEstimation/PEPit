@@ -68,7 +68,7 @@ def wc_halpern_iteration(n, verbose=1):
     problem = PEP()
 
     # Declare a non expansive operator
-    A = problem.declare_function(LipschitzOperator, param={'L': 1.})
+    A = problem.declare_function(LipschitzOperator, L=1.)
 
     # Start by defining its unique optimal point xs = x_*
     xs, _, _ = A.fixed_point()

@@ -63,7 +63,11 @@ From now, you can declare functions thanks to the `declare_function` method.
 
 .. code-block::
 
-    func = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': 0, 'L': L})
+    from PEPit.functions import SmoothConvexFunction
+
+.. code-block::
+
+    func = problem.declare_function(SmoothConvexFunction, L=L)
 
 
 You can also define a new point with

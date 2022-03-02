@@ -14,7 +14,7 @@ class MonotoneOperator(Function):
     Example:
         >>> from PEPit import PEP
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=MonotoneOperator, param=dict())
+        >>> h = problem.declare_function(function_class=MonotoneOperator)
 
     References:
         [1] H. H. Bauschke and P. L. Combettes (2017).
@@ -24,7 +24,6 @@ class MonotoneOperator(Function):
     """
 
     def __init__(self,
-                 _,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
@@ -32,7 +31,7 @@ class MonotoneOperator(Function):
         Args:
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.

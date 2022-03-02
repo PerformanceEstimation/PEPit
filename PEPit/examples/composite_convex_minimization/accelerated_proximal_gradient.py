@@ -85,8 +85,8 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=1):
     problem = PEP()
 
     # Declare a strongly convex smooth function and a convex function
-    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
-    h = problem.declare_function(ConvexFunction, param={})
+    f = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    h = problem.declare_function(ConvexFunction)
     F = f + h
 
     # Start by defining its unique optimal point xs = x_* and its function value Fs = F(x_*)

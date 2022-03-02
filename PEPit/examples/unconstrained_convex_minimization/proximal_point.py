@@ -77,7 +77,7 @@ def wc_proximal_point(gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a convex function
-    func = problem.declare_function(ConvexFunction, param={})
+    func = problem.declare_function(ConvexFunction)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

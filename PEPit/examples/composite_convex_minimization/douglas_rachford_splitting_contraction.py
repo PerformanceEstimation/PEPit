@@ -99,8 +99,8 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=1)
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    func1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
-    func2 = problem.declare_function(ConvexFunction, param={})
+    func1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    func2 = problem.declare_function(ConvexFunction)
 
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2

@@ -15,8 +15,9 @@ class ConvexIndicatorFunction(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.functions import ConvexIndicatorFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': 1})
+        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, D=1)
 
     References:
         `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
@@ -27,17 +28,17 @@ class ConvexIndicatorFunction(Function):
     """
 
     def __init__(self,
-                 param,
+                 D=np.inf,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the values of D
+            D (float): Diameter of the support of self.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -49,7 +50,7 @@ class ConvexIndicatorFunction(Function):
                          reuse_gradient=reuse_gradient)
 
         # Store the diameter D in an attribute
-        self.D = param['D']
+        self.D = D
 
     def add_class_constraints(self):
         """

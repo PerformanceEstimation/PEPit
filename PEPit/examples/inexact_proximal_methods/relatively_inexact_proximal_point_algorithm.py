@@ -79,7 +79,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=1):
     problem = PEP()
 
     # Declare a convex function.
-    f = problem.declare_function(ConvexFunction, param={})
+    f = problem.declare_function(ConvexFunction)
 
     # Start by defining its unique optimal point xs = x_*
     xs = f.stationary_point()

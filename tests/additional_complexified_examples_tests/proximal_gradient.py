@@ -63,12 +63,12 @@ def wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare strongly convex smooth functions
-    smooth_strongly_convex_1 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu / 3, 'L': L / 3})
-    smooth_strongly_convex_2 = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu / 2, 'L': L / 2})
+    smooth_strongly_convex_1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu / 3, L=L / 3)
+    smooth_strongly_convex_2 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu / 2, L=L / 2)
 
     # Declare convex smooth functions
-    convex_1 = problem.declare_function(ConvexFunction, param={})
-    convex_2 = problem.declare_function(ConvexFunction, param={})
+    convex_1 = problem.declare_function(ConvexFunction)
+    convex_2 = problem.declare_function(ConvexFunction)
 
     f1 = (3 * smooth_strongly_convex_1 + 2 * smooth_strongly_convex_2) / 2
     f2 = 5 * convex_1 + 2 * convex_2

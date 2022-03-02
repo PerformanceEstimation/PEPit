@@ -90,8 +90,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(LipschitzStronglyMonotoneOperator, param={'L': L, 'mu': 0})
-    B = problem.declare_function(StronglyMonotoneOperator, param={'mu': mu})
+    A = problem.declare_function(LipschitzStronglyMonotoneOperator, L=L, mu=0)
+    B = problem.declare_function(StronglyMonotoneOperator, mu=mu)
 
     # Then define starting points w0 and w1
     w0 = problem.set_initial_point()

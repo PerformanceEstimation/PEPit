@@ -100,8 +100,8 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     problem = PEP()
 
     # Declare a convex and a smooth strongly convex function.
-    f = problem.declare_function(SmoothStronglyConvexFunction, param={'mu': mu, 'L': L})
-    g = problem.declare_function(ConvexFunction, param={})
+    f = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    g = problem.declare_function(ConvexFunction)
 
     # Define the function to optimize as the sum of func1 and func2
     F = f + g

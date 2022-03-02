@@ -24,8 +24,9 @@ class LipschitzStronglyMonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import LipschitzStronglyMonotoneOperator
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperator, param={'mu': .1, 'L': 1})
+        >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperator, mu=.1, L=1.)
 
     References:
         `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
@@ -36,17 +37,19 @@ class LipschitzStronglyMonotoneOperator(Function):
     """
 
     def __init__(self,
-                 param,
+                 mu,
+                 L=1.,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True):
         """
 
         Args:
-            param (dict): contains the values of mu and L.
+            mu (float): The strong monotonicity parameter.
+            L (float): The Lipschitz continuity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
-            decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
                                        Keys are :class:`Function` objects and values are their associated coefficients.
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
@@ -61,8 +64,8 @@ class LipschitzStronglyMonotoneOperator(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True)
         # Store L and mu
-        self.mu = param['mu']
-        self.L = param['L']
+        self.mu = mu
+        self.L = L
 
     def add_class_constraints(self):
         """

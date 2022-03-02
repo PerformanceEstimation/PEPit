@@ -83,8 +83,8 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth convex function and a convex indicator of rayon D
-    func1 = problem.declare_function(function_class=SmoothConvexFunction, param={'L': L})
-    func2 = problem.declare_function(function_class=ConvexIndicatorFunction, param={'D': D})
+    func1 = problem.declare_function(function_class=SmoothConvexFunction, L=L)
+    func2 = problem.declare_function(function_class=ConvexIndicatorFunction, D=D)
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
