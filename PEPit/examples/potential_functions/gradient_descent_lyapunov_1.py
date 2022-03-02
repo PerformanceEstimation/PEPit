@@ -110,7 +110,6 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
     else:
         theoretical_tau = None
 
-
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file:'

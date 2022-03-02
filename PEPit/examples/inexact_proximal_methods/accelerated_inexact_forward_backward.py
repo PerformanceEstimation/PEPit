@@ -156,4 +156,5 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
 
 
 if __name__ == "__main__":
+
     pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)

@@ -89,7 +89,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
 
     # Declare a monotone operator
     A = problem.declare_function(MonotoneOperator)
-    B = problem.declare_function(CocoerciveOperatorbeta=beta)
+    B = problem.declare_function(CocoerciveOperator, beta=beta)
     C = problem.declare_function(SmoothStronglyConvexFunction, L=L, mu=mu)
 
     # Then define the starting points w0 and w1

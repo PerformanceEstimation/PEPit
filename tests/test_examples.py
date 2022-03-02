@@ -216,7 +216,7 @@ class TestExamples(unittest.TestCase):
     def test_accelerated_douglas_rachford_splitting(self):
         mu, L, alpha = 0.1, 1, 0.9
 
-        n_list = range(1, 8)
+        n_list = range(1, 9)
         ref_pesto_bounds = [0.2027, 0.1929, 0.1839, 0.1737, 0.1627, 0.1514, 0.1400, 0.1289]
         for n in n_list:
             wc, _ = wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=self.verbose)
@@ -275,7 +275,7 @@ class TestExamples(unittest.TestCase):
 
     def test_three_operator_splitting(self):
         mu, L1, L3, alpha, theta = 0.1, 10, 1, 1, 1
-        n_list = range(1, 3)
+        n_list = range(1, 4)
 
         ref_pesto_bounds = [0.8304, 0.6895, 0.5726]
         for n in n_list:
@@ -349,7 +349,7 @@ class TestExamples(unittest.TestCase):
 
     def test_three_operator_splitting_operators(self):
         L, mu, beta, alpha, theta = 1, 0.1, 1, 1.3, 0.9
-        n_list = range(1, 1)
+        n_list = range(1, 2)
 
         ref_pesto_bounds = [0.7797]
         for n in n_list:
