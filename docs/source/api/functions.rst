@@ -46,3 +46,15 @@ Convex indicator
 .. autoclass:: PEPit.functions.ConvexIndicatorFunction
    :members:
    :show-inheritance:
+
+Squared distance
+----------------
+.. autoclass:: PEPit.functions.SquaredDistanceTo
+   :members:
+   :show-inheritance:
+
+Bregman divergence
+------------------
+.. autoclass:: PEPit.functions.BregmanDivergenceTo
+   :members:
+   :show-inheritance:
