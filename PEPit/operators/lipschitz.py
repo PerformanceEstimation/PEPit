@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -70,9 +71,13 @@ class LipschitzOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=reuse_gradient)
         # Store L
         self.L = L
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of Lipschitz operators is necessarily continuous. \n"
+                  "When setting L to infinity, you remove all the constraints on the operator.\033[0m")
 
     def add_class_constraints(self):
         """

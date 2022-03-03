@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
@@ -43,6 +44,11 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         # Inherit from SmoothStronglyConvexFunction as a special case of it with mu=0.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True,
+                         reuse_gradient=reuse_gradient,
                          mu=0,
                          L=L)
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"
+                  "When setting L to infinity, please use the class of convex functions (ConvexFunction),\n "
+                  "that allows to compute several subgradients at the same point each time one is required.\033[0m")

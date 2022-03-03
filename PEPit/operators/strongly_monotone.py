@@ -18,6 +18,7 @@ class StronglyMonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import StronglyMonotoneOperator
         >>> problem = PEP()
         >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, mu=.1)
 

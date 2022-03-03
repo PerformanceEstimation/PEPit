@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -62,10 +63,15 @@ class LipschitzStronglyMonotoneOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=reuse_gradient)
         # Store L and mu
         self.mu = mu
         self.L = L
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of Lipschitz strongly monotone operators is necessarily continuous.\n"
+                  "When setting L to infinity, please use the class of strongly monotone operators (StronglyMonotoneOperator),\n "
+                  "that allows to compute several values of the operator at the same point.\033[0m")
 
     def add_class_constraints(self):
         """
