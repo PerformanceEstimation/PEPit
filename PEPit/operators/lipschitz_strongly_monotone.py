@@ -63,7 +63,7 @@ class LipschitzStronglyMonotoneOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=True)
         # Store L and mu
         self.mu = mu
         self.L = L

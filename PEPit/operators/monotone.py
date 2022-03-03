@@ -13,6 +13,7 @@ class MonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import MonotoneOperator
         >>> problem = PEP()
         >>> h = problem.declare_function(function_class=MonotoneOperator)
 
