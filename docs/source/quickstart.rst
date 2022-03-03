@@ -69,6 +69,17 @@ From now, you can declare functions thanks to the `declare_function` method.
 
     func = problem.declare_function(SmoothConvexFunction, L=L)
 
+.. warning::
+    To enforce the same subgradient to be returned each time one is required, we introduced the parameter reuse_gradient.
+    Since smooth convex function are differentiable, this parameter is per default set to True.
+
+    When the same subgradient is used several times in the same code and when it is difficult to
+    to keep track on it (through proximal calls for instance), it may be usefull to set this parameter
+    to True even if the function is not differentiable. This helps reducing the number of constraints,
+    and improve the accuracy of the worst-case. See for instance the code for `improved interior method
+    <https://pepit.readthedocs.io/en/latest/examples/b.html#improved-interior-method>`_ or
+    `no Lips in Bregman divergence
+    <https://pepit.readthedocs.io/en/latest/examples/b.html#no-lips-in-bregman-divergence>`_.
 
 You can also define a new point with
 
