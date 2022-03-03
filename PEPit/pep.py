@@ -218,6 +218,8 @@ class PEP(object):
                                                            (rank of the Gram matrix).
                                                            Available heuristic:
                                                            - "trace": minimize :math:`Tr(G)`
+                                                           - "logdet{an integer n}": minimize :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                             using n iterations of local approximation problems.
                                                            Set to None to deactivate it (default value).
             eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
                                              (only used when "dimension_reduction_heuristic" is not None)
@@ -332,16 +334,34 @@ class PEP(object):
             # Add the constraint that the objective stay close to its actual value
             constraints_list.append(objective >= wc_value - tol_dimension_reduction)
 
-            # Translate the heuristic into cvxpy objective
+            # Translate the heuristic into cvxpy objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
                 heuristic = cp.trace(G)
-            else:
-                raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'."
-                                 "Got {}".format(dimension_reduction_heuristic))
+                prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
+                prob.solve(**kwargs)
+            elif dimension_reduction_heuristic.startswith("logdet"):
+                niter = int(dimension_reduction_heuristic[6:])
+                for i in range(1, 1+niter):
+                    W = np.linalg.inv(G.value + eig_threshold * np.eye(Point.counter))
+                    heuristic = cp.sum(cp.multiply(G, W))
+                    prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
+                    prob.solve(**kwargs)
 
-            # Solve the new problem
-            prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
-            prob.solve(**kwargs)
+                    # Print the estimated dimension after i dimension reduction steps
+                    if verbose and i < niter:
+                        print('(PEPit) Solver status: {} (solver: {});'
+                              ' objective value: {}'.format(prob.status,
+                                                            prob.solver_stats.solver_name,
+                                                            wc_value))
+                        eig_val, _ = np.linalg.eig(G.value)
+                        nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
+                        print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction steps'.format(
+                            nb_eigenvalues, eig_threshold, i))
+
+            else:
+                raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
+                                 "or \`logdet\` followed by an interger."
+                                 "Got {}".format(dimension_reduction_heuristic))
 
             # Store the actualized obtained value
             wc_value = objective.value[0]
