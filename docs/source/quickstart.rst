@@ -205,7 +205,7 @@ You can use it  by specifying
 
 .. code-block::
 
-    problem.solve(dimension_reduction=True, dimension_reduction_heuristic="trace")
+    problem.solve(dimension_reduction_heuristic="trace")
 
 Finding Lyapunov
 ^^^^^^^^^^^^^^^^

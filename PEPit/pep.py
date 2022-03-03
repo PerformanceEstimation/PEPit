@@ -201,8 +201,8 @@ class PEP(object):
         return cvxpy_variable
 
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
-              dimension_reduction=False, dimension_reduction_heuristic="trace",
-              eig_threshold=1e-5, tol_dimension_reduction=1e-5, **kwargs):
+              dimension_reduction_heuristic=None, eig_threshold=1e-5, tol_dimension_reduction=1e-5,
+              **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
 
@@ -214,17 +214,17 @@ class PEP(object):
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
-            dimension_reduction (bool): Activate heuristics for minimizing the dimension of the solution
-                                        (rank of the Gram matrix).
-            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension.
-                                                           (only used when "dimension_reduction" is set to True)
-                                                           Only "trace" available.
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
+                                                           (rank of the Gram matrix).
+                                                           Available heuristic:
+                                                           - "trace": minimize :math:`Tr(G)`
+                                                           Set to None to deactivate it (default value).
             eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
-                                             (only used when "dimension_reduction" is set to True)
+                                             (only used when "dimension_reduction_heuristic" is not None)
                                              The default value is 1e-5.
             tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
                                                        Precisely, the second problem minimizes "optimal_value - tol"
-                                                       (only used when "dimension_reduction" is set to True)
+                                                       (only used when "dimension_reduction_heuristic" is not None)
                                                        The default value is 1e-5.
             kwargs (keywords, optional): Additional CVXPY solver specific arguments.
 
@@ -314,7 +314,7 @@ class PEP(object):
         wc_value = prob.value
 
         # Perform a dimension reduction if required
-        if dimension_reduction:
+        if dimension_reduction_heuristic:
 
             # Print the estimated dimension before dimension reduction
             if verbose:

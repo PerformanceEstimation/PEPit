@@ -135,7 +135,7 @@ def wc_optimized_gradient(L, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction=True)
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="trace")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / 2 / theta_new ** 2
