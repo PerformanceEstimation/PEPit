@@ -66,7 +66,7 @@ class ConvexSupportFunction(Function):
 
                 xj, gj, fj = point_j
 
-                if xi == xj:
+                if point_i == point_j:
                     self.add_constraint(gi * xi - fi == 0)
                     if self.M != np.inf:
                         self.add_constraint(gi ** 2 <= self.M ** 2)

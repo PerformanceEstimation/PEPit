@@ -62,11 +62,11 @@ class CocoerciveOperator(Function):
         see, e.g., [1, Proposition 2].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
+        for point_i in self.list_of_points:
 
             xi, gi, fi = point_i
 
-            for j, point_j in enumerate(self.list_of_points):
+            for point_j in self.list_of_points:
 
                 xj, gj, fj = point_j
 

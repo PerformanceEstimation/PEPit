@@ -62,15 +62,15 @@ class SmoothStronglyConvexFunction(Function):
         Formulates the list of interpolation constraints for self (smooth strongly convex function); see [1, Theorem 4].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
+        for point_i in self.list_of_points:
 
             xi, gi, fi = point_i
 
-            for j, point_j in enumerate(self.list_of_points):
+            for point_j in self.list_of_points:
 
                 xj, gj, fj = point_j
 
-                if i != j:
+                if point_i != point_j:
 
                     # Interpolation conditions of smooth strongly convex functions class
                     self.add_constraint(fi - fj >=
