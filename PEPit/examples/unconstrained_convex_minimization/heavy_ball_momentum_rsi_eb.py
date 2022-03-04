@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import RsiEbOperator
 
 
-def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
+def wc_heavy_ball_momentum_rsi_eb(mu, L, alpha, beta, n, verbose=True):
     """
     Consider the convex minimization problem
 
@@ -27,18 +27,21 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
 
     **Theoretical guarantee**:
 
-    The **upper** guarantee obtained in [TODO] is
+    The **lower** guarantee obtained in [2, Theorem 2] is
 
-        #TODO
+    .. math:: \\| x_n - x_\\star \\|^2 \\leqslant (1 - 2\\gamma\\mu + L^2 \\gamma^2)^n \\|x_0-x_\\star\\|^2.
 
-    **References**: This methods was first introduce in [1, Section 2], and convergence upper bound was proven in [?].
+    **References**: This methods was first introduce in [1, Section 2],
+                    and convergence lower bound was proven in [2, Theorem 2].
 
     `[1] B.T. Polyak (1964). Some methods of speeding up the convergence of iteration method.
     URSS Computational Mathematics and Mathematical Physics.
     <https://www.sciencedirect.com/science/article/pii/0041555364901375>`_
 
-    `[2] TODO
-    <TODO>`_
+    `[2] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+    Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
+    arXiv 2203.00342.
+    <https://arxiv.org/pdf/2203.00342.pdf>`_
 
     Args:
         L (float): the EB parameter.
@@ -57,7 +60,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
         >>> L = 1.
         >>> alpha = mu/L**2
         >>> beta = 0
-        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum_rsi_eb(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=0)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -76,7 +79,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=True):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(RsiEbOperator, param={'mu': mu, 'L': L})
+    func = problem.declare_function(RsiEbOperator, mu=mu, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -121,16 +124,17 @@ if __name__ == "__main__":
 
     mu = 0.1
     L = 1.
-    nb = 50
+    nb = 30
 
     beta_list = list()
     alpha_list = list()
     pepit_taus = list()
     for beta in np.linspace(0, 1, nb):
         for alpha in np.linspace(0, 4 * mu / L**2, nb):
+            print(beta, alpha)
             beta_list.append(beta)
             alpha_list.append(alpha)
-            pepit_tau, _ = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=False)
+            pepit_tau, _ = wc_heavy_ball_momentum_rsi_eb(mu=mu, L=L, alpha=alpha, beta=beta, n=5, verbose=-1)
             pepit_taus.append(min(pepit_tau, 1))
     plt.scatter(alpha_list, beta_list, c=pepit_taus)
     plt.colorbar()

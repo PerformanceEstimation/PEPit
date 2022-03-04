@@ -11,6 +11,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradie
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex_decreasing
+from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method_rsi_eb
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_proximal_point
@@ -113,7 +114,7 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_gradient_descent_qg_convex_decreasing(L, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_gradient_exact_line_search(self):
         L, mu, n = 3, .1, 1
 
@@ -125,6 +126,14 @@ class TestExamples(unittest.TestCase):
         gamma = 1 / (np.sqrt(n + 1) * M)
 
         wc, theory = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_subgradient_method_rsi_eb(self):
+        mu = .1
+        L = 1
+        gamma = mu / L ** 2
+        n = 4
+        wc, theory = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=gamma, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_conjugate_gradient(self):

@@ -19,24 +19,30 @@ class RsiEbOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import RsiEbOperator
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=RsiEbOperator, param={'mu': .1, 'L': 1})
+        >>> h = problem.declare_function(function_class=RsiEbOperator, mu=.1, L=1)
 
     References:
-        `[1] TODO
-        <TODO>`_
+
+        `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+        Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
+        arXiv 2203.00342.
+        <https://arxiv.org/pdf/2203.00342.pdf>`_
 
     """
 
     def __init__(self,
-                 param,
+                 mu,
+                 L=1,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the values of mu and L.
+            mu (float): The restricted secant inequality parameter.
+            L (float): The upper error bound parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
             decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -53,9 +59,9 @@ class RsiEbOperator(Function):
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=reuse_gradient)
-        # Store L and mu
-        self.mu = param['mu']
-        self.L = param['L']
+        # Store mu and L
+        self.mu = mu
+        self.L = L
 
     def add_class_constraints(self):
         """

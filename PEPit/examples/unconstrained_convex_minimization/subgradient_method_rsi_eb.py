@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import RsiEbOperator
 
 
-def wc_sub_gradient_descent(mu, L, gamma, n, verbose=True):
+def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=True):
     """
     Consider the convex minimization problem
 
@@ -29,14 +29,16 @@ def wc_sub_gradient_descent(mu, L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    The **tight** theoretical guarantee can be found in [1, Theorem ?]:
+    The **tight** theoretical guarantee can be found in [1, Prop 1] (upper bound) and [1, Theorem 2] (lower bound):
 
     .. math:: \\| x_n - x_\\star \\|^2 \\leqslant (1 - 2\\gamma\\mu + L^2 \\gamma^2)^n \\|x_0-x_\\star\\|^2.
 
     **References**:
 
-    `[1] TODO.
-    <TODO>`_
+    `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+    Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
+    arXiv 2203.00342.
+    <https://arxiv.org/pdf/2203.00342.pdf>`_
 
     Args:
         mu (float): the rsi parameter
@@ -52,7 +54,7 @@ def wc_sub_gradient_descent(mu, L, gamma, n, verbose=True):
     Example:
         >>> mu = .1
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_sub_gradient_descent(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=0)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -71,7 +73,7 @@ def wc_sub_gradient_descent(mu, L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(RsiEbOperator, param={'mu': mu, 'L': L})
+    func = problem.declare_function(RsiEbOperator, mu=mu, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -110,4 +112,4 @@ if __name__ == "__main__":
 
     mu = .1
     L = 1
-    pepit_tau, theoretical_tau = wc_sub_gradient_descent(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=True)
+    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=0)

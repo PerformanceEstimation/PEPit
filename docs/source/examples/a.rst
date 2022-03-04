@@ -16,6 +16,11 @@ Subgradient method
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method
 
 
+Subgradient method on RSI- EB+
+------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method_rsi_eb
+
+
 Gradient descent with exact line search
 ---------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search
