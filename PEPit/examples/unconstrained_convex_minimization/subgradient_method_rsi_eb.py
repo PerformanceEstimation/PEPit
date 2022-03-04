@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import RsiEbOperator
 
 
-def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=True):
+def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -45,7 +45,11 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=True):
         L (float): the eb parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -93,7 +97,8 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=True):
     problem.set_performance_metric((x - xs) ** 2)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - 2*gamma*mu + gamma**2 * L**2)**n
