@@ -150,6 +150,15 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
 
     pepit_tau = problem.solve()
 
+.. warning::
+    Performance estimation problems consists in reformulating the problem as an optimization problem, convex in a Gram
+    matrix G, and in function values F. The dimension of G is directly related to the number of points at which
+    the gradients are evaluated, and the differentiability of the function.
+
+    We encourage the user to try to call the function and subgradient the least possible. High dimension of G could
+    reduce numerical precision, and make difficult the analysis of dual values.,In addition, be aware an error is
+    returned when calling solve() if the feasible set has an empty interior.
+
 
 Derive proofs and adversarial objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -217,6 +226,7 @@ You can use it  by specifying
 .. code-block::
 
     problem.solve(dimension_reduction_heuristic="trace")
+
 
 Finding Lyapunov
 ^^^^^^^^^^^^^^^^
