@@ -71,23 +71,27 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=6, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 15 constraint(s) added
+                 function 1 : 62 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
-        (PEPit) Postprocessing: applying trace heuristic. Currently 4 eigenvalue(s) > 1e-05 before resolve.
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.008452818570056392 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.5188511226295036
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 1e-05 after trace heuristic
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00812434035130368 after 1 dimension reduction steps
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00822223614657051 after 2 dimension reduction steps
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13992399875222272
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.008160594019368063 after dimension reduction
         *** Example file: worst-case performance of inexact gradient ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.518851 (f(x_0)-f_*)
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
-    
+            PEPit guarantee:	     f(x_n)-f_* <= 0.139924 (f(x_0)-f_*)
+            Theoretical guarantee:   f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
+
     """
 
     # Instantiate PEP
@@ -121,7 +125,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="trace")
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet3")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = ((Leps - meps) / (Leps + meps)) ** (2 * n)
@@ -138,4 +142,4 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=6, verbose=1)
