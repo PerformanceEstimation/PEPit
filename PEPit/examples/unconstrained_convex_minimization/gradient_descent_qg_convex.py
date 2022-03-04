@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexQGFunction
 
 
-def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
+def wc_gradient_descent_qg_convex(L, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -18,7 +18,8 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
-    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
+    In short, for given values of :math:`n`, :math:`L`,
+    and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
     value of :math:`f(x_n)-f_\\star` when :math:`||x_0 - x_\\star||^2 \\leqslant 1`.
 
     **Algorithm**:
@@ -29,21 +30,27 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     where :math:`\\gamma` is a step-size.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma < \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, ?]:  #TODO add theorem
+    When :math:`\\gamma < \\frac{1}{L}`, the **lower** theoretical guarantee can be found in [1, Theorem 2.2]:
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\max{\\frac{1}{2n L \\gamma + 1}, L \\gamma} \\|x_0-x_\\star\\|^2.
 
     **References**:
 
-    The detailed approach is available in [1, Theorem ?].  #TODO add theorem
+    The detailed approach is available in [1, Theorem 2.2].
 
-    #TODO add ref
+    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    Optimal first-order methods for convex functions with a quadratic upper bound.
+    arXiv.
 
     Args:
         L (float): the quadratic growth parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (bool): if True, print conclusion
+        verbose (int): Level of information details to print.
+                       -1: No verbose at all.
+                       0: This example's output.
+                       1: This example's output + PEPit information.
+                       2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -51,7 +58,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, verbose=True)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, verbose=1)
         (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
         (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -70,7 +77,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(ConvexQGFunction, param={'L': L})
+    func = problem.declare_function(ConvexQGFunction, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -91,13 +98,14 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
     problem.set_performance_metric(func.value(x) - fs)
 
     # Solve the PEP
-    pepit_tau = problem.solve(verbose=verbose)
+    pepit_verbose = max(verbose, 0)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / 2 * max(1 / (2 * n * L * gamma + 1), L * gamma)
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
         print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
@@ -109,4 +117,4 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=True):
 if __name__ == "__main__":
 
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, verbose=True)
+    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, verbose=1)

@@ -7,29 +7,33 @@ class ConvexQGFunction(Function):
     implementing the interpolation constraints of the class of QG^+ and convex functions.
 
     Attributes:
-        L (float): smoothness parameter
+        L (float): The quadratic upper bound parameter
 
     General QG^+ convex functions are characterized by the quadratic growth parameter `L`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.functions import ConvexQGFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexQGFunction, param={'L': 1})
+        >>> func = problem.declare_function(function_class=ConvexQGFunction, L=1)
 
     References:
-        TODO add ref
+
+    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    Optimal first-order methods for convex functions with a quadratic upper bound.
+    arXiv.
 
     """
 
     def __init__(self,
-                 param,
+                 L=1,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            param (dict): contains the value of L
+            L (float): The quadratic upper bound parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf.
             decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -44,12 +48,12 @@ class ConvexQGFunction(Function):
                          reuse_gradient=reuse_gradient)
 
         # Store L
-        self.L = param['L']
+        self.L = L
 
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (quadratically growing convex function);
-        see [1, Theorem ?]. ## TODO add ref
+        Formulates the list of interpolation constraints for self (quadratically maximally growing convex function);
+        see [1, Theorem 2.6].
         """
 
         for point_i in self.list_of_stationary_points:

@@ -96,6 +96,11 @@ Gradient descent for QG convex objective
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex
 
 
+Gradient descent with decreasing step sizes for QG convex objective
+-------------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex_decreasing
+
+
 Conjugate gradient for QG convex objective
 ------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient_qg_convex
