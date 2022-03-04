@@ -313,6 +313,11 @@ class PEP(object):
         # Store the obtaine value
         wc_value = prob.value
 
+        # Raise explicit error when wc_value in infinite
+        if wc_value == np.inf:
+            raise UserWarning("PEPit doesn't found any guarantee. "
+                              "The solution to the underlying SDP is infinite!")
+
         # Perform a dimension reduction if required
         if dimension_reduction:
 
