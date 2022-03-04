@@ -104,7 +104,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     theoretical_tau = (1 - 2*gamma*mu + gamma**2 * L**2)**n
 
     # Print conclusion if required
-    if verbose:
+    if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
