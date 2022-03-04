@@ -201,7 +201,7 @@ class PEP(object):
         return cvxpy_variable
 
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
-              dimension_reduction_heuristic=None, eig_threshold=1e-5, tol_dimension_reduction=1e-5,
+              dimension_reduction_heuristic=None, eig_regularization=1e-5, tol_dimension_reduction=1e-5,
               **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
@@ -218,12 +218,14 @@ class PEP(object):
                                                            (rank of the Gram matrix).
                                                            Available heuristic:
                                                            - "trace": minimize :math:`Tr(G)`
-                                                           - "logdet{an integer n}": minimize :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                           - "logdet{an integer n}": minimize
+                                                             :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
                                                              using n iterations of local approximation problems.
                                                            Set to None to deactivate it (default value).
-            eig_threshold (float, optional): The threshold under which we consider an eigenvalue to be 0.
-                                             (only used when "dimension_reduction_heuristic" is not None)
-                                             The default value is 1e-5.
+            eig_regularization (float, optional): The regularization we use to make
+                                                  :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
+                                                  (only used when "dimension_reduction_heuristic" is not None)
+                                                  The default value is 1e-5.
             tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction_heuristic" is not None)
@@ -324,11 +326,10 @@ class PEP(object):
         if dimension_reduction_heuristic:
 
             # Print the estimated dimension before dimension reduction
+            nb_eigenvalues, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
             if verbose:
-                eig_val, _ = np.linalg.eig(G.value)
-                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
-                                                                                                        eig_threshold))
+                                                                                                        eig_regularization))
                 print('(PEPit) Calling SDP solver')
 
             # Add the constraint that the objective stay close to its actual value
@@ -342,21 +343,20 @@ class PEP(object):
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
                 for i in range(1, 1+niter):
-                    W = np.linalg.inv(G.value + eig_threshold * np.eye(Point.counter))
+                    W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                     heuristic = cp.sum(cp.multiply(G, W))
                     prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
                     prob.solve(**kwargs)
 
                     # Print the estimated dimension after i dimension reduction steps
+                    nb_eigenvalues, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
                     if verbose and i < niter:
                         print('(PEPit) Solver status: {} (solver: {});'
                               ' objective value: {}'.format(prob.status,
                                                             prob.solver_stats.solver_name,
                                                             wc_value))
-                        eig_val, _ = np.linalg.eig(G.value)
-                        nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
                         print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction steps'.format(
-                            nb_eigenvalues, eig_threshold, i))
+                            nb_eigenvalues, eig_regularization, i))
 
             else:
                 raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
@@ -368,14 +368,13 @@ class PEP(object):
 
             # Print the estimated dimension after dimension reduction
             if verbose:
+                nb_eigenvalues, _ = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
                 print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
-                eig_val, _ = np.linalg.eig(G.value)
-                nb_eigenvalues = len([element for element in eig_val if element > eig_threshold])
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
-                                                                                                       eig_threshold))
+                                                                                                       eig_regularization))
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
@@ -390,6 +389,39 @@ class PEP(object):
         else:
             # Return the value of the minimal performance metric
             return wc_value
+
+    @staticmethod
+    def get_nb_eigenvalues_and_corrected_matrix(M):
+        """
+        Compute the number of True non zero eigenvalues of M, and recompute M with corrected eigenvalues.
+
+        Args:
+            M (nd.array): a 2 dimensional array, supposedly symmetric.
+
+        Returns:
+            nb_eigenvalues (int): The number of eigenvalues of M estimated to be strictly positive zero.
+            corrected_S (nd.array): Updated M with zero eigenvalues instead of small ones.
+
+        """
+
+        # Symmetrize M to get rid of small computation errors.
+        S = (M + M.T) / 2
+
+        # Get eig_val and eig_vec.
+        eig_val, eig_vec = np.linalg.eig(S)
+
+        # Get the right threshold to use.
+        eig_threshold = max(np.max(eig_val)/1e3, 2 * np.max(-eig_val))
+
+        # Correct eig_val accordingly.
+        non_zero_eig_vals = eig_val >= eig_threshold
+        nb_eigenvalues = int(np.sum(non_zero_eig_vals))
+        corrected_eig_val = non_zero_eig_vals * eig_val
+
+        # Recompute M (or S) accordingly.
+        corrected_S = eig_vec @ np.diag(corrected_eig_val) @ eig_vec.T
+
+        return nb_eigenvalues, corrected_S
 
     def _eval_points_and_function_values(self, F_value, G_value, verbose):
         """
