@@ -86,15 +86,15 @@ class TestPEP(unittest.TestCase):
         pepit_tau = self.problem.solve(verbose=0)
 
         # Return the full problem and verify the problem value is still pepit_tau
-        prob = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction=False)
+        prob = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
 
         # Return the full tracetrick problem and verify that its value is not pepit_tau anymore but the trace value
-        prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction=True)
+        prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(prob2.value, 1 / 2, delta=10 ** -2)
 
         # Verify that, even with tracetrick, the solve method returns the worst-case performance, not the trace value.
-        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction=True)
+        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(pepit_tau, pepit_tau2, delta=10 ** -2)
 
     def tearDown(self):
