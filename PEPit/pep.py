@@ -201,7 +201,7 @@ class PEP(object):
         return cvxpy_variable
 
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-5, tol_dimension_reduction=1e-5,
+              dimension_reduction_heuristic=None, eig_regularization=1e-4, tol_dimension_reduction=1e-5,
               **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
@@ -326,10 +326,10 @@ class PEP(object):
         if dimension_reduction_heuristic:
 
             # Print the estimated dimension before dimension reduction
-            nb_eigenvalues, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+            nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
             if verbose:
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
-                                                                                                        eig_regularization))
+                                                                                                        eig_threshold))
                 print('(PEPit) Calling SDP solver')
 
             # Add the constraint that the objective stay close to its actual value
@@ -349,14 +349,14 @@ class PEP(object):
                     prob.solve(**kwargs)
 
                     # Print the estimated dimension after i dimension reduction steps
-                    nb_eigenvalues, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
                     if verbose and i < niter:
                         print('(PEPit) Solver status: {} (solver: {});'
                               ' objective value: {}'.format(prob.status,
                                                             prob.solver_stats.solver_name,
                                                             wc_value))
                         print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction steps'.format(
-                            nb_eigenvalues, eig_regularization, i))
+                            nb_eigenvalues, eig_threshold, i))
 
             else:
                 raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
@@ -368,13 +368,13 @@ class PEP(object):
 
             # Print the estimated dimension after dimension reduction
             if verbose:
-                nb_eigenvalues, _ = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+                nb_eigenvalues, eig_threshold, _ = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
                 print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
-                                                                                                       eig_regularization))
+                                                                                                       eig_threshold))
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
@@ -400,6 +400,7 @@ class PEP(object):
 
         Returns:
             nb_eigenvalues (int): The number of eigenvalues of M estimated to be strictly positive zero.
+            eig_threshold (float): The threshold used to determine whether an eigenvalue is 0 or not.
             corrected_S (nd.array): Updated M with zero eigenvalues instead of small ones.
 
         """
@@ -421,7 +422,7 @@ class PEP(object):
         # Recompute M (or S) accordingly.
         corrected_S = eig_vec @ np.diag(corrected_eig_val) @ eig_vec.T
 
-        return nb_eigenvalues, corrected_S
+        return nb_eigenvalues, eig_threshold, corrected_S
 
     def _eval_points_and_function_values(self, F_value, G_value, verbose):
         """
