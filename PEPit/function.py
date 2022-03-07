@@ -547,6 +547,21 @@ class Function(object):
         # Return the function value
         return f
 
+    def __call__(self, point):
+        """
+        Call the method `value` on point.
+
+        Args:
+            point (Point): any point.
+
+        Returns:
+            Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
+
+        """
+
+        # Call the method value on point
+        return self.value(point=point)
+
     def stationary_point(self, return_gradient_and_function_value=False):
         """
         Create a new stationary point, as well as its zero gradient and its function value.
