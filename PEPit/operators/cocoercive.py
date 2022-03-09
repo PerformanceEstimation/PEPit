@@ -57,7 +57,7 @@ class CocoerciveOperator(Function):
         # Store the beta parameter
         self.beta = beta
 
-        if self.beta == np.inf:
+        if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
                   "When setting beta to infinity, please use the class of monotone operators (MonotoneOperator), \n "
                   "that allows to compute several values of the operator at the same point.\033[0m")
