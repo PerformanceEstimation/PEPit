@@ -59,7 +59,7 @@ class CocoerciveOperator(Function):
 
         if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
-                  "When setting beta to infinity, please use the class of monotone operators (MonotoneOperator), \n "
+                  "When setting beta to 0, please use the class of monotone operators (MonotoneOperator), \n "
                   "that allows to compute several values of the operator at the same point.\033[0m")
 
     def add_class_constraints(self):
