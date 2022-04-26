@@ -31,6 +31,10 @@ We kindly ask you follow common guidelines, namely that the provided code:
 
 - is well covered by tests.
 
+- is aligned with the documentation.
+
+- is also mentioned in the ``whatsnew'' section of the documentation.
+
 Adding a new function or operator class
 ---------------------------------------
 
