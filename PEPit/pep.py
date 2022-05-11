@@ -315,8 +315,8 @@ class PEP(object):
 
         # Raise explicit error when wc_value in infinite
         if wc_value == np.inf:
-            raise UserWarning("PEPit doesn't found any guarantee. "
-                              "The solution to the underlying SDP is infinite!")
+            raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
+                              "It seems that the optimal value of your problem is unbounded.")
 
         # Perform a dimension reduction if required
         if dimension_reduction:
