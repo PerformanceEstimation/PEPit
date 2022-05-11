@@ -79,7 +79,7 @@ def wc_bregman_proximal_point(gamma, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func1.stationary_point()
-    fs = func1.value(xs)
+    fs = func1(xs)
     gf2s, f2s = func2.oracle(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0

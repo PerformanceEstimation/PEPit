@@ -94,14 +94,14 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
     # as well as corresponding inexact gradient and function value g0 and f0
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between f0 and f_*
-    problem.set_initial_condition(func.value(x0) - fs <= 1)
+    problem.set_initial_condition(func(x0) - fs <= 1)
 
     # Run n steps of the inexact gradient method
     Leps = (1 + epsilon) * L
@@ -113,7 +113,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=1):
         x, dx, fx = inexact_gradient_step(x, func, gamma=gamma, epsilon=epsilon, notion='relative')
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func.value(x) - fs)
+    problem.set_performance_metric(func(x) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

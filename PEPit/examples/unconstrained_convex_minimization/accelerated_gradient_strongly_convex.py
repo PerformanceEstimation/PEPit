@@ -86,13 +86,13 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is a well-chosen distance between x0 and x^*
-    problem.set_initial_condition(func.value(x0) - fs + mu / 2 * (x0 - xs) ** 2 <= 1)
+    problem.set_initial_condition(func(x0) - fs + mu / 2 * (x0 - xs) ** 2 <= 1)
 
     # Run n steps of the fast gradient method
     kappa = mu / L
@@ -104,7 +104,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
         y = x_new + (1 - sqrt(kappa)) / (1 + sqrt(kappa)) * (x_new - x_old)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func.value(x_new) - fs)
+    problem.set_performance_metric(func(x_new) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

@@ -81,7 +81,7 @@ and give a name to the value of `func` on `x0`
 
 .. code-block::
 
-    f0 = func.value(x0)
+    f0 = func(x0)
 
 
 as well as the (sub)gradient of `func` on `x0`
@@ -130,7 +130,7 @@ as well as performance metrics like
 
 .. code-block::
 
-    problem.set_performance_metric(func.value(x) - fs)
+    problem.set_performance_metric(func(x) - fs)
 
 
 Finally, you can ask PEPit to solve the system for you and return the worst-case guarantee of your method.
@@ -166,7 +166,7 @@ You can also ask for gradients and function values
 .. code-block::
 
     print(func.gradient(x).value)
-    print(func.value(x).value)
+    print(func(x).value)
 
 Recovering the values of all the points,
 gradients and function values at optimum allows you

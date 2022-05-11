@@ -95,11 +95,11 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding function value f0
     x0 = problem.set_initial_point()
-    f0 = func.value(x0)
+    f0 = func(x0)
 
     # Set the initial constraint that is the distance between f(x0) and f(x^*)
     problem.set_initial_condition((f0 - fs) <= 1)
@@ -114,7 +114,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
         x_new = x_next
 
     # Set the performance metric to the final distance to optimum
-    problem.set_performance_metric(func.value(x_new) - fs)
+    problem.set_performance_metric(func(x_new) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

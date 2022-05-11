@@ -94,7 +94,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value gn and fn
     xn = problem.set_initial_point()

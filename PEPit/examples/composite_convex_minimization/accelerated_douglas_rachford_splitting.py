@@ -102,13 +102,13 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
     g1s, _ = func1.oracle(xs)
     g2s, _ = func2.oracle(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
-    f0 = func.value(x0)
+    f0 = func(x0)
 
     # Set the parameters of the scheme
     theta = (1 - alpha * L) / (1 + alpha * L)
@@ -131,7 +131,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
             u[i + 1] = w[i + 1]
 
     # Set the performance metric to the final distance in function values to optimum
-    problem.set_performance_metric(func2.value(y) + fy - fs)
+    problem.set_performance_metric(func2(y) + fy - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
