@@ -51,10 +51,6 @@ class RsiEbOperator(Function):
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
 
-        Note:
-            Lipschitz continuous strongly monotone operators are necessarily continuous,
-            hence `reuse_gradient` is set to True.
-
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
