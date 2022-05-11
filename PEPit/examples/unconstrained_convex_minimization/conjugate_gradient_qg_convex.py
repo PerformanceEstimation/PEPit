@@ -32,14 +32,19 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
 
     **Theoretical guarantee**:
 
-        The **tight** guarantee obtained in [1, Theorem 2.3] (lower) and [1, Theorem 2.4] (upper) is
+        The **tight** guarantee obtained in [2, Theorem 2.3] (lower) and [2, Theorem 2.4] (upper) is
 
         .. math:: f(x_n) - f_\\star \\leqslant \\frac{L}{2 (n + 1)} \\|x_0-x_\\star\\|^2.
 
     **References**:
-    The detailed approach is available in [1, Theorem 2.4].
+    The detailed approach (based on convex relaxations) is available in [1, Corollary 6],
+    and the result provided in [2, Theorem 2.4].
 
-    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+    Mathematical Programming 184 (1), 183-220.
+    <https://arxiv.org/pdf/1803.05676.pdf>`_
+
+    [2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
     Optimal first-order methods for convex functions with a quadratic upper bound.
     arXiv.
 
