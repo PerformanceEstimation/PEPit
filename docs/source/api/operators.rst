@@ -34,3 +34,9 @@ Cocoercive
 .. autoclass:: PEPit.operators.CocoerciveOperator
    :members:
    :show-inheritance:
+
+RSI EB
+------
+.. autoclass:: PEPit.operators.RsiEbOperator
+   :members:
+   :show-inheritance:
