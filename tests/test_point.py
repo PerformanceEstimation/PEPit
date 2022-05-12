@@ -1,5 +1,6 @@
 
 import unittest
+import numpy as np
 
 from PEPit.point import Point
 from PEPit.expression import Expression
@@ -31,7 +32,7 @@ class TestPoint(unittest.TestCase):
 
     def test_linear_combination(self):
 
-        new_point = - self.A + 2 * self.B - self.B / 5
+        new_point = - self.A * 1. + 2 * self.B - self.B / 5
 
         self.assertIsInstance(new_point, Point)
         self.assertEqual(new_point.decomposition_dict, {self.A: -1, self.B: 9 / 5})
