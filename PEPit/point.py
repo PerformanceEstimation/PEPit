@@ -228,8 +228,6 @@ class Point(object):
             TypeError: if provided `other` is not a scalar value.
 
         """
-        # Verify the type of denominator
-        assert isinstance(denominator, float) or isinstance(denominator, int)
 
         # P / v = P * (1/v)
         return self.__rmul__(1 / denominator)
