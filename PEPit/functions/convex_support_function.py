@@ -3,21 +3,21 @@ import numpy as np
 from PEPit.function import Function
 
 
-class ConvexIndicatorFunction(Function):
+class ConvexSupportFunction(Function):
     """
-    The :class:`ConvexIndicatorFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing interpolation constraints for the class of closed convex indicator functions.
+    The :class:`ConvexSupportFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing interpolation constraints for the class of closed convex support functions.
 
     Attributes:
-        D (float): upper bound on the diameter of the feasible set
+        M (float): upper bound on the Lipschitz constant
 
-    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
+    Convex support functions are characterized by a parameter `M`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.functions import ConvexIndicatorFunction
+        >>> from PEPit.functions import ConvexSupportFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, D=1)
+        >>> func = problem.declare_function(function_class=ConvexSupportFunction, M=1)
 
     References:
         `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
@@ -28,14 +28,14 @@ class ConvexIndicatorFunction(Function):
     """
 
     def __init__(self,
-                 D=np.inf,
+                 M=np.inf,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False):
         """
 
         Args:
-            D (float): Diameter of the support of self.
+            M (float): Lipschitz constant of self.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -49,13 +49,13 @@ class ConvexIndicatorFunction(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=reuse_gradient)
 
-        # Store the diameter D in an attribute
-        self.D = D
+        # Store the Lipschitz constant in an attribute
+        self.M = M
 
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (closed convex indicator function),
-        see [1, Theorem 3.6].
+        Formulates the list of interpolation constraints for self (closed convex support function),
+        see [1, Corollary 3.7].
         """
 
         for i, point_i in enumerate(self.list_of_points):
@@ -67,9 +67,9 @@ class ConvexIndicatorFunction(Function):
                 xj, gj, fj = point_j
 
                 if point_i == point_j:
-                    self.add_constraint(fi == 0)
+                    self.add_constraint(gi * xi - fi == 0)
+                    if self.M != np.inf:
+                        self.add_constraint(gi ** 2 <= self.M ** 2)
 
                 else:
-                    self.add_constraint(gi * (xj - xi) <= 0)
-                    if self.D != np.inf:
-                        self.add_constraint((xi - xj) ** 2 <= self.D ** 2)
+                    self.add_constraint(xj * (gi - gj) <= 0)

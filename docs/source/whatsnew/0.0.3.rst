@@ -20,3 +20,5 @@ are now integers, allowing a bigger granularity.
 - The parameters that caracterize a function class must be provided directly as an argument of this function class,
 not through the dict "param" anymore.
 Example: `PEP.declare_function(function_class=SmoothStronglyConvexFunction, mu=.1, L=1.)`
+
+- Convex support functions have been added as a new function class.

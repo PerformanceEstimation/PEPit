@@ -46,3 +46,9 @@ Convex indicator
 .. autoclass:: PEPit.functions.ConvexIndicatorFunction
    :members:
    :show-inheritance:
+
+Convex support functions
+------------------------
+.. autoclass:: PEPit.functions.ConvexSupportFunction
+   :members:
+   :show-inheritance:
