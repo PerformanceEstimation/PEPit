@@ -313,6 +313,11 @@ class PEP(object):
         # Store the obtaine value
         wc_value = prob.value
 
+        # Raise explicit error when wc_value in infinite
+        if wc_value == np.inf:
+            raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
+                              "It seems that the optimal value of your problem is unbounded.")
+
         # Perform a dimension reduction if required
         if dimension_reduction_heuristic:
 
