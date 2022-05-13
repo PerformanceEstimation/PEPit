@@ -34,11 +34,13 @@ class TestExpression(unittest.TestCase):
 
     def test_linear_combination(self):
 
-        new_expression = - self.inner_product + 2 * self.function_value - self.function_value / 5
+        new_expression = 1 + 2 * (4 - (- self.inner_product * 3) - 5
+                                  + 2 * self.function_value - self.function_value / 5 + 2)
 
         self.assertIsInstance(new_expression, Expression)
-        self.assertEqual(new_expression.decomposition_dict, {(self.point1, self.point2): -1,
-                                                             self.function_value: 9 / 5})
+        self.assertEqual(new_expression.decomposition_dict, {1: 3,
+                                                             (self.point1, self.point2): 6,
+                                                             self.function_value: 18 / 5})
 
     def test_constraint(self):
 

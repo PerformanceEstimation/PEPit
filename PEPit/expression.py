@@ -113,7 +113,8 @@ class Expression(object):
             other (Expression or int or float): any other :class:`Expression` object or scalar constant.
 
         Returns:
-            self + other (Expression): The sum of the 2 :class:`Expression` objects.
+            self + other (Expression): The sum of the 2 :class:`Expression` objects
+                                       or of an :class:`Expression` and a scalar.
 
         Raises:
             TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
@@ -133,6 +134,25 @@ class Expression(object):
         # Create and return the newly created Expression
         return Expression(is_leaf=False, decomposition_dict=merged_decomposition_dict)
 
+    def __radd__(self, other):
+        """
+        Add 2 :class:`Expression` objects together, leading to a new :class:`Expression` object.
+        Note an :class:`Expression` can also be added to a python `float` or `int`.
+
+        Args:
+            other (Expression or int or float): any other :class:`Expression` object or scalar constant.
+
+        Returns:
+            other + self (Expression): The sum of the 2 :class:`Expression` objects
+                                       or of an :class:`Expression` and a scalar.
+
+        Raises:
+            TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
+
+        """
+
+        return self.__add__(other=other)
+
     def __sub__(self, other):
         """
         Subtract 2 :class:`Expression` objects together, leading to a new :class:`Expression` object.
@@ -148,8 +168,28 @@ class Expression(object):
             TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
 
         """
-        # A-B = A+(-B)
+        # A - B = A + (-B)
         return self.__add__(-other)
+
+    def __rsub__(self, other):
+        """
+        Subtract 2 :class:`Expression` objects together, leading to a new :class:`Expression` object.
+        Note an :class:`Expression` can also be subtracted from a python `float` or `int`.
+
+        Args:
+            other (Expression or int or float): any other :class:`Expression` object or scalar constant.
+
+        Returns:
+            other - self (Expression): the difference between the 2 :class:`Expression` objects
+                                       or between a scalar and an :class:`Expression`.
+
+        Raises:
+            TypeError: if provided `other` is neither an :class:`Expression` nor a scalar value.
+
+        """
+
+        # B - A = -(A - B)
+        return - self.__sub__(other=other)
 
     def __neg__(self):
         """
@@ -160,7 +200,7 @@ class Expression(object):
 
         """
 
-        # -A = (-1)*A
+        # -A = (-1) * A
         return self.__rmul__(other=-1)
 
     def __rmul__(self, other):
