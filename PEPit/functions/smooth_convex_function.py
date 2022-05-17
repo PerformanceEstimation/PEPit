@@ -50,5 +50,6 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"
-                  "When setting L to infinity, please use the class of convex functions (ConvexFunction),\n "
-                  "that allows to compute several subgradients at the same point each time one is required.\033[0m")
+                  "To instantiate a convex function, please avoid using the class SmoothConvexFunction with \n"
+                  "L == infinity. Instead, please use the class ConvexFunction that allows to compute several \n"
+                  "subgradients at the same point each time one is required.\033[0m")

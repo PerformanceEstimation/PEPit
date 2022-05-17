@@ -56,7 +56,9 @@ class SmoothFunction(Function):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth functions is necessarily differentiable. \n"
-                  "When setting L to infinity, you remove all the constraints on the functions.\033[0m")
+                  "To instantiate a function, please avoid using the class SmoothFunction with \n"
+                  "L == infinity. Instead, please use the class Function that allows to compute several \n"
+                  "subgradients at the same point each time one is required.\033[0m")
 
     def add_class_constraints(self):
         """

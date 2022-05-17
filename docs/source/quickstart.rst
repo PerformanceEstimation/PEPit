@@ -155,9 +155,9 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
     matrix G, and in function values F. The dimension of G is directly related to the number of points at which
     the gradients are evaluated, and the differentiability of the function.
 
-    We encourage the user to try to call the function and subgradient the least possible. High dimension of G could
-    reduce numerical precision, and make difficult the analysis of dual values.,In addition, be aware an error is
-    returned when calling solve() if the feasible set has an empty interior.
+    We encourage the users to perform as few function and subgradient evaluations as possible. Indeed, high dimensional
+    SDPs are in general more difficult to solve to high precision, and the probability of introducing difficult
+    constraints increases (in particular, SDP solvers might not be able to deal with problems having an empty interior).
 
 
 Derive proofs and adversarial objectives
