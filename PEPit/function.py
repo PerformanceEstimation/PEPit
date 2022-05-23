@@ -104,7 +104,7 @@ class Function(object):
             self.counter = None
 
         # Initialize list of points and constraints.
-        # An optimal point will be stored in the 2 lists "list_of_optimal_points" and "list_of_points".
+        # An optimal point will be stored in the 2 lists "list_of_stationary_points" and "list_of_points".
         self.list_of_stationary_points = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
