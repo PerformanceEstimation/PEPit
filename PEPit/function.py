@@ -612,3 +612,81 @@ class Function(object):
 
         # Return the aforementioned triplet
         return x, x, fx
+
+
+class Operator(Function):
+
+    def __add__(self, other):
+        """
+        Add 2 :class:`Function` objects together, leading to a new :class:`Function` object.
+
+        Args:
+            other (Function): any other :class:`Function` object.
+
+        Returns:
+            self + other (Function): The sum of the 2 :class:`Function` objects.
+
+        Raises:
+            AssertionError: if provided `other` is not a :class:`Function`.
+
+        """
+
+        # Verify other is a function
+        assert isinstance(other, Function)
+
+        # Merge decomposition dicts of self and other
+        merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
+
+        # Create and return the newly created function
+        return Operator(is_leaf=False,
+                        decomposition_dict=merged_decomposition_dict,
+                        reuse_gradient=self.reuse_gradient and other.reuse_gradient)
+
+    def __rmul__(self, other):
+        """
+        Multiply this :class:`Function` with a scalar value, leading to a new :class:`Function` object.
+
+        Args:
+            other (int or float): any scalar value.
+
+        Returns:
+            other * self (Function): The product of this function and `other`.
+
+        Raises:
+            AssertionError: if provided `other` is not a python scalar value.
+
+        """
+
+        # Verify other is a scalar constant
+        assert isinstance(other, float) or isinstance(other, int)
+
+        # Multiply uniformly self's decomposition_dict by other
+        new_decomposition_dict = dict()
+        for key, value in self.decomposition_dict.items():
+            new_decomposition_dict[key] = value * other
+
+        # Create and return the newly created Function
+        return Operator(is_leaf=False,
+                        decomposition_dict=new_decomposition_dict,
+                        reuse_gradient=self.reuse_gradient)
+
+    def value(self, point):
+        """
+        Return the function value of this :class:`Function` on point.
+
+        Args:
+            point (Point): any point.
+
+        Returns:
+            Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
+
+        """
+
+        # Verify point is a Point
+        assert isinstance(point, Point)
+
+        # Call subgradient
+        g = self.subgradient(point=point)
+
+        # Return the function value
+        return g

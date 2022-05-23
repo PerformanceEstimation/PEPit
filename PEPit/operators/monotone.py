@@ -1,7 +1,7 @@
-from PEPit.function import Function
+from PEPit.function import Operator
 
 
-class MonotoneOperator(Function):
+class MonotoneOperator(Operator):
     """
     The :class:`MonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
     implementing interpolation constraints for the class of maximally monotone operators.

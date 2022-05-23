@@ -1,7 +1,7 @@
-from PEPit.function import Function
+from PEPit.function import Operator
 
 
-class LipschitzOperator(Function):
+class LipschitzOperator(Operator):
     """
     The :class:`LipschitzOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
     implementing the interpolation constraints of the class of Lipschitz continuous operators.

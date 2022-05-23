@@ -1,7 +1,7 @@
-from PEPit.function import Function
+from PEPit.function import Operator
 
 
-class StronglyMonotoneOperator(Function):
+class StronglyMonotoneOperator(Operator):
     """
     The :class:`StronglyMonotoneOperator` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing interpolation constraints of the class of strongly monotone

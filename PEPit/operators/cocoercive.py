@@ -1,7 +1,7 @@
-from PEPit.function import Function
+from PEPit.function import Operator
 
 
-class CocoerciveOperator(Function):
+class CocoerciveOperator(Operator):
     """
     The :class:`CocoerciveOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
     implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.

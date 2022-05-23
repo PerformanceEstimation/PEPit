@@ -1,6 +1,6 @@
 from .constraint import Constraint
 from .expression import Expression
-from .function import Function
+from .function import Function, Operator
 from .pep import PEP
 from .point import Point
 
@@ -11,7 +11,7 @@ __all__ = ['examples',
            'tools',
            'constraint', 'Constraint',
            'expression', 'Expression',
-           'function', 'Function',
+           'function', 'Function',  'Operator',
            'pep', 'PEP',
            'point', 'Point',
            ]

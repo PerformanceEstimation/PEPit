@@ -1,7 +1,7 @@
-from PEPit.function import Function
+from PEPit.function import Operator
 
 
-class LipschitzStronglyMonotoneOperator(Function):
+class LipschitzStronglyMonotoneOperator(Operator):
     """
     The :class:`LipschitzStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
