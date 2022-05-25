@@ -632,7 +632,7 @@ class Operator(Function):
         """
 
         # Verify other is a function
-        assert isinstance(other, Function)
+        assert isinstance(other, Operator)
 
         # Merge decomposition dicts of self and other
         merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
