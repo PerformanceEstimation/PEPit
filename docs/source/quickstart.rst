@@ -155,9 +155,8 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
     matrix G, and in function values F. The dimension of G is directly related to the number of points at which
     the gradients are evaluated, and the differentiability of the function.
 
-    We encourage the users to perform as few function and subgradient evaluations as possible. Indeed, high dimensional
-    SDPs are in general more difficult to solve to high precision, and the probability of introducing difficult
-    constraints increases (in particular, SDP solvers might not be able to deal with problems having an empty interior).
+    We encourage the users to perform as few function and subgradient evaluations as possible, as the size of the
+    corresponding SDP grows with the number of subgradient/function evaluations at different points.
 
 
 Derive proofs and adversarial objectives
