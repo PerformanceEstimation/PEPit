@@ -1,3 +1,5 @@
+from warnings import warn
+
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -686,7 +688,22 @@ class Operator(Function):
         assert isinstance(point, Point)
 
         # Call subgradient
-        g = self.subgradient(point=point)
+        g = super().subgradient(point=point)
 
         # Return the function value
         return g
+
+    def gradient(self, point):
+
+        warn('The gradient method of an operator is deprecated.'
+             ' Please prefer using the value method'
+             ' or simply calling \"your operator(input argument)\"', DeprecationWarning, stacklevel=2)
+
+        return super().gradient(point=point)
+
+    def subgradient(self, point):
+        warn('The subgradient method of an operator is deprecated.'
+             ' Please prefer using the value method'
+             ' or simply calling \"your operator(input argument)\"', DeprecationWarning, stacklevel=2)
+
+        return super().subgradient(point=point)
