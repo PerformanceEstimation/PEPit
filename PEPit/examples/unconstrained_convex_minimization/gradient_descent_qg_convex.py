@@ -32,7 +32,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=1):
     **Theoretical guarantee**:
     When :math:`\\gamma < \\frac{1}{L}`, the **lower** theoretical guarantee can be found in [1, Theorem 2.2]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\max{\\frac{1}{2n L \\gamma + 1}, L \\gamma} \\|x_0-x_\\star\\|^2.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\max\\left(\\frac{1}{2n L \\gamma + 1}, L \\gamma\\right) \\|x_0-x_\\star\\|^2.
 
     **References**:
 

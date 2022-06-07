@@ -51,8 +51,8 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, verbose=1):
     Notes:
 
     We verify that :math:`u_t \\sim 2\\sqrt{t}`.
-    The step sizes as well as the function value of the iterate decrease as
-    :math:`O\\left \\frac{1}{\\sqrt{t}} \\right`.
+    The step sizes as well as the function values of the iterates decrease as
+    :math:`O\\left( \\frac{1}{\\sqrt{t}} \\right)`.
 
     **References**:
 
