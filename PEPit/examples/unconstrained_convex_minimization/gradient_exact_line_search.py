@@ -77,7 +77,7 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()

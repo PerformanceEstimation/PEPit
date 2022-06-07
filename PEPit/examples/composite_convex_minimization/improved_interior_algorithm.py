@@ -102,7 +102,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
     ghs, hs = h.oracle(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0
@@ -130,7 +130,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
     problem.set_initial_condition((hs - h0 - gh0 * (xs - x0)) * c + f10 - fs <= 1)
 
     # Set the performance metric to the final distance in function values to optimum
-    problem.set_performance_metric(func.value(x) - fs)
+    problem.set_performance_metric(func(x) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

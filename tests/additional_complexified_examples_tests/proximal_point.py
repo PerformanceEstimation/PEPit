@@ -53,7 +53,7 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()

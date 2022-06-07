@@ -96,7 +96,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
@@ -113,7 +113,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
     problem.set_initial_condition((x[0] - xs) ** 2 <= 1)
 
     # Set the performance metric to the final distance to the optimum in function values
-    problem.set_performance_metric((func2.value(y) + fy) - fs)
+    problem.set_performance_metric((func2(y) + fy) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

@@ -97,7 +97,7 @@ def wc_robust_momentum(mu, L, lam, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then Define the starting points of the algorithm, x0 and x1
     x0 = problem.set_initial_point()

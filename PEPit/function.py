@@ -104,7 +104,7 @@ class Function(object):
             self.counter = None
 
         # Initialize list of points and constraints.
-        # An optimal point will be stored in the 2 lists "list_of_optimal_points" and "list_of_points".
+        # An optimal point will be stored in the 2 lists "list_of_stationary_points" and "list_of_points".
         self.list_of_stationary_points = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
@@ -546,6 +546,21 @@ class Function(object):
 
         # Return the function value
         return f
+
+    def __call__(self, point):
+        """
+        Call the method `value` on point.
+
+        Args:
+            point (Point): any point.
+
+        Returns:
+            Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
+
+        """
+
+        # Call the method value on point
+        return self.value(point=point)
 
     def stationary_point(self, return_gradient_and_function_value=False):
         """

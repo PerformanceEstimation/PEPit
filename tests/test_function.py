@@ -47,6 +47,17 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(new_function, Function)
         self.assertEqual(new_function.decomposition_dict, {self.func1: -1, self.func2: 9 / 5})
 
+    def test_callable(self):
+
+        val = self.func1(point=self.point)
+
+        self.assertEqual(len(self.func1.list_of_points), 1)
+
+        triplet = self.func1.list_of_points[0]
+
+        self.assertEqual(triplet[0], self.point)
+        self.assertEqual(triplet[2], val)
+
     def test_oracle(self):
 
         new_function = self.compute_linear_combination()

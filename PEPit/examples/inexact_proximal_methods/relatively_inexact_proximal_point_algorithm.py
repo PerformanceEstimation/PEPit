@@ -97,7 +97,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=1):
         f.add_constraint(epsVar <= (sigma * (x[i + 1] - x[i])) ** 2 / 2)
 
     # Set the performance metric to the final distance in function values
-    problem.set_performance_metric(f.value(x[n]) - f.value(xs))
+    problem.set_performance_metric(f(x[n]) - f(xs))
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

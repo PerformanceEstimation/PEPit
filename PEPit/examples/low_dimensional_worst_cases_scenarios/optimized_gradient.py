@@ -107,7 +107,7 @@ def wc_optimized_gradient(L, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then Define the starting point of the algorithm
     x0 = problem.set_initial_point()
@@ -131,7 +131,7 @@ def wc_optimized_gradient(L, n, verbose=1):
         y = x_new + (theta_old - 1) / theta_new * (x_new - x_old) + theta_old / theta_new * (x_new - y)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func.value(y) - fs)
+    problem.set_performance_metric(func(y) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

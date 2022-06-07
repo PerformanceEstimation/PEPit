@@ -111,7 +111,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value Fs = F(x_*)
     xs = F.stationary_point()
-    Fs = F.value(xs)
+    Fs = F(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
@@ -136,7 +136,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
         z = z - (A[i + 1] - A[i]) * (vx + gy)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric((f.value(x) + hx) - Fs)
+    problem.set_performance_metric((f(x) + hx) - Fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

@@ -91,7 +91,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value Fs = F(x_*)
     xs = F.stationary_point()
-    Fs = F.value(xs)
+    Fs = F(xs)
 
     # Then define the starting point x0
     x0 = problem.set_initial_point()
@@ -108,7 +108,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=1):
         y = x_new + i / (i + 3) * (x_new - x_old)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric((f.value(x_new) + hx_new) - Fs)
+    problem.set_performance_metric((f(x_new) + hx_new) - Fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

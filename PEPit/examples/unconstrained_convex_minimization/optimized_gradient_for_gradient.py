@@ -96,11 +96,11 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func.value(xs)
+    fs = func(xs)
 
     # Then define x0 the starting point of the algorithm and its function value f(x_0)
     x0 = problem.set_initial_point()
-    f0 = func.value(x0)
+    f0 = func(x0)
 
     # Set the initial constraint that is f(x_0) - f(x_*)
     problem.set_initial_condition(f0 - fs <= 1)
