@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import RsiEbFunction
 
 
-def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
+def wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu, L, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -60,7 +60,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     Example:
         >>> mu = .1
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -119,4 +119,4 @@ if __name__ == "__main__":
 
     mu = .1
     L = 1
-    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
