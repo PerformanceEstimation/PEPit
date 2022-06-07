@@ -8,7 +8,8 @@ def wc_heavy_ball_momentum_qg_convex(L, n, verbose=1):
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is :math:`L-\\text{QG}^+` and convex.
+    where :math:`f` is :math:`L-\\text{QG}^+`
+    (:math:`\\forall x, f(x) - f_\\star \\leqslant \\frac{L}{2} \\|x-x_\\star\\|^2`) and convex.
 
     This code computes a worst-case guarantee for the **Heavy-ball (HB)** method, aka **Polyak momentum** method.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee

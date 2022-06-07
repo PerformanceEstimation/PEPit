@@ -4,7 +4,8 @@ from PEPit.function import Function
 class ConvexQGFunction(Function):
     """
     The :class:`ConvexQGFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of QG^+ and convex functions.
+    implementing the interpolation constraints of the class of QG^+ (upper bounded by a quadratic function)
+    and convex functions.
 
     Attributes:
         L (float): The quadratic upper bound parameter
