@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.operators import RsiEbOperator
+from PEPit.functions import RsiEbFunction
 
 
 def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
@@ -34,6 +34,8 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     .. math:: \\| x_n - x_\\star \\|^2 \\leqslant (1 - 2\\gamma\\mu + L^2 \\gamma^2)^n \\|x_0-x_\\star\\|^2.
 
     **References**:
+
+    Definition and convergence guarantees can be found in [1].
 
     `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
     Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
@@ -77,7 +79,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     problem = PEP()
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(RsiEbOperator, mu=mu, L=L)
+    func = problem.declare_function(RsiEbFunction, mu=mu, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

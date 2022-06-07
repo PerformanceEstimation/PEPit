@@ -25,4 +25,4 @@ Example: `PEP.declare_function(function_class=SmoothStronglyConvexFunction, mu=.
 
 - Convex QG functions have been added as a new Function class.
 
-- RSI EB operators have been added as a new Operator class.
+- RSI EB functions have been added as a new Function class.

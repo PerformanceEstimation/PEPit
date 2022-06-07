@@ -1,29 +1,28 @@
 from PEPit.function import Function
 
 
-class RsiEbOperator(Function):
+class RsiEbFunction(Function):
     """
-    The :class:`RsiEbOperator` class overwrites the `add_class_constraints` method
+    The :class:`RsiEbFunction` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
-    for the class of RSI and EB operators.
-
-    Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+    for the class of RSI and EB functions.
 
     Attributes:
         mu (float): Restricted sequent inequality parameter
         L (float): Error bound parameter
 
-    RSI EB operators are characterized by parameters :math:`\\mu` and `L`,
+    RSI EB functions are characterized by parameters :math:`\\mu` and `L`,
     hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.operators import RsiEbOperator
+        >>> from PEPit.functions import RsiEbFunction
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=RsiEbOperator, mu=.1, L=1)
+        >>> h = problem.declare_function(function_class=RsiEbFunction, mu=.1, L=1)
 
     References:
+
+        A definition of the class of RSI and EB functions can be found in [1].
 
         `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
         Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
@@ -61,8 +60,7 @@ class RsiEbOperator(Function):
 
     def add_class_constraints(self):
         """
-        Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
-        maximally monotone operator), see, e.g., discussions in [1, Section 2].
+        Formulates the list of necessary conditions for interpolation of self, see [1, Theorem 1].
         """
 
         for i, point_i in enumerate(self.list_of_points):
@@ -74,7 +72,7 @@ class RsiEbOperator(Function):
                 xj, gj, fj = point_j
 
                 if (xi != xj) | (gi != gj):
-                    # Interpolation conditions of strongly monotone operator class
+                    # Interpolation conditions of RSI function class
                     self.add_constraint((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
-                    # Interpolation conditions of Lipschitz operator class
+                    # Interpolation conditions of EB function class
                     self.add_constraint((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)
