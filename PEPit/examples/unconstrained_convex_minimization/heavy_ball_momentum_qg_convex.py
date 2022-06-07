@@ -50,9 +50,9 @@ def wc_heavy_ball_momentum_qg_convex(L, n, verbose=1):
     European Control Conference (ECC).
     <https://arxiv.org/pdf/1412.7457.pdf>`_
 
-    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    `[2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
     Optimal first-order methods for convex functions with a quadratic upper bound.
-    arXiv.
+    <https://arxiv.org/pdf/2205.15033.pdf>`_
 
     Args:
         L (float): the quadratic growth parameter.

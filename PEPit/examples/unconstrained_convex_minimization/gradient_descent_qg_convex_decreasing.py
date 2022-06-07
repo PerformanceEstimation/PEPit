@@ -58,9 +58,9 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, verbose=1):
 
     The detailed approach is available in [1, Appendix A.3].
 
-    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    `[1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
     Optimal first-order methods for convex functions with a quadratic upper bound.
-    arXiv.
+    <https://arxiv.org/pdf/2205.15033.pdf>`_
 
     Args:
         L (float): the quadratic growth parameter.

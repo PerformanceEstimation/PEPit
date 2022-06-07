@@ -44,9 +44,9 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
     Mathematical Programming 184 (1), 183-220.
     <https://arxiv.org/pdf/1803.05676.pdf>`_
 
-    [2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    `[2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
     Optimal first-order methods for convex functions with a quadratic upper bound.
-    arXiv.
+    <https://arxiv.org/pdf/2205.15033.pdf>`_
 
     Args:
         L (float): the quadratic growth parameter.

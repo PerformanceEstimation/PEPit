@@ -19,9 +19,9 @@ class ConvexQGFunction(Function):
 
     References:
 
-    [1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    `[1] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
     Optimal first-order methods for convex functions with a quadratic upper bound.
-    arXiv.
+    <https://arxiv.org/pdf/2205.15033.pdf>`_
 
     """
 
