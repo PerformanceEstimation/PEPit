@@ -80,6 +80,27 @@ class TestPEP(unittest.TestCase):
                                    2 * self.gamma * max(abs(1 - self.mu * self.gamma), abs(1 - self.L * self.gamma)),
                                    delta=2 * self.gamma * 10 ** 3)
 
+    def test_lmi_constraints(self):
+
+        # Overwrite initial constraint
+        R = 3
+        self.problem.list_of_constraints = [(self.x0 - self.xs) ** 2 <= R**2]
+
+        # Define new expression
+        expr = Expression()
+
+        # Enforce this expression to be at most ||x0 - xs||
+        self.list_of_psd = [np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])]
+
+        # Overwrite performance metric to evaluate the maximal value expr can take
+        self.problem.list_of_performance_metrics = [expr]
+        wc_value = self.problem.solve()
+
+        # This must be R
+        self.assertAlmostEqual(wc_value, R)
+
+        ## TODO test to get values of expressions in psd.
+
     def test_trace_trick(self):
 
         # Compute pepit_tau very basically
