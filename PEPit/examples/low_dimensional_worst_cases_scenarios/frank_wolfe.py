@@ -73,8 +73,35 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 0.0003087393658707492 before dimension reduction
+        (PEPit) Calling SDP solver(PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.00020751398351090105 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.000755276681586801 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007693997528643164 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007964324173861465 after 4 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007939708424874045 after 5 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.000784171983368276 after 6 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007860083928987761 after 7 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007839697598055312 after 8 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007786870762155865 after 9 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007724532569503582 after 10 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007595222464096862 after 11 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007591780300124078 after 12 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007591780300124078 after dimension reduction
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.0994521 ||x0 - xs||^2
+            PEPit guarantee:	     f(x_n)-f_* <= 0.0999807 ||x0 - xs||^2
             Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
 
     """
@@ -112,7 +139,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose,dimension_reduction_heuristic="logdet12")
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet12")
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1

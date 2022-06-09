@@ -201,7 +201,7 @@ class PEP(object):
         return cvxpy_variable
 
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-4, tol_dimension_reduction=1e-5,
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
               **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it.
@@ -423,7 +423,7 @@ class PEP(object):
         corrected_S = eig_vec @ np.diag(corrected_eig_val) @ eig_vec.T
 
         # Get the highest eigenvalue that have been set to 0.
-        eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]),0)
+        eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
 
         return nb_eigenvalues, eig_threshold, corrected_S
 

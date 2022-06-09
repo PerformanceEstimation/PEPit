@@ -80,17 +80,33 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.13989778793516514
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.008452818570056392 before dimension reduction
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.7005395180119392e-05 before dimension reduction
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00812434035130368 after 1 dimension reduction steps
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.283608596989854e-06 after 1 dimension reduction step(s)
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00822223614657051 after 2 dimension reduction steps
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13992399875222272
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.008160594019368063 after dimension reduction
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.335098252373141e-06 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.2372028101610534e-05 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.006867894032787e-05 after 4 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.416953129163531e-06 after 5 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 3.983502472713177e-05 after 6 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.4785759855262395e-06 after 7 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.360843247635456e-06 after 8 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.59529914206238e-06 after 9 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.339529753603287e-06 after 10 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.339529753603287e-06 after dimension reduction
         *** Example file: worst-case performance of inexact gradient ***
-            PEPit guarantee:	     f(x_n)-f_* <= 0.139924 (f(x_0)-f_*)
-            Theoretical guarantee:   f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
+            PEPit guarantee:	     f(x_n)-f_* <= 0.139888 (f(x_0)-f_*)
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
 
     """
 
