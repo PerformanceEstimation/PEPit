@@ -16,9 +16,9 @@ Subgradient method
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method
 
 
-Subgradient method on RSI- EB+
-------------------------------
-.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method_under_restricted_secant_inequality_and_error_bound
+Subgradient method under restricted secant inequality and error bound
+---------------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method_rsi_eb
 
 
 Gradient descent with exact line search

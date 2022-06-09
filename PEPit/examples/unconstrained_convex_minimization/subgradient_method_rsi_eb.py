@@ -2,13 +2,14 @@ from PEPit import PEP
 from PEPit.functions import RsiEbFunction
 
 
-def wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu, L, gamma, n, verbose=1):
+def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     """
     Consider the convex minimization problem
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is :math:`\\mu`-RSI and :math:`L`-EB.
+    where :math:`f` verifies the "lower" restricted secant inequality (:math:`\\mu-\\text{RSI}^-`)
+    and the "upper" error bound (:math:`L-\\text{EB}^+`) [1].
 
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, \\mu, L, \\gamma)` such that the guarantee
