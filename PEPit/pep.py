@@ -53,13 +53,15 @@ class PEP(object):
         PEP.counter += 1
 
         # Initialize list of functions,
-        # points and conditions that are independent of the functions,
-        # as well as the list of performance metric.
+        # points and constraints that are independent of the functions,
+        # as well as the list of matrices that must be constraint to be positive symmetric definite
+        # and the list of performance metrics.
         # The PEP will maximize the minimum of the latest.
         self.list_of_functions = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
+        self.list_of_psd = list()
 
         # Add useful attributes of Point and Expression initialized to 0 in their respective space.
         self.null_point = Point(is_leaf=False, decomposition_dict=dict())
@@ -140,6 +142,35 @@ class PEP(object):
 
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
+
+    def add_psd_matrix(self, matrix):
+        """
+        Store a new matrix of :class:`Expression`s that we enforce to be positive semidefinite.
+
+        Args:
+            matrix (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+
+        Raises:
+            AssertionError: if provided matrix is not a square matrix.
+
+        """
+
+        # Change iterable into ndarray
+        matrix = np.array(matrix)
+
+        # Verify constraint is a square matrix
+        size = matrix.shape[0]
+        assert matrix.shape == (size, size)
+
+        # Transform scalars into Expressions
+        for i in range(size):
+            for j in range(size):
+                # If entry is neither an Expression nor a python scalar,
+                # __radd__ method of class Expression raises an Exception.
+                matrix[i, j] += self.null_expression
+
+        # Add constraint to the list of self's constraints
+        self.list_of_psd.append(matrix)
 
     def set_performance_metric(self, expression):
         """
@@ -265,7 +296,7 @@ class PEP(object):
             print('(PEPit) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
-        # Defining initial conditions
+        # Defining initial conditions and general constraints
         for condition in self.list_of_constraints:
             assert isinstance(condition, Constraint)
             if condition.equality_or_inequality == 'inequality':
@@ -278,7 +309,7 @@ class PEP(object):
                                  'Got {}'.format(condition.equality_or_inequality))
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' initial conditions ({} constraint(s) added)'.format(len(self.list_of_constraints)))
+                  ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
 
         # Defining class constraints
         if verbose:
@@ -299,6 +330,17 @@ class PEP(object):
                                      'Got {}'.format(constraint.equality_or_inequality))
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'constraint(s) added')
+
+        # Defining lmi constraints
+        if verbose:
+            print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
+        for psd_counter, psd_matrix in enumerate(self.list_of_psd):
+            M = cp.Variable(psd_matrix.shape, PSD=True)
+            for i in range(psd_matrix.shape[0]):
+                for j in range(psd_matrix.shape[1]):
+                    constraints_list.append(M[i, j] == self._expression_to_cvxpy(psd_matrix[i, j], F, G))
+            if verbose:
+                print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter+1, *psd_matrix.shape))
 
         # Create the cvxpy problem
         if verbose:
@@ -471,6 +513,32 @@ class PEP(object):
                         gradient._value = points_values[:, gradient.counter]
                     if function_value.get_is_leaf():
                         function_value._value = F_value[function_value.counter]
+        for matrix in self.list_of_psd:
+            size = matrix.shape[0]
+            for i in range(size):
+                for j in range(size):
+                    expression = matrix[i, j]
+                    if expression.get_is_leaf():
+                        expression._value = F_value[expression.counter]
+                    else:
+                        for sub_expression in expression.decomposition_dict:
+                            # Distinguish 3 cases: function values, inner products, and constant values
+                            if type(sub_expression) == Expression:
+                                assert sub_expression.get_is_leaf()
+                                sub_expression._value = F_value[sub_expression.counter]
+                            elif type(sub_expression) == tuple:
+                                point1, point2 = sub_expression
+                                assert point1.get_is_leaf()
+                                assert point2.get_is_leaf()
+                                point1._value = points_values[:, point1.counter]
+                                point2._value = points_values[:, point2.counter]
+                            elif sub_expression == 1:
+                                pass
+                            # Raise Exception out of those 3 cases
+                            else:
+                                raise TypeError(
+                                    "Expressions are made of function values, inner products and constants only!"
+                                    "Got {}".format(type(sub_expression)))
 
     def _eval_constraint_dual_values(self, cvx_constraints):
         """
