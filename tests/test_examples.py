@@ -55,6 +55,7 @@ from PEPit.examples.adaptive_methods import wc_polyak_steps_in_distance_to_optim
 from PEPit.examples.adaptive_methods import wc_polyak_steps_in_function_value
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_inexact_gradient as wc_inexact_gradient_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_optimized_gradient as wc_optimized_gradient_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_frank_wolfe as wc_frank_wolfe_low_dim
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
@@ -145,6 +146,12 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_inexact_gradient_low_dim(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_frank_wolfe_low_dim(self):
+        D, L, n = 1., 1., 10
+
+        wc, theory = wc_frank_wolfe_low_dim(L, D, n, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
+        
     def test_inexact_accelerated_gradient_1(self):
         L, epsilon, n = 3, 0, 5
 

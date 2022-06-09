@@ -89,13 +89,20 @@ class TestPEP(unittest.TestCase):
         prob = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
 
-        # Return the full tracetrick problem and verify that its value is not pepit_tau anymore but the trace value
+        # Return the full dimension reduction problem
+        # and verify that its value is not pepit_tau anymore but the heuristic value
         prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(prob2.value, 1 / 2, delta=10 ** -2)
 
-        # Verify that, even with tracetrick, the solve method returns the worst-case performance, not the trace value.
+        # Verify that, even with dimension reduction (using trace heuristic),
+        # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(pepit_tau, pepit_tau2, delta=10 ** -2)
+
+        # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
+        # the solve method returns the worst-case performance, not the chosen heuristic value.
+        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
+        self.assertAlmostEqual(pepit_tau, pepit_tau3, delta=10 ** -2)
 
     def tearDown(self):
 
