@@ -314,7 +314,7 @@ class PEP(object):
                                                                                      prob.solver_stats.solver_name,
                                                                                      prob.value))
 
-        # Store the obtaine value
+        # Store the obtained value
         wc_value = prob.value
 
         # Raise explicit error when wc_value in infinite
