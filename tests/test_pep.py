@@ -11,7 +11,7 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 class TestPEP(unittest.TestCase):
 
     def setUp(self):
-        # smooth-strongly convex gradient descent set up
+        # Smooth strongly convex gradient descent set up
         self.L = 1.
         self.mu = 0.1
         self.gamma = 1 / self.L
@@ -36,6 +36,9 @@ class TestPEP(unittest.TestCase):
 
         # Set the performance metric to the function values accuracy
         self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
+
+        # Compute theoretical rate of the above problem
+        self.theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
 
     def test_is_instance(self):
 
@@ -67,8 +70,7 @@ class TestPEP(unittest.TestCase):
     def test_eval_constraint_dual_values(self):
 
         pepit_tau = self.problem.solve(verbose=0)
-        theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
-        self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
+        self.assertAlmostEqual(pepit_tau, self.theoretical_tau, delta=self.theoretical_tau * 10 ** -3)
 
         for condition in self.problem.list_of_constraints:
             self.assertIsInstance(condition._dual_variable_value, float)
@@ -90,16 +92,43 @@ class TestPEP(unittest.TestCase):
         expr = Expression()
 
         # Enforce this expression to be at most ||x0 - xs||
-        self.problem.list_of_psd = [np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])]
+        matrix = np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])
+        self.problem.add_psd_matrix(matrix=matrix)
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
-        wc_value = self.problem.solve()
+        pepit_tau = self.problem.solve(verbose=0)
 
         # This must be R
-        self.assertAlmostEqual(wc_value, R)
+        self.assertAlmostEqual(pepit_tau, R, delta=R * 10 ** -3)
 
-        # TODO test to get values of expressions in psd.
+        # The value stored in expr must be equal to the optimal value of this SDP.
+        self.assertAlmostEqual(expr.eval(), pepit_tau, delta=pepit_tau * 10 ** -3)
+
+    def test_lmi_constraints_in_real_problem(self):
+
+        # Define new expression from points
+        # (which is supposed to be transparent from the theoretical problem point of vue)
+        point = Point()
+        expr = point ** 2
+
+        # Enforce this expression to be at most ||x1 - xs||
+        matrix = np.array([[(self.x1 - self.xs) ** 2, expr], [expr, 1]])
+        self.problem.add_psd_matrix(matrix=matrix)
+
+        # Overwrite performance metric to evaluate the maximal value expr can take
+        self.problem.list_of_performance_metrics = [expr]
+        pepit_tau = self.problem.solve(verbose=0)
+
+        # This must be the square root of theoretical tau
+        theoretical_tau = np.sqrt(self.theoretical_tau)
+        self.assertAlmostEqual(pepit_tau, theoretical_tau, delta=theoretical_tau * 10 ** -3)
+
+        # The value stored in expr must be the square of the one stored in point.
+        self.assertAlmostEqual(np.sum(point.eval()**2), expr.eval(), delta=expr.eval() * 10 ** -3)
+
+        # The value stored in expr must be equal to the optimal value of this SDP.
+        self.assertAlmostEqual(expr.eval(), pepit_tau, delta=pepit_tau * 10 ** -3)
 
     def test_trace_trick(self):
 
