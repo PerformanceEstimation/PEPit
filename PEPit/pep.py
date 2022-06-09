@@ -340,6 +340,7 @@ class PEP(object):
                 heuristic = cp.trace(G)
                 prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=constraints_list)
                 prob.solve(**kwargs)
+                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
                 for i in range(1, 1+niter):
@@ -350,12 +351,12 @@ class PEP(object):
 
                     # Print the estimated dimension after i dimension reduction steps
                     nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
-                    if verbose and i < niter:
+                    if verbose:
                         print('(PEPit) Solver status: {} (solver: {});'
                               ' objective value: {}'.format(prob.status,
                                                             prob.solver_stats.solver_name,
                                                             wc_value))
-                        print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction steps'.format(
+                        print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
                             nb_eigenvalues, eig_threshold, i))
 
             else:
@@ -363,18 +364,17 @@ class PEP(object):
                                  "or \`logdet\` followed by an interger."
                                  "Got {}".format(dimension_reduction_heuristic))
 
-            # Store the actualized obtained value
-            wc_value = objective.value[0]
-
             # Print the estimated dimension after dimension reduction
             if verbose:
-                nb_eigenvalues, eig_threshold, _ = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
                 print('(PEPit) Solver status: {} (solver: {});'
                       ' objective value: {}'.format(prob.status,
                                                     prob.solver_stats.solver_name,
                                                     wc_value))
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
                                                                                                        eig_threshold))
+                                                                                                       
+            # Store the actualized obtained value
+            wc_value = objective.value[0]	
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
@@ -409,7 +409,7 @@ class PEP(object):
         S = (M + M.T) / 2
 
         # Get eig_val and eig_vec.
-        eig_val, eig_vec = np.linalg.eig(S)
+        eig_val, eig_vec = np.linalg.eigh(S)
 
         # Get the right threshold to use.
         eig_threshold = max(np.max(eig_val)/1e3, 2 * np.max(-eig_val))
@@ -423,7 +423,7 @@ class PEP(object):
         corrected_S = eig_vec @ np.diag(corrected_eig_val) @ eig_vec.T
 
         # Get the highest eigenvalue that have been set to 0.
-        eig_threshold = np.max(eig_val[non_zero_eig_vals == 0])
+        eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]),0)
 
         return nb_eigenvalues, eig_threshold, corrected_S
 

@@ -90,14 +90,14 @@ def wc_frank_wolfe(L, D, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    fs = func(xs)
+    fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
 
     # Enforce the feasibility of x0 : there is no initial constraint on x0
-    _ = func1(x0)
-    _ = func2(x0)
+    _ = func1.value(x0)
+    _ = func2.value(x0)
 
     # Compute n steps of the Conditional Gradient / Frank-Wolfe method starting from x0
     x = x0
@@ -108,11 +108,11 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         x = (1 - lam) * x + lam * y
 
     # Set the performance metric to the final distance in function values to optimum
-    problem.set_performance_metric((func(x)) - fs)
+    problem.set_performance_metric((func.value(x)) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(verbose=pepit_verbose,dimension_reduction_heuristic="logdet12")
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
