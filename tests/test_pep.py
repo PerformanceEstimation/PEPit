@@ -90,7 +90,7 @@ class TestPEP(unittest.TestCase):
         expr = Expression()
 
         # Enforce this expression to be at most ||x0 - xs||
-        self.list_of_psd = [np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])]
+        self.problem.list_of_psd = [np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])]
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
@@ -99,7 +99,7 @@ class TestPEP(unittest.TestCase):
         # This must be R
         self.assertAlmostEqual(wc_value, R)
 
-        ## TODO test to get values of expressions in psd.
+        # TODO test to get values of expressions in psd.
 
     def test_trace_trick(self):
 
