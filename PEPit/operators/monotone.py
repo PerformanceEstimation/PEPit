@@ -7,7 +7,7 @@ class MonotoneOperator(Function):
     implementing interpolation constraints for the class of maximally monotone operators.
 
     Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient` and `function values` should not be used.
 
     General maximally monotone operators are not characterized by any parameter, hence can be instantiated as
 

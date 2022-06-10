@@ -9,7 +9,7 @@ class LipschitzStronglyMonotoneOperator(Function):
     for the class of Lipschitz continuous strongly monotone (and maximally monotone) operators.
 
     Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient` and `function values` should not be used.
 
     Warning:
         Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
@@ -70,9 +70,9 @@ class LipschitzStronglyMonotoneOperator(Function):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of Lipschitz strongly monotone operators is necessarily continuous.\n"
-                  "To instantiate an operator, please avoid using the class LipschitzStronglyMonotoneOperator with L == infinity.\n"
-                  " Instead, please use the class StronglyMonotoneOperator that allows to compute several"
-                  "subgradients at the same point each time one is required.\033[0m")
+                  "To instantiate an operator, please avoid using the class LipschitzStronglyMonotoneOperator with\n"
+                  " L == np.inf. Instead, please use the class StronglyMonotoneOperator (which accounts for the fact\n"
+                  "that the image of the operator at certain points might not be a singleton).\033[0m")
 
     def add_class_constraints(self):
         """
