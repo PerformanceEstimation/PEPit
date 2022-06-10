@@ -9,7 +9,7 @@ class ConvexIndicatorFunction(Function):
     implementing interpolation constraints for the class of closed convex indicator functions.
 
     Attributes:
-        D (float): upper bound on the diameter of the feasible set, that can be infinite
+        D (float): upper bound on the diameter of the feasible set, possibly set to np.inf
 
     Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
 
