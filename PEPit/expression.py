@@ -129,7 +129,8 @@ class Expression(object):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, {1: other})
         # Raise an Exception in any other scenario
         else:
-            raise TypeError("Expression can be added only to other expression or scalar values")
+            raise TypeError("Expression can be added only to other expression or scalar values!"
+                            "Got {}".format(type(other)))
 
         # Create and return the newly created Expression
         return Expression(is_leaf=False, decomposition_dict=merged_decomposition_dict)
