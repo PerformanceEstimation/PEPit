@@ -40,7 +40,6 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
 
     `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
     Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
-    arXiv 2203.00342.
     <https://arxiv.org/pdf/2203.00342.pdf>`_
 
     Args:

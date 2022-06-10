@@ -477,5 +477,11 @@ Journal of Control and Decision (JCD) 5.1.42--60 (2018).
 [Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.](https://arxiv.org/pdf/1803.06073.pdf)
 International Conference on Machine Learning (ICML).
 
-[54] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[54] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+[Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.](https://arxiv.org/pdf/2203.00342.pdf)
+    
+[55] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+[Optimal first-order methods for convex functions with a quadratic upper bound.](https://arxiv.org/pdf/2205.15033.pdf)
+
+[56] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
 [PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)
