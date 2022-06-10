@@ -69,6 +69,20 @@ From now, you can declare functions thanks to the `declare_function` method.
 
     func = problem.declare_function(SmoothConvexFunction, L=L)
 
+.. warning::
+    To enforce the same subgradient to be returned each time one is required,
+    we introduced the attribute `reuse_gradient` in the `Function` class.
+    Some classes of functions contain only differentiable functions (e.g. smooth convex function).
+    In those, the `reuse_gradient` attribute is set to True by default.
+
+    When the same subgradient is used several times in the same code and when it is difficult to
+    to keep track of it (through proximal calls for instance), it may be useful to set this parameter
+    to True even if the function is not differentiable. This helps reducing the number of constraints,
+    and improve the accuracy of the underlying semidefinite program. See for instance the code for
+    `improved interior method 
+    <https://pepit.readthedocs.io/en/latest/examples/b.html#improved-interior-method>`_ or
+    `no Lips in Bregman divergence
+    <https://pepit.readthedocs.io/en/latest/examples/b.html#no-lips-in-bregman-divergence>`_.
 
 You can also define a new point with
 
@@ -139,6 +153,14 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
 
     pepit_tau = problem.solve()
 
+.. warning::
+    Performance estimation problems consist in reformulating the problem of finding a worst-case scenario as a semidefinite
+    program (SDP). The dimension of the corresponding SDP is directly related to the number of function and gradient evaluations
+    in a given code.
+    
+    We encourage the users to perform as few function and subgradient evaluations as possible, as the size of the
+    corresponding SDP grows with the number of subgradient/function evaluations at different points.
+
 
 Derive proofs and adversarial objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,25 +214,34 @@ Then, after solving the system, you can require its associated dual variable val
 Output pdf
 ~~~~~~~~~~
 
-In a latter release, we will provide an option to output a pdf file summarizing all those pieces of information.
+In a later release, we will provide an option to output a pdf file summarizing all those pieces of information.
 
-Simplify proofs
-^^^^^^^^^^^^^^^
+Simpler worst-case scenarios
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sometimes, there are several solutions to the PEP problem.
-In order to simplify the proof, one would prefer a low dimension solution.
-To this end, we provide an **heuristic** based on the trace to reduce the dimension of the provided solution.
+For obtaining simpler worst-case scenarios, one would prefer a low dimension solutions to the SDP.
+To this end, we provide **heuristics** based on the trace norm or log det minimization for reducing
+the dimension of the numerical solution to the SDP.
 
-You can use it  by specifying
+You can use the trace heuristic by specifying
 
 .. code-block::
 
     problem.solve(dimension_reduction_heuristic="trace")
+    
+You can use the n iteration of the log det heuristic by specifying "logdetn". For example, for
+using 5 iterations of the logdet heuristic:
+
+.. code-block::
+
+    problem.solve(dimension_reduction_heuristic="logdet5")
+
 
 Finding Lyapunov
 ^^^^^^^^^^^^^^^^
 
-In a latter release, we will provide tools to help finding good Lyapunov functions to study a given method.
+In a later release, we will provide tools to help finding good Lyapunov functions to study a given method.
 
 This tool will be based on the very recent work [7].
 

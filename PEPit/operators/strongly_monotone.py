@@ -8,7 +8,7 @@ class StronglyMonotoneOperator(Function):
     (maximally monotone) operators.
 
     Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
         mu (float): strong monotonicity parameter
@@ -18,6 +18,7 @@ class StronglyMonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit.operators import StronglyMonotoneOperator
         >>> problem = PEP()
         >>> h = problem.declare_function(function_class=StronglyMonotoneOperator, mu=.1)
 

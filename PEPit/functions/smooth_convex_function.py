@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
 
 
@@ -46,3 +47,9 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
                          reuse_gradient=True,
                          mu=0,
                          L=L)
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"
+                  "To instantiate a convex function, please avoid using the class SmoothConvexFunction with \n"
+                  "L == np.inf. Instead, please use the class ConvexFunction (which accounts for the fact \n"
+                  "that there might be several subgradients at the same point).\033[0m")

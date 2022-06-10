@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -7,7 +8,7 @@ class CocoerciveOperator(Function):
     implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.
 
     Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
         beta (float): cocoercivity parameter
@@ -55,6 +56,12 @@ class CocoerciveOperator(Function):
 
         # Store the beta parameter
         self.beta = beta
+
+        if self.beta == 0:
+            print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
+                  "To instantiate a monotone opetator, please avoid using the class CocoerciveOperator\n"
+                  "with beta == 0. Instead, please use the class Monotone (which accounts for the fact \n"
+                  "that the image of the operator at certain points might not be a singleton).\033[0m")
 
     def add_class_constraints(self):
         """

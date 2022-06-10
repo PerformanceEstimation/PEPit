@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -52,6 +53,10 @@ class SmoothFunction(Function):
 
         # Store L
         self.L = L
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of L-smooth functions with L == np.inf implies no constraint: \n"
+                  "it contains all differentiable functions. This might imply issues in your code.\033[0m")
 
     def add_class_constraints(self):
         """

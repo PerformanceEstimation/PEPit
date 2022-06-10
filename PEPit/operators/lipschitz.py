@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -7,7 +8,7 @@ class LipschitzOperator(Function):
     implementing the interpolation constraints of the class of Lipschitz continuous operators.
 
     Note:
-        Operators'values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
         L (float) Lipschitz parameter
@@ -73,6 +74,10 @@ class LipschitzOperator(Function):
                          reuse_gradient=True)
         # Store L
         self.L = L
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of L-Lipschitz operators with L == np.inf implies no constraint: \n"
+                  "it contains all multi-valued mappings. This might imply issues in your code.\033[0m")
 
     def add_class_constraints(self):
         """

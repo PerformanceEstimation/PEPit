@@ -1,3 +1,4 @@
+import numpy as np
 from PEPit.function import Function
 
 
@@ -56,6 +57,12 @@ class SmoothStronglyConvexFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
+
+        if self.L == np.inf:
+            print("\033[96m(PEPit) The class of smooth strongly convex functions is necessarily differentiable.\n"
+                  "To instantiate a strongly convex function, please avoid using the class SmoothStronglyConvexFunction\n"
+                  "with L == np.inf. Instead, please use the class StronglyConvexFunction (which accounts for the fact\n"
+                  "that there might be several subgradients at the same point).\033[0m")
 
     def add_class_constraints(self):
         """
