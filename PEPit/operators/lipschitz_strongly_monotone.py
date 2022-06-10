@@ -70,8 +70,9 @@ class LipschitzStronglyMonotoneOperator(Function):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of Lipschitz strongly monotone operators is necessarily continuous.\n"
-                  "When setting L to infinity, please use the class of strongly monotone operators (StronglyMonotoneOperator),\n "
-                  "that allows to compute several values of the operator at the same point.\033[0m")
+                  "To instantiate an operator, please avoid using the class LipschitzStronglyMonotoneOperator with L == infinity.\n"
+                  " Instead, please use the class StronglyMonotoneOperator that allows to compute several"
+                  "subgradients at the same point each time one is required.\033[0m")
 
     def add_class_constraints(self):
         """

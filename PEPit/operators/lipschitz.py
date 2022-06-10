@@ -77,7 +77,7 @@ class LipschitzOperator(Function):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of Lipschitz operators is necessarily continuous. \n"
-                  "When setting L to infinity, you remove all the constraints on the operator.\033[0m")
+                  "When setting L to infinity, you remove all the other constraints on the operator.\033[0m")
 
     def add_class_constraints(self):
         """
