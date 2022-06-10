@@ -16,6 +16,11 @@ Subgradient method
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method
 
 
+Subgradient method under restricted secant inequality and error bound
+---------------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_subgradient_method_rsi_eb
+
+
 Gradient descent with exact line search
 ---------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search
@@ -91,21 +96,21 @@ Inexact accelerated gradient
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_accelerated_gradient
 
 
-Gradient descent for QG convex objective
-----------------------------------------
+Gradient descent for quadratically upper bounded convex objective
+-----------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex
 
 
-Gradient descent with decreasing step sizes for QG convex objective
--------------------------------------------------------------------
+Gradient descent with decreasing step sizes for quadratically upper bounded convex objective
+--------------------------------------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex_decreasing
 
 
-Conjugate gradient for QG convex objective
-------------------------------------------
+Conjugate gradient for quadratically upper bounded convex objective
+-------------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient_qg_convex
 
 
-Heavy Ball momentum for QG convex objective
--------------------------------------------
+Heavy Ball momentum for quadratically upper bounded convex objective
+--------------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_heavy_ball_momentum_qg_convex

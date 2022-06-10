@@ -16,6 +16,7 @@ from .optimized_gradient import wc_optimized_gradient
 from .proximal_point import wc_proximal_point
 from .robust_momentum import wc_robust_momentum
 from .subgradient_method import wc_subgradient_method
+from .subgradient_method_rsi_eb import wc_subgradient_method_rsi_eb
 from .triple_momentum import wc_triple_momentum
 from .information_theoretic_exact_method import wc_information_theoretic
 from .optimized_gradient_for_gradient import wc_optimized_gradient_for_gradient
@@ -38,6 +39,7 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'proximal_point', 'wc_proximal_point',
            'robust_momentum', 'wc_robust_momentum',
            'subgradient_method', 'wc_subgradient_method',
+           'subgradient_method_rsi_eb', 'wc_subgradient_method_rsi_eb',
            'triple_momentum', 'wc_triple_momentum',
            'information_theoretic_exact_method', 'wc_information_theoretic',
            'optimized_gradient_for_gradient', 'wc_optimized_gradient_for_gradient',
