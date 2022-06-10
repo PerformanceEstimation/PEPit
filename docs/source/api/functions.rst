@@ -29,6 +29,12 @@ Convex and smooth
    :members:
    :show-inheritance:
 
+Convex and QG
+-------------
+.. autoclass:: PEPit.functions.ConvexQGFunction
+   :members:
+   :show-inheritance:
+
 Strongly convex and smooth
 --------------------------
 .. autoclass:: PEPit.functions.SmoothStronglyConvexFunction

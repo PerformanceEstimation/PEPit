@@ -13,14 +13,14 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
     This code computes a worst-case guarantee for the **Heavy-ball (HB)** method, aka **Polyak momentum** method.
-    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu, \\alpha, \\beta)` such that the guarantee
 
-    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) (f(x_0) - f_\\star)
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu, \\alpha, \\beta) (f(x_0) - f_\\star)
 
     is valid, where :math:`x_n` is the output of the **Heavy-ball (HB)** method,
     and where :math:`x_\\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`\\tau(n, L, \\mu, \\alpha, \\beta)` is computed as the worst-case value of
     :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star \\leqslant 1`.
 
     **Algorithm**:

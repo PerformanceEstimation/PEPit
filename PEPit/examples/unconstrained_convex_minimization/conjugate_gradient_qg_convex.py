@@ -1,17 +1,16 @@
-from math import sqrt
-
 from PEPit import PEP
-from PEPit.functions import SmoothConvexFunction
+from PEPit.functions.convex_qg_function import ConvexQGFunction
 from PEPit.primitive_steps import exact_linesearch_step
 
 
-def wc_conjugate_gradient(L, n, verbose=1):
+def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
     """
     Consider the convex minimization problem
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is :math:`L`-smooth and convex.
+    where :math:`f` is quadratically upper bounded (:math`\\text{QG}^+` [2]), i.e.
+    :math:`\\forall x, f(x) - f_\\star \\leqslant \\frac{L}{2} \\|x-x_\\star\\|^2`, and convex.
 
     This code computes a worst-case guarantee for the **conjugate gradient (CG)** method (with exact span searches).
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
@@ -34,36 +33,24 @@ def wc_conjugate_gradient(L, n, verbose=1):
 
     **Theoretical guarantee**:
 
-        The **tight** guarantee obtained in [1] is
+        The **tight** guarantee obtained in [2, Theorem 2.3] (lower) and [2, Theorem 2.4] (upper) is
 
-        .. math:: f(x_n) - f_\\star \\leqslant\\frac{L}{2 \\theta_n^2}\|x_0-x_\\star\|^2.
-
-        where
-
-        .. math::
-            :nowrap:
-
-            \\begin{eqnarray}
-                \\theta_0 & = & 1 \\\\
-                \\theta_t & = & \\frac{1 + \\sqrt{4 \\theta_{t-1}^2 + 1}}{2}, \\forall t \\in [|1, n-1|] \\\\
-                \\theta_n & = & \\frac{1 + \\sqrt{8 \\theta_{n-1}^2 + 1}}{2},
-            \\end{eqnarray}
-
-        and tightness follows from [2, Theorem 3].
+        .. math:: f(x_n) - f_\\star \\leqslant \\frac{L}{2 (n + 1)} \\|x_0-x_\\star\\|^2.
 
     **References**:
-    The detailed approach (based on convex relaxations) is available in [1, Corollary 6].
+    The detailed approach (based on convex relaxations) is available in [1, Corollary 6],
+    and the result provided in [2, Theorem 2.4].
 
     `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
     Mathematical Programming 184 (1), 183-220.
     <https://arxiv.org/pdf/1803.05676.pdf>`_
 
-    `[2] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
-    Journal of Complexity, 39, 1-16.
-    <https://arxiv.org/pdf/1606.01424.pdf>`_
+    `[2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+    Optimal first-order methods for convex functions with a quadratic upper bound.
+    <https://arxiv.org/pdf/2205.15033.pdf>`_
 
     Args:
-        L (float): the smoothness parameter.
+        L (float): the quadratic growth parameter.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
                        -1: No verbose at all.
@@ -76,18 +63,18 @@ def wc_conjugate_gradient(L, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_conjugate_gradient(L=1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 18 constraint(s) added
-        (PEPit) Compiling SDP
-        (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.061893515427809735
+        >>> pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)
+        (PEP-it) Setting up the problem: size of the main PSD matrix: 27x27
+        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
+                 function 1 : 351 constraint(s) added
+        (PEP-it) Compiling SDP
+        (PEP-it) Calling SDP solver
+        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.038461130525391705
         *** Example file: worst-case performance of conjugate gradient method ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.0618935 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
+            PEP-it guarantee:		 f(x_n)-f_* <= 0.0384611 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
 
     """
 
@@ -95,11 +82,11 @@ def wc_conjugate_gradient(L, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth convex function
-    func = problem.declare_function(SmoothConvexFunction, L=L)
+    func = problem.declare_function(ConvexQGFunction, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
-    fs = func(xs)
+    fs = func.value(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
@@ -125,18 +112,12 @@ def wc_conjugate_gradient(L, n, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theta_new = 1
-    for i in range(n):
-        if i < n - 1:
-            theta_new = (1 + sqrt(4 * theta_new ** 2 + 1)) / 2
-        else:
-            theta_new = (1 + sqrt(8 * theta_new ** 2 + 1)) / 2
-    theoretical_tau = L / (2 * theta_new ** 2)
+    theoretical_tau = L/(2*(n+1))
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of conjugate gradient method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -145,4 +126,4 @@ def wc_conjugate_gradient(L, n, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_conjugate_gradient(L=1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)

@@ -22,3 +22,5 @@ not through the dict "param" anymore.
 Example: `PEP.declare_function(function_class=SmoothStronglyConvexFunction, mu=.1, L=1.)`
 
 - Convex support functions have been added as a new function class.
+
+- Convex QG functions have been added as a new Function class.
