@@ -120,4 +120,4 @@ if __name__ == "__main__":
 
     mu = .1
     L = 1
-    pepit_tau, theoretical_tau = wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
