@@ -4,13 +4,13 @@ from PEPit.function import Function
 class ConvexQGFunction(Function):
     """
     The :class:`ConvexQGFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of quadratically upper bounded (:math`\\text{QG}^+` [1]),
+    implementing the interpolation constraints of the class of quadratically upper bounded (:math:`\\text{QG}^+` [1]),
     i.e. :math:`\\forall x, f(x) - f_\\star \\leqslant \\frac{L}{2} \\|x-x_\\star\\|^2`, and convex functions.
 
     Attributes:
         L (float): The quadratic upper bound parameter
 
-    General quadratically upper bounded (:math`\\text{QG}^+`) convex functions are characterized
+    General quadratically upper bounded (:math:`\\text{QG}^+`) convex functions are characterized
     by the quadratic growth parameter `L`, hence can be instantiated as
 
     Example:

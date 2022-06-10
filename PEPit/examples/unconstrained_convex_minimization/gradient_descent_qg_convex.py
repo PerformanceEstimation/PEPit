@@ -8,7 +8,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, verbose=1):
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is quadratically upper bounded (:math`\\text{QG}^+` [1]), i.e.
+    where :math:`f` is quadratically upper bounded (:math:`\\text{QG}^+` [1]), i.e.
     :math:`\\forall x, f(x) - f_\\star \\leqslant \\frac{L}{2} \\|x-x_\\star\\|^2`, and convex.
 
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
