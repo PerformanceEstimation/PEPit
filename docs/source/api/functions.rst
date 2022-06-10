@@ -29,8 +29,8 @@ Convex and smooth
    :members:
    :show-inheritance:
 
-Convex and QG
--------------
+Convex and quadratically upper bounded
+--------------------------------------
 .. autoclass:: PEPit.functions.ConvexQGFunction
    :members:
    :show-inheritance:
@@ -56,5 +56,11 @@ Convex indicator
 Convex support functions
 ------------------------
 .. autoclass:: PEPit.functions.ConvexSupportFunction
+   :members:
+   :show-inheritance:
+
+Restricted secant inequality and error bound
+--------------------------------------------
+.. autoclass:: PEPit.functions.RsiEbFunction
    :members:
    :show-inheritance:
