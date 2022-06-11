@@ -1,8 +1,8 @@
 from .constraint import Constraint
-from .expression import Expression
+from .expression import Expression, null_expression
 from .function import Function
 from .pep import PEP
-from .point import Point
+from .point import Point, null_point
 
 __all__ = ['examples',
            'functions',
@@ -10,8 +10,8 @@ __all__ = ['examples',
            'primitive_steps',
            'tools',
            'constraint', 'Constraint',
-           'expression', 'Expression',
+           'expression', 'Expression', 'null_expression',
            'function', 'Function',
            'pep', 'PEP',
-           'point', 'Point',
+           'point', 'Point', 'null_point',
            ]
