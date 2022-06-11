@@ -144,6 +144,7 @@ class PEP(object):
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
+            TypeError: if provided matrix does not contain only Expressions.
 
         """
 
