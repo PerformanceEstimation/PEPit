@@ -165,9 +165,16 @@ class PEP(object):
         # Transform scalars into Expressions
         for i in range(size):
             for j in range(size):
-                # If entry is neither an Expression nor a python scalar,
-                # __radd__ method of class Expression raises an Exception.
-                matrix[i, j] += self.null_expression
+                # The entry must be an Expression ...
+                if isinstance(matrix[i, j], Expression):
+                    pass
+                # ... or a python scalar. If so, store it as an Expression
+                elif isinstance(matrix[i, j], int) or isinstance(matrix[i, j], float):
+                    matrix[i, j] = Expression(is_leaf=False, decomposition_dict={1: matrix[i, j]})
+                # Raise an Exception in any other scenario
+                else:
+                    raise TypeError("PSD matrices contains only Expressions and / or scalar values!"
+                                    "Got {}".format(type(matrix[i, j])))
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
