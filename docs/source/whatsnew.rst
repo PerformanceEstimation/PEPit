@@ -6,4 +6,4 @@ What's new in PEPit
    :maxdepth: 2
    :caption: Contents:
 
-   whatsnew/0.0.3
+   whatsnew/0.1.0
