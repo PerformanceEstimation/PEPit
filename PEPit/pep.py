@@ -104,7 +104,7 @@ class PEP(object):
     def set_initial_condition(self, condition):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
-        Typically an condition of the form :math:`\\|x_0 - x_\\star\||^2 \\leq 1`.
+        Typically an condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
 
         Args:
             condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
@@ -247,11 +247,11 @@ class PEP(object):
                                               Set to False by default.
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix).
-                                                           Available heuristic:
-                                                           - "trace": minimize :math:`Tr(G)`
-                                                           - "logdet{an integer n}": minimize
-                                                             :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
-                                                             using n iterations of local approximation problems.
+                                                           Available heuristics are:
+                                                            - "trace": minimize :math:`Tr(G)`
+                                                            - "logdet{an integer n}": minimize
+                                                              :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                              using n iterations of local approximation problems.
                                                            Set to None to deactivate it (default value).
             eig_regularization (float, optional): The regularization we use to make
                                                   :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
