@@ -401,3 +401,7 @@ class Expression(object):
 
         # Return the value
         return self._value
+
+
+# Define a null Expression initialized to 0.
+null_expression = Expression(is_leaf=False, decomposition_dict=dict())

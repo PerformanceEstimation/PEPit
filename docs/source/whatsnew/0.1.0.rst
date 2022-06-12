@@ -1,0 +1,59 @@
+What's new in PEPit 0.1.0
+=========================
+
+- Adding general constraints to your problem.
+
+    | The method ``add_constraint`` has been added to the class ``PEP`` for general constraints not necessarily related to a specific function.
+    | For readability of your code,
+      we suggest to use the method ``set_initial_condition`` when the constraint is the initial one,
+      and the method ``add_constraint`` for any other constraint.
+
+- Adding LMI constraints to your problem.
+
+    The method ``add_psd_matrix`` has been added to the class ``PEP`` and must be used to add LMI constraints to your problem.
+
+- CVXPY options.
+
+    | PEPit uses CVXPY to solve the underlying SDP of your problem.
+    | CVXPY solver options can be provided to the method ``PEP.solve``.
+
+- Optimizing dimension of the solution.
+
+    | The ``tracetrick`` option of the method ``PEP.solve`` has been replaced by ``dimension_reduction_heuristic``.
+    | Set to None by default, this option can be set to "`trace`" or "`logdet{followed by a number}`" to use one of those heuristic.
+
+- Granularity of the verbose mode has evolved.
+
+    | The verbose mode of the method ``PEP.solve`` and of the provided examples files are now integers:
+        - 0: No verbose at all
+        - 1: PEPit information is printed but not CVXPY's
+        - 2: Both PEPit and CVXPY details are printed
+
+- Parameters of function classes.
+
+    | The parameters that characterize a function class must be provided directly as arguments of this function class, not through the dict "param" anymore.
+    | Example: ``PEP.declare_function(function_class=SmoothStronglyConvexFunction, mu=.1, L=1.)``
+
+- Initializing a Point or an Expression to 0.
+
+    ``null_point`` and ``null_expression`` have been added to the module ``PEPit`` to facilitate the access to a ``Point`` or an ``Expression`` initialized to 0.
+
+- 3 new function classes have been added:
+
+    - ``ConvexSupportFunction`` for convex support functions (see [1])
+    - ``ConvexQGFunction``, for convex and quadratically upper bounded functions (see [2])
+    - ``RsiEbFunction``, for functions verifying lower restricted secant inequality and upper error bound (see [3])
+
+`[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+Exact worst-case performance of first-order methods for composite convex optimization.
+SIAM Journal on Optimization, 27(3):1283–1313.
+<https://arxiv.org/pdf/1512.07516.pdf>`_
+
+`[2] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+Optimal first-order methods for convex functions with a quadratic upper bound.
+<https://arxiv.org/pdf/2205.15033.pdf>`_
+
+`[3] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.
+arXiv 2203.00342.
+<https://arxiv.org/pdf/2203.00342.pdf>`_

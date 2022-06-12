@@ -22,10 +22,6 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
-        null_point (Point): a :class:`Point` initialized to 0,
-                            easily callable to initialize a :class:`Point` before a for loop.
-        null_expression (Expression): a :class:`Expression` initialized to 0,
-                                      easily callable to initialize a :class:`Expression` before a for loop.
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -62,10 +58,6 @@ class PEP(object):
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
-
-        # Add useful attributes of Point and Expression initialized to 0 in their respective space.
-        self.null_point = Point(is_leaf=False, decomposition_dict=dict())
-        self.null_expression = Expression(is_leaf=False, decomposition_dict=dict())
 
     def declare_function(self, function_class, **kwargs):
         """
@@ -152,6 +144,7 @@ class PEP(object):
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
+            TypeError: if provided matrix does not contain only Expressions.
 
         """
 
@@ -165,9 +158,16 @@ class PEP(object):
         # Transform scalars into Expressions
         for i in range(size):
             for j in range(size):
-                # If entry is neither an Expression nor a python scalar,
-                # __radd__ method of class Expression raises an Exception.
-                matrix[i, j] += self.null_expression
+                # The entry must be an Expression ...
+                if isinstance(matrix[i, j], Expression):
+                    pass
+                # ... or a python scalar. If so, store it as an Expression
+                elif isinstance(matrix[i, j], int) or isinstance(matrix[i, j], float):
+                    matrix[i, j] = Expression(is_leaf=False, decomposition_dict={1: matrix[i, j]})
+                # Raise an Exception in any other scenario
+                else:
+                    raise TypeError("PSD matrices contains only Expressions and / or scalar values!"
+                                    "Got {}".format(type(matrix[i, j])))
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)

@@ -276,3 +276,7 @@ class Point(object):
                 self._value = value
 
         return self._value
+
+
+# Define a null Point initialized to 0.
+null_point = Point(is_leaf=False, decomposition_dict=dict())
