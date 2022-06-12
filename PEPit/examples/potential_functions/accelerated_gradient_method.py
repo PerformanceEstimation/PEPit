@@ -60,10 +60,11 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
         gamma (float): the step-size.
         lam (float): the initial value for sequence :math:`(\\lambda_t)_t`.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+                        
+                        - 1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value

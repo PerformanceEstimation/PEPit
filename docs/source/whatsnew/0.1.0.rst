@@ -25,6 +25,7 @@ What's new in PEPit 0.1.0
 - Granularity of the verbose mode has evolved.
 
     | The verbose mode of the method ``PEP.solve`` and of the provided examples files are now integers:
+
         - 0: No verbose at all
         - 1: PEPit information is printed but not CVXPY's
         - 2: Both PEPit and CVXPY details are printed

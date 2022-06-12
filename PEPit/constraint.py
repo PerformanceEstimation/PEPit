@@ -103,8 +103,7 @@ class Constraint(object):
                                                after the corresponding PEP was solved numerically.
 
         Raises:
-            | ValueError("The PEP must be solved to evaluate Constraints dual variables!")
-              if the PEP has not been solved yet.
+            ValueError("The PEP must be solved to evaluate Constraints dual variables!") if the PEP has not been solved yet.
 
         """
 

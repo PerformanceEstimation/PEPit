@@ -58,10 +58,11 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
         beta (float): parameter of the scheme such that :math:`0<\\beta<1` and :math:`0<\\alpha<2(1+\\beta)`.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+                        
+                        - 1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value

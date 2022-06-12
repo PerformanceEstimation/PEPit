@@ -59,10 +59,11 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
         theta (float): parameter of the scheme.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+
+                        - 1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value.
