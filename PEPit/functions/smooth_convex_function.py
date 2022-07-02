@@ -4,7 +4,7 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 
 class SmoothConvexFunction(SmoothStronglyConvexFunction):
     """
-    The :class:`SmoothConvexFunction` implements smooth convex functions as particular cases
+    The :class:`SmoothConvexFunction` class implements smooth convex functions as particular cases
     of :class:`SmoothStronglyConvexFunction`.
 
     Attributes:
