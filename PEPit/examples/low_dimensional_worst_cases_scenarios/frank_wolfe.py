@@ -74,37 +74,37 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.07828953910620315
-	(PEPit) Postprocessing: 15 eigenvalue(s) > 1.6863258220687357e-08 before dimension reduction
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.2813229285018236e-08 after 1 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.1902234629699887e-11 after 2 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 9.32674249761306e-11 after 3 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.3809514540596307e-11 after 4 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.10956621185581e-10 after 5 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.370700420819985e-11 after 6 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.1938932556596758e-10 after 7 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 9.119922745300259e-11 after 8 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.0129665227425043e-10 after 9 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.0703333614236926e-10 after 10 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.2774989036064415e-10 after 11 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after 12 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
-	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after dimension reduction
-	*** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-		PEPit guarantee:	 f(x_n)-f_* <= 0.0782795 ||x0 - xs||^2
-		Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2 
+        (PEPit) Postprocessing: 15 eigenvalue(s) > 1.6863258220687357e-08 before dimension reduction
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.2813229285018236e-08 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.1902234629699887e-11 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 9.32674249761306e-11 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.3809514540596307e-11 after 4 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 3.10956621185581e-10 after 5 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 3.370700420819985e-11 after 6 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.1938932556596758e-10 after 7 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 9.119922745300259e-11 after 8 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 3.0129665227425043e-10 after 9 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.0703333614236926e-10 after 10 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 2.2774989036064415e-10 after 11 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after 12 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after dimension reduction
+        *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0782795 ||x0 - xs||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2 
 
     """
 
