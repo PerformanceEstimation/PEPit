@@ -30,7 +30,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         .. math::
             \\begin{eqnarray}
                 y_t & = & \\arg\\min_{s \\in \\mathcal{D}} \\langle s \\mid \\nabla f_1(x_t) \\rangle, \\\\
-                x_{t+1} & = & \\frac{t - 1}{t + 1} x_t + \\frac{2}{t + 1} y_t.
+                x_{t+1} & = & \\frac{t}{t + 2} x_t + \\frac{2}{t + 2} y_t.
             \\end{eqnarray}
 
     **Theoretical guarantee**:
