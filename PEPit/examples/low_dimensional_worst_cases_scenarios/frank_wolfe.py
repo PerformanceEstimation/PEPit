@@ -73,37 +73,38 @@ def wc_frank_wolfe(L, D, n, verbose=1):
                  function 2 : 325 constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
-        (PEPit) Postprocessing: 11 eigenvalue(s) > 0.0003087393658707492 before dimension reduction
-        (PEPit) Calling SDP solver(PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.00020751398351090105 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.000755276681586801 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007693997528643164 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007964324173861465 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007939708424874045 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.000784171983368276 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007860083928987761 after 7 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007839697598055312 after 8 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007786870762155865 after 9 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007724532569503582 after 10 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007595222464096862 after 11 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007591780300124078 after 12 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.09945208318766442
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.0007591780300124078 after dimension reduction
-        *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-            PEPit guarantee:	     f(x_n)-f_* <= 0.0999807 ||x0 - xs||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.07828953910620315
+	(PEPit) Postprocessing: 15 eigenvalue(s) > 1.6863258220687357e-08 before dimension reduction
+	(PEPit) Calling SDP solver
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.2813229285018236e-08 after 1 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.1902234629699887e-11 after 2 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 9.32674249761306e-11 after 3 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.3809514540596307e-11 after 4 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.10956621185581e-10 after 5 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.370700420819985e-11 after 6 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.1938932556596758e-10 after 7 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 9.119922745300259e-11 after 8 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 3.0129665227425043e-10 after 9 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 1.0703333614236926e-10 after 10 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.2774989036064415e-10 after 11 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after 12 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
+	(PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after dimension reduction
+	*** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
+		PEPit guarantee:	 f(x_n)-f_* <= 0.0782795 ||x0 - xs||^2
+		Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2 
 
     """
 
@@ -132,7 +133,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     for i in range(n):
         g = func1.gradient(x)
         y, _, _ = linear_optimization_step(g, func2)
-        lam = 2 / (i + 1)
+        lam = 2 / (i + 2)
         x = (1 - lam) * x + lam * y
 
     # Set the performance metric to the final distance in function values to optimum
