@@ -481,7 +481,7 @@ class PEP(object):
         """
 
         # Write the gram matrix G as M.T M to extract points' values
-        eig_val, eig_vec = np.linalg.eig(G_value)
+        eig_val, eig_vec = np.linalg.eigh(G_value)
 
         # Verify negative eigenvalues are only precision mistakes and get rid of negative eigenvalues
         if np.min(eig_val) < 0:
