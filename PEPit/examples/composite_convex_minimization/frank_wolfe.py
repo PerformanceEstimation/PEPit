@@ -30,7 +30,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         .. math::
             \\begin{eqnarray}
                 y_t & = & \\arg\\min_{s \\in \\mathcal{D}} \\langle s \\mid \\nabla f_1(x_t) \\rangle, \\\\
-                x_{t+1} & = & \\frac{t - 1}{t + 1} x_t + \\frac{2}{t + 1} y_t.
+                x_{t+1} & = & \\frac{t}{t + 2} x_t + \\frac{2}{t + 2} y_t.
             \\end{eqnarray}
 
     **Theoretical guarantee**:
@@ -75,8 +75,8 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.0994521 ||x0 - xs||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
+            PEPit guarantee:		 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667  ||x0 - xs||^2
 
     """
 
@@ -105,7 +105,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     for i in range(n):
         g = func1.gradient(x)
         y, _, _ = linear_optimization_step(g, func2)
-        lam = 2 / (i + 1)
+        lam = 2 / (i + 2)
         x = (1 - lam) * x + lam * y
 
     # Set the performance metric to the final distance in function values to optimum

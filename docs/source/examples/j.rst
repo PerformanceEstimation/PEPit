@@ -14,3 +14,8 @@ Inexact gradient
 Optimized gradient
 ------------------
 .. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_optimized_gradient
+
+
+Frank Wolfe
+-----------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_frank_wolfe
