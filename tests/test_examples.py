@@ -427,7 +427,7 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, ref_pesto_bound, delta=self.relative_precision * ref_pesto_bound)
 
     def test_wc_optimal_contractive_halpern_iteration(self):
-        n, gamma = 3, .36
+        n, gamma = 3, 1.13
         wc, theory = wc_optimal_contractive_halpern_iteration(n=n, gamma=gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
