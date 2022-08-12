@@ -403,7 +403,7 @@ class TestExamples(unittest.TestCase):
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
 
     def test_wc_optimal_strongly_monotone_proximal_point_operators(self):
-        n, mu = 5, 0.65
+        n, mu = 3, 0.23
         wc, theory = wc_optimal_strongly_monotone_proximal_point_operators(n=n, mu=mu, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
@@ -427,7 +427,7 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, ref_pesto_bound, delta=self.relative_precision * ref_pesto_bound)
 
     def test_wc_optimal_contractive_halpern_iteration(self):
-        n, gamma = 7, 2.15
+        n, gamma = 3, .36
         wc, theory = wc_optimal_contractive_halpern_iteration(n=n, gamma=gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
