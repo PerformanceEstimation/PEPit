@@ -24,3 +24,8 @@ Douglas Rachford Splitting
 Three operator splitting
 ------------------------
 .. autofunction:: PEPit.examples.monotone_inclusions.wc_three_operator_splitting
+
+
+Optimal Strongly-monotone Proximal Point
+----------------------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions.wc_optimal_strongly_monotone_proximal_point
