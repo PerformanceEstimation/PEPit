@@ -9,6 +9,7 @@ from tests.additional_complexified_examples_tests import wc_proximal_gradient_co
 from tests.additional_complexified_examples_tests import wc_proximal_point_complexified
 from tests.additional_complexified_examples_tests import wc_gradient_exact_line_search_complexified
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified
+from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified2
 
 
 class TestExamples(unittest.TestCase):
@@ -59,6 +60,12 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_inexact_gradient_exact_line_search_complexified(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_inexact_ELS_modified2(self):
+        L, mu, epsilon, n = 2, .05, .2, 2
+
+        wc, theory = wc_inexact_gradient_exact_line_search_complexified2(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
     def test_ELS_vs_ELS_modified(self):
         L, mu, n = 1.5, .12, 3
 
@@ -70,5 +77,12 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 2.3, .23, .2, 2
 
         wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def test_inexact_ELS_vs_ELS_modified2(self):
+        L, mu, epsilon, n = 2.3, .23, .2, 2
+
+        wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified2(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
