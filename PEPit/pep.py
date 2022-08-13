@@ -318,6 +318,7 @@ class PEP(object):
         function_counter = 0
         for function in self.list_of_functions:
             function_counter += 1
+            self.list_of_psd += function.list_of_psd
             for constraint in function.list_of_constraints:
                 assert isinstance(constraint, Constraint)
                 if constraint.equality_or_inequality == 'inequality':

@@ -279,7 +279,7 @@ Mathematical Programming, 161(1-2), 307-345.
 SIAM Journal on Optimization, 27(3):1283–1313.
 
 [4] A. Taylor, J. Hendrickx, F. Glineur (2017).
-[Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods.](https://github.com/AdrienTaylor/Performance-Estimation-Toolbox)
+[Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods.](https://www.di.ens.fr/~ataylor/share/PESTO_CDC_2017.pdf)
 In 56th IEEE Conference on Decision and Control (CDC).
 
 [5] A. d’Aspremont, D. Scieur, A. Taylor (2021).
