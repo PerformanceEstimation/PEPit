@@ -1,6 +1,7 @@
 from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
+
 def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
     """
     Consider the fixed point problem
@@ -69,7 +70,7 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
     problem = PEP()
 
     # Declare a non expansive operator
-    A = problem.declare_function(LipschitzOperator, L=1/gamma)
+    A = problem.declare_function(LipschitzOperator, L=1 / gamma)
 
     # Start by defining its unique optimal point xs = x_*
     xs, _, _ = A.fixed_point()
@@ -109,4 +110,3 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
 if __name__ == "__main__":
 
     pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, verbose=1)
-    

@@ -2,10 +2,12 @@ from PEPit import PEP
 from PEPit.operators import StronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
+
 def phi(mu, idx):
     if idx == -1:
-        return 0 
+        return 0
     return ((1 + 2 * mu) ** (2 * idx + 2) - 1) / ((1 + 2 * mu) ** 2 - 1)
+
 
 def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
     """
@@ -105,7 +107,8 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
     x, y, y_prv = x0, x0, x0
     for i in range(n):
         x_nxt, _, _ = proximal_step(y, A, 1)
-        y_nxt = x_nxt + (phi(mu, i) - 1) / phi(mu, i + 1) * (x_nxt - x) - 2 * mu * phi(mu, i) / phi(mu, i + 1) * (y - x_nxt) + (1 + 2 * mu) * phi(mu, i - 1) / phi(mu, i + 1) * (y_prv - x)
+        y_nxt = x_nxt + (phi(mu, i) - 1) / phi(mu, i + 1) * (x_nxt - x) - 2 * mu * phi(mu, i) / phi(mu, i + 1) * (
+                    y - x_nxt) + (1 + 2 * mu) * phi(mu, i - 1) / phi(mu, i + 1) * (y_prv - x)
         x, y_prv, y = x_nxt, y, y_nxt
 
     # Set the performance metric to length of \tilde{A}xN
@@ -131,4 +134,3 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
 if __name__ == "__main__":
 
     pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)
-    

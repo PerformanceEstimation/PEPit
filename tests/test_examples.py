@@ -48,9 +48,10 @@ from PEPit.examples.stochastic_convex_minimization import wc_sgd
 from PEPit.examples.stochastic_convex_minimization import wc_point_saga
 from PEPit.examples.monotone_inclusions import wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
 from PEPit.examples.monotone_inclusions import wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
+from PEPit.examples.monotone_inclusions import wc_optimal_strongly_monotone_proximal_point as \
+    wc_optimal_strongly_monotone_proximal_point_operators
 from PEPit.examples.monotone_inclusions import wc_proximal_point as wc_proximal_point_method_operators
 from PEPit.examples.monotone_inclusions import wc_three_operator_splitting as wc_three_operator_splitting_operators
-from PEPit.examples.monotone_inclusions import wc_optimal_strongly_monotone_proximal_point as wc_optimal_strongly_monotone_proximal_point_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
@@ -327,7 +328,7 @@ class TestExamples(unittest.TestCase):
         for n in n_list:
             wc, _ = wc_three_operator_splitting(mu, L1, L3, alpha, theta, n, verbose=self.verbose)
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
-            
+
     def test_gradient_descent_non_convex(self):
         L, n = 1, 5
         gamma = 1 / L
@@ -387,6 +388,11 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_proximal_point_method_operators(alpha, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_wc_optimal_strongly_monotone_proximal_point_operators(self):
+        n, mu = 3, 0.23
+        wc, theory = wc_optimal_strongly_monotone_proximal_point_operators(n=n, mu=mu, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
     def test_douglas_rachford_splitting_operators(self):
         L, mu, alpha, theta = 1, 0.1, 1.3, 0.9
 
@@ -402,11 +408,6 @@ class TestExamples(unittest.TestCase):
             wc, _ = wc_three_operator_splitting_operators(L, mu, beta, alpha, theta, verbose=self.verbose)
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
 
-    def test_wc_optimal_strongly_monotone_proximal_point_operators(self):
-        n, mu = 3, 0.23
-        wc, theory = wc_optimal_strongly_monotone_proximal_point_operators(n=n, mu=mu, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
     def test_halpern_iteration(self):
         n = 10
 
