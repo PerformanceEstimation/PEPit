@@ -1,3 +1,5 @@
+import numpy as np
+
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -108,6 +110,7 @@ class Function(object):
         self.list_of_stationary_points = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
+        self.list_of_psd = list()
 
     def get_is_leaf(self):
         """
@@ -253,6 +256,43 @@ class Function(object):
 
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
+
+    def add_psd_matrix(self, matrix):
+        """
+        Store a new matrix of :class:`Expression`s that we enforce to be positive semidefinite.
+
+        Args:
+            matrix (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+
+        Raises:
+            AssertionError: if provided matrix is not a square matrix.
+            TypeError: if provided matrix does not contain only Expressions.
+
+        """
+
+        # Change iterable into ndarray
+        matrix = np.array(matrix)
+
+        # Verify constraint is a square matrix
+        size = matrix.shape[0]
+        assert matrix.shape == (size, size)
+
+        # Transform scalars into Expressions
+        for i in range(size):
+            for j in range(size):
+                # The entry must be an Expression ...
+                if isinstance(matrix[i, j], Expression):
+                    pass
+                # ... or a python scalar. If so, store it as an Expression
+                elif isinstance(matrix[i, j], int) or isinstance(matrix[i, j], float):
+                    matrix[i, j] = Expression(is_leaf=False, decomposition_dict={1: matrix[i, j]})
+                # Raise an Exception in any other scenario
+                else:
+                    raise TypeError("PSD matrices contains only Expressions and / or scalar values!"
+                                    "Got {}".format(type(matrix[i, j])))
+
+        # Add constraint to the list of self's constraints
+        self.list_of_psd.append(matrix)
 
     def add_class_constraints(self):
         """
