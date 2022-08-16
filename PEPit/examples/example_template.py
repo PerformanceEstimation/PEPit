@@ -13,12 +13,12 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
 
     where :math:`f` is ``CLASS (eg., smooth convex)``.
 
-    This code computes a worst-case guarantee for the ** ``NAME OF THE METHOD`` **.
+    This code computes a worst-case guarantee for the \*\* ``NAME OF THE METHOD`` \*\*.
     That is, it computes the smallest possible :math:`\\tau(arg_1, arg_2, arg_3)` such that the guarantee
 
     .. math:: \\text{PERFORMANCE METRIC} \\leqslant \\tau(arg_1, arg_2, arg_3) \\text{ INITIALIZATION}
 
-    is valid, where ``NOTATION OF THE OUTPUT`` is the output of the ** ``NAME OF THE METHOD`` **,
+    is valid, where ``NOTATION OF THE OUTPUT`` is the output of the \*\* ``NAME OF THE METHOD`` \*\*,
     and where :math:`x_\\star` is the minimizer of :math:`f`.
     In short, for given values of ``ARGUMENTS``,
     :math:`\\tau(arg_1, arg_2, arg_3)` is computed as the worst-case value of

@@ -259,7 +259,7 @@ class Function(object):
 
     def add_psd_matrix(self, matrix):
         """
-        Store a new matrix of :class:`Expression`s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
 
         Args:
             matrix (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
