@@ -70,7 +70,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=1)
         n (int): number of iterations.
         verbose (int): Level of information details to print.
 
-                        - 1: No verbose at all.
+                        - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
                         - 2: This example's output + PEPit information + CVXPY details.

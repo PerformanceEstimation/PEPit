@@ -51,7 +51,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=1):
         sigma (float): accuracy parameter of the proximal point computation.
         verbose (int): Level of information details to print.
                         
-                        - 1: No verbose at all.
+                        - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
                         - 2: This example's output + PEPit information + CVXPY details.

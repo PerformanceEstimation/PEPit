@@ -44,7 +44,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
         gamma (float): step-size between 1/2 and 1
         verbose (int): Level of information details to print.
                         
-                        - 1: No verbose at all.
+                        - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
                         - 2: This example's output + PEPit information + CVXPY details.
