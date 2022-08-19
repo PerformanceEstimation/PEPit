@@ -42,7 +42,7 @@ This [notebook](https://github.com/PerformanceEstimation/PEPit/blob/master/resso
 
 
 
-## Installation 
+## Installation
 
 The library has been tested on Linux and MacOSX.
 It relies on the following Python modules:
@@ -246,8 +246,8 @@ PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/
 
 This toolbox has been created by
 
-- [**Baptiste Goujaud**]() (main contributor #1) 
-- [**Céline Moucer**]() (main contributor #2)
+- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) (main contributor #1) 
+- [**Céline Moucer**](https://www.linkedin.com/in/c%C3%A9line-moucer-88068b173/) (main contributor #2)
 - [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) (project supervision)
 - [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) (project supervision)
 - [**Adrien Taylor**](https://adrientaylor.github.io/) (contributor & main project supervision)
@@ -479,7 +479,7 @@ International Conference on Machine Learning (ICML).
 
 [54] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
 [Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.](https://arxiv.org/pdf/2203.00342.pdf)
-    
+
 [55] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
 [Optimal first-order methods for convex functions with a quadratic upper bound.](https://arxiv.org/pdf/2205.15033.pdf)
 

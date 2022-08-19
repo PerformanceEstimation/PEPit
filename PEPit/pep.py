@@ -137,7 +137,7 @@ class PEP(object):
 
     def add_psd_matrix(self, matrix):
         """
-        Store a new matrix of :class:`Expression`s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
 
         Args:
             matrix (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
@@ -246,13 +246,16 @@ class PEP(object):
                                               If False, return the worst case value only.
                                               Set to False by default.
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
-                                                           (rank of the Gram matrix).
-                                                           Available heuristics are:
+                                                           (rank of the Gram matrix). Set to None to deactivate
+                                                           it (default value). Available heuristics are:
+                                                           
                                                             - "trace": minimize :math:`Tr(G)`
                                                             - "logdet{an integer n}": minimize
                                                               :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
                                                               using n iterations of local approximation problems.
-                                                           Set to None to deactivate it (default value).
+                                                              
+                                                            
+                                                            
             eig_regularization (float, optional): The regularization we use to make
                                                   :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
                                                   (only used when "dimension_reduction_heuristic" is not None)
