@@ -13,13 +13,13 @@ def wc_optimized_gradient(L, n, verbose=1):
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **optimized gradient method** (OGM), and applies the trace heuristic
-    for trying to find a low-dimensional worst-case example on which this guarantee is achieved. That is, it computes
+    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved. That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`. Then,
-    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is achieved.
+    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is nearly achieved.
 
     **Algorithm**:
     The optimized gradient method is described by
