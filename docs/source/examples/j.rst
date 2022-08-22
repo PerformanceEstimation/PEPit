@@ -19,3 +19,13 @@ Optimized gradient
 Frank Wolfe
 -----------
 .. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_frank_wolfe
+
+
+Proximal point
+--------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_proximal_point
+
+
+Halpern iteration
+-----------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_halpern_iteration
