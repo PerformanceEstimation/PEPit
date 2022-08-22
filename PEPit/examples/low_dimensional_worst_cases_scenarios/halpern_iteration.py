@@ -11,7 +11,8 @@ def wc_halpern_iteration(n, verbose=1):
     where :math:`A` is a non-expansive operator,
     that is a :math:`L`-Lipschitz operator with :math:`L=1`.
 
-    This code computes a worst-case guarantee for the **Halpern Iteration**.
+    This code computes a worst-case guarantee for the **Halpern Iteration**, and looks for a low-dimensional
+    worst-case example nearly achieving this worst-case guarantee.
     That is, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
 
     .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2
@@ -21,9 +22,8 @@ def wc_halpern_iteration(n, verbose=1):
 
     In short, for a given value of :math:`n`,
     :math:`\\tau(n)` is computed as the worst-case value of
-    :math:`\\|x_n - Ax_n\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
-
-    This example further illustrates how to find a low-dimensional worst-case example using the logdet heuristic [2].
+    :math:`\\|x_n - Ax_n\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`. Then, it looks for a low-dimensional
+    nearly achieving this performance.
     
     **Algorithm**: The Halpern iteration can be written as
 
@@ -77,7 +77,7 @@ def wc_halpern_iteration(n, verbose=1):
 	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.015625108638644202
 	(PEPit) Postprocessing: 1 eigenvalue(s) > 2.51642373983554e-11 after dimension reduction
 	*** Example file: worst-case performance of Halpern Iterations ***
-		PEPit guarantee:	 ||xN - AxN||^2 <= 0.0156151 ||x0 - x_*||^2
+		PEPit example:	 ||xN - AxN||^2 == 0.0156151 ||x0 - x_*||^2
 		Theoretical guarantee:	 ||xN - AxN||^2 <= 0.015625 ||x0 - x_*||^2
 
     """
@@ -115,7 +115,7 @@ def wc_halpern_iteration(n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Halpern Iterations ***')
-        print('\tPEPit guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t ||xN - AxN||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

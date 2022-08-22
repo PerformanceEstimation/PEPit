@@ -13,7 +13,9 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     where :math:`f_1` is :math:`L`-smooth and convex
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
 
-    This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method.
+    This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method,
+    and looks for a low-dimensional worst-case example nearly achieving this worst-case guarantee using :math:`12` iterations
+    of the logdet heuristic.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L) D^2,
@@ -21,7 +23,8 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     is valid, where x_n is the output of the **conditional gradient** method,
     and where :math:`x_\\star` is a minimizer of :math:`F`.
     In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L)` is computed as the worst-case value of
-    :math:`F(x_n) - F(x_\\star)` when :math:`D \\leqslant 1`.
+    :math:`F(x_n) - F(x_\\star)` when :math:`D \\leqslant 1`. Then, it looks for a low-dimensional nearly achieving this
+    performance.
 
     **Algorithm**:
 
@@ -39,7 +42,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
 
         .. math :: F(x_n) - F(x_\\star) \\leqslant \\frac{2L D^2}{n+2}.
 
-    **References**:
+    **References**: The algorithm is presented in, among others, [1, 2]. The logdet heuristic is presented in [3].
 
     [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
@@ -47,6 +50,10 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
     In 30th International Conference on Machine Learning (ICML).
     <http://proceedings.mlr.press/v28/jaggi13.pdf>`_
+
+    `[3] F. Maryam, H. Hindi, S. Boyd (2003). Log-det heuristic for matrix rank minimization with applications to Hankel
+    and Euclidean distance matrices. American Control Conference (ACC).
+    <https://web.stanford.edu/~boyd/papers/pdf/rank_min_heur_hankel.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -103,7 +110,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07828953910620315
         (PEPit) Postprocessing: 11 eigenvalue(s) > 2.3049828928448532e-10 after dimension reduction
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-        	PEPit guarantee:	 f(x_n)-f_* <= 0.0782795 ||x0 - xs||^2
+        	PEPit example:	 f(x_n)-f_* == 0.0782795 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2 
 
     """
@@ -151,7 +158,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit example:\t f(x_n)-f_* == {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

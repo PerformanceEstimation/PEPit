@@ -95,7 +95,7 @@ def wc_optimized_gradient(L, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
         (PEPit) Postprocessing: 1 eigenvalue(s) > 1e-05 after trace heuristic
         *** Example file: worst-case performance of optimized gradient method ***
-            PEPit guarantee:		 f(y_n)-f_* <= 0.0767422 ||x_0 - x_*||^2
+            PEPit example:		 f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
 
     """
@@ -144,7 +144,7 @@ def wc_optimized_gradient(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

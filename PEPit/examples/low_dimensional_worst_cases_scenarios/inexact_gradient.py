@@ -11,13 +11,16 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for an **inexact gradient method**.
+    This code computes a worst-case guarantee for an **inexact gradient method** and looks for a low-dimensional
+    worst-case example nearly achieving this worst-case guarantee using :math:`10` iterations of the logdet heuristic.
+    
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu,\\varepsilon)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n,L,\\mu,\\varepsilon) (f(x_0) - f_\\star)
 
     is valid, where :math:`x_n` is the output of the gradient descent with an inexact descent direction,
-    and where :math:`x_\\star` is the minimizer of :math:`f`.
+    and where :math:`x_\\star` is the minimizer of :math:`f`. Then, it looks for a low-dimensional nearly achieving this
+    performance.
 
     The inexact descent direction is assumed to satisfy a relative inaccuracy
     described by (with :math:`0 \\leqslant \\varepsilon \\leqslant 1`)
@@ -44,7 +47,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
     with :math:`L_{\\varepsilon} = (1 + \\varepsilon)L` and :math:`\mu_{\\varepsilon} = (1-\\varepsilon) \\mu`. This
     guarantee is achieved on one-dimensional quadratic functions.
 
-    **References**:The detailed analyses can be found in [1, 2].
+    **References**:The detailed analyses can be found in [1, 2]. The logdet heuristic is presented in [3].
 
     `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
     inexact gradient and Newton methods through semidefinite programming performance estimation.
@@ -54,6 +57,10 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
     `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods.
     Mathematical Programming (to appear).
     <https://arxiv.org/pdf/1912.13494.pdf>`_
+
+    `[3] F. Maryam, H. Hindi, S. Boyd (2003). Log-det heuristic for matrix rank minimization with applications to Hankel
+    and Euclidean distance matrices. American Control Conference (ACC).
+    <https://web.stanford.edu/~boyd/papers/pdf/rank_min_heur_hankel.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
@@ -106,7 +113,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13989778793516514
         (PEPit) Postprocessing: 2 eigenvalue(s) > 9.339529753603287e-06 after dimension reduction
         *** Example file: worst-case performance of inexact gradient ***
-            PEPit guarantee:	     f(x_n)-f_* <= 0.139888 (f(x_0)-f_*)
+            PEPit example:	     f(x_n)-f_* == 0.139888 (f(x_0)-f_*)
             Theoretical guarantee:	 f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
 
     """
@@ -150,7 +157,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit example:\t f(x_n)-f_* == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
