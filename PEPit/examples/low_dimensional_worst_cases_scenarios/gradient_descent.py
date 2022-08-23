@@ -10,12 +10,14 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     where :math:`f` is :math:`L`-smooth.
 
-    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`,
+    and looks for a low-dimensional worst-case example nearly achieving this worst-case guarantee.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
     .. math:: \\min_{t\\leqslant n} \\|\\nabla f(x_t)\\|^2 \\leqslant \\tau(n, L, \\gamma) (f(x_0) - f(x_n))
 
     is valid, where :math:`x_n` is the n-th iterates obtained with the gradient method with fixed step-size.
+    Then, it looks for a low-dimensional nearly achieving this performance.
 
     **Algorithm**:
     Gradient descent is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
@@ -60,17 +62,27 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 30 constraint(s) added
-        (PEPit) Compiling SDP
-        (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
-        *** Example file: worst-case performance of gradient descent with fixed step-size ***
-            PEPit guarantee:		 min_i ||f'(x_i)|| ^ 2 <= 0.266677 (f(x_0)-f_*)
-            Theoretical guarantee:	 min_i ||f'(x_i)|| ^ 2 <= 0.266667 (f(x_0)-f_*)
+	(PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+	(PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
+	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+	(PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+		 function 1 : 30 constraint(s) added
+	(PEPit) Setting up the problem: 0 lmi constraint(s) added
+	(PEPit) Compiling SDP
+	(PEPit) Calling SDP solver
+	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.2666666655116665
+	(PEPit) Postprocessing: 7 eigenvalue(s) > 0 before dimension reduction
+	(PEPit) Calling SDP solver
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
+	(PEPit) Postprocessing: 1 eigenvalue(s) > 7.796196733649025e-08 after 1 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
+	(PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
+	(PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
+	*** Example file: worst-case performance of gradient descent with fixed step-size ***
+		PEPit example:	 min_i ||f'(x_i)|| ^ 2 >= 0.266657 (f(x_0)-f_*)
+		Theoretical guarantee:	 min_i ||f'(x_i)|| ^ 2 <= 0.266667 (f(x_0)-f_*)
+
 
     """
 
@@ -102,7 +114,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet2")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 4 / 3 * L / n
@@ -110,7 +122,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEPit guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit example:\t min_i ||f\'(x_i)|| ^ 2 >= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
