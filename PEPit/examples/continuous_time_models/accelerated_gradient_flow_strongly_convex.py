@@ -18,8 +18,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
     .. math:: \\frac{d}{dt}\\mathcal{V}_{P}(X_t) \\leqslant -\\tau(\\mu)\\mathcal{V}_P(X_t) ,
 
     is valid, where :math:`\\mathcal{V}_{P}(X_t) = f(X_t) - f(x_\\star) + (X_t - x_\\star, \\frac{d}{dt}X_t)^TP(X_t - x_\\star, \\frac{d}{dt}X_t)`,
-    :math:`X_t` is the output of the **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
-    In short, for given values of and :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of the derivative
+    :math:`X_t` is the output of an **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
+    In short, for given values of :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of the derivative
     :math:`f(X_t)-f_\\star` when :math:`f(X_t) -  f(x_\\star)\\leqslant 1`.
 
     **Algorithm**:
@@ -59,7 +59,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
     Args:
         mu (float): the strong convexity parameter
-        psd (bool): option for positivity of :math:`P` in the Lyapunov function :math:`\\mathcal{V}_{P}`
+        psd (boolean): option for positivity of :math:`P` in the Lyapunov function :math:`\\mathcal{V}_{P}`
         verbose (int): Level of information details to print.
                        -1: No verbose at all.
                        0: This example's output.
