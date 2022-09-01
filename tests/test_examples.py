@@ -206,7 +206,7 @@ class TestExamples(unittest.TestCase):
         L, n = 1, 5
         gamma = 1 / L
 
-        wc, theory = wc_gradient_descent_non_convex_low_dim(L, gamma, n, verbose=1)
+        wc, theory = wc_gradient_descent_non_convex_low_dim(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
     def test_inexact_accelerated_gradient_1(self):

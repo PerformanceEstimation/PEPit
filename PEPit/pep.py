@@ -469,8 +469,9 @@ class PEP(object):
         # Recompute M (or S) accordingly.
         corrected_S = eig_vec @ np.diag(corrected_eig_val) @ eig_vec.T
 
-        # Get the highest eigenvalue that have been set to 0, if any.
+        # Get the highest eigenvalue that has been set to 0, if any.
         eig_threshold = 0
+        
         if nb_zeros > 0:
         	eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
 
