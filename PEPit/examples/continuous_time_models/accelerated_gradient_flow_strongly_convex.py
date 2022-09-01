@@ -41,6 +41,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
         .. math:: \\frac{d}{dt}\\mathcal{V}_P(X_t) \\leqslant -\\frac{4}{3}\\sqrt{\\mu}\\mathcal{V}_P(X_t).
 
+
     **References**:
 
     `[1] A. C. Wilson, B. Recht, M. I. Jordan (2021).

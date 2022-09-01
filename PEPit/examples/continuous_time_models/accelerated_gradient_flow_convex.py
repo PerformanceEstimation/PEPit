@@ -33,9 +33,11 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
         .. math:: \\frac{d}{dt}\\mathcal{V}(X_t, t) \\leqslant 0.
 
-        After integrating between :math:`0` and :math:`t`,
+        After integrating between :math:`0` and :math:`T`,
 
-        .. math:: f(X_t) - f_\\star \\leqslant \\frac{2}{t^2}\\|x_0 - x_\\star\\|^2.
+        .. math:: f(X_T) - f_\\star \\leqslant \\frac{2}{T^2}\\|x_0 - x_\\star\\|^2.
+
+        The detailed approach using PEPs is available in [2, Theorem 2.6].
 
     **References**:
 
@@ -43,6 +45,10 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
     A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights. In the Journal of
     Machine Learning Research (JMLR).
     <https://jmlr.org/papers/volume17/15-084/15-084.pdf>`_
+
+    `[2] C. Moucer, A. Taylor, F. Bach (2022).
+    A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.
+    <https://arxiv.org/pdf/2205.12772.pdf>`_
 
     Args:
         t (float): time step

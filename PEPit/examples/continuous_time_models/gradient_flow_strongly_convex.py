@@ -33,11 +33,17 @@ def wc_gradient_flow_strongly_convex(mu, verbose=1):
 
         .. math:: \\frac{d}{dt}\\mathcal{V}(X_t) \\leqslant -2\\mu\\mathcal{V}(X_t).
 
+        The detailed approach using PEPs is available in [2, Theorem 2.1].
+
     **References**:
 
     `[1] D. Scieur, V. Roulet, F. Bach and A. D'Aspremont (2017).
     Integration methods and accelerated optimization algorithms. In Advances in Neural Information Processing Systems (NIPS).
     <https://papers.nips.cc/paper/2017/file/bf62768ca46b6c3b5bea9515d1a1fc45-Paper.pdf>`_
+
+    `[2] C. Moucer, A. Taylor, F. Bach (2022).
+    A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.
+    <https://arxiv.org/pdf/2205.12772.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter
