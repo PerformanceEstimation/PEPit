@@ -24,3 +24,12 @@ SAGA
 Point SAGA
 ----------
 .. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_point_saga
+
+Randomized coordinate descent for smooth strongly convex functions
+--------------------------------------------------------------------
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_randomized_coordinate_descent_smooth_strongly_convex
+
+Randomized coordinate descent for smooth convex functions
+--------------------------------------------------------------------
+.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_randomized_coordinate_descent_smooth_convex
+
