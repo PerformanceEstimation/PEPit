@@ -1,4 +1,3 @@
-import cvxpy as cp
 from math import sqrt
 from PEPit import PEP
 from PEPit.functions.strongly_convex import StronglyConvexFunction
@@ -123,7 +122,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, solver=cp.MOSEK)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if psd:

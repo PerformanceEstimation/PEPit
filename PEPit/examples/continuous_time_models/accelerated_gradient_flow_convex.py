@@ -1,4 +1,3 @@
-import cvxpy as cp
 from PEPit import PEP
 from PEPit.functions.convex_function import ConvexFunction
 
@@ -107,7 +106,7 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, solver=cp.MOSEK)
+    pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 0.
