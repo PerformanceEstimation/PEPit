@@ -78,7 +78,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.834710743858431
-        *** Example file: worst-case performance of coordinate gradient descent with fixed step-sizes ***
+        *** Example file: worst-case performance of randomized coordinate gradient descent ***
         PEPit guarantee:    E||x_(n+1) - x_*||^2 <= 0.834711 ||x_n - x_*||^2
         Theoretical guarantee:  E||x_(n+1) - x_*||^2 <= 0.834711 ||x_n - x_*||^2
 
@@ -129,7 +129,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
 
     # Print conclusion if required
     if verbose != -1:
-        print('*** Example file: worst-case performance of coordinate gradient descent with fixed step-sizes ***')
+        print('*** Example file: worst-case performance of randomized coordinate gradient descent ***')
         print('\tPEPit guarantee:\t E||x_(n+1) - x_*||^2 <= {:.6} ||x_n - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E||x_(n+1) - x_*||^2 <= {:.6} ||x_n - x_*||^2'.format(theoretical_tau))
 
