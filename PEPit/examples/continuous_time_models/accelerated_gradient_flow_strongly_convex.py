@@ -61,10 +61,11 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
         mu (float): the strong convexity parameter
         psd (boolean): option for positivity of :math:`P` in the Lyapunov function :math:`\\mathcal{V}_{P}`
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+
+                        - -1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
