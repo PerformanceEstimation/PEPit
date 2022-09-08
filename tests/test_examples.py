@@ -517,10 +517,10 @@ class TestExamples(unittest.TestCase):
 
     def test_accelerated_gradient_flow_strongly_convex(self):
         mu = 2.1
-        psd = True
+        for psd in {True, False}:
         
-        wc, theory = wc_accelerated_gradient_flow_strongly_convex(mu=mu, psd=psd, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+            wc, theory = wc_accelerated_gradient_flow_strongly_convex(mu=mu, psd=psd, verbose=self.verbose)
+            self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_gradient_flow_strongly_convex(self):
         mu = .8
