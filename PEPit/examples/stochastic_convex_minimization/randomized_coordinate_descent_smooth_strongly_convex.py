@@ -27,7 +27,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    Randomized coordinate descent is described by
+    Randomized block-coordinate descent is described by
 
     .. math::
         \\begin{eqnarray}
@@ -35,7 +35,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
             x_{t+1}^{(i)} & = & x_t - \\gamma \\nabla_i f(x_t),
         \\end{eqnarray}
 
-    where :math:`\\gamma` is a step-size.
+    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the partial derivative corresponding to the block :math:`i`.
 
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 17]:

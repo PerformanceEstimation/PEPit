@@ -26,7 +26,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     of :math:`\\mathbb{E}_i[\\phi(x_{t+1}^{(i)})]` such that :math:`\\phi(x_{t}) \\leqslant 1`.
 
     **Algorithm**:
-    Randomized coordinate descent is described by
+    Randomized block-coordinate descent is described by
 
     .. math::
         \\begin{eqnarray}
