@@ -13,13 +13,13 @@ def wc_optimized_gradient(L, n, verbose=1):
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **optimized gradient method** (OGM), and applies the trace heuristic
-    for trying to find a low-dimensional worst-case example on which this guarantee is achieved. That is, it computes
+    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved. That is, it computes
     the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`. Then,
-    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is achieved.
+    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is nearly achieved.
 
     **Algorithm**:
     The optimized gradient method is described by
@@ -95,7 +95,7 @@ def wc_optimized_gradient(L, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
         (PEPit) Postprocessing: 1 eigenvalue(s) > 1e-05 after trace heuristic
         *** Example file: worst-case performance of optimized gradient method ***
-            PEPit guarantee:		 f(y_n)-f_* <= 0.0767422 ||x_0 - x_*||^2
+            PEPit example:		 f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2
             Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
 
     """
@@ -144,7 +144,7 @@ def wc_optimized_gradient(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

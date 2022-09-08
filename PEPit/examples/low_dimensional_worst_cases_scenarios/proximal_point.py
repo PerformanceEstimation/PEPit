@@ -11,13 +11,15 @@ def wc_proximal_point(alpha, n, verbose=1):
 
     where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
 
-    This code computes a worst-case guarantee for the **proximal point** method.
-    That, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
+    This code computes a worst-case guarantee for the **proximal point** method, and looks for a low-dimensional
+    worst-case example nearly achieving this worst-case guarantee using the trace heuristic.
+    
+    That is, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee
 
         .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
-    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
-    This example further illustrates how to find a low-dimensional worst-case example, recovering that of [1].
+    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`. Then, it looks for a low-dimensional nearly achieving this
+    performance.
 
     **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
@@ -65,7 +67,7 @@ def wc_proximal_point(alpha, n, verbose=1):
 	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03504938911860289
 	(PEPit) Postprocessing: 2 eigenvalue(s) > 4.190375858424204e-09 after dimension reduction
 	*** Example file: worst-case performance of the Proximal Point Method***
-		PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0350394 ||x0 - xs||^2
+		PEPit example:	 ||x(n) - x(n-1)||^2 == 0.0350394 ||x0 - xs||^2
 		Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2
 
     """
@@ -104,7 +106,7 @@ def wc_proximal_point(alpha, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit example:\t ||x(n) - x(n-1)||^2 == {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
