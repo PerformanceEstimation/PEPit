@@ -52,7 +52,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong-convexity parameter.
-        gamma (float): step-size.
+        gamma (float): the step-size.
         d (int): the dimension.
         verbose (int): Level of information details to print.
 
@@ -105,7 +105,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     gradients = []
     for i in range(d-1):
         gradients.append(Point())
-    gd = g0 - np.sum(gradients) # Define the last point as a function of the whole gradient and past iterates
+    gd = g0 - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
     gradients.append(gd)
     # Add orthogonality constraints
     for i in range(d):

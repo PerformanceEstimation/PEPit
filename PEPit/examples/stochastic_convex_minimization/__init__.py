@@ -10,5 +10,6 @@ __all__ = ['point_saga', 'wc_point_saga',
            'saga', 'wc_saga',
            'sgd', 'wc_sgd',
            'sgd_overparametrized', 'wc_sgd_overparametrized',
-          'randomized_coordinate_descent_smooth_strongly_convex', 'randomized_coordinate_descent_smooth_convex'
-            ]
+           'randomized_coordinate_descent_smooth_strongly_convex', 'wc_randomized_coordinate_descent_smooth_strongly_convex',
+           'randomized_coordinate_descent_smooth_convex', 'wc_randomized_coordinate_descent_smooth_convex',
+           ]

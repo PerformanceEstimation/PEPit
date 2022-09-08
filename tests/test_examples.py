@@ -389,7 +389,8 @@ class TestExamples(unittest.TestCase):
         L, mu, d = 1, 0.1, 3
         gamma = 2/(L+mu)
 
-        wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d, verbose=self.verbose)
+        wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
+                                                                             verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
     def test_accelerated_proximal_point_operators(self):

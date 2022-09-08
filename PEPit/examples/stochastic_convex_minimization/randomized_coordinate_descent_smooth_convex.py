@@ -51,7 +51,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     Args:
         L (float): the smoothness parameter.
-        gamma (float): step-size.
+        gamma (float): the step-size.
         d (int): the dimension.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
@@ -124,7 +124,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     phi1 = dn * (func(x) - fs) + L / 2 * (x - xs) ** 2
     problem.set_initial_condition(phi1 == 1)
 
-    # Run the last step of the algorihtm and keep gradients in memory
+    # Run the last step of the algorithm and keep gradients in memory
     g = func.gradient(x)
     gradients = []
     for i in range(d - 1):
@@ -136,6 +136,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
         for j in range(d):
             if i != j:
                 problem.add_constraint(gradients[i] * gradients[j] == 0)
+
     # Compute the d possible value for x1 using coordinate descent
     x1 = []
     for grad in gradients:
