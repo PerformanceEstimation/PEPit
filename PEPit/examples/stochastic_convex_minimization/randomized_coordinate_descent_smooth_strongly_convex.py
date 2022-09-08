@@ -13,24 +13,25 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for **randomized coordinate descent** with step-size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **randomized block-coordinate descent** with step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, d)` such that the guarantee
 
-    .. math:: \\mathbb{E}_i[\\|x_{n+1}^{(i)} - x_\star \\|^2] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_{n} - x_\\star\\|^2
+    .. math:: \\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_{t} - x_\\star\\|^2
+    
+    where :math:`x_{t+1}^{(i)}` denotes the value of the iterate :math:`x_{t+1}` in the scenario
+    where the :math:`i` th block of coordinates is selected for the update  with fixed step-size
+    :math:`\\gamma`, :math:`d` is the number of blocks of coordinates and where :math:`x_\\star` is a minimizer of :math:`f`.
 
-    is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`,
-    :math:`d`is the dimension, and where :math:`x_\\star` is a minimizer of :math:`f`.
-
-    In short, for given values of :math:`\\mu`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma, d)` is
-    computed as the worst-case value of :math:`\\mathbb{E}_i[\\|x_{k+1}^{(i)} - x_\star \\|^2]` when
-    :math:`\\|x_k - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma, d)` is
+    computed as the worst-case value of :math:`\\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2]` when
+    :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Randomized coordinate descent is described by
 
     .. math::
         \\begin{eqnarray}
-            \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, n|]\\right), \\\\
+            \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, d|]\\right), \\\\
             x_{t+1}^{(i)} & = & x_t - \\gamma \\nabla_i f(x_t),
         \\end{eqnarray}
 
@@ -39,7 +40,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 17]:
 
-    .. math:: \\mathbb{E}_i[\\|x_{n+1}^{(i)} - x_\star \\|^2] \\leqslant \\rho^2 \\|x_n-x_\\star\\|^2,
+    .. math:: \\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2] \\leqslant \\rho^2 \\|x_t-x_\\star\\|^2,
 
     where :math:`\\rho^2 = \\max \\left( \\frac{(\\gamma\\mu - 1)^2 + d - 1}{d},\\frac{(\\gamma L - 1)^2 + d - 1}{d} \\right)`.
 

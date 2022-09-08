@@ -11,37 +11,38 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is :math:`L`-smooth convex.
+    where :math:`f` is convex and :math:`L`-smooth.
 
-    This code computes a worst-case guarantee for **randomized coordinate descent** with fixed step-size :math:`\\gamma`.
-    That is, it verifies that the inequality holds
+    This code computes a worst-case guarantee for **randomized block-coordinate descent** with fixed step-size :math:`\\gamma`.
+    That is, it verifies that the inequality holds (the expectation is over the index of the block of coordinates that is randomly selected)
 
-    .. math:: \\mathbb{E}_i[\\phi(x^{(i)}_{n+1})] \\leqslant \\phi(x_{n}),
+    .. math:: \\mathbb{E}_i[\\phi(x_{t+1}^{(i)})] \\leqslant \\phi(x_{t}),
 
-    where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`,
-    :math:`d` is the dimension, and where :math:`x_\\star` is a minimizer of :math:`f`.
+    where :math:`x_{t+1}^{(i)}` denotes the value of the iterate :math:`x_{t+1}` in the scenario
+    where the :math:`i` th block of coordinates is selected for the update  with fixed step-size
+    :math:`\\gamma`, and :math:`d` is the number of blocks of coordinates.
 
-    In short, for given values of :math:`d`, :math:`L`, and :math:`\\gamma`, it computes the worst-case value
-    of :math:`\\mathbb{E}_i[\\phi(x^{(i)}_{n+1})]` such that :math:`\\phi(x_{n}) \\leqslant 1`.
+    In short, for given values of :math:`L`, :math:`d`, and :math:`\\gamma`, it computes the worst-case value
+    of :math:`\\mathbb{E}_i[\\phi(x_{t+1}^{(i)})]` such that :math:`\\phi(x_{t}) \\leqslant 1`.
 
     **Algorithm**:
     Randomized coordinate descent is described by
 
     .. math::
         \\begin{eqnarray}
-            \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, n|]\\right), \\\\
+            \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, d|]\\right), \\\\
             x_{t+1}^{(i)} & = & x_t - \\gamma \\nabla_i f(x_t),
         \\end{eqnarray}
 
-    where :math:`\\gamma` is a step-size.
+    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the partial derivative corresponding to the block :math:`i`.
 
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 16]:
 
-    .. math:: \\mathbb{E}_i[\\phi(x^{(i)}_{n+1})] \\leqslant \\phi(x_{n}),
+    .. math:: \\mathbb{E}_i[\\phi(x^{(i)}_{t+1})] \\leqslant \\phi(x_{t}),
 
-    where :math:`\\phi(x_n) = d_n (f(x_n) - f_\\star) + \\frac{L}{2} \|x_n - x_\\star\|^2`, :math:`d_{n+1} = d_n + \\frac{\\gamma L}{d}`,
-    and :math:`d_n \\geqslant 1`.
+    where :math:`\\phi(x_t) = d_t (f(x_t) - f_\\star) + \\frac{L}{2} \|x_t - x_\\star\|^2`, :math:`d_{t+1} = d_n + \\frac{\\gamma L}{d}`,
+    and :math:`d_t \\geqslant 1`.
 
     **References**:
 
