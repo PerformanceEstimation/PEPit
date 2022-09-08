@@ -80,7 +80,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
 	(PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
 	*** Example file: worst-case performance of gradient descent with fixed step-size ***
-		PEPit example:	 min_i ||f'(x_i)|| ^ 2 >= 0.266657 (f(x_0)-f_*)
+		PEPit example:	 min_i ||f'(x_i)|| ^ 2 == 0.266657 (f(x_0)-f_*)
 		Theoretical guarantee:	 min_i ||f'(x_i)|| ^ 2 <= 0.266667 (f(x_0)-f_*)
 
 
@@ -122,7 +122,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEPit example:\t min_i ||f\'(x_i)|| ^ 2 >= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit example:\t min_i ||f\'(x_i)|| ^ 2 == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
