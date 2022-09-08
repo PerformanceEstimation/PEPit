@@ -6,9 +6,15 @@ Low dimensional worst-cases scenarios
    :local:
 
 
+
 Inexact gradient
 ----------------
 .. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_inexact_gradient
+
+
+Non-convex gradient descent
+--------------------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_gradient_descent
 
 
 Optimized gradient
