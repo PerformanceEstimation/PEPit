@@ -70,6 +70,10 @@ from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_gradient_des
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
+from PEPit.examples.continuous_time_models import wc_accelerated_gradient_flow_convex
+from PEPit.examples.continuous_time_models import wc_gradient_flow_convex
+from PEPit.examples.continuous_time_models import wc_accelerated_gradient_flow_strongly_convex
+from PEPit.examples.continuous_time_models import wc_gradient_flow_strongly_convex
 from PEPit.examples.tutorials import wc_gradient_descent_contraction
 
 
@@ -506,6 +510,31 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
+
+    def test_accelerated_gradient_flow_convex(self):
+        t = 3.4
+        
+        wc, theory = wc_accelerated_gradient_flow_convex(t=t, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+
+    def test_gradient_flow_convex(self):
+        t = 3.4
+        
+        wc, theory = wc_gradient_flow_convex(t=t, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+
+    def test_accelerated_gradient_flow_strongly_convex(self):
+        mu = 2.1
+        for psd in {True, False}:
+        
+            wc, theory = wc_accelerated_gradient_flow_strongly_convex(mu=mu, psd=psd, verbose=self.verbose)
+            self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
+
+    def test_gradient_flow_strongly_convex(self):
+        mu = .8
+        
+        wc, theory = wc_gradient_flow_strongly_convex(mu=mu, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_gradient_descent_contraction(self):
         L, mu, n = 1, 0.1, 1
