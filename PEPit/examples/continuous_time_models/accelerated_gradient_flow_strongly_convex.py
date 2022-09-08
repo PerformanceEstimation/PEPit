@@ -135,10 +135,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an accelerated gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t,t)  <= {:.6} V(X_t,t)'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} V(X_t,t)'.format(
-            theoretical_tau))
+        print('\tPEPit guarantee:\t d/dt V(X_t,t)  <= {:.6} V(X_t,t)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} V(X_t,t)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -147,4 +145,3 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 if __name__ == "__main__":
 
     pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, verbose=1)
-

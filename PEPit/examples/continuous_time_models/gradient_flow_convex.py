@@ -114,10 +114,8 @@ def wc_gradient_flow_convex(t, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t)  <= {:.6}'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} '.format(
-            theoretical_tau))
+        print('\tPEPit guarantee:\t d/dt V(X_t)  <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -504,15 +504,15 @@ class TestExamples(unittest.TestCase):
         self.assertLessEqual(wc, theory)
 
     def test_accelerated_gradient_flow_convex(self):
-        t = 5.3
+        t = 3.4
         
-        wc, theory = wc_accelerated_gradient_flow_convex(t=3.4, verbose=self.verbose)
+        wc, theory = wc_accelerated_gradient_flow_convex(t=t, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_gradient_flow_convex(self):
-        t = 2.3
+        t = 3.4
         
-        wc, theory = wc_gradient_flow_convex(t=3.4, verbose=self.verbose)
+        wc, theory = wc_gradient_flow_convex(t=t, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_accelerated_gradient_flow_strongly_convex(self):
