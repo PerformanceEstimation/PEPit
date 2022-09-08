@@ -13,7 +13,7 @@ Inexact gradient
 
 
 Non-convex gradient descent
---------------------------
+---------------------------
 .. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_gradient_descent
 
 
