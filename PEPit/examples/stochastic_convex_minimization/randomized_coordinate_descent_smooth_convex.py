@@ -41,7 +41,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     .. math:: \\mathbb{E}_i[\\phi(x^{(i)}_{t+1})] \\leqslant \\phi(x_{t}),
 
-    where :math:`\\phi(x_t) = d_t (f(x_t) - f_\\star) + \\frac{L}{2} \|x_t - x_\\star\|^2`, :math:`d_{t+1} = d_n + \\frac{\\gamma L}{d}`,
+    where :math:`\\phi(x_t) = d_t (f(x_t) - f_\\star) + \\frac{L}{2} \|x_t - x_\\star\|^2`, :math:`d_{t+1} = d_t + \\frac{\\gamma L}{d}`,
     and :math:`d_t \\geqslant 1`.
 
     **References**:
@@ -99,7 +99,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     # Run n-1 steps of the algorithm (and keep the last one)
     x = x0
-    for i in range(n-1):
+    for _ in range(n-1):
         # Compute the gradients
         g = func.gradient(x)
         gradients = []
