@@ -4,12 +4,16 @@ from PEPit.expression import Expression
 
 def epsilon_subgradient_step(x0, f, gamma):
     """
-    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma d_{x_0}`
-    where :math:`d_{x_0} \\in\\partial_{\\varepsilon} f(x_0)`. That is, :math:`d_{x_0}` is an
+    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma g_0`
+    where :math:`g_0 \\in\\partial_{\\varepsilon} f(x_0)`. That is, :math:`g_0` is an
     :math:`\\varepsilon`-subgradient of :math:`f` at :math:`x_0`. The set :math:`\\partial_{\\varepsilon} f(x_0)`
     (referred to as the :math:`\\varepsilon`-subdifferential) is defined as (see [1, Section 3])
 
-    .. math:: \\partial_{\\varepsilon} f(x)=\\left\\{g:\, f(z)\\geqslant f(x)+\\left< g;\, z-x \\right>-\\varepsilon \\right\\}
+    .. math:: \\partial_{\\varepsilon} f(x)=\\left\\{g:\, f(z)\\geqslant f(x)+\\left< g;\, z-x \\right>-\\varepsilon \\right\\}.
+    
+    An alternative characterization of :math:`g_0 \\in\\partial_{\\varepsilon} f(x_0)` consists in writing
+    
+    .. math:: f(x_0)+f^*(g_0)-\\left< g_0;x_0\\right>\\leqslant \\varepsilon.
 
     References:
         `[1] A. Brøndsted, R.T. Rockafellar.
@@ -24,18 +28,26 @@ def epsilon_subgradient_step(x0, f, gamma):
 
     Returns:
         x (Point): the output point.
-        dx0 (Point): an :math:`\\varepsilon`-subgradient of f at x0.
-        fx0 (Expression): the value of the function f at x0.
+        g0 (Point): an :math:`\\varepsilon`-subgradient of f at x0.
+        f0 (Expression): the value of the function f at x0.
         epsilon (Expression): the value of epsilon.
 
     """
 
-    dx0 = Point()
+    g0 = Point()
+    f0 = f.value(x0)
     epsilon = Expression()
-    fx0 = Expression()
     
-    f.add_point((x0, dx0, fx0-epsilon))
-    x = x0 - gamma * dx0
+    x = x0 - gamma * g0
+    
+    # f^*(g0) = <g0;y>-f(y) for some y
+    y = Point()
+    fy = Expression()
+    f.add_point((y,g0,fy))
+    fstarg0 = g0*y-fy
+    
+    # epsilon-subgradient condition:
+    f.add_constraint(f0+fstarg0-g0*x0<=epsilon)
+    
     # Return the newly obtained point, the epsilon-subgradient, the value of f in x0, and epsilon.
-    
-    return x, dx0, fx0, epsilon
+    return x, g0, f0, epsilon

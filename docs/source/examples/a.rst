@@ -96,6 +96,11 @@ Inexact accelerated gradient
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_inexact_accelerated_gradient
 
 
+Epsilon-subgradient method
+--------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_epsilon_subgradient_method
+
+
 Gradient descent for quadratically upper bounded convex objective
 -----------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_qg_convex
