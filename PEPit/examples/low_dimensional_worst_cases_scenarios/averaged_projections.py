@@ -3,7 +3,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_alternate_projections(n, verbose=1):
+def wc_averaged_projections(n, verbose=1):
     """
     Consider the convex feasibility problem:
 
@@ -11,13 +11,13 @@ def wc_alternate_projections(n, verbose=1):
 
     where :math:`Q_1` and :math:`Q_2` are two closed convex sets.
 
-    This code computes a worst-case guarantee for the **alternate projection method**, and looks for a low-dimensional
+    This code computes a worst-case guarantee for the **averaged projection method**, and looks for a low-dimensional
     worst-case example nearly achieving this worst-case guarantee.
     That is, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
 
     .. math:: \\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the **alternate projection method**,
+    is valid, where :math:`x_n` is the output of the **averaged projection method**,
     and :math:`x_\\star\\in Q_1\\cap Q_2` is a solution to the convex feasibility problem.
 
     In short, for a given value of :math:`n`,
@@ -25,23 +25,12 @@ def wc_alternate_projections(n, verbose=1):
     :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
-    **Algorithm**: The alternate projection method can be written as
+    **Algorithm**: The averaged projection method can be written as
 
         .. math::
             \\begin{eqnarray}
-                y_{t+1} & = & \\mathrm{Proj}_{Q_1}(x_t), \\\\
-                x_{t+1} & = & \\mathrm{Proj}_{Q_2}(y_{t+1}).
+                x_{t+1} & = & \\frac{1}{2} \\left(\\mathrm{Proj}_{Q_1}(x_t) + \\mathrm{Proj}_{Q_2}(x_{t})\\right).
             \\end{eqnarray}
-
-    **References**: The first results on this method are due to [1]. Its translation in PEPs is due to [2].
-
-    `[1] J. Von Neumann (1949). On rings of operators. Reduction theory. Annals of Mathematics, pp. 401–485.
-    <https://www.jstor.org/stable/1969463>`_
-    
-    `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
-    Exact worst-case performance of first-order methods for composite convex optimization.
-    SIAM Journal on Optimization, 27(3):1283–1313.
-    <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         n (int): number of iterations.
@@ -57,25 +46,25 @@ def wc_alternate_projections(n, verbose=1):
         theoretical_tau (None): no theoretical value.
 
     Example:
-	>>> pepit_tau, theoretical_tau = wc_alternate_projections(n=10, verbose=1)
-	(PEPit) Setting up the problem: size of the main PSD matrix: 24x24
+	>>> pepit_tau, theoretical_tau = wc_averaged_projections(n=10, verbose=1)
+	(PEPit) Setting up the problem: size of the main PSD matrix: 25x25
 	(PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
 	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
 	(PEPit) Setting up the problem: interpolation conditions for 2 function(s)
 		 function 1 : 144 constraint(s) added
-		 function 2 : 121 constraint(s) added
+		 function 2 : 144 constraint(s) added
 	(PEPit) Setting up the problem: 0 lmi constraint(s) added
 	(PEPit) Compiling SDP
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.01886767937124591
-	(PEPit) Postprocessing: 4 eigenvalue(s) > 5.5123159517151226e-08 before dimension reduction
+	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.06844885734745605
+	(PEPit) Postprocessing: 4 eigenvalue(s) > 7.89275405945503e-10 before dimension reduction
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01886767937124591
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 5.920858007849378e-09 after 1 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01886767937124591
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 5.920858007849378e-09 after dimension reduction
-	*** Example file: worst-case performance of the alternate projection method ***
-		PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == 0.0188577 ||x0 - x_*||^2
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06844885734745605
+	(PEPit) Postprocessing: 2 eigenvalue(s) > 2.7574620504263067e-10 after 1 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06844885734745605
+	(PEPit) Postprocessing: 2 eigenvalue(s) > 2.7574620504263067e-10 after dimension reduction
+	*** Example file: worst-case performance of the averaged projection method ***
+		PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == 0.0684389 ||x0 - x_*||^2
 
     """
 
@@ -97,12 +86,13 @@ def wc_alternate_projections(n, verbose=1):
     x = x0
     y = x0
     for _ in range(n):
-        y, _, _ = proximal_step(x, ind_Q1, 1)
-        x, _, _ = proximal_step(y, ind_Q2, 1)
+        y1, _, _ = proximal_step(x, ind_Q1, 1)
+        y2, _, _ = proximal_step(x, ind_Q2, 1)
+        x = 1/2 * (y1 + y2)
 
     # Set the performance metric
     proj1_x, _, _ = proximal_step(x, ind_Q1, 1)
-    proj2_x = x
+    proj2_x, _, _  = proximal_step(x, ind_Q2, 1)
     problem.set_performance_metric((proj2_x-proj1_x)**2)
     problem.set_initial_condition((x0-xs)**2<=1)
 
@@ -113,7 +103,7 @@ def wc_alternate_projections(n, verbose=1):
     
     # Print conclusion if required
     if verbose != -1:
-        print('*** Example file: worst-case performance of the alternate projection method ***')
+        print('*** Example file: worst-case performance of the averaged projection method ***')
         print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -122,4 +112,4 @@ def wc_alternate_projections(n, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_alternate_projection(n=10, verbose=1)
+    pepit_tau, theoretical_tau = wc_averaged_projections(n=10, verbose=1)

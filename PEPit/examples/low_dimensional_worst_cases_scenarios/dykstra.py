@@ -3,7 +3,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_alternate_projections(n, verbose=1):
+def wc_dykstra(n, verbose=1):
     """
     Consider the convex feasibility problem:
 
@@ -11,13 +11,13 @@ def wc_alternate_projections(n, verbose=1):
 
     where :math:`Q_1` and :math:`Q_2` are two closed convex sets.
 
-    This code computes a worst-case guarantee for the **alternate projection method**, and looks for a low-dimensional
+    This code computes a worst-case guarantee for the **Dykstra projection method**, and looks for a low-dimensional
     worst-case example nearly achieving this worst-case guarantee.
     That is, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
 
     .. math:: \\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the **alternate projection method**,
+    is valid, where :math:`x_n` is the output of the **Dykstra projection method**,
     and :math:`x_\\star\\in Q_1\\cap Q_2` is a solution to the convex feasibility problem.
 
     In short, for a given value of :math:`n`,
@@ -25,24 +25,22 @@ def wc_alternate_projections(n, verbose=1):
     :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
-    **Algorithm**: The alternate projection method can be written as
+    **Algorithm**: The Dykstra projection method can be written as
 
         .. math::
             \\begin{eqnarray}
-                y_{t+1} & = & \\mathrm{Proj}_{Q_1}(x_t), \\\\
-                x_{t+1} & = & \\mathrm{Proj}_{Q_2}(y_{t+1}).
+                y_{t} & = & \\mathrm{Proj}_{Q_1}(x_t+p_t), \\\\
+                p_{t+1} & = & x_t + p_t - y_t,\\\\
+                x_{t+1} & = & \\mathrm{Proj}_{Q_2}(y_t+q_t),\\\\
+                q_{t+1} & = & y_t + q_t - x_{t+1}.
             \\end{eqnarray}
 
-    **References**: The first results on this method are due to [1]. Its translation in PEPs is due to [2].
+    **References**: This method is due to [1].
 
-    `[1] J. Von Neumann (1949). On rings of operators. Reduction theory. Annals of Mathematics, pp. 401–485.
-    <https://www.jstor.org/stable/1969463>`_
+    `[1] J.P. Boyle, R.L. Dykstra (1986). A method for finding projections onto the intersection of convex sets in Hilbert spaces.
+    Lecture Notes in Statistics. Vol. 37. pp. 28–47.
+    <https://link.springer.com/chapter/10.1007/978-1-4613-9940-7_3>`_
     
-    `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
-    Exact worst-case performance of first-order methods for composite convex optimization.
-    SIAM Journal on Optimization, 27(3):1283–1313.
-    <https://arxiv.org/pdf/1512.07516.pdf>`_
-
     Args:
         n (int): number of iterations.
         verbose (int): Level of information details to print.
@@ -57,7 +55,7 @@ def wc_alternate_projections(n, verbose=1):
         theoretical_tau (None): no theoretical value.
 
     Example:
-	>>> pepit_tau, theoretical_tau = wc_alternate_projections(n=10, verbose=1)
+	>>> pepit_tau, theoretical_tau = wc_dystra_projections(n=10, verbose=1)
 	(PEPit) Setting up the problem: size of the main PSD matrix: 24x24
 	(PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
 	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
@@ -67,15 +65,15 @@ def wc_alternate_projections(n, verbose=1):
 	(PEPit) Setting up the problem: 0 lmi constraint(s) added
 	(PEPit) Compiling SDP
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.01886767937124591
-	(PEPit) Postprocessing: 4 eigenvalue(s) > 5.5123159517151226e-08 before dimension reduction
+	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.02575645204711821
+	(PEPit) Postprocessing: 6 eigenvalue(s) > 8.637873043503131e-08 before dimension reduction
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01886767937124591
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 5.920858007849378e-09 after 1 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01886767937124591
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 5.920858007849378e-09 after dimension reduction
-	*** Example file: worst-case performance of the alternate projection method ***
-		PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == 0.0188577 ||x0 - x_*||^2
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02575645204711821
+	(PEPit) Postprocessing: 4 eigenvalue(s) > 4.1311208401858176e-09 after 1 dimension reduction step(s)
+	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02575645204711821
+	(PEPit) Postprocessing: 4 eigenvalue(s) > 4.1311208401858176e-09 after dimension reduction
+	*** Example file: worst-case performance of the Dykstra projection method ***
+		PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == 0.0257465 ||x0 - x_*||^2
 
     """
 
@@ -96,9 +94,13 @@ def wc_alternate_projections(n, verbose=1):
     # Run the alternate projection method
     x = x0
     y = x0
+    p = 0*x0 # initiate a null point (to be corrected)
+    q = 0*x0 # initiate a null point (to be corrected)
     for _ in range(n):
-        y, _, _ = proximal_step(x, ind_Q1, 1)
-        x, _, _ = proximal_step(y, ind_Q2, 1)
+        y, _, _ = proximal_step(x + p, ind_Q1, 1)
+        p = x + p - y
+        x, _, _ = proximal_step(y + q, ind_Q2, 1)
+        q = y + q - x
 
     # Set the performance metric
     proj1_x, _, _ = proximal_step(x, ind_Q1, 1)
@@ -113,7 +115,7 @@ def wc_alternate_projections(n, verbose=1):
     
     # Print conclusion if required
     if verbose != -1:
-        print('*** Example file: worst-case performance of the alternate projection method ***')
+        print('*** Example file: worst-case performance of the Dykstra projection method ***')
         print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -122,4 +124,4 @@ def wc_alternate_projections(n, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_alternate_projection(n=10, verbose=1)
+    pepit_tau, theoretical_tau = wc_dykstra(n=10, verbose=1)

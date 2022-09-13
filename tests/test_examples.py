@@ -70,6 +70,8 @@ from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_proximal_poi
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_halpern_iteration as wc_halpern_iteration_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_gradient_descent as wc_gradient_descent_non_convex_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_alternate_projections as wc_alternate_projections_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_averaged_projections as wc_averaged_projections_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_dykstra as wc_dykstra_low_dim
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
 from PEPit.examples.inexact_proximal_methods import wc_relatively_inexact_proximal_point_algorithm
@@ -217,11 +219,27 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
         
     def test_alternate_projections_low_dim(self):
-        n1 = 8
-        n2 = 9
+        n1 = 9
+        n2 = 10
 
         wc1, _ = wc_alternate_projections_low_dim(n1, verbose=self.verbose)
         wc2, _ = wc_alternate_projections_low_dim(n2, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+        
+    def test_averaged_projections_low_dim(self):
+        n1 = 10
+        n2 = 11
+
+        wc1, _ = wc_averaged_projections_low_dim(n1, verbose=self.verbose)
+        wc2, _ = wc_averaged_projections_low_dim(n2, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+        
+    def test_dykstra_low_dim(self):
+        n1 = 8
+        n2 = 10
+
+        wc1, _ = wc_dykstra_low_dim(n1, verbose=self.verbose)
+        wc2, _ = wc_dykstra_low_dim(n2, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
         
     def test_inexact_accelerated_gradient_1(self):
