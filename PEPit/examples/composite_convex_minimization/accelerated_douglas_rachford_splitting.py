@@ -141,6 +141,8 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
     # Compute theoretical guarantee (for comparison)
     if alpha < 1/L:
         theoretical_tau = 2 / (alpha * theta * (n + 3) ** 2)
+    else:
+    	theoretical_tau = None
 
     # Print conclusion if required
     if verbose != -1:
