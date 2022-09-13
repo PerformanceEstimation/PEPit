@@ -46,6 +46,8 @@ from PEPit.examples.stochastic_convex_minimization import wc_saga
 from PEPit.examples.stochastic_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_convex_minimization import wc_sgd
 from PEPit.examples.stochastic_convex_minimization import wc_point_saga
+from PEPit.examples.stochastic_convex_minimization import wc_randomized_coordinate_descent_smooth_strongly_convex
+from PEPit.examples.stochastic_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
 from PEPit.examples.monotone_inclusions import wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
 from PEPit.examples.monotone_inclusions import wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
 from PEPit.examples.monotone_inclusions import wc_optimal_strongly_monotone_proximal_point as \
@@ -402,6 +404,21 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_point_saga(L, mu, n, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
 
+    def test_randomized_coordinate(self):
+        L, d, n = 1, 3, 10
+        gamma = 1/L
+
+        wc, theory = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=gamma, d=d, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_randomized_coordinate_strongly_convex(self):
+        L, mu, d = 1, 0.1, 3
+        gamma = 2/(L+mu)
+
+        wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
+                                                                             verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        
     def test_accelerated_proximal_point_operators(self):
         alpha, n = 2, 10
 
