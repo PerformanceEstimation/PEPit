@@ -41,7 +41,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
 
         .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 \\|x_0-x_\\star\\|^2,
 
-    when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number `math:`n` of
+    when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number :math:`n` of
     functions for this particular setting, thereby implying that the guarantees are also valid for expectation
     minimization settings (i.e., when :math:`n` goes to infinity).
 
