@@ -35,3 +35,8 @@ Proximal point
 Halpern iteration
 -----------------
 .. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_halpern_iteration
+
+
+Alternate projections
+---------------------
+.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_alternate_projections
