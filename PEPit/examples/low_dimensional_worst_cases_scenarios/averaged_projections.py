@@ -71,7 +71,7 @@ def wc_averaged_projections(n, verbose=1):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a non expansive operator
+    # Declare the two indicator functions and the feasibility problem
     ind_Q1 = problem.declare_function(ConvexIndicatorFunction)
     ind_Q2 = problem.declare_function(ConvexIndicatorFunction)
     func = ind_Q1 + ind_Q2
@@ -82,7 +82,7 @@ def wc_averaged_projections(n, verbose=1):
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
 
-    # Run the alternate projection method
+    # Run the averaged projection method
     x = x0
     y = x0
     for _ in range(n):
