@@ -1,7 +1,7 @@
 from PEPit import PEP
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
-
+from PEPit import null_point
 
 def wc_dykstra(n, verbose=1):
     """
@@ -94,8 +94,8 @@ def wc_dykstra(n, verbose=1):
     # Run the alternate projection method
     x = x0
     y = x0
-    p = 0*x0 # initiate a null point (to be corrected)
-    q = 0*x0 # initiate a null point (to be corrected)
+    p = null_point
+    q = null_point
     for _ in range(n):
         y, _, _ = proximal_step(x + p, ind_Q1, 1)
         p = x + p - y
