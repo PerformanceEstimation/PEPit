@@ -66,21 +66,21 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> M = 2
-        >>> n = 6
-        >>> gamma = 1 / (M * sqrt(n + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
+        >>> M, n, eps, R = 2, 6, .1, 1
+        >>> gamma = 1 / sqrt(n + 1)
+        >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 21x21
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: initial conditions and general constraints (14 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 64 constraint(s) added
-        (PEPit) Compiling SDP
-        (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7559825331741553
-        *** Example file: worst-case performance of subgradient method ***
-            PEPit guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
-            Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
+		 function 1 : 188 constraint(s) added
+	(PEPit) Setting up the problem: 0 lmi constraint(s) added
+	(PEPit) Compiling SDP
+	(PEPit) Calling SDP solver
+	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 2.6029517161149593
+	*** Example file: worst-case performance of the epsilon-subgradient method ***
+		PEPit guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 2.60295
+		Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 2.94491
 
     """
 
@@ -133,9 +133,6 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
 
 if __name__ == "__main__":
 
-    M = 2
-    n = 6
-    gamma = 1 / (M * sqrt(n + 1))
-    eps = .1
-    R = 1
+    M, n, eps, R = 2, 6, .1, 1
+    gamma = 1 / sqrt(n + 1)
     pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, verbose=1)
