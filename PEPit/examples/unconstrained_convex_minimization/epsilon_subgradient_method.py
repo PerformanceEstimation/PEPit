@@ -87,7 +87,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a convex lipschitz function
+    # Declare a convex function
     func = problem.declare_function(ConvexFunction)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
@@ -100,7 +100,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
     # Set the initial constraint that is the distance between x0 and xs
     problem.set_initial_condition((x0 - xs)**2 <= R**2)
 
-    # Run n steps of the subgradient method
+    # Run n steps of the epsilon subgradient method
     x = x0
 
     for _ in range(n):
