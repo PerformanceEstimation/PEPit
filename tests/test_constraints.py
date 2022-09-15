@@ -39,7 +39,7 @@ class TestConstraints(unittest.TestCase):
         # Set the performance metric to the function values accuracy
         self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
 
-        self.solution = self.problem.solve(verbose=0)
+        self.solution = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet10")
 
     def test_is_instance(self):
 
@@ -95,6 +95,9 @@ class TestConstraints(unittest.TestCase):
 
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].eval_dual(), float)
+
+        self.assertAlmostEqual([constraint.eval_dual() for constraint in self.func.list_of_constraints],
+                               [1.7999981020796225, 1.7999980340948387])
 
     def tearDown(self):
 
