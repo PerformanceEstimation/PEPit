@@ -253,9 +253,7 @@ class PEP(object):
                                                             - "logdet{an integer n}": minimize
                                                               :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
                                                               using n iterations of local approximation problems.
-                                                              
-                                                            
-                                                            
+
             eig_regularization (float, optional): The regularization we use to make
                                                   :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
                                                   (only used when "dimension_reduction_heuristic" is not None)
@@ -368,6 +366,9 @@ class PEP(object):
             raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
                               "It seems that the optimal value of your problem is unbounded.")
 
+        # Keep dual values before dimension reduction in memory
+        dual_values = [constraint.dual_value for constraint in prob.constraints]
+
         # Perform a dimension reduction if required
         if dimension_reduction_heuristic:
 
@@ -426,7 +427,7 @@ class PEP(object):
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
 
         # Store all the dual values in constraints
-        self._eval_constraint_dual_values(prob.constraints)
+        self._eval_constraint_dual_values(dual_values)
 
         # Return the value of the minimal performance metric or the full cvxpy Problem object
         if return_full_cvxpy_problem:
@@ -473,7 +474,7 @@ class PEP(object):
         eig_threshold = 0
         
         if nb_zeros > 0:
-        	eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
+            eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
 
         return nb_eigenvalues, eig_threshold, corrected_S
 
@@ -548,12 +549,12 @@ class PEP(object):
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
 
-    def _eval_constraint_dual_values(self, cvx_constraints):
+    def _eval_constraint_dual_values(self, dual_values):
         """
         Store all dual values in associated :class:`Constraint` objects.
 
         Args:
-            cvx_constraints (list): a list of cvxpy formatted constraints.
+            dual_values (list): the list of dual values of the problem constraints.
 
         Returns:
              position_of_minimal_objective (np.float): the position, in the list of performance metric,
@@ -567,19 +568,19 @@ class PEP(object):
         # The dual variables associated to performance metric all have nonnegative values of sum 1.
         # Generally, only 1 performance metric is used.
         # Then its associated dual values is 1 while the others'associated dual values are 0.
-        performance_metric_dual_values = np.array([constraint.dual_value for constraint in cvx_constraints[:counter]])
+        performance_metric_dual_values = np.array(dual_values[:counter])
         performance_metric_dual_values = performance_metric_dual_values.reshape(-1)
         position_of_minimal_objective = np.argmax(performance_metric_dual_values)
 
         # Store all dual values of initial conditions (Generally the rate)
         for condition in self.list_of_constraints:
-            condition._dual_variable_value = cvx_constraints[counter].dual_value
+            condition._dual_variable_value = dual_values[counter]
             counter += 1
 
         # Store all the class constraints dual values, providing the proof of the desired rate.
         for function in self.list_of_functions:
             for constraint in function.list_of_constraints:
-                constraint._dual_variable_value = cvx_constraints[counter].dual_value
+                constraint._dual_variable_value = dual_values[counter]
                 counter += 1
 
         # Return the position of the reached performance metric

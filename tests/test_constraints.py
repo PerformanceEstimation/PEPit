@@ -13,7 +13,7 @@ class TestConstraints(unittest.TestCase):
 
     def setUp(self):
 
-        # smooth-strongly convex gradient descent set up
+        # Smooth-strongly convex gradient descent set up
         self.L = 1.
         self.mu = 0.1
         self.gamma = 1 / self.L
