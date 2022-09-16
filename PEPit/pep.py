@@ -277,7 +277,7 @@ class PEP(object):
             function.add_class_constraints()
 
         # Define the cvxpy variables
-        objective = cp.Variable((1,))
+        objective = cp.Variable()
         F = cp.Variable((Expression.counter,))
         G = cp.Variable((Point.counter, Point.counter), PSD=True)
         if verbose:
@@ -421,7 +421,7 @@ class PEP(object):
                                                                                                        eig_threshold))
                                                                                                        
             # Store the actualized obtained value
-            wc_value = objective.value[0]	
+            wc_value = objective.value
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
