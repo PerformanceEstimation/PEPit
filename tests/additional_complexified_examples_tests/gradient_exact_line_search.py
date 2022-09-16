@@ -5,7 +5,6 @@ from PEPit.point import Point
 import numpy as np
 
 
-
 def wc_gradient_exact_line_search_complexified(L, mu, n, verbose=1):
     """
     See description in `PEPit/examples/unconstrained_convex_minimization/gradient_exact_line_search.py`.
@@ -69,8 +68,8 @@ def wc_gradient_exact_line_search_complexified(L, mu, n, verbose=1):
         x = Point()
         gx, fx = func.oracle(x)
         
-        matrix = np.array([[0, gx_prev*gx], [gx_prev*gx, 0]])
-        problem.add_psd_matrix(matrix=matrix)
+        matrix_of_expressions = np.array([[0, gx_prev*gx], [gx_prev*gx, 0]])
+        problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
         func.add_constraint((x - x_prev) * gx == 0)
 
     # Set the performance metric to the function value accuracy
