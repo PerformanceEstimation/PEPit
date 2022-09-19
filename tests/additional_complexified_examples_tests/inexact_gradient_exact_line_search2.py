@@ -1,6 +1,5 @@
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.primitive_steps import inexact_gradient_step
 from PEPit.point import Point
 
 import numpy as np
@@ -29,7 +28,7 @@ def wc_inexact_gradient_exact_line_search_complexified2(L, mu, epsilon, n, verbo
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(1, 0.1, 0.1, 1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified2(1, 0.1, 0.1, 1, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
@@ -56,7 +55,6 @@ def wc_inexact_gradient_exact_line_search_complexified2(L, mu, epsilon, n, verbo
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()
     gx0, _ = func.oracle(x0)
-    
 
     # Set the initial constraint that is the distance between f0 and f_*
     problem.set_initial_condition(func(x0) - fs <= 1)
@@ -70,8 +68,8 @@ def wc_inexact_gradient_exact_line_search_complexified2(L, mu, epsilon, n, verbo
         x = Point()
         gx, fx = func.oracle(x)
         
-        matrix = np.array([[epsilon * gx_prev**2, gx_prev*gx], [gx_prev*gx, epsilon * gx**2]])
-        func.add_psd_matrix(matrix=matrix)
+        matrix_of_expressions = np.array([[epsilon * gx_prev**2, gx_prev*gx], [gx_prev*gx, epsilon * gx**2]])
+        func.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
         func.add_constraint((x - x_prev) * gx == 0)
 
     # Set the performance metric to the function value accuracy
@@ -98,4 +96,4 @@ def wc_inexact_gradient_exact_line_search_complexified2(L, mu, epsilon, n, verbo
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified2(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)

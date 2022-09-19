@@ -12,13 +12,13 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
 
     where :math:`f` is convex and :math:`M`-Lipschitz. This problem is a (possibly non-smooth) minimization problem.
 
-    This code computes a worst-case guarantee for the **subgradient** method. That is, it computes
+    This code computes a worst-case guarantee for the **subgradient method**. That is, it computes
     the smallest possible :math:`\\tau(n, M, \\gamma)` such that the guarantee
 
-    .. math:: \\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star \\leqslant \\tau(n, M, \\gamma)  \|x_0 - x_\\star\|
+    .. math:: \\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star \\leqslant \\tau(n, M, \\gamma) 
 
-    is valid, where :math:`x_t` is the output of the **subgradient** method after :math:`t\\leqslant n` steps,
-    and where :math:`x_\\star` is the minimizer of :math:`f`.
+    is valid, where :math:`x_t` are the iterates of the **subgradient method** after :math:`t\\leqslant n` steps,
+    where :math:`x_\\star` is a minimizer of :math:`f`, and when :math:`\\|x_0-x_\\star\\|\\leqslant 1`.
 
     In short, for given values of :math:`M`, the step-size :math:`\\gamma` and the number of iterations :math:`n`,
     :math:`\\tau(n, M, \\gamma)` is computed as the worst-case value of

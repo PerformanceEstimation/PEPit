@@ -92,8 +92,8 @@ class TestPEP(unittest.TestCase):
         expr = Expression()
 
         # Enforce this expression to be at most ||x0 - xs||
-        matrix = np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])
-        self.problem.add_psd_matrix(matrix=matrix)
+        matrix_of_expressions = np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])
+        self.problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
@@ -113,8 +113,8 @@ class TestPEP(unittest.TestCase):
         expr = point ** 2
 
         # Enforce this expression to be at most ||x1 - xs||
-        matrix = np.array([[(self.x1 - self.xs) ** 2, expr], [expr, 1]])
-        self.problem.add_psd_matrix(matrix=matrix)
+        matrix_of_expressions = np.array([[(self.x1 - self.xs) ** 2, expr], [expr, 1]])
+        self.problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
@@ -130,7 +130,17 @@ class TestPEP(unittest.TestCase):
         # The value stored in expr must be equal to the optimal value of this SDP.
         self.assertAlmostEqual(expr.eval(), pepit_tau, delta=pepit_tau * 10 ** -3)
 
-    def test_trace_trick(self):
+        # Verify value of the psd matrix.
+        for i in range(2):
+            for j in range(2):
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j), places=3)
+
+        # Verify dual value of the lmi constraint.
+        for i in range(2):
+            for j in range(2):
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1), places=3)
+
+    def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically
         pepit_tau = self.problem.solve(verbose=0)
@@ -142,17 +152,17 @@ class TestPEP(unittest.TestCase):
         # Return the full dimension reduction problem
         # and verify that its value is not pepit_tau anymore but the heuristic value
         prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic="trace")
-        self.assertAlmostEqual(prob2.value, 1 / 2, delta=10 ** -2)
+        self.assertAlmostEqual(prob2.value, .5 + self.mu ** 2, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace")
-        self.assertAlmostEqual(pepit_tau, pepit_tau2, delta=10 ** -2)
+        self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
-        self.assertAlmostEqual(pepit_tau, pepit_tau3, delta=10 ** -2)
+        self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
 
     def tearDown(self):
 

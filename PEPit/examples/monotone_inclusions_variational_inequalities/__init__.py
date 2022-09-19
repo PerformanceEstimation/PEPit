@@ -9,7 +9,7 @@ from .past_extragradient import wc_past_extragradient
 __all__ = ['accelerated_proximal_point', 'wc_accelerated_proximal_point',
            'douglas_rachford_splitting', 'wc_douglas_rachford_splitting',
            'optimal_strongly_monotone_proximal_point', 'wc_optimal_strongly_monotone_proximal_point',
-           'proximal_point.py', 'wc_proximal_point',
+           'proximal_point', 'wc_proximal_point',
            'three_operator_splitting', 'wc_three_operator_splitting',
            'optimistic_gradient', 'wc_optimistic_gradient',
            'past_extragradient', 'wc_past_extragradient',
