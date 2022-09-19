@@ -1,6 +1,5 @@
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.primitive_steps import inexact_gradient_step
 from PEPit.point import Point
 
 import numpy as np
@@ -56,7 +55,6 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
     # Then define the starting point x0 of the algorithm as well as corresponding gradient and function value g0 and f0
     x0 = problem.set_initial_point()
     gx0, _ = func.oracle(x0)
-    
 
     # Set the initial constraint that is the distance between f0 and f_*
     problem.set_initial_condition(func(x0) - fs <= 1)
@@ -70,8 +68,8 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
         x = Point()
         gx, fx = func.oracle(x)
         
-        matrix = np.array([[epsilon * gx_prev**2, gx_prev*gx], [gx_prev*gx, epsilon * gx**2]])
-        problem.add_psd_matrix(matrix=matrix)
+        matrix_of_expressions = np.array([[epsilon * gx_prev**2, gx_prev*gx], [gx_prev*gx, epsilon * gx**2]])
+        problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
         func.add_constraint((x - x_prev) * gx == 0)
 
     # Set the performance metric to the function value accuracy

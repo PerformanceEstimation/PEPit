@@ -13,7 +13,7 @@ class TestConstraints(unittest.TestCase):
 
     def setUp(self):
 
-        # smooth-strongly convex gradient descent set up
+        # Smooth-strongly convex gradient descent set up
         self.L = 1.
         self.mu = 0.1
         self.gamma = 1 / self.L
@@ -39,7 +39,7 @@ class TestConstraints(unittest.TestCase):
         # Set the performance metric to the function values accuracy
         self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
 
-        self.solution = self.problem.solve(verbose=0)
+        self.solution = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet10")
 
     def test_is_instance(self):
 
@@ -95,6 +95,10 @@ class TestConstraints(unittest.TestCase):
 
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].eval_dual(), float)
+
+        self.assertEqual(len([constraint.eval_dual() for constraint in self.func.list_of_constraints]), 2)
+        for constraint in self.func.list_of_constraints:
+            self.assertAlmostEqual(constraint.eval_dual(), 1.8, places=4)
 
     def tearDown(self):
 
