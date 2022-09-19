@@ -8,7 +8,7 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
     """
     Consider the monotone variational inequality
 
-        .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right> \\geq 0\\,\\,\\forall x\\in C,
+        .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right> \\geqslant 0\\,\\,\\forall x\\in C,
 
     where :math:`C` is a closed convex set and :math:`F` is maximally monotone and Lipschitz.
 
