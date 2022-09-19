@@ -1,5 +1,5 @@
-Stochastic convex minimization
-==============================
+Stochastic and randomized convex minimization
+=============================================
 
 .. contents::
    :depth: 1
@@ -8,29 +8,29 @@ Stochastic convex minimization
 
 Stochastic gradient descent
 ---------------------------
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_sgd
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_sgd
 
 
 Stochastic gradient descent in overparametrized setting
 -------------------------------------------------------
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_sgd_overparametrized
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_sgd_overparametrized
 
 
 SAGA
 ----
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_saga
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_saga
 
 
 Point SAGA
 ----------
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_point_saga
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_point_saga
 
 
 Randomized coordinate descent for smooth strongly convex functions
 --------------------------------------------------------------------
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_randomized_coordinate_descent_smooth_strongly_convex
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_randomized_coordinate_descent_smooth_strongly_convex
 
 
 Randomized coordinate descent for smooth convex functions
 --------------------------------------------------------------------
-.. autofunction:: PEPit.examples.stochastic_convex_minimization.wc_randomized_coordinate_descent_smooth_convex
+.. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_randomized_coordinate_descent_smooth_convex
