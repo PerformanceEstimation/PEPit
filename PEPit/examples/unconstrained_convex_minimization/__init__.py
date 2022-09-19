@@ -20,6 +20,7 @@ from .subgradient_method_rsi_eb import wc_subgradient_method_rsi_eb
 from .triple_momentum import wc_triple_momentum
 from .information_theoretic_exact_method import wc_information_theoretic
 from .optimized_gradient_for_gradient import wc_optimized_gradient_for_gradient
+from .epsilon_subgradient_method import wc_epsilon_subgradient_method
 
 __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'accelerated_gradient_strongly_convex', 'wc_accelerated_gradient_strongly_convex',
@@ -43,4 +44,5 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'triple_momentum', 'wc_triple_momentum',
            'information_theoretic_exact_method', 'wc_information_theoretic',
            'optimized_gradient_for_gradient', 'wc_optimized_gradient_for_gradient',
+           'epsilon_subgradient_method', 'wc_epsilon_subgradient_method',
            ]
