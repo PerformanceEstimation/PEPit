@@ -73,14 +73,14 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: initial conditions and general constraints (14 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		 function 1 : 188 constraint(s) added
-	(PEPit) Setting up the problem: 0 lmi constraint(s) added
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 2.6029517161149593
-	*** Example file: worst-case performance of the epsilon-subgradient method ***
-		PEPit guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 2.60295
-		Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 2.94491
+                 function 1 : 188 constraint(s) added
+        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0191201198697333
+        *** Example file: worst-case performance of the epsilon-subgradient method ***
+            PEPit guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.01912
+            Theoretical guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
 
     """
 
@@ -98,7 +98,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and xs
-    problem.set_initial_condition((x0 - xs)**2 <= R**2)
+    problem.set_initial_condition((x0 - xs) ** 2 <= R ** 2)
 
     # Run n steps of the epsilon subgradient method
     x = x0
@@ -107,11 +107,11 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
         x, gx, fx, epsilon = epsilon_subgradient_step(x, func, gamma)
         problem.set_performance_metric(fx - fs)
         problem.add_constraint(epsilon <= eps)
-        problem.add_constraint(gx**2 <= M**2)
+        problem.add_constraint(gx ** 2 <= M ** 2)
 
     # Set the performance metric to the function value accuracy
-    gx,fx = func.oracle(x)
-    problem.add_constraint(gx**2 <= M**2)
+    gx, fx = func.oracle(x)
+    problem.add_constraint(gx ** 2 <= M ** 2)
     problem.set_performance_metric(fx - fs)
 
     # Solve the PEP
@@ -119,13 +119,13 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (R**2+2*(n+1)*gamma*eps+(n+1)*gamma**2*M**2)/(2*(n+1)*gamma)
+    theoretical_tau = (R ** 2 + 2 * (n + 1) * gamma * eps + (n + 1) * gamma ** 2 * M ** 2) / (2 * (n + 1) * gamma)
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the epsilon-subgradient method ***')
-        print('\tPEPit guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6}'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

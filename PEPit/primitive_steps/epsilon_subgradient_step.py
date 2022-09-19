@@ -37,17 +37,17 @@ def epsilon_subgradient_step(x0, f, gamma):
     g0 = Point()
     f0 = f.value(x0)
     epsilon = Expression()
-    
+
     x = x0 - gamma * g0
-    
+
     # f^*(g0) = <g0;y>-f(y) for some y
     y = Point()
     fy = Expression()
-    f.add_point((y,g0,fy))
-    fstarg0 = g0*y-fy
-    
+    f.add_point((y, g0, fy))
+    fstarg0 = g0 * y - fy
+
     # epsilon-subgradient condition:
-    f.add_constraint(f0+fstarg0-g0*x0<=epsilon)
-    
+    f.add_constraint(f0 + fstarg0 - g0 * x0 <= epsilon)
+
     # Return the newly obtained point, the epsilon-subgradient, the value of f in x0, and epsilon.
     return x, g0, f0, epsilon
