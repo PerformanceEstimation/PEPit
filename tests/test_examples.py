@@ -55,8 +55,8 @@ from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optim
     wc_optimal_strongly_monotone_proximal_point_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import wc_proximal_point as wc_proximal_point_method_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import wc_three_operator_splitting as wc_three_operator_splitting_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimistic_gradient as wc_optimistic_gradient
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_past_extragradient as wc_past_extragradient
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimistic_gradient as wc_optimistic_gradient_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_past_extragradient as wc_past_extragradient_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
@@ -491,15 +491,15 @@ class TestExamples(unittest.TestCase):
     def test_optimistic_gradient(self):
         n1, n2, L, gamma = 5, 6, 1, 1/4
 
-        wc1, _ = wc_optimistic_gradient(n=n1, gamma=gamma, L=L, verbose=self.verbose)
-        wc2, _ = wc_optimistic_gradient(n=n2, gamma=gamma, L=L, verbose=self.verbose)
+        wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
 
     def test_past_extragradient(self):
         n1, n2, L, gamma = 5, 6, 1, 1/4
 
-        wc1, _ = wc_past_extragradient(n=n1, gamma=gamma, L=L, verbose=self.verbose)
-        wc2, _ = wc_past_extragradient(n=n2, gamma=gamma, L=L, verbose=self.verbose)
+        wc1, _ = wc_past_extragradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
+        wc2, _ = wc_past_extragradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
 
     def test_halpern_iteration(self):

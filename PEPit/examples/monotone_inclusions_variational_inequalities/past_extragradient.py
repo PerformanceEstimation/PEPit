@@ -8,7 +8,7 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
     """
     Consider the monotone variational inequality
 
-        .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right>\\,\\,\\forall x\\in C,
+        .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right> \\geq 0\\,\\,\\forall x\\in C,
 
     where :math:`C` is a closed convex set and :math:`F` is maximally monotone and Lipschitz.
 
@@ -72,12 +72,12 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
 		 function 1 : 144 constraint(s) added
 		 function 2 : 84 constraint(s) added
-	(PEPit) Setting up the problem: 0 lmi constraint(s) added
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.060266383644705254
-	*** Example file: worst-case performance of the Past Extragradient Method***
-		PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
+        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.060266383644705254
+        *** Example file: worst-case performance of the Past Extragradient Method***
+            PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
 
     """
 
@@ -87,7 +87,7 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
     # Declare an indicator function and a monotone operator
     ind_C = problem.declare_function(ConvexIndicatorFunction)
     F = problem.declare_function(LipschitzStronglyMonotoneOperator, mu=0, L=L)
-    
+
     total_problem = F + ind_C
 
     # Start by defining its unique optimal point xs = x_*
@@ -100,14 +100,14 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Compute n steps of the Proximal Gradient method starting from x0
-    x,_,_ = proximal_step(x0, ind_C, gamma)
+    x, _, _ = proximal_step(x0, ind_C, gamma)
     xtilde = x
     V = F.gradient(xtilde)
     for _ in range(n):
-    	xtilde,_,_ = proximal_step(x-gamma*V, ind_C, gamma)
-    	V = F.gradient(xtilde)
-    	previous_x = x
-    	x, _, _ = proximal_step(x-gamma*V, ind_C, gamma)
+        xtilde, _, _ = proximal_step(x - gamma * V, ind_C, gamma)
+        V = F.gradient(xtilde)
+        previous_x = x
+        x, _, _ = proximal_step(x - gamma * V, ind_C, gamma)
 
     # Set the performance metric to the distance between x(n) and x(n-1)
     problem.set_performance_metric((x - previous_x) ** 2)
@@ -130,4 +130,4 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1/4, L=1, verbose=1)
+    pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, verbose=1)
