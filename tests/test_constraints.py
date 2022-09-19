@@ -97,8 +97,8 @@ class TestConstraints(unittest.TestCase):
             self.assertIsInstance(self.problem.list_of_constraints[i].eval_dual(), float)
 
         self.assertEqual(len([constraint.eval_dual() for constraint in self.func.list_of_constraints]), 2)
-        for constraint, value in zip(self.func.list_of_constraints, [1.7999981020796225, 1.7999980340948387]):
-            self.assertAlmostEqual(constraint.eval_dual(), value)
+        for constraint in self.func.list_of_constraints:
+            self.assertAlmostEqual(constraint.eval_dual(), 1.8, places=5)
 
     def tearDown(self):
 
