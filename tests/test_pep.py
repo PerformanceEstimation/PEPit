@@ -130,6 +130,16 @@ class TestPEP(unittest.TestCase):
         # The value stored in expr must be equal to the optimal value of this SDP.
         self.assertAlmostEqual(expr.eval(), pepit_tau, delta=pepit_tau * 10 ** -3)
 
+        # Verify value of the psd matrix.
+        for i in range(2):
+            for j in range(2):
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j), places=3)
+
+        # Verify dual value of the lmi constraint.
+        for i in range(2):
+            for j in range(2):
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1), places=3)
+
     def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically
@@ -142,7 +152,7 @@ class TestPEP(unittest.TestCase):
         # Return the full dimension reduction problem
         # and verify that its value is not pepit_tau anymore but the heuristic value
         prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic="trace")
-        self.assertAlmostEqual(prob2.value, 1 / 2, delta=10 ** -2)
+        self.assertAlmostEqual(prob2.value, .5 + self.mu ** 2, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
