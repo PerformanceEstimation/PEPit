@@ -49,12 +49,14 @@ from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_point_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_strongly_convex
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
-from PEPit.examples.monotone_inclusions import wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
-from PEPit.examples.monotone_inclusions import wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
-from PEPit.examples.monotone_inclusions import wc_optimal_strongly_monotone_proximal_point as \
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimal_strongly_monotone_proximal_point as \
     wc_optimal_strongly_monotone_proximal_point_operators
-from PEPit.examples.monotone_inclusions import wc_proximal_point as wc_proximal_point_method_operators
-from PEPit.examples.monotone_inclusions import wc_three_operator_splitting as wc_three_operator_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_proximal_point as wc_proximal_point_method_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_three_operator_splitting as wc_three_operator_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimistic_gradient as wc_optimistic_gradient_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import wc_past_extragradient as wc_past_extragradient_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
@@ -485,6 +487,20 @@ class TestExamples(unittest.TestCase):
         for n in n_list:
             wc, _ = wc_three_operator_splitting_operators(L, mu, beta, alpha, theta, verbose=self.verbose)
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
+
+    def test_optimistic_gradient(self):
+        n1, n2, L, gamma = 5, 6, 1, 1/4
+
+        wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+
+    def test_past_extragradient(self):
+        n1, n2, L, gamma = 5, 6, 1, 1/4
+
+        wc1, _ = wc_past_extragradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
+        wc2, _ = wc_past_extragradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
 
     def test_halpern_iteration(self):
         n = 10
