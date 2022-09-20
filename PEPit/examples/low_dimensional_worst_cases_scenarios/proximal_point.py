@@ -65,7 +65,7 @@ def wc_proximal_point(alpha, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03504735907840766
         (PEPit) Postprocessing: 2 eigenvalue(s) > 1.885183851963194e-06 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03504735907840766
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03503739338571882
         (PEPit) Postprocessing: 2 eigenvalue(s) > 1.9044504527414672e-06 after dimension reduction
         *** Example file: worst-case performance of the Proximal Point Method***
                 PEPit example:           ||x(n) - x(n-1)||^2 == 0.0350374 ||x0 - xs||^2

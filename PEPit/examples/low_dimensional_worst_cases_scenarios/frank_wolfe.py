@@ -86,34 +86,22 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.07830185202143693
         (PEPit) Postprocessing: 12 eigenvalue(s) > 0.0006226631118848632 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07828372031738319
         (PEPit) Postprocessing: 11 eigenvalue(s) > 4.365697148503946e-06 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07826632525166947
         (PEPit) Postprocessing: 11 eigenvalue(s) > 1.2665145818615854e-05 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07824094610510846
         (PEPit) Postprocessing: 11 eigenvalue(s) > 2.4505278932874855e-05 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07820114036570962
         (PEPit) Postprocessing: 11 eigenvalue(s) > 4.164155031005524e-05 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07823286027467699
         (PEPit) Postprocessing: 10 eigenvalue(s) > 9.73301991908838e-05 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07823446697003811
         (PEPit) Postprocessing: 10 eigenvalue(s) > 0.00011791962010861412 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 9 eigenvalue(s) > 0.01083265488318979 after 7 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 12 eigenvalue(s) > 0.00725921649032903 after 8 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 12 eigenvalue(s) > 0.005083412289527975 after 9 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 13 eigenvalue(s) > 0.00324585774455972 after 10 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 9 eigenvalue(s) > 0.038959543860620685 after 11 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.010405323061800762 after 12 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07830185202143693
-        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.010405323061800762 after dimension reduction
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.07823446697003811
+        (PEPit) Postprocessing: 10 eigenvalue(s) > 0.00011791962010861412 after dimension reduction
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-                PEPit example:           f(x_n)-f_* == 0.0717236 ||x0 - xs||^2
+                PEPit example:           f(x_n)-f_* == 0.0782345 ||x0 - xs||^2
                 Theoretical guarantee:   f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
 
     """
@@ -151,7 +139,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet12")
+    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet6")
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1

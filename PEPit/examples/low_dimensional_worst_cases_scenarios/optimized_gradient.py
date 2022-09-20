@@ -94,7 +94,7 @@ def wc_optimized_gradient(L, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.07675218017587908
         (PEPit) Postprocessing: 5 eigenvalue(s) > 0.00012110342786525262 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.07675218017587908
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
         (PEPit) Postprocessing: 1 eigenvalue(s) > 5.187978263167338e-09 after dimension reduction
         *** Example file: worst-case performance of optimized gradient method ***
                 PEPit example:           f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2

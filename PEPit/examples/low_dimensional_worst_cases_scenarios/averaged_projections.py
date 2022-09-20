@@ -61,9 +61,9 @@ def wc_averaged_projections(n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06845454756941292
         (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00014022393949281894 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.06845454756941292
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.06844459892544441
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.442958512820225e-07 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.06845454756941292
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.06844459892544441
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.442958512820225e-07 after dimension reduction
         *** Example file: worst-case performance of the averaged projection method ***
                 PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0684446 ||x0 - x_*||^2

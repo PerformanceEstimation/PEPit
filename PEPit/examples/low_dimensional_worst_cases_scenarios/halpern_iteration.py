@@ -69,13 +69,13 @@ def wc_halpern_iteration(n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.033076981475854986
         (PEPit) Postprocessing: 11 eigenvalue(s) > 2.538373915093237e-06 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.033076981475854986
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03306531836320572
         (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00010453609338097841 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.033076981475854986
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.0330736415198303
         (PEPit) Postprocessing: 2 eigenvalue(s) > 4.3812352924839906e-05 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.033076981475854986
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.03307313275765859
         (PEPit) Postprocessing: 2 eigenvalue(s) > 4.715648695840045e-05 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.033076981475854986
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.03307313275765859
         (PEPit) Postprocessing: 2 eigenvalue(s) > 4.715648695840045e-05 after dimension reduction
         *** Example file: worst-case performance of Halpern Iterations ***
                 PEPit example:           ||xN - AxN||^2 == 0.0330731 ||x0 - x_*||^2

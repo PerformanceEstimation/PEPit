@@ -74,11 +74,11 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
         (PEPit) Postprocessing: 6 eigenvalue(s) > 0.0 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.266667996380269
         (PEPit) Postprocessing: 2 eigenvalue(s) > 1.0527850440294492e-05 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666668138016744
         (PEPit) Postprocessing: 2 eigenvalue(s) > 2.510763274714993e-07 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666668138016744
         (PEPit) Postprocessing: 2 eigenvalue(s) > 2.510763274714993e-07 after dimension reduction
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
                 PEPit example:           min_i ||f'(x_i)||^2 == 0.266667 (f(x_0)-f_*)

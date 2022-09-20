@@ -71,9 +71,9 @@ def wc_dykstra(n, verbose=1):
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.020649148184166164
         (PEPit) Postprocessing: 3 eigenvalue(s) > 0.003245910668057083 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.020649148184166164
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.02124334648210737
         (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.020649148184166164
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.02124334648210737
         (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after dimension reduction
         *** Example file: worst-case performance of the Dykstra projection method ***
                 PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0212433 ||x0 - x_*||^2

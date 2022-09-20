@@ -72,9 +72,9 @@ def wc_alternate_projections(n, verbose=1):
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018858674370385117
         (PEPit) Postprocessing: 2 eigenvalue(s) > 0.0003128757392530764 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018858674370385117
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018851597249912744
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.314172662475898e-06 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018858674370385117
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018851597249912744
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.314172662475898e-06 after dimension reduction
         *** Example file: worst-case performance of the alternate projection method ***
                 PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188516 ||x0 - x_*||^2
