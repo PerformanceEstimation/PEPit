@@ -83,16 +83,19 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=1)
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 20 constraint(s) added
-                 function 2 : 20 constraint(s) added
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
+                         function 2 : Adding 20 scalar constraint(s) ...
+                         function 2 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.35012779919911946
-        *** Example file: worst-case performance of the Douglas Rachford Splitting in distance ***
-            PEPit guarantee:		 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
-            Theoretical guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+        *** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***
+                PEPit guarantee:         ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+                Theoretical guarantee:   ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
 
     """
 
@@ -155,5 +158,4 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, verbose=1)
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, verbose=1)

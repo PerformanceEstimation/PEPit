@@ -60,19 +60,20 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
 
     Examples:
         >>> L = 1
-        >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 6 constraint(s) added
+                         function 1 : Adding 6 scalar constraint(s) ...
+                         function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 2.4580691380721078e-09
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 3.3902995517363515e-18
         *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
-            PEPit guarantee:		V_(n+1) - V_(n) <= 2.45807e-09
-            Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0
+                PEPit guarantee:        V_(n+1) - V_(n) <= 3.3903e-18
+                Theoretical guarantee:  V_(n+1) - V_(n) <= 0.0
 
     """
 
@@ -106,7 +107,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if gamma == 1/L:
+    if gamma == 1 / L:
         theoretical_tau = 0.
     else:
         theoretical_tau = None
@@ -117,7 +118,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
               ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
         print('\tPEPit guarantee:\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
-        if gamma==1/L:
+        if gamma == 1 / L:
             print('\tTheoretical guarantee:\t'
                   'V_(n+1) - V_(n) <= {:.6}'.format(theoretical_tau))
 
@@ -126,7 +127,5 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
-    gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=gamma, n=10, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, verbose=1)

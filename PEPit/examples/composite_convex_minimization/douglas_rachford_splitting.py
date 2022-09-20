@@ -73,16 +73,19 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-		         function 1 : 90 constraint(s) added
-		         function 2 : 110 constraint(s) added
+                         function 1 : Adding 90 scalar constraint(s) ...
+                         function 1 : 90 scalar constraint(s) added
+                         function 2 : Adding 110 scalar constraint(s) ...
+                         function 2 : 110 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.027791729882647262
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.027792700548325236
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-	        PEPit guarantee:       f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
-	        Theoretical guarantee:  f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+                PEPit guarantee:         f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+                Theoretical guarantee:   f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
 
     """
 
@@ -122,8 +125,8 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
 
     # Compute theoretical guarantee (for comparison) when theta = 1
     if theta == 1 and alpha == 1 and L == 1 and 0 < n <= 10:
-        pesto_tau = [1/4, 0.1273, 0.0838, 0.0627, 0.0501, 0.0417, 0.0357, 0.0313, 0.0278, 0.0250]
-        theoretical_tau = pesto_tau[n-1]
+        pesto_tau = [1 / 4, 0.1273, 0.0838, 0.0627, 0.0501, 0.0417, 0.0357, 0.0313, 0.0278, 0.0250]
+        theoretical_tau = pesto_tau[n - 1]
     else:
         theoretical_tau = None
 
@@ -132,12 +135,11 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, verbose=1):
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
         print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
         if theta == 1 and alpha == 1 and L == 1 and n <= 10:
-            print('\tTheoretical guarantee :\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2 '.format(theoretical_tau))
+            print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, verbose=1)

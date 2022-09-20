@@ -62,27 +62,27 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
-	(PEPit) Setting up the problem: size of the main PSD matrix: 7x7
-	(PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
-	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-	(PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		 function 1 : 30 constraint(s) added
-	(PEPit) Setting up the problem: 0 lmi constraint(s) added
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.2666666655116665
-	(PEPit) Postprocessing: 7 eigenvalue(s) > 0 before dimension reduction
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
-	(PEPit) Postprocessing: 1 eigenvalue(s) > 7.796196733649025e-08 after 1 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
-	(PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2666666655116665
-	(PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
-	*** Example file: worst-case performance of gradient descent with fixed step-size ***
-		PEPit example:	 min_i ||f'(x_i)|| ^ 2 == 0.266657 (f(x_0)-f_*)
-		Theoretical guarantee:	 min_i ||f'(x_i)|| ^ 2 <= 0.266667 (f(x_0)-f_*)
-
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
+        (PEPit) Postprocessing: 6 eigenvalue(s) > 0.0 before dimension reduction
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.0527850440294492e-05 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.510763274714993e-07 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.2666769474847614
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.510763274714993e-07 after dimension reduction
+        *** Example file: worst-case performance of gradient descent with fixed step-size ***
+                PEPit example:           min_i ||f'(x_i)||^2 == 0.266667 (f(x_0)-f_*)
+                Theoretical guarantee:   min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
 
     """
 
@@ -122,15 +122,14 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEPit example:\t min_i ||f\'(x_i)|| ^ 2 == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t min_i ||f\'(x_i)|| ^ 2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+        print('\tPEPit example:\t\t min_i ||f\'(x_i)||^2 == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     L = 1
     gamma = 1 / L
     pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)

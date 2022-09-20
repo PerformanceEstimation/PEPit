@@ -55,20 +55,21 @@ def wc_proximal_point(alpha, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		 function 1 : 132 constraint(s) added
-	(PEPit) Setting up the problem: 0 lmi constraint(s) added
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.03504938911860289
-	(PEPit) Postprocessing: 3 eigenvalue(s) > 6.668973163878725e-09 before dimension reduction
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03504938911860289
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 4.190375858424204e-09 after dimension reduction
-	*** Example file: worst-case performance of the Proximal Point Method***
-		PEPit example:	 ||x(n) - x(n-1)||^2 == 0.0350394 ||x0 - xs||^2
-		Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2
+                         function 1 : Adding 132 scalar constraint(s) ...
+                         function 1 : 132 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03504735907840766
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.885183851963194e-06 before dimension reduction
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03504735907840766
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.9044504527414672e-06 after dimension reduction
+        *** Example file: worst-case performance of the Proximal Point Method***
+                PEPit example:           ||x(n) - x(n-1)||^2 == 0.0350374 ||x0 - xs||^2
+                Theoretical guarantee:   ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2
 
     """
 
@@ -106,13 +107,12 @@ def wc_proximal_point(alpha, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEPit example:\t ||x(n) - x(n-1)||^2 == {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tPEPit example:\t\t ||x(n) - x(n-1)||^2 == {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, verbose=1)

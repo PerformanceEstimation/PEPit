@@ -57,15 +57,17 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 20 constraint(s) added
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.14062586461718285
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
-            PEPit guarantee:		 1/4||xN - AxN||^2 <= 0.140626 ||x0 - x_*||^2
-            Theoretical guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
+                PEPit guarantee:         1/4||xN - AxN||^2 <= 0.140626 ||x0 - x_*||^2
+                Theoretical guarantee:   1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
 
     """
 
@@ -86,7 +88,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
 
     x = x0
     for i in range(n):
-        x = (1-gamma) * x + gamma * A.gradient(x)
+        x = (1 - gamma) * x + gamma * A.gradient(x)
 
     # Set the performance metric to distance between xN and AxN
     problem.set_performance_metric((1 / 2 * (x - A.gradient(x))) ** 2)
@@ -96,7 +98,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if 1/2 <= gamma <= 1 / 2 * (1 + sqrt(n / (n + 1))):
+    if 1 / 2 <= gamma <= 1 / 2 * (1 + sqrt(n / (n + 1))):
         theoretical_tau = 1 / (n + 1) * (n / (n + 1)) ** n / (4 * gamma * (1 - gamma))
     elif 1 / 2 * (1 + sqrt(n / (n + 1))) < gamma <= 1:
         theoretical_tau = (2 * gamma - 1) ** (2 * n)
@@ -115,5 +117,4 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, verbose=1)

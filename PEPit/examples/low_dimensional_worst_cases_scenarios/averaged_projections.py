@@ -49,11 +49,13 @@ def wc_averaged_projections(n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_averaged_projections(n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 25x25
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 144 constraint(s) added
-                 function 2 : 144 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 144 scalar constraint(s) ...
+                         function 1 : 144 scalar constraint(s) added
+                         function 2 : Adding 144 scalar constraint(s) ...
+                         function 2 : 144 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06845454756941292
@@ -63,9 +65,8 @@ def wc_averaged_projections(n, verbose=1):
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.442958512820225e-07 after 1 dimension reduction step(s)
         (PEPit) Solver status: optimal (solver: SCS); objective value: 0.06845454756941292
         (PEPit) Postprocessing: 2 eigenvalue(s) > 7.442958512820225e-07 after dimension reduction
-        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -8.37e-07 < 0).
         *** Example file: worst-case performance of the averaged projection method ***
-            PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0684446 ||x0 - x_*||^2
+                PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0684446 ||x0 - x_*||^2
 
     """
 

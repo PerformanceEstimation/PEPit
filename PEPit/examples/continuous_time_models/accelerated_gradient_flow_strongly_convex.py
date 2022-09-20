@@ -1,4 +1,5 @@
 from math import sqrt
+
 from PEPit import PEP
 from PEPit.functions.strongly_convex import StronglyConvexFunction
 
@@ -72,20 +73,20 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        function 1 : 2 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: -0.31622777856753115
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: -0.31622776602929215
         *** Example file: worst-case performance of an accelerated gradient flow ***
-            PEPit guarantee:        d/dt V(X_t)  <= -0.316228 V(X_t)
-            Theoretical guarantee:  d/dt V(X_t)  <= -0.316228 V(X_t)
-
+                PEPit guarantee:         d/dt V(X_t,t) <= -0.316228 V(X_t,t)
+                Theoretical guarantee:   d/dt V(X_t) <= -0.316228 V(X_t,t)
 
     """
 
@@ -109,10 +110,10 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
     # Chose the Lyapunov function and compute its derivative
     if psd:
-        lyap = ft - fs + 1/2 * (sqrt(mu) * (xt - xs) + xt_dot)**2
+        lyap = ft - fs + 1 / 2 * (sqrt(mu) * (xt - xs) + xt_dot) ** 2
         lyap_dot = gt * xt_dot + (sqrt(mu) * (xt - xs) + xt_dot) * (sqrt(mu) * xt_dot + xt_dot_dot)
     else:
-        lyap = ft - fs + mu * 4/9 * (xt - xs) ** 2 + 2 * 2 / 3 * sqrt(mu) * (xt - xs) * xt_dot + 1 / 2 * xt_dot ** 2
+        lyap = ft - fs + mu * 4 / 9 * (xt - xs) ** 2 + 2 * 2 / 3 * sqrt(mu) * (xt - xs) * xt_dot + 1 / 2 * xt_dot ** 2
         lyap_dot = gt * xt_dot + mu * 8 / 9 * (xt - xs) * xt_dot + 4 / 3 * sqrt(mu) * (xt_dot ** 2 + (xt - xs) * xt_dot_dot) + xt_dot_dot * xt_dot
 
     # Set the initial constraint that is a well-chosen distance between xt and x_*
@@ -129,20 +130,19 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
     if psd:
         theoretical_tau = - sqrt(mu)
     else:
-        theoretical_tau = - 4/3 * sqrt(mu)
+        theoretical_tau = - 4 / 3 * sqrt(mu)
     if mu == 0:
         print("Warning: momentum is tuned for strongly convex functions!")
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an accelerated gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t,t)  <= {:.6} V(X_t,t)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} V(X_t,t)'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t d/dt V(X_t,t) <= {:.6} V(X_t,t)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t d/dt V(X_t) <= {:.6} V(X_t,t)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, verbose=1)

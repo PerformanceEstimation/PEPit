@@ -1,7 +1,7 @@
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.functions import SmoothConvexFunction
 from PEPit.functions import ConvexFunction
+from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
@@ -69,18 +69,22 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
         >>> L3 = 1
         >>> alpha = 1 / L3
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 29x29
+        (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 72 constraint(s) added
-                 function 2 : 72 constraint(s) added
-                 function 3 : 72 constraint(s) added
+                         function 1 : Adding 56 scalar constraint(s) ...
+                         function 1 : 56 scalar constraint(s) added
+                         function 2 : Adding 56 scalar constraint(s) ...
+                         function 2 : 56 scalar constraint(s) added
+                         function 3 : Adding 56 scalar constraint(s) ...
+                         function 3 : 56 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.4754523883370414
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.47544137382115453
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
-            PEPit guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475452 ||x0 - ws||^2
+                PEPit guarantee:         ||w^2_n - w^1_n||^2 <= 0.475441 ||x0 - ws||^2
 
     """
 
@@ -91,11 +95,6 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     func1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu1, L=L1)
     func2 = problem.declare_function(ConvexFunction)
     func3 = problem.declare_function(SmoothConvexFunction, L=L3)
-    # Define the function to optimize as the sum of func1, func2 and func3
-    func = func1 + func2 + func3
-
-    # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
-    xs = func.stationary_point()
 
     # Then define the starting points w0 and w0p of the algorithm
     w0 = problem.set_initial_point()
@@ -140,7 +139,6 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L3 = 1
     alpha = 1 / L3
     pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)

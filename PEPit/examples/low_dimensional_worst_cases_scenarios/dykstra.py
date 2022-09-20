@@ -1,7 +1,7 @@
 from PEPit import PEP
+from PEPit import null_point
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
-from PEPit import null_point
 
 
 def wc_dykstra(n, verbose=1):
@@ -59,11 +59,13 @@ def wc_dykstra(n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 24x24
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 144 constraint(s) added
-                 function 2 : 121 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 144 scalar constraint(s) ...
+                         function 1 : 144 scalar constraint(s) added
+                         function 2 : Adding 121 scalar constraint(s) ...
+                         function 2 : 121 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.020649148184166164
@@ -73,9 +75,8 @@ def wc_dykstra(n, verbose=1):
         (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after 1 dimension reduction step(s)
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.020649148184166164
         (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after dimension reduction
-        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -0.000479 < 0).
         *** Example file: worst-case performance of the Dykstra projection method ***
-            PEPit example:	 ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == 0.0212433 ||x0 - x_*||^2
+                PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0212433 ||x0 - x_*||^2
 
     """
 
@@ -118,7 +119,7 @@ def wc_dykstra(n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Dykstra projection method ***')
-        print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn) ||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

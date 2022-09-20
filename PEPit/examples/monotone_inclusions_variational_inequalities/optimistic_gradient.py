@@ -1,6 +1,6 @@
 from PEPit import PEP
-from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.functions import ConvexIndicatorFunction
+from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
@@ -61,19 +61,21 @@ def wc_optimistic_gradient(n, gamma, L, verbose=1):
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1/4, L=1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1 / 4, L=1, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-             function 1 : 49 constraint(s) added
-             function 2 : 84 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 49 scalar constraint(s) ...
+                         function 1 : 49 scalar constraint(s) added
+                         function 2 : Adding 84 scalar constraint(s) ...
+                         function 2 : 84 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.06631412707748953
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06631469189357277
         *** Example file: worst-case performance of the Optimistic Gradient Method***
-            PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0663141 ||x0 - xs||^2
+                PEPit guarantee:         ||x(n) - x(n-1)||^2 <= 0.0663147 ||x0 - xs||^2
 
     """
 
@@ -126,5 +128,4 @@ def wc_optimistic_gradient(n, gamma, L, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1 / 4, L=1, verbose=1)

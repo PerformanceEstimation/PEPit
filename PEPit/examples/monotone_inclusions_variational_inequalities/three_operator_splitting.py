@@ -1,7 +1,7 @@
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.operators import MonotoneOperator
 from PEPit.operators import CocoerciveOperator
+from PEPit.operators import MonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
@@ -72,16 +72,20 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 2 constraint(s) added
-                 function 2 : 2 constraint(s) added
-                 function 3 : 2 constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
+                         function 2 : Adding 2 scalar constraint(s) ...
+                         function 2 : 2 scalar constraint(s) added
+                         function 3 : Adding 2 scalar constraint(s) ...
+                         function 3 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.7796890317399627
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7796889999218343
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-                PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
+                PEPit guarantee:         ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
 
     """
 
@@ -130,5 +134,4 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)

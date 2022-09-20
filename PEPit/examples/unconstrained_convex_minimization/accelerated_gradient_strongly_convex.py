@@ -67,15 +67,17 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 12 constraint(s) added
+                         function 1 : Adding 12 scalar constraint(s) ...
+                         function 1 : 12 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.34758587217463155
         *** Example file: worst-case performance of the accelerated gradient method ***
-            PEPit guarantee:		 f(x_n)-f_*  <= 0.347586 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
-            Theoretical guarantee:	 f(x_n)-f_*  <= 0.467544 (f(x_0) -  f(x_*) +  mu/2*|| x_0 - x_* ||**2)
+                PEPit guarantee:         f(x_n)-f_* <= 0.347586 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.467544 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
 
     """
 
@@ -119,9 +121,9 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the accelerated gradient method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)'.format(
             pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_*  <= {:.6} (f(x_0) -  f(x_*) +  mu/2*||x_0 - x_*||**2)'.format(
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)'.format(
             theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -129,5 +131,4 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, verbose=1)

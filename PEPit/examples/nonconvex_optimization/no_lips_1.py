@@ -71,17 +71,22 @@ def wc_no_lips_1(L, gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=gamma, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 20x20
         (PEPit) Setting up the problem: performance measure is minimum of 5 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-		        function 1 : 30 constraint(s) added
-		        function 2 : 30 constraint(s) added
-		        function 3 : 49 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+                         function 2 : Adding 30 scalar constraint(s) ...
+                         function 2 : 30 scalar constraint(s) added
+                         function 3 : Adding 49 scalar constraint(s) ...
+                         function 3 : 49 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.19999999999153698
-        *** Example file: worst-case performance of the NoLips in function values ***
-	    PEPit guarantee:		 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
-	    Theoretical guarantee :	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.20000306821054706
+        *** Example file: worst-case performance of the NoLips in Bregman divergence ***
+                PEPit guarantee:         min_t Dh(x_(t+1), x_(t)) <= 0.200003 (F(x_0) - F(x_n))
+                Theoretical guarantee :  min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
+
     """
 
     # Instantiate PEP
@@ -138,7 +143,6 @@ def wc_no_lips_1(L, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
     gamma = 1 / (2 * L)
     pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=gamma, n=5, verbose=1)

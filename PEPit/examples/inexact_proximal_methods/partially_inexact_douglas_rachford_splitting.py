@@ -1,8 +1,8 @@
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import ConvexFunction
-from PEPit.primitive_steps import proximal_step
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import inexact_proximal_step
+from PEPit.primitive_steps import proximal_step
 
 
 def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verbose=1):
@@ -84,16 +84,19 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
         >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 40 constraint(s) added
-                 function 2 : 30 constraint(s) added
+                         function 1 : Adding 40 scalar constraint(s) ...
+                         function 1 : 40 scalar constraint(s) added
+                         function 2 : Adding 30 scalar constraint(s) ...
+                         function 2 : 30 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2812035034317067
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.28120549805153155
         *** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***
-            PEPit guarantee:		 ||z_n - z_*||^2 <= 0.281204 ||z_0 - z_*||^2
-            Theoretical guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+                PEPit guarantee:         ||z_n - z_*||^2 <= 0.281205 ||z_0 - z_*||^2
+                Theoretical guarantee:   ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
 
     """
 
@@ -123,7 +126,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
     for _ in range(n):
         x, dfx, _, _, _, _, epsVar = inexact_proximal_step(z, f, gamma, opt='PD_gapII')
         y, _, _ = proximal_step(x - gamma * dfx, g, gamma)
-        f.add_constraint(epsVar <= 1/2 * (sigma * (y - z + gamma * dfx)) ** 2)
+        f.add_constraint(epsVar <= 1 / 2 * (sigma * (y - z + gamma * dfx)) ** 2)
         z = z + (y - x)
 
     # Set the performance metric to the final distance between zn and zs
@@ -148,5 +151,4 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, verb
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, verbose=1)

@@ -73,17 +73,19 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 15 constraint(s) added
+                         function 1 : Adding 14 scalar constraint(s) ...
+                         function 1 : 14 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5188661397616067
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5189192063892595
         *** Example file: worst-case performance of inexact gradient method in distance in function values ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.518866 (f(x_0)-f_*)
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+                PEPit guarantee:         f(x_n)-f_* <= 0.518919 (f(x_0)-f_*)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
 
     """
 
@@ -134,5 +136,4 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2, verbose=1)

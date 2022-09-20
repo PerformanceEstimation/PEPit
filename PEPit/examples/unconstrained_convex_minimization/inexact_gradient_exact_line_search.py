@@ -1,7 +1,7 @@
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.primitive_steps import inexact_gradient_step
 from PEPit.primitive_steps import exact_linesearch_step
+from PEPit.primitive_steps import inexact_gradient_step
 
 
 def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
@@ -70,18 +70,21 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(1, 0.1, 0.1, 1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 18 constraint(s) added
+                         function 1 : Adding 18 scalar constraint(s) ...
+                         function 1 : 18 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5186658287501191
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5191057273345401
         *** Example file: worst-case performance of inexact gradient descent with exact linesearch ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.518666 (f(x_0)-f_*)
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+                PEPit guarantee:         f(x_n)-f_* <= 0.519106 (f(x_0)-f_*)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+
     """
 
     # Instantiate PEP
@@ -129,5 +132,4 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)

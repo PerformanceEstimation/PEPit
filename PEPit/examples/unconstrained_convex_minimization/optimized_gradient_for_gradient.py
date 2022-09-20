@@ -75,17 +75,19 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=1)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 30 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.30700730460985826
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.30700758289614183
         *** Example file: worst-case performance of optimized gradient method for gradient ***
-	        PEP-it guarantee:       ||f'(x_n)|| ^ 2 <= 0.307007 (f(x_0) - f_*)
-	        Theoretical guarantee:  ||f'(x_n)|| ^ 2 <= 0.307007 (f(x_0) - f_*)
+                PEP-it guarantee:        ||f'(x_n)||^2 <= 0.307008 (f(x_0) - f_*)
+                Theoretical guarantee:   ||f'(x_n)||^2 <= 0.307007 (f(x_0) - f_*)
 
     """
 
@@ -107,7 +109,7 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
     problem.set_initial_condition(f0 - fs <= 1)
 
     # Compute scalar sequence of \tilde{theta}_t
-    theta_tilde = [1] # compute \tilde{theta}_{t} from \tilde{theta}_{t+1} (sequence in reverse order)
+    theta_tilde = [1]  # compute \tilde{theta}_{t} from \tilde{theta}_{t+1} (sequence in reverse order)
     for i in range(n):
         if i < n - 1:
             theta_tilde.append((1 + sqrt(4 * theta_tilde[i] ** 2 + 1)) / 2)
@@ -122,8 +124,8 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
     for i in range(n):
         y_old = y_new
         y_new = x - 1 / L * func.gradient(x)
-        x = y_new + (theta_tilde[i] - 1) * (2 * theta_tilde[i+1] - 1) / theta_tilde[i] / (2 * theta_tilde[i] - 1) * (y_new - y_old) \
-            + (2 * theta_tilde[i+1] - 1) / (2 * theta_tilde[i] - 1) * (y_new - x)
+        x = y_new + (theta_tilde[i] - 1) * (2 * theta_tilde[i + 1] - 1) / theta_tilde[i] / (2 * theta_tilde[i] - 1) \
+            * (y_new - y_old) + (2 * theta_tilde[i + 1] - 1) / (2 * theta_tilde[i] - 1) * (y_new - x)
 
     # Set the performance metric to the gradient norm
     problem.set_performance_metric(func.gradient(x) ** 2)
@@ -138,13 +140,12 @@ def wc_optimized_gradient_for_gradient(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method for gradient ***')
-        print('\tPEP-it guarantee:\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t ||f\'(x_n)|| ^ 2 <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
+        print('\tPEP-it guarantee:\t ||f\'(x_n)||^2 <= {:.6} (f(x_0) - f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t ||f\'(x_n)||^2 <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, verbose=1)

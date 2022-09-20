@@ -61,18 +61,20 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     Example:
         >>> mu = .1
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method_under_restricted_secant_inequality_and_error_bound(mu=mu, L=L, gamma=mu / L**2, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 8 constraint(s) added
+                         function 1 : Adding 8 scalar constraint(s) ...
+                         function 1 : 8 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9605893213566064
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-            PEPit guarantee:	     f(x_n)-f_* <= 0.960589 ||x_0 - x_*||^2
-	        Theoretical guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.960589 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
 
     """
 
@@ -104,7 +106,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = (1 - 2*gamma*mu + gamma**2 * L**2)**n
+    theoretical_tau = (1 - 2 * gamma * mu + gamma ** 2 * L ** 2) ** n
 
     # Print conclusion if required
     if verbose != -1:
@@ -117,7 +119,6 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     mu = .1
     L = 1
     pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)

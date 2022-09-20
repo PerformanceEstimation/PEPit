@@ -71,16 +71,17 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 21x21
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (14 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 188 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 188 scalar constraint(s) ...
+                         function 1 : 188 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0191201198697333
         *** Example file: worst-case performance of the epsilon-subgradient method ***
-            PEPit guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.01912
-            Theoretical guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
+                PEPit guarantee:         min_(0 <= t <= n) f(x_i) - f_* <= 1.01912
+                Theoretical guarantee:   min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
 
     """
 
@@ -132,7 +133,6 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, verbose=1):
 
 
 if __name__ == "__main__":
-
     M, n, eps, R = 2, 6, .1, 1
     gamma = 1 / sqrt(n + 1)
     pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, verbose=1)

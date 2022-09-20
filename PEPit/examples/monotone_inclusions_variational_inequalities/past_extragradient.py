@@ -1,6 +1,6 @@
 from PEPit import PEP
-from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.functions import ConvexIndicatorFunction
+from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
@@ -65,19 +65,21 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1/4, L=1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 20x20
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-		 function 1 : 144 constraint(s) added
-		 function 2 : 84 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 144 scalar constraint(s) ...
+                         function 1 : 144 scalar constraint(s) added
+                         function 2 : Adding 84 scalar constraint(s) ...
+                         function 2 : 84 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.060266383644705254
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06026126041500441
         *** Example file: worst-case performance of the Past Extragradient Method***
-            PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
+                PEPit guarantee:         ||x(n) - x(n-1)||^2 <= 0.0602613 ||x0 - xs||^2
 
     """
 
@@ -129,5 +131,4 @@ def wc_past_extragradient(n, gamma, L, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, verbose=1)

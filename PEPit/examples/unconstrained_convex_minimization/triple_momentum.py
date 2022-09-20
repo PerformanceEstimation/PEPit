@@ -90,15 +90,17 @@ def wc_triple_momentum(mu, L, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 30 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.23893532450841679
         *** Example file: worst-case performance of the Triple Momentum Method ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.238935 ||x_0-x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.238935 ||x_0-x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
 
     """
 
@@ -157,5 +159,4 @@ def wc_triple_momentum(mu, L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, verbose=1)

@@ -1,8 +1,8 @@
 import numpy as np
 
 from PEPit import PEP
-from PEPit.point import Point
 from PEPit.functions import SmoothConvexFunction
+from PEPit.point import Point
 
 
 def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
@@ -71,16 +71,17 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (9 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        function 1 : 42 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 42 scalar constraint(s) ...
+                         function 1 : 42 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 1.0000000055232054
-        *** Example file: worst-case performance of randomized coordinate gradient descent ***
-        PEPit guarantee:    E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
-        Theoretical guarantee:  E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9999978377393944
+        *** Example file: worst-case performance of randomized  coordinate gradient descent ***
+                PEPit guarantee:         E[phi_(n+1)(x_(n+1))] <= 0.999998 phi_n(x_n)
+                Theoretical guarantee:   E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
 
     """
 
@@ -99,7 +100,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     # Run n-1 steps of the algorithm (and keep the last one)
     x = x0
-    for _ in range(n-1):
+    for _ in range(n - 1):
         # Compute the gradients
         g = func.gradient(x)
         gradients = []
@@ -143,7 +144,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     for grad in gradients:
         x1.append(x - gamma * grad)
 
-    var = np.mean([(dn + gamma * L / d) * (func(xn) - fs) + L / 2 * (xn - xs)**2 for xn in x1])
+    var = np.mean([(dn + gamma * L / d) * (func(xn) - fs) + L / 2 * (xn - xs) ** 2 for xn in x1])
 
     # Set the performance metric to the expected Lyapunov at iteration n
     problem.set_performance_metric(var)
@@ -167,4 +168,4 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1/L, d=2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)

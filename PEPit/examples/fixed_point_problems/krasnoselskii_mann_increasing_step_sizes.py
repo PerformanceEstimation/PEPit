@@ -45,14 +45,16 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 20 constraint(s) added
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.11963406474148795
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
-            PEPit guarantee:		 1/4||xN - AxN||^2 <= 0.119634 ||x0 - x_*||^2
+                PEPit guarantee:         1/4 ||xN - AxN||^2 <= 0.119634 ||x0 - x_*||^2
 
     """
 
@@ -88,12 +90,11 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEPit guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t 1/4 ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, verbose=1)

@@ -71,17 +71,21 @@ def wc_no_lips_2(L, gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 3 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 12 constraint(s) added
-                 function 2 : 12 constraint(s) added
-                 function 3 : 25 constraint(s) added
+                         function 1 : Adding 12 scalar constraint(s) ...
+                         function 1 : 12 scalar constraint(s) added
+                         function 2 : Adding 12 scalar constraint(s) ...
+                         function 2 : 12 scalar constraint(s) added
+                         function 3 : Adding 25 scalar constraint(s) ...
+                         function 3 : 25 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.3333333333330493
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.33333185324089176
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***
-            PEPit guarantee:		 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
-            Theoretical guarantee :	 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
+                PEPit guarantee:         min_t Dh(x_(t-1), x_(t)) <= 0.333332 (F(x_0) - F(x_n))
+                Theoretical guarantee:   min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
 
     """
 
@@ -133,14 +137,13 @@ def wc_no_lips_2(L, gamma, n, verbose=1):
     if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
         print('\tPEPit guarantee:\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     L = 1
     gamma = 1 / L
     pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, verbose=1)

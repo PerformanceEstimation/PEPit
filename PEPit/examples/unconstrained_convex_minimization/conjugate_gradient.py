@@ -80,15 +80,17 @@ def wc_conjugate_gradient(L, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_conjugate_gradient(L=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 18 constraint(s) added
+                         function 1 : Adding 18 scalar constraint(s) ...
+                         function 1 : 18 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.061893515427809735
         *** Example file: worst-case performance of conjugate gradient method ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.0618935 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.0618935 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
 
     """
 
@@ -145,5 +147,4 @@ def wc_conjugate_gradient(L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_conjugate_gradient(L=1, n=2, verbose=1)

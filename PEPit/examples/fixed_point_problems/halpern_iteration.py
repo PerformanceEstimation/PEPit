@@ -53,15 +53,17 @@ def wc_halpern_iteration(n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 28x28
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 702 constraint(s) added
+                         function 1 : Adding 702 scalar constraint(s) ...
+                         function 1 : 702 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.005933984368783424
         *** Example file: worst-case performance of Halpern Iterations ***
-            PEPit guarantee:		 ||xN - AxN||^2 <= 0.00593398 ||x0 - x_*||^2
-            Theoretical guarantee:	 ||xN - AxN||^2 <= 0.00591716 ||x0 - x_*||^2
+                PEPit guarantee:         ||xN - AxN||^2 <= 0.00593398 ||x0 - x_*||^2
+                Theoretical guarantee:   ||xN - AxN||^2 <= 0.00591716 ||x0 - x_*||^2
 
     """
 
@@ -106,5 +108,4 @@ def wc_halpern_iteration(n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)

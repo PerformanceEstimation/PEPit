@@ -81,15 +81,20 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex_decreasing(L=1, n=6, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 63 constraint(s) added
+                         function 1 : Adding 63 scalar constraint(s) ...
+                         function 1 : 63 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.10554312873105381
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.10554312873115372
+        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -4.19e-06 < 0).
+         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.105543 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.105547 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.105543 ||x_0 - x_*||^2
+                Theoretical conjecture:  f(x_n)-f_* <= 0.105547 ||x_0 - x_*||^2
 
     """
 
@@ -132,13 +137,12 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical conjecture:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex_decreasing(L=1, n=6, verbose=1)

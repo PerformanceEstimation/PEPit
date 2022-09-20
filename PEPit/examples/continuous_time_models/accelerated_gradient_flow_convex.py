@@ -66,17 +66,17 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        function 1 : 2 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: -4.440892098500626e-16
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: -1.2008648627755779e-18
         *** Example file: worst-case performance of an accelerated gradient flow ***
-        PEPit guarantee:    d/dt V(X_t,t)  <= -4.44089e-16
-        Theoretical guarantee:  d/dt V(X_t)  <= 0.0
-
+                PEPit guarantee:         d/dt V(X_t,t) <= -1.20086e-18
+                Theoretical guarantee:   d/dt V(X_t) <= 0.0
 
     """
 
@@ -99,8 +99,8 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
     xt_dot_dot = - 3 / t * xt_dot - gt
 
     # Chose the Lyapunov function and compute its derivative
-    lyap = t**2 * (ft - fs) + 2 * ((xt - xs) + t/2 * xt_dot)**2
-    lyap_dot = 2 * t * (ft - fs) + t ** 2 * xt_dot * gt + 4 * ((xt - xs) + t/2 * xt_dot) * (3 / 2 * xt_dot + t / 2 * xt_dot_dot)
+    lyap = t ** 2 * (ft - fs) + 2 * ((xt - xs) + t / 2 * xt_dot) ** 2
+    lyap_dot = 2 * t * (ft - fs) + t ** 2 * xt_dot * gt + 4 * ((xt - xs) + t / 2 * xt_dot) * (3 / 2 * xt_dot + t / 2 * xt_dot_dot)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric(lyap_dot)
@@ -115,13 +115,12 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an accelerated gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t,t)  <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6}'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t d/dt V(X_t,t) <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t d/dt V(X_t) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, verbose=1)

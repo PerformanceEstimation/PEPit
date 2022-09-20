@@ -71,19 +71,22 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau  = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 4 constraint(s) added
-                 function 2 : 2 constraint(s) added
+                         function 1 : Adding 4 scalar constraint(s) ...
+                         function 1 : 4 scalar constraint(s) added
+                         function 2 : Adding 2 scalar constraint(s) ...
+                         function 2 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-            PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
-            Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+                PEPit guarantee:         ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+                Theoretical guarantee:   ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
 
     """
 
@@ -132,9 +135,9 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
         theoretical_tau = (1 - theta * (L + mu) / (L + 1) / (mu + 1)) ** 2
     else:
         theoretical_tau = (2 - theta) / 4 / mu / (L ** 2 + 1) * (
-                    theta * (1 - 2 * mu + L ** 2) - 2 * mu * (L ** 2 - 1)) * \
+                theta * (1 - 2 * mu + L ** 2) - 2 * mu * (L ** 2 - 1)) * \
                           (theta * (1 + 2 * mu + L ** 2) - 2 * (mu + 1) * (L ** 2 + 1)) / (
-                                      theta * (1 + 2 * mu - L ** 2) - 2 * (mu + 1) * (1 - L ** 2))
+                                  theta * (1 + 2 * mu - L ** 2) - 2 * (mu + 1) * (1 - L ** 2))
 
     # Print conclusion if required
     if verbose != -1:
@@ -147,5 +150,4 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
