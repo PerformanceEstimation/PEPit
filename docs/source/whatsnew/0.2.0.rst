@@ -1,0 +1,24 @@
+What's new in PEPit 0.2.0
+=========================
+
+- Adding possibility to set LMI constraints associated to function objects.
+
+    The method ``add_psd_matrix`` has been added to the class ``Function`` and must be used to add LMI constraints associated to a function.
+
+- Storing dual values prior to dimension reduction.
+
+    Each ``Constraint`` object receives a dual value in the attribute ``_dual_value`` which can be accessed through the method ``eval_dual``.
+    In previous releases, and in case of dimension reduction being activated, the dual values being stored where those of the latest solved problem.
+    From this release, the dual values being stored are always those of the original problem.
+    Note the primal values are those of the last problem providing adversarial example of smallest dimension possible.
+
+- Creating ``PSDMatrix`` class.
+
+    ``PSDMatrix`` class as been added. This doesn't affect how the methods ``add_psd_matrix`` must be used.
+    A user must continue providing a psd matrix under the form of an Iterable of ``Expression``s.
+    The latter will be automatically transformed into a ``PSDMatrix`` object that contains a ``_dual_value`` attribute and an ``eval_dual`` method as any ``Constraint`` object.
+
+- Fixing a minor issue in pep.py.
+
+    There was an issue when the Gram matrix G did not need any eigenvalue correction as ``eig_threshold`` in ``pep.get_nb_eigenvalues_and_corrected_matrix`` where defined as the maximum of an empty list.
+    This issue has been fixed in this release.

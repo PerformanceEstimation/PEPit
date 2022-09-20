@@ -7,3 +7,4 @@ What's new in PEPit
    :caption: Contents:
 
    whatsnew/0.1.0
+   whatsnew/0.2.0
