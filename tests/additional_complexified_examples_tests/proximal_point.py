@@ -30,16 +30,19 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 6 constraint(s) added
-                 function 2 : 6 constraint(s) added
+                         function 1 : Adding 6 scalar constraint(s) ...
+                         function 1 : 6 scalar constraint(s) added
+                         function 2 : Adding 6 scalar constraint(s) ...
+                         function 2 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
         *** Example file: worst-case performance of the Proximal Point Method in function values***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
-            Theoretical guarantee :	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+                Theoretical guarantee :  f(x_n)-f_* <= 0.125 ||x0 - xs||^2
 
     """
 
@@ -79,7 +82,7 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method in function values***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
@@ -87,5 +90,4 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2, verbose=1)

@@ -1,8 +1,8 @@
+import numpy as np
+
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.point import Point
-
-import numpy as np
 
 
 def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbose=1):
@@ -28,18 +28,24 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(1, 0.1, 0.1, 1, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: 2 lmi constraint(s) added
+                         Size of PSD matrix 1: 2x2
+                         Size of PSD matrix 2: 2x2
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 18 constraint(s) added
+                         function 1 : Adding 14 scalar constraint(s) ...
+                         function 1 : 14 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5186658287501191
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5188573779100247
         *** Example file: worst-case performance of inexact gradient descent with exact linesearch ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.518666 (f(x_0)-f_*)
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+                PEPit guarantee:         f(x_n)-f_* <= 0.518857 (f(x_0)-f_*)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+
     """
 
     # Instantiate PEP
@@ -67,8 +73,8 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
         x_prev = x
         x = Point()
         gx, fx = func.oracle(x)
-        
-        matrix_of_expressions = np.array([[epsilon * gx_prev**2, gx_prev*gx], [gx_prev*gx, epsilon * gx**2]])
+
+        matrix_of_expressions = np.array([[epsilon * gx_prev ** 2, gx_prev * gx], [gx_prev * gx, epsilon * gx ** 2]])
         problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
         func.add_constraint((x - x_prev) * gx == 0)
 
@@ -95,5 +101,4 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)

@@ -1,6 +1,6 @@
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import ConvexFunction
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
@@ -44,18 +44,23 @@ def wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 4 function(s)
-                 function 1 : 6 constraint(s) added
-                 function 2 : 6 constraint(s) added
-                 function 3 : 6 constraint(s) added
-                 function 4 : 6 constraint(s) added
+                         function 1 : Adding 6 scalar constraint(s) ...
+                         function 1 : 6 scalar constraint(s) added
+                         function 2 : Adding 6 scalar constraint(s) ...
+                         function 2 : 6 scalar constraint(s) added
+                         function 3 : Adding 6 scalar constraint(s) ...
+                         function 3 : 6 scalar constraint(s) added
+                         function 4 : Adding 6 scalar constraint(s) ...
+                         function 4 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6561016829295551
         *** Example file: worst-case performance of gradient descent ***
-            PEPit guarantee:		 ||x_n-x_*||^2 <= 0.656102 ||x_0-x_*||^2
-            Theoretical guarantee:	 ||x_n-x_*||^2 <= 0.6561 ||x_0-x_*||^2
+                PEPit guarantee:         ||x_n-x_*||^2 <= 0.656102 ||x_0-x_*||^2
+                Theoretical guarantee:   ||x_n-x_*||^2 <= 0.6561 ||x_0-x_*||^2
 
     """
 
@@ -102,7 +107,7 @@ def wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent ***')
-        print('\tPEPit guarantee:\t\t ||x_n-x_*||^2 <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x_n-x_*||^2 <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n-x_*||^2 <= {:.6} ||x_0-x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -110,5 +115,4 @@ def wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2, verbose=1)
