@@ -56,7 +56,7 @@ def wc_halpern_iteration(n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-	    >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...

@@ -8,7 +8,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
     """
     Consider the convex minimization problem
 
-    .. math:: f_\\star \\triangleq \\min_x f(x),
+    .. math:: f_\\star \\triangleq \\min_{x\\in\\mathbb{R}^d} f(x),
 
     where :math:`f` is :math:`\\mu`-strongly convex.
 
@@ -17,9 +17,13 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
     .. math:: \\frac{d}{dt}\\mathcal{V}_{P}(X_t) \\leqslant -\\tau(\\mu)\\mathcal{V}_P(X_t) ,
 
-    is valid, where :math:`\\mathcal{V}_{P}(X_t) = f(X_t) - f(x_\\star) + (X_t - x_\\star, \\frac{d}{dt}X_t)^TP(X_t - x_\\star, \\frac{d}{dt}X_t)`,
-    :math:`X_t` is the output of an **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
-    In short, for given values of :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of the derivative
+    is valid with 
+    
+    .. math:: \\mathcal{V}_{P}(X_t) = f(X_t) - f(x_\\star) + (X_t - x_\\star, \\frac{d}{dt}X_t)^T(P \\otimes I_d)(X_t - x_\\star, \\frac{d}{dt}X_t) ,
+    
+    where :math:`I_d` is the identity matrix, :math:`X_t` is the output of an **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
+    
+    In short, for given values of :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of the derivative of
     :math:`f(X_t)-f_\\star` when :math:`f(X_t) -  f(x_\\star)\\leqslant 1`.
 
     **Algorithm**:
@@ -27,7 +31,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
                 .. math:: \\frac{d^2}{dt^2}X_t + 2\\sqrt{\\mu}\\frac{d}{dt}X_t + \\nabla f(X_t) = 0,
 
-    with :math:`X_{0}:= x_0 \\in \\mathbf{R}^d`.
+    with some initialization :math:`X_{0}\\triangleq x_0`.
 
     **Theoretical guarantee**:
 

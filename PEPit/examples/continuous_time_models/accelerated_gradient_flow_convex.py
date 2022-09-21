@@ -17,6 +17,7 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
     is valid, where :math:`\\mathcal{V}(X_t, t) = t^2(f(X_t) - f(x_\\star)) + 2 \\|(X_t - x_\star) + \\frac{t}{2}\\frac{d}{dt}X_t \\|^2`,
     :math:`X_t` is the output of an **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
+    
     In short, for given values of :math:`t`, it verifies :math:`\\frac{d}{dt}\\mathcal{V}(X_t, t) \\leqslant 0`.
 
     **Algorithm**:
@@ -24,7 +25,7 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
                 .. math:: \\frac{d^2}{dt^2}X_t + \\frac{3}{t}\\frac{d}{dt}X_t + \\nabla f(X_t) = 0,
 
-    with :math:`X_{0}:= x_0 \\in \\mathbf{R}^d`.
+    with some initialization :math:`X_{0}\\triangleq x_0`.
 
     **Theoretical guarantee**:
 

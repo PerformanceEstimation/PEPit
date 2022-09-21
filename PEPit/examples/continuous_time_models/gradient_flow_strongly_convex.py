@@ -25,7 +25,7 @@ def wc_gradient_flow_strongly_convex(mu, verbose=1):
 
                 .. math:: \\frac{d}{dt}X_t = -\\nabla f(X_t),
 
-    with :math:`X_{0}:= x_0 \\in \\mathbf{R}^d`.
+    with some initialization :math:`X_{0}\\triangleq x_0`.
 
     **Theoretical guarantee**:
 
