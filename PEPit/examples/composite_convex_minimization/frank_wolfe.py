@@ -1,6 +1,6 @@
 from PEPit import PEP
-from PEPit.functions import SmoothConvexFunction
 from PEPit.functions import ConvexIndicatorFunction
+from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import linear_optimization_step
 
 
@@ -67,16 +67,19 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 132 constraint(s) added
-                 function 2 : 325 constraint(s) added
+                         function 1 : Adding 132 scalar constraint(s) ...
+                         function 1 : 132 scalar constraint(s) added
+                         function 2 : Adding 325 scalar constraint(s) ...
+                         function 2 : 325 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.09945208318766442
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.07830185202143693
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667  ||x0 - xs||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.0783019 ||x0 - xs||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
 
     """
 
@@ -124,11 +127,10 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)

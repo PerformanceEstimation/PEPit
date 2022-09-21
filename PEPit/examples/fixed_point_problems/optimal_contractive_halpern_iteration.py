@@ -53,16 +53,17 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                function 1 : 132 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 132 scalar constraint(s) ...
+                         function 1 : 132 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.010613019546783495
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.010613882599724987
         *** Example file: worst-case performance of Optimal Contractive Halpern Iterations ***
-            PEPit guarantee:        ||xN - AxN||^2 <= 0.010613 ||x0 - x_*||^2
-            Theoretical guarantee:  ||xN - AxN||^2 <= 0.0106132 ||x0 - x_*||^2
+                PEPit guarantee:         ||xN - AxN||^2 <= 0.0106139 ||x0 - x_*||^2
+                Theoretical guarantee:   ||xN - AxN||^2 <= 0.0106132 ||x0 - x_*||^2
 
     """
 
@@ -108,5 +109,4 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, verbose=1)

@@ -87,7 +87,7 @@ More precisely, this code snippet allows computing the worst-case value of <img 
 
 ```Python
 from PEPit import PEP
-from PEPit.functions import SmoothConvexFunction
+from PEPit.functions import SmoothStronglyConvexFunction
 
 
 def wc_gradient_descent(L, gamma, n, verbose=1):
@@ -101,13 +101,13 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
 
-    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\gamma) || x_0 - x_\\star ||^2
+    .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\gamma) \\|x_0 - x_\\star\\|^2
 
     is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
-    value of :math:`f(x_n)-f_\\star` when :math:`||x_0 - x_\\star||^2 \\leqslant 1`.
+    value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by
@@ -119,7 +119,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Theorem 3.1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L||x_0-x_\\star||^2}{4nL\\gamma+2},
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{4nL\\gamma+2} \\|x_0-x_\\star\\|^2,
 
     which is tight on some Huber loss functions.
 
@@ -134,10 +134,11 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         gamma (float): step-size.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+                        
+                        - -1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -148,23 +149,25 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 30 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.16666666497937685
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.16666664596175398
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
 
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a convex smooth function
-    func = problem.declare_function(SmoothConvexFunction, L=L)
+    # Declare a strongly convex smooth function
+    func = problem.declare_function(SmoothStronglyConvexFunction, mu=0, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -202,7 +205,6 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 3
     pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=1)
 
@@ -222,6 +224,7 @@ PEPit provides the following [steps](https://pepit.readthedocs.io/en/latest/api/
 - [Bregman gradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-gradient-step)
 - [Bregman proximal step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-proximal-step)
 - [Linear optimization step](https://pepit.readthedocs.io/en/latest/api/steps.html#linear-optimization-step)
+- [Epsilon-subgradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#epsilon-subgradient-step)
 
 PEPit provides the following [function classes](https://pepit.readthedocs.io/en/latest/api/functions.html) CNIs:
 
@@ -232,6 +235,9 @@ PEPit provides the following [function classes](https://pepit.readthedocs.io/en/
 - [Strongly convex and smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-convex-and-smooth)
 - [Convex and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-lipschitz-continuous)
 - [Convex indicator](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-indicator)
+- [Convex support](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-support-functions)
+- [Convex quadratically growing](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-quadratically-upper-bounded)
+- [Functions verifying restricted secant inequality and upper error bound](https://pepit.readthedocs.io/en/latest/api/functions.html#restricted-secant-inequality-and-error-bound)
 
 PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
 

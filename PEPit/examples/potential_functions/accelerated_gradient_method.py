@@ -75,15 +75,17 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (0 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 12 constraint(s) added
+                         function 1 : Adding 12 scalar constraint(s) ...
+                         function 1 : 12 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 7.946321396432764e-09
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 5.264872499157039e-14
         *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
-            PEPit guarantee:       V_(n+1) - V_n <= 7.94632e-09
-            Theoretical guarantee:  V_(n+1) - V_n <= 0.0
+                PEPit guarantee:         V_(n+1) - V_n <= 5.26487e-14
+                Theoretical guarantee:   V_(n+1) - V_n <= 0.0
 
     """
 
@@ -127,17 +129,17 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if gamma == 1/L:
+    if gamma == 1 / L:
         theoretical_tau = 0.
     else:
         theoretical_tau = None
 
     # Print conclusion if required
     if verbose != -1:
-        print(
-            '*** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***')
+        print('*** Example file:'
+              ' worst-case performance of accelerated gradient method for a given Lyapunov function***')
         print('\tPEPit guarantee:\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
-        if gamma == 1/L:
+        if gamma == 1 / L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -145,6 +147,5 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
     pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=1)

@@ -58,15 +58,17 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_gradient_exact_line_search(L=1, mu=.1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 16 constraint(s) added
+                         function 1 : Adding 16 scalar constraint(s) ...
+                         function 1 : 16 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.44812204883466417
         *** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***
-            PEPit guarantee:		 f(x_n)-f_* <= 0.448122 (f(x_0)-f_*)
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
+                PEPit guarantee:         f(x_n)-f_* <= 0.448122 (f(x_0)-f_*)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
 
     """
 
@@ -114,5 +116,4 @@ def wc_gradient_exact_line_search(L, mu, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_gradient_exact_line_search(L=1, mu=.1, n=2, verbose=1)

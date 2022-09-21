@@ -75,18 +75,20 @@ def wc_robust_momentum(mu, L, lam, verbose=1):
          theoretical_tau (float): theoretical value
     
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_robust_momentum(0.1, 1, 0.2, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 6 constraint(s) added
+                         function 1 : Adding 6 scalar constraint(s) ...
+                         function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5285548355257013
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5285548355275751
         *** Example file: worst-case performance of the Robust Momentum Method ***
-            PEPit guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
-            Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
+                PEPit guarantee:         v(x_(n+1)) <= 0.528555 v(x_n)
+                Theoretical guarantee:   v(x_(n+1)) <= 0.528555 v(x_n)
 
     """
 
@@ -111,7 +113,6 @@ def wc_robust_momentum(mu, L, lam, verbose=1):
     beta = kappa * rho ** 3 / (kappa - 1)
     gamma = rho ** 3 / ((kappa - 1) * (1 - rho) ** 2 * (1 + rho))
     l = mu ** 2 * (kappa - kappa * rho ** 2 - 1) / (2 * rho * (1 - rho))
-    nnu = (1 + rho) * (1 - kappa + 2 * kappa * rho - kappa * rho ** 2) / (2 * rho)
 
     # Run one step of the Robust Momentum Method
     y0 = x1 + gamma * (x1 - x0)
@@ -146,15 +147,12 @@ def wc_robust_momentum(mu, L, lam, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
-            pepit_tau))
-        print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(
-            theoretical_tau))
+        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, verbose=1)

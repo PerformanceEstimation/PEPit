@@ -76,17 +76,21 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 42 constraint(s) added
-                 function 2 : 49 constraint(s) added
-                 function 3 : 42 constraint(s) added
+                         function 1 : Adding 42 scalar constraint(s) ...
+                         function 1 : 42 scalar constraint(s) added
+                         function 2 : Adding 49 scalar constraint(s) ...
+                         function 2 : 49 scalar constraint(s) added
+                         function 3 : Adding 42 scalar constraint(s) ...
+                         function 3 : 42 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.06675394483126838
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-            PEPit guarantee:	     F(x_n)-F_* <= 0.0667539 (c * Dh(xs;x0) + f1(x0) - F_*)
-            Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
+                PEPit guarantee:         F(x_n)-F_* <= 0.0667539 (c * Dh(xs;x0) + f1(x0) - F_*)
+                Theoretical guarantee:   F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
 
     """
 
@@ -145,7 +149,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 
     # Print conclusion if required
     if verbose != -1:
-        print('*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
+        print(
+            '*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
         print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
@@ -154,7 +159,6 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
     lam = 1 / L
     pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)

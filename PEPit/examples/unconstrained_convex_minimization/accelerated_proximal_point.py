@@ -80,18 +80,20 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=1):
 
 
     Example:
-       >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=1)
-       (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
-       (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-       (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
-       (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 20 constraint(s) added
-       (PEPit) Compiling SDP
-       (PEPit) Calling SDP solver
-       (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.01593113594082973
-       *** Example file: worst-case performance of optimized gradient method ***
-           PEPit guarantee:       f(x_n)-f_* <= 0.0159311  (f(x_0) - f_* + A0/2* ||x_0 - x_*||^2)
-           Theoretical guarantee:  f(x_n)-f_* <= 0.0511881  (f(x_0) - f_* + A0/2* ||x_0 - x_*||^2)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.015931135941565824
+        *** Example file: worst-case performance of fast proximal point method ***
+                PEPit guarantee:         f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
+                Theoretical guarantee:   f(x_n)-f_* <= 0.0511881 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
 
     """
 
@@ -145,5 +147,4 @@ def wc_accelerated_proximal_point(A0, gammas, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, verbose=1)

@@ -62,15 +62,17 @@ def wc_proximal_point(gamma, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 20 constraint(s) added
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.020833335685727362
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.02083327687098447
         *** Example file: worst-case performance of proximal point method ***
-            PEPit guarantee:           f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
-            Theoretical guarantee:      f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
 
     """
 
@@ -116,5 +118,4 @@ def wc_proximal_point(gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=1)

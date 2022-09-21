@@ -65,17 +65,19 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 27x27
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 351 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: SCS); optimal value: 0.038461130525391705
+        (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 351 scalar constraint(s) ...
+                         function 1 : 351 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.038461130525391705
         *** Example file: worst-case performance of conjugate gradient method ***
-            PEP-it guarantee:		 f(x_n)-f_* <= 0.0384611 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
+                PEPit guarantee:         f(x_n)-f_* <= 0.0384611 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
 
     """
 
@@ -113,12 +115,12 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = L/(2*(n+1))
+    theoretical_tau = L / (2 * (n + 1))
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of conjugate gradient method ***')
-        print('\tPEP-it guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -126,5 +128,4 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)

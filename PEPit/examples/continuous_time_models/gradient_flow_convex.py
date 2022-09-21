@@ -24,7 +24,7 @@ def wc_gradient_flow_convex(t, verbose=1):
 
                 .. math:: \\frac{d}{dt}X_t = -\\nabla f(X_t),
 
-    with :math:`X_{0}:= x_0 \\in \\mathbf{R}^d`.
+    with some initialization :math:`X_{0}\\triangleq x_0`.
 
     **Theoretical guarantee**:
 
@@ -67,17 +67,17 @@ def wc_gradient_flow_convex(t, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_gradient_flow_convex(t=2.5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 3x3
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        function 1 : 2 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 2.1751469868162582e-09
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.910532459863401e-18
         *** Example file: worst-case performance of the gradient flow ***
-        PEPit guarantee:    d/dt V(X_t)  <= 2.17515e-09
-        Theoretical guarantee:  d/dt V(X_t)  <= 0.0
-
+                PEPit guarantee:         d/dt V(X_t) <= 1.91053e-18
+                Theoretical guarantee:   d/dt V(X_t) <= 0.0
 
     """
 
@@ -115,13 +115,12 @@ def wc_gradient_flow_convex(t, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t)  <= {:.6}'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t d/dt V(X_t)  <= {:.6} '.format(theoretical_tau))
+        print('\tPEPit guarantee:\t d/dt V(X_t) <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t d/dt V(X_t) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_gradient_flow_convex(t=2.5, verbose=1)

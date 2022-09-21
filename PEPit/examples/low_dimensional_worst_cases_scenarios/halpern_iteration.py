@@ -56,29 +56,30 @@ def wc_halpern_iteration(n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-	>>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=15, verbose=1)
-	(PEPit) Setting up the problem: size of the main PSD matrix: 18x18
-	(PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-	(PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		 function 1 : 272 constraint(s) added
-	(PEPit) Setting up the problem: 0 lmi constraint(s) added
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.015625108638644202
-	(PEPit) Postprocessing: 16 eigenvalue(s) > 0.0017004950517382784 before dimension reduction
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.015625108638644202
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 0.0009050641128584248 after 1 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.015625108638644202
-	(PEPit) Postprocessing: 2 eigenvalue(s) > 2.24969870935426e-06 after 2 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.015625108638644202
-	(PEPit) Postprocessing: 1 eigenvalue(s) > 2.51642373983554e-11 after 3 dimension reduction step(s)
-	(PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.015625108638644202
-	(PEPit) Postprocessing: 1 eigenvalue(s) > 2.51642373983554e-11 after dimension reduction
-	*** Example file: worst-case performance of Halpern Iterations ***
-		PEPit example:	 ||xN - AxN||^2 == 0.0156151 ||x0 - x_*||^2
-		Theoretical guarantee:	 ||xN - AxN||^2 <= 0.015625 ||x0 - x_*||^2
+        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 132 scalar constraint(s) ...
+                         function 1 : 132 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.033076981475854986
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 2.538373915093237e-06 before dimension reduction
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03306531836320572
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.00010453609338097841 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.0330736415198303
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 4.3812352924839906e-05 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.03307313275765859
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 4.715648695840045e-05 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.03307313275765859
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 4.715648695840045e-05 after dimension reduction
+        *** Example file: worst-case performance of Halpern Iterations ***
+                PEPit example:           ||xN - AxN||^2 == 0.0330731 ||x0 - x_*||^2
+                Theoretical guarantee:   ||xN - AxN||^2 <= 0.0330579 ||x0 - x_*||^2
 
     """
 
@@ -107,7 +108,9 @@ def wc_halpern_iteration(n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet3",tol_dimension_reduction=1e-5)
+    pepit_tau = problem.solve(verbose=pepit_verbose,
+                              dimension_reduction_heuristic="logdet3",
+                              tol_dimension_reduction=1e-5)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (2 / (n + 1)) ** 2
@@ -115,7 +118,7 @@ def wc_halpern_iteration(n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Halpern Iterations ***')
-        print('\tPEPit example:\t ||xN - AxN||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t\t ||xN - AxN||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -123,5 +126,4 @@ def wc_halpern_iteration(n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, verbose=1)

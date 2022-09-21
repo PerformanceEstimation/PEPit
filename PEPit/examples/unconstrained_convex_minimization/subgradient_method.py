@@ -76,15 +76,17 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 64 constraint(s) added
+                         function 1 : Adding 64 scalar constraint(s) ...
+                         function 1 : 64 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7559825331741553
         *** Example file: worst-case performance of subgradient method ***
-            PEPit guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
-            Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
+                PEPit guarantee:         min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755983 ||x_0 - x_*||
+                Theoretical guarantee:   min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
 
     """
 
@@ -102,7 +104,7 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and xs
-    problem.set_initial_condition((x0 - xs)**2 <= 1)
+    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run n steps of the subgradient method
     x = x0
@@ -135,7 +137,6 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
 
 
 if __name__ == "__main__":
-
     M = 2
     n = 6
     gamma = 1 / (M * sqrt(n + 1))

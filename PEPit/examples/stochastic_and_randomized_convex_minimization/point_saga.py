@@ -71,24 +71,35 @@ def wc_point_saga(L, mu, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 31x31
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 10 function(s)
-		         function 1 : 2 constraint(s) added
-		         function 2 : 2 constraint(s) added
-		         function 3 : 2 constraint(s) added
-		         function 4 : 2 constraint(s) added
-		         function 5 : 2 constraint(s) added
-		         function 6 : 2 constraint(s) added
-		         function 7 : 2 constraint(s) added
-		         function 8 : 2 constraint(s) added
-		         function 9 : 2 constraint(s) added
-		         function 10 : 2 constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
+                         function 2 : Adding 2 scalar constraint(s) ...
+                         function 2 : 2 scalar constraint(s) added
+                         function 3 : Adding 2 scalar constraint(s) ...
+                         function 3 : 2 scalar constraint(s) added
+                         function 4 : Adding 2 scalar constraint(s) ...
+                         function 4 : 2 scalar constraint(s) added
+                         function 5 : Adding 2 scalar constraint(s) ...
+                         function 5 : 2 scalar constraint(s) added
+                         function 6 : Adding 2 scalar constraint(s) ...
+                         function 6 : 2 scalar constraint(s) added
+                         function 7 : Adding 2 scalar constraint(s) ...
+                         function 7 : 2 scalar constraint(s) added
+                         function 8 : Adding 2 scalar constraint(s) ...
+                         function 8 : 2 scalar constraint(s) added
+                         function 9 : Adding 2 scalar constraint(s) ...
+                         function 9 : 2 scalar constraint(s) added
+                         function 10 : Adding 2 scalar constraint(s) ...
+                         function 10 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.9714053958034508
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9714053941143999
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-	        PEPit guarantee:        E[V(x^(1))] <= 0.971405 V(x^(0))
-	        Theoretical guarantee:  E[V(x^(1))] <= 0.973292 V(x^(0))
+                PEPit guarantee:         E[V(x^(1))] <= 0.971405 V(x^(0))
+                Theoretical guarantee:   E[V(x^(1))] <= 0.973292 V(x^(0))
 
     """
 
@@ -157,5 +168,4 @@ def wc_point_saga(L, mu, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, verbose=1)

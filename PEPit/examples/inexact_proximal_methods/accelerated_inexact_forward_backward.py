@@ -89,16 +89,19 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 59x59
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 156 constraint(s) added
-                 function 2 : 528 constraint(s) added
+                         function 1 : Adding 156 scalar constraint(s) ...
+                         function 1 : 156 scalar constraint(s) added
+                         function 2 : Adding 528 scalar constraint(s) ...
+                         function 2 : 528 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018869997698251897
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-        PEPit guarantee:	     F(x_n)-F_* <= 0.01887 ||x_0 - x_*||^2
-        Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
+                PEPit guarantee:         F(x_n)-F_* <= 0.01887 ||x_0 - x_*||^2
+                Theoretical guarantee:   F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
 
     """
 
@@ -157,5 +160,4 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)

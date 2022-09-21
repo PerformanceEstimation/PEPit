@@ -1,8 +1,8 @@
 import numpy as np
 
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import ConvexFunction
+from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
@@ -71,20 +71,27 @@ def wc_saga(L, mu, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 6 function(s)
-                 function 1 : 30 constraint(s) added
-                 function 2 : 6 constraint(s) added
-                 function 3 : 6 constraint(s) added
-                 function 4 : 6 constraint(s) added
-                 function 5 : 6 constraint(s) added
-                 function 6 : 6 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+                         function 2 : Adding 6 scalar constraint(s) ...
+                         function 2 : 6 scalar constraint(s) added
+                         function 3 : Adding 6 scalar constraint(s) ...
+                         function 3 : 6 scalar constraint(s) added
+                         function 4 : Adding 6 scalar constraint(s) ...
+                         function 4 : 6 scalar constraint(s) added
+                         function 5 : Adding 6 scalar constraint(s) ...
+                         function 5 : 6 scalar constraint(s) added
+                         function 6 : Adding 6 scalar constraint(s) ...
+                         function 6 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.9666666451997894
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9666748513396348
         *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
-            PEPit guarantee:		 V^(1) <= 0.966667 V^(0)
-            Theoretical guarantee:	 V^(1) <= 0.966667 V^(0)
+                PEPit guarantee:         V^(1) <= 0.966675 V^(0)
+                Theoretical guarantee:   V^(1) <= 0.966667 V^(0)
 
     """
 
@@ -129,7 +136,7 @@ def wc_saga(L, mu, n, verbose=1):
         g0[i], f0[i] = fn[i].oracle(x0)
         w = x0 - gamma * (g0[i] - g[i])
         for j in range(n):
-            w = w - gamma/n * g[j]
+            w = w - gamma / n * g[j]
         x1, _, _ = proximal_step(w, h, gamma)
         final_lyapunov = c * (x1 - xs) ** 2
         for j in range(n):
@@ -162,5 +169,4 @@ def wc_saga(L, mu, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)

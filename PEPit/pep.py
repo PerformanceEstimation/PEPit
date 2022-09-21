@@ -442,7 +442,13 @@ class PEP(object):
                 heuristic = cp.trace(G)
                 prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=cvxpy_constraints_list)
                 prob.solve(**kwargs)
+
+                # Store the actualized obtained value
+                wc_value = objective.value
+
+                # Compute minimal number of dimensions
                 nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
                 for i in range(1, 1+niter):
@@ -451,8 +457,13 @@ class PEP(object):
                     prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=cvxpy_constraints_list)
                     prob.solve(**kwargs)
 
-                    # Print the estimated dimension after i dimension reduction steps
+                    # Store the actualized obtained value
+                    wc_value = objective.value
+
+                    # Compute minimal number of dimensions
                     nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+
+                    # Print the estimated dimension after i dimension reduction steps
                     if verbose:
                         print('(PEPit) Solver status: {} (solver: {});'
                               ' objective value: {}'.format(prob.status,
@@ -474,9 +485,6 @@ class PEP(object):
                                                     wc_value))
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
                                                                                                        eig_threshold))
-                                                                                                       
-            # Store the actualized obtained value
-            wc_value = objective.value
 
         # Store all the values of points and function values
         self._eval_points_and_function_values(F.value, G.value, verbose=verbose)

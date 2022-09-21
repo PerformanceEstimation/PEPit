@@ -79,17 +79,19 @@ def wc_information_theoretic(mu, L, n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, verbose=1)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 17x17
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 240 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.7566088333863754
+        (PEPit) Setting up the problem: size of the main PSD matrix: 17x17
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 240 scalar constraint(s) ...
+                         function 1 : 240 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7566107333964406
         *** Example file: worst-case performance of the information theoretic exact method ***
-	        PEP-it guarantee:       ||z_n - x_* ||^2 <= 0.756609 ||z_0 - x_*||^2
-	        Theoretical guarantee:  ||z_n - x_* ||^2 <= 0.756605 ||z_0 - x_*||^2
+                PEP-it guarantee:        ||z_n - x_* ||^2 <= 0.756611 ||z_0 - x_*||^2
+                Theoretical guarantee:   ||z_n - x_* ||^2 <= 0.756605 ||z_0 - x_*||^2
 
     """
     # Instantiate PEP
@@ -116,16 +118,16 @@ def wc_information_theoretic(mu, L, n, verbose=1):
 
     for i in range(n):
         A_old = A_new
-        A_new = ((1 + q) * A_old + 2 * (1 + sqrt((1 + A_old) * (1 + q * A_old)))) / (1-q)**2
+        A_new = ((1 + q) * A_old + 2 * (1 + sqrt((1 + A_old) * (1 + q * A_old)))) / (1 - q) ** 2
         beta = A_old / (1 - q) / A_new
-        delta = 1 / 2 * ((1 - q)**2 * A_new - (1 + q) * A_old) / (1 + q + q * A_old)
+        delta = 1 / 2 * ((1 - q) ** 2 * A_new - (1 + q) * A_old) / (1 + q + q * A_old)
 
         y = (1 - beta) * z + beta * x
         x = y - 1 / L * func.gradient(y)
         z = (1 - q * delta) * z + q * delta * y - delta / L * func.gradient(y)
 
     # Set the performance metric to the distance accuracy
-    problem.set_performance_metric((z - xs)**2)
+    problem.set_performance_metric((z - xs) ** 2)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
@@ -145,5 +147,4 @@ def wc_information_theoretic(mu, L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, verbose=1)

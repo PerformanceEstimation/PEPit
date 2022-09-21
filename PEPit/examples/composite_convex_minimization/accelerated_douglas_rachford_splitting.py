@@ -79,16 +79,19 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 20 constraint(s) added
-                 function 2 : 20 constraint(s) added
+                         function 1 : Adding 20 scalar constraint(s) ...
+                         function 1 : 20 scalar constraint(s) added
+                         function 2 : Adding 20 scalar constraint(s) ...
+                         function 2 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19291623130351168
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19291623136473224
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
-            PEPit guarantee:		                 F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
-            Theoretical guarantee for quadratics:	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
+                PEPit guarantee:                         F(y_n)-F_* <= 0.192916 ||x0 - ws||^2
+                Theoretical guarantee for quadratics:    F(y_n)-F_* <= 1.68889 ||x0 - ws||^2
 
     """
 
@@ -139,17 +142,17 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if alpha < 1/L:
+    if alpha < 1 / L:
         theoretical_tau = 2 / (alpha * theta * (n + 3) ** 2)
     else:
-    	theoretical_tau = None
+        theoretical_tau = None
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***')
         print('\tPEPit guarantee:\t\t\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
-        if alpha < 1/L:
+        if alpha < 1 / L:
             print('\tTheoretical guarantee for quadratics:\t F(y_n)-F_* <= {:.6} ||x0 - ws||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -157,5 +160,4 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, verbose=1)

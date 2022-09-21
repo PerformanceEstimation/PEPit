@@ -84,19 +84,21 @@ def wc_optimized_gradient(L, n, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 30 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.07675218017587908
-        (PEPit) Postprocessing: applying trace heuristic. Currently 6 eigenvalue(s) > 1e-05 before resolve.
+        (PEPit) Postprocessing: 5 eigenvalue(s) > 0.00012110342786525262 before dimension reduction
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 1e-05 after trace heuristic
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 5.187978263167338e-09 after dimension reduction
         *** Example file: worst-case performance of optimized gradient method ***
-            PEPit example:		 f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2
-            Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
+                PEPit example:           f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2
+                Theoretical guarantee:   f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
 
     """
 
@@ -144,7 +146,7 @@ def wc_optimized_gradient(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEPit example:\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit example:\t\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -152,5 +154,4 @@ def wc_optimized_gradient(L, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, verbose=1)

@@ -79,23 +79,29 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=1):
     Example:
         >>> mu = 0.1
         >>> L = 1
-        >>> gamma = 1/L
+        >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
-		         function 1 : 2 constraint(s) added
-		         function 2 : 2 constraint(s) added
-		         function 3 : 2 constraint(s) added
-		         function 4 : 2 constraint(s) added
-		         function 5 : 2 constraint(s) added
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
+                         function 2 : Adding 2 scalar constraint(s) ...
+                         function 2 : 2 scalar constraint(s) added
+                         function 3 : Adding 2 scalar constraint(s) ...
+                         function 3 : 2 scalar constraint(s) added
+                         function 4 : Adding 2 scalar constraint(s) ...
+                         function 4 : 2 scalar constraint(s) added
+                         function 5 : Adding 2 scalar constraint(s) ...
+                         function 5 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 5.0416521649156865
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 5.041652328250217
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-            PEPit guarantee:		 E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
-            Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
+                PEPit guarantee:         E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
+                Theoretical guarantee:   E[||x_1 - x_*||^2] <= 5.04165 ||x0 - x_*||^2
 
     """
 
@@ -144,7 +150,6 @@ def wc_sgd(L, mu, gamma, v, R, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     mu = 0.1
     L = 1
     gamma = 1 / L

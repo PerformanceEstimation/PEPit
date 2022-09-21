@@ -55,19 +55,21 @@ def wc_bregman_proximal_point(gamma, n, verbose=1):
 
     Examples:
         >>> pepit_tau, theoretical_tau = wc_bregman_proximal_point(gamma=3, n=5, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 20x20
+        (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                 function 1 : 30 constraint(s) added
-                 function 2 : 30 constraint(s) added
-                 function 3 : 42 constraint(s) added
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+                         function 2 : Adding 42 scalar constraint(s) ...
+                         function 2 : 42 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06666565028497914
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06666740784196148
         *** Example file: worst-case performance of the Bregman Proximal Point in function values ***
-            PEPit guarantee:		 F(x_n)-F_* <= 0.0666657 Dh(x_*; x_0)
-            Theoretical guarantee :	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
+                PEPit guarantee:         F(x_n)-F_* <= 0.0666674 Dh(x_*; x_0)
+                Theoretical guarantee:   F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
 
     """
 
@@ -109,11 +111,10 @@ def wc_bregman_proximal_point(gamma, n, verbose=1):
     if verbose != -1:
         print('*** Example file: worst-case performance of the Bregman Proximal Point in function values ***')
         print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0) '.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_bregman_proximal_point(gamma=3, n=5, verbose=1)

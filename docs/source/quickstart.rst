@@ -179,7 +179,7 @@ After solving the **PEP**, you can ask **PEPit**
 
 .. code-block::
 
-    print(x.value)
+    print(x.eval())
 
 which returns one possible value of the output of the described algorithm at optimum.
 
@@ -187,8 +187,8 @@ You can also ask for gradients and function values
 
 .. code-block::
 
-    print(func.gradient(x).value)
-    print(func(x).value)
+    print(func.gradient(x).eval())
+    print(func(x).eval())
 
 Recovering the values of all the points,
 gradients and function values at optimum allows you
@@ -209,7 +209,7 @@ Then, after solving the system, you can require its associated dual variable val
 
 .. code-block::
 
-    constraint.dual_variable_value
+    constraint.eval_dual()
 
 Output pdf
 ~~~~~~~~~~

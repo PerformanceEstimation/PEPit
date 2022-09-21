@@ -69,22 +69,20 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau  = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                function 1 : 110 constraint(s) added
-        (PEPit) Setting up the problem: 0 lmi constraint(s) added
+                         function 1 : Adding 110 scalar constraint(s) ...
+                         function 1 : 110 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.003936787408353186
-        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -2.67e-07 < 0).
-        Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
-        In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.003937868091430488
         *** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***
-            PEPit guarantee:        ||AxN||^2 <= 0.00393679 ||x0 - x_*||^2
-            Theoretical guarantee:  ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2
+                PEPit guarantee:         ||AxN||^2 <= 0.00393787 ||x0 - x_*||^2
+                Theoretical guarantee:   ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2
 
     """
 
@@ -108,7 +106,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
     for i in range(n):
         x_nxt, _, _ = proximal_step(y, A, 1)
         y_nxt = x_nxt + (phi(mu, i) - 1) / phi(mu, i + 1) * (x_nxt - x) - 2 * mu * phi(mu, i) / phi(mu, i + 1) * (
-                    y - x_nxt) + (1 + 2 * mu) * phi(mu, i - 1) / phi(mu, i + 1) * (y_prv - x)
+                y - x_nxt) + (1 + 2 * mu) * phi(mu, i - 1) / phi(mu, i + 1) * (y_prv - x)
         x, y_prv, y = x_nxt, y, y_nxt
 
     # Set the performance metric to length of \tilde{A}xN
@@ -132,5 +130,4 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)

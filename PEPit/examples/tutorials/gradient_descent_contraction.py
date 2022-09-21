@@ -56,17 +56,19 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=1):
     Example:
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=1)
-        (PEP-it) Setting up the problem: size of the main PSD matrix: 4x4
-        (PEP-it) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEP-it) Setting up the problem: initial conditions (1 constraint(s) added)
-        (PEP-it) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 2 constraint(s) added
-        (PEP-it) Compiling SDP
-        (PEP-it) Calling SDP solver
-        (PEP-it) Solver status: optimal (solver: MOSEK); optimal value: 0.8100000029204689
+        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+                         function 1 : Adding 2 scalar constraint(s) ...
+                         function 1 : 2 scalar constraint(s) added
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8100016613979604
         *** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***
-            PEP-it guarantee:		 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
-            Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
+                PEP-it guarantee:        ||x_n - y_n||^2 <= 0.810002 ||x_0 - y_0||^2
+                Theoretical guarantee:   ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
 
     """
 
@@ -111,6 +113,5 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
     pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, verbose=1)

@@ -74,15 +74,17 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=1):
         >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_distance_to_optimum(L=L, mu=mu, gamma=gamma, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (2 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : 6 constraint(s) added
+                         function 1 : Adding 6 scalar constraint(s) ...
+                         function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.66942148764241
         *** Example file: worst-case performance of Polyak steps ***
-            PEPit guarantee:		 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
-            Theoretical guarantee:	 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
+                PEPit guarantee:         ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
+                Theoretical guarantee:   ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
 
     """
 
@@ -118,7 +120,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=1):
     pepit_tau = problem.solve(verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    if 1/L <= gamma <= 1/mu:
+    if 1 / L <= gamma <= 1 / mu:
         theoretical_tau = (gamma * L - 1) * (1 - gamma * mu) / (gamma * (L + mu) - 1)
     else:
         theoretical_tau = 0.
@@ -134,7 +136,6 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, verbose=1):
 
 
 if __name__ == "__main__":
-
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)

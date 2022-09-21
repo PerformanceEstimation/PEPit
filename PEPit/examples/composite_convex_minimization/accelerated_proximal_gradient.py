@@ -68,17 +68,24 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
-        (PEPit) Setting up the problem: initial conditions (1 constraint(s) added)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                 function 1 : 6 constraint(s) added
-                 function 2 : 2 constraint(s) added
+                         function 1 : Adding 30 scalar constraint(s) ...
+                         function 1 : 30 scalar constraint(s) added
+                         function 2 : Adding 20 scalar constraint(s) ...
+                         function 2 : 20 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        *** Example file: worst-case performance of the Fast Proximal Gradient Method in function values***
-            PEPit guarantee:       f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
-            Theoretical guarantee:  f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.052630167313517565
+        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -7.28e-06 < 0).
+         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
+         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        *** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***
+                PEPit guarantee:         f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
+                Theoretical guarantee:   f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
 
     """
 
@@ -124,14 +131,14 @@ def wc_accelerated_proximal_gradient(mu, L, n, verbose=1):
 
     # Print conclusion if required
     if verbose != -1:
-        print('*** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***')
+        print('*** Example file:'
+              ' worst-case performance of the Accelerated Proximal Gradient Method in function values***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee :\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2 '.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-
     pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, verbose=1)
