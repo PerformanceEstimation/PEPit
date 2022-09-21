@@ -22,3 +22,7 @@ What's new in PEPit 0.2.0
 
     There was an issue when the Gram matrix G did not need any eigenvalue correction as ``eig_threshold`` in ``pep.get_nb_eigenvalues_and_corrected_matrix`` where defined as the maximum of an empty list.
     This issue has been fixed in this release.
+    
+- Eigenvalues are now sorted in decreasing order in the output of the PEP, making it easier to plot low-dimensional worst-case examples (examples of such usages can be found in the exercise repository `Learning-Performance-Estimation <https://github.com/PerformanceEstimation/Learning-Performance-Estimation/>`_).
+
+- Many new examples were introduced, including for looking for low-dimensional worst-case examples, fixed-point iterations, variational inequalities, and continuous-time dynamics.
