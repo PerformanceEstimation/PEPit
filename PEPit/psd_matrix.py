@@ -8,7 +8,7 @@ class PSDMatrix(object):
     A :class:`PSDMatrix` encodes a square matrix of :class:`Expression` objects that is constrained to be symmetric PSD.
 
     Attributes:
-        matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression` objects.
+        matrix_of_expressions (2D ndarray of Expression): a square matrix of :class:`Expression` objects.
         shape (tuple of ints): the shape of the underlying matrix of :class:`Expression` objects.
         _value (2D ndarray of floats): numerical values of :class:`Expression` objects
                                        obtained after solving the PEP via SDP solver.
@@ -22,11 +22,12 @@ class PSDMatrix(object):
 
     Example:
         >>> # Defining t <= sqrt(expr) for a given expression expr.
+        >>> import numpy as np
         >>> from PEPit import Expression
         >>> from PEPit import PSDMatrix
         >>> expr = Expression()
         >>> t = Expression()
-        >>> psd_matrix = PSDMatrix(matrix_of_expressions=[[expr, t], [t, 1]])
+        >>> psd_matrix = PSDMatrix(matrix_of_expressions=np.array([[expr, t], [t, 1]]))
         >>> # The last line means that the matrix [[expr, t], [t, 1]] is constrained to be PSD.
         >>> # This is equivalent to det([[expr, t], [t, 1]]) >= 0, i.e. expr - t^2 >= 0.
 
@@ -40,7 +41,7 @@ class PSDMatrix(object):
         :class:`PSDMatrix` objects are instantiated via the following argument.
 
         Args:
-            matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            matrix_of_expressions (2D ndarray of Expression): a square matrix of :class:`Expression`.
 
         Instantiating the :class:`PSDMatrix` objects of the first example can be done by
 

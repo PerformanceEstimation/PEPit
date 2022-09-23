@@ -141,7 +141,7 @@ class PEP(object):
         Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
 
         Args:
-            matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            matrix_of_expressions (2D ndarray of Expression): a square matrix of :class:`Expression`.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
