@@ -92,7 +92,7 @@ class TestPEP(unittest.TestCase):
         expr = Expression()
 
         # Enforce this expression to be at most ||x0 - xs||
-        matrix_of_expressions = np.array([[(self.x0 - self.xs) ** 2, expr], [expr, 1]])
+        matrix_of_expressions = [[(self.x0 - self.xs) ** 2, expr], [expr, 1]]
         self.problem.add_psd_matrix(matrix_of_expressions=matrix_of_expressions)
 
         # Overwrite performance metric to evaluate the maximal value expr can take
