@@ -34,6 +34,13 @@ Constraint
    :show-inheritance:
 
 
+Symmetric positive semidefinite matrix
+--------------------------------------
+.. autoclass:: PEPit.PSDMatrix
+   :members:
+   :show-inheritance:
+
+
 Function
 --------
 .. autoclass:: PEPit.Function

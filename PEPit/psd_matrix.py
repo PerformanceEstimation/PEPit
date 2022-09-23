@@ -8,16 +8,16 @@ class PSDMatrix(object):
     A :class:`PSDMatrix` encodes a square matrix of :class:`Expression` objects that is constrained to be symmetric PSD.
 
     Attributes:
-        matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
-        shape (tuple of ints): the shape of the underlying matrix of :class:`Expression`.
-        _value (2D ndarray of floats): numerical values of :class:`Expression`s
+        matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression` objects.
+        shape (tuple of ints): the shape of the underlying matrix of :class:`Expression` objects.
+        _value (2D ndarray of floats): numerical values of :class:`Expression` objects
                                        obtained after solving the PEP via SDP solver.
                                        Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         _dual_variable_value (2D ndarray of floats): the associated dual matrix
                                                      from the numerical solution to the corresponding PEP.
                                                      Set to None before the call to `PEP.solve` from the :class:`PEP`.
-        entries_dual_variable_value (2D ndarray of floats): the dual of each correspondence between entries
-                                                            of the matrix and the underlying :class:`Expression`s.
+        entries_dual_variable_value (2D ndarray of floats): the dual of each correspondence between entries of
+                                                            the matrix and the underlying :class:`Expression` objects.
         counter (int): counts the number of :class:`PSDMatrix` objects.
 
     Example:
@@ -126,10 +126,10 @@ class PSDMatrix(object):
 
     def eval(self):
         """
-        Compute, store and return the value of the underlying matrix of :class:`Expression`s.
+        Compute, store and return the value of the underlying matrix of :class:`Expression` objects.
 
         Returns:
-            self._value (np.array): The value of the underlying matrix of :class:`Expression`s
+            self._value (np.array): The value of the underlying matrix of :class:`Expression` objects
                                     after the corresponding PEP was solved numerically.
 
         Raises:
