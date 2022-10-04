@@ -50,6 +50,7 @@ class Point(object):
     # It counts the dimension of the system of points,
     # namely the number of points needed to linearly generate the others.
     counter = 0
+    list_of_leaf_points = list()
 
     def __init__(self,
                  is_leaf=True,
@@ -94,6 +95,7 @@ class Point(object):
             self.decomposition_dict = {self: 1}
             self.counter = Point.counter
             Point.counter += 1
+            Point.list_of_leaf_points.append(self)
         else:
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict

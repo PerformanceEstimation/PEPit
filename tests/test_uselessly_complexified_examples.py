@@ -1,5 +1,6 @@
 import unittest
 
+import PEPit
 from PEPit.examples.unconstrained_convex_minimization import wc_proximal_point
 from PEPit.examples.composite_convex_minimization import wc_proximal_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_exact_line_search
@@ -32,6 +33,7 @@ class TestExamples(unittest.TestCase):
         L, mu, gamma, n = 1, 0.1, 1, 2
 
         wc_modified, theory = wc_proximal_gradient_complexified(L, mu, gamma, n, verbose=self.verbose)
+        self.tearDown()
         wc, theory = wc_proximal_gradient(L, mu, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
@@ -45,6 +47,7 @@ class TestExamples(unittest.TestCase):
         n, gamma = 2, 1
 
         wc_modified, theory = wc_proximal_point_complexified(n, gamma, verbose=self.verbose)
+        self.tearDown()
         wc, theory = wc_proximal_point(n, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
@@ -70,6 +73,7 @@ class TestExamples(unittest.TestCase):
         L, mu, n = 1.5, .12, 3
 
         wc_modified, theory = wc_gradient_exact_line_search_complexified(L=L, mu=mu, n=n, verbose=self.verbose)
+        self.tearDown()
         wc, theory = wc_gradient_exact_line_search(L=L, mu=mu, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
@@ -77,6 +81,7 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 2.3, .23, .2, 2
 
         wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.tearDown()
         wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
@@ -84,5 +89,9 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 2.3, .23, .2, 2
 
         wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified2(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.tearDown()
         wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def tearDown(self):
+        PEPit.reset_classes()

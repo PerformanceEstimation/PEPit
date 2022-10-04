@@ -2,9 +2,7 @@ import unittest
 
 import numpy as np
 
-from PEPit.expression import Expression
-from PEPit.function import Function
-from PEPit.point import Point
+import PEPit
 
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
@@ -612,10 +610,5 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def tearDown(self):
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0
 
-
-if __name__ == '__name__':
-    unittest.main()
+        PEPit.reset_classes()

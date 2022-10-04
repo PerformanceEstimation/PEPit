@@ -1,5 +1,6 @@
 import unittest
 
+import PEPit
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -51,5 +52,4 @@ class TestExpression(unittest.TestCase):
 
     def tearDown(self):
 
-        Point.counter = 0
-        Expression.counter = 0
+        PEPit.reset_classes()

@@ -1,5 +1,6 @@
 import unittest
 
+import PEPit
 from PEPit.tools.dict_operations import prune_dict
 
 from PEPit.point import Point
@@ -282,6 +283,4 @@ class TestFunction(unittest.TestCase):
 
     def tearDown(self):
 
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0
+        PEPit.reset_classes()

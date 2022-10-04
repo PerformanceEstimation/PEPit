@@ -1,7 +1,7 @@
 import unittest
 
+import PEPit
 from PEPit.point import Point
-from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
@@ -113,7 +113,4 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
 
     def tearDown(self):
 
-        Point.counter = 0
-        Expression.counter = 0
-        Constraint.counter = 0
-        Function.counter = 0
+        PEPit.reset_classes()

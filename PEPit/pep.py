@@ -572,19 +572,24 @@ class PEP(object):
         # Iterate over point and function value
         # Set the attribute value of all leaf variables to the right value
         # Note the other ones are not stored until user asks to eval them
-        for point in self.list_of_points:
-            if point.get_is_leaf():
-                point._value = points_values[:, point.counter]
-        for function in self.list_of_functions:
-            if function.get_is_leaf():
-                for triplet in function.list_of_points:
-                    point, gradient, function_value = triplet
-                    if point.get_is_leaf():
-                        point._value = points_values[:, point.counter]
-                    if gradient.get_is_leaf():
-                        gradient._value = points_values[:, gradient.counter]
-                    if function_value.get_is_leaf():
-                        function_value._value = F_value[function_value.counter]
+
+        # for point in self.list_of_points:
+        #     if point.get_is_leaf():
+        #         point._value = points_values[:, point.counter]
+        for point in Point.list_of_leaf_points:
+            point._value = points_values[:, point.counter]
+        for expression in Expression.list_of_leaf_expressions:
+            expression._value = F_value[expression.counter]
+        # for function in self.list_of_functions:
+        #     if function.get_is_leaf():
+        #         for triplet in function.list_of_points:
+        #             point, gradient, function_value = triplet
+        #             # if point.get_is_leaf():
+        #             #     point._value = points_values[:, point.counter]
+        #             # if gradient.get_is_leaf():
+        #             #     gradient._value = points_values[:, gradient.counter]
+        #             if function_value.get_is_leaf():
+        #                 function_value._value = F_value[function_value.counter]
         for matrix in self.list_of_psd:
             size = matrix.shape[0]
             for i in range(size):

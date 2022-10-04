@@ -1,11 +1,13 @@
 import unittest
 import numpy as np
 
+import PEPit
 from PEPit.pep import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.primitive_steps import inexact_gradient_step
 
 
 class TestPEP(unittest.TestCase):
@@ -66,6 +68,17 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(point.eval(), np.ndarray)
             self.assertIsInstance(gradient.eval(), np.ndarray)
             self.assertIsInstance(function_value.eval(), float)
+
+    def test_eval_points_annd_expression_values_defined_independently_of_the_pep_object(self):
+
+        self.x2, self.dx1, _ = inexact_gradient_step(self.x1, self.func, self.gamma, epsilon=.1, notion='absolute')
+        self.problem.set_performance_metric((self.x2 - self.xs) ** 2)
+
+        self.problem.solve(verbose=0)
+
+        self.assertIsInstance(self.x1.eval(), np.ndarray)
+        self.assertIsInstance(self.dx1.eval(), np.ndarray)
+        self.assertIsInstance(self.x2.eval(), np.ndarray)
 
     def test_eval_constraint_dual_values(self):
 
@@ -166,6 +179,4 @@ class TestPEP(unittest.TestCase):
 
     def tearDown(self):
 
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0
+        PEPit.reset_classes()
