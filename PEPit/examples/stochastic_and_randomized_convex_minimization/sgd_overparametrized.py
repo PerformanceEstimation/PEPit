@@ -100,8 +100,8 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8099999999798264
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size and with zero variance at the optimal point ***
-                PEPit guarantee:         E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
-                Theoretical guarantee:   E[||x_1 - x_*||^2] <= 0.81 ||x0 - x_*||^2
+                PEPit guarantee:         E[||x_1 - x_*||^2] <= 0.81
+                Theoretical guarantee:   E[||x_1 - x_*||^2] <= 0.81
 
     """
 
@@ -142,8 +142,8 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
     if verbose != -1:
         print('*** Example file: worst-case performance of stochastic gradient descent'
               ' with fixed step-size and with zero variance at the optimal point ***')
-        print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
