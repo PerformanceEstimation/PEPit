@@ -294,9 +294,10 @@ class PEP(object):
 
         Args:
             verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
-                           0: No verbose at all
-                           1: PEPit information is printed but not CVXPY's
-                           2: Both PEPit and CVXPY details are printed
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not CVXPY's
+                            - 2: Both PEPit and CVXPY details are printed
             return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
                                               If False, return the worst case value only.
                                               Set to False by default.
