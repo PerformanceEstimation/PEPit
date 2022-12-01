@@ -5,7 +5,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.point import Point
 
 
-def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
+def wc_randomized_coordinate_descent_smooth_convex_complexified(L, gamma, d, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -90,9 +90,6 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     # Instantiate PEP
     problem = PEP()
-    
-    # Declare a partition of the ambient space in d blocks of variables
-    partition = problem.declare_block_partition(d=d)
 
     # Declare a smooth convex function
     func = problem.declare_function(SmoothConvexFunction, L=L)
@@ -103,32 +100,57 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
-    
-    # Define the gradient at x0
-    g0 = func.gradient(x0)
 
-    # Compute the Lyapunov coefficient at iteration n-1
+    # Run n-1 steps of the algorithm (and keep the last one)
+    x = x0
+    for _ in range(n - 1):
+        # Compute the gradients
+        g = func.gradient(x)
+        gradients = []
+        for i in range(d - 1):
+            gradients.append(Point())
+        gd = g - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
+        gradients.append(gd)
+        # Add orthogonality constraints
+        for i in range(d):
+            for j in range(d):
+                if i != j:
+                    problem.add_constraint(gradients[i] * gradients[j] == 0)
+        # Select randomly a value for i_k in [1, d]
+        i_k = np.random.randint(d)
+        # Compute a randomized coordinate descent step
+        x = x - gamma * gradients[i_k]
+
+    # Compute the Lyapunov at iteration n-1
     if n >= 2:
         dn = (n - 1) * gamma * L / d + 1
     else:
         dn = 1
-        
-    # Compute all the possible outcome of the randomized coordinate descent step
-    x = x0
-    x_list = list()
-    for i in range(d):
-        x_list.append(x - gamma * partition.get_block(g0,i))
-    
-    # Compute the variance from the different possible outcomes    
-    var = np.mean([(dn + gamma * L / d) * (func(xn) - fs) + L / 2 * (xn - xs) ** 2 for xn in x_list])
-    
-    # Set the performance metric to the variance
-    problem.set_performance_metric(var)
-
-    # Set the initial condition to
     phi1 = dn * (func(x) - fs) + L / 2 * (x - xs) ** 2
     problem.set_initial_condition(phi1 == 1)
 
+    # Run the last step of the algorithm and keep gradients in memory
+    g = func.gradient(x)
+    gradients = []
+    for i in range(d - 1):
+        gradients.append(Point())
+    gd = g - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
+    gradients.append(gd)
+    # Add orthogonality constraints
+    for i in range(d):
+        for j in range(d):
+            if i != j:
+                problem.add_constraint(gradients[i] * gradients[j] == 0)
+
+    # Compute the d possible value for x1 using coordinate descent
+    x1 = []
+    for grad in gradients:
+        x1.append(x - gamma * grad)
+
+    var = np.mean([(dn + gamma * L / d) * (func(xn) - fs) + L / 2 * (xn - xs) ** 2 for xn in x1])
+
+    # Set the performance metric to the expected Lyapunov at iteration n
+    problem.set_performance_metric(var)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)

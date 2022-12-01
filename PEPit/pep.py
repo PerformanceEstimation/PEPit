@@ -6,6 +6,7 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
+from PEPit.block_partition import Block_partition
 
 
 class PEP(object):
@@ -23,6 +24,9 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
+	list_of_psd (list): list of :class:`PSDMatrix` that are defined through the pipeline.
+	list_of_partitions (list): list of :class:`Block_partition` that are defined through the pipeline.
+                                           
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -59,6 +63,7 @@ class PEP(object):
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
+        self.list_of_partitions = list()
 
     def declare_function(self, function_class, **kwargs):
         """
@@ -152,6 +157,27 @@ class PEP(object):
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
+
+    def declare_block_partition(self, d):
+        """
+        Instantiate a :class:`block_partition` and store it in the attribute `list_of_partitions`.
+
+        Args:
+            d (int): number of blocks in the :class:`block_partition`.
+
+        Returns:
+            partition (Function): the newly created partition.
+
+        """
+
+        # Create the partition
+        partition = Block_partition(d)
+
+        # Store it in list_of_partitions
+        self.list_of_partitions.append(partition)
+
+        # Return it
+        return partition
 
     def set_performance_metric(self, expression):
         """
@@ -331,6 +357,10 @@ class PEP(object):
         # Create all class constraints
         for function in self.list_of_functions:
             function.add_class_constraints()
+            
+        # Create all partition constraints
+        for partition in self.list_of_partitions:
+            partition.add_partition_constraints()
 
         # Define the cvxpy variables
         objective = cp.Variable()
@@ -397,6 +427,21 @@ class PEP(object):
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd), 'lmi constraint(s) added')
 
+        if verbose and len(self.list_of_partitions)>0:
+            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(self.list_of_partitions)))
+	
+        partition_counter = 0
+        for partition in self.list_of_partitions:
+            partition_counter += 1
+            if verbose:
+                print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
+                      'blocks: Adding' , len(partition.list_of_constraints), 'scalar constraint(s)...')
+            for constraint in partition.list_of_constraints:
+                cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
+            if verbose:
+                print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
+                      'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
+			
         # Create the cvxpy problem
         if verbose:
             print('(PEPit) Compiling SDP')
@@ -668,7 +713,12 @@ class PEP(object):
                                                                   counter:counter + psd_matrix.shape[0]*psd_matrix.shape[
                                                                       1]]).reshape(psd_matrix.shape)
                 counter += psd_matrix.shape[0] * psd_matrix.shape[1]
-
+        
+        for partition in self.list_of_partitions:
+            for constraint in partition.list_of_constraints:
+                constraint._dual_variable_value = dual_values[counter]
+                counter += 1
+                
         # Verify nothing is left
         assert len(dual_values) == counter
 

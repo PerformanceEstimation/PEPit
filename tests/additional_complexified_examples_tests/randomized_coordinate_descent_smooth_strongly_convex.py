@@ -5,7 +5,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.point import Point
 
 
-def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, verbose=1):
+def wc_randomized_coordinate_descent_smooth_strongly_convex_complexified(L, mu, gamma, d, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -92,9 +92,6 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
 
     # Instantiate PEP
     problem = PEP()
-    
-    # Declare a partition of the ambient space in d blocks of variables
-    partition = problem.declare_block_partition(d=d)
 
     # Declare a strongly convex smooth function
     func = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
@@ -109,12 +106,22 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Define the gradient at x0
+    # Define an orthogonal decomposition of the gradient (into a partition of the space)
     g0 = func.gradient(x0)
+    gradients = []
+    for i in range(d - 1):
+        gradients.append(Point())
+    gd = g0 - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
+    gradients.append(gd)
+    # Add orthogonality constraints
+    for i in range(d):
+        for j in range(d):
+            if i != j:
+                problem.add_constraint(gradients[i] * gradients[j] == 0)
 
     # Compute the expectation of randomized coordinate descent step
     x = x0
-    var = np.mean([(x - gamma * partition.get_block(g0,i) - xs) ** 2 for i in range(d)])
+    var = np.mean([(x - gamma * grad - xs) ** 2 for grad in gradients])
 
     # Set the performance metric to the variance
     problem.set_performance_metric(var)

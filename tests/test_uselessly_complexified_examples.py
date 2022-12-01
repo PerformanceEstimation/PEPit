@@ -4,12 +4,18 @@ from PEPit.examples.unconstrained_convex_minimization import wc_proximal_point
 from PEPit.examples.composite_convex_minimization import wc_proximal_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_exact_line_search
 from PEPit.examples.unconstrained_convex_minimization import wc_inexact_gradient_exact_line_search
+from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_strongly_convex
+from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
 
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified
+from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified2
 from tests.additional_complexified_examples_tests import wc_proximal_point_complexified
+from tests.additional_complexified_examples_tests import wc_proximal_point_complexified2
 from tests.additional_complexified_examples_tests import wc_gradient_exact_line_search_complexified
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified2
+from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
+from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_convex_complexified
 
 
 class TestExamples(unittest.TestCase):
@@ -35,6 +41,13 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_proximal_gradient(L, mu, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
+    def test_PGD_vs_PGD_modified2(self):
+        L, mu, gamma, n = 1, 0.15, 1, 3
+
+        wc_modified, theory = wc_proximal_gradient_complexified2(L, mu, gamma, n, verbose=self.verbose)
+        wc, theory = wc_proximal_gradient(L, mu, gamma, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
     def test_PPA_modified(self):
         n, gamma = 2, 1
 
@@ -45,6 +58,13 @@ class TestExamples(unittest.TestCase):
         n, gamma = 2, 1
 
         wc_modified, theory = wc_proximal_point_complexified(n, gamma, verbose=self.verbose)
+        wc, theory = wc_proximal_point(n, gamma, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def test_PPA_vs_PPA_modified2(self):
+        n, gamma = 3, 2
+
+        wc_modified, theory = wc_proximal_point_complexified2(n, gamma, verbose=self.verbose)
         wc, theory = wc_proximal_point(n, gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
 
@@ -85,4 +105,23 @@ class TestExamples(unittest.TestCase):
 
         wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified2(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def test_randomized_coordinate(self):
+        L, d, n = 1, 3, 10
+        gamma = 1/L
+
+        wc_modified, theory = wc_randomized_coordinate_descent_smooth_convex_complexified(L=L, gamma=gamma, d=d, n=n, verbose=self.verbose)
+        wc, theory = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=gamma, d=d, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def test_randomized_coordinate_strongly_convex(self):
+        L, mu, d = 1, 0.1, 4
+        gamma = 2/(L+mu)
+
+        wc_modified, theory = wc_randomized_coordinate_descent_smooth_strongly_convex_complexified(L=L, mu=mu, gamma=gamma, d=d,
+                                                                             verbose=self.verbose)
+
+        wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
+                                                                             verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
