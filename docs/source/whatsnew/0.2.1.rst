@@ -4,3 +4,6 @@ What's new in PEPit 0.2.1
 - :class:`PSDMatrix` can now be instantiated with a list of lists. Previously, the argument had to be a ndarray.
 
 - The attribute `matrix_of_expression` of :class:`PSDMatrix` has been renamed to `matrix_of_expressions`.
+
+- Fix: Points that were not associated with Functions could be not evaluable after solving the PEP (See Issue `#74 <https://github.com/PerformanceEstimation/PEPit/issues/74>`_).
+       This has been fixed in PR `#75 <https://github.com/PerformanceEstimation/PEPit/pull/75>`_.
