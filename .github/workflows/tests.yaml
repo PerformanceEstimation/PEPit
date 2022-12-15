@@ -21,6 +21,7 @@ on:
 jobs:
   linux:
 
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'no ci')"
     strategy:
       max-parallel: 5
