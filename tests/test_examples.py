@@ -2,8 +2,6 @@ import unittest
 
 import numpy as np
 
-import PEPit
-
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
@@ -608,7 +606,3 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-
-    def tearDown(self):
-
-        PEPit.reset_classes()

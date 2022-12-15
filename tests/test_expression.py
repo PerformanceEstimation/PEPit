@@ -1,6 +1,6 @@
 import unittest
 
-import PEPit
+from PEPit import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -9,6 +9,7 @@ from PEPit.constraint import Constraint
 class TestExpression(unittest.TestCase):
 
     def setUp(self):
+        self.pep = PEP()
 
         self.point1 = Point(is_leaf=True, decomposition_dict=None)
         self.point2 = Point(is_leaf=True, decomposition_dict=None)
@@ -49,7 +50,3 @@ class TestExpression(unittest.TestCase):
 
         self.assertIsInstance(constraint, Constraint)
         self.assertEqual(constraint.expression.decomposition_dict, (self.inner_product - self.function_value).decomposition_dict)
-
-    def tearDown(self):
-
-        PEPit.reset_classes()

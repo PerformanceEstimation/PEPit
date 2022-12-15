@@ -17,15 +17,3 @@ __all__ = ['examples',
            'pep', 'PEP',
            'point', 'Point', 'null_point',
            ]
-
-
-def reset_classes():
-
-    Constraint.counter = 0
-    Expression.counter = 0
-    Expression.list_of_leaf_expressions = list()
-    Function.counter = 0
-    PEP.counter = 0
-    Point.counter = 0
-    Point.list_of_leaf_points = list()
-    PSDMatrix.counter = 0

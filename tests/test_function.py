@@ -1,6 +1,6 @@
 import unittest
 
-import PEPit
+from PEPit import PEP
 from PEPit.tools.dict_operations import prune_dict
 
 from PEPit.point import Point
@@ -12,6 +12,7 @@ from PEPit.functions.convex_function import ConvexFunction
 class TestFunction(unittest.TestCase):
 
     def setUp(self):
+        self.pep = PEP()
 
         self.func1 = Function(is_leaf=True, decomposition_dict=None)
         self.func2 = ConvexFunction(is_leaf=True, decomposition_dict=None)
@@ -280,7 +281,3 @@ class TestFunction(unittest.TestCase):
         self.assertEqual(len(list_of_functions_which_need_nothing), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_only), 0)
         self.assertEqual(len(list_of_functions_which_need_gradient_and_function_value), 1)
-
-    def tearDown(self):
-
-        PEPit.reset_classes()

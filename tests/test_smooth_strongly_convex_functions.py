@@ -1,6 +1,6 @@
 import unittest
 
-import PEPit
+from PEPit import PEP
 from PEPit.point import Point
 from PEPit.constraint import Constraint
 from PEPit.function import Function
@@ -15,6 +15,8 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.mu1 = 0.1
         self.L2 = 10.
         self.mu2 = 0.001
+
+        self.pep = PEP()
 
         self.func1 = SmoothStronglyConvexFunction(L=self.L1, mu=self.mu1)
         self.func2 = SmoothStronglyConvexFunction(L=self.L2, mu=self.mu2)
@@ -110,7 +112,3 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
                                          gj * (xi - xj)
                                          + 1 / (2 * L) * (gi - gj) ** 2
                                          + mu / (2 * (1 - mu / L)) * (xi - xj - 1 / L * (gi - gj)) ** 2, 0)
-
-    def tearDown(self):
-
-        PEPit.reset_classes()

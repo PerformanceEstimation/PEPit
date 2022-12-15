@@ -39,11 +39,8 @@ class PEP(object):
             >>> pep = PEP()
 
         """
-
         # Set all counters to 0 to recreate points, expressions and functions from scratch at the beginning of each PEP.
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0
+        self._reset_classes()
 
         # Update the class counter
         self.counter = PEP.counter
@@ -59,6 +56,22 @@ class PEP(object):
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
+
+    @staticmethod
+    def _reset_classes():
+        """
+        Reset all classes attributes to initial values when instantiating a new :class:`PEP` object.
+
+        """
+
+        Constraint.counter = 0
+        Expression.counter = 0
+        Expression.list_of_leaf_expressions = list()
+        Function.counter = 0
+        PEP.counter = 0
+        Point.counter = 0
+        Point.list_of_leaf_points = list()
+        PSDMatrix.counter = 0
 
     def declare_function(self, function_class, **kwargs):
         """
@@ -258,7 +271,7 @@ class PEP(object):
             G (CVXPY Variable): a CVXPY Variable referring to points and gradients.
             verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
 
-                            - 0: No verbose at all.
+                            - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
                             - 2: Both PEPit and CVXPY details are printed
 
@@ -572,24 +585,11 @@ class PEP(object):
         # Iterate over point and function value
         # Set the attribute value of all leaf variables to the right value
         # Note the other ones are not stored until user asks to eval them
-
-        # for point in self.list_of_points:
-        #     if point.get_is_leaf():
-        #         point._value = points_values[:, point.counter]
         for point in Point.list_of_leaf_points:
             point._value = points_values[:, point.counter]
         for expression in Expression.list_of_leaf_expressions:
             expression._value = F_value[expression.counter]
-        # for function in self.list_of_functions:
-        #     if function.get_is_leaf():
-        #         for triplet in function.list_of_points:
-        #             point, gradient, function_value = triplet
-        #             # if point.get_is_leaf():
-        #             #     point._value = points_values[:, point.counter]
-        #             # if gradient.get_is_leaf():
-        #             #     gradient._value = points_values[:, gradient.counter]
-        #             if function_value.get_is_leaf():
-        #                 function_value._value = F_value[function_value.counter]
+
         for matrix in self.list_of_psd:
             size = matrix.shape[0]
             for i in range(size):

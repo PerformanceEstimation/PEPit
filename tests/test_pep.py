@@ -1,7 +1,6 @@
 import unittest
 import numpy as np
 
-import PEPit
 from PEPit.pep import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
@@ -69,7 +68,7 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(gradient.eval(), np.ndarray)
             self.assertIsInstance(function_value.eval(), float)
 
-    def test_eval_points_annd_expression_values_defined_independently_of_the_pep_object(self):
+    def test_eval_points_and_expression_values_defined_independently_of_the_pep_object(self):
 
         self.x2, self.dx1, _ = inexact_gradient_step(self.x1, self.func, self.gamma, epsilon=.1, notion='absolute')
         self.problem.set_performance_metric((self.x2 - self.xs) ** 2)
@@ -176,7 +175,3 @@ class TestPEP(unittest.TestCase):
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
         self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
-
-    def tearDown(self):
-
-        PEPit.reset_classes()
