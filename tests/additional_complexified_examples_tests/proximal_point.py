@@ -18,10 +18,11 @@ def wc_proximal_point_complexified(gamma, n, verbose=1):
         gamma (float): the step size parameter.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+
+                        - -1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         tuple: worst_case value, theoretical value
