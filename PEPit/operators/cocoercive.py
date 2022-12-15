@@ -79,4 +79,4 @@ class CocoerciveOperator(Function):
 
                 if (xi != xj) | (gi != gj):
                     # Interpolation conditions of cocoercive operator class
-                    self.add_constraint((gi - gj) * (xi - xj) - self.beta * (gi - gj) ** 2 >= 0)
+                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.beta * (gi - gj) ** 2 >= 0)

@@ -7,3 +7,17 @@ What's new in PEPit 0.2.1
 
 - Fix: Points that were not associated with Functions could be not evaluable after solving the PEP (See Issue `#74 <https://github.com/PerformanceEstimation/PEPit/issues/74>`_).
        This has been fixed in PR `#75 <https://github.com/PerformanceEstimation/PEPit/pull/75>`_.
+
+- Fix: Constraints on a function defined a linear combination of other functions were not taken into consideration.
+       This has been fixed in PR `#80 <https://github.com/PerformanceEstimation/PEPit/pull/80>`_.
+
+- The attributes `list_of_constraints` and `list_of_psd` of :class:`Function` objects have respectively been splitted into
+`list_of_constraints` and `list_of_class_constraints` (the latter containing the interpolation constraints of the class of functions),
+and into `list_of_psd` and `list_of_class_psd` (the latter containing the lmi interpolation constraints of the class of functions).
+The 2 lists containing the interpolation constraints are filled when the PEP solver is called.
+
+- The attributes `list_of_functions` and `list_of_points` of the :class:`PEP` objects are not used anymore in the pipeline.
+They still contains the same elements as in previous version of PEPit and can still be called for now.
+However, they will be removed in a future version of PEPit, therefore we discourage from using them.
+The full list of functions as well as the full list of points can respectively be obtained in
+`Function.list_of_functions` and `Point.list_of_points`.

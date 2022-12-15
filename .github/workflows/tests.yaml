@@ -9,7 +9,7 @@ on:
 
   push:
     branches:
-      - 'master' 
+      - 'master'
       - 'develop'
   create:
     branches:

@@ -93,7 +93,6 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
     
     # for test: attempt to evaluate a point that was not created through a pep object. 
     x.eval()
-    
 
     # Print conclusion if required
     if verbose != -1:

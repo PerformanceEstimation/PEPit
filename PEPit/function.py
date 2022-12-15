@@ -31,6 +31,9 @@ class Function(object):
         list_of_stationary_points (list): The sublist of `self.list_of_points` of
                                           stationary points (characterized by some subgradient=0).
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
+        list_of_psd (list): The list of :class:`PSDMatrix` objects associated with this :class:`Function`.
+        list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
+        list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated associated with class interpolation constraints.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
@@ -51,6 +54,7 @@ class Function(object):
     # It counts the number of functions defined from scratch.
     # The others are linear combination of those functions.
     counter = 0
+    list_of_functions = list()
 
     def __init__(self,
                  is_leaf=True,
@@ -89,6 +93,7 @@ class Function(object):
         # Store inputs
         self._is_leaf = is_leaf
         self.reuse_gradient = reuse_gradient
+        Function.list_of_functions.append(self)
 
         # If leaf function, the decomposition is updated,
         # the object counter is set
@@ -110,6 +115,8 @@ class Function(object):
         self.list_of_points = list()
         self.list_of_constraints = list()
         self.list_of_psd = list()
+        self.list_of_class_constraints = list()
+        self.list_of_class_psd = list()
 
     def get_is_leaf(self):
         """

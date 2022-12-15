@@ -68,6 +68,7 @@ class PEP(object):
         Expression.counter = 0
         Expression.list_of_leaf_expressions = list()
         Function.counter = 0
+        Function.list_of_functions = list()
         PEP.counter = 0
         Point.counter = 0
         Point.list_of_leaf_points = list()
@@ -340,9 +341,15 @@ class PEP(object):
         """
         # Set CVXPY verbose to True if verbose mode is at least 2
         kwargs["verbose"] = verbose >= 2
+        list_of_leaf_functions = [function for function in Function.list_of_functions
+                                  if function.get_is_leaf()]
+        self.list_of_leaf_functions = list_of_leaf_functions
+        list_of_functions_with_constraints = [function for function in Function.list_of_functions
+                                              if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
+        self.list_of_functions_with_constraints = list_of_functions_with_constraints
 
         # Create all class constraints
-        for function in self.list_of_functions:
+        for function in list_of_leaf_functions:
             function.add_class_constraints()
 
         # Define the cvxpy variables
@@ -386,29 +393,62 @@ class PEP(object):
         # Defining class constraints
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' interpolation conditions for {} function(s)'.format(len(self.list_of_functions)))
+                  ' interpolation conditions for {} function(s)'.format(len(list_of_leaf_functions)))
         function_counter = 0
-        for function in self.list_of_functions:
+        for function in list_of_leaf_functions:
             function_counter += 1
 
             if verbose:
-                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_constraints), 'scalar constraint(s) ...')
+                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints), 'scalar constraint(s) ...')
 
-            for constraint in function.list_of_constraints:
+            for constraint in function.list_of_class_constraints:
                 cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
 
             if verbose:
-                print('\t\t function', function_counter, ':', len(function.list_of_constraints), 'scalar constraint(s) added')
+                print('\t\t function', function_counter, ':', len(function.list_of_class_constraints), 'scalar constraint(s) added')
 
-            if len(function.list_of_psd) > 0:
+            if len(function.list_of_class_psd) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_psd), 'lmi constraint(s) ...')
+                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
 
-                for psd_counter, psd_matrix in enumerate(function.list_of_psd):
+                for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
                     cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_psd), 'lmi constraint(s) added')
+                    print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
+
+        # Other function constraints
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
+        function_counter = 0
+        for function in list_of_functions_with_constraints:
+            function_counter += 1
+
+            if len(function.list_of_constraints) > 0:
+                if verbose:
+                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_constraints),
+                          'scalar constraint(s) ...')
+
+                for constraint in function.list_of_constraints:
+                    cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
+
+                if verbose:
+                    print('\t\t function', function_counter, ':', len(function.list_of_constraints),
+                          'scalar constraint(s) added')
+
+            if len(function.list_of_psd) > 0:
+                if verbose:
+                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_psd),
+                          'lmi constraint(s) ...')
+
+                for psd_counter, psd_matrix in enumerate(function.list_of_psd):
+                    cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G,
+                                                                                verbose)
+
+                if verbose:
+                    print('\t\t function', function_counter, ':', len(function.list_of_psd),
+                          'lmi constraint(s) added')
 
         # Create the cvxpy problem
         if verbose:
@@ -660,7 +700,21 @@ class PEP(object):
             counter += psd_matrix.shape[0]*psd_matrix.shape[1]
 
         # Store all the class constraints dual values, providing the proof of the desired rate.
-        for function in self.list_of_functions:
+        for function in self.list_of_leaf_functions:
+            for constraint in function.list_of_class_constraints:
+                constraint._dual_variable_value = dual_values[counter]
+                counter += 1
+
+            for psd_matrix in function.list_of_class_psd:
+                psd_matrix._dual_variable_value = dual_values[counter]
+                assert psd_matrix._dual_variable_value.shape == psd_matrix.shape
+                counter += 1
+                psd_matrix.entries_dual_variable_value = np.array(dual_values[
+                                                                  counter:counter + psd_matrix.shape[0]*psd_matrix.shape[
+                                                                      1]]).reshape(psd_matrix.shape)
+                counter += psd_matrix.shape[0] * psd_matrix.shape[1]
+
+        for function in self.list_of_functions_with_constraints:
             for constraint in function.list_of_constraints:
                 constraint._dual_variable_value = dual_values[counter]
                 counter += 1

@@ -54,7 +54,7 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.assertIs(self.point1.counter, 0)
         self.assertIs(self.point2.counter, 1)
 
-        self.assertIs(len(function.list_of_constraints), 0)
+        self.assertIs(len(function.list_of_class_constraints), 0)
 
         # Add points and constraints
         function.oracle(self.point1)
@@ -62,8 +62,8 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         function.add_class_constraints()
 
         self.assertIs(len(function.list_of_points), 2)
-        self.assertIs(len(function.list_of_constraints), 2)
-        self.assertIs(function.list_of_constraints[-1].counter, 1)
+        self.assertIs(len(function.list_of_class_constraints), 2)
+        self.assertIs(function.list_of_class_constraints[-1].counter, 1)
 
     def test_add_constraints(self):
         new_function = self.compute_linear_combination()
@@ -77,14 +77,14 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.func2.add_class_constraints()
 
         # Count constraints
-        self.assertEqual(len(new_function.list_of_constraints), 0)
-        self.assertEqual(len(self.func1.list_of_constraints), 6)
-        self.assertEqual(len(self.func2.list_of_constraints), 6)
+        self.assertEqual(len(new_function.list_of_class_constraints), 0)
+        self.assertEqual(len(self.func1.list_of_class_constraints), 6)
+        self.assertEqual(len(self.func2.list_of_class_constraints), 6)
 
         # Test constraints type
-        for i in range(len(self.func1.list_of_constraints)):
-            self.assertIsInstance(self.func1.list_of_constraints[i], Constraint)
-            self.assertIsInstance(self.func2.list_of_constraints[i], Constraint)
+        for i in range(len(self.func1.list_of_class_constraints)):
+            self.assertIsInstance(self.func1.list_of_class_constraints[i], Constraint)
+            self.assertIsInstance(self.func2.list_of_class_constraints[i], Constraint)
 
     def test_sum_smooth_strongly_convex_functions(self):
 

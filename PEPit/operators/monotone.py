@@ -59,4 +59,4 @@ class MonotoneOperator(Function):
 
                 if (xi != xj) | (gi != gj):
                     # Interpolation conditions of monotone operator class
-                    self.add_constraint((gi - gj) * (xi - xj) >= 0)
+                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) >= 0)

@@ -90,6 +90,6 @@ class LipschitzStronglyMonotoneOperator(Function):
 
                 if (xi != xj) | (gi != gj):
                     # Interpolation conditions of strongly monotone operator class
-                    self.add_constraint((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
+                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
                     # Interpolation conditions of Lipschitz operator class
-                    self.add_constraint((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)
+                    self.list_of_class_constraints.append((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)
