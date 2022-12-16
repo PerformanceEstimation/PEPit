@@ -443,8 +443,7 @@ class PEP(object):
                           'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                    cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G,
-                                                                                verbose)
+                    cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
