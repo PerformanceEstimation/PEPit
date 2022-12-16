@@ -57,6 +57,11 @@ class PEP(object):
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
 
+        # Initialize lists of constraints that are used to solve the SDP.
+        # Those lists should not be updated by hand, only the solve method does update them.
+        self._list_of_constraints_sent_to_cvxpy = list()
+        self._list_of_cvxpy_constraints = list()
+
     @staticmethod
     def _reset_classes():
         """
@@ -247,6 +252,10 @@ class PEP(object):
         # Sanity check
         assert isinstance(constraint, Constraint)
 
+        # Add constraint to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
+        # all the constraints that have been sent to CVXPY as well as the order.
+        self._list_of_constraints_sent_to_cvxpy.append(constraint)
+
         # Distinguish equality and inequality
         if constraint.equality_or_inequality == 'inequality':
             cvxpy_constraint = self._expression_to_cvxpy(constraint.expression, F, G) <= 0
@@ -258,8 +267,8 @@ class PEP(object):
                              ' must either be \'equality\' or \'inequality\'.'
                              'Got {}'.format(constraint.equality_or_inequality))
 
-        # Return the corresponding CVXPY constraint
-        return cvxpy_constraint
+        # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
+        self._list_of_cvxpy_constraints.append(cvxpy_constraint)
 
     def send_lmi_constraint_to_cvxpy(self, psd_counter, psd_matrix, F, G, verbose):
         """
@@ -282,6 +291,13 @@ class PEP(object):
 
         """
 
+        # Sanity check
+        assert isinstance(psd_matrix, PSDMatrix)
+
+        # Add psd_matrix to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
+        # all the constraints that have been sent to CVXPY as well as the order.
+        self._list_of_constraints_sent_to_cvxpy.append(psd_matrix)
+
         # Create a symmetric matrix in CVXPY
         M = cp.Variable(psd_matrix.shape, symmetric=True)
 
@@ -297,8 +313,8 @@ class PEP(object):
         if verbose:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
 
-        # Return a list of CVXPY constraints
-        return cvxpy_constraints_list
+        # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
+        self._list_of_cvxpy_constraints += cvxpy_constraints_list
 
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
@@ -341,12 +357,18 @@ class PEP(object):
         """
         # Set CVXPY verbose to True if verbose mode is at least 2
         kwargs["verbose"] = verbose >= 2
+
+        # Initialize lists of constraints that are used to solve the SDP.
+        # Those lists should not be updated by hand, only the solve method does update them.
+        # If solve is called again, they should be reinitialized.
+        self._list_of_constraints_sent_to_cvxpy = list()
+        self._list_of_cvxpy_constraints = list()
+
+        # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
                                   if function.get_is_leaf()]
-        self.list_of_leaf_functions = list_of_leaf_functions
         list_of_functions_with_constraints = [function for function in Function.list_of_functions
                                               if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
-        self.list_of_functions_with_constraints = list_of_functions_with_constraints
 
         # Create all class constraints
         for function in list_of_leaf_functions:
@@ -362,14 +384,14 @@ class PEP(object):
 
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
-        cvxpy_constraints_list = [G >> 0]
+        self._list_of_cvxpy_constraints = [G >> 0]
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            cvxpy_constraints_list.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
+            self._list_of_cvxpy_constraints.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
@@ -378,7 +400,7 @@ class PEP(object):
         if verbose:
             print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
         for condition in self.list_of_constraints:
-            cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(condition, F, G))
+            self.send_constraint_to_cvxpy(condition, F, G)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
@@ -388,7 +410,7 @@ class PEP(object):
             if verbose:
                 print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
             for psd_counter, psd_matrix in enumerate(self.list_of_psd):
-                cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
 
         # Defining class constraints
         if verbose:
@@ -402,7 +424,7 @@ class PEP(object):
                 print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints), 'scalar constraint(s) ...')
 
             for constraint in function.list_of_class_constraints:
-                cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
+                self.send_constraint_to_cvxpy(constraint, F, G)
 
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_class_constraints), 'scalar constraint(s) added')
@@ -412,7 +434,7 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
-                    cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                    self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
@@ -431,7 +453,7 @@ class PEP(object):
                           'scalar constraint(s) ...')
 
                 for constraint in function.list_of_constraints:
-                    cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
+                    self.send_constraint_to_cvxpy(constraint, F, G)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_constraints),
@@ -443,7 +465,7 @@ class PEP(object):
                           'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                    cvxpy_constraints_list += self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                    self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
@@ -452,7 +474,7 @@ class PEP(object):
         # Create the cvxpy problem
         if verbose:
             print('(PEPit) Compiling SDP')
-        prob = cp.Problem(objective=cp.Maximize(objective), constraints=cvxpy_constraints_list)
+        prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_cvxpy_constraints)
 
         # Solve it
         if verbose:
@@ -475,6 +497,7 @@ class PEP(object):
         # Dimension aims at finding low dimension lower bound functions,
         # but solves a different problem with an extra condition and different objective,
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
+        assert self._list_of_cvxpy_constraints == prob.constraints
         dual_values = [constraint.dual_value for constraint in prob.constraints]
 
         # Perform a dimension reduction if required
@@ -488,12 +511,12 @@ class PEP(object):
                 print('(PEPit) Calling SDP solver')
 
             # Add the constraint that the objective stay close to its actual value
-            cvxpy_constraints_list.append(objective >= wc_value - tol_dimension_reduction)
+            self._list_of_cvxpy_constraints.append(objective >= wc_value - tol_dimension_reduction)
 
             # Translate the heuristic into cvxpy objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
                 heuristic = cp.trace(G)
-                prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=cvxpy_constraints_list)
+                prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=self._list_of_cvxpy_constraints)
                 prob.solve(**kwargs)
 
                 # Store the actualized obtained value
@@ -507,7 +530,7 @@ class PEP(object):
                 for i in range(1, 1+niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                     heuristic = cp.sum(cp.multiply(G, W))
-                    prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=cvxpy_constraints_list)
+                    prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=self._list_of_cvxpy_constraints)
                     prob.solve(**kwargs)
 
                     # Store the actualized obtained value
@@ -682,50 +705,18 @@ class PEP(object):
         performance_metric_dual_values = np.array(dual_values[1:counter])
         position_of_minimal_objective = np.argmax(performance_metric_dual_values)
 
-        # Store all dual values of initial conditions (Generally the rate)
-        for condition in self.list_of_constraints:
-            condition._dual_variable_value = dual_values[counter]
-            assert isinstance(condition._dual_variable_value, float)
-            counter += 1
-
-        # Store all dual values of lmi constraints
-        for psd_matrix in self.list_of_psd:
-            psd_matrix._dual_variable_value = dual_values[counter]
-            assert psd_matrix._dual_variable_value.shape == psd_matrix.shape
-            counter += 1
-            psd_matrix.entries_dual_variable_value = np.array(dual_values[
-                                                              counter:counter + psd_matrix.shape[0]*psd_matrix.shape[
-                                                                  1]]).reshape(psd_matrix.shape)
-            counter += psd_matrix.shape[0]*psd_matrix.shape[1]
-
-        # Store all the class constraints dual values, providing the proof of the desired rate.
-        for function in self.list_of_leaf_functions:
-            for constraint in function.list_of_class_constraints:
-                constraint._dual_variable_value = dual_values[counter]
+        for constraint_or_psd in self._list_of_constraints_sent_to_cvxpy:
+            if isinstance(constraint_or_psd, Constraint):
+                constraint_or_psd._dual_variable_value = dual_values[counter]
                 counter += 1
-
-            for psd_matrix in function.list_of_class_psd:
-                psd_matrix._dual_variable_value = dual_values[counter]
-                assert psd_matrix._dual_variable_value.shape == psd_matrix.shape
+            elif isinstance(constraint_or_psd, PSDMatrix):
+                assert dual_values[counter].shape == constraint_or_psd.shape
+                constraint_or_psd._dual_variable_value = dual_values[counter]
                 counter += 1
-                psd_matrix.entries_dual_variable_value = np.array(dual_values[
-                                                                  counter:counter + psd_matrix.shape[0]*psd_matrix.shape[
-                                                                      1]]).reshape(psd_matrix.shape)
-                counter += psd_matrix.shape[0] * psd_matrix.shape[1]
-
-        for function in self.list_of_functions_with_constraints:
-            for constraint in function.list_of_constraints:
-                constraint._dual_variable_value = dual_values[counter]
-                counter += 1
-
-            for psd_matrix in function.list_of_psd:
-                psd_matrix._dual_variable_value = dual_values[counter]
-                assert psd_matrix._dual_variable_value.shape == psd_matrix.shape
-                counter += 1
-                psd_matrix.entries_dual_variable_value = np.array(dual_values[
-                                                                  counter:counter + psd_matrix.shape[0]*psd_matrix.shape[
-                                                                      1]]).reshape(psd_matrix.shape)
-                counter += psd_matrix.shape[0] * psd_matrix.shape[1]
+                size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
+                constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
+                                                                         ).reshape(constraint_or_psd.shape)
+                counter += size
 
         # Verify nothing is left
         assert len(dual_values) == counter
