@@ -23,6 +23,14 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
+        list_of_psd (list): list of :class:`PSDMatrix` objects.
+                            The PEP consider the associated LMI constraints psd_matrix >> 0.
+        _list_of_constraints_sent_to_cvxpy (list): a list of all the :class:`Constraint` objects that are sent to CVXPY
+                                                   for solving the SDP. It should not be updated manually.
+                                                   Only the `solve` method takes care of it.
+        _list_of_cvxpy_constraints (list): a list of all the CVXPY Constraints objects that have been sent by PEPit
+                                           for solving the SDP. It should not be updated manually.
+                                           Only the `solve` method takes care of it.
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -233,15 +241,13 @@ class PEP(object):
 
     def send_constraint_to_cvxpy(self, constraint, F, G):
         """
-        Transform a PEPit :class:`Constraint` into a CVXPY one.
+        Transform a PEPit :class:`Constraint` into a CVXPY one
+        and add the 2 formats of the constraints into the tracking lists.
 
         Args:
             constraint (Constraint): a :class:`Constraint` object to be sent to CVXPY.
             F (CVXPY Variable): a CVXPY Variable referring to function values.
             G (CVXPY Variable): a CVXPY Variable referring to points and gradients.
-
-        Returns:
-            cvxpy_constraint (CVXPY constraint): the corresponding CVXPY constraint.
 
         Raises:
             ValueError if the attribute `equality_or_inequality` of the :class:`Constraint`
@@ -272,7 +278,8 @@ class PEP(object):
 
     def send_lmi_constraint_to_cvxpy(self, psd_counter, psd_matrix, F, G, verbose):
         """
-        Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix.
+        Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
+        and add the 2 formats of the constraints into the tracking lists.
 
         Args:
             psd_counter (int): a counter useful for the verbose mode.
@@ -284,10 +291,6 @@ class PEP(object):
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
                             - 2: Both PEPit and CVXPY details are printed
-
-        Returns:
-            cvxpy_constraints_list (list of CVXPY constraints): the PSD constraint as well as
-                                                                correspondence between the matrix and its elements.
 
         """
 
@@ -626,6 +629,10 @@ class PEP(object):
             G_value (nd.array): value of the cvxpy variable G
             verbose (bool): if True, details of computation are printed
 
+        Raises:
+            TypeError if some matrix in `self.list_of_psd` contains some entry that :class:`Expression` objects
+            composed of other things than leaf :class:`Expression`s or tuple of :class:`Points`.
+
         """
 
         # Write the gram matrix G as M.T M to extract points' values
@@ -691,6 +698,10 @@ class PEP(object):
              position_of_minimal_objective (np.float): the position, in the list of performance metric,
                                                        of the one that is actually reached.
 
+        Raises:
+            TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
+            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
+
         """
         # Store residual, dual value of the main lmi
         self.residual = dual_values[0]
@@ -717,6 +728,10 @@ class PEP(object):
                 constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
                                                                          ).reshape(constraint_or_psd.shape)
                 counter += size
+            else:
+                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
+                                "\'Constraint\' objects of \'PSDMatrix\' objects."
+                                "Got {}".format(type(constraint_or_psd)))
 
         # Verify nothing is left
         assert len(dual_values) == counter
