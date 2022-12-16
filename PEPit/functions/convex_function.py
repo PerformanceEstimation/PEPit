@@ -53,4 +53,4 @@ class ConvexFunction(Function):
                 if point_i != point_j:
 
                     # Interpolation conditions of convex functions class
-                    self.add_constraint(fi - fj >= gj * (xi - xj))
+                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))

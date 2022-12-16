@@ -51,9 +51,9 @@ class TestConstraints(unittest.TestCase):
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i], Constraint)
             self.assertIsInstance(self.problem.list_of_constraints[i].expression, Expression)
-        for i in range(len(self.func.list_of_constraints)):
-            self.assertIsInstance(self.func.list_of_constraints[i], Constraint)
-            self.assertIsInstance(self.func.list_of_constraints[i].expression, Expression)
+        for i in range(len(self.func.list_of_class_constraints)):
+            self.assertIsInstance(self.func.list_of_class_constraints[i], Constraint)
+            self.assertIsInstance(self.func.list_of_class_constraints[i].expression, Expression)
 
     def test_counter(self):
 
@@ -67,14 +67,14 @@ class TestConstraints(unittest.TestCase):
             self.assertIs(self.problem.list_of_constraints[i].counter, i)
 
         # class constraints are added after initial conditions in PEP
-        for i in range(len(self.func.list_of_constraints)):
-            self.assertIs(self.func.list_of_constraints[i].counter, i + len(self.problem.list_of_constraints))
+        for i in range(len(self.func.list_of_class_constraints)):
+            self.assertIs(self.func.list_of_class_constraints[i].counter, i + len(self.problem.list_of_constraints))
 
     def test_equality_inequality(self):
 
-        for i in range(len(self.func.list_of_constraints)):
-            self.assertIsInstance(self.func.list_of_constraints[i].equality_or_inequality, str)
-            self.assertIn(self.func.list_of_constraints[i].equality_or_inequality, {'equality', 'inequality'})
+        for i in range(len(self.func.list_of_class_constraints)):
+            self.assertIsInstance(self.func.list_of_class_constraints[i].equality_or_inequality, str)
+            self.assertIn(self.func.list_of_class_constraints[i].equality_or_inequality, {'equality', 'inequality'})
 
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].equality_or_inequality, str)
@@ -82,20 +82,20 @@ class TestConstraints(unittest.TestCase):
 
     def test_eval(self):
 
-        for i in range(len(self.func.list_of_constraints)):
-            self.assertIsInstance(self.func.list_of_constraints[i].eval(), float)
+        for i in range(len(self.func.list_of_class_constraints)):
+            self.assertIsInstance(self.func.list_of_class_constraints[i].eval(), float)
 
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].eval(), float)
 
     def test_eval_dual(self):
 
-        for i in range(len(self.func.list_of_constraints)):
-            self.assertIsInstance(self.func.list_of_constraints[i].eval_dual(), float)
+        for i in range(len(self.func.list_of_class_constraints)):
+            self.assertIsInstance(self.func.list_of_class_constraints[i].eval_dual(), float)
 
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].eval_dual(), float)
 
-        self.assertEqual(len([constraint.eval_dual() for constraint in self.func.list_of_constraints]), 2)
-        for constraint in self.func.list_of_constraints:
+        self.assertEqual(len([constraint.eval_dual() for constraint in self.func.list_of_class_constraints]), 2)
+        for constraint in self.func.list_of_class_constraints:
             self.assertAlmostEqual(constraint.eval_dual(), 1.8, places=4)

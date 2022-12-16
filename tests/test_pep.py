@@ -48,10 +48,10 @@ class TestPEP(unittest.TestCase):
         self.assertEqual(len(self.problem.list_of_points), 1)
         self.assertEqual(len(self.problem.list_of_constraints), 1)
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
-        self.assertEqual(len(self.func.list_of_constraints), 0)
+        self.assertEqual(len(self.func.list_of_class_constraints), 0)
 
         pepit_tau = self.problem.solve(verbose=0)
-        self.assertEqual(len(self.func.list_of_constraints), 2)
+        self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 2)
         self.assertEqual(Function.counter, 1)
@@ -88,7 +88,7 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(condition._dual_variable_value, float)
             self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 
-        for constraint in self.func.list_of_constraints:
+        for constraint in self.func.list_of_class_constraints:
             self.assertIsInstance(constraint._dual_variable_value, float)
             self.assertAlmostEqual(constraint._dual_variable_value,
                                    2 * self.gamma * max(abs(1 - self.mu * self.gamma), abs(1 - self.L * self.gamma)),

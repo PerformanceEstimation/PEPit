@@ -68,6 +68,6 @@ class StronglyConvexFunction(Function):
                 if point_i != point_j:
 
                     # Interpolation conditions of smooth strongly convex functions class
-                    self.add_constraint(fi - fj >=
+                    self.list_of_class_constraints.append(fi - fj >=
                                         gj * (xi - xj)
                                         + self.mu / 2 * (xi - xj) ** 2)

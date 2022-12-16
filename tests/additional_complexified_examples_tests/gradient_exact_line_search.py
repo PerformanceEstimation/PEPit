@@ -52,7 +52,9 @@ def wc_gradient_exact_line_search_complexified(L, mu, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    f1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    f2 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
