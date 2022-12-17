@@ -1,7 +1,6 @@
-
 import unittest
-import numpy as np
 
+from PEPit import PEP
 from PEPit.point import Point
 from PEPit.expression import Expression
 
@@ -9,6 +8,7 @@ from PEPit.expression import Expression
 class TestPoint(unittest.TestCase):
 
     def setUp(self):
+        self.pep = PEP()
 
         self.A = Point(is_leaf=True, decomposition_dict=None)
         self.B = Point(is_leaf=True, decomposition_dict=None)
@@ -56,8 +56,3 @@ class TestPoint(unittest.TestCase):
                                                           (self.B, self.A): -1,
                                                           (self.B, self.B): 1
                                                           })
-
-    def tearDown(self):
-
-        Point.counter = 0
-        Expression.counter = 0

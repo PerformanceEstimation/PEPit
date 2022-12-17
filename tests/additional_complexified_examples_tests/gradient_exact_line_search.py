@@ -17,11 +17,12 @@ def wc_gradient_exact_line_search_complexified(L, mu, n, verbose=1):
         mu (float): the strong convexity parameter.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
-    
+
+                        - -1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
+
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
@@ -51,7 +52,9 @@ def wc_gradient_exact_line_search_complexified(L, mu, n, verbose=1):
     problem = PEP()
 
     # Declare a smooth strongly convex function
-    func = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    f1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    f2 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
+    func = f1 + f2
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

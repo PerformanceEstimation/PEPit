@@ -47,6 +47,7 @@ class Expression(object):
     # Class counter.
     # It counts the number of function values needed to linearly generate the expressions.
     counter = 0
+    list_of_leaf_expressions = list()
 
     def __init__(self,
                  is_leaf=True,
@@ -90,6 +91,7 @@ class Expression(object):
             self.decomposition_dict = {self: 1}
             self.counter = Expression.counter
             Expression.counter += 1
+            Expression.list_of_leaf_expressions.append(self)
         else:
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict

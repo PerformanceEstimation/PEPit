@@ -68,7 +68,7 @@ class ConvexQGFunction(Function):
 
                 if point_i != point_j:
                     # Interpolation conditions of convex functions class
-                    self.add_constraint(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
+                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
 
         for i, point_i in enumerate(self.list_of_points):
 
@@ -80,4 +80,4 @@ class ConvexQGFunction(Function):
 
                 if i != j:
                     # Interpolation conditions of convex functions class
-                    self.add_constraint(fi - fj >= gj * (xi - xj))
+                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))

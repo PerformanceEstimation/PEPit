@@ -73,6 +73,6 @@ class RsiEbFunction(Function):
 
                 if (xi != xj) | (gi != gj):
                     # Interpolation conditions of RSI function class
-                    self.add_constraint((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
+                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
                     # Interpolation conditions of EB function class
-                    self.add_constraint((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)
+                    self.list_of_class_constraints.append((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)

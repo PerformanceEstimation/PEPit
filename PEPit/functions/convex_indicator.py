@@ -67,9 +67,9 @@ class ConvexIndicatorFunction(Function):
                 xj, gj, fj = point_j
 
                 if point_i == point_j:
-                    self.add_constraint(fi == 0)
+                    self.list_of_class_constraints.append(fi == 0)
 
                 else:
-                    self.add_constraint(gi * (xj - xi) <= 0)
+                    self.list_of_class_constraints.append(gi * (xj - xi) <= 0)
                     if self.D != np.inf:
-                        self.add_constraint((xi - xj) ** 2 <= self.D ** 2)
+                        self.list_of_class_constraints.append((xi - xj) ** 2 <= self.D ** 2)

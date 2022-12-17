@@ -62,7 +62,7 @@ class ConvexLipschitzFunction(Function):
             xi, gi, fi = point_i
 
             # Lipschitz condition on the function (bounded gradient)
-            self.add_constraint(gi**2 <= self.M**2)
+            self.list_of_class_constraints.append(gi**2 <= self.M**2)
 
             for point_j in self.list_of_points:
 
@@ -71,4 +71,4 @@ class ConvexLipschitzFunction(Function):
                 if point_i != point_j:
 
                     # Interpolation conditions of convex functions class
-                    self.add_constraint(fi - fj >= gj * (xi - xj))
+                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))

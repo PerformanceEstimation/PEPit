@@ -6,6 +6,7 @@ from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.primitive_steps import inexact_gradient_step
 
 
 class TestPEP(unittest.TestCase):
@@ -47,10 +48,10 @@ class TestPEP(unittest.TestCase):
         self.assertEqual(len(self.problem.list_of_points), 1)
         self.assertEqual(len(self.problem.list_of_constraints), 1)
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
-        self.assertEqual(len(self.func.list_of_constraints), 0)
+        self.assertEqual(len(self.func.list_of_class_constraints), 0)
 
         pepit_tau = self.problem.solve(verbose=0)
-        self.assertEqual(len(self.func.list_of_constraints), 2)
+        self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 2)
         self.assertEqual(Function.counter, 1)
@@ -67,6 +68,17 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(gradient.eval(), np.ndarray)
             self.assertIsInstance(function_value.eval(), float)
 
+    def test_eval_points_and_expression_values_defined_independently_of_the_pep_object(self):
+
+        self.x2, self.dx1, _ = inexact_gradient_step(self.x1, self.func, self.gamma, epsilon=.1, notion='absolute')
+        self.problem.set_performance_metric((self.x2 - self.xs) ** 2)
+
+        self.problem.solve(verbose=0)
+
+        self.assertIsInstance(self.x1.eval(), np.ndarray)
+        self.assertIsInstance(self.dx1.eval(), np.ndarray)
+        self.assertIsInstance(self.x2.eval(), np.ndarray)
+
     def test_eval_constraint_dual_values(self):
 
         pepit_tau = self.problem.solve(verbose=0)
@@ -76,7 +88,7 @@ class TestPEP(unittest.TestCase):
             self.assertIsInstance(condition._dual_variable_value, float)
             self.assertAlmostEqual(condition._dual_variable_value, pepit_tau, delta=pepit_tau * 10 ** -3)
 
-        for constraint in self.func.list_of_constraints:
+        for constraint in self.func.list_of_class_constraints:
             self.assertIsInstance(constraint._dual_variable_value, float)
             self.assertAlmostEqual(constraint._dual_variable_value,
                                    2 * self.gamma * max(abs(1 - self.mu * self.gamma), abs(1 - self.L * self.gamma)),
@@ -163,9 +175,3 @@ class TestPEP(unittest.TestCase):
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
         self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
-
-    def tearDown(self):
-
-        Point.counter = 0
-        Expression.counter = 0
-        Function.counter = 0

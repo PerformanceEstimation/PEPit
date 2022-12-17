@@ -18,10 +18,11 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
         epsilon (float): level of inaccuracy.
         n (int): number of iterations.
         verbose (int): Level of information details to print.
-                       -1: No verbose at all.
-                       0: This example's output.
-                       1: This example's output + PEPit information.
-                       2: This example's output + PEPit information + CVXPY details.
+
+                        - -1: No verbose at all.
+                        - 0: This example's output.
+                        - 1: This example's output + PEPit information.
+                        - 2: This example's output + PEPit information + CVXPY details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -89,13 +90,15 @@ def wc_inexact_gradient_exact_line_search_complexified(L, mu, epsilon, n, verbos
     Leps = (1 + epsilon) * L
     meps = (1 - epsilon) * mu
     theoretical_tau = ((Leps - meps) / (Leps + meps)) ** (2 * n)
+    
+    # for test: attempt to evaluate a point that was not created through a pep object. 
+    x.eval()
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient descent with exact linesearch ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
-
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 

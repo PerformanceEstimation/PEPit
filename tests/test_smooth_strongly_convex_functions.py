@@ -1,7 +1,7 @@
 import unittest
 
+from PEPit import PEP
 from PEPit.point import Point
-from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
@@ -15,6 +15,8 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.mu1 = 0.1
         self.L2 = 10.
         self.mu2 = 0.001
+
+        self.pep = PEP()
 
         self.func1 = SmoothStronglyConvexFunction(L=self.L1, mu=self.mu1)
         self.func2 = SmoothStronglyConvexFunction(L=self.L2, mu=self.mu2)
@@ -52,7 +54,7 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.assertIs(self.point1.counter, 0)
         self.assertIs(self.point2.counter, 1)
 
-        self.assertIs(len(function.list_of_constraints), 0)
+        self.assertIs(len(function.list_of_class_constraints), 0)
 
         # Add points and constraints
         function.oracle(self.point1)
@@ -60,8 +62,8 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         function.add_class_constraints()
 
         self.assertIs(len(function.list_of_points), 2)
-        self.assertIs(len(function.list_of_constraints), 2)
-        self.assertIs(function.list_of_constraints[-1].counter, 1)
+        self.assertIs(len(function.list_of_class_constraints), 2)
+        self.assertIs(function.list_of_class_constraints[-1].counter, 1)
 
     def test_add_constraints(self):
         new_function = self.compute_linear_combination()
@@ -75,14 +77,14 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
         self.func2.add_class_constraints()
 
         # Count constraints
-        self.assertEqual(len(new_function.list_of_constraints), 0)
-        self.assertEqual(len(self.func1.list_of_constraints), 6)
-        self.assertEqual(len(self.func2.list_of_constraints), 6)
+        self.assertEqual(len(new_function.list_of_class_constraints), 0)
+        self.assertEqual(len(self.func1.list_of_class_constraints), 6)
+        self.assertEqual(len(self.func2.list_of_class_constraints), 6)
 
         # Test constraints type
-        for i in range(len(self.func1.list_of_constraints)):
-            self.assertIsInstance(self.func1.list_of_constraints[i], Constraint)
-            self.assertIsInstance(self.func2.list_of_constraints[i], Constraint)
+        for i in range(len(self.func1.list_of_class_constraints)):
+            self.assertIsInstance(self.func1.list_of_class_constraints[i], Constraint)
+            self.assertIsInstance(self.func2.list_of_class_constraints[i], Constraint)
 
     def test_sum_smooth_strongly_convex_functions(self):
 
@@ -110,10 +112,3 @@ class TestConstraintsStronglyConvex(unittest.TestCase):
                                          gj * (xi - xj)
                                          + 1 / (2 * L) * (gi - gj) ** 2
                                          + mu / (2 * (1 - mu / L)) * (xi - xj - 1 / L * (gi - gj)) ** 2, 0)
-
-    def tearDown(self):
-
-        Point.counter = 0
-        Expression.counter = 0
-        Constraint.counter = 0
-        Function.counter = 0
