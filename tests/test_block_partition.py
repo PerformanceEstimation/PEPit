@@ -72,3 +72,5 @@ class TestExpression(unittest.TestCase):
     def tearDown(self):
         Point.counter = 0
         Constraint.counter = 0
+        Block_partition.counter = 0
+        Block_partition.list_of_partitions = list()
