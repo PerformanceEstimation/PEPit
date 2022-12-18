@@ -512,7 +512,7 @@ class PEP(object):
                 print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
                       'blocks: Adding' , len(partition.list_of_constraints), 'scalar constraint(s)...')
             for constraint in partition.list_of_constraints:
-                cvxpy_constraints_list.append(self.send_constraint_to_cvxpy(constraint, F, G))
+                self.send_constraint_to_cvxpy(constraint, F, G)
             if verbose:
                 print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
@@ -775,11 +775,6 @@ class PEP(object):
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
                                 "Got {}".format(type(constraint_or_psd)))
-        
-        for partition in self.list_of_partitions:
-            for constraint in partition.list_of_constraints:
-                constraint._dual_variable_value = dual_values[counter]
-                counter += 1
                 
         # Verify nothing is left
         assert len(dual_values) == counter
