@@ -9,8 +9,6 @@ class Block_partition(object):
     Attributes:
         blocks_dict (dict): dictionary of lists of :class:`Point` objects.
                             Keys are :class:`Point` objects. The lists corresponds to the decompositions in blocks.
-                            
-        list_of_points (list): A list of :class:`Point` storing the points that were decomposed using this :class:`block_partition`.
         
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
         
@@ -29,7 +27,6 @@ class Block_partition(object):
         """
         assert d > 1
         self.d = d #controls that d>1 (otherwise useless and simple to create bugs)
-        self.list_of_points = list()
         self.list_of_constraints = list()
         self.blocks_dict = {}
         
@@ -63,7 +60,6 @@ class Block_partition(object):
         # case 1: point is already in the list: do nothing (just return)
         # case 2: point is not partitioned yet: partition (and return)
         if point not in self.blocks_dict:
-            self.list_of_points.append(point)
             partitioned_point = list()
             accumulation = null_point
             # fill the partition with d-1 new :class:`Point`. The last element is set so that the sum is equal to point.
@@ -97,10 +93,8 @@ class Block_partition(object):
         """
             Formulates the list of orthogonality constraints for self.
         """
-        for i in range(len(self.list_of_points)):
-            xi = self.list_of_points[i]
-            for j in range(len(self.list_of_points)):
-                    xj = self.list_of_points[j]
+        for xi in self.blocks_dict:
+            for xj in self.blocks_dict:
                     for k in range(self.d):
                         for l in range(self.d):
                             if k > l:

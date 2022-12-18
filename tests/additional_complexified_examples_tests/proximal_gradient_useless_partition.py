@@ -85,9 +85,11 @@ def wc_proximal_gradient_complexified2(L, mu, gamma, n, verbose=1):
 
     # Start by defining its unique optimal point
     xs = func.stationary_point()
+    _ = partition.get_block(xs,1) #useless partition
 
     # Then Define the starting point of the algorithm
     x0 = problem.set_initial_point()
+    _ = partition.get_block(x0,1) #useless partition
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)

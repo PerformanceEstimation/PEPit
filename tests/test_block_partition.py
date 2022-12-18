@@ -40,8 +40,8 @@ class TestExpression(unittest.TestCase):
 
     def test_number_of_points(self):
     
-        self.assertIs(len(self.partition1.list_of_points), 3) 
-        self.assertIs(len(self.partition2.list_of_points), 2)
+        self.assertIs(len(self.partition1.blocks_dict), 3) 
+        self.assertIs(len(self.partition2.blocks_dict), 2)
         
     def test_constraints(self):
     
