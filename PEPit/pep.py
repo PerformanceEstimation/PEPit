@@ -24,7 +24,6 @@ class PEP(object):
                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
-        list_of_partitions (list): list of :class:`Block_partition` that are defined through the pipeline.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
                             The PEP consider the associated LMI constraints psd_matrix >> 0.
         _list_of_constraints_sent_to_cvxpy (list): a list of all the :class:`Constraint` objects that are sent to CVXPY
@@ -66,7 +65,6 @@ class PEP(object):
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
-        self.list_of_partitions = list()
 
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
@@ -79,9 +77,11 @@ class PEP(object):
         Reset all classes attributes to initial values when instantiating a new :class:`PEP` object.
 
         """
-
+	
         Constraint.counter = 0
         Expression.counter = 0
+        Block_partition.counter = 0
+        Block_partition.list_of_partitions = list()
         Expression.list_of_leaf_expressions = list()
         Function.counter = 0
         Function.list_of_functions = list()
@@ -198,8 +198,6 @@ class PEP(object):
         # Create the partition
         partition = Block_partition(d)
 
-        # Store it in list_of_partitions
-        self.list_of_partitions.append(partition)
 
         # Return it
         return partition
@@ -402,7 +400,7 @@ class PEP(object):
             function.add_class_constraints()
             
         # Create all partition constraints
-        for partition in self.list_of_partitions:
+        for partition in Block_partition.list_of_partitions:
             partition.add_partition_constraints()
 
         # Define the cvxpy variables
@@ -502,11 +500,11 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
 
-        if verbose and len(self.list_of_partitions)>0:
-            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(self.list_of_partitions)))
+        if verbose and len(Block_partition.list_of_partitions)>0:
+            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(Block_partition.list_of_partitions)))
 	
         partition_counter = 0
-        for partition in self.list_of_partitions:
+        for partition in Block_partition.list_of_partitions:
             partition_counter += 1
             if verbose:
                 print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),

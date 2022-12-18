@@ -17,6 +17,11 @@ class Block_partition(object):
     Example:
     >>> 
     """
+    # Class counter.
+    # It counts the number of partitions defined from scratch.
+    counter = 0
+    list_of_partitions = list()
+    
 
     def __init__(self, d):
         """
@@ -29,6 +34,8 @@ class Block_partition(object):
         self.d = d #controls that d>1 (otherwise useless and simple to create bugs)
         self.list_of_constraints = list()
         self.blocks_dict = {}
+        Block_partition.counter += 1
+        Block_partition.list_of_partitions.append(self)
         
 
     def get_nb_blocks(self):

@@ -1,5 +1,6 @@
 import unittest
 
+from PEPit.pep import PEP
 from PEPit.block_partition import Block_partition
 from PEPit.point import Point
 from PEPit.constraint import Constraint
@@ -8,6 +9,8 @@ from PEPit.constraint import Constraint
 class TestExpression(unittest.TestCase):
 
     def setUp(self):
+    
+        self.problem = PEP()
 
         self.point1 = Point()
         self.point2 = Point()
@@ -15,7 +18,7 @@ class TestExpression(unittest.TestCase):
 
         self.partition0 = Block_partition(d=2)
         self.partition1 = Block_partition(d=2)
-        self.partition2 = Block_partition(d=5)
+        self.partition2 = self.problem.declare_block_partition(d=5)
         
         self.partition0.get_block(self.point1,0)
         
@@ -32,6 +35,19 @@ class TestExpression(unittest.TestCase):
         self.partition1.add_partition_constraints()
         self.partition2.add_partition_constraints()
         
+    def test_counter(self):
+    
+        self.assertIs(Block_partition.counter, 3)
+        
+    def test_list_size(self):
+    
+        self.assertIs(len(Block_partition.list_of_partitions), 3)
+        
+    def test_list_elements(self):
+    
+        self.assertIs(Block_partition.list_of_partitions[0], self.partition0)
+        self.assertIs(Block_partition.list_of_partitions[1], self.partition1)
+        self.assertIs(Block_partition.list_of_partitions[2], self.partition2)
 
     def test_sizes(self):
     
