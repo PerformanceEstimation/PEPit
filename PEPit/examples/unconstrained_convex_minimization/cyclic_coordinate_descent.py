@@ -10,7 +10,7 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
     where :math:`f` is :math:`L`-smooth by blocks (with :math:`d` blocks) and convex.
 
-    This code computes a worst-case guarantee for **cyclic coordinate descent** with fixed step-size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **cyclic coordinate descent** with fixed step-size :math:`1/L_i`.
     That is, it computes the smallest possible :math:`\\tau(n, d, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, d, L) \\|x_0 - x_\\star\\|^2
@@ -22,17 +22,18 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
     value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
-    Cyclic coordinat descent is described by
+    Cyclic coordinate descent is described by
 
     .. math:: x_{t+1} = x_t - \\frac{1}{L_{i_t}} \\nabla_{i_t} f(x_t),
 
     where :math:`L_{i_t}` is the Lipschitz constant of the block :math:`i_t`, and where :math:`i_t` follows a prescribed ordering.
 
     **References**:
-        `[1] Z. Shi, R. Liu (2016).
-        Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
-        In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
-        <https://arxiv.org/pdf/1608.04826.pdf>`_
+    
+    `[1] Z. Shi, R. Liu (2016).
+    Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
+    In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+    <https://arxiv.org/pdf/1608.04826.pdf>`_
 
     Args:
         L (list): list of floats, smoothness parameters (for each block).
