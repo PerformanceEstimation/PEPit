@@ -16,6 +16,8 @@ from tests.additional_complexified_examples_tests import wc_inexact_gradient_exa
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified2
 from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
 from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_convex_complexified
+from tests.additional_complexified_examples_tests import wc_gradient_descent_useless_blocks
+from tests.additional_complexified_examples_tests import wc_gradient_descent_blocks
 
 
 class TestExamples(unittest.TestCase):
@@ -125,3 +127,16 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
                                                                              verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=10 ** -3 * theory)
+
+    def test_gradient_descent_useless_blocks(self):
+        L, gamma, n = 1, 1, 5
+
+        wc_modified, theory = wc_gradient_descent_useless_blocks(L=L, gamma=gamma, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, theory, delta=10 ** -3 * theory)
+
+    def test_gradient_descent_blocks(self):
+        L = [1., 2., 10.]
+        n = 3
+
+        wc_modified, theory = wc_gradient_descent_blocks(L=L, n=n, verbose=self.verbose)
+        self.assertLessEqual(wc_modified, theory)

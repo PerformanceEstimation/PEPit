@@ -25,6 +25,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_triple_momentum
 from PEPit.examples.unconstrained_convex_minimization import wc_information_theoretic
 from PEPit.examples.unconstrained_convex_minimization import wc_optimized_gradient_for_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_epsilon_subgradient_method
+from PEPit.examples.unconstrained_convex_minimization import wc_cyclic_coordinate_descent
 from PEPit.examples.composite_convex_minimization import wc_accelerated_douglas_rachford_splitting
 from PEPit.examples.composite_convex_minimization import wc_accelerated_proximal_gradient
 from PEPit.examples.composite_convex_minimization import wc_bregman_proximal_point
@@ -122,6 +123,14 @@ class TestExamples(unittest.TestCase):
         
         wc, theory = wc_gradient_descent(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_cyclic_coordinate_descent(self):
+        L = [1., 2., 10.]
+        n = 9
+        wc, _ = wc_cyclic_coordinate_descent(L=L, n=n, verbose=self.verbose)
+        Lmax = max(L)
+        wc_GD, theory_GD = wc_gradient_descent(Lmax, 1/Lmax, 3, verbose=self.verbose)
+        self.assertLessEqual(wc, theory_GD)
 
     def test_gradient_descent_qg_convex(self):
         L, n = 1, 4

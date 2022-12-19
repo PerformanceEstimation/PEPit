@@ -21,6 +21,7 @@ from .robust_momentum import wc_robust_momentum
 from .subgradient_method import wc_subgradient_method
 from .subgradient_method_rsi_eb import wc_subgradient_method_rsi_eb
 from .triple_momentum import wc_triple_momentum
+from .cyclic_coordinate_descent import wc_cyclic_coordinate_descent
 
 __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'accelerated_gradient_strongly_convex', 'wc_accelerated_gradient_strongly_convex',
@@ -45,4 +46,5 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'subgradient_method', 'wc_subgradient_method',
            'subgradient_method_rsi_eb', 'wc_subgradient_method_rsi_eb',
            'triple_momentum', 'wc_triple_momentum',
+           'cyclic_coordinate_descent', 'wc_cyclic_coordinate_descent',
            ]
