@@ -12,7 +12,7 @@ class BlockPartition(object):
         
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
         
-        d (int): encodes the number of blocks (d>1).
+        d (int): encodes the number of blocks (d>0).
         	
     Example:
     >>> 
@@ -28,9 +28,9 @@ class BlockPartition(object):
         :class:`block_decomposition`
         
         Raises:
-            AssertionError: if d <= 1
+            AssertionError: if d <= 0
         """
-        assert d > 1
+        assert d > 0
         self.d = d #controls that d>1 (otherwise useless and simple to create bugs)
         self.list_of_constraints = list()
         self.blocks_dict = {}

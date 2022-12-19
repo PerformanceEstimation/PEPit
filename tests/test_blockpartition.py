@@ -19,6 +19,7 @@ class TestExpression(unittest.TestCase):
         self.partition0 = BlockPartition(d=2)
         self.partition1 = BlockPartition(d=2)
         self.partition2 = self.problem.declare_block_partition(d=5)
+        self.partition3 = self.problem.declare_block_partition(d=1)
         
         self.partition0.get_block(self.point1,0)
         
@@ -35,13 +36,17 @@ class TestExpression(unittest.TestCase):
         self.partition1.add_partition_constraints()
         self.partition2.add_partition_constraints()
         
+    def test_instances(self):
+    
+        self.assertIsInstance(self.partition0, BlockPartition)
+        
     def test_counter(self):
     
-        self.assertIs(BlockPartition.counter, 3)
+        self.assertIs(BlockPartition.counter, 4)
         
     def test_list_size(self):
     
-        self.assertIs(len(BlockPartition.list_of_partitions), 3)
+        self.assertIs(len(BlockPartition.list_of_partitions), 4)
         
     def test_list_elements(self):
     
@@ -59,6 +64,12 @@ class TestExpression(unittest.TestCase):
         self.assertEqual(self.partition1.get_block(self.point1,1), self.partition1.get_block(self.point1,1))
         self.assertEqual(self.partition1.get_block(self.point2,0), self.partition1.get_block(self.point2,0))
         self.assertEqual(self.partition1.get_block(self.point2,1), self.partition1.get_block(self.point2,1))
+        
+    def test_no_partition(self):
+    
+        self.assertEqual(self.partition3.get_block(self.point1,0).decomposition_dict, self.point1.decomposition_dict)
+        self.assertEqual(self.partition3.get_block(self.point2,0).decomposition_dict, self.point2.decomposition_dict)
+        self.assertEqual(self.partition3.get_block(self.point3,0).decomposition_dict, self.point3.decomposition_dict)
 
     def test_sizes(self):
     

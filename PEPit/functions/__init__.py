@@ -8,6 +8,7 @@ from .smooth_function import SmoothFunction
 from .smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from .strongly_convex import StronglyConvexFunction
 from .convex_support_function import ConvexSupportFunction
+from .block_smooth_convex_function import BlockSmoothConvexFunction
 
 __all__ = ['convex_function', 'ConvexFunction',
            'convex_indicator', 'ConvexIndicatorFunction',
@@ -18,5 +19,6 @@ __all__ = ['convex_function', 'ConvexFunction',
            'smooth_function', 'SmoothFunction',
            'smooth_strongly_convex_function', 'SmoothStronglyConvexFunction',
            'strongly_convex', 'StronglyConvexFunction',
-           'convex_support_function', 'ConvexSupportFunction'
+           'convex_support_function', 'ConvexSupportFunction',
+           'block_smooth_convex_function', 'BlockSmoothConvexFunction',
            ]
