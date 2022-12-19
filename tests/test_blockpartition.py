@@ -1,7 +1,7 @@
 import unittest
 
 from PEPit.pep import PEP
-from PEPit.block_partition import Block_partition
+from PEPit.blockpartition import BlockPartition
 from PEPit.point import Point
 from PEPit.constraint import Constraint
 
@@ -16,8 +16,8 @@ class TestExpression(unittest.TestCase):
         self.point2 = Point()
         self.point3 = Point()
 
-        self.partition0 = Block_partition(d=2)
-        self.partition1 = Block_partition(d=2)
+        self.partition0 = BlockPartition(d=2)
+        self.partition1 = BlockPartition(d=2)
         self.partition2 = self.problem.declare_block_partition(d=5)
         
         self.partition0.get_block(self.point1,0)
@@ -37,17 +37,28 @@ class TestExpression(unittest.TestCase):
         
     def test_counter(self):
     
-        self.assertIs(Block_partition.counter, 3)
+        self.assertIs(BlockPartition.counter, 3)
         
     def test_list_size(self):
     
-        self.assertIs(len(Block_partition.list_of_partitions), 3)
+        self.assertIs(len(BlockPartition.list_of_partitions), 3)
         
     def test_list_elements(self):
     
-        self.assertIs(Block_partition.list_of_partitions[0], self.partition0)
-        self.assertIs(Block_partition.list_of_partitions[1], self.partition1)
-        self.assertIs(Block_partition.list_of_partitions[2], self.partition2)
+        self.assertIs(BlockPartition.list_of_partitions[0], self.partition0)
+        self.assertIs(BlockPartition.list_of_partitions[1], self.partition1)
+        self.assertIs(BlockPartition.list_of_partitions[2], self.partition2)
+        
+    def test_same_blocks(self):
+    
+        pt1 = self.partition1.get_block(self.point1,0)
+        pt2 = self.partition1.get_block(self.point1,0)
+        self.assertIsInstance(pt1, Point) 
+        self.assertIsInstance(pt2, Point) 
+        self.assertEqual(pt1.decomposition_dict, pt2.decomposition_dict)
+        self.assertEqual(self.partition1.get_block(self.point1,1), self.partition1.get_block(self.point1,1))
+        self.assertEqual(self.partition1.get_block(self.point2,0), self.partition1.get_block(self.point2,0))
+        self.assertEqual(self.partition1.get_block(self.point2,1), self.partition1.get_block(self.point2,1))
 
     def test_sizes(self):
     
@@ -72,5 +83,5 @@ class TestExpression(unittest.TestCase):
     def tearDown(self):
         Point.counter = 0
         Constraint.counter = 0
-        Block_partition.counter = 0
-        Block_partition.list_of_partitions = list()
+        BlockPartition.counter = 0
+        BlockPartition.list_of_partitions = list()

@@ -6,7 +6,7 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
-from PEPit.block_partition import Block_partition
+from PEPit.blockpartition import BlockPartition
 
 
 class PEP(object):
@@ -80,8 +80,8 @@ class PEP(object):
 	
         Constraint.counter = 0
         Expression.counter = 0
-        Block_partition.counter = 0
-        Block_partition.list_of_partitions = list()
+        BlockPartition.counter = 0
+        BlockPartition.list_of_partitions = list()
         Expression.list_of_leaf_expressions = list()
         Function.counter = 0
         Function.list_of_functions = list()
@@ -185,10 +185,10 @@ class PEP(object):
 
     def declare_block_partition(self, d):
         """
-        Instantiate a :class:`block_partition` and store it in the attribute `list_of_partitions`.
+        Instantiate a :class:`blockpartition` and store it in the attribute `list_of_partitions`.
 
         Args:
-            d (int): number of blocks in the :class:`block_partition`.
+            d (int): number of blocks in the :class:`blockpartition`.
 
         Returns:
             partition (Function): the newly created partition.
@@ -196,7 +196,7 @@ class PEP(object):
         """
 
         # Create the partition
-        partition = Block_partition(d)
+        partition = BlockPartition(d)
 
 
         # Return it
@@ -400,7 +400,7 @@ class PEP(object):
             function.add_class_constraints()
             
         # Create all partition constraints
-        for partition in Block_partition.list_of_partitions:
+        for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
 
         # Define the cvxpy variables
@@ -500,11 +500,11 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
 
-        if verbose and len(Block_partition.list_of_partitions)>0:
-            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(Block_partition.list_of_partitions)))
+        if verbose and len(BlockPartition.list_of_partitions)>0:
+            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
 	
         partition_counter = 0
-        for partition in Block_partition.list_of_partitions:
+        for partition in BlockPartition.list_of_partitions:
             partition_counter += 1
             if verbose:
                 print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),

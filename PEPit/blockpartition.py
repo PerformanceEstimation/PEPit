@@ -2,9 +2,9 @@ from PEPit.point import Point
 from PEPit.point import null_point
 from PEPit.constraint import Constraint
 
-class Block_partition(object):
+class BlockPartition(object):
     """
-    A :class:`block_partition` encodes an abstract block partitioning (of :math:`d` blocks of variables) of the ambient space.
+    A :class:`BlockPartition` encodes an abstract block partitioning (of :math:`d` blocks of variables) of the ambient space.
     
     Attributes:
         blocks_dict (dict): dictionary of lists of :class:`Point` objects.
@@ -34,8 +34,8 @@ class Block_partition(object):
         self.d = d #controls that d>1 (otherwise useless and simple to create bugs)
         self.list_of_constraints = list()
         self.blocks_dict = {}
-        Block_partition.counter += 1
-        Block_partition.list_of_partitions.append(self)
+        BlockPartition.counter += 1
+        BlockPartition.list_of_partitions.append(self)
         
 
     def get_nb_blocks(self):
@@ -82,7 +82,7 @@ class Block_partition(object):
         
     def add_constraint(self, constraint):
         """
-            Store a new :class:`Constraint` to the list of constraints of this :class:`block_partition`.
+            Store a new :class:`Constraint` to the list of constraints of this :class:`BlockPartition`.
             
             Args:
                 constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
