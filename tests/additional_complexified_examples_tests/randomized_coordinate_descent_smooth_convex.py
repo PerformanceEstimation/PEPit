@@ -68,23 +68,21 @@ def wc_randomized_coordinate_descent_smooth_convex_complexified(L, gamma, d, n, 
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex_complexified(L=L, gamma=1 / L, d=2, n=4, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (9 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 42 scalar constraint(s) ...
-                         function 1 : 42 scalar constraint(s) added
-        (PEPit) Setting up the problem: 1 partition(s) added
-		          partition 1 with 3 blocks: Adding 3 scalar constraint(s)...
-		          partition 1 with 3 blocks: 3 scalar constraint(s) added
+                 function 1 : Adding 42 scalar constraint(s) ...
+                 function 1 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9999978377393944
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9999997247769806
         *** Example file: worst-case performance of randomized  coordinate gradient descent ***
-                PEPit guarantee:         E[phi_(n+1)(x_(n+1))] <= 0.999998 phi_n(x_n)
-                Theoretical guarantee:   E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
+            PEPit guarantee:	     E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
+            Theoretical guarantee:	 E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
 
     """
 
@@ -171,4 +169,4 @@ def wc_randomized_coordinate_descent_smooth_convex_complexified(L, gamma, d, n, 
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex_complexified(L=L, gamma=1 / L, d=2, n=4, verbose=1)

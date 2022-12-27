@@ -27,25 +27,26 @@ def wc_proximal_point_complexified2(gamma, n, verbose=1):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified2(gamma=1, n=2, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
-                         function 2 : Adding 6 scalar constraint(s) ...
-                         function 2 : 6 scalar constraint(s) added
+                 function 1 : Adding 6 scalar constraint(s) ...
+                 function 1 : 6 scalar constraint(s) added
+                 function 2 : Adding 6 scalar constraint(s) ...
+                 function 2 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                         partition 1 with 5 blocks: Adding 0 scalar constraint(s)...
-                         partition 1 with 5 blocks: 0 scalar constraint(s) added
+                 partition 1 with 5 blocks: Adding 40 scalar constraint(s)...
+                 partition 1 with 5 blocks: 40 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12500080627897306
         *** Example file: worst-case performance of the Proximal Point Method in function values***
-                PEPit guarantee:         f(x_n)-f_* <= 0.125 ||x0 - xs||^2
-                Theoretical guarantee :  f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+            PEPit guarantee:	     f(x_n)-f_* <= 0.125001 ||x0 - xs||^2
+            Theoretical guarantee :	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
 
     """
 
@@ -60,12 +61,12 @@ def wc_proximal_point_complexified2(gamma, n, verbose=1):
 
     # Start by defining its unique optimal point xs = x_* and its function value fs = F(x_*)
     xs = func.stationary_point()
-    _ = partition.get_block(xs,1) #useless partition
+    _ = partition.get_block(xs, 1)  # useless partition
     fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
-    _ = partition.get_block(x0,1) #useless partition
+    _ = partition.get_block(x0, 1)  # useless partition
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
@@ -96,4 +97,4 @@ def wc_proximal_point_complexified2(gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point_complexified2(gamma=1, n=2, verbose=1)

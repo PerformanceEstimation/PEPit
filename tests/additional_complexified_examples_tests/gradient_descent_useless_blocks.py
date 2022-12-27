@@ -64,24 +64,24 @@ def wc_gradient_descent_useless_blocks(L, gamma, n, verbose=1):
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : Adding 42 scalar constraint(s) ...
-		         function 1 : 42 scalar constraint(s) added
+                 function 1 : Adding 42 scalar constraint(s) ...
+                 function 1 : 42 scalar constraint(s) added
         (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                        partition 1 with 1 blocks: Adding 0 scalar constraint(s)...
-                        partition 1 with 1 blocks: 0 scalar constraint(s) added
+                 partition 1 with 1 blocks: Adding 0 scalar constraint(s)...
+                 partition 1 with 1 blocks: 0 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.04545454238767727
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.045454550430615935
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-	        PEPit guarantee:	   f(x_n)-f_* <= 0.0454545 ||x_0 - x_*||^2
-	        Theoretical guarantee:    f(x_n)-f_* <= 0.0454545 ||x_0 - x_*||^2
+            PEPit guarantee:	     f(x_n)-f_* <= 0.0454546 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.0454545 ||x_0 - x_*||^2
 
     """
 
     # Instantiate PEP
     problem = PEP()
-    
+
     # Declare a partition of the ambient space in d blocks of variables
     partition = problem.declare_block_partition(d=1)
 
@@ -89,11 +89,11 @@ def wc_gradient_descent_useless_blocks(L, gamma, n, verbose=1):
     func = problem.declare_function(SmoothStronglyConvexFunction, mu=0, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = partition.get_block(func.stationary_point(),0)
+    xs = partition.get_block(func.stationary_point(), 0)
     fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
-    x0 = partition.get_block(problem.set_initial_point(),0)
+    x0 = partition.get_block(problem.set_initial_point(), 0)
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
@@ -101,7 +101,7 @@ def wc_gradient_descent_useless_blocks(L, gamma, n, verbose=1):
     # Run n steps of the GD method
     x = x0
     for _ in range(n):
-        x = x - gamma * partition.get_block(func.gradient(x),0)
+        x = x - gamma * partition.get_block(func.gradient(x), 0)
 
     # Set the performance metric to the function values accuracy
     problem.set_performance_metric(func(x) - fs)

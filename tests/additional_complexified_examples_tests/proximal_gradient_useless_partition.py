@@ -41,29 +41,30 @@ def wc_proximal_gradient_complexified2(L, mu, gamma, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
+        >>> pepit_tau, theoretical_tau = wc_proximal_gradient_complexified2(L=1, mu=.1, gamma=1, n=2, verbose=1)
+        (PEPit) Setting up the problem: size of the main PSD matrix: 23x23
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 4 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
-                         function 2 : Adding 6 scalar constraint(s) ...
-                         function 2 : 6 scalar constraint(s) added
-                         function 3 : Adding 6 scalar constraint(s) ...
-                         function 3 : 6 scalar constraint(s) added
-                         function 4 : Adding 6 scalar constraint(s) ...
-                         function 4 : 6 scalar constraint(s) added
+                 function 1 : Adding 6 scalar constraint(s) ...
+                 function 1 : 6 scalar constraint(s) added
+                 function 2 : Adding 6 scalar constraint(s) ...
+                 function 2 : 6 scalar constraint(s) added
+                 function 3 : Adding 6 scalar constraint(s) ...
+                 function 3 : 6 scalar constraint(s) added
+                 function 4 : Adding 6 scalar constraint(s) ...
+                 function 4 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                         partition 1 with 6 blocks: Adding 0 scalar constraint(s)...
-                         partition 1 with 6 blocks: 0 scalar constraint(s) added
+                 partition 1 with 6 blocks: Adding 60 scalar constraint(s)...
+                 partition 1 with 6 blocks: 60 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6561016829295551
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6561141430959633
         *** Example file: worst-case performance of gradient descent ***
-                PEPit guarantee:         ||x_n-x_*||^2 <= 0.656102 ||x_0-x_*||^2
-                Theoretical guarantee:   ||x_n-x_*||^2 <= 0.6561 ||x_0-x_*||^2
+            PEPit guarantee:	     ||x_n-x_*||^2 <= 0.656114 ||x_0-x_*||^2
+            Theoretical guarantee:	 ||x_n-x_*||^2 <= 0.6561 ||x_0-x_*||^2
 
     """
 
@@ -85,11 +86,11 @@ def wc_proximal_gradient_complexified2(L, mu, gamma, n, verbose=1):
 
     # Start by defining its unique optimal point
     xs = func.stationary_point()
-    _ = partition.get_block(xs,1) #useless partition
+    _ = partition.get_block(xs, 1)  # useless partition
 
     # Then Define the starting point of the algorithm
     x0 = problem.set_initial_point()
-    _ = partition.get_block(x0,1) #useless partition
+    _ = partition.get_block(x0, 1)  # useless partition
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
@@ -121,4 +122,4 @@ def wc_proximal_gradient_complexified2(L, mu, gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_gradient_complexified(L=1, mu=.1, gamma=1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_gradient_complexified2(L=1, mu=.1, gamma=1, n=2, verbose=1)

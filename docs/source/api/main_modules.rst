@@ -20,6 +20,13 @@ Point
    :show-inheritance:
 
 
+Block partition
+---------------
+.. autoclass:: PEPit.BlockPartition
+   :members:
+   :show-inheritance:
+
+
 Expression
 ----------
 .. autoclass:: PEPit.Expression

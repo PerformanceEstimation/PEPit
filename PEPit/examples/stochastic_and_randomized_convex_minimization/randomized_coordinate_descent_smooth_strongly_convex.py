@@ -2,7 +2,6 @@ import numpy as np
 
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.point import Point
 
 
 def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, verbose=1):
@@ -74,34 +73,34 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-        (PEPit) Setting up the problem: initial conditions and general constraints (3 constraint(s) added)
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
+                 function 1 : Adding 2 scalar constraint(s) ...
+                 function 1 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-		          partition 1 with 3 blocks: Adding 3 scalar constraint(s)...
-		          partition 1 with 3 blocks: 3 scalar constraint(s) added
+                 partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
+                 partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8347107377149059
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8347107452140342
         *** Example file: worst-case performance of randomized coordinate gradient descent ***
-                PEPit guarantee:         E||x_(n+1) - x_*||^2 <= 0.834711 ||x_n - x_*||^2
-                Theoretical guarantee:   E||x_(n+1) - x_*||^2 <= 0.834711 ||x_n - x_*||^2
+            PEPit guarantee:	     E[||x_(t+1) - x_*||^2|x_t] <= 0.834711 ||x_t - x_*||^2
+            Theoretical guarantee:	 E[||x_(t+1) - x_*||^2|x_t] <= 0.834711 ||x_t - x_*||^2
 
     """
 
     # Instantiate PEP
     problem = PEP()
-    
+
     # Declare a partition of the ambient space in d blocks of variables
     partition = problem.declare_block_partition(d=d)
 
     # Declare a strongly convex smooth function
     func = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
 
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
+    # Start by defining its unique optimal point xs = x_*
     xs = func.stationary_point()
-    fs = func(xs)
 
     # Then define the starting point x0 of the algorithm
     x0 = problem.set_initial_point()
@@ -109,15 +108,12 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Define the gradient at x0
+    # Compute all the possible outcomes of the randomized coordinate descent step
     g0 = func.gradient(x0)
+    x1_list = [x0 - gamma * partition.get_block(g0, i) for i in range(d)]
 
-    # Compute the expectation of randomized coordinate descent step
-    x = x0
-    var = np.mean([(x - gamma * partition.get_block(g0,i) - xs) ** 2 for i in range(d)])
-
-    # Set the performance metric to the variance
-    problem.set_performance_metric(var)
+    # Set the performance metric to the expected value of the distance to optimiser from the different possible outcomes
+    problem.set_performance_metric(np.mean([(x1 - xs) ** 2 for x1 in x1_list]))
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
@@ -129,8 +125,8 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E||x_(n+1) - x_*||^2 <= {:.6} ||x_n - x_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t E||x_(n+1) - x_*||^2 <= {:.6} ||x_n - x_*||^2'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t E[||x_(t+1) - x_*||^2|x_t] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t E[||x_(t+1) - x_*||^2|x_t] <= {:.6} ||x_t - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -140,4 +136,5 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (mu + L)
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2,
+                                                                                         verbose=1)

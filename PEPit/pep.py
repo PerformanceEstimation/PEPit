@@ -6,7 +6,7 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
-from PEPit.blockpartition import BlockPartition
+from PEPit.block_partition import BlockPartition
 
 
 class PEP(object):
@@ -48,7 +48,8 @@ class PEP(object):
             >>> pep = PEP()
 
         """
-        # Set all counters to 0 to recreate points, expressions and functions from scratch at the beginning of each PEP.
+        # Set all counters to 0 to recreate
+        # points, expressions, functions and block partitions from scratch at the beginning of each PEP.
         self._reset_classes()
 
         # Update the class counter
@@ -77,11 +78,11 @@ class PEP(object):
         Reset all classes attributes to initial values when instantiating a new :class:`PEP` object.
 
         """
-	
-        Constraint.counter = 0
-        Expression.counter = 0
+
         BlockPartition.counter = 0
         BlockPartition.list_of_partitions = list()
+        Constraint.counter = 0
+        Expression.counter = 0
         Expression.list_of_leaf_expressions = list()
         Function.counter = 0
         Function.list_of_functions = list()
@@ -183,24 +184,24 @@ class PEP(object):
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
 
-    def declare_block_partition(self, d):
+    @staticmethod
+    def declare_block_partition(d):
         """
-        Instantiate a :class:`blockpartition` and store it in the attribute `list_of_partitions`.
+        Instantiate a :class:`BlockPartition` and store it in the attribute `list_of_partitions`.
 
         Args:
-            d (int): number of blocks in the :class:`blockpartition`.
+            d (int): number of blocks in the :class:`BlockPartition`.
 
         Returns:
-            partition (Function): the newly created partition.
+            block_partition (BlockPartition): the newly created partition.
 
         """
 
         # Create the partition
-        partition = BlockPartition(d)
-
+        block_partition = BlockPartition(d)
 
         # Return it
-        return partition
+        return block_partition
 
     def set_performance_metric(self, expression):
         """
@@ -500,21 +501,22 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
 
-        if verbose and len(BlockPartition.list_of_partitions)>0:
+        # Defining block partition constraints
+        if verbose and len(BlockPartition.list_of_partitions) > 0:
             print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
-	
+
         partition_counter = 0
         for partition in BlockPartition.list_of_partitions:
             partition_counter += 1
             if verbose:
-                print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
-                      'blocks: Adding' , len(partition.list_of_constraints), 'scalar constraint(s)...')
+                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                      'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
             for constraint in partition.list_of_constraints:
                 self.send_constraint_to_cvxpy(constraint, F, G)
             if verbose:
-                print('\t\t partition', partition_counter, 'with' , partition.get_nb_blocks(),
+                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
-			
+
         # Create the cvxpy problem
         if verbose:
             print('(PEPit) Compiling SDP')
@@ -773,7 +775,7 @@ class PEP(object):
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
                                 "Got {}".format(type(constraint_or_psd)))
-                
+
         # Verify nothing is left
         assert len(dual_values) == counter
 
