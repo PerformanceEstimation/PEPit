@@ -15,14 +15,13 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     This code computes a worst-case guarantee for **randomized block-coordinate descent** with step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, d)` such that the guarantee
 
-    .. math:: \\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_{t} - x_\\star\\|^2
+    .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2|x_t] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_t - x_\\star\\|^2
     
-    where :math:`x_{t+1}^{(i)}` denotes the value of the iterate :math:`x_{t+1}` in the scenario
-    where the :math:`i` th block of coordinates is selected for the update  with fixed step-size
-    :math:`\\gamma`, :math:`d` is the number of blocks of coordinates and where :math:`x_\\star` is a minimizer of :math:`f`.
+    holds for any fixed step-size :math:`\\gamma` and any number of blocks :math:`d`,
+    and where :math:`x_\\star` denotes a minimizer of :math:`f`.
 
     In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma, d)` is
-    computed as the worst-case value of :math:`\\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2]` when
+    computed as the worst-case value of :math:`\\mathbb{E}[\\|x_{t+1} - x_\star \\|^2|x_t]` when
     :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
@@ -31,15 +30,15 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
     .. math::
         \\begin{eqnarray}
             \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, d|]\\right), \\\\
-            x_{t+1}^{(i)} & = & x_t - \\gamma \\nabla_i f(x_t),
+            x_{t+1} & = & x_t - \\gamma \\nabla_i f(x_t),
         \\end{eqnarray}
 
-    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the partial derivative corresponding to the block :math:`i`.
+    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the :math:`i^{\\text{th}}` partial gradient.
 
     **Theoretical guarantee**:
     When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 17]:
 
-    .. math:: \\mathbb{E}_i[\\|x_{t+1}^{(i)} - x_\star \\|^2] \\leqslant \\rho^2 \\|x_t-x_\\star\\|^2,
+    .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2|x_t] \\leqslant \\rho^2 \\|x_t-x_\\star\\|^2,
 
     where :math:`\\rho^2 = \\max \\left( \\frac{(\\gamma\\mu - 1)^2 + d - 1}{d},\\frac{(\\gamma L - 1)^2 + d - 1}{d} \\right)`.
 
