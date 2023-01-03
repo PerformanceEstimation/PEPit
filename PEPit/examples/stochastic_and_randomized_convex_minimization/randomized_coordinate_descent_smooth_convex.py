@@ -16,7 +16,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
     fixed step-size :math:`\\gamma`.
     That is, it verifies that the Lyapunov function
 
-    .. math:: \\phi(t, x_t) = (t \\gamma L / d + 1)(f(x_t) - f_\\star) + L / 2 \\|x_t - x_\\star\||^2
+    .. math:: \\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\||^2
 
     is decreasing in expectation over the **randomized block-coordinate descent** algorithm. We use the notation 
     :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
@@ -39,9 +39,9 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
     When :math:`\\gamma \\leqslant \\frac{1}{L}`,
     the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 16]:
 
-    .. math:: \\mathbb{E}[\\phi(t, x_t)] \\leqslant \\phi(x_{t-1}),
+    .. math:: \\mathbb{E}[\\phi(t, x_t)] \\leqslant \\phi(t-1, x_{t-1}),
 
-    where :math:`\\phi(t, x_t) = (t \\gamma L / d + 1)(f(x_t) - f_\\star) + L / 2 \\|x_t - x_\\star\\|^2`.
+    where :math:`\\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\\|^2`.
 
     **References**:
 
