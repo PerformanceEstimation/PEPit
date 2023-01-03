@@ -44,16 +44,23 @@ from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_point_saga
-from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_strongly_convex
+from PEPit.examples.stochastic_and_randomized_convex_minimization import \
+    wc_randomized_coordinate_descent_smooth_strongly_convex
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimal_strongly_monotone_proximal_point as \
     wc_optimal_strongly_monotone_proximal_point_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_proximal_point as wc_proximal_point_method_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_three_operator_splitting as wc_three_operator_splitting_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimistic_gradient as wc_optimistic_gradient_operators
-from PEPit.examples.monotone_inclusions_variational_inequalities import wc_past_extragradient as wc_past_extragradient_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_proximal_point as wc_proximal_point_method_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_three_operator_splitting as wc_three_operator_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_optimistic_gradient as wc_optimistic_gradient_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_past_extragradient as wc_past_extragradient_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
@@ -68,9 +75,12 @@ from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_optimized_gr
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_frank_wolfe as wc_frank_wolfe_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_proximal_point as wc_proximal_point_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_halpern_iteration as wc_halpern_iteration_low_dim
-from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_gradient_descent as wc_gradient_descent_non_convex_low_dim
-from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_alternate_projections as wc_alternate_projections_low_dim
-from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_averaged_projections as wc_averaged_projections_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import \
+    wc_gradient_descent as wc_gradient_descent_non_convex_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import \
+    wc_alternate_projections as wc_alternate_projections_low_dim
+from PEPit.examples.low_dimensional_worst_cases_scenarios import \
+    wc_averaged_projections as wc_averaged_projections_low_dim
 from PEPit.examples.low_dimensional_worst_cases_scenarios import wc_dykstra as wc_dykstra_low_dim
 from PEPit.examples.inexact_proximal_methods import wc_accelerated_inexact_forward_backward
 from PEPit.examples.inexact_proximal_methods import wc_partially_inexact_douglas_rachford_splitting
@@ -106,7 +116,7 @@ class TestExamples(unittest.TestCase):
 
     def test_epsilon_subgradient_method(self):
         M, n, eps, R = 2, 6, 2, 1
-        gamma = 1 / (np.sqrt(n+1))
+        gamma = 1 / (np.sqrt(n + 1))
 
         wc, theory = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
@@ -119,18 +129,18 @@ class TestExamples(unittest.TestCase):
 
     def test_gradient_descent(self):
         L, n = 3, 4
-        gamma = 1/L
-        
+        gamma = 1 / L
+
         wc, theory = wc_gradient_descent(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
-    def test_cyclic_coordinate_descent(self):
-        L = [1., 2., 10.]
+    def test_cyclic_coordinate_descent_one_block(self):
         n = 9
-        wc, _ = wc_cyclic_coordinate_descent(L=L, n=n, verbose=self.verbose)
-        Lmax = max(L)
-        wc_GD, theory_GD = wc_gradient_descent(Lmax, 1/Lmax, 3, verbose=self.verbose)
-        self.assertLessEqual(wc, theory_GD)
+        L = 1.
+
+        wc, _ = wc_cyclic_coordinate_descent(L=[L], n=n, verbose=self.verbose)
+        wc_GD, _ = wc_gradient_descent(L, 1 / L, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, wc_GD, delta=self.relative_precision * wc_GD)
 
     def test_gradient_descent_qg_convex(self):
         L, n = 1, 4
@@ -189,7 +199,7 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_inexact_gradient_descent(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_proximal_point(self):
         n, gamma = 3, .1
 
@@ -213,7 +223,7 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_frank_wolfe_low_dim(L, D, n, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
-        
+
     def test_proximal_point_low_dim(self):
         n, alpha = 11, 2.2
 
@@ -225,14 +235,14 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_halpern_iteration_low_dim(n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_gradient_descent_non_convex_low_dim(self):
         L, n = 1, 5
         gamma = 1 / L
 
         wc, theory = wc_gradient_descent_non_convex_low_dim(L, gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_alternate_projections_low_dim(self):
         n1 = 9
         n2 = 10
@@ -240,7 +250,7 @@ class TestExamples(unittest.TestCase):
         wc1, _ = wc_alternate_projections_low_dim(n1, verbose=self.verbose)
         wc2, _ = wc_alternate_projections_low_dim(n2, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
-        
+
     def test_averaged_projections_low_dim(self):
         n1 = 10
         n2 = 11
@@ -248,7 +258,7 @@ class TestExamples(unittest.TestCase):
         wc1, _ = wc_averaged_projections_low_dim(n1, verbose=self.verbose)
         wc2, _ = wc_averaged_projections_low_dim(n2, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
-        
+
     def test_dykstra_low_dim(self):
         n1 = 8
         n2 = 10
@@ -256,14 +266,14 @@ class TestExamples(unittest.TestCase):
         wc1, _ = wc_dykstra_low_dim(n1, verbose=self.verbose)
         wc2, _ = wc_dykstra_low_dim(n2, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
-        
+
     def test_inexact_accelerated_gradient_1(self):
         L, epsilon, n = 3, 0, 5
 
         wc, theory = wc_inexact_accelerated_gradient(L=L, epsilon=epsilon, n=n, verbose=self.verbose)
 
         # Less accurate requirement due to ill conditioning of this specific SDP (no Slater point)
-        local_relative_precision = 10**-2
+        local_relative_precision = 10 ** -2
         self.assertAlmostEqual(theory, wc, delta=local_relative_precision * theory)
 
     def test_inexact_accelerated_gradient_2(self):
@@ -447,20 +457,20 @@ class TestExamples(unittest.TestCase):
         self.assertLessEqual(wc, theory)
 
     def test_randomized_coordinate(self):
-        L, d, n = 1, 3, 10
-        gamma = 1/L
+        L, d, t = 1, 3, 10
+        gamma = 1 / L
 
-        wc, theory = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=gamma, d=d, n=n, verbose=self.verbose)
+        wc, theory = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=gamma, d=d, t=t, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_randomized_coordinate_strongly_convex(self):
         L, mu, d = 1, 0.1, 3
-        gamma = 2/(L+mu)
+        gamma = 2 / (L + mu)
 
         wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
                                                                              verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_accelerated_proximal_point_operators(self):
         alpha, n = 2, 10
 
@@ -494,14 +504,14 @@ class TestExamples(unittest.TestCase):
             self.assertAlmostEqual(wc, ref_pesto_bounds[n - 1], delta=self.relative_precision * ref_pesto_bounds[n - 1])
 
     def test_optimistic_gradient(self):
-        n1, n2, L, gamma = 5, 6, 1, 1/4
+        n1, n2, L, gamma = 5, 6, 1, 1 / 4
 
         wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
         wc2, _ = wc_optimistic_gradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
 
     def test_past_extragradient(self):
-        n1, n2, L, gamma = 5, 6, 1, 1/4
+        n1, n2, L, gamma = 5, 6, 1, 1 / 4
 
         wc1, _ = wc_past_extragradient_operators(n=n1, gamma=gamma, L=L, verbose=self.verbose)
         wc2, _ = wc_past_extragradient_operators(n=n2, gamma=gamma, L=L, verbose=self.verbose)
@@ -530,7 +540,7 @@ class TestExamples(unittest.TestCase):
         n, gamma = 3, 1.13
         wc, theory = wc_optimal_contractive_halpern_iteration(n=n, gamma=gamma, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
+
     def test_gradient_descent_lyapunov_1(self):
         L, n = 1, 10
         gamma = 1 / L
@@ -586,26 +596,25 @@ class TestExamples(unittest.TestCase):
 
     def test_accelerated_gradient_flow_convex(self):
         t = 3.4
-        
+
         wc, theory = wc_accelerated_gradient_flow_convex(t=t, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_gradient_flow_convex(self):
         t = 3.4
-        
+
         wc, theory = wc_gradient_flow_convex(t=t, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_accelerated_gradient_flow_strongly_convex(self):
         mu = 2.1
         for psd in {True, False}:
-        
             wc, theory = wc_accelerated_gradient_flow_strongly_convex(mu=mu, psd=psd, verbose=self.verbose)
             self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 
     def test_gradient_flow_strongly_convex(self):
         mu = .8
-        
+
         wc, theory = wc_gradient_flow_strongly_convex(mu=mu, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.absolute_precision)
 

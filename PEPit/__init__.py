@@ -1,12 +1,13 @@
+from .block_partition import BlockPartition
 from .constraint import Constraint
 from .expression import Expression, null_expression
 from .function import Function
 from .psd_matrix import PSDMatrix
-from .blockpartition import BlockPartition
 from .pep import PEP
 from .point import Point, null_point
 
-__all__ = ['examples',
+__all__ = ['block_partition', 'BlockPartition',
+           'examples',
            'functions',
            'operators',
            'primitive_steps',
@@ -15,7 +16,6 @@ __all__ = ['examples',
            'expression', 'Expression', 'null_expression',
            'function', 'Function',
            'psd_matrix', 'PSDMatrix',
-           'blockpartition', 'BlockPartition',
            'pep', 'PEP',
            'point', 'Point', 'null_point',
            ]

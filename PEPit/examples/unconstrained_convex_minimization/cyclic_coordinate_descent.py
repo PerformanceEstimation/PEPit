@@ -10,23 +10,24 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
     where :math:`f` is :math:`L`-smooth by blocks (with :math:`d` blocks) and convex.
 
-    This code computes a worst-case guarantee for **cyclic coordinate descent** with fixed step-size :math:`1/L_i`.
+    This code computes a worst-case guarantee for **cyclic coordinate descent** with fixed step-sizes :math:`1/L_i`.
     That is, it computes the smallest possible :math:`\\tau(n, d, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, d, L) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of cyclic coordinate descent with fixed step-size :math:`1/L_i`, and
+    is valid, where :math:`x_n` is the output of cyclic coordinate descent with fixed step-sizes :math:`1/L_i`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
-    In short, for given values of :math:`n`, :math:`L`, and :math:`d`, :math:`\\tau(n, d, L)` is computed as the worst-case
-    value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L`, and :math:`d`, :math:`\\tau(n, d, L)` is computed as
+    the worst-case value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Cyclic coordinate descent is described by
 
     .. math:: x_{t+1} = x_t - \\frac{1}{L_{i_t}} \\nabla_{i_t} f(x_t),
 
-    where :math:`L_{i_t}` is the Lipschitz constant of the block :math:`i_t`, and where :math:`i_t` follows a prescribed ordering.
+    where :math:`L_{i_t}` is the Lipschitz constant of the block :math:`i_t`,
+    and where :math:`i_t` follows a prescribed ordering.
 
     **References**:
     
@@ -73,7 +74,7 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
     # Instantiate PEP
     problem = PEP()
-    
+
     # Declare a partition of the ambient space in d blocks of variables
     d = len(L)
     partition = problem.declare_block_partition(d=d)
@@ -94,8 +95,8 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
     # Run n steps of the GD method
     x = x0
     for k in range(n):
-        i = k % d 
-        x = x - 1/L[i] * partition.get_block(func.gradient(x),i)
+        i = k % d
+        x = x - 1 / L[i] * partition.get_block(func.gradient(x), i)
 
     # Set the performance metric to the function values accuracy
     problem.set_performance_metric(func(x) - fs)

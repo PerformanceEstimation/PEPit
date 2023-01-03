@@ -61,18 +61,18 @@ def wc_gradient_descent_blocks(L, n, verbose=1):
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : Adding 60 scalar constraint(s) ...
-		         function 1 : 60 scalar constraint(s) added
+                 function 1 : Adding 60 scalar constraint(s) ...
+                 function 1 : 60 scalar constraint(s) added
         (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-		         partition 1 with 3 blocks: Adding 75 scalar constraint(s)...
-		         partition 1 with 3 blocks: 75 scalar constraint(s) added
+                 partition 1 with 3 blocks: Adding 75 scalar constraint(s)...
+                 partition 1 with 3 blocks: 75 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.6632652826522251
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7386453506244032
         *** Example file: worst-case performance of gradient descent (block smoothness) ***
-	        PEPit guarantee:          f(x_n)-f_* <= 0.663265 ||x_0 - x_*||^2
-	        Theoretical guarantee:    f(x_n)-f_* <= 0.714286 ||x_0 - x_*||^2
+            PEPit guarantee:	     f(x_n)-f_* <= 0.738645 ||x_0 - x_*||^2
+            Theoretical guarantee:	 f(x_n)-f_* <= 0.714286 ||x_0 - x_*||^2
 
     """
 

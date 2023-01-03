@@ -1,6 +1,7 @@
 import numpy as np
+
 from PEPit.function import Function
-from PEPit.blockpartition import BlockPartition
+from PEPit.block_partition import BlockPartition
 
 
 class BlockSmoothConvexFunction(Function):
@@ -12,7 +13,8 @@ class BlockSmoothConvexFunction(Function):
         partition (BlockPartition): partitioning of the variables (in blocks).
         L (list): smoothness parameters (one per block).
         
-    Smooth convex functions by blocks are characterized by a list of parameters :math:`L_i` (one per block), hence can be instantiated as
+    Smooth convex functions by blocks are characterized by a list of parameters :math:`L_i` (one per block),
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -20,7 +22,7 @@ class BlockSmoothConvexFunction(Function):
         >>> problem = PEP()
         >>> partition = problem.declare_block_partition(d=3)
         >>> L = [1, 4, 10]
-        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, L=L)
+        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
 
     References:
         `[1] Z. Shi, R. Liu (2016).
@@ -40,7 +42,8 @@ class BlockSmoothConvexFunction(Function):
 
         Args:
             partition (BlockPartition): a :class:`BlockPartition`.
-            L (list):  smoothness parameters (list of floats). The size of the list is equal to partition.get_nb_blocks().
+            L (list): smoothness parameters (list of floats).
+                      The size of the list must be equal to the number of blocks of the partition.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -64,14 +67,15 @@ class BlockSmoothConvexFunction(Function):
             assert len(L) == partition.get_nb_blocks()
             for Li in L:
                 assert Li < np.inf
-                
+
         self.partition = partition
         self.L = L
-        
 
     def add_class_constraints(self):
         """
-        Formulates the list of necessary constraints for interpolation for self (block smooth convex function); see [1, Lemma 1.1].
+        Formulates the list of necessary constraints for interpolation for self (block smooth convex function);
+        see [1, Lemma 1.1].
+
         """
 
         for point_i in self.list_of_points:
@@ -81,14 +85,14 @@ class BlockSmoothConvexFunction(Function):
             for point_j in self.list_of_points:
 
                 xj, gj, fj = point_j
-                
-                for k in range(self.partition.get_nb_blocks()):
-                    
-                    if point_i != point_j:
-                    
+
+                if point_i != point_j:
+
+                    for k in range(self.partition.get_nb_blocks()):
+
                         # partial gradients for block k
                         gik = self.partition.get_block(gi, k)
                         gjk = self.partition.get_block(gj, k)
                         
                         # Necessary conditions for interpolation
-                        self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1/self.L[k] * (gik-gjk) * (gik-gjk))
+                        self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L[k]) * (gik - gjk) ** 2)
