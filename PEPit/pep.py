@@ -6,6 +6,7 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
+from PEPit.block_partition import BlockPartition
 
 
 class PEP(object):
@@ -47,7 +48,8 @@ class PEP(object):
             >>> pep = PEP()
 
         """
-        # Set all counters to 0 to recreate points, expressions and functions from scratch at the beginning of each PEP.
+        # Set all counters to 0 to recreate
+        # points, expressions, functions and block partitions from scratch at the beginning of each PEP.
         self._reset_classes()
 
         # Update the class counter
@@ -77,6 +79,8 @@ class PEP(object):
 
         """
 
+        BlockPartition.counter = 0
+        BlockPartition.list_of_partitions = list()
         Constraint.counter = 0
         Expression.counter = 0
         Expression.list_of_leaf_expressions = list()
@@ -179,6 +183,25 @@ class PEP(object):
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
+
+    @staticmethod
+    def declare_block_partition(d):
+        """
+        Instantiate a :class:`BlockPartition` and store it in the attribute `list_of_partitions`.
+
+        Args:
+            d (int): number of blocks in the :class:`BlockPartition`.
+
+        Returns:
+            block_partition (BlockPartition): the newly created partition.
+
+        """
+
+        # Create the partition
+        block_partition = BlockPartition(d)
+
+        # Return it
+        return block_partition
 
     def set_performance_metric(self, expression):
         """
@@ -376,6 +399,10 @@ class PEP(object):
         # Create all class constraints
         for function in list_of_leaf_functions:
             function.add_class_constraints()
+            
+        # Create all partition constraints
+        for partition in BlockPartition.list_of_partitions:
+            partition.add_partition_constraints()
 
         # Define the cvxpy variables
         objective = cp.Variable()
@@ -473,6 +500,22 @@ class PEP(object):
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
+
+        # Defining block partition constraints
+        if verbose and len(BlockPartition.list_of_partitions) > 0:
+            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
+
+        partition_counter = 0
+        for partition in BlockPartition.list_of_partitions:
+            partition_counter += 1
+            if verbose:
+                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                      'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
+            for constraint in partition.list_of_constraints:
+                self.send_constraint_to_cvxpy(constraint, F, G)
+            if verbose:
+                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                      'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
         # Create the cvxpy problem
         if verbose:

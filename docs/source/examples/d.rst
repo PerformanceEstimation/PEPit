@@ -27,10 +27,10 @@ Point SAGA
 
 
 Randomized coordinate descent for smooth strongly convex functions
---------------------------------------------------------------------
+------------------------------------------------------------------
 .. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_randomized_coordinate_descent_smooth_strongly_convex
 
 
 Randomized coordinate descent for smooth convex functions
---------------------------------------------------------------------
+---------------------------------------------------------
 .. autofunction:: PEPit.examples.stochastic_and_randomized_convex_minimization.wc_randomized_coordinate_descent_smooth_convex

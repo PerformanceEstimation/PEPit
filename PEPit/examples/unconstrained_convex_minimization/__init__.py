@@ -3,6 +3,7 @@ from .accelerated_gradient_strongly_convex import wc_accelerated_gradient_strong
 from .accelerated_proximal_point import wc_accelerated_proximal_point
 from .conjugate_gradient import wc_conjugate_gradient
 from .conjugate_gradient_qg_convex import wc_conjugate_gradient_qg_convex
+from .cyclic_coordinate_descent import wc_cyclic_coordinate_descent
 from .epsilon_subgradient_method import wc_epsilon_subgradient_method
 from .gradient_descent import wc_gradient_descent
 from .gradient_descent_qg_convex import wc_gradient_descent_qg_convex
@@ -27,6 +28,7 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'accelerated_proximal_point', 'wc_accelerated_proximal_point',
            'conjugate_gradient', 'wc_conjugate_gradient',
            'conjugate_gradient_qg_convex', 'wc_conjugate_gradient_qg_convex',
+           'cyclic_coordinate_descent', 'wc_cyclic_coordinate_descent',
            'epsilon_subgradient_method', 'wc_epsilon_subgradient_method',
            'gradient_descent', 'wc_gradient_descent',
            'gradient_descent_qg_convex', 'wc_gradient_descent_qg_convex',

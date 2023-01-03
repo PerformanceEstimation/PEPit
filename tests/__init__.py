@@ -1,4 +1,6 @@
 __all__ = ['additional_complexified_examples_tests',
+           'test_block_partition',
+           'test_block_smooth_convex_functions',
            'test_constraints',
            'test_dict_operations',
            'test_examples',

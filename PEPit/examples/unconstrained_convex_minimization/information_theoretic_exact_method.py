@@ -57,10 +57,10 @@ def wc_information_theoretic(mu, L, n, verbose=1):
 
     **References**:
 
-    `[1] A. Taylor, Y. Drori (2021).
+    `[1] A. Taylor, Y. Drori (2022).
     An optimal gradient method for smooth strongly convex minimization.
-    arXiv 2101.09741v2.
-    <https://arxiv.org/pdf/2101.09741v2.pdf>`_
+    Mathematical Programming.
+    <https://arxiv.org/pdf/2101.09741.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter.

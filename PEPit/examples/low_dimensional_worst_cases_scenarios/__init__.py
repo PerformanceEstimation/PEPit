@@ -8,12 +8,13 @@ from .inexact_gradient import wc_inexact_gradient
 from .optimized_gradient import wc_optimized_gradient
 from .proximal_point import wc_proximal_point
 
-__all__ = ['inexact_gradient', 'wc_inexact_gradient',
-           'optimized_gradient', 'wc_optimized_gradient',
-           'frank_wolfe', 'wc_frank_wolfe',
-           'proximal_point', 'wc_proximal_point',
-           'halpern_iteration', 'wc_halpern_iteration',
-           'alternate_projections', 'wc_alternate_projections',
+__all__ = ['alternate_projections', 'wc_alternate_projections',
            'averaged_projections', 'wc_averaged_projections',
            'dykstra', 'wc_dykstra',
+           'frank_wolfe', 'wc_frank_wolfe',
+           'gradient_descent', 'wc_gradient_descent',
+           'halpern_iteration', 'wc_halpern_iteration',
+           'inexact_gradient', 'wc_inexact_gradient',
+           'optimized_gradient', 'wc_optimized_gradient',
+           'proximal_point', 'wc_proximal_point',
            ]

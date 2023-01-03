@@ -11,7 +11,7 @@ class SmoothStronglyConvexFunction(Function):
         mu (float): strong convexity parameter
         L (float): smoothness parameter
 
-    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and `L`, hence can be instantiated as
+    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and :math:`L`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

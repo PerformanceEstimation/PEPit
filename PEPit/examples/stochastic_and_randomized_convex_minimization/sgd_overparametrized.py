@@ -10,12 +10,16 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
 
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
-    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex. In addition, we assume a zero
-    variance at the optimal point (which is denoted by :math:`x_\\star`):
+    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex. In the sequel, we use the notation 
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    e.g., :math:`F(x)\\equiv\\mathbb{E}[f_i(x)]`. In addition, we assume a zero variance at the optimal point
+    (which is denoted by :math:`x_\\star`):
 
     .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n \\|\\nabla f_i(x_\\star)\\|^2 = 0,
-
-    which happens for example in machine learning in the interpolation regime,
+    
+    where the expectation :math:`\\mathbb{E}` is taken over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    
+    This kind of situations happens for example in machine learning in the interpolation regime,
     that is if there exists a model :math:`x_\\star`
     such that the loss :math:`\\mathcal{L}` on any observation :math:`(z_i)_{i \\in [|1, n|]}`,
     :math:`\\mathcal{L}(x_\\star, z_i) = f_i(x_\\star)` is zero.
@@ -39,7 +43,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
 
     **Theoretical guarantee**: An empirically tight one-iteration guarantee is provided in the code of PESTO [1]:
 
-        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 \\|x_0-x_\\star\\|^2,
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left(1-\\frac{\\mu}{L}\\right)^2 \\|x_0-x_\\star\\|^2,
 
     when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number :math:`n` of
     functions for this particular setting, thereby implying that the guarantees are also valid for expectation

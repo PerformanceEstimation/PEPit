@@ -71,6 +71,11 @@ Information theoretic exact method
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_information_theoretic
 
 
+Cyclic coordinate descent
+-------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_cyclic_coordinate_descent
+
+
 Proximal point
 --------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_proximal_point

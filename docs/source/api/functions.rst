@@ -64,3 +64,9 @@ Restricted secant inequality and error bound
 .. autoclass:: PEPit.functions.RsiEbFunction
    :members:
    :show-inheritance:
+
+Convex and smooth by block
+--------------------------
+.. autoclass:: PEPit.functions.BlockSmoothConvexFunction
+   :members:
+   :show-inheritance:

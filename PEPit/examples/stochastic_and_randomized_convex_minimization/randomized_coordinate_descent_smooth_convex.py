@@ -2,28 +2,27 @@ import numpy as np
 
 from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
-from PEPit.point import Point
 
 
-def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
+def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
     """
     Consider the convex minimization problem
 
     .. math:: f_\\star \\triangleq \\min_x f(x),
 
-    where :math:`f` is convex and :math:`L`-smooth.
+    where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for **randomized block-coordinate descent** with fixed step-size :math:`\\gamma`.
-    That is, it verifies that the inequality holds (the expectation is over the index of the block of coordinates that is randomly selected)
+    This code computes a worst-case guarantee for **randomized block-coordinate descent** with :math:`d` blocks and
+    fixed step-size :math:`\\gamma`.
+    That is, it verifies that the Lyapunov function
 
-    .. math:: \\mathbb{E}_i[\\phi(x_{t+1}^{(i)})] \\leqslant \\phi(x_{t}),
+    .. math:: \\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\||^2
 
-    where :math:`x_{t+1}^{(i)}` denotes the value of the iterate :math:`x_{t+1}` in the scenario
-    where the :math:`i` th block of coordinates is selected for the update  with fixed step-size
-    :math:`\\gamma`, and :math:`d` is the number of blocks of coordinates.
+    is decreasing in expectation over the **randomized block-coordinate descent** algorithm. We use the notation 
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
     In short, for given values of :math:`L`, :math:`d`, and :math:`\\gamma`, it computes the worst-case value
-    of :math:`\\mathbb{E}_i[\\phi(x_{t+1}^{(i)})]` such that :math:`\\phi(x_{t}) \\leqslant 1`.
+    of :math:`\\mathbb{E}[\\phi(t, x_t)]` such that :math:`\\phi(x_{t-1}) \\leqslant 1`.
 
     **Algorithm**:
     Randomized block-coordinate descent is described by
@@ -31,22 +30,22 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     .. math::
         \\begin{eqnarray}
             \\text{Pick random }i & \\sim & \\mathcal{U}\\left([|1, d|]\\right), \\\\
-            x_{t+1}^{(i)} & = & x_t - \\gamma \\nabla_i f(x_t),
+            x_{t+1} & = & x_t - \\gamma \\nabla_i f(x_t),
         \\end{eqnarray}
 
-    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the partial derivative corresponding to the block :math:`i`.
+    where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the :math:`i^{\\text{th}}` partial gradient.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 16]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`,
+    the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 16]:
 
-    .. math:: \\mathbb{E}_i[\\phi(x^{(i)}_{t+1})] \\leqslant \\phi(x_{t}),
+    .. math:: \\mathbb{E}[\\phi(t, x_t)] \\leqslant \\phi(t-1, x_{t-1}),
 
-    where :math:`\\phi(x_t) = d_t (f(x_t) - f_\\star) + \\frac{L}{2} \|x_t - x_\\star\|^2`, :math:`d_{t+1} = d_t + \\frac{\\gamma L}{d}`,
-    and :math:`d_t \\geqslant 1`.
+    where :math:`\\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\\|^2`.
 
     **References**:
 
-    `[1] A. Taylor, F. Bach (2021). Stochastic first-order methods: non-asymptotic and computer-aided
+    `[1] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided
     analyses via potential functions. In Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
@@ -54,7 +53,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
         L (float): the smoothness parameter.
         gamma (float): the step-size.
         d (int): the dimension.
-        n (int): number of iterations.
+        t (int): number of iterations.
         verbose (int): Level of information details to print.
 
                         - -1: No verbose at all.
@@ -69,24 +68,31 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     Example:
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-        (PEPit) Setting up the problem: initial conditions and general constraints (9 constraint(s) added)
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 42 scalar constraint(s) ...
-                         function 1 : 42 scalar constraint(s) added
+                 function 1 : Adding 12 scalar constraint(s) ...
+                 function 1 : 12 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
+        (PEPit) Setting up the problem: 1 partition(s) added
+                 partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
+                 partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9999978377393944
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0000000759647794
         *** Example file: worst-case performance of randomized  coordinate gradient descent ***
-                PEPit guarantee:         E[phi_(n+1)(x_(n+1))] <= 0.999998 phi_n(x_n)
-                Theoretical guarantee:   E[phi_(n+1)(x_(n+1))] <= 1.0 phi_n(x_n)
+            PEPit guarantee:	     E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
+            Theoretical guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
 
     """
 
     # Instantiate PEP
     problem = PEP()
+
+    # Declare a partition of the ambient space in d blocks of variables
+    partition = problem.declare_block_partition(d=d)
 
     # Declare a smooth convex function
     func = problem.declare_function(SmoothConvexFunction, L=L)
@@ -95,59 +101,26 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     xs = func.stationary_point()
     fs = func(xs)
 
-    # Then define the starting point x0 of the algorithm
-    x0 = problem.set_initial_point()
+    # Then define the point x_{t-1} of the algorithm
+    xt_minus_1 = problem.set_initial_point()
 
-    # Run n-1 steps of the algorithm (and keep the last one)
-    x = x0
-    for _ in range(n - 1):
-        # Compute the gradients
-        g = func.gradient(x)
-        gradients = []
-        for i in range(d - 1):
-            gradients.append(Point())
-        gd = g - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
-        gradients.append(gd)
-        # Add orthogonality constraints
-        for i in range(d):
-            for j in range(d):
-                if i != j:
-                    problem.add_constraint(gradients[i] * gradients[j] == 0)
-        # Select randomly a value for i_k in [1, d]
-        i_k = np.random.randint(d)
-        # Compute a randomized coordinate descent step
-        x = x - gamma * gradients[i_k]
+    # Define the Lyapunov function
+    def phi(k, x):
+        dk = k * gamma * L / d + 1
+        return dk * (func(x) - fs) + L / 2 * (x - xs) ** 2
 
-    # Compute the Lyapunov at iteration n-1
-    if n >= 2:
-        dn = (n - 1) * gamma * L / d + 1
-    else:
-        dn = 1
-    phi1 = dn * (func(x) - fs) + L / 2 * (x - xs) ** 2
-    problem.set_initial_condition(phi1 == 1)
+    # Set the initial condition
+    problem.set_initial_condition(phi(t - 1, xt_minus_1) <= 1)
 
-    # Run the last step of the algorithm and keep gradients in memory
-    g = func.gradient(x)
-    gradients = []
-    for i in range(d - 1):
-        gradients.append(Point())
-    gd = g - np.sum(gradients)  # Define the last point as a function of the whole gradient and past iterates
-    gradients.append(gd)
-    # Add orthogonality constraints
-    for i in range(d):
-        for j in range(d):
-            if i != j:
-                problem.add_constraint(gradients[i] * gradients[j] == 0)
+    # Compute all the possible outcomes of the randomized coordinate descent step
+    gt_minus_1 = func.gradient(xt_minus_1)
+    xt_list = [xt_minus_1 - gamma * partition.get_block(gt_minus_1, i) for i in range(d)]
 
-    # Compute the d possible value for x1 using coordinate descent
-    x1 = []
-    for grad in gradients:
-        x1.append(x - gamma * grad)
+    # Compute the expected value of the Lyapunov from the different possible outcomes
+    phi_t = np.mean([phi(t, xt) for xt in xt_list])
 
-    var = np.mean([(dn + gamma * L / d) * (func(xn) - fs) + L / 2 * (xn - xs) ** 2 for xn in x1])
-
-    # Set the performance metric to the expected Lyapunov at iteration n
-    problem.set_performance_metric(var)
+    # Set the performance metric to the variance
+    problem.set_performance_metric(phi_t)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
@@ -159,8 +132,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized  coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E[phi_(n+1)(x_(n+1))] <= {:.6} phi_n(x_n)'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t E[phi_(n+1)(x_(n+1))] <= {:.6} phi_n(x_n)'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -168,4 +141,4 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, n, verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, verbose=1)

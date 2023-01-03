@@ -12,7 +12,9 @@ def wc_point_saga(L, mu, n, verbose=1):
     .. math:: F^\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
     where :math:`f_1, \\dots, f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex, and with proximal operator
-    readily available.
+    readily available. In the sequel, we use the notation :math:`\\mathbb{E}` for denoting the expectation over the
+    uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    e.g., :math:`F(x)\\equiv \\mathbb{E}[f_i(x)]`.
 
     This code computes a tight (one-step) worst-case guarantee using a Lyapunov function for **Point SAGA** [1].
     The Lyapunov (or energy) function at a point :math:`x` is given in [1, Theorem 5]:
