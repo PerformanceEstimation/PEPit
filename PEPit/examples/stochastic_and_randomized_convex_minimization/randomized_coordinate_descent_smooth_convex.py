@@ -18,10 +18,11 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
 
     .. math:: \\phi(t, x_t) = (t \\gamma L / d + 1)(f(x_t) - f_\\star) + L / 2 \\|x_t - x_\\star\||^2
 
-    is decreasing in expectation over the **randomized block-coordinate descent** algorithm.
+    is decreasing in expectation over the **randomized block-coordinate descent** algorithm. We use the notation 
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
     In short, for given values of :math:`L`, :math:`d`, and :math:`\\gamma`, it computes the worst-case value
-    of :math:`\\mathbb{E}[\\phi(t, x_t)| x_{t-1}]` such that :math:`\\phi(x_{t-1}) \\leqslant 1`.
+    of :math:`\\mathbb{E}[\\phi(t, x_t)]` such that :math:`\\phi(x_{t-1}) \\leqslant 1`.
 
     **Algorithm**:
     Randomized block-coordinate descent is described by
@@ -38,13 +39,13 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
     When :math:`\\gamma \\leqslant \\frac{1}{L}`,
     the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 16]:
 
-    .. math:: \\mathbb{E}[\\phi(t, x_t)| x_{t-1}] \\leqslant \\phi(x_{t-1}),
+    .. math:: \\mathbb{E}[\\phi(t, x_t)] \\leqslant \\phi(x_{t-1}),
 
     where :math:`\\phi(t, x_t) = (t \\gamma L / d + 1)(f(x_t) - f_\\star) + L / 2 \\|x_t - x_\\star\\|^2`.
 
     **References**:
 
-    `[1] A. Taylor, F. Bach (2021). Stochastic first-order methods: non-asymptotic and computer-aided
+    `[1] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided
     analyses via potential functions. In Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
@@ -82,8 +83,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
         (PEPit) Calling SDP solver
         (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0000000759647794
         *** Example file: worst-case performance of randomized  coordinate gradient descent ***
-            PEPit guarantee:	     E[phi(t, x_t)|x_(t-1)] <= 1.0 phi(t-1, x_(t-1))
-            Theoretical guarantee:	 E[phi(t, x_t)|x_(t-1)] <= 1.0 phi(t-1, x_(t-1))
+            PEPit guarantee:	     E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
+            Theoretical guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
 
     """
 
@@ -131,8 +132,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized  coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E[phi(t, x_t)|x_(t-1)] <= {:.6} phi(t-1, x_(t-1))'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t E[phi(t, x_t)|x_(t-1)] <= {:.6} phi(t-1, x_(t-1))'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

@@ -13,13 +13,15 @@ def wc_saga(L, mu, n, verbose=1):
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv h(x) + \\frac{1}{n} \\sum_{i=1}^{n} f_i(x)\\right\\},
 
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
-    closed, proper, and convex with a proximal operator readily available.
+    closed, proper, and convex with a proximal operator readily available. In the sequel, we use the notation 
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    e.g., :math:`F(x)\\equiv h(x)+\\mathbb{E}[f_i(x)]`.
 
     This code computes the exact rate for a Lyapunov (or energy) function for **SAGA** [1].
     That is, it computes the smallest possible :math:`\\tau(n,L,\\mu)` such this Lyapunov function decreases geometrically
 
     .. math:: \\mathbb{E}[V^{(1)}] \\leqslant \\tau(n, L, \\mu) V^{(0)},
-
+    
     where the value of the Lyapunov function at iteration :math:`t` is denoted by :math:`V^{(t)}` and is defined as
 
     .. math:: V^{(t)} \\triangleq \\frac{1}{n} \sum_{i=1}^n \\left(f_i(\\phi_i^{(t)}) - f_i(x^\\star) - \\langle \\nabla f_i(x^\\star); \\phi_i^{(t)} - x^\\star\\rangle\\right) + \\frac{1}{2 n \\gamma (1-\\mu \\gamma)} \\|x^{(t)} - x^\\star\\|^2,
