@@ -142,15 +142,6 @@ class TestExamples(unittest.TestCase):
         wc_GD, _ = wc_gradient_descent(L, 1 / L, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, wc_GD, delta=self.relative_precision * wc_GD)
 
-    # def test_cyclic_coordinate_descent(self):
-    #     n = 9
-    #     L = [1., 2., 10.]
-    #     L_max = max(L)
-    #
-    #     wc, _ = wc_cyclic_coordinate_descent(L=L, n=n, verbose=self.verbose)
-    #     _, theory_GD = wc_gradient_descent(L_max, 1 / L_max, 3, verbose=self.verbose)
-    #     self.assertLessEqual(wc, theory_GD)
-
     def test_gradient_descent_qg_convex(self):
         L, n = 1, 4
         gamma = .1 / L

@@ -148,10 +148,3 @@ class TestExamples(unittest.TestCase):
 
         wc_modified, theory = wc_gradient_descent_blocks(L=[L], n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, theory, delta=self.relative_precision * theory)
-
-    # def test_gradient_descent_blocks(self):
-    #     L = [1., 2., 10.]
-    #     n = 3
-    #
-    #     wc_modified, theory = wc_gradient_descent_blocks(L=L, n=n, verbose=self.verbose)
-    #     self.assertLessEqual(wc_modified, theory)
