@@ -9,7 +9,7 @@ def wc_proximal_point(alpha, n, verbose=1):
 
         .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax,
 
-    where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvents of :math:`A`.
+    where :math:`A` is maximally monotone. We denote :math:`J_A = (I + A)^{-1}` the resolvent of :math:`A`.
 
     This code computes a worst-case guarantee for the **proximal point** method.
     That, it computes the smallest possible :math:`\\tau(n, \\alpha)` such that the guarantee

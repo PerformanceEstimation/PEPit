@@ -13,8 +13,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax + Bx,
 
     where :math:`A` is :math:`L`-Lipschitz and maximally monotone and :math:`B` is (maximally) :math:`\\mu`-strongly
-    monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively A and B, with
-    step-sizes :math:`\\alpha`.
+    monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively
+    :math:`\\alpha A` and :math:`\\alpha B`.
 
     This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
     :math:`w^{(0)}_t` and :math:`w^{(1)}_t`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`

@@ -13,7 +13,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
 
     where :math:`A` is maximally monotone, :math:`B` is :math:`\\beta`-cocoercive and C is the gradient of some
     :math:`L`-smooth :math:`\\mu`-strongly convex function. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}`
-    the resolvent of respectively :math:`A` and :math:`B`, with step-size :math:`\\alpha`.
+    the resolvents of respectively :math:`\\alpha A` and :math:`\\alpha B`.
 
     This code computes a worst-case guarantee for the **three operator splitting** (TOS).
     That is, given two initial points :math:`w^{(0)}_t` and :math:`w^{(1)}_t`,
@@ -55,7 +55,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
         L (float): smoothness constant of C.
         mu (float): strong convexity of C.
         beta (float): cocoercivity of B.
-        alpha (float): step-size (in the resolvants).
+        alpha (float): step-size (in the resolvents).
         theta (float): overrelaxation parameter.
         verbose (int): Level of information details to print.
                         
