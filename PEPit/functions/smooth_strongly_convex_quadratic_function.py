@@ -61,9 +61,8 @@ class SmoothStronglyConvexQuadraticFunction(Function):
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth strongly convex quadratic functions is necessarily differentiable.\n"
-                  "To instantiate a strongly convex quadratic function, please avoid using the class SmoothStronglyConvexQuadraticFunction\n"
-                  "with L == np.inf. Instead, please use the class StronglyConvexQuadraticFunction (which accounts for the fact\n"
-                  "that there might be several subgradients at the same point).\033[0m")
+                  "To instantiate a strongly convex quadratic function, please avoid using the classSmoothStronglyConvexQuadraticFunction\n"
+                  "with L == np.inf.\033[0m")
 
     def add_class_constraints(self):
         """

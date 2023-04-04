@@ -18,9 +18,9 @@ class SkewSymmetricLinearOperator(Function):
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.operators import SymmetricLinearOperator
+        >>> from PEPit.operators import SkewSymmetricLinearOperator
         >>> problem = PEP()
-        >>> M = problem.declare_function(function_class=SymmetricLinearOperator, L=1.)
+        >>> M = problem.declare_function(function_class=SkewSymmetricLinearOperator, L=1.)
 
     References:
         `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).

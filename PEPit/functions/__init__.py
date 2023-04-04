@@ -8,6 +8,7 @@ from .rsi_eb import RsiEbFunction
 from .smooth_convex_function import SmoothConvexFunction
 from .smooth_function import SmoothFunction
 from .smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from .smooth_strongly_convex_quadratic_function import SmoothStronglyConvexQuadraticFunction
 from .strongly_convex import StronglyConvexFunction
 
 __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
@@ -19,6 +20,7 @@ __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
            'rsi_eb', 'RsiEbFunction',
            'smooth_convex_function', 'SmoothConvexFunction',
            'smooth_function', 'SmoothFunction',
-           'smooth_strongly_convex_function', 'SmoothStronglyConvexFunction',
-           'strongly_convex', 'StronglyConvexFunction',
+           'smooth_strongly_convex_function', 'SmoothStronglyConvexFunction', 
+           'SmoothStronglyConvexQuadraticFunction', 'strongly_convex',
+           'StronglyConvexFunction',
            ]
