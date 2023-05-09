@@ -7,4 +7,5 @@ __all__ = ['halpern_iteration', 'wc_halpern_iteration',
            'krasnoselskii_mann_constant_step_sizes', 'wc_krasnoselskii_mann_constant_step_sizes',
            'krasnoselskii_mann_increasing_step_sizes', 'wc_krasnoselskii_mann_increasing_step_sizes',
            'optimal_contractive_halpern_iteration', 'wc_optimal_contractive_halpern_iteration',
+           'inconsistent_halpern_iteration', 'wc_inconsistent_halpern_iteration',
            ]
