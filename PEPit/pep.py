@@ -780,20 +780,20 @@ class PEP(object):
         # Store one correspondence constraint per entry of the matrix
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
-            	if i >= j:
-                	A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_mosek(psd_matrix[i, j])
-                	# how many constraints in the task so far? This will be the constraint number
-                	nb_cons = task.getnumcon()
-                	# add a constraint in mosek
-                	task.appendcons(1)
-                	# in MOSEK format: matrices corresponding to the quadratic part of the expression
-                	sym_A1 = task.appendsparsesymmat(Point.counter,A_i,A_j,[1.]) #1/2 because we have to symmetrize the matrix!
-                	# in MOSEK format: this is the matrix which selects one entry of the matrix to be PSD
-                	sym_A2 = task.appendsparsesymmat(size,[i],[j],[-.5]) #1/2 because we have to symmetrize the matrix!
-                	# fill the mosek (equality) constraint 
-                	task.putbaraij(nb_cons, 0, sym_A1, [1.0])
-                	task.putbaraij(nb_cons, 1, sym_A2, [1.0])
-                	task.putconbound(nb_cons, mosek.boundkey.fx, 0.0, 0.0)
+                A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_mosek(psd_matrix[i, j])
+                # how many constraints in the task so far? This will be the constraint number
+                nb_cons = task.getnumcon()
+                # add a constraint in mosek
+                task.appendcons(1)
+                # in MOSEK format: matrices corresponding to the quadratic part of the expression
+                sym_A1 = task.appendsparsesymmat(Point.counter,A_i, A_j, A_val) #1/2 because we have to symmetrize the matrix!
+                # in MOSEK format: this is the matrix which selects one entry of the matrix to be PSD
+                sym_A2 = task.appendsparsesymmat(size,[max(i,j)],[min(i,j)],[-.5*(i!=j)-1*(i==j)]) #1/2 because we have to symmetrize the matrix!
+                # fill the mosek (equality) constraint 
+                task.putbaraij(nb_cons, 0, [sym_A1], [1.0])
+                task.putbaraij(nb_cons, psd_matrix.counter+1, [sym_A2], [1.0])
+                task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
+                task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
 
         # Print a message if verbose mode activated
         if verbose:
@@ -809,6 +809,7 @@ class PEP(object):
         inf = 1.0 # for symbolic purposes
         
         # we start by creating an expression for handling the objective function (minimum among all performance metrics)
+        ## TODO: modifier (soit cette fonction soit approche CVXPY): soit utiliser tau comme une variable PEP des deux côtés, soit d'aucun des deux (pour l'instant juste coté mosek)
         tau = Expression(is_leaf=True)
         
         with mosek.Task() as task: #initiate MOSEK's task
@@ -931,7 +932,7 @@ class PEP(object):
                     print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
                           'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
                 for constraint in partition.list_of_constraints:
-                    self.send_constraint_to_cvxpy(constraint, F, G)
+                    self.send_constraint_to_mosek(constraint, task)
                 if verbose:
                     print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
                           'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
@@ -980,19 +981,20 @@ class PEP(object):
 
                 # Translate the heuristic into cvxpy objective and solve the associated problem
                 if dimension_reduction_heuristic == "trace":
-                    task.putclist([tau.counter-1], [0.0])
+                    task.putclist([tau.counter], [0.0])
                 
                     A_i = np.arange(0,Point.counter)
                     A_j = A_i
                     A_val = np.ones((Point.counter,))
                     
                     sym_A = task.appendsparsesymmat(Point.counter,A_i,A_j,A_val) 
-                    task.putbarcj(0,[sym_A],[1.0])
+                    task.putbarcj(0,[sym_A],[-1.0]) #-1 here (we minimize)
                     
                     task.optimize()
 
                     # Store the actualized obtained value
-                    wc_value = task.getprimalobj(mosek.soltype.itr)
+                    xx = task.getxx(mosek.soltype.itr)
+                    wc_value = xx[-1]
 
                     # Compute minimal number of dimensions
                     Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
@@ -1000,18 +1002,20 @@ class PEP(object):
 
                 elif dimension_reduction_heuristic.startswith("logdet"):
                     niter = int(dimension_reduction_heuristic[6:])
+                    task.putclist([tau.counter], [0.0])
                     for i in range(1, 1+niter):
                         W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                         No_zero_ele =np.argwhere(np.tril(W))
                         W_i = No_zero_ele[:,0]
                         W_j = No_zero_ele[:,1]
-                        W_val = Gweights[Gweights_indi,Gweights_indj]
+                        W_val = W[W_i, W_j]
                         sym_W = task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
-                        task.putbarcj(0,[sym_A],[1.0])
+                        task.putbarcj(0,[sym_W],[-1.0]) #-1 here (we minimize)
                         task.optimize()
 
                         # Store the actualized obtained value
-                        wc_value = task.getprimalobj(mosek.soltype.itr)
+                        xx = task.getxx(mosek.soltype.itr)
+                        wc_value = xx[-1]
 
                         # Compute minimal number of dimensions
                         Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
@@ -1039,11 +1043,11 @@ class PEP(object):
                                                                                                        eig_threshold))
 
             # Store all the values of points and function values
-            wc_value = task.getprimalobj(mosek.soltype.itr)
             Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
             xx = task.getxx(mosek.soltype.itr)
             F_value = xx
             tau_value = xx[-1]
+            wc_value = tau_value
             self._eval_points_and_function_values(F_value, Gram_value, verbose=verbose)
 
             # Store all the dual values in constraints
