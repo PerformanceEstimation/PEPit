@@ -53,7 +53,7 @@ class TestPEP(unittest.TestCase):
         pepit_tau = self.problem.solve(verbose=0)
         self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
-        self.assertEqual(Expression.counter, 2)
+        self.assertEqual(Expression.counter, 3)
         self.assertEqual(Function.counter, 1)
 
     def test_eval_points_and_function_values(self):

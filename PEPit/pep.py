@@ -229,8 +229,8 @@ class PEP(object):
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
               **kwargs):
-        out = self._mosek_solve(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
-        #out = self._solve_cvxpy(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
+        #out = self._mosek_solve(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
+        out = self._solve_cvxpy(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         
         return out
     
@@ -406,6 +406,9 @@ class PEP(object):
                                  The value only is returned by default.
 
         """
+	# Create an expression that serve for the objective (min of the performance measures)   
+        tau = Expression(is_leaf=True)
+                
         # Set CVXPY verbose to True if verbose mode is at least 2
         kwargs["verbose"] = verbose >= 2
 
@@ -430,9 +433,9 @@ class PEP(object):
             partition.add_partition_constraints()
 
         # Define the cvxpy variables
-        objective = cp.Variable()
         F = cp.Variable((Expression.counter,))
         G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+        objective = F[-1]
         self.talkative_description(verbose)
 
         # Express the constraints from F, G and objective
@@ -444,7 +447,7 @@ class PEP(object):
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            self._list_of_cvxpy_constraints.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
+            self.send_constraint_to_cvxpy(tau <= performance_metric, F, G)
         self.talkative_performance_measure(verbose)
 
         # Defining initial conditions and general constraints
