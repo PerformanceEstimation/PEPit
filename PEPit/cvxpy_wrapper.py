@@ -19,7 +19,7 @@ class Cvxpy_wrapper(object):
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
         self._list_of_solver_constraints = list()
-        self.F = cp.Variable((Expression.counter+1,))
+        self.F = cp.Variable((Expression.counter+1,)) # need the +1 because the objective will be created afterwards
         self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
 
         # Express the constraints from F, G and objective
