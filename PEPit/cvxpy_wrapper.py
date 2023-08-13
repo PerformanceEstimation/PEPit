@@ -17,16 +17,16 @@ class Cvxpy_wrapper(object):
         """
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_cvxpy = list()
-        self._list_of_cvxpy_constraints = list()
-        self.F = cp.Variable((Expression.counter,))
+        self._list_of_constraints_sent_to_solver = list()
+        self._list_of_solver_constraints = list()
+        self.F = cp.Variable((Expression.counter+1,))
         self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
 
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
-        self._list_of_cvxpy_constraints = [self.G >> 0]
+        self._list_of_solver_constraints = [self.G >> 0]
         
-    def _expression_to_cvxpy(self, expression):
+    def _expression_to_solver(self, expression):
         """
         Create a cvxpy compatible expression from an :class:`Expression`.
 
@@ -72,7 +72,7 @@ class Cvxpy_wrapper(object):
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
     
-    def send_constraint_to_cvxpy(self, constraint):
+    def send_constraint_to_solver(self, constraint):
         """
         Transform a PEPit :class:`Constraint` into a CVXPY one
         and add the 2 formats of the constraints into the tracking lists.
@@ -91,15 +91,15 @@ class Cvxpy_wrapper(object):
         # Sanity check
         assert isinstance(constraint, Constraint)
 
-        # Add constraint to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
+        # Add constraint to the attribute _list_of_constraints_sent_to_solver to keep track of
         # all the constraints that have been sent to CVXPY as well as the order.
-        self._list_of_constraints_sent_to_cvxpy.append(constraint)
+        self._list_of_constraints_sent_to_solver.append(constraint)
 
         # Distinguish equality and inequality
         if constraint.equality_or_inequality == 'inequality':
-            cvxpy_constraint = self._expression_to_cvxpy(constraint.expression) <= 0
+            cvxpy_constraint = self._expression_to_solver(constraint.expression) <= 0
         elif constraint.equality_or_inequality == 'equality':
-            cvxpy_constraint = self._expression_to_cvxpy(constraint.expression) == 0
+            cvxpy_constraint = self._expression_to_solver(constraint.expression) == 0
         else:
             # Raise an exception otherwise
             raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
@@ -107,9 +107,9 @@ class Cvxpy_wrapper(object):
                              'Got {}'.format(constraint.equality_or_inequality))
 
         # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
-        self._list_of_cvxpy_constraints.append(cvxpy_constraint)
+        self._list_of_solver_constraints.append(cvxpy_constraint)
 
-    def send_lmi_constraint_to_cvxpy(self, psd_counter, psd_matrix, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
         """
         Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
         and add the 2 formats of the constraints into the tracking lists.
@@ -130,9 +130,9 @@ class Cvxpy_wrapper(object):
         # Sanity check
         assert isinstance(psd_matrix, PSDMatrix)
 
-        # Add psd_matrix to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
+        # Add psd_matrix to the attribute _list_of_constraints_sent_to_solver to keep track of
         # all the constraints that have been sent to CVXPY as well as the order.
-        self._list_of_constraints_sent_to_cvxpy.append(psd_matrix)
+        self._list_of_constraints_sent_to_solver.append(psd_matrix)
 
         # Create a symmetric matrix in CVXPY
         M = cp.Variable(psd_matrix.shape, symmetric=True)
@@ -143,30 +143,30 @@ class Cvxpy_wrapper(object):
         # Store one correspondence constraint per entry of the matrix
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
-                cvxpy_constraints_list.append(M[i, j] == self._expression_to_cvxpy(psd_matrix[i, j]))
+                cvxpy_constraints_list.append(M[i, j] == self._expression_to_solver(psd_matrix[i, j]))
 
         # Print a message if verbose mode activated
         if verbose:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
 
         # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
-        self._list_of_cvxpy_constraints += cvxpy_constraints_list
+        self._list_of_solver_constraints += cvxpy_constraints_list
 
     def generate_problem(self, objective):
         self.objective = objective
-        self.prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_cvxpy_constraints)
+        self.prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_solver_constraints)
         return self.prob
         
     def get_dual_variables(self):
-        assert self._list_of_cvxpy_constraints == self.prob.constraints
+        assert self._list_of_solver_constraints == self.prob.constraints
         dual_values = [constraint.dual_value for constraint in self.prob.constraints]
         return dual_values
         
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         # Add the constraint that the objective stay close to its actual value
-        self._list_of_cvxpy_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
+        self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
         
     def heuristic(self, weight=1):
         obj = cp.trace(cp.multiply(self.G, weight))
-        prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_cvxpy_constraints)
+        prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
         return prob
