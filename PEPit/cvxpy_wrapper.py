@@ -231,13 +231,9 @@ class Cvxpy_wrapper(object):
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
         
-    def heuristic(self, weight=1):
-        if weight.shape == (1,1): #should be improved --> weight=np.identity(Point.counter) by default, but seems to bug here
-            obj = cp.trace(self.G)
-            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
-        else:
-            obj = cp.sum(cp.multiply(self.G, weight))
-            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+    def heuristic(self, weight):
+        obj = cp.sum(cp.multiply(self.G, weight))
+        self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
     
     def solve(self, **kwargs):
         self.prob.solve(**kwargs)

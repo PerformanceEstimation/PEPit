@@ -222,10 +222,9 @@ class PEP(object):
     def solve(self, verbose=1, return_full_cvxpy_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
               **kwargs):
-        #out = self._mosek_solve(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
-        #out = self._solve_cvxpy(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
-        #wrap = cpw.Cvxpy_wrapper()
-        wrap = mkw.Mosek_wrapper()
+        ##UNCOMMENT THE WRAPPER YOU WANT TO USE 
+        wrap = cpw.Cvxpy_wrapper()
+        #wrap = mkw.Mosek_wrapper()
         out = self._generic_solve(wrap, verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
@@ -389,7 +388,7 @@ class PEP(object):
 
             # Translate the heuristic into cvxpy objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
-                wrapper.heuristic()
+                wrapper.heuristic(np.identity(Point.counter))
                 solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                 # Compute minimal number of dimensions

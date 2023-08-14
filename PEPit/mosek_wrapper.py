@@ -24,7 +24,9 @@ class Mosek_wrapper(object):
         self._nb_pep_SDPconstraints_in_mosek = 1
         
         self.task = mosek.Task() #initiate MOSEK's task
-        self.task.set_Stream(mosek.streamtype.log, self.streamprinter) #must be optional
+        
+        # IF VERBOSE, UNCOMMENT NEXT LINE
+        #self.task.set_Stream(mosek.streamtype.log, self.streamprinter) #must be optional
         # optimal_F, optimal_G
             
         self.task.appendbarvars([Point.counter]) # init the Gram matrix
@@ -32,7 +34,7 @@ class Mosek_wrapper(object):
             
         inf = 1.0 # symbolical purposes
         for i in range(Expression.counter+1):
-            self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf) # no bounds on function values
+            self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf) # no bounds on function values (nor on tau)
             
 
     @staticmethod
