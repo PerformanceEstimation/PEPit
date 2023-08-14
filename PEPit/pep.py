@@ -232,11 +232,11 @@ class PEP(object):
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
               **kwargs):
         
-        # Create an expression that serve for the objective (min of the performance measures)   
-        tau = Expression(is_leaf=True)
-        
         ## TODO: turn the generic 'verbose' of the solver ON ?
         
+        # Create an expression that serve for the objective (min of the performance measures)   
+        tau = Expression(is_leaf=True)
+        objective = tau
         
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
@@ -253,7 +253,6 @@ class PEP(object):
             partition.add_partition_constraints()
 
         # Define the cvxpy variables
-        objective = wrapper._expression_to_solver(tau)
         self.talkative_description(verbose)
 
         # Defining performance metrics
@@ -356,14 +355,11 @@ class PEP(object):
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        prob.solve(**kwargs)
+        solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
         if verbose:
-            print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
-                                                                                     prob.solver_stats.solver_name,
-                                                                                     prob.value))
-
-        # Store the obtained value
-        wc_value = prob.value
+            print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(solver_status,
+                                                                                     solver_name,
+                                                                                     wc_value))
 
         # Raise explicit error when wc_value in infinite
         if wc_value == np.inf:
@@ -391,33 +387,29 @@ class PEP(object):
 
             # Translate the heuristic into cvxpy objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
-                prob = wrapper.heuristic()
-                prob.solve(**kwargs)
-
-                # Store the actualized obtained value
-                wc_value = objective.value
+                wrapper.heuristic()
+                solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                 # Compute minimal number of dimensions
-                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(wrapper.G.value)
+                G_value, F_value = wrapper.get_primal_variables()
+                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
 
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
                 for i in range(1, 1+niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
-                    prob = wrapper.heuristic(W)
-                    prob.solve(**kwargs)
-
-                    # Store the actualized obtained value
-                    wc_value = objective.value
+                    wrapper.heuristic(W)
+                    solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                     # Compute minimal number of dimensions
-                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(wrapper.G.value)
+                    G_value, F_value = wrapper.get_primal_variables()
+                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
 
                     # Print the estimated dimension after i dimension reduction steps
                     if verbose:
                         print('(PEPit) Solver status: {} (solver: {});'
-                              ' objective value: {}'.format(prob.status,
-                                                            prob.solver_stats.solver_name,
+                              ' objective value: {}'.format(solver_status,
+                                                            solver_name,
                                                             wc_value))
                         print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
                             nb_eigenvalues, eig_threshold, i))
@@ -430,21 +422,23 @@ class PEP(object):
             # Print the estimated dimension after dimension reduction
             if verbose:
                 print('(PEPit) Solver status: {} (solver: {});'
-                      ' objective value: {}'.format(prob.status,
-                                                    prob.solver_stats.solver_name,
+                      ' objective value: {}'.format(solver_status,
+                                                    solver_name,
                                                     wc_value))
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
                                                                                                        eig_threshold))
 
         # Store all the values of points and function values
-        self._eval_points_and_function_values(wrapper.F.value, wrapper.G.value, verbose=verbose)
+        self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
 
         # Store all the dual values in constraints
-        self._eval_constraint_dual_values(dual_values, wrapper)
+        _, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
+        
+        print('dual: {}, primal: {}'.format(dual_objective, wc_value))
 
         # Return the value of the minimal performance metric or the full cvxpy Problem object
         if return_full_problem:
-            # Return the cvxpy Problem object
+            # Return the problem object (specific to solver) 
             return prob
         else:
             # Return the value of the minimal performance metric
@@ -505,7 +499,6 @@ class PEP(object):
             # Defining performance metrics
             # Note maximizing the minimum of all the performance metrics
             # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
-            task.putclist([tau.counter], [1.0])
             for performance_metric in self.list_of_performance_metrics:
                 assert isinstance(performance_metric, Expression)
                 self.send_constraint_to_mosek(tau <= performance_metric, task)
@@ -870,6 +863,7 @@ class PEP(object):
         Returns:
              position_of_minimal_objective (np.float): the position, in the list of performance metric,
                                                        of the one that is actually reached.
+             dual_objective (float)
 
         Raises:
             TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
@@ -879,6 +873,9 @@ class PEP(object):
         # Store residual, dual value of the main lmi
         self.residual = dual_values[0]
         assert self.residual.shape == (Point.counter, Point.counter)
+        
+        # initiate the value of the dual objective (updated below)
+        dual_objective = 0.
 
         # Set counter
         counter = len(self.list_of_performance_metrics)+1
@@ -894,6 +891,9 @@ class PEP(object):
         for constraint_or_psd in wrapper._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
                 constraint_or_psd._dual_variable_value = dual_values[counter]
+                constraint_dict = constraint_or_psd.expression.decomposition_dict
+                if (1 in constraint_dict):
+                    dual_objective -= dual_values[counter] * constraint_dict[1]
                 counter += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
                 assert dual_values[counter].shape == constraint_or_psd.shape
@@ -912,7 +912,7 @@ class PEP(object):
         assert len(dual_values) == counter
 
         # Return the position of the reached performance metric
-        return position_of_minimal_objective
+        return position_of_minimal_objective, dual_objective
         
     def talkative_performance_measure(self,verbose):
         """

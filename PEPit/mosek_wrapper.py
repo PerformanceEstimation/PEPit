@@ -17,11 +17,12 @@ class Mosek_wrapper(object):
         """
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_mosek = list()
+        self._list_of_constraints_sent_to_solver = list()
         
         self.task = mosek.Task() #initiate MOSEK's task
+        # optimal_F, optimal_G
 
-    def _expression_to_mosek(expression):
+    def _expression_to_solver(expression):
         """
         Create a sparse matrix representation from an :class:`Expression`.
         TODOTODOTODO: direct faire créer la matrice sparse (sans passer par matrice complète)
@@ -86,7 +87,7 @@ class Mosek_wrapper(object):
         # Return the input expression in sparse SDP form
         return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, alpha_val
 
-    def send_constraint_to_mosek(self, constraint, task):
+    def send_constraint_to_solver(self, constraint):
         """
         Add a PEPit :class:`Constraint` in a Mosek task and add it to the tracking list.
 
@@ -106,24 +107,24 @@ class Mosek_wrapper(object):
 
         # Add constraint to the attribute _list_of_constraints_sent_to_mosek to keep track of
         # all the constraints that have been sent to mosek as well as the order.
-        self._list_of_constraints_sent_to_mosek.append(constraint)
+        self._list_of_constraints_sent_to_solver.append(constraint)
         
         # how many constraints in the task so far? This will be the constraint number
-        nb_cons = task.getnumcon()
+        nb_cons = self.task.getnumcon()
         
         # Add a mosek constraint via task
-        task.appendcons(1)
-        A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_mosek(constraint.expression)
+        self.task.appendcons(1)
+        A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_solver(constraint.expression)
         
-        sym_A = task.appendsparsesymmat(Point.counter,A_i,A_j,A_val)
-        task.putbaraij(nb_cons, 0, [sym_A], [1.0])
-        task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
+        sym_A = self.task.appendsparsesymmat(Point.counter,A_i,A_j,A_val)
+        self.task.putbaraij(nb_cons, 0, [sym_A], [1.0])
+        self.task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
         
         # Distinguish equality and inequality
         if constraint.equality_or_inequality == 'inequality':
-            task.putconbound(nb_cons, mosek.boundkey.up, -inf, -alpha_val)
+            self.task.putconbound(nb_cons, mosek.boundkey.up, -inf, -alpha_val)
         elif constraint.equality_or_inequality == 'equality':
-            task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
+            self.task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
         else:
             # Raise an exception otherwise
             raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
@@ -131,7 +132,7 @@ class Mosek_wrapper(object):
                              'Got {}'.format(constraint.equality_or_inequality))
                              
 
-    def send_lmi_constraint_to_mosek(self, psd_counter, psd_matrix, task, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, task, verbose):
         """
         Add a PEPit :class:`Constraint` in a Mosek task and add it to the tracking list.
 
@@ -152,50 +153,75 @@ class Mosek_wrapper(object):
 
         # Add constraint to the attribute _list_of_constraints_sent_to_mosek to keep track of
         # all the constraints that have been sent to mosek as well as the order.
-        self._list_of_constraints_sent_to_mosek.append(psd_matrix)
+        self._list_of_constraints_sent_to_solver.append(psd_matrix)
 
         # Create a symmetric matrix in MOSEK
         size = psd_matrix.shape[0]
-        task.appendbarvars([size])
+        self.task.appendbarvars([size])
 
         # Store one correspondence constraint per entry of the matrix
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
-                A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_mosek(psd_matrix[i, j])
+                A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_solver(psd_matrix[i, j])
                 # how many constraints in the task so far? This will be the constraint number
-                nb_cons = task.getnumcon()
+                nb_cons = self.task.getnumcon()
                 # add a constraint in mosek
-                task.appendcons(1)
+                self.task.appendcons(1)
                 # in MOSEK format: matrices corresponding to the quadratic part of the expression
-                sym_A1 = task.appendsparsesymmat(Point.counter,A_i, A_j, A_val) #1/2 because we have to symmetrize the matrix!
+                sym_A1 = self.task.appendsparsesymmat(Point.counter,A_i, A_j, A_val) #1/2 because we have to symmetrize the matrix!
                 # in MOSEK format: this is the matrix which selects one entry of the matrix to be PSD
-                sym_A2 = task.appendsparsesymmat(size,[max(i,j)],[min(i,j)],[-.5*(i!=j)-1*(i==j)]) #1/2 because we have to symmetrize the matrix!
+                sym_A2 = self.task.appendsparsesymmat(size,[max(i,j)],[min(i,j)],[-.5*(i!=j)-1*(i==j)]) #1/2 because we have to symmetrize the matrix!
                 # fill the mosek (equality) constraint 
-                task.putbaraij(nb_cons, 0, [sym_A1], [1.0])
-                task.putbaraij(nb_cons, psd_matrix.counter+1, [sym_A2], [1.0])
-                task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
-                task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
+                self.task.putbaraij(nb_cons, 0, [sym_A1], [1.0])
+                self.task.putbaraij(nb_cons, psd_matrix.counter+1, [sym_A2], [1.0])
+                self.task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
+                self.task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
 
         # Print a message if verbose mode activated
         if verbose:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
 
     def generate_problem(self, objective):
-        self.objective = objective
-        self.prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_cvxpy_constraints)
-        return self.prob
+        self.task.putclist([tau.counter], [1.0])
+        # Input the objective sense (minimize/maximize)
+        self.task.putobjsense(mosek.objsense.maximize)
+        #if verbose >= 2:
+            #self.task.solutionsummary(mosek.streamtype.msg)
+        return self.task
         
     def get_dual_variables(self):
-        assert self._list_of_cvxpy_constraints == self.prob.constraints
+        ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
+        ## Task.getbarsj(mosek.soltype.itr, i) for dual associated to i
+        assert self._list_of_solver_constraints == self.prob.constraints 
         dual_values = [constraint.dual_value for constraint in self.prob.constraints]
         return dual_values
         
+    def get_primal_variables(self):
+        return self.optimal_G, self.optimal_F
+    
+    def associate_dual_variables(self):
+        #perform the association between constraints and dual variables
+        return true
+        
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         # Add the constraint that the objective stay close to its actual value
-        self._list_of_cvxpy_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
+        self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
         
     def heuristic(self, weight=1):
-        obj = cp.trace(cp.multiply(self.G, weight))
-        prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_cvxpy_constraints)
-        return prob
- 
+        if weight.shape == (1,1): #should be improved --> weight=np.identity(Point.counter) by default, but seems to bug here
+            obj = cp.trace(self.G)
+            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+        else:
+            obj = cp.sum(cp.multiply(self.G, weight))
+            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+    
+    def solve(self, **kwargs):
+        # Solve the problem and print summary
+        self.task.optimize(**kwargs)
+        self.wc_value = task.getprimalobj(mosek.soltype.itr)
+        self.optimal_G = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
+        xx = task.getxx(mosek.soltype.itr)
+        tau = xx[-1]
+        self.optimal_F = xx
+        prosta = task.getprosta(mosek.soltype.itr)
+        return prosta, 'MOSEK', tau

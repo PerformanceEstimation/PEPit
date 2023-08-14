@@ -153,8 +153,8 @@ class Cvxpy_wrapper(object):
         self._list_of_solver_constraints += cvxpy_constraints_list
 
     def generate_problem(self, objective):
-        self.objective = objective
-        self.prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_solver_constraints)
+        self.objective = self._expression_to_solver(objective)
+        self.prob = cp.Problem(objective=cp.Maximize(self.objective), constraints=self._list_of_solver_constraints)
         return self.prob
         
     def get_dual_variables(self):
@@ -162,11 +162,27 @@ class Cvxpy_wrapper(object):
         dual_values = [constraint.dual_value for constraint in self.prob.constraints]
         return dual_values
         
+    def get_primal_variables(self):
+        return self.optimal_G, self.optimal_F
+    
+    def associate_dual_variables(self):
+        #perform the association between constraints and dual variables
+        return true
+        
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
         
     def heuristic(self, weight=1):
-        obj = cp.trace(cp.multiply(self.G, weight))
-        prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
-        return prob
+        if weight.shape == (1,1): #should be improved --> weight=np.identity(Point.counter) by default, but seems to bug here
+            obj = cp.trace(self.G)
+            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+        else:
+            obj = cp.sum(cp.multiply(self.G, weight))
+            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+    
+    def solve(self, **kwargs):
+        self.prob.solve(**kwargs)
+        self.optimal_G = self.G.value
+        self.optimal_F = self.F.value
+        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value
