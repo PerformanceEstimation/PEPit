@@ -206,7 +206,7 @@ class Cvxpy_wrapper(object):
                 constraint_or_psd._dual_variable_value = dual_values[counter]
                 constraint_dict = constraint_or_psd.expression.decomposition_dict
                 if (1 in constraint_dict):
-                    dual_objective -= dual_values[counter] * constraint_dict[1]
+                    dual_objective -= dual_values[counter] * constraint_dict[1] ## ATTENTION: on ne tient pas compte des constantes dans les LMIs en faisant juste ça!!
                 counter += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
                 assert dual_values[counter].shape == constraint_or_psd.shape
@@ -234,6 +234,7 @@ class Cvxpy_wrapper(object):
     def heuristic(self, weight):
         obj = cp.sum(cp.multiply(self.G, weight))
         self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
+        return self.prob
     
     def solve(self, **kwargs):
         self.prob.solve(**kwargs)

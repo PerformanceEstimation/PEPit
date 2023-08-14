@@ -139,7 +139,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    cvxpy_prob = problem.solve(verbose=pepit_verbose, return_full_cvxpy_problem=True)
+    cvxpy_prob = problem.solve(verbose=pepit_verbose, return_full_problem=True)
     pepit_tau = cvxpy_prob.value
     if cvxpy_prob.solver_stats.solver_name == "SCS":
         print("\033[96m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")

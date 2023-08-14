@@ -158,12 +158,12 @@ class TestPEP(unittest.TestCase):
         pepit_tau = self.problem.solve(verbose=0)
 
         # Return the full problem and verify the problem value is still pepit_tau
-        prob = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic=None)
+        prob = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
 
         # Return the full dimension reduction problem
         # and verify that its value is not pepit_tau anymore but the heuristic value
-        prob2 = self.problem.solve(verbose=0, return_full_cvxpy_problem=True, dimension_reduction_heuristic="trace")
+        prob2 = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(prob2.value, .5 + self.mu ** 2, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),

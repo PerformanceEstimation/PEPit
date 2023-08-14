@@ -1,5 +1,4 @@
 import numpy as np
-import mosek as mosek
 import sys
 import PEPit.cvxpy_wrapper as cpw
 import PEPit.mosek_wrapper as mkw
@@ -219,13 +218,13 @@ class PEP(object):
     # GENERAL SOLVE
     #
     #
-    def solve(self, verbose=1, return_full_cvxpy_problem=False,
+    def solve(self, verbose=1, return_full_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
               **kwargs):
         ##UNCOMMENT THE WRAPPER YOU WANT TO USE 
         wrap = cpw.Cvxpy_wrapper()
         #wrap = mkw.Mosek_wrapper()
-        out = self._generic_solve(wrap, verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
+        out = self._generic_solve(wrap, verbose, return_full_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
     def _generic_solve(self, wrapper, verbose=1, return_full_problem=False,
@@ -253,7 +252,9 @@ class PEP(object):
             partition.add_partition_constraints()
 
         # Define the cvxpy variables
-        self.talkative_description(verbose)
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
@@ -262,22 +263,31 @@ class PEP(object):
             assert isinstance(performance_metric, Expression)
             wrapper.send_constraint_to_solver(tau <= performance_metric)
             #cp_wrap._list_of_cvxpy_constraints.append(objective <= cp_wrap._expression_to_cvxpy(performance_metric))
-        self.talkative_performance_measure(verbose)
+        
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions and general constraints
-        self.talkative_handling_constraints(verbose)
+        if verbose:
+            print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
         for condition in self.list_of_constraints:
             wrapper.send_constraint_to_solver(condition)
-        self.talkative_constraints(verbose)
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
 
         # Defining general lmi constraints
         if len(self.list_of_psd) > 0:
-            self.talkative_LMIs(verbose, len(self.list_of_psd))
+            if verbose:
+                print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
             for psd_counter, psd_matrix in enumerate(self.list_of_psd):
                 wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix, verbose)
 
         # Defining class constraints
-        self.talkative_functions(verbose, len(list_of_leaf_functions))
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' interpolation conditions for {} function(s)'.format(len(list_of_leaf_functions)))
         function_counter = 0
         for function in list_of_leaf_functions:
             function_counter += 1
@@ -302,7 +312,9 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
 
         # Other function constraints
-        self.talkative_function_constraints(verbose,len(list_of_functions_with_constraints))
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
         function_counter = 0
         for function in list_of_functions_with_constraints:
             function_counter += 1
@@ -434,8 +446,9 @@ class PEP(object):
 
         # Store all the dual values in constraints
         #_, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
-        
-        print('dual: {}, primal: {}'.format(dual_objective, wc_value))
+        if verbose:
+            print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective, wc_value))
+            print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective-wc_value, (dual_objective-wc_value)/wc_value))
 
         # Return the value of the minimal performance metric or the full cvxpy Problem object
         if return_full_problem:
@@ -446,282 +459,9 @@ class PEP(object):
             return wc_value    
 
     #
-    # MOSEK PARTS
-    #
-    #
-
-            
-
-    def _mosek_solve(self, verbose=1, return_full_mosek_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-              **kwargs):
-        """XXXX
-
-        """
-        inf = 1.0 # for symbolic purposes
-        
-        # we start by creating an expression for handling the objective function (minimum among all performance metrics)
-        ## TODO: modifier (soit cette fonction soit approche CVXPY): soit utiliser tau comme une variable PEP des deux côtés, soit d'aucun des deux (pour l'instant juste coté mosek)
-        tau = Expression(is_leaf=True)
-        
-        with mosek.Task() as task: #initiate MOSEK's task
-            if verbose >= 2:
-                task.set_Stream(mosek.streamtype.log, streamprinter) # printer
-            
-
-            # Initialize lists of constraints that are used to solve the SDP.
-            # Those lists should not be updated by hand, only the solve method does update them.
-            # If solve is called again, they should be reinitialized.
-            self._list_of_constraints_sent_to_mosek = list()
-            
-            # Store functions that have class constraints as well as functions that have personal constraints
-            list_of_leaf_functions = [function for function in Function.list_of_functions
-                                      if function.get_is_leaf()]
-            list_of_functions_with_constraints = [function for function in Function.list_of_functions
-                                                  if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
-
-            # Create all class constraints
-            for function in list_of_leaf_functions:
-                function.add_class_constraints()
-        
-            # Create all partition constraints
-            for partition in BlockPartition.list_of_partitions:
-                partition.add_partition_constraints()
-
-            # Start the formulation: initiaze the MOSEK variable
-            self.talkative_description(verbose)
-            
-            task.appendbarvars([Point.counter]) # init the Gram matrix
-            task.appendvars(Expression.counter) # init function value variables (the additional variable is "tau" for handling the objective)
-            
-            for i in range(Expression.counter):
-                task.putvarbound(i, mosek.boundkey.fr, -inf, +inf) # no bounds on function values
-                
-            # Defining performance metrics
-            # Note maximizing the minimum of all the performance metrics
-            # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
-            for performance_metric in self.list_of_performance_metrics:
-                assert isinstance(performance_metric, Expression)
-                self.send_constraint_to_mosek(tau <= performance_metric, task)
-            self.talkative_performance_measure(verbose)
-            
-            # Defining initial conditions and general constraints
-            self.talkative_handling_constraints(verbose)
-            for condition in self.list_of_constraints:
-                self.send_constraint_to_mosek(condition, task)
-            self.talkative_constraints(verbose)
-
-            # Defining general lmi constraints
-            if len(self.list_of_psd) > 0:
-                self.talkative_LMIs(verbose, len(self.list_of_psd))
-                for psd_counter, psd_matrix in enumerate(self.list_of_psd):
-                    self.send_lmi_constraint_to_mosek(psd_counter, psd_matrix, task, verbose)
-                    
-            # Defining class constraints
-            self.talkative_functions(verbose, len(list_of_leaf_functions))
-            function_counter = 0
-            for function in list_of_leaf_functions:
-                function_counter += 1
-
-                if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints), 'scalar constraint(s) ...')
-
-                for constraint in function.list_of_class_constraints:
-                    self.send_constraint_to_mosek(constraint, task)
-                
-                if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_class_constraints), 'scalar constraint(s) added')
-
-                if len(function.list_of_class_psd) > 0:
-                    if verbose:
-                        print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
-
-                    for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
-                        self.send_lmi_constraint_to_mosek(psd_counter, psd_matrix, task, verbose)
-
-                    if verbose:
-                        print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
-
-            # Other function constraints
-            self.talkative_function_constraints(verbose,len(list_of_functions_with_constraints))
-            function_counter = 0
-            for function in list_of_functions_with_constraints:
-                function_counter += 1
-
-                if len(function.list_of_constraints) > 0:
-                    if verbose:
-                        print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_constraints),
-                              'scalar constraint(s) ...')
-
-                    for constraint in function.list_of_constraints:
-                        self.send_constraint_to_mosek(constraint, task)
-
-                    if verbose:
-                        print('\t\t function', function_counter, ':', len(function.list_of_constraints),
-                              'scalar constraint(s) added')
-
-                if len(function.list_of_psd) > 0:
-                    if verbose:
-                        print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_psd),
-                              'lmi constraint(s) ...')
-
-                    for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                        self.send_lmi_constraint_to_mosek(psd_counter, psd_matrix, task, verbose)
-
-                    if verbose:
-                        print('\t\t function', function_counter, ':', len(function.list_of_psd),
-                              'lmi constraint(s) added')
-
-            # Defining block partition constraints
-            if verbose and len(BlockPartition.list_of_partitions) > 0:
-                print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
-
-            partition_counter = 0
-            for partition in BlockPartition.list_of_partitions:
-                partition_counter += 1
-                if verbose:
-                    print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
-                          'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
-                for constraint in partition.list_of_constraints:
-                    self.send_constraint_to_mosek(constraint, task)
-                if verbose:
-                    print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
-                          'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
-                          
-            # Solve the problem
-            if verbose:
-                print('(PEPit) Calling SDP solver')
-            # Input the objective sense (minimize/maximize)
-            task.putobjsense(mosek.objsense.maximize)
-            # Solve the problem and print summary
-            task.optimize()
-            if verbose >= 2:
-                task.solutionsummary(mosek.streamtype.msg)
-            prosta = task.getprosta(mosek.soltype.itr)
-            solsta = task.getsolsta(mosek.soltype.itr)
-            if verbose:
-                print('(PEPit) Solver status: ', solsta, ' (solver: MOSEK);'
-                      'objective value:{}'.format(task.getprimalobj(mosek.soltype.itr)))
-
-
-            # Raise explicit error when wc_value in infinite
-            if prosta == mosek.prosta.dual_infeas:
-                raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
-                                  "It seems that the optimal value of your problem is unbounded.")
-            # Store the obtained value
-            wc_value = task.getprimalobj(mosek.soltype.itr)
-            Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
-            xx = task.getxx(mosek.soltype.itr)
-            F_value = xx
-            tau_value = xx[-1]
-            ##TODO: store explicit upper bound (dual obj)
-            ##TODO: primal-dual associations (return dual vars)
-            
-            # Perform a dimension reduction if required
-            if dimension_reduction_heuristic:
-
-                # Print the estimated dimension before dimension reduction
-                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(Gram_value)
-                if verbose:
-                    print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
-                                                                                                            eig_threshold))
-                    print('(PEPit) Calling SDP solver')
-
-                # Add the constraint that the objective stay close to its actual value
-                self.send_constraint_to_mosek(tau >= wc_value - tol_dimension_reduction, task)
-
-                # Translate the heuristic into cvxpy objective and solve the associated problem
-                if dimension_reduction_heuristic == "trace":
-                    task.putclist([tau.counter], [0.0])
-                
-                    A_i = np.arange(0,Point.counter)
-                    A_j = A_i
-                    A_val = np.ones((Point.counter,))
-                    
-                    sym_A = task.appendsparsesymmat(Point.counter,A_i,A_j,A_val) 
-                    task.putbarcj(0,[sym_A],[-1.0]) #-1 here (we minimize)
-                    
-                    task.optimize()
-
-                    # Store the actualized obtained value
-                    xx = task.getxx(mosek.soltype.itr)
-                    wc_value = xx[-1]
-
-                    # Compute minimal number of dimensions
-                    Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
-                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(Gram_value)
-
-                elif dimension_reduction_heuristic.startswith("logdet"):
-                    niter = int(dimension_reduction_heuristic[6:])
-                    task.putclist([tau.counter], [0.0])
-                    for i in range(1, 1+niter):
-                        W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
-                        No_zero_ele =np.argwhere(np.tril(W))
-                        W_i = No_zero_ele[:,0]
-                        W_j = No_zero_ele[:,1]
-                        W_val = W[W_i, W_j]
-                        sym_W = task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
-                        task.putbarcj(0,[sym_W],[-1.0]) #-1 here (we minimize)
-                        task.optimize()
-
-                        # Store the actualized obtained value
-                        xx = task.getxx(mosek.soltype.itr)
-                        wc_value = xx[-1]
-
-                        # Compute minimal number of dimensions
-                        Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
-                        nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(Gram_value)
-
-                        # Print the estimated dimension after i dimension reduction steps
-                        solsta = task.getsolsta(mosek.soltype.itr)
-                        if verbose:
-                            print('(PEPit) Solver status: ', solsta, ' (solver: MOSEK);'
-                                  'objective value:{}'.format(task.getprimalobj(mosek.soltype.itr)))
-                            print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
-                                  nb_eigenvalues, eig_threshold, i))
-
-                else:
-                    raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
-                                     "or \`logdet\` followed by an interger."
-                                     "Got {}".format(dimension_reduction_heuristic))
-
-                # Print the estimated dimension after dimension reduction
-                solsta = task.getsolsta(mosek.soltype.itr)
-                if verbose:
-                    print('(PEPit) Solver status: ', solsta, ' (solver: MOSEK);'
-                          ' objective value: {}'.format(task.getprimalobj(mosek.soltype.itr)))
-                    print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
-                                                                                                       eig_threshold))
-
-            # Store all the values of points and function values
-            Gram_value = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
-            xx = task.getxx(mosek.soltype.itr)
-            F_value = xx
-            tau_value = xx[-1]
-            wc_value = tau_value
-            self._eval_points_and_function_values(F_value, Gram_value, verbose=verbose)
-
-            # Store all the dual values in constraints
-            #### TODOTODO
-            #### self._eval_constraint_dual_values(dual_values)
-
-            # Return the value of the minimal performance metric or the full cvxpy Problem object
-            if return_full_mosek_problem:
-                # Return the cvxpy Problem object
-                return task
-            else:
-                # Return the value of the minimal performance metric
-                return wc_value
-            
-            
-                        
-
-        
-    #
     # EVALUATION PARTS
     #
     #
-    
     @staticmethod
     def _verify_accuracy():
         """XXXX
@@ -729,19 +469,6 @@ class PEP(object):
         """
         # CHECK FEASIBILITY (primal & dual)
     	# CHECK PD GAP
-    @staticmethod
-    def _get_Gram_from_mosek(tril, size):
-        # MOSEK returns:
-        # the primal solution for a semidefinite variable. Only the lower triangular part of
-        # is returned because the matrix by construction is symmetric. The format is that the columns are stored sequentially in the natural order.
-        G = np.zeros((size,size))
-        counter = 0
-        for j in range(size):
-            for i in range(size-j):
-                G[j+i,j] = tril[counter]
-                G[j,j+i] = tril[counter]
-                counter += 1
-        return G
  
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):
@@ -850,69 +577,6 @@ class PEP(object):
                                 raise TypeError(
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
-
-
-        
-    def talkative_performance_measure(self,verbose):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
-        
-    def talkative_description(self,verbose):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
-        
-    def talkative_handling_constraints(self,verbose):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
-        
-    def talkative_constraints(self,verbose):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
-        
-    def talkative_LMIs(self,verbose,size):
-        """
-        Todo
-        
-        """
-        if verbose:
-                print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(size))
-        
-    def talkative_functions(self,verbose,size):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' interpolation conditions for {} function(s)'.format(size))
-        
-    def talkative_function_constraints(self,verbose,size):
-        """
-        Todo
-        
-        """
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' constraints for {} function(s)'.format(size))
                   
 MOSEK = {}
 CVXPY = {}

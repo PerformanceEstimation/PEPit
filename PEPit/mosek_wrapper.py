@@ -228,7 +228,7 @@ class Mosek_wrapper(object):
                 counter_scalar += 1
                 constraint_dict = constraint_or_psd.expression.decomposition_dict
                 if (1 in constraint_dict):
-                    dual_objective -= dual_values[-1] * constraint_dict[1]
+                    dual_objective -= dual_values[-1] * constraint_dict[1] ## ATTENTION: on ne tient pas compte des constantes dans les LMIs en faisant juste ça!!
             elif isinstance(constraint_or_psd, PSDMatrix):
                 dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
                 assert dual_values[-1].shape == constraint_or_psd.shape
