@@ -18,10 +18,24 @@ class Mosek_wrapper(object):
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
+        self._constraint_index_in_mosek = list() # index of the MOSEK constraint for each element of the previous list
+        self._nb_pep_constraints_in_mosek = 0
+        self._list_of_psd_constraints_sent_to_solver = list()
+        self._nb_pep_SDPconstraints_in_mosek = 1
         
         self.task = mosek.Task() #initiate MOSEK's task
+        self.task.set_Stream(mosek.streamtype.log, self.streamprinter) #must be optional
         # optimal_F, optimal_G
+            
+        self.task.appendbarvars([Point.counter]) # init the Gram matrix
+        self.task.appendvars(Expression.counter+1) # init function value variables (the additional variable is "tau" for handling the objective)
+            
+        inf = 1.0 # symbolical purposes
+        for i in range(Expression.counter+1):
+            self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf) # no bounds on function values
+            
 
+    @staticmethod
     def _expression_to_solver(expression):
         """
         Create a sparse matrix representation from an :class:`Expression`.
@@ -87,7 +101,7 @@ class Mosek_wrapper(object):
         # Return the input expression in sparse SDP form
         return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, alpha_val
 
-    def send_constraint_to_solver(self, constraint):
+    def send_constraint_to_solver(self, constraint, track=True):
         """
         Add a PEPit :class:`Constraint` in a Mosek task and add it to the tracking list.
 
@@ -107,7 +121,9 @@ class Mosek_wrapper(object):
 
         # Add constraint to the attribute _list_of_constraints_sent_to_mosek to keep track of
         # all the constraints that have been sent to mosek as well as the order.
-        self._list_of_constraints_sent_to_solver.append(constraint)
+        if track:
+            self._list_of_constraints_sent_to_solver.append(constraint)
+            self._nb_pep_constraints_in_mosek += 1
         
         # how many constraints in the task so far? This will be the constraint number
         nb_cons = self.task.getnumcon()
@@ -120,6 +136,8 @@ class Mosek_wrapper(object):
         self.task.putbaraij(nb_cons, 0, [sym_A], [1.0])
         self.task.putaijlist(nb_cons+np.zeros(a_i.shape,dtype=np.int8), a_i, a_val)
         
+        if track:
+            self._constraint_index_in_mosek.append(nb_cons)
         # Distinguish equality and inequality
         if constraint.equality_or_inequality == 'inequality':
             self.task.putconbound(nb_cons, mosek.boundkey.up, -inf, -alpha_val)
@@ -132,7 +150,7 @@ class Mosek_wrapper(object):
                              'Got {}'.format(constraint.equality_or_inequality))
                              
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, task, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
         """
         Add a PEPit :class:`Constraint` in a Mosek task and add it to the tracking list.
 
@@ -154,6 +172,7 @@ class Mosek_wrapper(object):
         # Add constraint to the attribute _list_of_constraints_sent_to_mosek to keep track of
         # all the constraints that have been sent to mosek as well as the order.
         self._list_of_constraints_sent_to_solver.append(psd_matrix)
+        self._nb_pep_SDPconstraints_in_mosek += 1
 
         # Create a symmetric matrix in MOSEK
         size = psd_matrix.shape[0]
@@ -180,48 +199,99 @@ class Mosek_wrapper(object):
         # Print a message if verbose mode activated
         if verbose:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
+        
+    #def get_dual_variables(self):
+        
+    def get_primal_variables(self):
+        return self.optimal_G, self.optimal_F
+    
+    def eval_constraint_dual_values(self):
+        ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
+        ## Task.getbarsj(mosek.soltype.itr, i) for dual associated to i
+        
+        #MUST CHECK the nb of constraints, somehow
+        #assert len(self._list_of_constraints_sent_to_solver) == self.task.getmaxnumcon()
+        scalar_dual_values = self.task.gety(mosek.soltype.itr)
+        #print(scalar_dual_values)
+        dual_values = list()
+        dual_objective = 0.
+        counter_psd = 1
+        counter_scalar = 0
+        dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, 0), Point.counter))
+        for constraint_or_psd in self._list_of_constraints_sent_to_solver:
+            if isinstance(constraint_or_psd, Constraint):
+                #note: p-e dangereux? je fais l'hypothèse qu'on parcourir la liste des cons dans le bon ordre
+                dual_values.append(scalar_dual_values[self._constraint_index_in_mosek[counter_scalar]])
+                constraint_or_psd._dual_variable_value = dual_values[-1]
+                counter_scalar += 1
+                constraint_dict = constraint_or_psd.expression.decomposition_dict
+                if (1 in constraint_dict):
+                    dual_objective -= dual_values[-1] * constraint_dict[1]
+            elif isinstance(constraint_or_psd, PSDMatrix):
+                dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
+                assert dual_values[-1].shape == constraint_or_psd.shape
+                constraint_or_psd._dual_variable_value = dual_values[-1]
+                counter_psd += 1
+                
+        assert len(dual_values)-1 == len(self._list_of_constraints_sent_to_solver) #-1 because we added the dual corresponding to the Gram matrix
+        residual = dual_values[0]
+
+        # Return the position of the reached performance metric
+        return dual_values, residual, dual_objective
+        
+    def prepare_heuristic(self, wc_value, tol_dimension_reduction):
+        # Add the constraint that the objective stay close to its actual value
+        self.task.putclist([Expression.counter-1], [0.0])
+        self.send_constraint_to_solver(self.objective >= wc_value - tol_dimension_reduction, track = False)
+        
+    def heuristic(self, weight=np.identity(Point.counter)):
+        No_zero_ele =np.argwhere(np.tril(weight))
+        W_i = No_zero_ele[:,0]
+        W_j = No_zero_ele[:,1]
+        W_val = weight[W_i, W_j]
+        sym_W = self.task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
+        self.task.putbarcj(0,[sym_W],[-1.0]) #-1 here (we minimize)
+        
+        self.task.optimize()
 
     def generate_problem(self, objective):
-        self.task.putclist([tau.counter], [1.0])
+        #task.putclist([tau.counter], [0.0])
+        assert self.task.getmaxnumvar() == Expression.counter
+        self.objective = objective
+        _, _, _, Fweights_ind, Fweights_val, _ = self._expression_to_solver(objective)
+        self.task.putclist(Fweights_ind, Fweights_val) #to be cleaned by calling _expression_to_solver(objective)?
         # Input the objective sense (minimize/maximize)
         self.task.putobjsense(mosek.objsense.maximize)
         #if verbose >= 2:
             #self.task.solutionsummary(mosek.streamtype.msg)
         return self.task
-        
-    def get_dual_variables(self):
-        ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
-        ## Task.getbarsj(mosek.soltype.itr, i) for dual associated to i
-        assert self._list_of_solver_constraints == self.prob.constraints 
-        dual_values = [constraint.dual_value for constraint in self.prob.constraints]
-        return dual_values
-        
-    def get_primal_variables(self):
-        return self.optimal_G, self.optimal_F
-    
-    def associate_dual_variables(self):
-        #perform the association between constraints and dual variables
-        return true
-        
-    def prepare_heuristic(self, wc_value, tol_dimension_reduction):
-        # Add the constraint that the objective stay close to its actual value
-        self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
-        
-    def heuristic(self, weight=1):
-        if weight.shape == (1,1): #should be improved --> weight=np.identity(Point.counter) by default, but seems to bug here
-            obj = cp.trace(self.G)
-            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
-        else:
-            obj = cp.sum(cp.multiply(self.G, weight))
-            self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
     
     def solve(self, **kwargs):
         # Solve the problem and print summary
         self.task.optimize(**kwargs)
-        self.wc_value = task.getprimalobj(mosek.soltype.itr)
-        self.optimal_G = self._get_Gram_from_mosek(task.getbarxj(mosek.soltype.itr, 0), Point.counter)
-        xx = task.getxx(mosek.soltype.itr)
+        self.wc_value = self.task.getprimalobj(mosek.soltype.itr)
+        self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
+        xx = self.task.getxx(mosek.soltype.itr)
         tau = xx[-1]
         self.optimal_F = xx
-        prosta = task.getprosta(mosek.soltype.itr)
+        prosta = self.task.getprosta(mosek.soltype.itr)
         return prosta, 'MOSEK', tau
+        
+    @staticmethod
+    def streamprinter(text):
+        sys.stdout.write(text)
+        sys.stdout.flush()
+    
+    @staticmethod
+    def _get_Gram_from_mosek(tril, size):
+        # MOSEK returns:
+        # the primal solution for a semidefinite variable. Only the lower triangular part of
+        # is returned because the matrix by construction is symmetric. The format is that the columns are stored sequentially in the natural order.
+        G = np.zeros((size,size))
+        counter = 0
+        for j in range(size):
+            for i in range(size-j):
+                G[j+i,j] = tril[counter]
+                G[j,j+i] = tril[counter]
+                counter += 1
+        return G

@@ -165,9 +165,67 @@ class Cvxpy_wrapper(object):
     def get_primal_variables(self):
         return self.optimal_G, self.optimal_F
     
-    def associate_dual_variables(self):
-        #perform the association between constraints and dual variables
-        return true
+    def eval_constraint_dual_values(self):
+        """
+        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
+
+        Args:
+            dual_values (list): the list of dual values of the problem constraints.
+
+        Returns:
+             position_of_minimal_objective (np.float): the position, in the list of performance metric,
+                                                       of the one that is actually reached.
+             dual_objective (float)
+
+        Raises:
+            TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
+            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
+
+        """
+        dual_values = self.get_dual_variables()
+        # Store residual, dual value of the main lmi
+        residual = dual_values[0]
+        assert residual.shape == (Point.counter, Point.counter)
+        
+        # initiate the value of the dual objective (updated below)
+        dual_objective = 0.
+
+        # Set counter
+        #counter = len(self.list_of_performance_metrics)+1
+
+        # The dual variables associated to performance metric all have nonnegative values of sum 1.
+        # Generally, only 1 performance metric is used.
+        # Then its associated dual values is 1 while the others'associated dual values are 0.
+        
+        #performance_metric_dual_values = np.array(dual_values[1:counter])
+        #position_of_minimal_objective = np.argmax(performance_metric_dual_values)
+        counter = 1 # the list of constraints sent to cvxpy contains the perf metrics
+
+        for constraint_or_psd in self._list_of_constraints_sent_to_solver:
+            if isinstance(constraint_or_psd, Constraint):
+                constraint_or_psd._dual_variable_value = dual_values[counter]
+                constraint_dict = constraint_or_psd.expression.decomposition_dict
+                if (1 in constraint_dict):
+                    dual_objective -= dual_values[counter] * constraint_dict[1]
+                counter += 1
+            elif isinstance(constraint_or_psd, PSDMatrix):
+                assert dual_values[counter].shape == constraint_or_psd.shape
+                constraint_or_psd._dual_variable_value = dual_values[counter]
+                counter += 1
+                size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
+                constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
+                                                                         ).reshape(constraint_or_psd.shape)
+                counter += size
+            else:
+                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
+                                "\'Constraint\' objects of \'PSDMatrix\' objects."
+                                "Got {}".format(type(constraint_or_psd)))
+
+        # Verify nothing is left
+        assert len(dual_values) == counter
+
+        # Return the position of the reached performance metric
+        return dual_values, residual, dual_objective
         
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         # Add the constraint that the objective stay close to its actual value

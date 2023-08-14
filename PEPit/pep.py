@@ -224,8 +224,9 @@ class PEP(object):
               **kwargs):
         #out = self._mosek_solve(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         #out = self._solve_cvxpy(verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
-        cp_wrap = cpw.Cvxpy_wrapper()
-        out = self._generic_solve(cp_wrap, verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
+        #wrap = cpw.Cvxpy_wrapper()
+        wrap = mkw.Mosek_wrapper()
+        out = self._generic_solve(wrap, verbose, return_full_cvxpy_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
     def _generic_solve(self, wrapper, verbose=1, return_full_problem=False,
@@ -370,13 +371,14 @@ class PEP(object):
         # Dimension aims at finding low dimension lower bound functions,
         # but solves a different problem with an extra condition and different objective,
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
-        dual_values = wrapper.get_dual_variables()
+        dual_values, self.residual, dual_objective = wrapper.eval_constraint_dual_values()
+        G_value, F_value = wrapper.get_primal_variables()
 
         # Perform a dimension reduction if required
         if dimension_reduction_heuristic:
 
             # Print the estimated dimension before dimension reduction
-            nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(wrapper.G.value)
+            nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
             wrapper.prepare_heuristic(wc_value, tol_dimension_reduction)
             if verbose:
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
@@ -432,7 +434,7 @@ class PEP(object):
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
 
         # Store all the dual values in constraints
-        _, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
+        #_, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
         
         print('dual: {}, primal: {}'.format(dual_objective, wc_value))
 
@@ -714,10 +716,7 @@ class PEP(object):
             
             
                         
-    @staticmethod
-    def streamprinter(text):
-        sys.stdout.write(text)
-        sys.stdout.flush()
+
         
     #
     # EVALUATION PARTS
@@ -853,66 +852,7 @@ class PEP(object):
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
 
-    def _eval_constraint_dual_values(self, dual_values, wrapper):
-        """
-        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
 
-        Args:
-            dual_values (list): the list of dual values of the problem constraints.
-
-        Returns:
-             position_of_minimal_objective (np.float): the position, in the list of performance metric,
-                                                       of the one that is actually reached.
-             dual_objective (float)
-
-        Raises:
-            TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
-            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
-
-        """
-        # Store residual, dual value of the main lmi
-        self.residual = dual_values[0]
-        assert self.residual.shape == (Point.counter, Point.counter)
-        
-        # initiate the value of the dual objective (updated below)
-        dual_objective = 0.
-
-        # Set counter
-        counter = len(self.list_of_performance_metrics)+1
-
-        # The dual variables associated to performance metric all have nonnegative values of sum 1.
-        # Generally, only 1 performance metric is used.
-        # Then its associated dual values is 1 while the others'associated dual values are 0.
-        
-        performance_metric_dual_values = np.array(dual_values[1:counter])
-        position_of_minimal_objective = np.argmax(performance_metric_dual_values)
-        counter = 1 # the list of constraints sent to cvxpy contains the perf metrics
-
-        for constraint_or_psd in wrapper._list_of_constraints_sent_to_solver:
-            if isinstance(constraint_or_psd, Constraint):
-                constraint_or_psd._dual_variable_value = dual_values[counter]
-                constraint_dict = constraint_or_psd.expression.decomposition_dict
-                if (1 in constraint_dict):
-                    dual_objective -= dual_values[counter] * constraint_dict[1]
-                counter += 1
-            elif isinstance(constraint_or_psd, PSDMatrix):
-                assert dual_values[counter].shape == constraint_or_psd.shape
-                constraint_or_psd._dual_variable_value = dual_values[counter]
-                counter += 1
-                size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
-                constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
-                                                                         ).reshape(constraint_or_psd.shape)
-                counter += size
-            else:
-                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
-                                "\'Constraint\' objects of \'PSDMatrix\' objects."
-                                "Got {}".format(type(constraint_or_psd)))
-
-        # Verify nothing is left
-        assert len(dual_values) == counter
-
-        # Return the position of the reached performance metric
-        return position_of_minimal_objective, dual_objective
         
     def talkative_performance_measure(self,verbose):
         """
