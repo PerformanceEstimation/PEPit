@@ -1,0 +1,8 @@
+TODO's:
+
+- in pep.py -> routine for checking accuracies (primal, dual, & primal-dual)
+- in wrappers -> accurately compute dual objectives (currently do not take into account constant terms from LMIs)
+- add tests (incl: for wrappers & for both solvers)
+- update the "output" of the examples for the documentation
+- update the documentation.
+- comments in mosek_wrapper.py & cvxpy_wrapper.py

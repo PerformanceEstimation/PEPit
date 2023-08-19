@@ -18,6 +18,11 @@ class Wrapper(object):
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
         optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
+        verbose (bool): verbosity:
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not CVXPY's
+                            - 2: Both PEPit and CVXPY details are printed
 
     """
     def __init__(self):
@@ -34,6 +39,19 @@ class Wrapper(object):
         self.optimal_G = None
         self.optimal_dual = list()
         self.prob = None
+        self.verbose = False
+
+    def check_license(self):
+        """
+        Check that there is a valid available license for the solver.
+
+        Returns:
+            license (bool): is there a valid license?
+
+        """
+    
+        raise NotImplementedError("This method must be overwritten in children classes")
+    
         
     def send_constraint_to_solver(self, constraint):
         """
@@ -49,26 +67,6 @@ class Wrapper(object):
 
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-    
-    
-    def check_license(self):
-        """
-        Check that there is a valid available license for the solver.
-
-        Args:
-            constraint (Constraint): a :class:`Constraint` object to be sent to the solver.
-
-        Raises:
-            ValueError if the attribute `equality_or_inequality` of the :class:`Constraint`
-            is neither `equality`, nor `inequality`.
-
-        Returns:
-            license (bool): is there a valid license?
-
-        """
-    
-        raise NotImplementedError("This method must be overwritten in children classes")
-    
 
     def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
         """
@@ -86,36 +84,6 @@ class Wrapper(object):
 
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-
-    def generate_problem(self, objective):
-        """
-        Instantiate an optimization model using the solver format, whose objective corresponds to a
-        PEPit :class:`Expression` object.
-
-        Args:
-            objective (Expression): the objective function of the PEP (to be maximized).
-        
-        Returns:
-            prob (): the PEP in the solver's format.
-
-        """
-        raise NotImplementedError("This method must be overwritten in children classes")
-        return self.prob
-    
-    def eval_constraint_dual_values(self):
-        """
-        Postprocess the output of the solver and associate each constraint of the list 
-        _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
-        
-        Returns:
-            dual_values (list): ###ça ne devrait pas être necessaire!
-            residual (np.array):
-            dual_objective (float):
-
-        """
-    
-        raise NotImplementedError("This method must be overwritten in children classes")
-        return dual_values, residual, dual_objective
         
     def get_dual_variables(self):
         """
@@ -138,6 +106,55 @@ class Wrapper(object):
             
         """
         return self.optimal_G, self.optimal_F
+    
+    def eval_constraint_dual_values(self):
+        """
+        Postprocess the output of the solver and associate each constraint of the list 
+        _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
+        
+        Returns:
+            dual_values (list): ###ça ne devrait pas être necessaire!
+            residual (np.array):
+            dual_objective (float):
+
+        """
+    
+        raise NotImplementedError("This method must be overwritten in children classes")
+        return dual_values, residual, dual_objective
+
+    def generate_problem(self, objective):
+        """
+        Instantiate an optimization model using the solver format, whose objective corresponds to a
+        PEPit :class:`Expression` object.
+
+        Args:
+            objective (Expression): the objective function of the PEP (to be maximized).
+        
+        Returns:
+            prob (): the PEP in the solver's format.
+
+        """
+        raise NotImplementedError("This method must be overwritten in children classes")
+        return self.prob
+    
+    def solve(self, **kwargs):
+        """
+        Change the objective of the PEP, specifically for finding low-dimensional examples.
+        We specify a matrix :math:`W` (weight), which will allow minimizing :math:`\\mathrm{Tr}(G\\,W)`.
+
+        Args:
+            kwargs (keywords, optional): solver specific arguments.
+        
+        Returns:
+            status (string): status of the solution / problem.
+            name (string): name of the solver.
+            value (float): value of the performance metric after solving.
+            problem (): solver-specific model of the PEP.
+        
+        """
+        self.prob.solve(**kwargs)
+        self.optimal_G, self.optimal_F = self.get_primal_variables()
+        return self.prob.status, self.prob.solver_stats.solver_name, self._translate_status(self.objective.value), self.prob
         
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
@@ -164,24 +181,18 @@ class Wrapper(object):
             weight (np.array): weights that will be used in the heuristic.
         
         """
-        #change the objective using weight and returns prob
         raise NotImplementedError("This method must be overwritten in children classes")
     
-    def solve(self, **kwargs):
+    @staticmethod
+    def _translate_status(status):
         """
-        Change the objective of the PEP, specifically for finding low-dimensional examples.
-        We specify a matrix :math:`W` (weight), which will allow minimizing :math:`\\mathrm{Tr}(G\\,W)`.
+        Translate the solver-specific status to a PEP-standardize string.
 
         Args:
-            kwargs (keywords, optional): solver specific arguments.
+            status (): solver specific status.
         
         Returns:
-            status (): solver-specific status.
-            name (string): name of the solver.
-            value (float): value of the performance metric after solving.
-            problem (): solver-specific model of the PEP.
+            status (string): PEPit-standardized status.
         
         """
-        self.prob.solve(**kwargs)
-        self.optimal_G, self.optimal_F = self.get_primal_variables()
-        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
+        raise NotImplementedError("This method must be overwritten in children classes")

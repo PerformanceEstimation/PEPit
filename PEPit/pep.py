@@ -11,8 +11,10 @@ from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
                   
+## Add references to your wrappers here.
 MOSEK = {'libname': 'mosek', 'wrapper': Mosek_wrapper}
 CVXPY = {'libname': 'cvxpy', 'wrapper': Cvxpy_wrapper}
+
 class PEP(object):
     """
     The class :class:`PEP` is the main class of this framework.
@@ -216,33 +218,108 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
         
-    #
-    # GENERAL SOLVE
-    #
-    #
     def solve(self, verbose=1, return_full_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, solver=CVXPY,
-              **kwargs):
+              **kwargs):      
+        """
+        Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
+        instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
+
+        Args:
+            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not CVXPY's
+                            - 2: Both PEPit and CVXPY details are printed
+            return_full_problem (bool): If True, return the problem object (whose type depends on the solver).
+                                        If False, only return the worst-case value.
+                                        Set to False by default.
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
+                                                           (rank of the Gram matrix). Set to None to deactivate
+                                                           it (default value). Available heuristics are:
+                                                           
+                                                            - "trace": minimize :math:`Tr(G)`
+                                                            - "logdet{an integer n}": minimize
+                                                              :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                              using n iterations of local approximation problems.
+
+            eig_regularization (float, optional): The regularization we use to make
+                                                  :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
+                                                  (only used when "dimension_reduction_heuristic" is not None)
+                                                  The default value is 1e-5.
+            tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
+                                                       Precisely, the second problem minimizes "optimal_value - tol"
+                                                       (only used when "dimension_reduction_heuristic" is not None)
+                                                       The default value is 1e-5.
+            solver (dict, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`. 
+                                     Default is CVXPY, other native option include MOSEK.
+            kwargs (keywords, optional): Additional solver-specific arguments.
+
+        Returns:
+            float or Problem: Value of the performance metric of the PEP, or a reference to a solver-specific representation
+                              of the PEP. The value is returned by default.
+
+        """
+        # Check that the solver is installed, if it is not, switch to CVXPY.
         find_solver = importlib.util.find_spec(solver['libname'])
         solver_found = find_solver is not None
         if not solver_found:
             solver = CVXPY
             print('(PEPit) {} not found, switching to cvxpy'.format(solver['libname']))
         
+        # Initiate a wrapper to interface with the solver 
         wrap = solver['wrapper']()
+        
+        # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
         if not wrap.check_license():
             print('(PEPit) No valid {} license found, switching to cvxpy'.format(solver['libname']))
             solver = CVXPY
             wrap = solver['wrapper']()
-            
+        
+        # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
         out = self._generic_solve(wrap, verbose, return_full_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
     def _generic_solve(self, wrapper, verbose=1, return_full_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-              **kwargs):
-        
-        ## TODO: turn the generic 'verbose' of the solver ON ?
+              **kwargs):      
+        """
+        Internal solve method. Transate the :class:`PEP` to an SDP, and solve it via the wrapper.
+
+        Args:
+            wrapper (Wrapper): Interface to the solver.
+            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not CVXPY's
+                            - 2: Both PEPit and CVXPY details are printed
+            return_full_problem (bool): If True, return the problem object (whose type depends on the solver).
+                                        If False, only return the worst-case value.
+                                        Set to False by default.
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
+                                                           (rank of the Gram matrix). Set to None to deactivate
+                                                           it (default value). Available heuristics are:
+                                                           
+                                                            - "trace": minimize :math:`Tr(G)`
+                                                            - "logdet{an integer n}": minimize
+                                                              :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                              using n iterations of local approximation problems.
+
+            eig_regularization (float, optional): The regularization we use to make
+                                                  :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
+                                                  (only used when "dimension_reduction_heuristic" is not None)
+                                                  The default value is 1e-5.
+            tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
+                                                       Precisely, the second problem minimizes "optimal_value - tol"
+                                                       (only used when "dimension_reduction_heuristic" is not None)
+                                                       The default value is 1e-5.
+            kwargs (keywords, optional): Additional solver-specific arguments.
+
+        Returns:
+            float or Problem: Value of the performance metric of the PEP, or a reference to a solver-specific representation
+                              of the PEP. The value is returned by default.
+
+        """
         
         # Create an expression that serve for the objective (min of the performance measures)   
         tau = Expression(is_leaf=True)
@@ -262,7 +339,7 @@ class PEP(object):
         for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
 
-        # Define the cvxpy variables
+        # Define the variables (G,F)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
@@ -273,7 +350,6 @@ class PEP(object):
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
             wrapper.send_constraint_to_solver(tau <= performance_metric)
-            #cp_wrap._list_of_cvxpy_constraints.append(objective <= cp_wrap._expression_to_cvxpy(performance_metric))
         
         if verbose:
             print('(PEPit) Setting up the problem:'
@@ -293,7 +369,7 @@ class PEP(object):
             if verbose:
                 print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
             for psd_counter, psd_matrix in enumerate(self.list_of_psd):
-                wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix, verbose)
+                wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
 
         # Defining class constraints
         if verbose:
@@ -317,7 +393,7 @@ class PEP(object):
                     print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
-                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix, verbose)
+                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
@@ -348,7 +424,7 @@ class PEP(object):
                           'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix, verbose)
+                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
@@ -370,7 +446,7 @@ class PEP(object):
                 print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
-        # Create the cvxpy problem
+        # Instantiate the problem
         if verbose:
             print('(PEPit) Compiling SDP')
         wrapper.generate_problem(objective)
@@ -407,9 +483,7 @@ class PEP(object):
                                                                                                         eig_threshold))
                 print('(PEPit) Calling SDP solver')
 
-           
-
-            # Translate the heuristic into cvxpy objective and solve the associated problem
+            # Translate the heuristic into the objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
                 wrapper.heuristic(np.identity(Point.counter))
                 solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
@@ -469,17 +543,19 @@ class PEP(object):
             # Return the value of the minimal performance metric
             return wc_value    
 
-    #
-    # EVALUATION PARTS
-    #
-    #
-    @staticmethod
+
     def _verify_accuracy():
-        """XXXX
+        """XXXX TODOTODOs
 
         """
-        # CHECK FEASIBILITY (primal & dual)
+        # CHECK FEASIBILITY (primal & dual; all constraints (LMIs and linear constraints))!
     	# CHECK PD GAP
+        primal_lin_accuracy = 0.
+        primal_PSD_accuracy = 0.
+        dual_lin_accuracy = 0.
+        dual_PSD_accuracy = 0.
+        PD_gap = 0.
+        return primal_lin_accuracy, primal_PSD_accuracy, dual_lin_accuracy, dual_PSD_accuracy, PD_gap
  
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):

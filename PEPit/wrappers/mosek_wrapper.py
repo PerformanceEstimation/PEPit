@@ -21,17 +21,25 @@ class Mosek_wrapper(Wrapper):
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
                                                     This list does not contain constraints due to internal representation of the 
                                                     problem by the solver.
-        prob: instance of the problem (whose type depends on the solver)
+        _list_of_constraints_sent_to_solver_full (list): full list of constraints associated to the solver.
+        prob (mosek.task): instance of the problem.
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
         optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
+        verbose (bool): verbosity:
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not MOSEK's
+                            - 2: Both PEPit and CVXPY details are printed
 
     """
-    def __init__(self):
+    def __init__(self, verbose=False):
         """
+        This function initialize all internal variables of the class. 
+        
+        Args:
+            verbose (bool): verbose mode of the solver.
 
-    Attributes:
-                            
         """
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
@@ -40,16 +48,19 @@ class Mosek_wrapper(Wrapper):
         self._nb_pep_constraints_in_mosek = 0
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 1
+        self._list_of_constraints_sent_to_solver_full = list()
+        self.verbose = verbose
         
         self.env = mosek.Env()
         self.task = self.env.Task() #initiate MOSEK's task
         
-        # IF VERBOSE, UNCOMMENT NEXT LINE
-        #self.task.set_Stream(mosek.streamtype.log, self.streamprinter) #must be optional
-        # optimal_F, optimal_G
-            
-        self.task.appendbarvars([Point.counter]) # init the Gram matrix
-        self.task.appendvars(Expression.counter+1) # init function value variables (the additional variable is "tau" for handling the objective)
+        if verbose >1 :
+            self.task.set_Stream(mosek.streamtype.log, self.streamprinter)
+        
+        # "Initialize" the Gram matrix
+        self.task.appendbarvars([Point.counter])
+        # "Initialize" function value variables (an additional variable "tau" is for handling the objective, hence +1)
+        self.task.appendvars(Expression.counter+1) 
             
         inf = 1.0 # symbolical purposes
         for i in range(Expression.counter+1):
@@ -57,32 +68,35 @@ class Mosek_wrapper(Wrapper):
 
 
     def check_license(self):
+        """
+        Check that there is a valid available license for MOSEK.
+
+        Returns:
+            license (bool): is there a valid license?
+            
+        """
         try:
             self.env.checkoutlicense(mosek.feature.pton)
         except:
             return False
             
-        return self.env.expirylicenses() >= 0
+        return self.env.expirylicenses() >= 0 # number of days until license expires >= 0?
         
     @staticmethod
     def _expression_to_solver(expression):
         """
         Create a sparse matrix representation from an :class:`Expression`.
-        TODOTODOTODO: direct faire créer la matrice sparse (sans passer par matrice complète)
 
         Args:
             expression (Expression): any expression.
-            F (cvxpy Variable): a vector representing the function values.
-            G (cvxpy Variable): a matrix representing the Gram matrix of all leaf :class:`Point` objects.
 
         Returns:
-            Ai (sp): ...
-            Aj (sp): ...
-            Aval (sp): ...
-            ai (sp): ...
-            aval (sp): ...
-            alpha_val (float): ...
-            
+            Ai (numpy array): Set of line indices for the sparse representation of the constraint matrix (multiplying G).
+            Aj (numpy array): Set of column indices for the sparse representation of the constraint matrix (multiplying G).
+            Aval (numpy array): Set of values for the sparse representation of the constraint matrix (multiplying G).
+            ai (numpy array): Set of indices for the sparse representation of the constraint vector (multiplying F).
+            aval (numpy array): Set of values of the sparse representation of the constraint vector (multiplying F).
+            alpha_val (float): Constant part of the constraint.
 
         """
         alpha_val = 0
@@ -136,7 +150,7 @@ class Mosek_wrapper(Wrapper):
 
         Args:
             constraint (Constraint): a :class:`Constraint` object to be sent to MOSEK.
-            task (mosek.Task): a mosek task for handling the problem.
+            track (bool, optional): do we track the constraint (saving dual variable, etc.)?
 
         Raises:
             ValueError if the attribute `equality_or_inequality` of the :class:`Constraint`
@@ -179,19 +193,13 @@ class Mosek_wrapper(Wrapper):
                              'Got {}'.format(constraint.equality_or_inequality))
                              
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
         """
-        Add a PEPit :class:`Constraint` in a Mosek task and add it to the tracking list.
-
+        Transfer a PEPit :class:`PSDMatrix` (LMI constraint) to MOSEK and add it the tracking lists.
 
         Args:
             psd_counter (int): a counter useful for the verbose mode.
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
-
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not MOSEK's
-                            - 2: Both PEPit and MOSEK details are printed
 
         """
 
@@ -226,22 +234,25 @@ class Mosek_wrapper(Wrapper):
                 self.task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
 
         # Print a message if verbose mode activated
-        if verbose:
+        if self.verbose > 0:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
-        
-    #def get_dual_variables(self):
-        
-    def get_primal_variables(self):
-        return self.optimal_G, self.optimal_F
-    
+##commented + specified until here    
     def eval_constraint_dual_values(self):
+        """
+        Postprocess the output of the solver and associate each constraint of the list 
+        _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
+        
+        Returns:
+            dual_values (list): ###ça ne devrait pas être necessaire!
+            residual (np.array):
+            dual_objective (float):
+
+        """
         ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
         ## Task.getbarsj(mosek.soltype.itr, i) for dual associated to i
         
         #MUST CHECK the nb of constraints, somehow
-        #assert len(self._list_of_constraints_sent_to_solver) == self.task.getmaxnumcon()
         scalar_dual_values = self.task.gety(mosek.soltype.itr)
-        #print(scalar_dual_values)
         dual_values = list()
         dual_objective = 0.
         counter_psd = 1
@@ -290,8 +301,8 @@ class Mosek_wrapper(Wrapper):
         self.task.putclist(Fweights_ind, Fweights_val) #to be cleaned by calling _expression_to_solver(objective)?
         # Input the objective sense (minimize/maximize)
         self.task.putobjsense(mosek.objsense.maximize)
-        #if verbose >= 2:
-            #self.task.solutionsummary(mosek.streamtype.msg)
+        if self.verbose > 1:
+            self.task.solutionsummary(mosek.streamtype.msg)
         return self.task
     
     def solve(self, **kwargs):
