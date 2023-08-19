@@ -8,3 +8,5 @@ TODO's:
 - update the documentation.
 - comments in mosek_wrapper.py & cvxpy_wrapper.py
 
+--- others: (not done at all)
+- naming points + constraints?
