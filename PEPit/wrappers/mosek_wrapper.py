@@ -236,6 +236,7 @@ class Mosek_wrapper(Wrapper):
         # Print a message if verbose mode activated
         if self.verbose > 0:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
+            
 ##commented + specified until here    
     def eval_constraint_dual_values(self):
         """
