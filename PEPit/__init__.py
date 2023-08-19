@@ -3,12 +3,11 @@ from .constraint import Constraint
 from .expression import Expression, null_expression
 from .function import Function
 from .psd_matrix import PSDMatrix
+from .wrapper import Wrapper
 from .pep import PEP
 from .pep import MOSEK
 from .pep import CVXPY
 from .point import Point, null_point
-from .cvxpy_wrapper import Cvxpy_wrapper
-from .mosek_wrapper import Mosek_wrapper
 
 __all__ = ['block_partition', 'BlockPartition',
            'examples',
@@ -16,12 +15,12 @@ __all__ = ['block_partition', 'BlockPartition',
            'operators',
            'primitive_steps',
            'tools',
+           'wrappers',
            'constraint', 'Constraint',
            'expression', 'Expression', 'null_expression',
            'function', 'Function',
            'psd_matrix', 'PSDMatrix',
            'pep', 'PEP', 'MOSEK', 'CVXPY',
            'point', 'Point', 'null_point',
-           'cvxpy_wrapper', 'Cvxpy_wrapper',
-           'mosek_wrapper', 'Mosek_wrapper',
+           'wrapper', 'Wrapper',
            ]

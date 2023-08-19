@@ -1,8 +1,9 @@
 import numpy as np
 import sys
-import PEPit.cvxpy_wrapper as cpw
-import PEPit.mosek_wrapper as mkw
+import importlib.util
 
+from PEPit.wrappers.cvxpy_wrapper import Cvxpy_wrapper
+from PEPit.wrappers.mosek_wrapper import Mosek_wrapper
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -10,8 +11,8 @@ from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
                   
-MOSEK = {'name': 'MOSEK'}
-CVXPY = {'name': 'CVXPY'}
+MOSEK = {'libname': 'mosek', 'wrapper': Mosek_wrapper}
+CVXPY = {'libname': 'cvxpy', 'wrapper': Cvxpy_wrapper}
 class PEP(object):
     """
     The class :class:`PEP` is the main class of this framework.
@@ -222,11 +223,17 @@ class PEP(object):
     def solve(self, verbose=1, return_full_problem=False,
               dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, solver=CVXPY,
               **kwargs):
-              
-        if solver == MOSEK:
-            wrap = mkw.Mosek_wrapper()
-        elif solver == CVXPY:
-            wrap = cpw.Cvxpy_wrapper()
+        find_solver = importlib.util.find_spec(solver['libname'])
+        solver_found = find_solver is not None
+        if not solver_found:
+            solver = CVXPY
+            print('(PEPit) {} not found, switching to cvxpy'.format(solver['libname']))
+        
+        wrap = solver['wrapper']()
+        if not wrap.check_license():
+            print('(PEPit) No valid {} license found, switching to cvxpy'.format(solver['libname']))
+            solver = CVXPY
+            wrap = solver['wrapper']()
             
         out = self._generic_solve(wrap, verbose, return_full_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out

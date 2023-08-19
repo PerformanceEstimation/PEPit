@@ -1,13 +1,14 @@
 import cvxpy as cp
 import numpy as np
 
+from PEPit.wrapper import Wrapper
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
 
-class Cvxpy_wrapper(object):
+class Cvxpy_wrapper(Wrapper):
     def __init__(self):
         """
 
@@ -25,6 +26,9 @@ class Cvxpy_wrapper(object):
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
         self._list_of_solver_constraints = [self.G >> 0]
+        
+    def check_license(self):
+        return True
         
     def _expression_to_solver(self, expression):
         """

@@ -2,13 +2,31 @@ import mosek as mosek
 import numpy as np
 import sys
 
+from PEPit.wrapper import Wrapper
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
 
-class Mosek_wrapper(object):
+class Mosek_wrapper(Wrapper):
+    """
+    A :class:`Mosek_wrapper` object interfaces PEPit with the SDP solver `MOSEK<https://www.mosek.com/>`_.
+
+    This class overwrittes the :class:`Wrapper` for MOSEK. In particular, it implements the methods:
+    send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
+    get_primal_variables, eval_constraint_dual_values, prepare_heuristic, and heuristic
+    
+    Attributes:
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
+                                                    This list does not contain constraints due to internal representation of the 
+                                                    problem by the solver.
+        prob: instance of the problem (whose type depends on the solver)
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        optimal_F (numpy.array): Elements of F after solving.
+        optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
+
+    """
     def __init__(self):
         """
 
@@ -23,7 +41,8 @@ class Mosek_wrapper(object):
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 1
         
-        self.task = mosek.Task() #initiate MOSEK's task
+        self.env = mosek.Env()
+        self.task = self.env.Task() #initiate MOSEK's task
         
         # IF VERBOSE, UNCOMMENT NEXT LINE
         #self.task.set_Stream(mosek.streamtype.log, self.streamprinter) #must be optional
@@ -35,8 +54,16 @@ class Mosek_wrapper(object):
         inf = 1.0 # symbolical purposes
         for i in range(Expression.counter+1):
             self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf) # no bounds on function values (nor on tau)
-            
 
+
+    def check_license(self):
+        try:
+            self.env.checkoutlicense(mosek.feature.pton)
+        except:
+            return False
+            
+        return self.env.expirylicenses() >= 0
+        
     @staticmethod
     def _expression_to_solver(expression):
         """
@@ -238,12 +265,12 @@ class Mosek_wrapper(object):
         assert len(dual_values)-1 == len(self._list_of_constraints_sent_to_solver) #-1 because we added the dual corresponding to the Gram matrix
         residual = dual_values[0]
 
-        # Return the position of the reached performance metric
         return dual_values, residual, dual_objective
         
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         # Add the constraint that the objective stay close to its actual value
         self.task.putclist([Expression.counter-1], [0.0])
+        self.task.putobjsense(mosek.objsense.minimize)
         self.send_constraint_to_solver(self.objective >= wc_value - tol_dimension_reduction, track = False)
         
     def heuristic(self, weight=np.identity(Point.counter)):
@@ -252,10 +279,8 @@ class Mosek_wrapper(object):
         W_j = No_zero_ele[:,1]
         W_val = weight[W_i, W_j]
         sym_W = self.task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
-        self.task.putobjsense(mosek.objsense.minimize)
         self.task.putbarcj(0,[sym_W],[1.0]) 
-        
-        self.task.optimize()
+        self.task.putobjsense(mosek.objsense.minimize)
 
     def generate_problem(self, objective):
         #task.putclist([tau.counter], [0.0])

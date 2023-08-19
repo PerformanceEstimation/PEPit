@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import mosek as mosek
 
-import PEPit.mosek_wrapper as wrap
+import PEPit.wrappers.mosek_wrapper as wrap
 from PEPit.pep import PEP
 from PEPit import MOSEK
 from PEPit.point import Point

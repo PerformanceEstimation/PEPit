@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-import PEPit.cvxpy_wrapper as wrap
+import PEPit.wrappers.cvxpy_wrapper as wrap
 from PEPit.pep import PEP
 from PEPit import CVXPY
 from PEPit.point import Point
