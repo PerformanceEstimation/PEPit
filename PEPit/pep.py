@@ -9,8 +9,9 @@ from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
-
-
+                  
+MOSEK = {'name': 'MOSEK'}
+CVXPY = {'name': 'CVXPY'}
 class PEP(object):
     """
     The class :class:`PEP` is the main class of this framework.
@@ -219,11 +220,14 @@ class PEP(object):
     #
     #
     def solve(self, verbose=1, return_full_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, solver=CVXPY,
               **kwargs):
-        ##UNCOMMENT THE WRAPPER YOU WANT TO USE 
-        wrap = cpw.Cvxpy_wrapper()
-        #wrap = mkw.Mosek_wrapper()
+              
+        if solver == MOSEK:
+            wrap = mkw.Mosek_wrapper()
+        elif solver == CVXPY:
+            wrap = cpw.Cvxpy_wrapper()
+            
         out = self._generic_solve(wrap, verbose, return_full_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
@@ -362,12 +366,12 @@ class PEP(object):
         # Create the cvxpy problem
         if verbose:
             print('(PEPit) Compiling SDP')
-        prob = wrapper.generate_problem(objective)
+        wrapper.generate_problem(objective)
 
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
+        solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
         if verbose:
             print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(solver_status,
                                                                                      solver_name,
@@ -401,7 +405,7 @@ class PEP(object):
             # Translate the heuristic into cvxpy objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
                 wrapper.heuristic(np.identity(Point.counter))
-                solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
+                solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
 
                 # Compute minimal number of dimensions
                 G_value, F_value = wrapper.get_primal_variables()
@@ -412,7 +416,7 @@ class PEP(object):
                 for i in range(1, 1+niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                     wrapper.heuristic(W)
-                    solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
+                    solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
 
                     # Compute minimal number of dimensions
                     G_value, F_value = wrapper.get_primal_variables()
@@ -577,6 +581,3 @@ class PEP(object):
                                 raise TypeError(
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
-                  
-MOSEK = {}
-CVXPY = {}

@@ -4,9 +4,11 @@ from .expression import Expression, null_expression
 from .function import Function
 from .psd_matrix import PSDMatrix
 from .pep import PEP
+from .pep import MOSEK
+from .pep import CVXPY
 from .point import Point, null_point
 from .cvxpy_wrapper import Cvxpy_wrapper
-#from .mosek_wrapper import Mosek_wrapper
+from .mosek_wrapper import Mosek_wrapper
 
 __all__ = ['block_partition', 'BlockPartition',
            'examples',
@@ -18,7 +20,7 @@ __all__ = ['block_partition', 'BlockPartition',
            'expression', 'Expression', 'null_expression',
            'function', 'Function',
            'psd_matrix', 'PSDMatrix',
-           'pep', 'PEP',
+           'pep', 'PEP', 'MOSEK', 'CVXPY',
            'point', 'Point', 'null_point',
            'cvxpy_wrapper', 'Cvxpy_wrapper',
            'mosek_wrapper', 'Mosek_wrapper',

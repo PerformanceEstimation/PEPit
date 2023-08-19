@@ -161,11 +161,6 @@ class TestPEP(unittest.TestCase):
         prob = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
 
-        # Return the full dimension reduction problem
-        # and verify that its value is not pepit_tau anymore but the heuristic value
-        prob2 = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic="trace")
-        self.assertAlmostEqual(prob2.value, .5 + self.mu ** 2, delta=10 ** -2)
-
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace")

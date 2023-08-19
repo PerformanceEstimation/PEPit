@@ -252,7 +252,8 @@ class Mosek_wrapper(object):
         W_j = No_zero_ele[:,1]
         W_val = weight[W_i, W_j]
         sym_W = self.task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
-        self.task.putbarcj(0,[sym_W],[-1.0]) #-1 here (we minimize)
+        self.task.putobjsense(mosek.objsense.minimize)
+        self.task.putbarcj(0,[sym_W],[1.0]) 
         
         self.task.optimize()
 
@@ -277,7 +278,7 @@ class Mosek_wrapper(object):
         tau = xx[-1]
         self.optimal_F = xx
         prosta = self.task.getprosta(mosek.soltype.itr)
-        return prosta, 'MOSEK', tau
+        return prosta, 'MOSEK', tau, self.task
         
     @staticmethod
     def streamprinter(text):

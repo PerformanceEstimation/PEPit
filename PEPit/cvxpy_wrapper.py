@@ -240,4 +240,4 @@ class Cvxpy_wrapper(object):
         self.prob.solve(**kwargs)
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
-        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value
+        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
