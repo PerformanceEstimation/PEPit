@@ -301,7 +301,7 @@ class Wrapper(object):
         _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
         
         Returns:
-            dual_values (list): ###ça ne devrait pas être necessaire!
+            dual_values (list): 
             residual (np.array):
             dual_objective (float):
 

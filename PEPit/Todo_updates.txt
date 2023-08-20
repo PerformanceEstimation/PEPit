@@ -1,11 +1,19 @@
 TODO's:
 
+---accuracies
 - in pep.py -> routine for checking accuracies (primal, dual, & primal-dual)
 - in wrappers -> accurately compute dual objectives (currently do not take into account constant terms from LMIs)
-- add tests (incl: for wrappers & for both solvers)
+
+---documentation:
 - update the "output" of the examples for the documentation
 - update the documentation.
-- comments in mosek_wrapper.py & cvxpy_wrapper.py
 
---- others: (not done at all)
+---tests:
+- add asserts in the new code
+- add tests, including for:
+	- for wrappers & for both solvers
+	- for dual objectives (in particular, test what happens if we put equality initial conditions (instead of <=)
+	- should test for PSD constraints with (a few) constants entries/values.
+
+---others: (not done at all)
 - naming points + constraints?

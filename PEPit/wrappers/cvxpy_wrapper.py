@@ -153,16 +153,14 @@ class Cvxpy_wrapper(Wrapper):
         # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints += cvxpy_constraints_list
 
-##commented + specified until here     
     def eval_constraint_dual_values(self):
         """
-        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
-
-        Args:
-            dual_values (list): the list of dual values of the problem constraints.
+        Recover all dual variables and store them in associated :class:`Constraint` and :class:`PSDMatrix` objects.
 
         Returns:
-             dual_objective (float)
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
+             dual_objective (float): numerical value of the dual objective function.
 
         Raises:
             TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
@@ -210,8 +208,6 @@ class Cvxpy_wrapper(Wrapper):
         # Return the position of the reached performance metric
         return dual_values, residual, dual_objective
         
-        
-##commented + specified after here  
     def generate_problem(self, objective):
         """
         Instantiate an optimization model using the cvxpy format, whose objective corresponds to a

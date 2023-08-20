@@ -175,26 +175,21 @@ class Mosek_wrapper(Wrapper):
         # Print a message if verbose mode activated
         if self.verbose > 0:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
-            
-##commented + specified until here    
+               
     def eval_constraint_dual_values(self):
         """
-        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
-
-        Args:
-            dual_values (list): the list of dual values of the problem constraints.
+        Recover all dual variables and store them in associated :class:`Constraint` and :class:`PSDMatrix` objects.
 
         Returns:
-             dual_objective (float)
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
+             dual_objective (float): numerical value of the dual objective function.
 
         Raises:
             TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
             is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
-        ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
-        ## Task.getbarsj(mosek.soltype.itr, i) for dual associated to i
-        
         #MUST CHECK the nb of constraints, somehow
         scalar_dual_values = self.task.gety(mosek.soltype.itr)
         dual_values = list()
@@ -216,12 +211,15 @@ class Mosek_wrapper(Wrapper):
                 assert dual_values[-1].shape == constraint_or_psd.shape
                 constraint_or_psd._dual_variable_value = dual_values[-1]
                 counter_psd += 1
+            else:
+                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
+                                "\'Constraint\' objects of \'PSDMatrix\' objects."
+                                "Got {}".format(type(constraint_or_psd)))
                 
         assert len(dual_values)-1 == len(self._list_of_constraints_sent_to_solver) #-1 because we added the dual corresponding to the Gram matrix
         residual = dual_values[0]
 
         return dual_values, residual, dual_objective
-##commented + specified after here  
 
     def generate_problem(self, objective):
         """
