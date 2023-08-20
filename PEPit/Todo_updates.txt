@@ -1,6 +1,5 @@
 TODO's:
 
-- "_expression_to_solver" is currently in the wrappers --> it should be in pep.py with two modes: (i) input: a PEPit constraint // output: full matrices, and (ii) input: a PEPit constraint // output: matrices (sparse form) 
 - in pep.py -> routine for checking accuracies (primal, dual, & primal-dual)
 - in wrappers -> accurately compute dual objectives (currently do not take into account constant terms from LMIs)
 - add tests (incl: for wrappers & for both solvers)

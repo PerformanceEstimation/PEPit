@@ -14,7 +14,7 @@ class Cvxpy_wrapper(Wrapper):
 
     This class overwrittes the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
-    get_primal_variables, eval_constraint_dual_values, prepare_heuristic, and heuristic
+    get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
@@ -76,35 +76,8 @@ class Cvxpy_wrapper(Wrapper):
             cvxpy_variable (cvxpy Variable): The expression in terms of F and G.
 
         """
-        cvxpy_variable = 0
-        Fweights = np.zeros((Expression.counter,))
-        Gweights = np.zeros((Point.counter, Point.counter))
-
-        # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_leaf():
-            Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from leaf expressions
-        else:
-            for key, weight in expression.decomposition_dict.items():
-                # Function values are stored in F
-                if type(key) == Expression:
-                    assert key.get_is_leaf()
-                    Fweights[key.counter] = weight
-                # Inner products are stored in G
-                elif type(key) == tuple:
-                    point1, point2 = key
-                    assert point1.get_is_leaf()
-                    assert point2.get_is_leaf()
-                    Gweights[point1.counter, point2.counter] = weight
-                # Constants are simply constants
-                elif key == 1:
-                    cvxpy_variable = weight
-                # Others don't exist and raise an Exception
-                else:
-                    raise TypeError("Expressions are made of function values, inner products and constants only!")
-
-        Gweights = (Gweights + Gweights.T)/2
-        cvxpy_variable += self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
+        Gweights, Fweights, cons = self._expression_to_matrices(expression)
+        cvxpy_variable = cons + self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
 
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
@@ -192,11 +165,14 @@ class Cvxpy_wrapper(Wrapper):
              dual_objective (float)
 
         Raises:
-            TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
+            TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
             is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
-        dual_values = self.get_dual_variables()
+        
+        assert self._list_of_solver_constraints == self.prob.constraints
+        dual_values = [constraint.dual_value for constraint in self.prob.constraints]
+        self.dual_values = dual_values
         # Store residual, dual value of the main lmi
         residual = dual_values[0]
         assert residual.shape == (Point.counter, Point.counter)
@@ -206,13 +182,6 @@ class Cvxpy_wrapper(Wrapper):
 
         # Set counter
         #counter = len(self.list_of_performance_metrics)+1
-
-        # The dual variables associated to performance metric all have nonnegative values of sum 1.
-        # Generally, only 1 performance metric is used.
-        # Then its associated dual values is 1 while the others'associated dual values are 0.
-        
-        #performance_metric_dual_values = np.array(dual_values[1:counter])
-        #position_of_minimal_objective = np.argmax(performance_metric_dual_values)
         counter = 1 # the list of constraints sent to cvxpy contains the perf metrics
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
@@ -241,17 +210,38 @@ class Cvxpy_wrapper(Wrapper):
         # Return the position of the reached performance metric
         return dual_values, residual, dual_objective
         
-    def get_dual_variables(self):
-        assert self._list_of_solver_constraints == self.prob.constraints
-        dual_values = [constraint.dual_value for constraint in self.prob.constraints]
-        return dual_values
         
+##commented + specified after here  
     def generate_problem(self, objective):
+        """
+        Instantiate an optimization model using the cvxpy format, whose objective corresponds to a
+        PEPit :class:`Expression` object.
+
+        Args:
+            objective (Expression): the objective function of the PEP (to be maximized).
+        
+        Returns:
+            prob (cvxpy.Problem): the PEP in cvxpy format.
+
+        """
         self.objective = self._expression_to_solver(objective)
         self.prob = cp.Problem(objective=cp.Maximize(self.objective), constraints=self._list_of_solver_constraints)
         return self.prob
         
     def solve(self, **kwargs):
+        """
+        Solve the PEP.
+
+        Args:
+            kwargs (keywords, optional): solver specific arguments.
+        
+        Returns:
+            status (string): status of the solution / problem.
+            name (string): name of the solver.
+            value (float): value of the performance metric after solving.
+            problem (cvxpy Problem): solver-specific model of the PEP.
+        
+        """
         if self.verbose > 1:
             kwargs['verbose'] = True
         self.prob.solve(**kwargs)
@@ -260,10 +250,30 @@ class Cvxpy_wrapper(Wrapper):
         return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
         
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
+        """
+        Add the constraint that the objective stay close to its actual value before using 
+        dimension-reduction heuristics. That is, we constrain
+
+        .. math:: \\tau \\leqslant \\text{wc value} + \\text{tol dimension reduction}
+
+        Args:
+            wc_value (float): the optimal value of the original PEP.
+            tol_dimension_reduction (float): tolerance on the objective for finding
+                                             low-dimensional examples.
+        
+        """
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
         
     def heuristic(self, weight):
+        """
+        Change the objective of the PEP, specifically for finding low-dimensional examples.
+        We specify a matrix :math:`W` (weight), which will allow minimizing :math:`\\mathrm{Tr}(G\\,W)`.
+
+        Args:
+            weight (np.array): weights that will be used in the heuristic.
+        
+        """
         obj = cp.sum(cp.multiply(self.G, weight))
         self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
         return self.prob

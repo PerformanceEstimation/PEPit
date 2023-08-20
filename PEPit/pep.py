@@ -557,6 +557,7 @@ class PEP(object):
         PD_gap = 0.
         return primal_lin_accuracy, primal_PSD_accuracy, dual_lin_accuracy, dual_PSD_accuracy, PD_gap
  
+        
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):
         """

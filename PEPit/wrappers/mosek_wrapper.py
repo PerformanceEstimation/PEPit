@@ -15,7 +15,7 @@ class Mosek_wrapper(Wrapper):
 
     This class overwrittes the :class:`Wrapper` for MOSEK. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
-    get_primal_variables, eval_constraint_dual_values, prepare_heuristic, and heuristic
+    get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
@@ -82,67 +82,6 @@ class Mosek_wrapper(Wrapper):
             
         return self.env.expirylicenses() >= 0 # number of days until license expires >= 0?
         
-    @staticmethod
-    def _expression_to_solver(expression):
-        """
-        Create a sparse matrix representation from an :class:`Expression`.
-
-        Args:
-            expression (Expression): any expression.
-
-        Returns:
-            Ai (numpy array): Set of line indices for the sparse representation of the constraint matrix (multiplying G).
-            Aj (numpy array): Set of column indices for the sparse representation of the constraint matrix (multiplying G).
-            Aval (numpy array): Set of values for the sparse representation of the constraint matrix (multiplying G).
-            ai (numpy array): Set of indices for the sparse representation of the constraint vector (multiplying F).
-            aval (numpy array): Set of values of the sparse representation of the constraint vector (multiplying F).
-            alpha_val (float): Constant part of the constraint.
-
-        """
-        alpha_val = 0
-        Fweights = np.zeros((Expression.counter,))
-        Gweights = np.zeros((Point.counter, Point.counter))
-
-        # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_leaf():
-            Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from leaf expressions
-        else:
-            for key, weight in expression.decomposition_dict.items():
-                # Function values are stored in F
-                if type(key) == Expression:
-                    assert key.get_is_leaf()
-                    Fweights[key.counter] += weight
-                # Inner products are stored in G
-                elif type(key) == tuple:
-                    point1, point2 = key
-                    assert point1.get_is_leaf()
-                    assert point2.get_is_leaf()
-                    Gweights[point1.counter, point2.counter] += weight
-                # Constants are simply constants
-                elif key == 1:
-                    alpha_val += weight
-                # Others don't exist and raise an Exception
-                else:
-                    raise TypeError("Expressions are made of function values, inner products and constants only!")
-
-        Gweights = (Gweights + Gweights.T)/2
-        
-        No_zero_ele =np.argwhere(Fweights)
-        Fweights_ind = No_zero_ele.flatten()
-        Fweights_val = Fweights[Fweights_ind]
-        
-        No_zero_ele =np.argwhere(np.tril(Gweights))
-        Gweights_indi = No_zero_ele[:,0]
-        Gweights_indj = No_zero_ele[:,1]
-        Gweights_val = Gweights[Gweights_indi,Gweights_indj]
-        
-        No_zero_ele =np.argwhere(Fweights)
-        Fweights_ind = No_zero_ele.flatten()
-        Fweights_val = Fweights[Fweights_ind]
-        
-        # Return the input expression in sparse SDP form
-        return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, alpha_val
 
     def send_constraint_to_solver(self, constraint, track=True):
         """
@@ -173,7 +112,7 @@ class Mosek_wrapper(Wrapper):
         
         # Add a mosek constraint via task
         self.task.appendcons(1)
-        A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_solver(constraint.expression)
+        A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_sparse_matrices(constraint.expression)
         
         sym_A = self.task.appendsparsesymmat(Point.counter,A_i,A_j,A_val)
         self.task.putbaraij(nb_cons, 0, [sym_A], [1.0])
@@ -218,7 +157,7 @@ class Mosek_wrapper(Wrapper):
         # Store one correspondence constraint per entry of the matrix
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
-                A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_solver(psd_matrix[i, j])
+                A_i, A_j, A_val, a_i, a_val, alpha_val = self._expression_to_sparse_matrices(psd_matrix[i, j])
                 # how many constraints in the task so far? This will be the constraint number
                 nb_cons = self.task.getnumcon()
                 # add a constraint in mosek
@@ -240,13 +179,17 @@ class Mosek_wrapper(Wrapper):
 ##commented + specified until here    
     def eval_constraint_dual_values(self):
         """
-        Postprocess the output of the solver and associate each constraint of the list 
-        _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
-        
+        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
+
+        Args:
+            dual_values (list): the list of dual values of the problem constraints.
+
         Returns:
-            dual_values (list): ###ça ne devrait pas être necessaire!
-            residual (np.array):
-            dual_objective (float):
+             dual_objective (float)
+
+        Raises:
+            TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
+            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
         ## Task.gety() for obtaining dual variables (but not of the PSD constraints)
@@ -278,28 +221,25 @@ class Mosek_wrapper(Wrapper):
         residual = dual_values[0]
 
         return dual_values, residual, dual_objective
-        
-    def prepare_heuristic(self, wc_value, tol_dimension_reduction):
-        # Add the constraint that the objective stay close to its actual value
-        self.task.putclist([Expression.counter-1], [0.0])
-        self.task.putobjsense(mosek.objsense.minimize)
-        self.send_constraint_to_solver(self.objective >= wc_value - tol_dimension_reduction, track = False)
-        
-    def heuristic(self, weight=np.identity(Point.counter)):
-        No_zero_ele =np.argwhere(np.tril(weight))
-        W_i = No_zero_ele[:,0]
-        W_j = No_zero_ele[:,1]
-        W_val = weight[W_i, W_j]
-        sym_W = self.task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
-        self.task.putbarcj(0,[sym_W],[1.0]) 
-        self.task.putobjsense(mosek.objsense.minimize)
+##commented + specified after here  
 
     def generate_problem(self, objective):
+        """
+        Instantiate an optimization model using the mosek format, whose objective corresponds to a
+        PEPit :class:`Expression` object.
+
+        Args:
+            objective (Expression): the objective function of the PEP (to be maximized).
+        
+        Returns:
+            prob (mosek.task): the PEP in mosek's format.
+
+        """
         #task.putclist([tau.counter], [0.0])
         assert self.task.getmaxnumvar() == Expression.counter
         self.objective = objective
-        _, _, _, Fweights_ind, Fweights_val, _ = self._expression_to_solver(objective)
-        self.task.putclist(Fweights_ind, Fweights_val) #to be cleaned by calling _expression_to_solver(objective)?
+        _, _, _, Fweights_ind, Fweights_val, _ = self._expression_to_sparse_matrices(objective)
+        self.task.putclist(Fweights_ind, Fweights_val) #to be cleaned by calling _expression_to_sparse_matrices(objective)?
         # Input the objective sense (minimize/maximize)
         self.task.putobjsense(mosek.objsense.maximize)
         if self.verbose > 1:
@@ -307,7 +247,19 @@ class Mosek_wrapper(Wrapper):
         return self.task
     
     def solve(self, **kwargs):
-        # Solve the problem and print summary
+        """
+        Solve the PEP.
+
+        Args:
+            kwargs (keywords, optional): solver specific arguments.
+        
+        Returns:
+            status (string): status of the solution / problem.
+            name (string): name of the solver.
+            value (float): value of the performance metric after solving.
+            problem (mosek task): solver-specific model of the PEP.
+        
+        """
         self.task.optimize(**kwargs)
         self.wc_value = self.task.getprimalobj(mosek.soltype.itr)
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
@@ -317,14 +269,62 @@ class Mosek_wrapper(Wrapper):
         prosta = self.task.getprosta(mosek.soltype.itr)
         return prosta, 'MOSEK', tau, self.task
         
+    def prepare_heuristic(self, wc_value, tol_dimension_reduction):
+        """
+        Add the constraint that the objective stay close to its actual value before using 
+        dimension-reduction heuristics. That is, we constrain
+
+        .. math:: \\tau \\leqslant \\text{wc value} + \\text{tol dimension reduction}
+
+        Args:
+            wc_value (float): the optimal value of the original PEP.
+            tol_dimension_reduction (float): tolerance on the objective for finding
+                                             low-dimensional examples.
+        
+        """
+        self.task.putclist([Expression.counter-1], [0.0])
+        self.task.putobjsense(mosek.objsense.minimize)
+        self.send_constraint_to_solver(self.objective >= wc_value - tol_dimension_reduction, track = False)
+        
+    def heuristic(self, weight=np.identity(Point.counter)):
+        """
+        Change the objective of the PEP, specifically for finding low-dimensional examples.
+        We specify a matrix :math:`W` (weight), which will allow minimizing :math:`\\mathrm{Tr}(G\\,W)`.
+
+        Args:
+            weight (np.array): weights that will be used in the heuristic.
+        
+        """
+        No_zero_ele =np.argwhere(np.tril(weight))
+        W_i = No_zero_ele[:,0]
+        W_j = No_zero_ele[:,1]
+        W_val = weight[W_i, W_j]
+        sym_W = self.task.appendsparsesymmat(Point.counter,W_i,W_j,W_val)
+        self.task.putbarcj(0,[sym_W],[1.0]) 
+        self.task.putobjsense(mosek.objsense.minimize)
+        
     @staticmethod
     def streamprinter(text):
+        """
+        Output summaries.
+
+        Args:
+            text (string): to be printed out.
+        
+        """
         sys.stdout.write(text)
         sys.stdout.flush()
     
     @staticmethod
     def _get_Gram_from_mosek(tril, size):
-        # MOSEK returns:
+        """
+        Compute a Gram matrix from mosek.
+
+        Args:
+            tril (numpy array): weights that will be used in the heuristic.
+            size (int): weights that will be used in the heuristic.
+        
+        """
         # the primal solution for a semidefinite variable. Only the lower triangular part of
         # is returned because the matrix by construction is symmetric. The format is that the columns are stored sequentially in the natural order.
         G = np.zeros((size,size))
