@@ -15,5 +15,11 @@ TODO's:
 	- for dual objectives (in particular, test what happens if we put equality initial conditions (instead of <=)
 	- should test for PSD constraints with (a few) constants entries/values.
 
+---Git/tests:
+- comment nous assurer que certains (ou mieux: tous les) tests puissent être sur mosek?
+
+---Timings:
+- on fait une petite comparaison plus rigoureuse que mes tests maisons? (de mes observations: l'implem directe via mosek est particulièrement bien qd les probs sont sparse---il y a p-e une API pas sparse pour MOSEK). Quand ça ne l'est pas (eg bcp d'itérations sur une seule fonction).
+
 ---others: (not done at all)
 - naming points + constraints?
