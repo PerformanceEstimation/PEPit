@@ -19,7 +19,7 @@ TODO's:
 - comment nous assurer que certains (ou mieux: tous les) tests puissent être sur mosek?
 
 ---Timings:
-- on fait une petite comparaison plus rigoureuse que mes tests maisons? (de mes observations: l'implem directe via mosek est particulièrement bien qd les probs sont sparse---il y a p-e une API pas sparse pour MOSEK). Quand ça ne l'est pas (eg bcp d'itérations sur une seule fonction).
+- on fait une petite comparaison plus rigoureuse que mes tests maisons? (de mes observations: l'implem directe via mosek est particulièrement bien qd les probs sont sparse---il y a p-e une API pas sparse pour MOSEK). Quand ça ne l'est pas (eg bcp d'itérations sur une seule fonction), c'est sensiblement les mêmes temps qu'avec CVXPY + MOSEK
 
 ---others: (not done at all)
 - naming points + constraints?
