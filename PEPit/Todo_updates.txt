@@ -1,3 +1,5 @@
+Note: all those updates are required for submitting the revision.
+
 TODO's:
 ---Questions (please add yours):
 - should we really return the "problems" (CVXPY problem, MOSEK task) to the user? to the main PEP class?
@@ -26,3 +28,12 @@ TODO's:
 
 ---others: (not done at all)
 - naming points + constraints?
+
+--- PIP:
+- gérer le commentaire du technical editor: "I had to clone the repository and install the software through pip directly through github. So, it appears that the PEPit version on pip is outdated, and this outdated version was set up for testing, even though the set of examples the authors suggested was an up-to-date version."
+
+
+
+-----autres commentaires:
+- papier:
+  Pourquoi est-ce qu'on a dit que c'était + facile de gérer les pires cas en dimension faible en PEPit qu'en PESTO? C'est carrément négligeable il me semble.
