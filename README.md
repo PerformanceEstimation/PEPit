@@ -4,7 +4,7 @@
 [![Codecov Status](https://codecov.io/gh/PerformanceEstimation/PEPit/branch/master/graph/badge.svg?token=NwT4oACGS4)](https://codecov.io/gh/PerformanceEstimation/PEPit)
 [![Documentation Status](https://readthedocs.org/projects/pepit/badge/?version=latest)](https://pepit.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/PEPit.svg)](https://pypi.python.org/pypi/PEPit/)
-[![Downloads](https://pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
+[![Downloads](https://static.pepy.tech/badge/pepit)](https://pepy.tech/project/pepit)
 [![License](https://img.shields.io/github/license/PerformanceEstimation/PEPit.svg)](https://github.com/PerformanceEstimation/PEPit/blob/master/LICENSE)
 
 This open source Python library provides a generic way to use PEP framework in Python.

@@ -18,6 +18,12 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         >>> problem = PEP()
         >>> func = problem.declare_function(function_class=SmoothConvexFunction, L=1.)
 
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+        Smooth strongly convex interpolation and exact worst-case performance of first-order methods.
+        Mathematical Programming, 161(1-2), 307-345.
+        <https://arxiv.org/pdf/1502.05666.pdf>`_
+
     """
 
     def __init__(self,
