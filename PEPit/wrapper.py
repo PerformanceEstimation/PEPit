@@ -2,6 +2,8 @@ import numpy as np
 
 from PEPit.expression import Expression
 from PEPit.point import Point
+from PEPit.constraint import Constraint
+from PEPit.psd_matrix import PSDMatrix
 
 class Wrapper(object):
     """
@@ -43,6 +45,8 @@ class Wrapper(object):
         self.optimal_F = None
         self.optimal_G = None
         self.optimal_dual = list()
+        self.dual_residual = None
+        self.dual_objective = None
         self.prob = None
         self.verbose = False
 
@@ -278,11 +282,13 @@ class Wrapper(object):
         Outputs the list of dual variables.
         
         Returns:
-            dual_values (list): numerical values of the dual variables (same ordering as that
+            optimal_dual (list): numerical values of the dual variables (same ordering as that
                                 of _list_of_constraints_sent_to_solver.
+            dual_residual (np.array): dual variable corresponding to the main (primal) Gram matrix.
+            dual_objective (float): dual objective value.
 
         """
-        return self.optimal_dual
+        return self.optimal_dual, self.dual_residual, self.dual_objective
         
     def get_primal_variables(self):
         """
@@ -294,8 +300,65 @@ class Wrapper(object):
             
         """
         return self.optimal_G, self.optimal_F
-    
+
     def eval_constraint_dual_values(self):
+        """
+        Recover all dual variables and store them in associated :class:`Constraint` and :class:`PSDMatrix` objects.
+
+        Returns:
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
+             dual_objective (float): numerical value of the dual objective function.
+
+        Raises:
+            TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
+            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
+
+        """
+        dual_values, residual = self._recover_dual_values()
+        
+        assert residual.shape == (Point.counter, Point.counter)
+        
+        # initiate the value of the dual objective (updated below)
+        dual_objective = 0.
+
+        # Set counterself._list_of_constraints_sent_to_solver_full
+        counter = 1
+
+        for constraint_or_psd in self._list_of_constraints_sent_to_solver:
+            if isinstance(constraint_or_psd, Constraint):
+                constraint_or_psd._dual_variable_value = dual_values[counter]
+                constraint_dict = constraint_or_psd.expression.decomposition_dict
+                if (1 in constraint_dict):
+                    dual_objective -= dual_values[counter] * constraint_dict[1] 
+                counter += 1
+            elif isinstance(constraint_or_psd, PSDMatrix):
+                assert dual_values[counter].shape == constraint_or_psd.shape
+                constraint_or_psd._dual_variable_value = dual_values[counter]
+                counter += 1
+                n, m = constraint_or_psd._dual_variable_value.shape
+                # update dual objective
+                for i in range(n):
+                    for j in range(m):
+                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
+                        if (1 in constraint_dict):
+                            dual_objective -= constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
+            else:
+                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
+                                "\'Constraint\' objects of \'PSDMatrix\' objects."
+                                "Got {}".format(type(constraint_or_psd)))
+        
+        self.optimal_dual = dual_values
+        self.dual_residual = residual
+        self.dual_objective = dual_objective
+        
+        # Verify nothing is left
+        assert len(dual_values) == counter
+
+
+        return dual_values, residual, dual_objective
+            
+    def _recover_dual_values(self):
         """
         Postprocess the output of the solver and associate each constraint of the list 
         _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
@@ -303,12 +366,11 @@ class Wrapper(object):
         Returns:
             dual_values (list): 
             residual (np.array):
-            dual_objective (float):
 
         """
     
         raise NotImplementedError("This method must be overwritten in children classes")
-        return dual_values, residual, dual_objective
+        return dual_values, residual
 
     def generate_problem(self, objective):
         """

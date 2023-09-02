@@ -176,14 +176,13 @@ class Mosek_wrapper(Wrapper):
         if self.verbose > 0:
             print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
                
-    def eval_constraint_dual_values(self):
+    def _recover_dual_values(self):
         """
-        Recover all dual variables and store them in associated :class:`Constraint` and :class:`PSDMatrix` objects.
+        Recover all dual variables from solver.
 
         Returns:
              dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
              residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
-             dual_objective (float): numerical value of the dual objective function.
 
         Raises:
             TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
@@ -193,31 +192,19 @@ class Mosek_wrapper(Wrapper):
         #MUST CHECK the nb of constraints, somehow
         scalar_dual_values = self.task.gety(mosek.soltype.itr)
         dual_values = list()
-        dual_objective = 0.
+        
         counter_psd = 1
         counter_scalar = 0
+        
         dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, 0), Point.counter))
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
-                #note: p-e dangereux? je fais l'hypothèse qu'on parcourir la liste des cons dans le bon ordre
                 dual_values.append(scalar_dual_values[self._constraint_index_in_mosek[counter_scalar]])
-                constraint_or_psd._dual_variable_value = dual_values[-1]
                 counter_scalar += 1
-                constraint_dict = constraint_or_psd.expression.decomposition_dict
-                if (1 in constraint_dict):
-                    dual_objective -= dual_values[-1] * constraint_dict[1] 
+                
             elif isinstance(constraint_or_psd, PSDMatrix):
                 dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
                 assert dual_values[-1].shape == constraint_or_psd.shape
-                constraint_or_psd._dual_variable_value = dual_values[-1]
-                n, m = constraint_or_psd._dual_variable_value.shape
-                # update dual objective
-                for i in range(n):
-                    for j in range(m):
-                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
-                        if (1 in constraint_dict):
-                            dual_objective -= constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
-                #here: add
                 counter_psd += 1
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
@@ -227,7 +214,7 @@ class Mosek_wrapper(Wrapper):
         assert len(dual_values)-1 == len(self._list_of_constraints_sent_to_solver) #-1 because we added the dual corresponding to the Gram matrix
         residual = dual_values[0]
 
-        return dual_values, residual, dual_objective
+        return dual_values, residual
 
     def generate_problem(self, objective):
         """

@@ -153,14 +153,13 @@ class Cvxpy_wrapper(Wrapper):
         # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints += cvxpy_constraints_list
 
-    def eval_constraint_dual_values(self):
+    def _recover_dual_values(self):
         """
-        Recover all dual variables and store them in associated :class:`Constraint` and :class:`PSDMatrix` objects.
+        Recover all dual variables from solver.
 
         Returns:
              dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
              residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
-             dual_objective (float): numerical value of the dual objective function.
 
         Raises:
             TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
@@ -169,50 +168,40 @@ class Cvxpy_wrapper(Wrapper):
         """
         
         assert self._list_of_solver_constraints == self.prob.constraints
-        dual_values = [constraint.dual_value for constraint in self.prob.constraints]
-        self.dual_values = dual_values
-        # Store residual, dual value of the main lmi
-        residual = dual_values[0]
-        assert residual.shape == (Point.counter, Point.counter)
+        dual_values_temp = [constraint.dual_value for constraint in self.prob.constraints]
+        dual_values = list()
         
-        # initiate the value of the dual objective (updated below)
-        dual_objective = 0.
+        # Store residual, dual value of the main lmi
+        residual = dual_values_temp[0]
+        dual_values.append(residual)
+        assert residual.shape == (Point.counter, Point.counter)
 
         # Set counterself._list_of_constraints_sent_to_solver_full
-        counter = 1 # the list of constraints sent to cvxpy contains the perf metrics
+        counter = 1 
+        counter2 = 1 # number of dual variables (no artificial ones due to LMI)
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
-                constraint_or_psd._dual_variable_value = dual_values[counter]
-                constraint_dict = constraint_or_psd.expression.decomposition_dict
-                if (1 in constraint_dict):
-                    dual_objective -= dual_values[counter] * constraint_dict[1] 
+                dual_values.append(dual_values_temp[counter])
                 counter += 1
+                counter2 += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
-                assert dual_values[counter].shape == constraint_or_psd.shape
-                constraint_or_psd._dual_variable_value = dual_values[counter]
+                assert dual_values_temp[counter].shape == constraint_or_psd.shape
+                dual_values.append(-dual_values_temp[counter])
                 counter += 1
+                counter2 += 1
                 size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
-                constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
-                                                                         ).reshape(constraint_or_psd.shape)
-                n, m = constraint_or_psd._dual_variable_value.shape
                 counter += size
-                # update dual objective
-                for i in range(n):
-                    for j in range(m):
-                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
-                        if (1 in constraint_dict):
-                            dual_objective += constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
                                 "Got {}".format(type(constraint_or_psd)))
 
         # Verify nothing is left
-        assert len(dual_values) == counter
+        assert len(dual_values) == counter2
 
         # Return the position of the reached performance metric
-        return dual_values, residual, dual_objective
+        return dual_values, residual
         
     def generate_problem(self, objective):
         """

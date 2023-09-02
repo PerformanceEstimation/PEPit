@@ -4,10 +4,8 @@ TODO's:
 ---Questions (please add yours):
 - should we really return the "problems" (CVXPY problem, MOSEK task) to the user? to the main PEP class?
 
-
 ---accuracies // duals
 - in pep.py -> routine for checking accuracies (primal, dual, & primal-dual)
-- split "eval_constraint_dual_values" (in wrappers) in two: one that is implemented in Wrapper (which does the association, and which does not require new implementation) and one which has to be implemented for every solver (something like "compute_dual_variables_and_objective") ... so that it is easy and "transparent" to add new solvers in there.
 
 ---documentation:
 - update the "output" of the examples for the documentation
@@ -17,8 +15,8 @@ TODO's:
 - add asserts in the new code
 - add tests, including for:
 	- for wrappers & for both solvers
-	- for dual objectives (in particular, test what happens if we put equality initial conditions (instead of <=)
-	- should test for PSD constraints with (a few) constants entries/values.
+	- for dual objectives (in particular, test what happens if we put equality initial conditions (instead of <=)---should check that the signs are handled correctly.
+	- should test for PSD constraints with (a few) constants entries/values. (this is already done in a few examples now--should check consistency of the dual objective)
 
 ---Git/tests:
 - comment nous assurer que certains (ou mieux: tous les) tests puissent être sur mosek?
