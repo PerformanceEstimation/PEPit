@@ -31,22 +31,26 @@ def wc_proximal_point_complexified3(gamma, n, verbose=1):
         tuple: worst_case value, theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified(gamma=1, n=2, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_proximal_point_complexified3(gamma=1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
+        (PEPit) Setting up the problem: 1 lmi constraint(s) added
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
-                         function 2 : Adding 6 scalar constraint(s) ...
-                         function 2 : 6 scalar constraint(s) added
+                function 1 : Adding 6 scalar constraint(s) ...
+                function 1 : 6 scalar constraint(s) added
+                function 2 : Adding 6 scalar constraint(s) ...
+                function 2 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12500022120131604
+        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.12499999936719847
+        (PEPit) Final upper bound (dual): 0.12500002829268117 and lower bound (primal example): 0.12499999936719847
+        (PEPit) Duality gap: absolute: 2.892548270350126e-08 and relative: 2.3140386279947184e-07
         *** Example file: worst-case performance of the Proximal Point Method in function values***
-                PEPit guarantee:         f(x_n)-f_* <= 0.125 ||x0 - xs||^2
-                Theoretical guarantee :  f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+                PEPit guarantee:	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2
+                Theoretical guarantee :	 f(x_n)-f_* <= 0.125 ||x0 - xs||^2 
 
     """
 

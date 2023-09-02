@@ -29,7 +29,7 @@ def wc_inexact_gradient_exact_line_search_complexified3(L, mu, epsilon, n, verbo
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search_complexified3(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
