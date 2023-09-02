@@ -205,11 +205,19 @@ class Mosek_wrapper(Wrapper):
                 counter_scalar += 1
                 constraint_dict = constraint_or_psd.expression.decomposition_dict
                 if (1 in constraint_dict):
-                    dual_objective -= dual_values[-1] * constraint_dict[1] ## ATTENTION: on ne tient pas compte des constantes dans les LMIs en faisant juste ça!!
+                    dual_objective -= dual_values[-1] * constraint_dict[1] 
             elif isinstance(constraint_or_psd, PSDMatrix):
                 dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
                 assert dual_values[-1].shape == constraint_or_psd.shape
                 constraint_or_psd._dual_variable_value = dual_values[-1]
+                n, m = constraint_or_psd._dual_variable_value.shape
+                # update dual objective
+                for i in range(n):
+                    for j in range(m):
+                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
+                        if (1 in constraint_dict):
+                            dual_objective -= constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
+                #here: add
                 counter_psd += 1
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"

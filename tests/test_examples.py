@@ -472,13 +472,13 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_accelerated_proximal_point_operators(self):
-        alpha, n = 2, 10
+        alpha, n = 2.1, 10
 
         wc, theory = wc_accelerated_proximal_point_operators(alpha, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_proximal_point_method_operators(self):
-        alpha, n = 2, 3
+        alpha, n = 2.1, 3
 
         wc, theory = wc_proximal_point_method_operators(alpha, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)

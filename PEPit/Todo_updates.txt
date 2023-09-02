@@ -7,7 +7,6 @@ TODO's:
 
 ---accuracies // duals
 - in pep.py -> routine for checking accuracies (primal, dual, & primal-dual)
-- in wrappers -> accurately compute dual objectives (currently do not take into account constant terms from LMIs)
 - split "eval_constraint_dual_values" (in wrappers) in two: one that is implemented in Wrapper (which does the association, and which does not require new implementation) and one which has to be implemented for every solver (something like "compute_dual_variables_and_objective") ... so that it is easy and "transparent" to add new solvers in there.
 
 ---documentation:
@@ -33,8 +32,10 @@ TODO's:
 --- PIP:
 - gérer le commentaire du technical editor: "I had to clone the repository and install the software through pip directly through github. So, it appears that the PEPit version on pip is outdated, and this outdated version was set up for testing, even though the set of examples the authors suggested was an up-to-date version."
 
-
+--- Examples:
+- à ajouter?
 
 -----autres commentaires:
 - papier:
   Pourquoi est-ce qu'on a dit que c'était + facile de gérer les pires cas en dimension faible en PEPit qu'en PESTO? C'est carrément négligeable il me semble.
+

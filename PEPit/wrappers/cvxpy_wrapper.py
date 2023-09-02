@@ -186,7 +186,7 @@ class Cvxpy_wrapper(Wrapper):
                 constraint_or_psd._dual_variable_value = dual_values[counter]
                 constraint_dict = constraint_or_psd.expression.decomposition_dict
                 if (1 in constraint_dict):
-                    dual_objective -= dual_values[counter] * constraint_dict[1] ## ATTENTION: on ne tient pas compte des constantes dans les LMIs en faisant juste ça!!
+                    dual_objective -= dual_values[counter] * constraint_dict[1] 
                 counter += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
                 assert dual_values[counter].shape == constraint_or_psd.shape
@@ -195,7 +195,14 @@ class Cvxpy_wrapper(Wrapper):
                 size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
                 constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
                                                                          ).reshape(constraint_or_psd.shape)
+                n, m = constraint_or_psd._dual_variable_value.shape
                 counter += size
+                # update dual objective
+                for i in range(n):
+                    for j in range(m):
+                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
+                        if (1 in constraint_dict):
+                            dual_objective += constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
