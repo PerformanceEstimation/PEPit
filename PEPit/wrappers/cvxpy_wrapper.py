@@ -178,8 +178,7 @@ class Cvxpy_wrapper(Wrapper):
         # initiate the value of the dual objective (updated below)
         dual_objective = 0.
 
-        # Set counter
-        #counter = len(self.list_of_performance_metrics)+1
+        # Set counterself._list_of_constraints_sent_to_solver_full
         counter = 1 # the list of constraints sent to cvxpy contains the perf metrics
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
