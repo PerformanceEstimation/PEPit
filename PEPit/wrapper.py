@@ -47,8 +47,17 @@ class Wrapper(object):
         self.optimal_dual = list()
         self.dual_residual = None
         self.dual_objective = None
+        
         self.prob = None
         self.verbose = False
+        
+        # feasibility: (i) primal (linear constraints + eigs of the LMI) (ii) dual
+        self.primal_feas = None
+        self.primal_feas_eigs = None
+        self.dual_feas = None
+        self.dual_feas_eigs = None
+        
+        
 
     def check_license(self):
         """
