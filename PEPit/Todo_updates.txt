@@ -32,6 +32,7 @@ TODO's:
 
 --- Examples:
 - à ajouter?
+- the output of the upper bound should be the dual value (and not the primal value)
 
 -----autres commentaires:
 - papier:
