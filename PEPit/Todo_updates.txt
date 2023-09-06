@@ -33,6 +33,7 @@ TODO's:
 --- Examples:
 - à ajouter?
 - the output of the upper bound should be the dual value (and not the primal value)
+- une fois les outputs modifiés -> updater l'output 'exemple' du papier.
 
 -----autres commentaires:
 - papier:
