@@ -21,21 +21,12 @@ TODO's:
 ---Git/tests:
 - comment nous assurer que certains (ou mieux: tous les) tests puissent être sur mosek?
 
----Timings:
-- on fait une petite comparaison plus rigoureuse que mes tests maisons? (de mes observations: l'implem directe via mosek est particulièrement bien qd les probs sont sparse---il y a p-e une API pas sparse pour MOSEK). Quand ça ne l'est pas (eg bcp d'itérations sur une seule fonction), c'est sensiblement les mêmes temps qu'avec CVXPY + MOSEK
-
----others: (not done at all)
+---Others: (not done at all)
 - naming points + constraints?
 
---- PIP:
-- gérer le commentaire du technical editor: "I had to clone the repository and install the software through pip directly through github. So, it appears that the PEPit version on pip is outdated, and this outdated version was set up for testing, even though the set of examples the authors suggested was an up-to-date version."
+--- Functions:
+Smooth convex Lip
 
 --- Examples:
-- à ajouter?
 - the output of the upper bound should be the dual value (and not the primal value)
 - une fois les outputs modifiés -> updater l'output 'exemple' du papier.
-
------autres commentaires:
-- papier:
-  Pourquoi est-ce qu'on a dit que c'était + facile de gérer les pires cas en dimension faible en PEPit qu'en PESTO? C'est carrément négligeable il me semble.
-

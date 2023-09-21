@@ -187,7 +187,7 @@ class Cvxpy_wrapper(Wrapper):
                 counter2 += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
                 assert dual_values_temp[counter].shape == constraint_or_psd.shape
-                dual_values.append(-dual_values_temp[counter])
+                dual_values.append(dual_values_temp[counter])
                 counter += 1
                 counter2 += 1
                 size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]

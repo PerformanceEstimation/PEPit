@@ -81,7 +81,6 @@ class Mosek_wrapper(Wrapper):
             return False
             
         return self.env.expirylicenses() >= 0 # number of days until license expires >= 0?
-        
 
     def send_constraint_to_solver(self, constraint, track=True):
         """
@@ -203,7 +202,7 @@ class Mosek_wrapper(Wrapper):
                 counter_scalar += 1
                 
             elif isinstance(constraint_or_psd, PSDMatrix):
-                dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
+                dual_values.append(-self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, counter_psd), constraint_or_psd.shape[0]))
                 assert dual_values[-1].shape == constraint_or_psd.shape
                 counter_psd += 1
             else:

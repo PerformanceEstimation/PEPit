@@ -349,9 +349,9 @@ class Wrapper(object):
                 # update dual objective
                 for i in range(n):
                     for j in range(m):
-                        constraint_dict = constraint_or_psd.__getitem__((i,j)).decomposition_dict
+                        constraint_dict = constraint_or_psd.__getitem__((i, j)).decomposition_dict
                         if (1 in constraint_dict):
-                            dual_objective -= constraint_or_psd._dual_variable_value[i,j] * constraint_dict[1]
+                            dual_objective += constraint_or_psd._dual_variable_value[i, j] * constraint_dict[1]
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
