@@ -43,6 +43,7 @@ jobs:
         pip install -e .
     - uses: yaananth/run-notebook@v2
       env:
+        MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
         RUNNER: ${{ toJson(runner) }}
         SECRETS: ${{ toJson(secrets) }}
         GITHUB: ${{ toJson(github) }}
