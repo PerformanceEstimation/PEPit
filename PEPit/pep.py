@@ -1,19 +1,22 @@
-import numpy as np
-import sys
 import importlib.util
 
-from PEPit.wrappers.cvxpy_wrapper import Cvxpy_wrapper
-from PEPit.wrappers.mosek_wrapper import Mosek_wrapper
+import numpy as np
+
+# from PEPit.wrappers.cvxpy_wrapper import CvxpyWrapper
+# from PEPit.wrappers.mosek_wrapper import MosekWrapper
+from PEPit.wrappers import WRAPPERS
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
-                  
-## Add references to your wrappers here.
-MOSEK = {'libname': 'mosek', 'wrapper': Mosek_wrapper}
-CVXPY = {'libname': 'cvxpy', 'wrapper': Cvxpy_wrapper}
+
+
+# Add references to your wrappers here.
+# CVXPY = {'libname': 'cvxpy', 'wrapper': CvxpyWrapper}
+# MOSEK = {'libname': 'mosek', 'wrapper': MosekWrapper}
+
 
 class PEP(object):
     """
@@ -217,10 +220,11 @@ class PEP(object):
 
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
-        
-    def solve(self, verbose=1, return_full_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, solver=CVXPY,
-              **kwargs):
+
+    def solve(self, verbose=1,
+              return_full_problem=False, dimension_reduction_heuristic=None,
+              eig_regularization=1e-3, tol_dimension_reduction=1e-5,
+              solver="cvxpy", **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
@@ -261,30 +265,35 @@ class PEP(object):
 
         """
         # Check that the solver is installed, if it is not, switch to CVXPY.
-        find_solver = importlib.util.find_spec(solver['libname'])
-        solver_found = find_solver is not None
-        if not solver_found:
-            solver = CVXPY
-            print('(PEPit) {} not found, switching to cvxpy'.format(solver['libname']))
-        
+        found_solver = importlib.util.find_spec(solver)
+        if found_solver is None:
+            solver = "cvxpy"
+            print('(PEPit) {} not found in system environment, switching to cvxpy'.format(solver))
+
         # Initiate a wrapper to interface with the solver 
-        wrap = solver['wrapper']()
-        
+        wrapper = WRAPPERS[solver]()
+
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
-        if not wrap.check_license():
-            print('(PEPit) No valid {} license found, switching to cvxpy'.format(solver['libname']))
-            solver = CVXPY
-            wrap = solver['wrapper']()
-        
+        if not wrapper.check_license():
+            print('(PEPit) No valid {} license found, switching to cvxpy'.format(solver))
+            solver = "cvxpy"
+            wrapper = WRAPPERS[solver]()
+
         # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
-        out = self._generic_solve(wrap, verbose, return_full_problem, dimension_reduction_heuristic, eig_regularization, tol_dimension_reduction, **kwargs)
+        print("=====")
+        print(
+            "Wrapper used:{}".format(solver)
+        )
+        out = self._generic_solve(wrapper, verbose, return_full_problem, dimension_reduction_heuristic,
+                                  eig_regularization,
+                                  tol_dimension_reduction, **kwargs)
         return out
 
     def _generic_solve(self, wrapper, verbose=1, return_full_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-              **kwargs):      
+                       dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
+                       **kwargs):
         """
-        Internal solve method. Transate the :class:`PEP` to an SDP, and solve it via the wrapper.
+        Internal solve method. Translate the :class:`PEP` to an SDP, and solve it via the wrapper.
 
         Args:
             wrapper (Wrapper): Interface to the solver.
@@ -320,11 +329,11 @@ class PEP(object):
                               of the PEP. The value is returned by default.
 
         """
-        
+
         # Create an expression that serve for the objective (min of the performance measures)   
         tau = Expression(is_leaf=True)
         objective = tau
-        
+
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
                                   if function.get_is_leaf()]
@@ -334,7 +343,7 @@ class PEP(object):
         # Create all class constraints
         for function in list_of_leaf_functions:
             function.add_class_constraints()
-            
+
         # Create all partition constraints
         for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
@@ -350,7 +359,7 @@ class PEP(object):
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
             wrapper.send_constraint_to_solver(tau <= performance_metric)
-        
+
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
@@ -362,7 +371,8 @@ class PEP(object):
             wrapper.send_constraint_to_solver(condition)
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
+                  ' initial conditions and general constraints ({} constraint(s) added)'.format(
+                    len(self.list_of_constraints)))
 
         # Defining general lmi constraints
         if len(self.list_of_psd) > 0:
@@ -380,28 +390,32 @@ class PEP(object):
             function_counter += 1
 
             if verbose:
-                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints), 'scalar constraint(s) ...')
+                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
+                      'scalar constraint(s) ...')
 
             for constraint in function.list_of_class_constraints:
                 wrapper.send_constraint_to_solver(constraint)
 
             if verbose:
-                print('\t\t function', function_counter, ':', len(function.list_of_class_constraints), 'scalar constraint(s) added')
+                print('\t\t function', function_counter, ':', len(function.list_of_class_constraints),
+                      'scalar constraint(s) added')
 
             if len(function.list_of_class_psd) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
+                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd),
+                          'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
                     wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
+                    print('\t\t function', function_counter, ':', len(function.list_of_class_psd),
+                          'lmi constraint(s) added')
 
         # Other function constraints
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
+                  ' additional constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
         function_counter = 0
         for function in list_of_functions_with_constraints:
             function_counter += 1
@@ -432,7 +446,8 @@ class PEP(object):
 
         # Defining block partition constraints
         if verbose and len(BlockPartition.list_of_partitions) > 0:
-            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
+            print(
+                '(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
 
         partition_counter = 0
         for partition in BlockPartition.list_of_partitions:
@@ -494,14 +509,15 @@ class PEP(object):
 
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
-                for i in range(1, 1+niter):
+                for i in range(1, 1 + niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                     wrapper.heuristic(W)
                     solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
 
                     # Compute minimal number of dimensions
                     G_value, F_value = wrapper.get_primal_variables()
-                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
+                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(
+                        G_value)
 
                     # Print the estimated dimension after i dimension reduction steps
                     if verbose:
@@ -509,8 +525,9 @@ class PEP(object):
                               ' objective value: {}'.format(solver_status,
                                                             solver_name,
                                                             wc_value))
-                        print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
-                            nb_eigenvalues, eig_threshold, i))
+                        print(
+                            '(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
+                                nb_eigenvalues, eig_threshold, i))
 
             else:
                 raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
@@ -530,10 +547,12 @@ class PEP(object):
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
 
         # Store all the dual values in constraints
-        #_, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
+        # _, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
         if verbose:
-            print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective, wc_value))
-            print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective-wc_value, (dual_objective-wc_value)/wc_value))
+            print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
+                                                                                                      wc_value))
+            print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective - wc_value,
+                                                                              (dual_objective - wc_value) / wc_value))
 
         # Return the value of the minimal performance metric or the full cvxpy Problem object
         if return_full_problem:
@@ -541,23 +560,21 @@ class PEP(object):
             return prob
         else:
             # Return the value of the minimal performance metric
-            return wc_value    
-
+            return wc_value
 
     def _verify_accuracy():
         """XXXX TODOTODOs
 
         """
         # CHECK FEASIBILITY (primal & dual; all constraints (LMIs and linear constraints))!
-    	# CHECK PD GAP
+        # CHECK PD GAP
         primal_lin_accuracy = 0.
         primal_PSD_accuracy = 0.
         dual_lin_accuracy = 0.
         dual_PSD_accuracy = 0.
         PD_gap = 0.
         return primal_lin_accuracy, primal_PSD_accuracy, dual_lin_accuracy, dual_PSD_accuracy, PD_gap
- 
-        
+
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):
         """
@@ -580,12 +597,12 @@ class PEP(object):
         eig_val, eig_vec = np.linalg.eigh(S)
 
         # Get the right threshold to use.
-        eig_threshold = max(np.max(eig_val)/1e3, 2 * np.max(-eig_val))
+        eig_threshold = max(np.max(eig_val) / 1e3, 2 * np.max(-eig_val))
 
         # Correct eig_val accordingly.
         non_zero_eig_vals = eig_val >= eig_threshold
         nb_eigenvalues = int(np.sum(non_zero_eig_vals))
-        nb_zeros = M.shape[0]-nb_eigenvalues
+        nb_zeros = M.shape[0] - nb_eigenvalues
         corrected_eig_val = non_zero_eig_vals * eig_val
 
         # Recompute M (or S) accordingly.
@@ -593,7 +610,7 @@ class PEP(object):
 
         # Get the highest eigenvalue that has been set to 0, if any.
         eig_threshold = 0
-        
+
         if nb_zeros > 0:
             eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
 

@@ -5,8 +5,6 @@ from .function import Function
 from .psd_matrix import PSDMatrix
 from .wrapper import Wrapper
 from .pep import PEP
-from .pep import MOSEK
-from .pep import CVXPY
 from .point import Point, null_point
 
 __all__ = ['block_partition', 'BlockPartition',
@@ -20,7 +18,7 @@ __all__ = ['block_partition', 'BlockPartition',
            'expression', 'Expression', 'null_expression',
            'function', 'Function',
            'psd_matrix', 'PSDMatrix',
-           'pep', 'PEP', 'MOSEK', 'CVXPY',
+           'pep', 'PEP',
            'point', 'Point', 'null_point',
            'wrapper', 'Wrapper',
            ]

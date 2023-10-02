@@ -94,6 +94,8 @@ from PEPit.examples.tutorials import wc_gradient_descent_contraction
 
 class TestExamples(unittest.TestCase):
 
+    SOLVER = "cvxpy"
+
     def setUp(self):
         self.n = 6
         self.mu = .1
@@ -624,3 +626,8 @@ class TestExamples(unittest.TestCase):
 
         wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+
+class TestExamplesWithMOSEK(TestExamples):
+
+    SOLVER = "mosek"

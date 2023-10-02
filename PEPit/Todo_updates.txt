@@ -1,5 +1,3 @@
-Note: all those updates are required for submitting the revision.
-
 TODO's:
 ---Questions (please add yours):
 - should we really return the "problems" (CVXPY problem, MOSEK task) to the user? to the main PEP class?
@@ -30,3 +28,16 @@ Smooth convex Lip
 --- Examples:
 - the output of the upper bound should be the dual value (and not the primal value)
 - une fois les outputs modifiés -> updater l'output 'exemple' du papier.
+
+
+Examples:
+- Importer les 2 solvers
+- Ajouter solver en param de l example avec CVXPY by default
+- L ajouter en docstring
+- L ajouter en if name==main
+- l appeler dans test_examples
+- Updater les outputs des examples
+
+Tests:
+- Tester une install avec Mosek, une sans
+- Tester une install avec Mosek sans la license.

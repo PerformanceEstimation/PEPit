@@ -5,6 +5,7 @@ from PEPit.point import Point
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
+
 class Wrapper(object):
     """
     A :class:`Wrapper` object interfaces PEPit with an SDP solver (or modelling language).
@@ -32,6 +33,7 @@ class Wrapper(object):
                             - 2: Both PEPit and CVXPY details are printed
 
     """
+
     def __init__(self):
         """
         :class:`Wrapper` object should not be instantiated as such: only children class should.
@@ -41,23 +43,22 @@ class Wrapper(object):
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
-        self._list_of_constraints_sent_to_solver_full = list() ##MUST USE FOR EVALUATION TRUE DUAL OBJ!!
+        self._list_of_constraints_sent_to_solver_full = list()  # MUST USE FOR EVALUATION TRUE DUAL OBJ!!
+
         self.optimal_F = None
         self.optimal_G = None
         self.optimal_dual = list()
         self.dual_residual = None
         self.dual_objective = None
-        
+
         self.prob = None
         self.verbose = False
-        
+
         # feasibility: (i) primal (linear constraints + eigs of the LMI) (ii) dual
         self.primal_feas = None
         self.primal_feas_eigs = None
         self.dual_feas = None
         self.dual_feas_eigs = None
-        
-        
 
     def check_license(self):
         """
@@ -67,9 +68,9 @@ class Wrapper(object):
             license (bool): is there a valid license?
 
         """
-    
+
         raise NotImplementedError("This method must be overwritten in children classes")
-    
+
     def _expression_to_matrices(self, expression):
         """
         Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
@@ -114,10 +115,10 @@ class Wrapper(object):
                 else:
                     raise TypeError("Expressions are made of function values, inner products and constants only!")
 
-        Gweights = (Gweights + Gweights.T)/2
-        
+        Gweights = (Gweights + Gweights.T) / 2
+
         return Gweights, Fweights, cons
-        
+
     def _expression_to_sparse_matrices(self, expression):
         """
         Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
@@ -162,18 +163,18 @@ class Wrapper(object):
                     point1, point2 = key
                     assert point1.get_is_leaf()
                     assert point2.get_is_leaf()
-                    
-                    weight_sym = 0 # weight of the symmetrical entry
-                    if (point2,point1) in expression.decomposition_dict:
-                        if point1.counter >= point2.counter: # if both entry and symmetrical entry: only append in one case
-                            weight_sym = expression.decomposition_dict[(point2,point1)]
-                            Gweights_val.append((weight+weight_sym)/2)
+
+                    weight_sym = 0  # weight of the symmetrical entry
+                    if (point2, point1) in expression.decomposition_dict:
+                        if point1.counter >= point2.counter:  # if both entry and symmetrical entry: only append in one case
+                            weight_sym = expression.decomposition_dict[(point2, point1)]
+                            Gweights_val.append((weight + weight_sym) / 2)
                             Gweights_indi.append(point1.counter)
                             Gweights_indj.append(point2.counter)
                     else:
-                        Gweights_val.append((weight+weight_sym)/2)
-                        Gweights_indi.append(max(point1.counter,point2.counter))
-                        Gweights_indj.append(min(point1.counter,point2.counter))
+                        Gweights_val.append((weight + weight_sym) / 2)
+                        Gweights_indi.append(max(point1.counter, point2.counter))
+                        Gweights_indj.append(min(point1.counter, point2.counter))
                 # Constants are simply constants
                 elif key == 1:
                     cons_val = weight
@@ -181,13 +182,12 @@ class Wrapper(object):
                 else:
                     raise TypeError("Expressions are made of function values, inner products and constants only!")
 
-
         Fweights_ind = np.array(Fweights_ind)
         Fweights_val = np.array(Fweights_val)
         Gweights_indi = np.array(Gweights_indi)
         Gweights_indj = np.array(Gweights_indj)
         Gweights_val = np.array(Gweights_val)
-        
+
         return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, cons_val
 
     def _expression_to_sparse_matrices_original(self, expression):
@@ -237,23 +237,19 @@ class Wrapper(object):
                 else:
                     raise TypeError("Expressions are made of function values, inner products and constants only!")
 
-        Gweights = (Gweights + Gweights.T)/2
-        
-        No_zero_ele =np.argwhere(Fweights)
+        Gweights = (Gweights + Gweights.T) / 2
+
+        No_zero_ele = np.argwhere(np.tril(Gweights))
+        Gweights_indi = No_zero_ele[:, 0]
+        Gweights_indj = No_zero_ele[:, 1]
+        Gweights_val = Gweights[Gweights_indi, Gweights_indj]
+
+        No_zero_ele = np.argwhere(Fweights)
         Fweights_ind = No_zero_ele.flatten()
         Fweights_val = Fweights[Fweights_ind]
-        
-        No_zero_ele =np.argwhere(np.tril(Gweights))
-        Gweights_indi = No_zero_ele[:,0]
-        Gweights_indj = No_zero_ele[:,1]
-        Gweights_val = Gweights[Gweights_indi,Gweights_indj]
-        
-        No_zero_ele =np.argwhere(Fweights)
-        Fweights_ind = No_zero_ele.flatten()
-        Fweights_val = Fweights[Fweights_ind]
-        
+
         return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, cons_val
-                
+
     def send_constraint_to_solver(self, constraint):
         """
         Transfer a PEPit :class:`Constraint` to the solver and add the :class:`Constraint` 
@@ -285,7 +281,7 @@ class Wrapper(object):
 
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-        
+
     def get_dual_variables(self):
         """
         Outputs the list of dual variables.
@@ -298,10 +294,10 @@ class Wrapper(object):
 
         """
         return self.optimal_dual, self.dual_residual, self.dual_objective
-        
+
     def get_primal_variables(self):
         """
-        Outputs the optimal  of dual variables.
+        Outputs the optimal value of primal variables.
         
         Returns:
             optimal_G (numpy.array): numerical Gram matrix of the PEP after solving.
@@ -325,9 +321,9 @@ class Wrapper(object):
 
         """
         dual_values, residual = self._recover_dual_values()
-        
+
         assert residual.shape == (Point.counter, Point.counter)
-        
+
         # initiate the value of the dual objective (updated below)
         dual_objective = 0.
 
@@ -338,8 +334,8 @@ class Wrapper(object):
             if isinstance(constraint_or_psd, Constraint):
                 constraint_or_psd._dual_variable_value = dual_values[counter]
                 constraint_dict = constraint_or_psd.expression.decomposition_dict
-                if (1 in constraint_dict):
-                    dual_objective -= dual_values[counter] * constraint_dict[1] 
+                if 1 in constraint_dict:
+                    dual_objective -= dual_values[counter] * constraint_dict[1]
                 counter += 1
             elif isinstance(constraint_or_psd, PSDMatrix):
                 assert dual_values[counter].shape == constraint_or_psd.shape
@@ -350,23 +346,22 @@ class Wrapper(object):
                 for i in range(n):
                     for j in range(m):
                         constraint_dict = constraint_or_psd.__getitem__((i, j)).decomposition_dict
-                        if (1 in constraint_dict):
+                        if 1 in constraint_dict:
                             dual_objective += constraint_or_psd._dual_variable_value[i, j] * constraint_dict[1]
             else:
                 raise TypeError("The list of constraints that are sent to CVXPY should contain only"
                                 "\'Constraint\' objects of \'PSDMatrix\' objects."
                                 "Got {}".format(type(constraint_or_psd)))
-        
+
         self.optimal_dual = dual_values
         self.dual_residual = residual
         self.dual_objective = dual_objective
-        
+
         # Verify nothing is left
         assert len(dual_values) == counter
 
-
         return dual_values, residual, dual_objective
-            
+
     def _recover_dual_values(self):
         """
         Postprocess the output of the solver and associate each constraint of the list 
@@ -377,7 +372,7 @@ class Wrapper(object):
             residual (np.array):
 
         """
-    
+
         raise NotImplementedError("This method must be overwritten in children classes")
         return dual_values, residual
 
@@ -395,7 +390,7 @@ class Wrapper(object):
         """
         raise NotImplementedError("This method must be overwritten in children classes")
         return self.prob
-    
+
     def solve(self, **kwargs):
         """
         Solve the PEP with solver options.
@@ -411,7 +406,7 @@ class Wrapper(object):
         
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-        
+
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
         Add the constraint that the objective stay close to its actual value before using 
@@ -426,8 +421,8 @@ class Wrapper(object):
         
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-        #add constraint that tau<= wc_value+tol_dimension
-        
+        # add constraint that tau<= wc_value+tol_dimension
+
     def heuristic(self, weight):
         """
         Change the objective of the PEP, specifically for finding low-dimensional examples.
@@ -438,7 +433,7 @@ class Wrapper(object):
         
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-    
+
     @staticmethod
     def _translate_status(status):
         """

@@ -1,5 +1,5 @@
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
 
 from PEPit.wrapper import Wrapper
 from PEPit.point import Point
@@ -8,11 +8,11 @@ from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
 
-class Cvxpy_wrapper(Wrapper):
+class CvxpyWrapper(Wrapper):
     """
     A :class:`Cvxpy_wrapper` object interfaces PEPit with the `CVXPY<https://www.cvxpy.org/>`_ modelling language.
 
-    This class overwrittes the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
+    This class overwrites the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
@@ -34,6 +34,7 @@ class Cvxpy_wrapper(Wrapper):
                             - 2: Both PEPit and CVXPY details are printed (overwrittes CVXPY's setting)
 
     """
+
     def __init__(self, verbose=False):
         """
         This function initialize all internal variables of the class. 
@@ -45,9 +46,8 @@ class Cvxpy_wrapper(Wrapper):
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
-        self._list_of_solver_constraints = list()
         self._list_of_constraints_sent_to_solver_full = list()
-        self.F = cp.Variable((Expression.counter+1,)) # need the +1 because the objective will be created afterwards
+        self.F = cp.Variable((Expression.counter + 1,))  # need the +1 because the objective will be created afterwards
         self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
 
         # Express the constraints from F, G and objective
@@ -60,11 +60,11 @@ class Cvxpy_wrapper(Wrapper):
         Check that there is a valid available license for CVXPY.
 
         Returns:
-            license (bool): no license needed: True
-            
+            license presence (bool): no license needed: True
+
         """
         return True
-        
+
     def _expression_to_solver(self, expression):
         """
         Create a cvxpy compatible expression from an :class:`Expression`.
@@ -81,7 +81,7 @@ class Cvxpy_wrapper(Wrapper):
 
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
-    
+
     def send_constraint_to_solver(self, constraint):
         """
         Transform a PEPit :class:`Constraint` into a CVXPY one
@@ -117,7 +117,7 @@ class Cvxpy_wrapper(Wrapper):
         # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints.append(cvxpy_constraint)
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
         """
         Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
         and add the 2 formats of the constraints into the tracking lists.
@@ -166,19 +166,19 @@ class Cvxpy_wrapper(Wrapper):
             is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
-        
+
         assert self._list_of_solver_constraints == self.prob.constraints
         dual_values_temp = [constraint.dual_value for constraint in self.prob.constraints]
         dual_values = list()
-        
+
         # Store residual, dual value of the main lmi
         residual = dual_values_temp[0]
         dual_values.append(residual)
         assert residual.shape == (Point.counter, Point.counter)
 
         # Set counterself._list_of_constraints_sent_to_solver_full
-        counter = 1 
-        counter2 = 1 # number of dual variables (no artificial ones due to LMI)
+        counter = 1
+        counter2 = 1  # number of dual variables (no artificial ones due to LMI)
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
@@ -202,7 +202,7 @@ class Cvxpy_wrapper(Wrapper):
 
         # Return the position of the reached performance metric
         return dual_values, residual
-        
+
     def generate_problem(self, objective):
         """
         Instantiate an optimization model using the cvxpy format, whose objective corresponds to a
@@ -218,7 +218,7 @@ class Cvxpy_wrapper(Wrapper):
         self.objective = self._expression_to_solver(objective)
         self.prob = cp.Problem(objective=cp.Maximize(self.objective), constraints=self._list_of_solver_constraints)
         return self.prob
-        
+
     def solve(self, **kwargs):
         """
         Solve the PEP.
@@ -239,7 +239,7 @@ class Cvxpy_wrapper(Wrapper):
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
         return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
-        
+
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
         Add the constraint that the objective stay close to its actual value before using 
@@ -255,7 +255,7 @@ class Cvxpy_wrapper(Wrapper):
         """
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
-        
+
     def heuristic(self, weight):
         """
         Change the objective of the PEP, specifically for finding low-dimensional examples.

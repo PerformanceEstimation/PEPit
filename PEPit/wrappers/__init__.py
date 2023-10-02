@@ -1,6 +1,11 @@
-from .cvxpy_wrapper import Cvxpy_wrapper
-from .mosek_wrapper import Mosek_wrapper
+from .cvxpy_wrapper import CvxpyWrapper
+from .mosek_wrapper import MosekWrapper
 
-__all__ = ['cvxpy_wrapper', 'Cvxpy_wrapper',
-           'mosek_wrapper', 'Mosek_wrapper',
+__all__ = ['cvxpy_wrapper', 'CvxpyWrapper',
+           'mosek_wrapper', 'MosekWrapper',
            ]
+
+WRAPPERS = {
+    "cvxpy": CvxpyWrapper,
+    "mosek": MosekWrapper,
+}
