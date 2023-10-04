@@ -2,8 +2,6 @@ import importlib.util
 
 import numpy as np
 
-# from PEPit.wrappers.cvxpy_wrapper import CvxpyWrapper
-# from PEPit.wrappers.mosek_wrapper import MosekWrapper
 from PEPit.wrappers import WRAPPERS
 from PEPit.point import Point
 from PEPit.expression import Expression
@@ -11,11 +9,6 @@ from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
-
-
-# Add references to your wrappers here.
-# CVXPY = {'libname': 'cvxpy', 'wrapper': CvxpyWrapper}
-# MOSEK = {'libname': 'mosek', 'wrapper': MosekWrapper}
 
 
 class PEP(object):
@@ -35,9 +28,9 @@ class PEP(object):
                                             The pep maximizes the minimum of all performance metrics.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
                             The PEP consider the associated LMI constraints psd_matrix >> 0.
-        _list_of_constraints_sent_to_mosek (list): a list of all the :class:`Constraint` objects that are sent to MOSEK
-                                                   for solving the SDP. It should not be updated manually.
-                                                   Only the `solve` method takes care of it.
+        # _list_of_constraints_sent_to_mosek (list): a list of all the :class:`Constraint` objects that are sent to MOSEK
+        #                                            for solving the SDP. It should not be updated manually.
+        #                                            Only the `solve` method takes care of it.
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
 
@@ -75,7 +68,11 @@ class PEP(object):
 
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_mosek = list()
+        # self._list_of_constraints_sent_to_mosek = list()
+
+        # Initialize wrapper information
+        self.wrapper_name = None
+        self.wrapper = None
 
     @staticmethod
     def _reset_classes():
@@ -103,7 +100,7 @@ class PEP(object):
         Args:
             function_class (class): a subclass of :class:`Function` that overwrite the `add_class_constraints` method.
             kwargs (dict): dictionary of parameters that characterize the function class.
-                           Can also contains the boolean `reuse_gradient`,
+                           Can also contain the boolean `reuse_gradient`,
                            that enforces using only one subgradient per point.
 
         Returns:
@@ -141,7 +138,7 @@ class PEP(object):
     def set_initial_condition(self, condition):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
-        Typically an condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
+        Typically, a condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
 
         Args:
             condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
@@ -221,10 +218,8 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
 
-    def solve(self, verbose=1,
-              return_full_problem=False, dimension_reduction_heuristic=None,
-              eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-              solver="cvxpy", **kwargs):
+    def solve(self, verbose=1, dimension_reduction_heuristic=None,
+              eig_regularization=1e-3, tol_dimension_reduction=1e-5, wrapper="cvxpy", **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
@@ -235,9 +230,6 @@ class PEP(object):
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
                             - 2: Both PEPit and CVXPY details are printed
-            return_full_problem (bool): If True, return the problem object (whose type depends on the solver).
-                                        If False, only return the worst-case value.
-                                        Set to False by default.
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
@@ -255,7 +247,7 @@ class PEP(object):
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction_heuristic" is not None)
                                                        The default value is 1e-5.
-            solver (dict, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`. 
+            wrapper (dict, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`.
                                      Default is CVXPY, other native option include MOSEK.
             kwargs (keywords, optional): Additional solver-specific arguments.
 
@@ -264,34 +256,39 @@ class PEP(object):
                               of the PEP. The value is returned by default.
 
         """
+        wrapper_name = wrapper
+
         # Check that the solver is installed, if it is not, switch to CVXPY.
-        found_solver = importlib.util.find_spec(solver)
-        if found_solver is None:
-            solver = "cvxpy"
-            print('(PEPit) {} not found in system environment, switching to cvxpy'.format(solver))
+        found_python_package = importlib.util.find_spec(wrapper_name)
+        if found_python_package is None:
+            if verbose >= 1:
+                print('(PEPit) {} not found in system environment, switching to cvxpy'.format(wrapper_name))
+            wrapper_name = "cvxpy"
 
         # Initiate a wrapper to interface with the solver 
-        wrapper = WRAPPERS[solver]()
+        wrapper = WRAPPERS[wrapper_name]()
+        wrapper.setup_environment()
 
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
         if not wrapper.check_license():
-            print('(PEPit) No valid {} license found, switching to cvxpy'.format(solver))
-            solver = "cvxpy"
-            wrapper = WRAPPERS[solver]()
+            if verbose >= 1:
+                print('(PEPit) No valid {} license found, switching to cvxpy'.format(wrapper_name))
+            wrapper_name = "cvxpy"
+            wrapper = WRAPPERS[wrapper_name]()
+            wrapper.setup_environment()
+
+        # Store wrapper information in self
+        self.wrapper_name = wrapper_name
+        self.wrapper = wrapper
 
         # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
-        print("=====")
-        print(
-            "Wrapper used:{}".format(solver)
-        )
-        out = self._generic_solve(wrapper, verbose, return_full_problem, dimension_reduction_heuristic,
-                                  eig_regularization,
-                                  tol_dimension_reduction, **kwargs)
+        out = self._solve_with_wrapper(wrapper, verbose, dimension_reduction_heuristic,
+                                       eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
-    def _generic_solve(self, wrapper, verbose=1, return_full_problem=False,
-                       dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-                       **kwargs):
+    def _solve_with_wrapper(self, wrapper, verbose=1,
+                            dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
+                            **kwargs):
         """
         Internal solve method. Translate the :class:`PEP` to an SDP, and solve it via the wrapper.
 
@@ -469,7 +466,7 @@ class PEP(object):
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
+        solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
         if verbose:
             print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(solver_status,
                                                                                      solver_name,
@@ -501,7 +498,7 @@ class PEP(object):
             # Translate the heuristic into the objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
                 wrapper.heuristic(np.identity(Point.counter))
-                solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
+                solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                 # Compute minimal number of dimensions
                 G_value, F_value = wrapper.get_primal_variables()
@@ -512,14 +509,14 @@ class PEP(object):
                 for i in range(1, 1 + niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
                     wrapper.heuristic(W)
-                    solver_status, solver_name, wc_value, prob = wrapper.solve(**kwargs)
+                    solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                     # Compute minimal number of dimensions
                     G_value, F_value = wrapper.get_primal_variables()
                     nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(
                         G_value)
 
-                    # Print the estimated dimension after i dimension reduction steps
+                    # Print the estimated dimension after niter dimension reduction steps
                     if verbose:
                         print('(PEPit) Solver status: {} (solver: {});'
                               ' objective value: {}'.format(solver_status,
@@ -547,24 +544,19 @@ class PEP(object):
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
 
         # Store all the dual values in constraints
-        # _, dual_objective = self._eval_constraint_dual_values(dual_values, wrapper)
         if verbose:
             print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
                                                                                                       wc_value))
             print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective - wc_value,
                                                                               (dual_objective - wc_value) / wc_value))
 
-        # Return the value of the minimal performance metric or the full cvxpy Problem object
-        if return_full_problem:
-            # Return the problem object (specific to solver) 
-            return prob
-        else:
-            # Return the value of the minimal performance metric
-            return wc_value
+        # Return the value of the minimal performance metric
+        return wc_value  # TODO return dual_obj?
+        # TODO do something with duals = list des duals
 
-    def _verify_accuracy():
-        """XXXX TODOTODOs
-
+    def _verify_accuracy(self):
+        """
+        TODO
         """
         # CHECK FEASIBILITY (primal & dual; all constraints (LMIs and linear constraints))!
         # CHECK PD GAP
@@ -578,7 +570,7 @@ class PEP(object):
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):
         """
-        Compute the number of True non zero eigenvalues of M, and recompute M with corrected eigenvalues.
+        Compute the number of True non-zero eigenvalues of M, and recompute M with corrected eigenvalues.
 
         Args:
             M (nd.array): a 2 dimensional array, supposedly symmetric.

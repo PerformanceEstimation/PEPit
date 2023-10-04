@@ -16,9 +16,6 @@ TODO's:
 	- for dual objectives (in particular, test what happens if we put equality initial conditions (instead of <=)---should check that the signs are handled correctly.
 	- should test for PSD constraints with (a few) constants entries/values. (this is already done in a few examples now--should check consistency of the dual objective)
 
----Git/tests:
-- comment nous assurer que certains (ou mieux: tous les) tests puissent être sur mosek?
-
 ---Others: (not done at all)
 - naming points + constraints?
 

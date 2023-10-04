@@ -1,5 +1,4 @@
 cvxpy
 numpy
 scipy
-mosek
 matplotlib

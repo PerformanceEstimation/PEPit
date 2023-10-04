@@ -1,7 +1,6 @@
 import sys
 
 import numpy as np
-import mosek as mosek
 
 from PEPit.wrapper import Wrapper
 from PEPit.point import Point
@@ -43,24 +42,29 @@ class MosekWrapper(Wrapper):
             verbose (bool): verbose mode of the solver.
 
         """
+        super().__init__(verbose=verbose)
+
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_solver = list()
         self._constraint_index_in_mosek = list()  # index of the MOSEK constraint for each element of the previous list
         self._nb_pep_constraints_in_mosek = 0
         self._list_of_psd_constraints_sent_to_solver = list()
-        self._nb_pep_SDPconstraints_in_mosek = 1
-        self._list_of_constraints_sent_to_solver_full = list()
-        self.verbose = verbose
+        self._nb_pep_SDPconstraints_in_mosek = 0
+        self.env = None
+        self.task = None
+
+    def setup_environment(self):
+        import mosek
 
         self.env = mosek.Env()
         self.task = self.env.Task()  # initiate MOSEK's task
 
-        if verbose > 1:
-            self.task.set_Stream(mosek.streamtype.log, self.streamprinter)
+        if self.verbose >= 1:
+            self.task.set_Stream(mosek.streamtype.log, self._streamprinter)
 
         # "Initialize" the Gram matrix
         self.task.appendbarvars([Point.counter])
+        self._nb_pep_SDPconstraints_in_mosek += 1
         # "Initialize" function value variables (an additional variable "tau" is for handling the objective, hence +1)
         self.task.appendvars(Expression.counter + 1)
 
@@ -76,6 +80,8 @@ class MosekWrapper(Wrapper):
             license (bool): is there a valid license?
 
         """
+        import mosek
+
         try:
             self.env.checkoutlicense(mosek.feature.pton)
         except mosek.Error:
@@ -96,6 +102,7 @@ class MosekWrapper(Wrapper):
             is neither `equality`, nor `inequality`.
 
         """
+        import mosek
 
         # Sanity check
         assert isinstance(constraint, Constraint)
@@ -140,6 +147,7 @@ class MosekWrapper(Wrapper):
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """
+        import mosek
 
         # Sanity check
         assert isinstance(psd_matrix, PSDMatrix)
@@ -190,6 +198,8 @@ class MosekWrapper(Wrapper):
             is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
+        import mosek
+
         # MUST CHECK the nb of constraints, somehow
         scalar_dual_values = self.task.gety(mosek.soltype.itr)
         dual_values = list()
@@ -231,6 +241,8 @@ class MosekWrapper(Wrapper):
             prob (mosek.task): the PEP in mosek's format.
 
         """
+        import mosek
+
         # task.putclist([tau.counter], [0.0])
         assert self.task.getmaxnumvar() == Expression.counter
         self.objective = objective
@@ -257,14 +269,16 @@ class MosekWrapper(Wrapper):
             problem (mosek task): solver-specific model of the PEP.
         
         """
+        import mosek
+
         self.task.optimize(**kwargs)
-        self.wc_value = self.task.getprimalobj(mosek.soltype.itr)
+        # wc_value = self.task.getprimalobj(mosek.soltype.itr)
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
         xx = self.task.getxx(mosek.soltype.itr)
         tau = xx[-1]
         self.optimal_F = xx
-        prosta = self.task.getprosta(mosek.soltype.itr)
-        return prosta, 'MOSEK', tau, self.task
+        problem_status = self.task.getprosta(mosek.soltype.itr)
+        return problem_status, 'MOSEK', tau
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
@@ -279,11 +293,13 @@ class MosekWrapper(Wrapper):
                                              low-dimensional examples.
         
         """
+        import mosek
+
         self.task.putclist([Expression.counter - 1], [0.0])
         self.task.putobjsense(mosek.objsense.minimize)
         self.send_constraint_to_solver(self.objective >= wc_value - tol_dimension_reduction, track=False)
 
-    def heuristic(self, weight=np.identity(Point.counter)):
+    def heuristic(self, weight):
         """
         Change the objective of the PEP, specifically for finding low-dimensional examples.
         We specify a matrix :math:`W` (weight), which will allow minimizing :math:`\\mathrm{Tr}(G\\,W)`.
@@ -292,6 +308,8 @@ class MosekWrapper(Wrapper):
             weight (np.array): weights that will be used in the heuristic.
         
         """
+        import mosek
+
         No_zero_ele = np.argwhere(np.tril(weight))
         W_i = No_zero_ele[:, 0]
         W_j = No_zero_ele[:, 1]
@@ -301,7 +319,7 @@ class MosekWrapper(Wrapper):
         self.task.putobjsense(mosek.objsense.minimize)
 
     @staticmethod
-    def streamprinter(text):
+    def _streamprinter(text):
         """
         Output summaries.
 

@@ -1,6 +1,3 @@
-import numpy as np
-import cvxpy as cp
-
 from PEPit.wrapper import Wrapper
 from PEPit.point import Point
 from PEPit.expression import Expression
@@ -31,7 +28,7 @@ class CvxpyWrapper(Wrapper):
 
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed (overwrittes CVXPY's setting)
+                            - 2: Both PEPit and CVXPY details are printed (overwrites CVXPY's setting)
 
     """
 
@@ -43,18 +40,20 @@ class CvxpyWrapper(Wrapper):
             verbose (bool): verbose mode of the solver.
 
         """
-        # Initialize lists of constraints that are used to solve the SDP.
-        # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_solver = list()
-        self._list_of_constraints_sent_to_solver_full = list()
-        self.F = cp.Variable((Expression.counter + 1,))  # need the +1 because the objective will be created afterwards
-        self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+        super().__init__(verbose=verbose)
+        self.F = None
+        self.G = None
+        self._list_of_solver_constraints = list()
+
+    def setup_environment(self):
+        import cvxpy as cp
 
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
-        self._list_of_solver_constraints = [self.G >> 0]
-        self.verbose = verbose
-        
+        self.F = cp.Variable((Expression.counter + 1,))  # need the +1 because the objective will be created afterwards
+        self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+        self._list_of_solver_constraints.append(self.G >> 0)
+
     def check_license(self):
         """
         Check that there is a valid available license for CVXPY.
@@ -76,6 +75,8 @@ class CvxpyWrapper(Wrapper):
             cvxpy_variable (cvxpy Variable): The expression in terms of F and G.
 
         """
+        import cvxpy as cp
+        
         Gweights, Fweights, cons = self._expression_to_matrices(expression)
         cvxpy_variable = cons + self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
 
@@ -127,7 +128,8 @@ class CvxpyWrapper(Wrapper):
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """
-
+        import cvxpy as cp
+        
         # Sanity check
         assert isinstance(psd_matrix, PSDMatrix)
 
@@ -176,7 +178,7 @@ class CvxpyWrapper(Wrapper):
         dual_values.append(residual)
         assert residual.shape == (Point.counter, Point.counter)
 
-        # Set counterself._list_of_constraints_sent_to_solver_full
+        # Set counter
         counter = 1
         counter2 = 1  # number of dual variables (no artificial ones due to LMI)
 
@@ -215,8 +217,12 @@ class CvxpyWrapper(Wrapper):
             prob (cvxpy.Problem): the PEP in cvxpy format.
 
         """
-        self.objective = self._expression_to_solver(objective)
-        self.prob = cp.Problem(objective=cp.Maximize(self.objective), constraints=self._list_of_solver_constraints)
+        import cvxpy as cp
+        
+        # self.objective = objective
+        cvxpy_objective = self._expression_to_solver(objective)
+        self.objective = cvxpy_objective
+        self.prob = cp.Problem(objective=cp.Maximize(cvxpy_objective), constraints=self._list_of_solver_constraints)
         return self.prob
 
     def solve(self, **kwargs):
@@ -238,7 +244,7 @@ class CvxpyWrapper(Wrapper):
         self.prob.solve(**kwargs)
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
-        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
+        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
@@ -265,6 +271,8 @@ class CvxpyWrapper(Wrapper):
             weight (np.array): weights that will be used in the heuristic.
         
         """
+        import cvxpy as cp
+
         obj = cp.sum(cp.multiply(self.G, weight))
         self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
         return self.prob

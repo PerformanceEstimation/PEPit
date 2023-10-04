@@ -34,7 +34,7 @@ class Wrapper(object):
 
     """
 
-    def __init__(self):
+    def __init__(self, verbose):
         """
         :class:`Wrapper` object should not be instantiated as such: only children class should.
         This function initialize all internal variables of the class.
@@ -43,22 +43,26 @@ class Wrapper(object):
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
-        self._list_of_constraints_sent_to_solver_full = list()  # MUST USE FOR EVALUATION TRUE DUAL OBJ!!
+        self._list_of_constraints_sent_to_solver_full = list()  # MUST USE FOR EVALUATION TRUE DUAL OBJ!!  ## TODO check usage
 
         self.optimal_F = None
         self.optimal_G = None
+        self.objective = None  # PEPit leaf expression
         self.optimal_dual = list()
         self.dual_residual = None
         self.dual_objective = None
 
         self.prob = None
-        self.verbose = False
+        self.verbose = verbose
 
         # feasibility: (i) primal (linear constraints + eigs of the LMI) (ii) dual
         self.primal_feas = None
         self.primal_feas_eigs = None
         self.dual_feas = None
         self.dual_feas_eigs = None
+
+    def setup_environment(self):
+        raise NotImplementedError
 
     def check_license(self):
         """
@@ -71,7 +75,8 @@ class Wrapper(object):
 
         raise NotImplementedError("This method must be overwritten in children classes")
 
-    def _expression_to_matrices(self, expression):
+    @staticmethod
+    def _expression_to_matrices(expression):
         """
         Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
         
@@ -119,7 +124,8 @@ class Wrapper(object):
 
         return Gweights, Fweights, cons
 
-    def _expression_to_sparse_matrices(self, expression):
+    @staticmethod
+    def _expression_to_sparse_matrices(expression):
         """
         Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
         
@@ -190,65 +196,65 @@ class Wrapper(object):
 
         return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, cons_val
 
-    def _expression_to_sparse_matrices_original(self, expression):
-        """
-        Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
-        
-            ..math:: \\mathrm{Tr}(\\text{Gweights}\\,G) + \\text{Fweights}^T F + \\text{cons}
-            
-        where :math:`\\text{Gweights}` and :math:`\\text{Fweights}` are expressed in sparse formats.
-
-        Args:
-            expression (Expression): any expression.
-
-        Returns:
-            Gweights_indi (numpy array): Set of line indices for the sparse representation of the constraint matrix (multiplying G).
-            Gweights_indj (numpy array): Set of column indices for the sparse representation of the constraint matrix (multiplying G).
-            Gweights_val (numpy array): Set of values for the sparse representation of the constraint matrix (multiplying G).
-            Fweights_ind (numpy array): Set of indices for the sparse representation of the constraint vector (multiplying F).
-            Fweights_val (numpy array): Set of values of the sparse representation of the constraint vector (multiplying F).
-            cons_val (float): Constant part of the constraint.
-
-        """
-        cons_val = 0
-        Fweights = np.zeros((Expression.counter,))
-        Gweights = np.zeros((Point.counter, Point.counter))
-
-        # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_leaf():
-            Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from leaf expressions
-        else:
-            for key, weight in expression.decomposition_dict.items():
-                # Function values are stored in F
-                if type(key) == Expression:
-                    assert key.get_is_leaf()
-                    Fweights[key.counter] += weight
-                # Inner products are stored in G
-                elif type(key) == tuple:
-                    point1, point2 = key
-                    assert point1.get_is_leaf()
-                    assert point2.get_is_leaf()
-                    Gweights[point1.counter, point2.counter] += weight
-                # Constants are simply constants
-                elif key == 1:
-                    cons_val += weight
-                # Others don't exist and raise an Exception
-                else:
-                    raise TypeError("Expressions are made of function values, inner products and constants only!")
-
-        Gweights = (Gweights + Gweights.T) / 2
-
-        No_zero_ele = np.argwhere(np.tril(Gweights))
-        Gweights_indi = No_zero_ele[:, 0]
-        Gweights_indj = No_zero_ele[:, 1]
-        Gweights_val = Gweights[Gweights_indi, Gweights_indj]
-
-        No_zero_ele = np.argwhere(Fweights)
-        Fweights_ind = No_zero_ele.flatten()
-        Fweights_val = Fweights[Fweights_ind]
-
-        return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, cons_val
+    # def _expression_to_sparse_matrices_original(self, expression):
+    #     """
+    #     Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
+    #
+    #         ..math:: \\mathrm{Tr}(\\text{Gweights}\\,G) + \\text{Fweights}^T F + \\text{cons}
+    #
+    #     where :math:`\\text{Gweights}` and :math:`\\text{Fweights}` are expressed in sparse formats.
+    #
+    #     Args:
+    #         expression (Expression): any expression.
+    #
+    #     Returns:
+    #         Gweights_indi (numpy array): Set of line indices for the sparse representation of the constraint matrix (multiplying G).
+    #         Gweights_indj (numpy array): Set of column indices for the sparse representation of the constraint matrix (multiplying G).
+    #         Gweights_val (numpy array): Set of values for the sparse representation of the constraint matrix (multiplying G).
+    #         Fweights_ind (numpy array): Set of indices for the sparse representation of the constraint vector (multiplying F).
+    #         Fweights_val (numpy array): Set of values of the sparse representation of the constraint vector (multiplying F).
+    #         cons_val (float): Constant part of the constraint.
+    #
+    #     """
+    #     cons_val = 0
+    #     Fweights = np.zeros((Expression.counter,))
+    #     Gweights = np.zeros((Point.counter, Point.counter))
+    #
+    #     # If simple function value, then simply return the right coordinate in F
+    #     if expression.get_is_leaf():
+    #         Fweights[expression.counter] += 1
+    #     # If composite, combine all the cvxpy expression found from leaf expressions
+    #     else:
+    #         for key, weight in expression.decomposition_dict.items():
+    #             # Function values are stored in F
+    #             if type(key) == Expression:
+    #                 assert key.get_is_leaf()
+    #                 Fweights[key.counter] += weight
+    #             # Inner products are stored in G
+    #             elif type(key) == tuple:
+    #                 point1, point2 = key
+    #                 assert point1.get_is_leaf()
+    #                 assert point2.get_is_leaf()
+    #                 Gweights[point1.counter, point2.counter] += weight
+    #             # Constants are simply constants
+    #             elif key == 1:
+    #                 cons_val += weight
+    #             # Others don't exist and raise an Exception
+    #             else:
+    #                 raise TypeError("Expressions are made of function values, inner products and constants only!")
+    #
+    #     Gweights = (Gweights + Gweights.T) / 2
+    #
+    #     No_zero_ele = np.argwhere(np.tril(Gweights))
+    #     Gweights_indi = No_zero_ele[:, 0]
+    #     Gweights_indj = No_zero_ele[:, 1]
+    #     Gweights_val = Gweights[Gweights_indi, Gweights_indj]
+    #
+    #     No_zero_ele = np.argwhere(Fweights)
+    #     Fweights_ind = No_zero_ele.flatten()
+    #     Fweights_val = Fweights[Fweights_ind]
+    #
+    #     return Gweights_indi, Gweights_indj, Gweights_val, Fweights_ind, Fweights_val, cons_val
 
     def send_constraint_to_solver(self, constraint):
         """
@@ -288,7 +294,7 @@ class Wrapper(object):
         
         Returns:
             optimal_dual (list): numerical values of the dual variables (same ordering as that
-                                of _list_of_constraints_sent_to_solver.
+                                 of _list_of_constraints_sent_to_solver).
             dual_residual (np.array): dual variable corresponding to the main (primal) Gram matrix.
             dual_objective (float): dual objective value.
 
@@ -327,7 +333,7 @@ class Wrapper(object):
         # initiate the value of the dual objective (updated below)
         dual_objective = 0.
 
-        # Set counterself._list_of_constraints_sent_to_solver_full
+        # Set counter
         counter = 1
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
@@ -374,7 +380,7 @@ class Wrapper(object):
         """
 
         raise NotImplementedError("This method must be overwritten in children classes")
-        return dual_values, residual
+        # return dual_values, residual
 
     def generate_problem(self, objective):
         """
@@ -389,7 +395,6 @@ class Wrapper(object):
 
         """
         raise NotImplementedError("This method must be overwritten in children classes")
-        return self.prob
 
     def solve(self, **kwargs):
         """
@@ -430,20 +435,6 @@ class Wrapper(object):
 
         Args:
             weight (np.array): weights that will be used in the heuristic.
-        
-        """
-        raise NotImplementedError("This method must be overwritten in children classes")
-
-    @staticmethod
-    def _translate_status(status):
-        """
-        Translate the solver-specific status to a PEP-standardize string.
-
-        Args:
-            status (): solver specific status.
-        
-        Returns:
-            status (string): PEPit-standardized status.
         
         """
         raise NotImplementedError("This method must be overwritten in children classes")
