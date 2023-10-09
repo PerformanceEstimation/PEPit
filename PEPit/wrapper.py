@@ -1,5 +1,3 @@
-import numpy as np
-
 from PEPit.expression import Expression
 from PEPit.point import Point
 from PEPit.constraint import Constraint
@@ -54,6 +52,7 @@ class Wrapper(object):
 
         self.prob = None
         self.verbose = verbose
+        self.solver_name = None
 
         # feasibility: (i) primal (linear constraints + eigs of the LMI) (ii) dual
         self.primal_feas = None
@@ -90,7 +89,7 @@ class Wrapper(object):
         """
         raise NotImplementedError("This method must be overwritten in children classes")
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
         """
         Transfer a PEPit :class:`PSDMatrix` (LMI constraint) to the solver
         and add it the tracking lists.
@@ -98,11 +97,6 @@ class Wrapper(object):
         Args:
             psd_counter (int): a counter useful for the verbose mode.
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
-
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and solver details are printed
 
         """
         raise NotImplementedError("This method must be overwritten in children classes")

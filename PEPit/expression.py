@@ -3,7 +3,7 @@ import numpy as np
 
 from PEPit.constraint import Constraint
 
-from PEPit.tools.dict_operations import merge_dict
+from PEPit.tools.dict_operations import merge_dict, prune_dict
 
 
 class Expression(object):
@@ -126,13 +126,16 @@ class Expression(object):
         # If other is an Expression, merge the decomposition_dicts
         if isinstance(other, Expression):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
-        # It other is a scalar constant, add it to the decomposition_dict of self
+        # If other is a scalar constant, add it to the decomposition_dict of self
         elif isinstance(other, int) or isinstance(other, float):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, {1: other})
         # Raise an Exception in any other scenario
         else:
             raise TypeError("Expression can be added only to other expression or scalar values!"
                             "Got {}".format(type(other)))
+
+        # Remove leaf with null coefficients
+        merged_decomposition_dict = prune_dict(merged_decomposition_dict)
 
         # Create and return the newly created Expression
         return Expression(is_leaf=False, decomposition_dict=merged_decomposition_dict)

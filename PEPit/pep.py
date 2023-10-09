@@ -1,5 +1,7 @@
 import importlib.util
 
+from tools.dict_operations import symmetrize_dict
+
 import numpy as np
 
 from PEPit.wrappers import WRAPPERS
@@ -9,6 +11,8 @@ from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
+
+from PEPit.tools import prune_dict
 
 
 class PEP(object):
@@ -68,7 +72,8 @@ class PEP(object):
 
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        # self._list_of_constraints_sent_to_mosek = list()
+        self._list_of_constraints_sent_to_wrapper = list()
+        self._list_of_psd_sent_to_wrapper = list()
 
         # Initialize wrapper information
         self.wrapper_name = None
@@ -324,12 +329,13 @@ class PEP(object):
         Returns:
             float or Problem: Value of the performance metric of the PEP, or a reference to a solver-specific representation
                               of the PEP. The value is returned by default.
-
+            # TODO update
         """
 
         # Create an expression that serve for the objective (min of the performance measures)   
         tau = Expression(is_leaf=True)
         objective = tau
+        self.objective = objective
 
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
@@ -348,14 +354,16 @@ class PEP(object):
         # Define the variables (G,F)
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
+                  ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            wrapper.send_constraint_to_solver(tau <= performance_metric)
+            performance_metric_constraint = (tau <= performance_metric)
+            wrapper.send_constraint_to_solver(performance_metric_constraint)
+            self._list_of_constraints_sent_to_wrapper.append(performance_metric_constraint)
 
         if verbose:
             print('(PEPit) Setting up the problem:'
@@ -366,6 +374,7 @@ class PEP(object):
             print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
         for condition in self.list_of_constraints:
             wrapper.send_constraint_to_solver(condition)
+            self._list_of_constraints_sent_to_wrapper.append(condition)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' initial conditions and general constraints ({} constraint(s) added)'.format(
@@ -377,6 +386,7 @@ class PEP(object):
                 print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
             for psd_counter, psd_matrix in enumerate(self.list_of_psd):
                 wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
         # Defining class constraints
         if verbose:
@@ -392,6 +402,7 @@ class PEP(object):
 
             for constraint in function.list_of_class_constraints:
                 wrapper.send_constraint_to_solver(constraint)
+                self._list_of_constraints_sent_to_wrapper.append(constraint)
 
             if verbose:
                 print('\t\t function', function_counter, ':', len(function.list_of_class_constraints),
@@ -404,6 +415,7 @@ class PEP(object):
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
                     wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_class_psd),
@@ -424,6 +436,7 @@ class PEP(object):
 
                 for constraint in function.list_of_constraints:
                     wrapper.send_constraint_to_solver(constraint)
+                    self._list_of_constraints_sent_to_wrapper.append(constraint)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_constraints),
@@ -436,6 +449,7 @@ class PEP(object):
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_psd):
                     wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
                     print('\t\t function', function_counter, ':', len(function.list_of_psd),
@@ -454,6 +468,7 @@ class PEP(object):
                       'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
             for constraint in partition.list_of_constraints:
                 wrapper.send_constraint_to_solver(constraint)
+                self._list_of_constraints_sent_to_wrapper.append(constraint)
             if verbose:
                 print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
@@ -481,7 +496,7 @@ class PEP(object):
         # Dimension aims at finding low dimension lower bound functions,
         # but solves a different problem with an extra condition and different objective,
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
-        dual_values, self.residual, dual_objective = wrapper.eval_constraint_dual_values()
+        _, self.residual, _ = wrapper.eval_constraint_dual_values()
         G_value, F_value = wrapper.get_primal_variables()
 
         # Perform a dimension reduction if required
@@ -541,31 +556,138 @@ class PEP(object):
                                                                                                        eig_threshold))
 
         # Store all the values of points and function values
+        self.G_value = G_value
+        self.F_value = F_value
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
+        dual_objective = self._recap(wc_value, verbose=verbose)
+        # Return the value of the minimal performance metric
+        return dual_objective, wc_value
 
-        # Store all the dual values in constraints
+    def _recap(self, wc_value, verbose):
+        """
+        TODO
+        """
+
+        ################################################################################
+        #################################### Primal ####################################
+        ################################################################################
+
+        # Verify that the given wc_value corresponds to the objective value
+        assert wc_value == self.objective.eval()
+
+        # Grab the smallest eigenvalue of G
+        G_min_eig_val = np.min(np.linalg.eigh(self.G_value)[0])
+        if verbose:
+            message = "(PEPit) The solver found a Gram matrix that is positive semi-definite"
+            if G_min_eig_val < 0:
+                message += " up to an error of {}".format(-G_min_eig_val)
+            print(message)
+
+        # Grab the smallest eigenvalue of all the PSD matrices
+        if self._list_of_psd_sent_to_wrapper:
+            psd_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval())[0])
+                                      for psd_matrix in self._list_of_psd_sent_to_wrapper])
+            if verbose:
+                message = "(PEPit) All required PSD matrices are indeed positive semi-definite"
+                if psd_min_eig_val < 0:
+                    message += " up to an error of {}".format(-psd_min_eig_val)
+                print(message)
+
+        # Get the max value of all transgression of the constraints
+        if self._list_of_constraints_sent_to_wrapper:
+            max_constraint_error = np.max(
+                [constraint.eval()
+                 for constraint in self._list_of_constraints_sent_to_wrapper
+                 if constraint.equality_or_inequality == "inequality"]
+                + [np.abs(constraint.eval())
+                   for constraint in self._list_of_constraints_sent_to_wrapper
+                   if constraint.equality_or_inequality == "equality"]
+            )
+            if verbose:
+                message = "(PEPit) All the primal scalar constraints are verified"
+                if max_constraint_error > 0:
+                    message += " up to an error of {}".format(max_constraint_error)
+                print(message)
+
+        ################################################################################
+        ##################################### Dual #####################################
+        ################################################################################
+
+        # Verify that all dual variables are nonnegative.
+        # Moreover, linear combination of the constraints with the right coefficients should lead to objective <= tau
+
+        # Residual >= 0
+        residual_min_eig_val = np.min(np.linalg.eigh(self.residual)[0])
+        if verbose:
+            message = "(PEPit) The solver found a residual matrix that is positive semi-definite"
+            if residual_min_eig_val < 0:
+                message += " up to an error of {}".format(-residual_min_eig_val)
+            print(message)
+        # - <Gram, residual> <= 0
+        constraints_combination = -np.dot(Point.list_of_leaf_points, np.dot(self.residual, Point.list_of_leaf_points))
+
+        # LMI constraints
+        # Dual >= 0
+        if self._list_of_psd_sent_to_wrapper:
+            lmi_dual_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval_dual())[0])
+                                           for psd_matrix in self._list_of_psd_sent_to_wrapper])
+            if verbose:
+                message = "(PEPit) All the dual matrices to lmi are positive semi-definite"
+                if lmi_dual_min_eig_val < 0:
+                    message += " up to an error of {}".format(-lmi_dual_min_eig_val)
+                print(message)
+            # - <psd_matrix, lmi_dual> <= 0
+            for psd_matrix in self._list_of_psd_sent_to_wrapper:
+                constraints_combination -= np.sum(psd_matrix.eval_dual() * psd_matrix.matrix_of_expressions)
+
+        # Scalar constraints
+        # Dual of inequality constraints >= 0
+        inequality_constraint_dual_values = [constraint.eval_dual()
+                                             for constraint in self._list_of_constraints_sent_to_wrapper
+                                             if constraint.equality_or_inequality == "inequality"]
+        if inequality_constraint_dual_values:
+            inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
+            if verbose:
+                message = "(PEPit) All the dual scalar values associated to inequality constraints are nonnegative"
+                if inequality_constraint_dual_min_value < 0:
+                    message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
+                print(message)
+        # + <expression, dual> <= 0
+        for constraint in self._list_of_constraints_sent_to_wrapper:
+            constraints_combination += constraint.eval_dual() * constraint.expression
+
+        # Proof reconstruction
+        # At this stage, constraints_combination must be equal to "objective - tau"
+        # which constitutes the proof as it has to be nonpositive.
+        # Compute an expression that should be exactly equal to the constant tau.
+        dual_objective_expression = self.objective - constraints_combination
+        # Operation over the decomposition dict of dual_objective_expression
+        dual_objective_expression_decomposition_dict = prune_dict(
+            symmetrize_dict(
+                dual_objective_expression.decomposition_dict
+            )
+        )
+        # Get the actual dual_objective from its dict
+        dual_objective = dual_objective_expression_decomposition_dict[1]
+        # Compute the remaining terms, that should be small and only due to numerical stability errors
+        remaining_terms = np.sum(np.abs([value for key, value in dual_objective_expression_decomposition_dict.items()
+                                         if key != 1]))
+        if verbose:
+            message = "(PEPit) The worst-case guarantee proof is perfectly reconstituted"
+            if remaining_terms > 0:
+                message += " up to an error of {}".format(remaining_terms)
+            print(message)
+
+        ################################################################################
+        ################################## Duality Gap #################################
+        ################################################################################
         if verbose:
             print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
                                                                                                       wc_value))
             print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective - wc_value,
                                                                               (dual_objective - wc_value) / wc_value))
 
-        # Return the value of the minimal performance metric
-        return wc_value  # TODO return dual_obj?
-        # TODO do something with duals = list des duals
-
-    def _verify_accuracy(self):
-        """
-        TODO
-        """
-        # CHECK FEASIBILITY (primal & dual; all constraints (LMIs and linear constraints))!
-        # CHECK PD GAP
-        primal_lin_accuracy = 0.
-        primal_PSD_accuracy = 0.
-        dual_lin_accuracy = 0.
-        dual_PSD_accuracy = 0.
-        PD_gap = 0.
-        return primal_lin_accuracy, primal_PSD_accuracy, dual_lin_accuracy, dual_PSD_accuracy, PD_gap
+        return dual_objective
 
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):

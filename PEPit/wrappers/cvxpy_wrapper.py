@@ -120,7 +120,7 @@ class CvxpyWrapper(Wrapper):
         # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints.append(cvxpy_constraint)
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
         """
         Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
         and add the 2 formats of the constraints into the tracking lists.
@@ -244,9 +244,10 @@ class CvxpyWrapper(Wrapper):
         if self.verbose > 1:
             kwargs['verbose'] = True
         self.prob.solve(**kwargs)
+        self.solver_name = self.prob.solver_stats.solver_name
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
-        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value
+        return self.prob.status, self.solver_name, self.objective.value
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """

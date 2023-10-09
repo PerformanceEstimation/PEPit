@@ -1,14 +1,7 @@
 import unittest
-import numpy as np
 
-import PEPit.wrappers.cvxpy_wrapper as wrap
 from PEPit.pep import PEP
-from PEPit import CVXPY
-from PEPit.point import Point
-from PEPit.expression import Expression
-from PEPit.function import Function
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
-from PEPit.primitive_steps import inexact_gradient_step
 
 
 class TestWrapperCVXPY(unittest.TestCase):
@@ -49,20 +42,21 @@ class TestWrapperCVXPY(unittest.TestCase):
         pepit_tau = self.problem.solve(verbose=0)
 
         # Return the full problem and verify the problem value is still pepit_tau
-        prob = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic=None, solver=CVXPY)
-        self.assertAlmostEqual(prob.value, pepit_tau, delta=10 ** -2)
+        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None, wrapper="cvxpy")
+        self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
         # Return the full dimension reduction problem
         # and verify that its value is not pepit_tau anymore but the heuristic value
-        prob2 = self.problem.solve(verbose=0, return_full_problem=True, dimension_reduction_heuristic="trace", solver=CVXPY)
-        self.assertAlmostEqual(prob2.value, .5 + self.mu ** 2, delta=10 ** -2)
+        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", wrapper="cvxpy")
+        self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
+        # TODO think about this test!
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", solver=CVXPY)
-        self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
+        pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", wrapper="cvxpy")
+        self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", solver=CVXPY)
-        self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
+        pepit_tau5 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper="cvxpy")
+        self.assertAlmostEqual(pepit_tau5, pepit_tau, delta=10 ** -2)

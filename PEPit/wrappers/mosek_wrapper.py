@@ -140,7 +140,7 @@ class MosekWrapper(Wrapper):
                              ' must either be \'equality\' or \'inequality\'.'
                              'Got {}'.format(constraint.equality_or_inequality))
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix, verbose):
+    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
         """
         Transfer a PEPit :class:`PSDMatrix` (LMI constraint) to MOSEK and add it the tracking lists.
 
@@ -209,7 +209,7 @@ class MosekWrapper(Wrapper):
         counter_psd = 1
         counter_scalar = 0
 
-        dual_values.append(self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, 0), Point.counter))
+        dual_values.append(-self._get_Gram_from_mosek(self.task.getbarsj(mosek.soltype.itr, 0), Point.counter))
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
                 dual_values.append(scalar_dual_values[self._constraint_index_in_mosek[counter_scalar]])
@@ -274,13 +274,14 @@ class MosekWrapper(Wrapper):
         import mosek
 
         self.task.optimize(**kwargs)
+        self.solver_name = "MOSEK"
         # wc_value = self.task.getprimalobj(mosek.soltype.itr)
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
         xx = self.task.getxx(mosek.soltype.itr)
         tau = xx[-1]
         self.optimal_F = xx
         problem_status = self.task.getprosta(mosek.soltype.itr)
-        return problem_status, 'MOSEK', tau
+        return problem_status, self.solver_name, tau
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
