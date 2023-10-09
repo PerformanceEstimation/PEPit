@@ -579,9 +579,11 @@ class PEP(object):
         TODO
         """
 
-        ################################################################################
-        #################################### Primal ####################################
-        ################################################################################
+        ################################################################################################################
+        #################################################### Primal ####################################################
+        ################################################################################################################
+        if verbose:
+            print("(PEPit) Primal feasibility check:")
 
         # Verify that the given wc_value corresponds to the objective value
         assert wc_value == self.objective.eval()
@@ -589,7 +591,7 @@ class PEP(object):
         # Grab the smallest eigenvalue of G
         G_min_eig_val = np.min(np.linalg.eigh(self.G_value)[0])
         if verbose:
-            message = "(PEPit) The solver found a Gram matrix that is positive semi-definite"
+            message = "\t\t The solver found a Gram matrix that is positive semi-definite"
             if G_min_eig_val < 0:
                 message += " up to an error of {}".format(-G_min_eig_val)
             print(message)
@@ -599,7 +601,7 @@ class PEP(object):
             psd_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval())[0])
                                       for psd_matrix in self._list_of_psd_sent_to_wrapper])
             if verbose:
-                message = "(PEPit) All required PSD matrices are indeed positive semi-definite"
+                message = "\t\t All required PSD matrices are indeed positive semi-definite"
                 if psd_min_eig_val < 0:
                     message += " up to an error of {}".format(-psd_min_eig_val)
                 print(message)
@@ -615,14 +617,16 @@ class PEP(object):
                    if constraint.equality_or_inequality == "equality"]
             )
             if verbose:
-                message = "(PEPit) All the primal scalar constraints are verified"
+                message = "\t\t All the primal scalar constraints are verified"
                 if max_constraint_error > 0:
                     message += " up to an error of {}".format(max_constraint_error)
                 print(message)
 
-        ################################################################################
-        ##################################### Dual #####################################
-        ################################################################################
+        ################################################################################################################
+        ##################################################### Dual #####################################################
+        ################################################################################################################
+        if verbose:
+            print("(PEPit) Dual feasibility check:")
 
         # Verify that all dual variables are nonnegative.
         # Moreover, linear combination of the constraints with the right coefficients should lead to objective <= tau
@@ -630,7 +634,7 @@ class PEP(object):
         # Residual >= 0
         residual_min_eig_val = np.min(np.linalg.eigh(self.residual)[0])
         if verbose:
-            message = "(PEPit) The solver found a residual matrix that is positive semi-definite"
+            message = "\t\t The solver found a residual matrix that is positive semi-definite"
             if residual_min_eig_val < 0:
                 message += " up to an error of {}".format(-residual_min_eig_val)
             print(message)
@@ -643,7 +647,7 @@ class PEP(object):
             lmi_dual_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval_dual())[0])
                                            for psd_matrix in self._list_of_psd_sent_to_wrapper])
             if verbose:
-                message = "(PEPit) All the dual matrices to lmi are positive semi-definite"
+                message = "\t\t All the dual matrices to lmi are positive semi-definite"
                 if lmi_dual_min_eig_val < 0:
                     message += " up to an error of {}".format(-lmi_dual_min_eig_val)
                 print(message)
@@ -659,7 +663,7 @@ class PEP(object):
         if inequality_constraint_dual_values:
             inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
             if verbose:
-                message = "(PEPit) All the dual scalar values associated to inequality constraints are nonnegative"
+                message = "\t\t All the dual scalar values associated to inequality constraints are nonnegative"
                 if inequality_constraint_dual_min_value < 0:
                     message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
                 print(message)
@@ -692,9 +696,9 @@ class PEP(object):
                 message += " up to an error of {}".format(remaining_terms)
             print(message)
 
-        ################################################################################
-        ################################## Duality Gap #################################
-        ################################################################################
+        ################################################################################################################
+        ################################################## Duality Gap #################################################
+        ################################################################################################################
         if verbose:
             print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
                                                                                                       wc_value))
