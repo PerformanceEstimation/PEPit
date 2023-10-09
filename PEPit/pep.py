@@ -223,7 +223,7 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
 
-    def solve(self, verbose=1, dimension_reduction_heuristic=None,
+    def solve(self, verbose=1, return_primal_or_dual="dual", dimension_reduction_heuristic=None,
               eig_regularization=1e-3, tol_dimension_reduction=1e-5, wrapper="cvxpy", **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
@@ -287,11 +287,12 @@ class PEP(object):
         self.wrapper = wrapper
 
         # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
-        out = self._solve_with_wrapper(wrapper, verbose, dimension_reduction_heuristic,
+        out = self._solve_with_wrapper(wrapper, verbose, return_primal_or_dual,
+                                       dimension_reduction_heuristic,
                                        eig_regularization, tol_dimension_reduction, **kwargs)
         return out
 
-    def _solve_with_wrapper(self, wrapper, verbose=1,
+    def _solve_with_wrapper(self, wrapper, verbose=1, return_primal_or_dual="dual",
                             dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
                             **kwargs):
         """
@@ -561,7 +562,13 @@ class PEP(object):
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
         dual_objective = self._recap(wc_value, verbose=verbose)
         # Return the value of the minimal performance metric
-        return dual_objective, wc_value
+        if return_primal_or_dual == "dual":
+            return dual_objective
+        elif return_primal_or_dual == "primal":
+            return wc_value
+        else:
+            raise ValueError("The argument \'return_primal_or_dual\' must be \'dual\' or \`primal\`."
+                             "Got {}".format(return_primal_or_dual))
 
     def _recap(self, wc_value, verbose):
         """
