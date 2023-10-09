@@ -5,6 +5,14 @@ What's new in PEPit 0.3.0
 - The :class:`BlockPartition` has been created and allows to decompose the space into orthogonal subspaces to treat points differently in each subspaces.
 This is useful in particular to study Coordinate Descent like method or block adaptive AdaGrad like methods.
 
-- Mosek
+- Add argument `wrapper` in solve set to `cvxpy` by default.
+If `wrapper` is set to `cvxpy`, the routine is unchanged compared to PEPit 0.2.1.
+If `wrapper` is set to `mosek`, PEPit bypasses CVXPY and run MOSEK directly.
 
-- Remove possibility to return full problem with pep.solve
+- Remove possibility to return full problem with pep.solve.
+Instead, the pep object possesses a lot of attributes with all the details.
+
+- PEP.solve now returns the dual value of the objective by default, i.e. the actually worst-case guarantee.
+The user can still call `PEP.solve` with the option `return_primal_or_dual == "primal"` to get the primal value of the objective corresponding to a counter example.
+Note, those two values should be almost identical by strong duality.
+A new list of messages are printed to verify feasibility of the provided solution and provides duality gap.
