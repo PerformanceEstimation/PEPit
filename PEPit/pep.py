@@ -22,6 +22,8 @@ class PEP(object):
     It stores the following information.
 
     Attributes:
+        counter (int): counts the number of :class:`PEP` objects.
+                       Ideally, only one is defined at a time.
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
@@ -32,11 +34,10 @@ class PEP(object):
                                             The pep maximizes the minimum of all performance metrics.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
                             The PEP consider the associated LMI constraints psd_matrix >> 0.
-        # _list_of_constraints_sent_to_mosek (list): a list of all the :class:`Constraint` objects that are sent to MOSEK
-        #                                            for solving the SDP. It should not be updated manually.
-        #                                            Only the `solve` method takes care of it.
-        counter (int): counts the number of :class:`PEP` objects.
-                       Ideally, only one is defined at a time.
+        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects sent to the wrapper.
+        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
+        wrapper_name (str): name of the used wrapper.
+        wrapper (Wrapper): :class:`Wrapper` object that interfaces between the :class:`PEP` and the solver.
 
     """
     # Class counter.
@@ -223,18 +224,28 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
 
-    def solve(self, verbose=1, return_primal_or_dual="dual", dimension_reduction_heuristic=None,
-              eig_regularization=1e-3, tol_dimension_reduction=1e-5, wrapper="cvxpy", **kwargs):
+    def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", verbose=1,
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
 
         Args:
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+            wrapper (str, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`.
+                                     Default is "cvxpy", other native option include "mosek".
+            return_primal_or_dual (str, optional): If "dual", it returns a worst-case upper bound of the PEP
+                                                   (dual value of the objective).
+                                                   If "primal", it returns a worst-case lower bound of the PEP
+                                                   (primal value of the objective).
+                                                   Default is "dual".
+                                                   Note both value should be almost the same by strong duality.
 
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed
+            verbose (int, optional): Level of information details to print
+                                     (Override the CVXPY solver verbose parameter).
+
+                                     - 0: No verbose at all
+                                     - 1: PEPit information is printed but not CVXPY's
+                                     - 2: Both PEPit and CVXPY details are printed
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
@@ -252,13 +263,10 @@ class PEP(object):
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction_heuristic" is not None)
                                                        The default value is 1e-5.
-            wrapper (dict, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`.
-                                     Default is CVXPY, other native option include MOSEK.
             kwargs (keywords, optional): Additional solver-specific arguments.
 
         Returns:
-            float or Problem: Value of the performance metric of the PEP, or a reference to a solver-specific representation
-                              of the PEP. The value is returned by default.
+            float: Worst case guarantee of the PEP.
 
         """
         wrapper_name = wrapper
@@ -328,9 +336,8 @@ class PEP(object):
             kwargs (keywords, optional): Additional solver-specific arguments.
 
         Returns:
-            float or Problem: Value of the performance metric of the PEP, or a reference to a solver-specific representation
-                              of the PEP. The value is returned by default.
-            # TODO update
+            float: Worst-case guarantee of the PEP.
+
         """
 
         # Create an expression that serve for the objective (min of the performance measures)   

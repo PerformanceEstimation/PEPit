@@ -8,7 +8,7 @@ def merge_dict(dict1, dict2):
         dict2 (dict): any dictionary
 
     Returns:
-        merged_dict (dict): the union of the 2 inputs with added values.
+        (dict): the union of the 2 inputs with added values.
 
     """
 
@@ -40,7 +40,7 @@ def prune_dict(my_dict):
         my_dict (dict): any dictionary
 
     Returns:
-        pruned_dict (dict): pruned dictionary
+        (dict): pruned dictionary
 
     """
 
@@ -67,8 +67,8 @@ def multiply_dicts(dict1, dict2):
         dict2 (dict): any dictionary
 
     Returns:
-        product_dict (dict): the keys are the couple of keys of dict1 and dict2
-                             and the values the product of values of dict1 and dict2.
+        (dict): the keys are the couple of keys of dict1 and dict2
+                and the values the product of values of dict1 and dict2.
 
     """
 
@@ -91,8 +91,21 @@ def multiply_dicts(dict1, dict2):
 
 
 def symmetrize_dict(my_dict):
+    """
+    Symmetrize the keys of a dictionary.
+    Each entry which key is a tuple is replaced by two entries:
+        - one with the same key and half the original value,
+        - the other one with reversed key and half the original value as well.
 
-    # TODO Docstring + test
+    Args:
+        my_dict (dict): any dictionary
+
+    Returns:
+        (dict): the keys are the ones of my_dict and the reversed tuples for the tuple ones.
+                the values are half the original ones for entries with symmetries tuples keys,
+                and the original ones for the others.
+
+    """
 
     reversed_dict = dict()
     for key, value in my_dict.items():
