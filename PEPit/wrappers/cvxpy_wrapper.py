@@ -4,6 +4,8 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
+from PEPit.tools.expressions_to_matrices import _expression_to_matrices
+
 
 class CvxpyWrapper(Wrapper):
     """
@@ -77,7 +79,7 @@ class CvxpyWrapper(Wrapper):
         """
         import cvxpy as cp
         
-        Gweights, Fweights, cons = self._expression_to_matrices(expression)
+        Gweights, Fweights, cons = _expression_to_matrices(expression)
         cvxpy_variable = cons + self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
 
         # Return the input expression in a cvxpy variable
