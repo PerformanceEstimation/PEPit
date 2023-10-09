@@ -88,3 +88,19 @@ def multiply_dicts(dict1, dict2):
 
     # Return the product dict
     return product_dict
+
+
+def symmetrize_dict(my_dict):
+
+    # TODO Docstring + test
+
+    reversed_dict = dict()
+    for key, value in my_dict.items():
+        if isinstance(key, tuple):
+            reversed_dict[key[::-1]] = value
+        else:
+            reversed_dict[key] = value
+
+    symmetric_dict = merge_dict(my_dict, reversed_dict)
+    final_dict = {key: value/2 for key, value in symmetric_dict.items()}
+    return final_dict
