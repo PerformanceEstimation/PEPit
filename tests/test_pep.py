@@ -152,6 +152,16 @@ class TestPEP(unittest.TestCase):
             for j in range(2):
                 self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1), places=3)
 
+    def test_consistency(self):
+
+        # Solve twice the same problem in a row and verify the two lists of constraints have same length.
+        _ = self.problem.solve(verbose=0)
+        l1 = self.problem._list_of_constraints_sent_to_wrapper
+        _ = self.problem.solve(verbose=0)
+        l2 = self.problem._list_of_constraints_sent_to_wrapper
+
+        self.assertEqual(len(l1), len(l2))
+
     def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically

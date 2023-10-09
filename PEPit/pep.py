@@ -346,16 +346,20 @@ class PEP(object):
 
         # Create all class constraints
         for function in list_of_leaf_functions:
-            function.add_class_constraints()
+            function.set_class_constraints()
 
         # Create all partition constraints
         for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
 
-        # Define the variables (G,F)
+        # Report the creation of variables (G,F)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
+            # They are actually created by wrapper when their environment is set
+
+        # Initialize the list of constraints sent to wrapper
+        self._list_of_constraints_sent_to_wrapper = list()
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
@@ -675,7 +679,10 @@ class PEP(object):
             )
         )
         # Get the actual dual_objective from its dict
-        dual_objective = dual_objective_expression_decomposition_dict[1]
+        if 1 in dual_objective_expression_decomposition_dict.keys():
+            dual_objective = dual_objective_expression_decomposition_dict[1]
+        else:
+            dual_objective = 0.
         # Compute the remaining terms, that should be small and only due to numerical stability errors
         remaining_terms = np.sum(np.abs([value for key, value in dual_objective_expression_decomposition_dict.items()
                                          if key != 1]))

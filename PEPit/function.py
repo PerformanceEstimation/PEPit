@@ -280,6 +280,13 @@ class Function(object):
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
 
+    def set_class_constraints(self):
+        """
+
+        """
+        self.list_of_class_constraints = list()
+        self.add_class_constraints()
+
     def add_class_constraints(self):
         """
         Warnings:
