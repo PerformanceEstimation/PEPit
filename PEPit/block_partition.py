@@ -1,5 +1,4 @@
-from PEPit.point import Point
-from PEPit.point import null_point
+from PEPit.point import Point, null_point
 from PEPit.constraint import Constraint
 
 
@@ -78,7 +77,7 @@ class BlockPartition(object):
 
         Raises:
             AssertionError: if provided `point` is not a :class:`Point` or `block_number` is not a valid integer
-                            (which should be non negative and strictly smaller than the number of blocks)
+                            (which should be nonnegative and strictly smaller than the number of blocks)
 
         """
         assert isinstance(point, Point) and isinstance(block_number, int)

@@ -1,8 +1,8 @@
 import importlib.util
 
-from tools.dict_operations import symmetrize_dict
-
 import numpy as np
+
+from PEPit.tools.dict_operations import prune_dict, symmetrize_dict
 
 from PEPit.wrappers import WRAPPERS
 from PEPit.point import Point
@@ -11,8 +11,6 @@ from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
-
-from PEPit.tools import prune_dict
 
 
 class PEP(object):
