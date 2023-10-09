@@ -19,7 +19,6 @@ class Wrapper(object):
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
                                                     This list does not contain constraints due to internal representation of the 
                                                     problem by the solver.
-        _list_of_constraints_sent_to_solver_full (list): full list of constraints associated to the solver.
         prob (): instance of the problem (whose type depends on the solver)
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
@@ -41,7 +40,6 @@ class Wrapper(object):
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_solver = list()
-        self._list_of_constraints_sent_to_solver_full = list()  # MUST USE FOR EVALUATION TRUE DUAL OBJ!!  ## TODO check usage
 
         self.optimal_F = None
         self.optimal_G = None

@@ -62,7 +62,7 @@ def wc_example_template(arg1, arg2, arg3, wrapper="cvxpy", verbose=1):
         arg3 (type3): description of arg3.
         wrapper (str): the name of the wrapper to be used.
 		verbose (int): level of information details to print.
-                        
+
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.

@@ -249,7 +249,7 @@ class PEP(object):
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
-                                                           
+
                                                             - "trace": minimize :math:`Tr(G)`
                                                             - "logdet{an integer n}": minimize
                                                               :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
@@ -278,7 +278,7 @@ class PEP(object):
                 print('(PEPit) {} not found in system environment, switching to cvxpy'.format(wrapper_name))
             wrapper_name = "cvxpy"
 
-        # Initiate a wrapper to interface with the solver 
+        # Initiate a wrapper to interface with the solver
         wrapper = WRAPPERS[wrapper_name]()
         wrapper.setup_environment()
 
@@ -312,14 +312,14 @@ class PEP(object):
 
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed
+                            - 2: Both PEPit and solver details are printed
             return_full_problem (bool): If True, return the problem object (whose type depends on the solver).
                                         If False, only return the worst-case value.
                                         Set to False by default.
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
-                                                           
+
                                                             - "trace": minimize :math:`Tr(G)`
                                                             - "logdet{an integer n}": minimize
                                                               :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
@@ -340,7 +340,7 @@ class PEP(object):
 
         """
 
-        # Create an expression that serve for the objective (min of the performance measures)   
+        # Create an expression that serve for the objective (min of the performance measures)
         tau = Expression(is_leaf=True)
         objective = tau
         self.objective = objective
@@ -555,7 +555,7 @@ class PEP(object):
 
             else:
                 raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
-                                 "or \`logdet\` followed by an interger."
+                                 "or \`logdet\` followed by an integer."
                                  "Got {}".format(dimension_reduction_heuristic))
 
             # Print the estimated dimension after dimension reduction
@@ -581,9 +581,27 @@ class PEP(object):
             raise ValueError("The argument \'return_primal_or_dual\' must be \'dual\' or \`primal\`."
                              "Got {}".format(return_primal_or_dual))
 
-    def _recap(self, wc_value, verbose):
+    def _recap(self, wc_value, verbose=1):
         """
-        TODO
+        Check primal feasibility and display precision.
+        Check dual feasibility and display precision.
+        Compute and display primal-dual gap.
+
+        Args:
+            wc_value (float): the primal value of the PEP objective returned by the solver.
+            verbose (int): If larger or equal than 1, print intermediate information.
+
+        Returns:
+            (float): the dual value of the PEP objective.
+
+        Notes:
+            The dual feasibility consists in
+
+                - verifying that the dual values associated to inequality constraints are nonnegative,
+                - and verifying that the residual corresponds to the right linear combination of the constraints.
+
+            The second point essentially means that verifying the dual feasibility consists in reconstructing the proof.
+
         """
 
         ################################################################################################################
@@ -762,7 +780,7 @@ class PEP(object):
         Args:
             F_value (nd.array): value of the cvxpy variable F
             G_value (nd.array): value of the cvxpy variable G
-            verbose (bool): if True, details of computation are printed
+            verbose (int): If larger or equal than 1, print intermediate information.
 
         Raises:
             TypeError if some matrix in `self.list_of_psd` contains some entry that :class:`Expression` objects
