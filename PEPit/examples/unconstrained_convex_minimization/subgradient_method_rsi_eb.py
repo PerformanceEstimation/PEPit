@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import RsiEbFunction
 
 
-def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
+def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -47,7 +47,8 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
         L (float): the eb parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -61,7 +62,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
     Example:
         >>> mu = .1
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -103,7 +104,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - 2 * gamma * mu + gamma ** 2 * L ** 2) ** n
@@ -121,4 +122,4 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, verbose=1):
 if __name__ == "__main__":
     mu = .1
     L = 1
-    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, wrapper="cvxpy", verbose=1)

@@ -5,7 +5,7 @@ from PEPit.operators import MonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
+def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -57,7 +57,8 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
         beta (float): cocoercivity of B.
         alpha (float): step-size (in the resolvents).
         theta (float): overrelaxation parameter.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -69,7 +70,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
         theoretical_tau (None): no theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -119,7 +120,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -134,4 +135,4 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, verbose=1)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, wrapper="cvxpy", verbose=1)

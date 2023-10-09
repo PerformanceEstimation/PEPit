@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
+def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -54,7 +54,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
         gamma (float): the step-size.
         d (int): the dimension.
         t (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -67,7 +68,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -124,7 +125,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1.
@@ -141,4 +142,4 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, wrapper="cvxpy", verbose=1)

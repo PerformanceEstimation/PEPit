@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexLipschitzFunction
 
 
-def wc_subgradient_method(M, n, gamma, verbose=1):
+def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", verbose=1):
     """
     Consider the minimization problem
 
@@ -58,7 +58,8 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
         M (float): the Lipschitz parameter.
         n (int): the number of iterations.
         gamma (float): step-size.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -73,7 +74,7 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
         >>> M = 2
         >>> n = 6
         >>> gamma = 1 / (M * sqrt(n + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -120,7 +121,7 @@ def wc_subgradient_method(M, n, gamma, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = M / sqrt(n + 1)
@@ -140,4 +141,4 @@ if __name__ == "__main__":
     M = 2
     n = 6
     gamma = 1 / (M * sqrt(n + 1))
-    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", verbose=1)

@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions.strongly_convex import StronglyConvexFunction
 
 
-def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
+def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -65,7 +65,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
     Args:
         mu (float): the strong convexity parameter
         psd (boolean): option for positivity of :math:`P` in the Lyapunov function :math:`\\mathcal{V}_{P}`
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -77,7 +78,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -128,7 +129,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if psd:
@@ -149,4 +150,4 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, wrapper="cvxpy", verbose=1)

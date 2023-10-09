@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, verbose=1):
+def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -54,7 +54,8 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
         mu (float): the strong-convexity parameter.
         gamma (float): the step-size.
         d (int): the dimension.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -69,7 +70,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
         >>> L = 1
         >>> mu = 0.1
         >>> gamma = 2 / (mu + L)
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -117,7 +118,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, ver
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max(((mu * gamma - 1) ** 2 + d - 1) / d, ((L * gamma - 1) ** 2 + d - 1) / d)
@@ -137,4 +138,4 @@ if __name__ == "__main__":
     mu = 0.1
     gamma = 2 / (mu + L)
     pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2,
-                                                                                         verbose=1)
+                                                                                         wrapper="cvxpy", verbose=1)

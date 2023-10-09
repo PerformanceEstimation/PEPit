@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import BlockSmoothConvexFunction
 
 
-def wc_cyclic_coordinate_descent(L, n, verbose=1):
+def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -39,7 +39,8 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
     Args:
         L (list): list of floats, smoothness parameters (for each block).
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -52,7 +53,7 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
     Example:
         >>> L = [1., 2., 10.]
-        >>> pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 34x34
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -103,7 +104,7 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -119,4 +120,4 @@ def wc_cyclic_coordinate_descent(L, n, verbose=1):
 
 if __name__ == "__main__":
     L = [1., 2., 10.]
-    pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, verbose=1)
+    pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", verbose=1)

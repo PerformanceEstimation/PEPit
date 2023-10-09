@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_accelerated_gradient_convex(mu, L, n, verbose=1):
+def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", verbose=1):
     """
     Consider the convex minimization problem
 
@@ -50,7 +50,8 @@ def wc_accelerated_gradient_convex(mu, L, n, verbose=1):
         mu (float): the strong convexity parameter
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -62,7 +63,7 @@ def wc_accelerated_gradient_convex(mu, L, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -107,7 +108,7 @@ def wc_accelerated_gradient_convex(mu, L, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (n ** 2 + 5 * n + 6)  # tight only for mu=0, see [2], Table 1 (column 1, line 1)
@@ -125,4 +126,4 @@ def wc_accelerated_gradient_convex(mu, L, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, wrapper="cvxpy", verbose=1)

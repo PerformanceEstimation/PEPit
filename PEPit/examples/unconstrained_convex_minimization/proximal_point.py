@@ -3,7 +3,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_proximal_point(gamma, n, verbose=1):
+def wc_proximal_point(gamma, n, wrapper="cvxpy", verbose=1):
     """
     Consider the minimization problem
 
@@ -47,7 +47,8 @@ def wc_proximal_point(gamma, n, verbose=1):
     Args:
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -59,7 +60,7 @@ def wc_proximal_point(gamma, n, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -102,7 +103,7 @@ def wc_proximal_point(gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1 / (4 * gamma * n)
@@ -118,4 +119,4 @@ def wc_proximal_point(gamma, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point(gamma=3, n=4, wrapper="cvxpy", verbose=1)

@@ -5,7 +5,7 @@ from PEPit import PEP
 # from primitive_steps import ``THE PRIMITIVE STEPS YOU NEED``
 
 
-def wc_example_template(arg1, arg2, arg3, verbose=1):
+def wc_example_template(arg1, arg2, arg3, wrapper="cvxpy", verbose=1):
     """
     Consider the ``CHARACTERISTIC (eg., convex)`` minimization problem
 
@@ -60,7 +60,8 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
         arg1 (type1): description of arg1.
         arg2 (type2): description of arg2.
         arg3 (type3): description of arg3.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -72,7 +73,7 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, wrapper="cvxpy", verbose=1)
         ``OUTPUT MESSAGE``
 
     """
@@ -108,7 +109,7 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
     #
     # # Solve the PEP
     # pepit_verbose = max(verbose, 0)
-    # pepit_tau = problem.solve(verbose=pepit_verbose)
+    # pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
     #
     # # Theoretical guarantee (for comparison)
     # theoretical_tau = theoretical_tau  # TODO specify
@@ -125,4 +126,4 @@ def wc_example_template(arg1, arg2, arg3, verbose=1):
 
 if __name__ == "__main__":
 
-    pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, verbose=1)
+    pepit_tau, theoretical_tau = wc_example_template(arg1=value1, arg2=value2, arg3=value3, wrapper="cvxpy", verbose=1)

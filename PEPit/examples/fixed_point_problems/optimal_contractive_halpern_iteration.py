@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
 
-def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
+def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", verbose=1):
     """
     Consider the fixed point problem
 
@@ -38,7 +38,8 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
     Args:
         n (int): number of iterations.
         gamma (float): :math:`\\gamma \ge 1`. :math:`A` will be :math:`1/\\gamma`-contractive.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -50,7 +51,7 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -93,7 +94,7 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 + 1 / gamma) ** 2 * ((gamma - 1) / (gamma ** (n + 1) - 1)) ** 2
@@ -109,4 +110,4 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, wrapper="cvxpy", verbose=1)

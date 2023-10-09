@@ -4,7 +4,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import linear_optimization_step
 
 
-def wc_frank_wolfe(L, D, n, verbose=1):
+def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -59,7 +59,8 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         L (float): the smoothness parameter.
         D (float): diameter of :math:`f_2`.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -71,7 +72,7 @@ def wc_frank_wolfe(L, D, n, verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -156,4 +157,4 @@ def wc_frank_wolfe(L, D, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, verbose=1)
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", verbose=1)

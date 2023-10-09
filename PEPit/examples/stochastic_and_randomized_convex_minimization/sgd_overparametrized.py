@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
+def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
     """
     Consider the finite sum minimization problem
 
@@ -69,7 +69,8 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
         mu (float): the strong convexity parameter.
         gamma (float): the step-size.
         n (int): number of functions.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -84,7 +85,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
         >>> mu = 0.1
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -136,7 +137,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     kappa = L / mu
@@ -157,4 +158,4 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, verbose=1)
+    pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, wrapper="cvxpy", verbose=1)

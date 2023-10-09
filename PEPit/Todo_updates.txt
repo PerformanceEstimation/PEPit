@@ -6,14 +6,6 @@ Smooth convex Lip
 ---Others: (not done at all)
 - naming points + constraints?
 
---- Examples:
-- the output of the upper bound should be the dual value (and not the primal value)
-- Importer les 2 wrappers
-- Ajouter wrapper en param de l example avec CVXPY by default
-- L ajouter en docstring
-- L ajouter en if name==main
-- l appeler dans test_examples
-
 ---tests:
 - add asserts in the new code
 - add tests, including for:

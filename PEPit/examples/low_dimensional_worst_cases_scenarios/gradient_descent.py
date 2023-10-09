@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothFunction
 
 
-def wc_gradient_descent(L, gamma, n, verbose=1):
+def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", verbose=1):
     """
     Consider the minimization problem
 
@@ -47,7 +47,8 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         L (float): the smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -61,7 +62,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     Example:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -132,4 +133,4 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 if __name__ == "__main__":
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", verbose=1)

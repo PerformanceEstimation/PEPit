@@ -5,7 +5,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
+def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", verbose=1):
     """
     Consider the composite convex minimization problem,
 
@@ -54,7 +54,8 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
         alpha (float): parameter of the scheme.
         theta (float): parameter of the scheme.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -68,7 +69,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     Example:
         >>> L3 = 1
         >>> alpha = 1 / L3
-        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, wrapper="cvxpy", verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -124,7 +125,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -141,4 +142,4 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
 if __name__ == "__main__":
     L3 = 1
     alpha = 1 / L3
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, wrapper="cvxpy", verbose=1)
