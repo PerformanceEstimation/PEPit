@@ -34,6 +34,7 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         """
 
         Args:
+            L (float): The smoothness parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -41,7 +42,6 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
-            L (float): The smoothness parameter.
 
         Note:
             Smooth convex functions are necessarily differentiable, hence `reuse_gradient` is set to True.
