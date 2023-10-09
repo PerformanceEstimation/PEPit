@@ -22,6 +22,7 @@ class PEP(object):
     Attributes:
         counter (int): counts the number of :class:`PEP` objects.
                        Ideally, only one is defined at a time.
+
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
@@ -32,10 +33,20 @@ class PEP(object):
                                             The pep maximizes the minimum of all performance metrics.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
                             The PEP consider the associated LMI constraints psd_matrix >> 0.
-        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects sent to the wrapper.
-        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
+
         wrapper_name (str): name of the used wrapper.
         wrapper (Wrapper): :class:`Wrapper` object that interfaces between the :class:`PEP` and the solver.
+
+        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects sent to the wrapper.
+        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
+
+        objective (Expression): the expression to be maximized by the solver.
+                                It is set by the method solve. And should not be updated otherwise.
+
+        G_value (ndarray): the value of the Gram matrix G that the solver found.
+        F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
+
+        residual (ndarray): the dual value found by the solver to the lmi constraints G >= 0.
 
     """
     # Class counter.
@@ -62,21 +73,34 @@ class PEP(object):
         # points and constraints that are independent of the functions,
         # as well as the list of matrices that must be constraint to be positive symmetric definite
         # and the list of performance metrics.
-        # The PEP will maximize the minimum of the latest.
+        # The PEP will maximize the minimum of the latter.
         self.list_of_functions = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
 
-        # Initialize lists of constraints that are used to solve the SDP.
+        # Initialize wrapper information
+        # The wrapper will be determined in the method "solve".
+        self.wrapper_name = None
+        self.wrapper = None
+
+        # Initialize lists of constraints that will be sent to the wrapper to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
         self._list_of_constraints_sent_to_wrapper = list()
         self._list_of_psd_sent_to_wrapper = list()
 
-        # Initialize wrapper information
-        self.wrapper_name = None
-        self.wrapper = None
+        # The attribute objective will contain a leaf Expression when set in the method "solve".
+        self.objective = None
+        # The Gram matrix G and the vector of Expressions F will obtain value from the solver,
+        # stored in the 2 following attributes.
+        # From those values, all Points and Expressions receive a primal value.
+        self.G_value = None
+        self.F_value = None
+        # All PEP Constraints receive also a dual value.
+        # The constraint G >= 0 is the only constraint that is not defined from the class Constraint.
+        # Its dual value, called residual, is then stored in the following attribute.
+        self.residual = None
 
     @staticmethod
     def _reset_classes():
@@ -339,9 +363,7 @@ class PEP(object):
         """
 
         # Create an expression that serve for the objective (min of the performance measures)
-        tau = Expression(is_leaf=True)
-        objective = tau
-        self.objective = objective
+        self.objective = Expression(is_leaf=True)
 
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
@@ -371,7 +393,7 @@ class PEP(object):
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            performance_metric_constraint = (tau <= performance_metric)
+            performance_metric_constraint = (self.objective <= performance_metric)
             wrapper.send_constraint_to_solver(performance_metric_constraint)
             self._list_of_constraints_sent_to_wrapper.append(performance_metric_constraint)
 
@@ -486,7 +508,7 @@ class PEP(object):
         # Instantiate the problem
         if verbose:
             print('(PEPit) Compiling SDP')
-        wrapper.generate_problem(objective)
+        wrapper.generate_problem(self.objective)
 
         # Solve it
         if verbose:
