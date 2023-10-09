@@ -1,7 +1,7 @@
 TODO's:
 
 --- Functions:
-Smooth convex Lip
+- smooth convex Lip
 
 ---Others: (not done at all)
 - naming points + constraints?
@@ -18,4 +18,4 @@ Smooth convex Lip
 
 --- Examples:
 - Updater les outputs des examples
-- une fois les outputs modifiés -> updater l'output 'exemple' du papier.
+- Une fois les outputs modifiés -> updater l'output 'exemple' du papier.

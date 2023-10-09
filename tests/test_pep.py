@@ -164,10 +164,10 @@ class TestPEP(unittest.TestCase):
 
     def test_dimension_reduction(self):
 
-        # Compute pepit_tau very basically
+        # Compute pepit_tau very basically.
         pepit_tau = self.problem.solve(verbose=0)
 
-        # Return the full problem and verify the problem value is still pepit_tau
+        # Compute pepit_tau very basically with dimension_reduction_heuristic off and verify all is fine.
         pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
