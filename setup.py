@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-version = "0.2.1"
+version = "0.3.0"
 
 setuptools.setup(
     name="PEPit",
@@ -26,5 +26,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     packages=[element for element in setuptools.find_packages() if element[:5] == 'PEPit'],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )

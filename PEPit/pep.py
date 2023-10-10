@@ -528,7 +528,7 @@ class PEP(object):
         # Dimension aims at finding low dimension lower bound functions,
         # but solves a different problem with an extra condition and different objective,
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
-        _, self.residual, _ = wrapper.eval_constraint_dual_values()
+        self.residual = wrapper.assign_dual_values()
         G_value, F_value = wrapper.get_primal_variables()
 
         # Perform a dimension reduction if required
@@ -591,7 +591,7 @@ class PEP(object):
         self.G_value = G_value
         self.F_value = F_value
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
-        dual_objective = self._recap(wc_value, verbose=verbose)
+        dual_objective = self.check_feasibility(wc_value, verbose=verbose)
         # Return the value of the minimal performance metric
         if return_primal_or_dual == "dual":
             return dual_objective
@@ -601,7 +601,7 @@ class PEP(object):
             raise ValueError("The argument \'return_primal_or_dual\' must be \'dual\' or \`primal\`."
                              "Got {}".format(return_primal_or_dual))
 
-    def _recap(self, wc_value, verbose=1):
+    def check_feasibility(self, wc_value, verbose=1):
         """
         Check primal feasibility and display precision.
         Check dual feasibility and display precision.

@@ -23,11 +23,9 @@ class MosekWrapper(Wrapper):
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
                                                     This list does not contain constraints due to internal representation of the 
                                                     problem by the solver.
-        _list_of_constraints_sent_to_solver_full (list): full list of constraints associated to the solver.
         prob (mosek.task): instance of the problem.
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
-        optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
         verbose (bool): verbosity:
 
                             - 0: No verbose at all
@@ -343,7 +341,7 @@ class MosekWrapper(Wrapper):
             size (int): weights that will be used in the heuristic.
         
         """
-        # the primal solution for a semidefinite variable.
+        # the primal solution for a semi-definite variable.
         # Only the lower triangular part of is returned because the matrix by construction is symmetric.
         # The format is that the columns are stored sequentially in the natural order.
         G = np.zeros((size, size))

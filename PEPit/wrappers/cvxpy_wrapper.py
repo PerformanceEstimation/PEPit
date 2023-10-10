@@ -221,7 +221,6 @@ class CvxpyWrapper(Wrapper):
         """
         import cvxpy as cp
         
-        # self.objective = objective
         cvxpy_objective = self._expression_to_solver(objective)
         self.objective = cvxpy_objective
         self.prob = cp.Problem(objective=cp.Maximize(cvxpy_objective), constraints=self._list_of_solver_constraints)
