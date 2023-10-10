@@ -23,23 +23,28 @@ class CvxpyWrapper(Wrapper):
         prob (cvxpy.Problem): instance of the problem.
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
-        optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
         F (cvxpy.Variable): CVXPY variable corresponding to leaf :class:`Expression` objects of the PEP.
         G (cvxpy.Variable): CVXPY variable corresponding the Gram matrix of the PEP.
-        verbose (bool): verbosity:
+        verbose (int): Level of information details to print
+                       (Override the solver verbose parameter).
 
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed (overwrites CVXPY's setting)
+                       - 0: No verbose at all
+                       - 1: PEPit information is printed but not solver's
+                       - 2: Both PEPit and solver details are printed
 
     """
 
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=1):
         """
         This function initialize all internal variables of the class. 
         
         Args:
-            verbose (bool): verbose mode of the solver.
+            verbose (int): Level of information details to print
+                           (Override the solver verbose parameter).
+
+                           - 0: No verbose at all
+                           - 1: PEPit information is printed but not solver's
+                           - 2: Both PEPit and solver details are printed
 
         """
         super().__init__(verbose=verbose)

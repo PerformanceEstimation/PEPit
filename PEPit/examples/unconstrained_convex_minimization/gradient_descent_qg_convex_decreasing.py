@@ -72,7 +72,7 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", verbose=1):
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value

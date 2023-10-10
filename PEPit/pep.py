@@ -263,11 +263,11 @@ class PEP(object):
                                                    Note both value should be almost the same by strong duality.
 
             verbose (int, optional): Level of information details to print
-                                     (Override the CVXPY solver verbose parameter).
+                                     (Override the solver verbose parameter).
 
                                      - 0: No verbose at all
-                                     - 1: PEPit information is printed but not CVXPY's
-                                     - 2: Both PEPit and CVXPY details are printed
+                                     - 1: PEPit information is printed but not solver's
+                                     - 2: Both PEPit and solver details are printed
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
@@ -296,7 +296,7 @@ class PEP(object):
         # Check that the solver is installed, if it is not, switch to CVXPY.
         found_python_package = importlib.util.find_spec(wrapper_name)
         if found_python_package is None:
-            if verbose >= 1:
+            if verbose:
                 print('(PEPit) {} not found in system environment, switching to cvxpy'.format(wrapper_name))
             wrapper_name = "cvxpy"
 
@@ -306,7 +306,7 @@ class PEP(object):
 
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
         if not wrapper.check_license():
-            if verbose >= 1:
+            if verbose:
                 print('(PEPit) No valid {} license found, switching to cvxpy'.format(wrapper_name))
             wrapper_name = "cvxpy"
             wrapper = WRAPPERS[wrapper_name]()
@@ -330,14 +330,17 @@ class PEP(object):
 
         Args:
             wrapper (Wrapper): Interface to the solver.
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
+            verbose (int, optional): Level of information details to print (Override the CVXPY solver verbose parameter).
 
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
                             - 2: Both PEPit and solver details are printed
-            return_full_problem (bool): If True, return the problem object (whose type depends on the solver).
-                                        If False, only return the worst-case value.
-                                        Set to False by default.
+            return_primal_or_dual (str, optional): If "dual", it returns a worst-case upper bound of the PEP
+                                                   (dual value of the objective).
+                                                   If "primal", it returns a worst-case lower bound of the PEP
+                                                   (primal value of the objective).
+                                                   Default is "dual".
+                                                   Note both value should be almost the same by strong duality.
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
@@ -609,7 +612,7 @@ class PEP(object):
 
         Args:
             wc_value (float): the primal value of the PEP objective returned by the solver.
-            verbose (int): If larger or equal than 1, print intermediate information.
+            verbose (int, optional): If larger or equal than 1, print intermediate information.
 
         Returns:
             (float): the dual value of the PEP objective.
@@ -793,14 +796,14 @@ class PEP(object):
 
         return nb_eigenvalues, eig_threshold, corrected_S
 
-    def _eval_points_and_function_values(self, F_value, G_value, verbose):
+    def _eval_points_and_function_values(self, F_value, G_value, verbose=1):
         """
         Store values of :class:`Point` and :class:`Expression objects at optimum after the PEP has been solved.
 
         Args:
             F_value (nd.array): value of the cvxpy variable F
             G_value (nd.array): value of the cvxpy variable G
-            verbose (int): If larger or equal than 1, print intermediate information.
+            verbose (int, optional): If larger or equal than 1, print intermediate information.
 
         Raises:
             TypeError if some matrix in `self.list_of_psd` contains some entry that :class:`Expression` objects

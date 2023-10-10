@@ -23,18 +23,27 @@ class Wrapper(object):
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
         dual_values (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
-        verbose (bool): verbosity:
+        verbose (int): Level of information details to print
+                       (Override the solver verbose parameter).
 
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed
+                       - 0: No verbose at all
+                       - 1: PEPit information is printed but not solver's
+                       - 2: Both PEPit and solver details are printed
 
     """
 
-    def __init__(self, verbose):
+    def __init__(self, verbose=1):
         """
         :class:`Wrapper` object should not be instantiated as such: only children class should.
         This function initialize all internal variables of the class.
+
+        Args:
+            verbose (int): Level of information details to print
+                           (Override the solver verbose parameter).
+
+                           - 0: No verbose at all
+                           - 1: PEPit information is printed but not solver's
+                           - 2: Both PEPit and solver details are printed
 
         """
         # Initialize lists of constraints that are used to solve the SDP.

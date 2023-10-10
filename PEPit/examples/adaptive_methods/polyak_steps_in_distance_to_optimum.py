@@ -62,7 +62,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, wrapper="cvxpy", verbos
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
