@@ -47,6 +47,12 @@ Convex and Lipschitz continuous
    :members:
    :show-inheritance:
 
+Smooth convex and Lipschitz continuous
+--------------------------------------
+.. autoclass:: PEPit.functions.SmoothConvexLipschitzFunction
+   :members:
+   :show-inheritance:
+
 Convex indicator
 ----------------
 .. autoclass:: PEPit.functions.ConvexIndicatorFunction
