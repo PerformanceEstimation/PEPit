@@ -53,3 +53,10 @@ Function
 .. autoclass:: PEPit.Function
    :members:
    :show-inheritance:
+
+
+Wrapper
+-------
+.. autoclass:: PEPit.Wrapper
+   :members:
+   :show-inheritance:

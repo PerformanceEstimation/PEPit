@@ -19,3 +19,8 @@ Multiply two dictionaries
 Prune a dictionary
 ------------------
 .. autofunction:: PEPit.tools.prune_dict
+
+
+Symmetrize a dictionary
+-----------------------
+.. autofunction:: PEPit.tools.symmetrize_dict
