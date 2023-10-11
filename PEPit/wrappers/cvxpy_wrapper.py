@@ -19,7 +19,6 @@ class CvxpyWrapper(Wrapper):
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
                                                     This list does not contain constraints due to internal representation of the 
                                                     problem by the solver.
-        _list_of_constraints_sent_to_solver_full (list): full list of constraints associated to the solver.
         prob (cvxpy.Problem): instance of the problem.
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         optimal_F (numpy.array): Elements of F after solving.
