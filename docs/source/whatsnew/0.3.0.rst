@@ -11,3 +11,5 @@ What's new in PEPit 0.3.0
 - PEP.solve now returns the dual value of the objective by default, i.e. the actually worst-case guarantee. The user can still call `PEP.solve` with the option `return_primal_or_dual == "primal"` to get the primal value of the objective corresponding to a counter example. Note, those two values should be almost identical by strong duality. A new list of messages are printed to verify feasibility of the provided solution and provides duality gap.
 
 - The order of the constraints of `SmoothFunction` has been reversed to be consistent with `ConvexFunction`, `StronglyConvexFunction`, `SmoothConvexFunction` and `SmoothStronglyConvexFunction`.
+
+- Point, Expression, Constraint, PSDMatrix and Function objects now have an attribute "name" that contains a string representing them. The latter is initialized as None, and get be updated through the methods `set_name`. Finally they are accessible through the methods `get_name`.

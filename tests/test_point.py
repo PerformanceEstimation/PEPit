@@ -18,6 +18,17 @@ class TestPoint(unittest.TestCase):
         self.assertIsInstance(self.A, Point)
         self.assertIsInstance(self.B, Point)
 
+    def test_name(self):
+
+        self.B.set_name("pointB")
+        self.assertIsNone(self.A.get_name())
+        self.assertEqual(self.B.get_name(), "pointB")
+
+        C = self.A + self.B
+        self.assertIsNone(C.get_name())
+        C.set_name("pointC")
+        self.assertEqual(C.get_name(), "pointC")
+
     def test_counter(self):
 
         C = self.A + self.B

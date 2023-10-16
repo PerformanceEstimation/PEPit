@@ -10,6 +10,7 @@ class Point(object):
     A :class:`Point` encodes an element of a pre-Hilbert space, either a point or a gradient.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         _is_leaf (bool): True if self is defined from scratch
                          (not as linear combination of other :class:`Point` objects).
                          False if self is defined as linear combination of other points.
@@ -79,6 +80,8 @@ class Point(object):
             >>> new_point = Point(is_leaf=False, decomposition_dict = {point1: -1/5, point2: 1/5})
 
         """
+        # Initialize name of the point
+        self.name = None
 
         # Store is_leaf in a protected attribute
         self._is_leaf = is_leaf
@@ -101,12 +104,26 @@ class Point(object):
             self.decomposition_dict = decomposition_dict
             self.counter = None
 
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
+
     def get_is_leaf(self):
         """
-
         Returns:
             self._is_leaf (bool): allows to access the protected attribute `_is_leaf`.
-
         """
         return self._is_leaf
 

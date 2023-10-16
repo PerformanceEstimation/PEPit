@@ -8,6 +8,7 @@ class PSDMatrix(object):
     A :class:`PSDMatrix` encodes a square matrix of :class:`Expression` objects that is constrained to be symmetric PSD.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression` objects.
         shape (tuple of ints): the shape of the underlying matrix of :class:`Expression` objects.
         _value (2D ndarray of floats): numerical values of :class:`Expression` objects
@@ -56,6 +57,8 @@ class PSDMatrix(object):
             TypeError: if provided matrix does not contain only Expressions and / or scalar values.
 
         """
+        # Initialize name of the psd matrix
+        self.name = None
 
         # Update the counter
         self.counter = PSDMatrix.counter
@@ -71,6 +74,22 @@ class PSDMatrix(object):
         # Moreover, the associated dual variable value must be stored in self._dual_variable_value.
         self._dual_variable_value = None
         self.entries_dual_variable_value = None
+
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
 
     @staticmethod
     def _store(matrix_of_expressions):

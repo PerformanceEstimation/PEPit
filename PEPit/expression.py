@@ -14,6 +14,7 @@ class Expression(object):
     and constant scalar values.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         _is_leaf (bool): True if self is a function value defined from scratch
                                    (not as linear combination of other function values).
                                    False if self is a linear combination of existing :class:`Expression` objects.
@@ -76,6 +77,9 @@ class Expression(object):
             >>> new_expr = Expression(is_leaf=False, decomposition_dict = {expr1: -1/5, expr2: 1/5, 1: -1/5})
 
         """
+        # Initialize name of the expression
+        self.name = None
+
         # Store is_leaf in a protected attribute
         self._is_leaf = is_leaf
 
@@ -96,6 +100,22 @@ class Expression(object):
             assert type(decomposition_dict) == dict
             self.decomposition_dict = decomposition_dict
             self.counter = None
+
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
 
     def get_is_leaf(self):
         """

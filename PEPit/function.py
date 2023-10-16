@@ -19,6 +19,7 @@ class Function(object):
     and some are linear combinations of pre-existing ones.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         _is_leaf (bool): True if self is defined from scratch.
                          False if self is defined as linear combination of leaves.
         decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -33,7 +34,7 @@ class Function(object):
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
         list_of_psd (list): The list of :class:`PSDMatrix` objects associated with this :class:`Function`.
         list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
-        list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated associated with class interpolation constraints.
+        list_of_class_psd (list): The list of :class:`PSDMatrix` objects appearing in class interpolation constraints.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
@@ -89,6 +90,8 @@ class Function(object):
             >>> new_func = Function(is_leaf=False, decomposition_dict = {func1: -1/5, func2: 1/5})
 
         """
+        # Initialize name of the function
+        self.name = None
 
         # Store inputs
         self._is_leaf = is_leaf
@@ -117,6 +120,22 @@ class Function(object):
         self.list_of_psd = list()
         self.list_of_class_constraints = list()
         self.list_of_class_psd = list()
+
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
 
     def get_is_leaf(self):
         """
@@ -265,7 +284,7 @@ class Function(object):
 
     def add_psd_matrix(self, matrix_of_expressions):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
@@ -348,7 +367,7 @@ class Function(object):
         # Separate all leaf function in 3 categories based on their need
         for function, weight in self.decomposition_dict.items():
             # If function has already been evaluated on point, then one should reuse some evaluation.
-            # Note the method "is_already_evaluated_on_point" returns a non empty tuple if the function has already
+            # Note the method "is_already_evaluated_on_point" returns a non-empty tuple if the function has already
             # been evaluated, and None otherwise.
             # Those outputs are respectively evaluated as True and False by the following test.
             if function._is_already_evaluated_on_point(point=point):
@@ -366,7 +385,8 @@ class Function(object):
                 list_of_functions_which_need_gradient_and_function_value.append((function, weight))
 
         # Return the 3 lists in a specific order: from the smallest need to the biggest one.
-        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value
+        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+            list_of_functions_which_need_gradient_and_function_value
 
     def add_point(self, triplet):
         """
@@ -458,7 +478,7 @@ class Function(object):
 
         # If those values already exist, simply return them.
         # If not, instantiate them before returning.
-        # Note if the non differentiable case, the gradient is recomputed anyway.
+        # Note if the non-differentiable case, the gradient is recomputed anyway.
         associated_grad_and_function_val = self._is_already_evaluated_on_point(point=point)
         # "associated_grad_and_function_val" is a tuple (True) or None (False)
 
@@ -474,14 +494,16 @@ class Function(object):
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of leaf functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self._separate_leaf_functions_regarding_their_need_on_point(point=point)
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+            list_of_functions_which_need_gradient_and_function_value =\
+            self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
         # Here we deal with the function value computation
         if associated_grad_and_function_val is None:
 
             # If no leaf function need a new function value, it means that they all have one,
-            # and then "self"'s one is determined by linear combination.
+            # and then "self" 's one is determined by linear combination.
             if list_of_functions_which_need_gradient_and_function_value == list():
                 f = Expression(is_leaf=False, decomposition_dict=dict())
                 for function, weight in self.decomposition_dict.items():
@@ -496,7 +518,8 @@ class Function(object):
         # either because it is not differentiable or because it had never been computed so far.
 
         # If "self" gradient is determined by its leaf functions, then we compute it.
-        if list_of_functions_which_need_gradient_and_function_value == list() and list_of_functions_which_need_gradient_only == list():
+        if list_of_functions_which_need_gradient_and_function_value == list() and \
+                list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
                 g += weight * function.gradient(point=point)

@@ -24,6 +24,17 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(self.func1, Function)
         self.assertIsInstance(self.func2, Function)
 
+    def test_name(self):
+
+        self.assertIsNone(self.func1.get_name())
+        self.assertIsNone(self.func2.get_name())
+
+        self.func1.set_name("f1")
+        self.func2.set_name("f2")
+
+        self.assertEqual(self.func1.get_name(), "f1")
+        self.assertEqual(self.func2.get_name(), "f2")
+
     def test_counter(self):
 
         composite_function = self.func1 + self.func2

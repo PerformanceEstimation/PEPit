@@ -7,6 +7,7 @@ class Constraint(object):
     depending on the value of `self.equality_or_inequality`.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         expression (Expression): The :class:`Expression` that is compared to 0.
         equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
         _value (float): numerical value of self.expression obtained after solving the PEP via SDP solver.
@@ -52,6 +53,8 @@ class Constraint(object):
             AssertionError: if provided `equality_or_inequality` argument is neither "equality" nor "inequality".
 
         """
+        # Initialize name of the constraint
+        self.name = None
 
         # Update the counter
         self.counter = Constraint.counter
@@ -69,6 +72,22 @@ class Constraint(object):
 
         # Moreover, the associated dual variable value must be stored in self._dual_variable_value.
         self._dual_variable_value = None
+
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
 
     def eval(self):
         """

@@ -31,13 +31,15 @@ class TestConstraints(unittest.TestCase):
         self.x0 = self.problem.set_initial_point()
 
         # Set the initial constraint that is the distance between x0 and x^*
-        self.problem.set_initial_condition((self.x0 - self.xs) ** 2 <= 1)
+        self.initial_condition = (self.x0 - self.xs) ** 2 <= 1
+        self.problem.set_initial_condition(self.initial_condition)
 
         # Run n steps of the GD method
         self.x1 = self.x0 - self.gamma * self.func.gradient(self.x0)
 
         # Set the performance metric to the function values accuracy
-        self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
+        self.performance_metric = (self.x1 - self.xs) ** 2
+        self.problem.set_performance_metric(self.performance_metric)
 
         self.solution = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet10")
 
@@ -69,6 +71,17 @@ class TestConstraints(unittest.TestCase):
         # class constraints are added after initial conditions in PEP
         for i in range(len(self.func.list_of_class_constraints)):
             self.assertIs(self.func.list_of_class_constraints[i].counter, i + len(self.problem.list_of_constraints))
+
+    def test_name(self):
+
+        self.assertIsNone(self.initial_condition.get_name())
+        self.assertIsNone(self.performance_metric.get_name())
+
+        self.initial_condition.set_name("init")
+        self.performance_metric.set_name("perf")
+
+        self.assertEqual(self.initial_condition.get_name(), "init")
+        self.assertEqual(self.performance_metric.get_name(), "perf")
 
     def test_equality_inequality(self):
 
