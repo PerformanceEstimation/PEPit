@@ -1,25 +1,28 @@
-import numpy as np
 from PEPit.function import Function
 
 
-class CocoerciveOperator(Function):
+class CocoerciveStronglyMonotoneOperator(Function):
     """
-    The :class:`CocoerciveOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.
+    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing some necessary constraints verified by the class of cocoercive and strongly monotone (maximally) operators.
+
+    Warnings:
+        Those constraints might not be sufficient, thus the caracterized class might contain more operators.
 
     Note:
         Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
+        mu (float): strong monotonicity parameter
         beta (float): cocoercivity parameter
 
-    Cocoercive operators are characterized by the parameter :math:`\\beta`, hence can be instantiated as
+    Cocoercive operators are characterized by the parameters :math:`\\mu` and :math:`\\beta`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.operators import CocoerciveOperator
+        >>> from PEPit.operators import CocoerciveStronglyMonotoneOperator
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=CocoerciveOperator, beta=1.)
+        >>> func = problem.declare_function(function_class=CocoerciveStronglyMonotoneOperator, mu=.1, beta=1.)
 
     References:
         `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
@@ -30,6 +33,7 @@ class CocoerciveOperator(Function):
     """
 
     def __init__(self,
+                 mu,
                  beta=1.,
                  is_leaf=True,
                  decomposition_dict=None,
@@ -37,6 +41,7 @@ class CocoerciveOperator(Function):
         """
 
         Args:
+            mu (float): The strong monotonicity parameter.
             beta (float): The cocoercivity parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf .
@@ -54,19 +59,27 @@ class CocoerciveOperator(Function):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True)
 
-        # Store the beta parameter
+        # Store the mu and beta parameters
+        self.mu = mu
         self.beta = beta
 
+        if self.mu == 0:
+            print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
+                  " \n"
+                  "To instantiate a cocoercive (non strongly) monotone opetator,"
+                  " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
+                  "with mu == 0. Instead, please use the class CocoerciveOperator.\033[0m")
+
         if self.beta == 0:
-            print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
-                  "To instantiate a monotone opetator, please avoid using the class CocoerciveOperator\n"
-                  "with beta == 0. Instead, please use the class Monotone (which accounts for the fact \n"
-                  "that the image of the operator at certain points might not be a singleton).\033[0m")
+            print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
+                  " \n"
+                  "To instantiate a non cocoercive strongly monotone opetator,"
+                  " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
+                  "with beta == 0. Instead, please use the class StronglyMonotoneOperator.\033[0m")
 
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (cocoercive maximally monotone operator),
-        see, e.g., [1, Proposition 2].
+        Formulates a list of necessary constraints for self (cocoercive strongly monotone operator).
         """
 
         for i, point_i in enumerate(self.list_of_points):
@@ -79,5 +92,6 @@ class CocoerciveOperator(Function):
 
                 # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
                 if i < j:
-                    # Interpolation conditions of cocoercive operator class
+                    # Necessary conditions of cocoercive strongly monotone operator class
+                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.mu * (xi - xj) ** 2 >= 0)
                     self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.beta * (gi - gj) ** 2 >= 0)

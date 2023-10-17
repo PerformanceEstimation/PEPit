@@ -4,12 +4,12 @@ from PEPit.expression import Expression
 
 def epsilon_subgradient_step(x0, f, gamma):
     """
-    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma g_0`
+    This routine performs a step :math:`x \\leftarrow x_0 - \\gamma g_0`
     where :math:`g_0 \\in\\partial_{\\varepsilon} f(x_0)`. That is, :math:`g_0` is an
     :math:`\\varepsilon`-subgradient of :math:`f` at :math:`x_0`. The set :math:`\\partial_{\\varepsilon} f(x_0)`
     (referred to as the :math:`\\varepsilon`-subdifferential) is defined as (see [1, Section 3])
 
-    .. math:: \\partial_{\\varepsilon} f(x)=\\left\\{g:\, f(z)\\geqslant f(x)+\\left< g;\, z-x \\right>-\\varepsilon \\right\\}.
+    .. math:: \\partial_{\\varepsilon} f(x_0)=\\left\\{g_0:\,\\forall z,\, f(z)\\geqslant f(x_0)+\\left< g_0;\, z-x_0 \\right>-\\varepsilon \\right\\}.
     
     An alternative characterization of :math:`g_0 \\in\\partial_{\\varepsilon} f(x_0)` consists in writing
     

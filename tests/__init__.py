@@ -8,6 +8,6 @@ __all__ = ['additional_complexified_examples_tests',
            'test_function',
            'test_pep',
            'test_point',
-           'test_smooth_strongly_convex_functions',
+           'test_functions_and_operators',
            'test_uselessly_complexified_examples',
            ]
