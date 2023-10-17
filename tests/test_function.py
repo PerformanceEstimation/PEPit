@@ -14,7 +14,7 @@ class TestFunction(unittest.TestCase):
     def setUp(self):
         self.pep = PEP()
 
-        self.func1 = Function(is_leaf=True, decomposition_dict=None)
+        self.func1 = Function(is_leaf=True, decomposition_dict=None, name="f1")
         self.func2 = ConvexFunction(is_leaf=True, decomposition_dict=None)
 
         self.point = Point(is_leaf=True, decomposition_dict=None)
@@ -26,10 +26,8 @@ class TestFunction(unittest.TestCase):
 
     def test_name(self):
 
-        self.assertIsNone(self.func1.get_name())
         self.assertIsNone(self.func2.get_name())
 
-        self.func1.set_name("f1")
         self.func2.set_name("f2")
 
         self.assertEqual(self.func1.get_name(), "f1")

@@ -24,7 +24,8 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
                  L=1.,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -36,6 +37,7 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
             L (float): The smoothness parameter.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Smooth convex functions are necessarily differentiable, hence `reuse_gradient` is set to True.
@@ -46,7 +48,9 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True,
                          mu=0,
-                         L=L)
+                         L=L,
+                         name=name,
+                         )
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"

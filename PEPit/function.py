@@ -61,6 +61,7 @@ class Function(object):
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False,
+                 name=None,
                  ):
         """
         :class:`Function` objects can also be instantiated via the following arguments.
@@ -73,6 +74,7 @@ class Function(object):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             If `is_leaf` is True, then `decomposition_dict` must be provided as None.
@@ -91,7 +93,7 @@ class Function(object):
 
         """
         # Initialize name of the function
-        self.name = None
+        self.name = name
 
         # Store inputs
         self._is_leaf = is_leaf

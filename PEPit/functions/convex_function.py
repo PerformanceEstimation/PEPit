@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 from PEPit.function import Function
 
 
@@ -20,7 +22,8 @@ class ConvexFunction(Function):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=False):
+                 reuse_gradient=False,
+                 name=None):
         """
 
         Args:
@@ -31,11 +34,14 @@ class ConvexFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=reuse_gradient,
+                         name=name,
+                         )
 
     def add_class_constraints(self):
         """
@@ -53,4 +59,19 @@ class ConvexFunction(Function):
                 if point_i != point_j:
 
                     # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))
+                    constraint = (fi - fj >= gj * (xi - xj))
+                    if None not in {self.name, xi.name, xj.name}:
+                        constraint.set_name("IC_{}({}, {})".format(self.name, xi.name, xj.name))
+                    self.list_of_class_constraints.append(constraint)
+
+    def display_class_constraint_duals(self):
+
+        n = len(self.list_of_points)
+        list_of_duals = [constraint.eval_dual() for constraint in self.list_of_class_constraints]
+        assert len(list_of_duals) == n*(n-1)
+        complete_list_of_duals = [0]
+        for i in range(n-1):
+            complete_list_of_duals += list_of_duals[i*n: (i+1)*n]
+            complete_list_of_duals += [0]
+        tab_of_duals = pd.array(complete_list_of_duals)
+        print(tab_of_duals)

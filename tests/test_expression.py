@@ -15,7 +15,7 @@ class TestExpression(unittest.TestCase):
         self.point2 = Point(is_leaf=True, decomposition_dict=None)
 
         self.inner_product = self.point1 * self.point2
-        self.function_value = Expression(is_leaf=True, decomposition_dict=None)
+        self.function_value = Expression(is_leaf=True, decomposition_dict=None, name="fx")
 
     def test_is_instance(self):
 
@@ -25,10 +25,8 @@ class TestExpression(unittest.TestCase):
     def test_name(self):
 
         self.assertIsNone(self.inner_product.get_name())
-        self.assertIsNone(self.function_value.get_name())
 
         self.inner_product.set_name("x1*x2")
-        self.function_value.set_name("fx")
 
         self.assertEqual(self.inner_product.get_name(), "x1*x2")
         self.assertEqual(self.function_value.get_name(), "fx")

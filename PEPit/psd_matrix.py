@@ -36,12 +36,16 @@ class PSDMatrix(object):
     # It counts the number of generated constraints
     counter = 0
 
-    def __init__(self, matrix_of_expressions):
+    def __init__(self,
+                 matrix_of_expressions,
+                 name=None,
+                 ):
         """
         :class:`PSDMatrix` objects are instantiated via the following argument.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Instantiating the :class:`PSDMatrix` objects of the first example can be done by
 
@@ -58,7 +62,7 @@ class PSDMatrix(object):
 
         """
         # Initialize name of the psd matrix
-        self.name = None
+        self.name = name
 
         # Update the counter
         self.counter = PSDMatrix.counter

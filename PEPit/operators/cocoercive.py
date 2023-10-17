@@ -33,7 +33,8 @@ class CocoerciveOperator(Function):
                  beta=1.,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -45,6 +46,7 @@ class CocoerciveOperator(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Cocoercive operators are necessarily continuous, hence `reuse_gradient` is set to True.
@@ -52,7 +54,9 @@ class CocoerciveOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
 
         # Store the beta parameter
         self.beta = beta

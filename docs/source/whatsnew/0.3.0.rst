@@ -12,4 +12,4 @@ What's new in PEPit 0.3.0
 
 - The order of the constraints of `SmoothFunction` has been reversed to be consistent with `ConvexFunction`, `StronglyConvexFunction`, `SmoothConvexFunction` and `SmoothStronglyConvexFunction`.
 
-- Point, Expression, Constraint, PSDMatrix and Function objects now have an attribute "name" that contains a string representing them. The latter is initialized as None, and get be updated through the methods `set_name`. Finally they are accessible through the methods `get_name`.
+- Point, Expression, Constraint, PSDMatrix and Function objects now have an attribute "name" that contains a string representing them. The latter is initialized from the argument name when creating the object (set to None by default), and get be updated through the methods `set_name`. Finally they are accessible through the methods `get_name`.

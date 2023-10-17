@@ -10,7 +10,7 @@ class TestPoint(unittest.TestCase):
     def setUp(self):
         self.pep = PEP()
 
-        self.A = Point(is_leaf=True, decomposition_dict=None)
+        self.A = Point(is_leaf=True, decomposition_dict=None, name="pointA")
         self.B = Point(is_leaf=True, decomposition_dict=None)
 
     def test_is_instance(self):
@@ -20,8 +20,10 @@ class TestPoint(unittest.TestCase):
 
     def test_name(self):
 
+        self.assertEqual(self.A.get_name(), "pointA")
+
+        self.assertIsNone(self.B.get_name())
         self.B.set_name("pointB")
-        self.assertIsNone(self.A.get_name())
         self.assertEqual(self.B.get_name(), "pointB")
 
         C = self.A + self.B

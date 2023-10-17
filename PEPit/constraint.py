@@ -31,7 +31,10 @@ class Constraint(object):
     # It counts the number of generated constraints
     counter = 0
 
-    def __init__(self, expression, equality_or_inequality):
+    def __init__(self,
+                 expression,
+                 equality_or_inequality,
+                 ):
         """
         :class:`Constraint` objects can also be instantiated via the following arguments.
 

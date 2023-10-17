@@ -53,6 +53,7 @@ class Expression(object):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
+                 name=None,
                  ):
         """
         :class:`Expression` objects can also be instantiated via the following arguments
@@ -64,6 +65,7 @@ class Expression(object):
             decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
                                        Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                        And values are their associated coefficients.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             If `is_leaf` is True, then `decomposition_dict` must be provided as None.
@@ -78,7 +80,7 @@ class Expression(object):
 
         """
         # Initialize name of the expression
-        self.name = None
+        self.name = name
 
         # Store is_leaf in a protected attribute
         self._is_leaf = is_leaf

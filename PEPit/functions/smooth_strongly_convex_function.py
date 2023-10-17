@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from PEPit.function import Function
 
 
@@ -32,7 +33,8 @@ class SmoothStronglyConvexFunction(Function):
                  L=1.,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -45,6 +47,7 @@ class SmoothStronglyConvexFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Smooth strongly convex functions are necessarily differentiable, hence `reuse_gradient` is set to True.
@@ -52,7 +55,9 @@ class SmoothStronglyConvexFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
 
         # Store mu and L
         self.mu = mu
@@ -79,8 +84,26 @@ class SmoothStronglyConvexFunction(Function):
 
                 if point_i != point_j:
                     # Interpolation conditions of smooth strongly convex functions class
-                    self.list_of_class_constraints.append(fi - fj >=
-                                                          gj * (xi - xj)
-                                                          + 1 / (2 * self.L) * (gi - gj) ** 2
-                                                          + self.mu / (2 * (1 - self.mu / self.L)) * (
-                                                                      xi - xj - 1 / self.L * (gi - gj)) ** 2)
+                    constraint = (fi - fj >=
+                                  gj * (xi - xj)
+                                  + 1 / (2 * self.L) * (gi - gj) ** 2
+                                  + self.mu / (2 * (1 - self.mu / self.L)) * (
+                                          xi - xj - 1 / self.L * (gi - gj)) ** 2)
+                    constraint.set_name("IC_{}({}, {})".format(self.name, xi.name, xj.name))
+                    self.list_of_class_constraints.append(constraint)
+
+    def get_class_constraint_duals(self):
+
+        n = len(self.list_of_points)
+        list_of_duals = [constraint.eval_dual() for constraint in self.list_of_class_constraints]
+        assert len(list_of_duals) == n*(n-1)
+        complete_list_of_duals = [0]
+        for i in range(n-1):
+            complete_list_of_duals += list_of_duals[i*n: (i+1)*n]
+            complete_list_of_duals += [0]
+        tab_of_duals = np.array(complete_list_of_duals).reshape(n, n)
+        point_names = [point[0].name for point in self.list_of_points]
+        df = pd.DataFrame(tab_of_duals, columns=point_names, index=point_names)
+        if self.name:
+            df.columns.name = "IC_{}".format(self.name)
+        print(df)

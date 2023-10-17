@@ -29,7 +29,8 @@ class ConvexLipschitzFunction(Function):
                  M=1.,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=False):
+                 reuse_gradient=False,
+                 name=None):
         """
 
         Args:
@@ -41,12 +42,15 @@ class ConvexLipschitzFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         """
         # Inherit directly from Function.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=reuse_gradient,
+                         name=name,
+                         )
 
         # param M
         self.M = M
