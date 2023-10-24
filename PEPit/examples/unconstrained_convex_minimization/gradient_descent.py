@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import SmoothConvexFunction
 
 
 def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", verbose=1):
@@ -79,8 +79,8 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", verbose=1):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, mu=0, L=L)
+    # Declare a smooth convex function
+    func = problem.declare_function(SmoothConvexFunction, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
