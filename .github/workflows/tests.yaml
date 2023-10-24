@@ -59,8 +59,7 @@ jobs:
       uses: codecov/codecov-action@v3
 
 
-no_mosek:
-  linux:
+  linux_no_mosek:
 
     runs-on: ubuntu-20.04
     if: "!contains(github.event.head_commit.message, 'no ci')"
@@ -94,8 +93,7 @@ no_mosek:
       uses: codecov/codecov-action@v3
 
 
-no_mosek_license:
-  linux:
+  linux_no_mosek_license:
 
     runs-on: ubuntu-20.04
     if: "!contains(github.event.head_commit.message, 'no ci')"
