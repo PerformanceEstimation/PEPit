@@ -180,3 +180,15 @@ class TestPEP(unittest.TestCase):
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
+
+    def test_unbounded_result(self):
+
+        # The problem has 1 initial constraint.
+        self.assertEqual(len(self.problem.list_of_constraints), 1)
+
+        # Remove it to make the solution unbounded.
+        self.problem.list_of_constraints = []
+
+        # Check the behavior of PEP in this case.
+        # It should stop the code before trying to assign no existent values to variables and return None
+        self.assertIsNone(self.problem.solve())

@@ -523,9 +523,12 @@ class PEP(object):
                                                                                      wc_value))
 
         # Raise explicit error when wc_value in infinite
-        if wc_value == np.inf:
-            raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
-                              "It seems that the optimal value of your problem is unbounded.")
+        if wc_value is None:
+            print("\033[96m(PEPit) Problem issue: PEPit didn't find any nontrivial worst-case guarantee. "
+                  "It seems that the optimal value of your problem is unbounded.\033[0m")
+
+            # Skip the following as no variable has a value
+            return wc_value
 
         # Keep dual values before dimension reduction in memory
         # Dimension aims at finding low dimension lower bound functions,
