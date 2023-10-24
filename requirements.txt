@@ -1,4 +1,5 @@
 cvxpy
 numpy
+pandas
 scipy
 matplotlib

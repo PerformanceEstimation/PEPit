@@ -47,20 +47,26 @@ class MonotoneOperator(Function):
                          name=name,
                          )
 
+    def set_monotony_constraint_i_j(self,
+                                    xi, gi, fi,
+                                    xj, gj, fj,
+                                    ):
+        """
+        Set monotony constraint for operators.
+
+        """
+        # Set constraint
+        constraint = ((gi - gj) * (xi - xj) >= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (maximally monotone operator),
         see, e.g., [1, Theorem 20.21].
         """
 
-        for point_i in self.list_of_points:
-
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if (xi != xj) | (gi != gj):
-                    # Interpolation conditions of monotone operator class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) >= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="monotony",
+                                                      set_class_constraint_i_j=self.set_monotony_constraint_i_j)

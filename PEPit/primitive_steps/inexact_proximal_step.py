@@ -132,7 +132,7 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         eps_var = Expression()
         e = x - x0 + gamma * v
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(e ** 2 / 2 + gamma * eps_sub <= eps_var)
+        constraint = (e ** 2 / 2 + gamma * eps_sub <= eps_var)
 
     elif opt == 'PD_gapII':
         # This option constrain x to satisfy the following requirement: ||e||^2 / 2 <= epsVar,
@@ -143,7 +143,7 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         fx = Expression()
         f.add_point((x, gx, fx))
         eps_var = Expression()
-        f.add_constraint(e ** 2 / 2 <= eps_var)
+        constraint = (e ** 2 / 2 <= eps_var)
         w, v, fw = x, gx, fx
 
     elif opt == 'PD_gapIII':
@@ -156,10 +156,14 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         f.add_point((w, v, fw))
         eps_var = Expression()
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(gamma * eps_sub <= eps_var)
+        constraint = (gamma * eps_sub <= eps_var)
 
     else:
         raise ValueError("inexact_proximal_step supports only opt in ['PD_gapI', 'PD_gapII', 'PD_gapIII'],"
                          " got {}".format(opt))
+
+    # Add constraint to list of constraints
+    constraint.set_name("inexact_proximal({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     return x, gx, fx, w, v, fw, eps_var

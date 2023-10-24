@@ -62,24 +62,30 @@ class SmoothFunction(Function):
             print("\033[96m(PEPit) The class of L-smooth functions with L == np.inf implies no constraint: \n"
                   "it contains all differentiable functions. This might imply issues in your code.\033[0m")
 
+    def set_smoothness_i_j(self,
+                           xi, gi, fi,
+                           xj, gj, fj,
+                           ):
+        """
+        Set smoothness interpolation constraints.
+
+        """
+        # Set constraint
+        constraint = (fi - fj >=
+                      - self.L / 4 * (xi - xj) ** 2
+                      + 1 / 2 * (gi + gj) * (xi - xj)
+                      + 1 / (4 * self.L) * (gi - gj) ** 2
+                      )
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (smooth (not necessarily convex) function),
         see [1, Theorem 3.10].
         """
 
-        for point_i in self.list_of_points:
-
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-                    # Interpolation conditions of smooth functions class
-                    self.list_of_class_constraints.append(fi - fj >=
-                                                          - self.L / 4 * (xi - xj) ** 2
-                                                          + 1 / 2 * (gi + gj) * (xi - xj)
-                                                          + 1 / (4 * self.L) * (gi - gj) ** 2
-                                                          )
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="smoothness",
+                                                      set_class_constraint_i_j=self.set_smoothness_i_j)

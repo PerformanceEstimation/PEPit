@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -35,6 +38,7 @@ class Function(object):
         list_of_psd (list): The list of :class:`PSDMatrix` objects associated with this :class:`Function`.
         list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
         list_of_class_psd (list): The list of :class:`PSDMatrix` objects appearing in class interpolation constraints.
+        tables_of_constraints (dict): A dictionary containing all the constraints, sorted by table.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
@@ -122,6 +126,9 @@ class Function(object):
         self.list_of_psd = list()
         self.list_of_class_constraints = list()
         self.list_of_class_psd = list()
+
+        # Initialize dictionary that will contain the tables of constraints
+        self.tables_of_constraints = dict()
 
     def set_name(self, name):
         """
@@ -301,6 +308,131 @@ class Function(object):
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
 
+    def add_constraints_from_one_list_of_points(self, list_of_points,
+                                                constraint_name, set_class_constraint_i):
+
+        # Set function ID
+        function_id = self.get_name()
+        if function_id is None:
+            function_id = "Function_{}".format(self.counter)
+
+        # Initialize table of constraints
+        table_of_constraints = list()
+
+        # Browse list of points and create interpolation constraints
+        for i, point_i in enumerate(list_of_points):
+
+            xi, gi, fi = point_i
+            xi_id = xi.get_name()
+            if xi_id is None:
+                xi_id = "Point_{}".format(i)
+
+            # Create interpolation constraint
+            constraint = set_class_constraint_i(xi, gi, fi)
+
+            # Set name to newly created constraint
+            constraint.set_name("IC_{}_{}({})".format(function_id, constraint_name, xi_id))
+
+            # Add constraint to the table of constraints
+            table_of_constraints.append(constraint)
+
+            # Add constraint to the list of class constraints
+            self.list_of_class_constraints.append(constraint)
+
+        # Complete table of constraints
+        table_of_constraints = np.array(table_of_constraints).reshape(1, -1)
+        point_names = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                       enumerate(list_of_points)]
+        df = pd.DataFrame(table_of_constraints, columns=point_names)
+        df.columns.name = "IC_{}".format(function_id)
+
+        # Add the table of constraints to the attribute tables_of_constraints
+        self.tables_of_constraints[constraint_name] = df
+
+    def add_constraints_from_two_lists_of_points(self, list_of_points_1, list_of_points_2,
+                                                 constraint_name, set_class_constraint_i_j):
+
+        # Set function ID
+        function_id = self.get_name()
+        if function_id is None:
+            function_id = "Function_{}".format(self.counter)
+
+        # Initialize table of constraints
+        table_of_constraints = list()
+
+        # Browse list of points and create interpolation constraints
+        for i, point_i in enumerate(list_of_points_1):
+
+            xi, gi, fi = point_i
+            xi_id = xi.get_name()
+            if xi_id is None:
+                xi_id = "Point_{}".format(i)
+
+            # Initialize row of constraints
+            row_of_constraints = list()
+
+            for j, point_j in enumerate(list_of_points_2):
+
+                xj, gj, fj = point_j
+                xj_id = xj.get_name()
+                if xj_id is None:
+                    xj_id = "Point_{}".format(j)
+
+                if point_i == point_j:
+                    row_of_constraints.append(0)
+
+                else:
+                    # Create interpolation constraint
+                    constraint = set_class_constraint_i_j(xi, gi, fi,
+                                                          xj, gj, fj,
+                                                          )
+
+                    # Set name to newly created constraint
+                    constraint.set_name("IC_{}_{}({}, {})".format(function_id, constraint_name, xi_id, xj_id))
+
+                    # Add constraint to the row of constraints
+                    row_of_constraints.append(constraint)
+
+                    # Add constraint to the list of class constraints
+                    self.list_of_class_constraints.append(constraint)
+
+            # Add row of constraints to the table of constraints
+            table_of_constraints.append(row_of_constraints)
+
+        # Complete table of constraints
+        table_of_constraints = np.array(table_of_constraints)
+        point_names_1 = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                         enumerate(list_of_points_1)]
+        point_names_2 = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                         enumerate(list_of_points_2)]
+        df = pd.DataFrame(table_of_constraints, columns=point_names_2, index=point_names_1)
+        df.columns.name = "IC_{}".format(function_id)
+
+        # Add the table of constraints to the attribute tables_of_constraints
+        self.tables_of_constraints[constraint_name] = df
+
+    def get_class_constraints_duals(self):
+
+        tables_of_duals = dict()
+        for key, table in self.tables_of_constraints.items():
+            new_table = []
+            for index, row in table.iterrows():
+                new_row = []
+                for element in row:
+                    if isinstance(element, Constraint):
+                        new_row.append(element.eval_dual())
+                    elif isinstance(element, float) or isinstance(element, int):
+                        new_row.append(element)
+                    else:
+                        raise TypeError("The elements of table of constraints must either be Constraints objects"
+                                        " or scalar values. Got {}.".format(type(element)))
+                new_table.append(new_row)
+            new_table = np.array(new_table)
+            df = pd.DataFrame(new_table, columns=table.columns, index=table.index)
+            df.columns.name = table.columns.name
+            tables_of_duals[key] = df
+        return tables_of_duals
+
     def set_class_constraints(self):
         """
 
@@ -387,7 +519,7 @@ class Function(object):
                 list_of_functions_which_need_gradient_and_function_value.append((function, weight))
 
         # Return the 3 lists in a specific order: from the smallest need to the biggest one.
-        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, \
             list_of_functions_which_need_gradient_and_function_value
 
     def add_point(self, triplet):
@@ -496,8 +628,8 @@ class Function(object):
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of leaf functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
-            list_of_functions_which_need_gradient_and_function_value =\
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, \
+            list_of_functions_which_need_gradient_and_function_value = \
             self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value

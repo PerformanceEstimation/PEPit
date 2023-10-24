@@ -55,24 +55,41 @@ class ConvexLipschitzFunction(Function):
         # param M
         self.M = M
 
+    def set_lipschitz_constraint_i(self,
+                                   xi, gi, fi):
+        """
+        Formulates the Lipschitz constraint by bounding the gradients.
+
+        """
+        # Lipschitz condition on the function (bounded gradient)
+        constraint = (gi ** 2 <= self.M ** 2)
+
+        return constraint
+
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
+        """
+        Formulates the list of interpolation constraints for self (CCP function).
+        """
+        # Interpolation conditions of convex functions class
+        constraint = (fi - fj >= gj * (xi - xj))
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (CCP Lipschitz continuous function),
         see [1, Theorem 3.5].
         """
 
-        for point_i in self.list_of_points:
+        self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                     constraint_name="Lipschitz",
+                                                     set_class_constraint_i=self.set_lipschitz_constraint_i)
 
-            xi, gi, fi = point_i
-
-            # Lipschitz condition on the function (bounded gradient)
-            self.list_of_class_constraints.append(gi**2 <= self.M**2)
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

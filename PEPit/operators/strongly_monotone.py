@@ -60,20 +60,26 @@ class StronglyMonotoneOperator(Function):
         # Store mu
         self.mu = mu
 
+    def set_strong_monotony_constraint_i_j(self,
+                                           xi, gi, fi,
+                                           xj, gj, fj,
+                                           ):
+        """
+        Set strong monotony constraint for operators.
+
+        """
+        # Set constraint
+        constraint = ((gi - gj) * (xi - xj) - self.mu * (xi - xj) ** 2 >= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (strongly monotone maximally monotone operator),
-        see, e.g., [1, Proposition 1].
+        Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
+        maximally monotone operator), see, e.g., discussions in [1, Section 2].
         """
 
-        for point_i in self.list_of_points:
-
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if (xi != xj) | (gi != gj):
-                    # Interpolation conditions of strongly monotone operator class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.mu * (xi - xj) ** 2 >= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="strong_monotony",
+                                                      set_class_constraint_i_j=self.set_strong_monotony_constraint_i_j)

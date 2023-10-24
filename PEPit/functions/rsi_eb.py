@@ -62,21 +62,43 @@ class RsiEbFunction(Function):
         self.mu = mu
         self.L = L
 
+    def set_rsi_constraints_i_j(self,
+                                xi, gi, fi,
+                                xj, gj, fj,
+                                ):
+        """
+        Set RSI constraints.
+
+        """
+        # Interpolation conditions of RSI function class
+        constraint = ((gi - gj) * (xi - xj) - self.mu * (xi - xj) ** 2 >= 0)
+
+        return constraint
+
+    def set_eb_constraints_i_j(self,
+                               xi, gi, fi,
+                               xj, gj, fj,
+                               ):
+        """
+        Set EB constraints.
+
+        """
+        # Interpolation conditions of RSI function class
+        constraint = ((gi - gj) ** 2 - self.L ** 2 * (xi - xj) ** 2 <= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of necessary conditions for interpolation of self, see [1, Theorem 1].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="RSI",
+                                                      set_class_constraint_i_j=self.set_rsi_constraints_i_j)
 
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_stationary_points):
-
-                xj, gj, fj = point_j
-
-                if (xi != xj) | (gi != gj):
-                    # Interpolation conditions of RSI function class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.mu * (xi - xj)**2 >= 0)
-                    # Interpolation conditions of EB function class
-                    self.list_of_class_constraints.append((gi - gj)**2 - self.L**2 * (xi - xj)**2 <= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="EB",
+                                                      set_class_constraint_i_j=self.set_eb_constraints_i_j)

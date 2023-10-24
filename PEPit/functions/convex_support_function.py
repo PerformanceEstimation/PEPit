@@ -56,24 +56,55 @@ class ConvexSupportFunction(Function):
         # Store the Lipschitz constant in an attribute
         self.M = M
 
+    @staticmethod
+    def set_fenchel_value_constraint_i(xi, gi, fi):
+        """
+        Set the value of the Fenchel transform to 0.
+
+        """
+        # Set constraint
+        constraint = (gi * xi - fi == 0)
+
+        return constraint
+
+    def set_lipschitz_constraint_i(self, xi, gi, fi):
+        """
+        Set Lipschitz constraint so that its Fenchel transform has a bounded support.
+
+        """
+        # Set constraint
+        constraint = (gi ** 2 <= self.M ** 2)
+
+        return constraint
+
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
+        """
+        Formulates the list of interpolation constraints for self (CCP function).
+        """
+        # Interpolation conditions of convex functions class
+        constraint = (xj * (gi - gj) <= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (closed convex support function),
         see [1, Corollary 3.7].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
+        self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                     constraint_name="Fenchel_value",
+                                                     set_class_constraint_i=self.set_fenchel_value_constraint_i)
 
-            xi, gi, fi = point_i
+        if self.M != np.inf:
+            self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                         constraint_name="Lipschitz",
+                                                         set_class_constraint_i=self.set_lipschitz_constraint_i)
 
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                if point_i == point_j:
-                    self.list_of_class_constraints.append(gi * xi - fi == 0)
-                    if self.M != np.inf:
-                        self.list_of_class_constraints.append(gi ** 2 <= self.M ** 2)
-
-                else:
-                    self.list_of_class_constraints.append(xj * (gi - gj) <= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j)

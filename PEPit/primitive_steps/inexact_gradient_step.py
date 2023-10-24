@@ -3,7 +3,7 @@ from PEPit.point import Point
 
 def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     """
-    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma d_{x_0}`
+    This routine performs a step :math:`x \\leftarrow x_0 - \\gamma d_{x_0}`
     where :math:`d_{x_0}` is close to the gradient of :math:`f` in :math:`x_0`
     in the following sense:
 
@@ -48,12 +48,16 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     # Define dx0 as a proxy to gx0.
     dx0 = Point()
     if notion == 'absolute':
-        f.add_constraint((gx0 - dx0) ** 2 - epsilon ** 2 <= 0)
+        constraint = ((gx0 - dx0) ** 2 - epsilon ** 2 <= 0)
     elif notion == 'relative':
-        f.add_constraint((gx0 - dx0) ** 2 - epsilon ** 2 * (gx0 ** 2) <= 0)
+        constraint = ((gx0 - dx0) ** 2 - epsilon ** 2 * (gx0 ** 2) <= 0)
     else:
         raise ValueError("inexact_gradient_step supports only notion in ['absolute', 'relative'],"
                          " got {}".format(notion))
+
+    # Add constraint to list of constraints.
+    constraint.set_name("inexact_gradient_step({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     # Perform an inexact gradient step in the direction dx0.
     x = x0 - gamma * dx0

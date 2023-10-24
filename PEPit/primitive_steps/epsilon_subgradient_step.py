@@ -4,7 +4,7 @@ from PEPit.expression import Expression
 
 def epsilon_subgradient_step(x0, f, gamma):
     """
-    This routines performs a step :math:`x \\leftarrow x_0 - \\gamma g_0`
+    This routine performs a step :math:`x \\leftarrow x_0 - \\gamma g_0`
     where :math:`g_0 \\in\\partial_{\\varepsilon} f(x_0)`. That is, :math:`g_0` is an
     :math:`\\varepsilon`-subgradient of :math:`f` at :math:`x_0`. The set :math:`\\partial_{\\varepsilon} f(x_0)`
     (referred to as the :math:`\\varepsilon`-subdifferential) is defined as (see [1, Section 3])
@@ -47,7 +47,9 @@ def epsilon_subgradient_step(x0, f, gamma):
     fstarg0 = g0 * y - fy
 
     # epsilon-subgradient condition:
-    f.add_constraint(f0 + fstarg0 - g0 * x0 <= epsilon)
+    constraint = (f0 + fstarg0 - g0 * x0 <= epsilon)
+    constraint.set_name("epsilon_subgradient({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     # Return the newly obtained point, the epsilon-subgradient, the value of f in x0, and epsilon.
     return x, g0, f0, epsilon

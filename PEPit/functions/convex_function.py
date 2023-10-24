@@ -43,35 +43,25 @@ class ConvexFunction(Function):
                          name=name,
                          )
 
-    def add_class_constraints(self):
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
         """
         Formulates the list of interpolation constraints for self (CCP function).
         """
+        # Interpolation conditions of convex functions class
+        constraint = (fi - fj >= gj * (xi - xj))
 
-        for point_i in self.list_of_points:
+        return constraint
 
-            xi, gi, fi = point_i
+    def add_class_constraints(self):
+        """
+        Add the convexity constraints.
+        """
 
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-
-                    # Interpolation conditions of convex functions class
-                    constraint = (fi - fj >= gj * (xi - xj))
-                    if None not in {self.name, xi.name, xj.name}:
-                        constraint.set_name("IC_{}({}, {})".format(self.name, xi.name, xj.name))
-                    self.list_of_class_constraints.append(constraint)
-
-    def display_class_constraint_duals(self):
-
-        n = len(self.list_of_points)
-        list_of_duals = [constraint.eval_dual() for constraint in self.list_of_class_constraints]
-        assert len(list_of_duals) == n*(n-1)
-        complete_list_of_duals = [0]
-        for i in range(n-1):
-            complete_list_of_duals += list_of_duals[i*n: (i+1)*n]
-            complete_list_of_duals += [0]
-        tab_of_duals = pd.array(complete_list_of_duals)
-        print(tab_of_duals)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

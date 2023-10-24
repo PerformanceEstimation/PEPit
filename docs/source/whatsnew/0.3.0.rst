@@ -2,6 +2,9 @@ What's new in PEPit 0.3.0
 =========================
 
 
+For users:
+----------
+
 - The :class:`BlockPartition` has been created and allows to decompose the space into orthogonal subspaces to treat points differently in each subspaces. This is useful in particular to study Coordinate Descent like method or block adaptive AdaGrad like methods.
 
 - Add argument `wrapper` in solve set to `cvxpy` by default. If `wrapper` is set to `cvxpy`, the routine is unchanged compared to PEPit 0.2.1. If `wrapper` is set to `mosek`, PEPit bypasses CVXPY and run MOSEK directly.
@@ -12,4 +15,16 @@ What's new in PEPit 0.3.0
 
 - The order of the constraints of `SmoothFunction` has been reversed to be consistent with `ConvexFunction`, `StronglyConvexFunction`, `SmoothConvexFunction` and `SmoothStronglyConvexFunction`.
 
-- Point, Expression, Constraint, PSDMatrix and Function objects now have an attribute "name" that contains a string representing them. The latter is initialized from the argument name when creating the object (set to None by default), and get be updated through the methods `set_name`. Finally they are accessible through the methods `get_name`.
+- Point, Expression, Constraint, PSDMatrix and Function objects now have an attribute "name" that contains a string representing them. The latter is initialized from the argument name when creating the object (set to None by default), and get updated through the methods `set_name`. Finally they are accessible through the methods `get_name`.
+
+- The class interpolation constraints are automatically named after the function name and the points names. To fully enjoy this feature, it is recommended to give a name to those entities.
+
+- Each function now possess an attribute `tables_of_constraints` storing the class constraints in a nice readable way. To access the dual values of all interpolation constraints in readable tables, use the method `get_class_constraints_duals`. It returns a dictionary whose values are pandas DataFrames.
+
+
+For contributors only:
+----------------------
+
+- Creating a new class of functions / operator previously required to overwrite the method `set_class_constraints`. This method has been renamed into `add_class_constraints`, while `set_class_constraints` is implemented in the class `Function` and calls `add_class_constraints`.
+
+- In order to simplify the implementation of the functions / operators classes, a method `add_constraints_from_lists_of_points` have been added to the class `Function`. A contributor adding a function / operator class can use it in `add_class_constraints`. `add_constraints_from_lists_of_points` takes lists of points in arguments as well as a method that returns a named constraint from 2 points, their names and the function name. Please refer to `the implemented functions / operators classes <https://pepit.readthedocs.io/en/latest/api/functions_and_operators.html>`_ as examples.

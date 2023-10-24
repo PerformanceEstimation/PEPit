@@ -56,24 +56,60 @@ class ConvexIndicatorFunction(Function):
         # Store the diameter D in an attribute
         self.D = D
 
+    @staticmethod
+    def set_value_constraint_i(xi, gi, fi):
+        """
+        Set the value of the function to 0 everywhere on the support.
+
+        """
+        # Value constraint
+        constraint = (fi == 0)
+
+        return constraint
+
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
+        """
+        Formulates the list of interpolation constraints for self (CCP function).
+        """
+        # Interpolation conditions of convex functions class
+        constraint = (0 >= gj * (xi - xj))
+
+        return constraint
+
+    def set_diameter_constraint_i_j(self,
+                                    xi, gi, fi,
+                                    xj, gj, fj,
+                                    ):
+        """
+        Formulate the constraints bounding the diameter of the support of self.
+
+        """
+        # Diameter constraint
+        constraint = ((xi - xj) ** 2 <= self.D ** 2)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (closed convex indicator function),
         see [1, Theorem 3.6].
         """
+        self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                     constraint_name="value",
+                                                     set_class_constraint_i=self.set_value_constraint_i,
+                                                     )
 
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                if point_i == point_j:
-                    self.list_of_class_constraints.append(fi == 0)
-
-                else:
-                    self.list_of_class_constraints.append(gi * (xj - xi) <= 0)
-                    if self.D != np.inf:
-                        self.list_of_class_constraints.append((xi - xj) ** 2 <= self.D ** 2)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )
+        if self.D != np.inf:
+            self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                          list_of_points_2=self.list_of_points,
+                                                          constraint_name="diameter",
+                                                          set_class_constraint_i_j=self.set_diameter_constraint_i_j,
+                                                          )

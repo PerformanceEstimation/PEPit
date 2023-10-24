@@ -56,32 +56,44 @@ class ConvexQGFunction(Function):
         # Store L
         self.L = L
 
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
+        """
+        Formulates the list of interpolation constraints for self (CCP function).
+        """
+        # Interpolation conditions of convex functions class
+        constraint = (fi - fj >= gj * (xi - xj))
+
+        return constraint
+
+    def set_star_cocoercivity_constraint_i_j(self,
+                                             xi, gi, fi,
+                                             xj, gj, fj,
+                                             ):
+        """
+        Formulates the list of interpolation constraints for self (smooth strongly convex function).
+        """
+        # Interpolation conditions of QG convex functions class
+        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (quadratically maximally growing convex function);
         see [1, Theorem 2.6].
         """
+        if self.list_of_stationary_points != list():
+            self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
+                                                          list_of_points_2=self.list_of_points,
+                                                          constraint_name="*cocoercivity",
+                                                          set_class_constraint_i_j=self.set_star_cocoercivity_constraint_i_j,
+                                                          )
 
-        for point_i in self.list_of_stationary_points:
-
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
-
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                if i != j:
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

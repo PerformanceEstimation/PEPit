@@ -12,7 +12,8 @@ class SmoothStronglyConvexFunction(Function):
         mu (float): strong convexity parameter
         L (float): smoothness parameter
 
-    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and :math:`L`, hence can be instantiated as
+    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and :math:`L`, hence can be
+    instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -64,46 +65,33 @@ class SmoothStronglyConvexFunction(Function):
         self.L = L
 
         if self.L == np.inf:
-            print("\033[96m(PEPit) The class of smooth strongly convex functions is necessarily differentiable.\n"
-                  "To instantiate a strongly convex function, please avoid using the class SmoothStronglyConvexFunction\n"
-                  "with L == np.inf. Instead, please use the class StronglyConvexFunction (which accounts for the fact\n"
-                  "that there might be several subgradients at the same point).\033[0m")
+            print("\033[96m(PEPit) Smooth strongly convex functions are necessarily differentiable. To instantiate\n"
+                  "a strongly convex function, please avoid using the class SmoothStronglyConvexFunction with\n"
+                  "L == np.inf. Instead, please use the class StronglyConvexFunction (which accounts for the fact\n"
+                  "that there might be several sub-gradients at the same point).\033[0m")
+
+    def set_cocoercivity_constraint_i_j(self,
+                                        xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
+        """
+        Formulates the list of interpolation constraints for self (smooth strongly convex function).
+        """
+        # Interpolation conditions of smooth strongly convex functions class
+        constraint = (fi - fj >=
+                      gj * (xi - xj)
+                      + 1 / (2 * self.L) * (gi - gj) ** 2
+                      + self.mu / (2 * (1 - self.mu / self.L)) * (
+                              xi - xj - 1 / self.L * (gi - gj)) ** 2)
+
+        return constraint
 
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (smooth strongly convex function); see [1, Theorem 4].
+        Add cocoercivity constraints.
         """
-
-        for point_i in self.list_of_points:
-
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-                    # Interpolation conditions of smooth strongly convex functions class
-                    constraint = (fi - fj >=
-                                  gj * (xi - xj)
-                                  + 1 / (2 * self.L) * (gi - gj) ** 2
-                                  + self.mu / (2 * (1 - self.mu / self.L)) * (
-                                          xi - xj - 1 / self.L * (gi - gj)) ** 2)
-                    constraint.set_name("IC_{}({}, {})".format(self.name, xi.name, xj.name))
-                    self.list_of_class_constraints.append(constraint)
-
-    def get_class_constraint_duals(self):
-
-        n = len(self.list_of_points)
-        list_of_duals = [constraint.eval_dual() for constraint in self.list_of_class_constraints]
-        assert len(list_of_duals) == n*(n-1)
-        complete_list_of_duals = [0]
-        for i in range(n-1):
-            complete_list_of_duals += list_of_duals[i*n: (i+1)*n]
-            complete_list_of_duals += [0]
-        tab_of_duals = np.array(complete_list_of_duals).reshape(n, n)
-        point_names = [point[0].name for point in self.list_of_points]
-        df = pd.DataFrame(tab_of_duals, columns=point_names, index=point_names)
-        if self.name:
-            df.columns.name = "IC_{}".format(self.name)
-        print(df)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="cocoercivity",
+                                                      set_class_constraint_i_j=self.set_cocoercivity_constraint_i_j,
+                                                      )
