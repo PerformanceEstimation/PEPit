@@ -34,3 +34,15 @@ Cocoercive
 .. autoclass:: PEPit.operators.CocoerciveOperator
    :members:
    :show-inheritance:
+
+Cocoercive and strongly monotone
+--------------------------------
+.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperator
+   :members:
+   :show-inheritance:
+
+Negatively comonotone
+---------------------
+.. autoclass:: PEPit.operators.NegativelyComonotoneOperator
+   :members:
+   :show-inheritance:

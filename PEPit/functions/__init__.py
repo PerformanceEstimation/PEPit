@@ -6,6 +6,7 @@ from .convex_qg_function import ConvexQGFunction
 from .convex_support_function import ConvexSupportFunction
 from .rsi_eb import RsiEbFunction
 from .smooth_convex_function import SmoothConvexFunction
+from .smooth_convex_lipschitz_function import SmoothConvexLipschitzFunction
 from .smooth_function import SmoothFunction
 from .smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from .strongly_convex import StronglyConvexFunction
@@ -18,6 +19,7 @@ __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
            'convex_support_function', 'ConvexSupportFunction',
            'rsi_eb', 'RsiEbFunction',
            'smooth_convex_function', 'SmoothConvexFunction',
+           'smooth_convex_lipschitz_function', 'SmoothConvexLipschitzFunction',
            'smooth_function', 'SmoothFunction',
            'smooth_strongly_convex_function', 'SmoothStronglyConvexFunction',
            'strongly_convex', 'StronglyConvexFunction',

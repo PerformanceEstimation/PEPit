@@ -3,7 +3,7 @@ from PEPit.point import Point
 
 def exact_linesearch_step(x0, f, directions):
     """
-    This routines outputs some :math:`x` by *mimicking* an exact line/span search in specified directions.
+    This routine outputs some :math:`x` by *mimicking* an exact line/span search in specified directions.
     It is used for instance in ``PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search``
     and in ``PEPit.examples.unconstrained_convex_minimization.wc_conjugate_gradient``.
 
