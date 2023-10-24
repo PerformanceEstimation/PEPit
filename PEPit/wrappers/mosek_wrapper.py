@@ -65,7 +65,7 @@ class MosekWrapper(Wrapper):
         self.env = mosek.Env()
         self.task = self.env.Task()  # initiate MOSEK's task
 
-        if self.verbose >= 1:
+        if self.verbose > 1:
             self.task.set_Stream(mosek.streamtype.log, self._streamprinter)
 
         # "Initialize" the Gram matrix

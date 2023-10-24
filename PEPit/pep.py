@@ -301,7 +301,7 @@ class PEP(object):
             wrapper_name = "cvxpy"
 
         # Initiate a wrapper to interface with the solver
-        wrapper = WRAPPERS[wrapper_name]()
+        wrapper = WRAPPERS[wrapper_name](verbose=verbose)
         wrapper.setup_environment()
 
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
@@ -309,7 +309,7 @@ class PEP(object):
             if verbose:
                 print('(PEPit) No valid {} license found, switching to cvxpy'.format(wrapper_name))
             wrapper_name = "cvxpy"
-            wrapper = WRAPPERS[wrapper_name]()
+            wrapper = WRAPPERS[wrapper_name](verbose=verbose)
             wrapper.setup_environment()
 
         # Store wrapper information in self
