@@ -291,13 +291,14 @@ class PEP(object):
             float: Worst case guarantee of the PEP.
 
         """
-        wrapper_name = wrapper
+        wrapper_name = wrapper.lower()
 
         # Check that the solver is installed, if it is not, switch to CVXPY.
         found_python_package = importlib.util.find_spec(wrapper_name)
         if found_python_package is None:
             if verbose:
-                print('(PEPit) {} not found in system environment, switching to cvxpy'.format(wrapper_name))
+                print('\033[96m(PEPit) {} not found in system environment,'
+                      ' switching to cvxpy\033[0m'.format(wrapper_name))
             wrapper_name = "cvxpy"
 
         # Initiate a wrapper to interface with the solver
@@ -307,7 +308,7 @@ class PEP(object):
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
         if not wrapper.check_license():
             if verbose:
-                print('(PEPit) No valid {} license found, switching to cvxpy'.format(wrapper_name))
+                print('\033[96m(PEPit) No valid {} license found, switching to cvxpy\033[96m'.format(wrapper_name))
             wrapper_name = "cvxpy"
             wrapper = WRAPPERS[wrapper_name](verbose=verbose)
             wrapper.setup_environment()
@@ -432,7 +433,7 @@ class PEP(object):
             function_counter += 1
 
             if verbose:
-                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
+                print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
                       'scalar constraint(s) ...')
 
             for constraint in function.list_of_class_constraints:
@@ -440,12 +441,12 @@ class PEP(object):
                 self._list_of_constraints_sent_to_wrapper.append(constraint)
 
             if verbose:
-                print('\t\t function', function_counter, ':', len(function.list_of_class_constraints),
+                print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_constraints),
                       'scalar constraint(s) added')
 
             if len(function.list_of_class_psd) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd),
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_psd),
                           'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
@@ -453,7 +454,7 @@ class PEP(object):
                     self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_class_psd),
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_psd),
                           'lmi constraint(s) added')
 
         # Other function constraints
@@ -466,7 +467,7 @@ class PEP(object):
 
             if len(function.list_of_constraints) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_constraints),
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_constraints),
                           'scalar constraint(s) ...')
 
                 for constraint in function.list_of_constraints:
@@ -474,7 +475,7 @@ class PEP(object):
                     self._list_of_constraints_sent_to_wrapper.append(constraint)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_constraints),
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_constraints),
                           'scalar constraint(s) added')
 
             if len(function.list_of_psd) > 0:
@@ -487,7 +488,7 @@ class PEP(object):
                     self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_psd),
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
 
         # Defining block partition constraints
@@ -499,13 +500,13 @@ class PEP(object):
         for partition in BlockPartition.list_of_partitions:
             partition_counter += 1
             if verbose:
-                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
             for constraint in partition.list_of_constraints:
                 wrapper.send_constraint_to_solver(constraint)
                 self._list_of_constraints_sent_to_wrapper.append(constraint)
             if verbose:
-                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
         # Instantiate the problem
@@ -518,9 +519,10 @@ class PEP(object):
             print('(PEPit) Calling SDP solver')
         solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
         if verbose:
-            print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(solver_status,
-                                                                                     solver_name,
-                                                                                     wc_value))
+            print('(PEPit) Solver status: {} (wrapper:{}, solver: {}); optimal value: {}'.format(solver_status,
+                                                                                                 self.wrapper_name,
+                                                                                                 solver_name,
+                                                                                                 wc_value))
 
         # Raise explicit error when wc_value in infinite
         if wc_value is None:
@@ -642,7 +644,7 @@ class PEP(object):
         # Grab the smallest eigenvalue of G
         G_min_eig_val = np.min(np.linalg.eigh(self.G_value)[0])
         if verbose:
-            message = "\t\t The solver found a Gram matrix that is positive semi-definite"
+            message = "\t\tThe solver found a Gram matrix that is positive semi-definite"
             if G_min_eig_val < 0:
                 message += " up to an error of {}".format(-G_min_eig_val)
             print(message)
@@ -652,7 +654,7 @@ class PEP(object):
             psd_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval())[0])
                                       for psd_matrix in self._list_of_psd_sent_to_wrapper])
             if verbose:
-                message = "\t\t All required PSD matrices are indeed positive semi-definite"
+                message = "\t\tAll required PSD matrices are indeed positive semi-definite"
                 if psd_min_eig_val < 0:
                     message += " up to an error of {}".format(-psd_min_eig_val)
                 print(message)
@@ -668,7 +670,7 @@ class PEP(object):
                    if constraint.equality_or_inequality == "equality"]
             )
             if verbose:
-                message = "\t\t All the primal scalar constraints are verified"
+                message = "\t\tAll the primal scalar constraints are verified"
                 if max_constraint_error > 0:
                     message += " up to an error of {}".format(max_constraint_error)
                 print(message)
@@ -685,7 +687,7 @@ class PEP(object):
         # Residual >= 0
         residual_min_eig_val = np.min(np.linalg.eigh(self.residual)[0])
         if verbose:
-            message = "\t\t The solver found a residual matrix that is positive semi-definite"
+            message = "\t\tThe solver found a residual matrix that is positive semi-definite"
             if residual_min_eig_val < 0:
                 message += " up to an error of {}".format(-residual_min_eig_val)
             print(message)
@@ -698,7 +700,7 @@ class PEP(object):
             lmi_dual_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval_dual())[0])
                                            for psd_matrix in self._list_of_psd_sent_to_wrapper])
             if verbose:
-                message = "\t\t All the dual matrices to lmi are positive semi-definite"
+                message = "\t\tAll the dual matrices to lmi are positive semi-definite"
                 if lmi_dual_min_eig_val < 0:
                     message += " up to an error of {}".format(-lmi_dual_min_eig_val)
                 print(message)
@@ -714,7 +716,7 @@ class PEP(object):
         if inequality_constraint_dual_values:
             inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
             if verbose:
-                message = "\t\t All the dual scalar values associated to inequality constraints are nonnegative"
+                message = "\t\tAll the dual scalar values associated to inequality constraints are nonnegative"
                 if inequality_constraint_dual_min_value < 0:
                     message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
                 print(message)

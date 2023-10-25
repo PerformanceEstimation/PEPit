@@ -279,7 +279,6 @@ class MosekWrapper(Wrapper):
 
         self.task.optimize(**kwargs)
         self.solver_name = "MOSEK"
-        # wc_value = self.task.getprimalobj(mosek.soltype.itr)
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
         xx = self.task.getxx(mosek.soltype.itr)
         tau = xx[-1]
