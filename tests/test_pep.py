@@ -191,4 +191,4 @@ class TestPEP(unittest.TestCase):
 
         # Check the behavior of PEP in this case.
         # It should stop the code before trying to assign no existent values to variables and return None
-        self.assertIsNone(self.problem.solve())
+        self.assertIsNone(self.problem.solve(verbose=0))

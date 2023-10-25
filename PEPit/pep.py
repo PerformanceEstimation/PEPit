@@ -750,11 +750,26 @@ class PEP(object):
         ################################################################################################################
         ################################################## Duality Gap #################################################
         ################################################################################################################
+        absolute_duality_gap = dual_objective - wc_value
         if verbose:
             print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
                                                                                                       wc_value))
-            print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(dual_objective - wc_value,
-                                                                              (dual_objective - wc_value) / wc_value))
+
+        if wc_value != 0:
+            relative_duality_gap = (dual_objective - wc_value) / wc_value
+            if verbose:
+                print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(absolute_duality_gap,
+                                                                                  relative_duality_gap))
+        else:
+            relative_duality_gap = 0
+
+        if abs(absolute_duality_gap) > 10**-3 and abs(relative_duality_gap) > 10**-6:
+            message = "\033[96m(PEPit) Warning: the duality gap seems surprisingly large"
+            if absolute_duality_gap < 0:
+                message += " and negative"
+            message += ".\n\t\tThe solver might not have converged properly.\n"\
+                       "\t\tWe recommend to use another wrapper or solver for confirmation.\033[0m"
+            print(message)
 
         return dual_objective
 
