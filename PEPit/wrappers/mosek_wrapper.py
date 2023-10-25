@@ -276,7 +276,8 @@ class MosekWrapper(Wrapper):
         
         """
         import mosek
-
+        if "solver" in kwargs.keys():
+            del kwargs["solver"]
         self.task.optimize(**kwargs)
         self.solver_name = "MOSEK"
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
