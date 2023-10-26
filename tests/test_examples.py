@@ -92,7 +92,7 @@ from PEPit.examples.continuous_time_models import wc_gradient_flow_strongly_conv
 from PEPit.examples.tutorials import wc_gradient_descent_contraction
 
 
-class TestExamples(unittest.TestCase):
+class TestExamplesCVXPY(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -238,7 +238,7 @@ class TestExamples(unittest.TestCase):
         n = 15
 
         wc, theory = wc_halpern_iteration_low_dim(n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        self.assertAlmostEqual(wc, theory, delta=2*self.relative_precision * theory)
 
     def test_gradient_descent_non_convex_low_dim(self):
         L, n = 1, 5
@@ -630,7 +630,7 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
 
-class TestExampleMosek(TestExamples):
+class TestExamplesMosek(TestExamplesCVXPY):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

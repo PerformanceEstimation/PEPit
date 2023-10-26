@@ -247,7 +247,7 @@ class PEP(object):
         self.list_of_performance_metrics.append(expression)
 
     def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", verbose=1,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5, **kwargs):
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4, **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
@@ -324,7 +324,7 @@ class PEP(object):
         return out
 
     def _solve_with_wrapper(self, wrapper, verbose=1, return_primal_or_dual="dual",
-                            dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
+                            dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4,
                             **kwargs):
         """
         Internal solve method. Translate the :class:`PEP` to an SDP, and solve it via the wrapper.
@@ -389,8 +389,9 @@ class PEP(object):
                   ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
             # They are actually created by wrapper when their environment is set
 
-        # Initialize the list of constraints sent to wrapper
+        # Initialize the lists of constraints sent to wrapper
         self._list_of_constraints_sent_to_wrapper = list()
+        self._list_of_psd_sent_to_wrapper = list()
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
