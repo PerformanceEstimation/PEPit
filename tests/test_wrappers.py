@@ -119,7 +119,7 @@ class TestWrapperCVXPY(unittest.TestCase):
 
         # Proof reconstruction
         # At this stage, constraints_combination must be equal to "objective - tau"
-        # which constitutes the proof as it has to be nonpositive.
+        # which constitutes the proof as it has to be non-positive.
         # Compute an expression that should be exactly equal to the constant tau.
         dual_objective_expression = self.problem.objective - constraints_combination
         # Operation over the decomposition dict of dual_objective_expression

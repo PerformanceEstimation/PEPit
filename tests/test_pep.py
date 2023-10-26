@@ -50,7 +50,7 @@ class TestPEP(unittest.TestCase):
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
         self.assertEqual(len(self.func.list_of_class_constraints), 0)
 
-        pepit_tau = self.problem.solve(verbose=0)
+        self.problem.solve(verbose=0)
         self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 3)
@@ -145,12 +145,14 @@ class TestPEP(unittest.TestCase):
         # Verify value of the psd matrix.
         for i in range(2):
             for j in range(2):
-                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j), places=3)
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j),
+                                       places=3)
 
         # Verify dual value of the lmi constraint.
         for i in range(2):
             for j in range(2):
-                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1), places=3)
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1),
+                                       places=3)
 
     def test_consistency(self):
 
