@@ -66,14 +66,14 @@ class CocoerciveStronglyMonotoneOperator(Function):
         if self.mu == 0:
             print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
                   " \n"
-                  "To instantiate a cocoercive (non strongly) monotone opetator,"
+                  "To instantiate a cocoercive (non strongly) monotone operator,"
                   " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
                   "with mu == 0. Instead, please use the class CocoerciveOperator.\033[0m")
 
         if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
                   " \n"
-                  "To instantiate a non cocoercive strongly monotone opetator,"
+                  "To instantiate a non cocoercive strongly monotone operator,"
                   " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
                   "with beta == 0. Instead, please use the class StronglyMonotoneOperator.\033[0m")
 

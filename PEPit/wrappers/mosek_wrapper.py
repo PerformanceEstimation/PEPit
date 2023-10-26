@@ -20,24 +20,37 @@ class MosekWrapper(Wrapper):
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
-        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
-                                                    This list does not contain constraints due to internal representation of the 
-                                                    problem by the solver.
-        prob (mosek.task): instance of the problem.
-        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
+                                                    associated to the PEP. This list does not contain constraints
+                                                    due to internal representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        objective (Expression): The objective expression that must be maximized.
+                                This is an additional :class:`Expression` created by the PEP to deal with cases
+                                where the user wants to maximize a minimum of several expressions.
+        dual_values (list): Optimal dual variables after solving
+                            (same ordering as that of _list_of_constraints_sent_to_solver).
+        residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
+        prob: instance of the problem (whose type depends on the solver).
+        solver_name (str): The name of the solver the wrapper interact with.
         verbose (int): Level of information details to print
                        (Override the solver verbose parameter).
 
                        - 0: No verbose at all
                        - 1: PEPit information is printed but not solver's
                        - 2: Both PEPit and solver details are printed
+        _constraint_index_in_mosek (list of integer): indices corresponding to the list of constraints sent to MOSEK.
+        _nb_pep_constraints_in_mosek (int): total number of scalar constraints sent to MOSEK.
+        _list_of_psd_constraints_sent_to_solver (list): list of PSD constraints sent to MOSEK.
+        _nb_pep_SDPconstraints_in_mosek (int): total number of PSD constraints sent to MOSEK.
+        env: MOSEK environment
+        task: Mosek task
 
     """
 
     def __init__(self, verbose=1):
         """
-        This function initialize all internal variables of the class. 
+        This function initializes all internal variables of the class.
         
         Args:
             verbose (int): Level of information details to print
@@ -52,7 +65,7 @@ class MosekWrapper(Wrapper):
 
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._constraint_index_in_mosek = list()  # index of the MOSEK constraint for each element of the previous list
+        self._constraint_index_in_mosek = list()  # indices of the MOSEK constraints.
         self._nb_pep_constraints_in_mosek = 0
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 0
@@ -60,6 +73,11 @@ class MosekWrapper(Wrapper):
         self.task = None
 
     def setup_environment(self):
+        """
+        Create MOSEK environment and task.
+        Initialize the main variables of the optimization problem.
+
+        """
         import mosek
 
         self.env = mosek.Env()

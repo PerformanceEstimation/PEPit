@@ -58,7 +58,7 @@ class NegativelyComonotoneOperator(Function):
 
         if self.rho == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
-                  "To instantiate a monotone opetator, please avoid using the class NegativelyComonotoneOperator\n"
+                  "To instantiate a monotone operator, please avoid using the class NegativelyComonotoneOperator\n"
                   "with rho == 0. Instead, please use the class Monotone.\033[0m")
 
     def add_class_constraints(self):

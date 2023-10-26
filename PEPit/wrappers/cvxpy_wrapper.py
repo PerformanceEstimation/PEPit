@@ -16,20 +16,28 @@ class CvxpyWrapper(Wrapper):
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
-        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
-                                                    This list does not contain constraints due to internal representation of the 
-                                                    problem by the solver.
-        prob (cvxpy.Problem): instance of the problem.
-        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
+                                                    associated to the PEP. This list does not contain constraints
+                                                    due to internal representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
-        F (cvxpy.Variable): CVXPY variable corresponding to leaf :class:`Expression` objects of the PEP.
-        G (cvxpy.Variable): CVXPY variable corresponding the Gram matrix of the PEP.
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        objective (Expression): The objective expression that must be maximized.
+                                This is an additional :class:`Expression` created by the PEP to deal with cases
+                                where the user wants to maximize a minimum of several expressions.
+        dual_values (list): Optimal dual variables after solving
+                            (same ordering as that of _list_of_constraints_sent_to_solver).
+        residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
+        prob: instance of the problem (whose type depends on the solver).
+        solver_name (str): The name of the solver the wrapper interact with.
         verbose (int): Level of information details to print
                        (Override the solver verbose parameter).
 
                        - 0: No verbose at all
                        - 1: PEPit information is printed but not solver's
                        - 2: Both PEPit and solver details are printed
+        F (cvxpy.Variable): a 1D cvxpy.Variable that represents PEPit's Expressions.
+        G (cvxpy.Variable): a 2D cvxpy.Variable that represents PEPit's Gram matrix.
+        _list_of_solver_constraints (list of cvxpy.Constraint): the list of constraints of the problem in CVXPY format.
 
     """
 
@@ -47,11 +55,17 @@ class CvxpyWrapper(Wrapper):
 
         """
         super().__init__(verbose=verbose)
+
+        # Initialize attributes
         self.F = None
         self.G = None
         self._list_of_solver_constraints = list()
 
     def setup_environment(self):
+        """
+        Create base cvxpy variables and main cvxpy constraint: G >> 0.
+
+        """
         import cvxpy as cp
 
         # Express the constraints from F, G and objective

@@ -199,7 +199,7 @@ class PEP(object):
 
     def add_psd_matrix(self, matrix_of_expressions):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
@@ -331,7 +331,8 @@ class PEP(object):
 
         Args:
             wrapper (Wrapper): Interface to the solver.
-            verbose (int, optional): Level of information details to print (Override the CVXPY solver verbose parameter).
+            verbose (int, optional): Level of information details to print
+                                     (Override the CVXPY solver verbose parameter).
 
                             - 0: No verbose at all
                             - 1: PEPit information is printed but not CVXPY's
@@ -727,7 +728,7 @@ class PEP(object):
 
         # Proof reconstruction
         # At this stage, constraints_combination must be equal to "objective - tau"
-        # which constitutes the proof as it has to be nonpositive.
+        # which constitutes the proof as it has to be non-positive.
         # Compute an expression that should be exactly equal to the constant tau.
         dual_objective_expression = self.objective - constraints_combination
         # Operation over the decomposition dict of dual_objective_expression

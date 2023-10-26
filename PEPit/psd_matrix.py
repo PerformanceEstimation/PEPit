@@ -149,22 +149,22 @@ class PSDMatrix(object):
         return self._value
 
     def eval_dual(self):
-            """
-            Compute, store and return the value of the dual variable of this :class:`PSDMatrix`.
+        """
+        Compute, store and return the value of the dual variable of this :class:`PSDMatrix`.
 
-            Returns:
-                self._dual_variable_value (ndarray of floats): The value of the dual variable of this :class:`PSDMatrix`
-                                                               after the corresponding PEP was solved numerically.
+        Returns:
+            self._dual_variable_value (ndarray of floats): The value of the dual variable of this :class:`PSDMatrix`
+                                                           after the corresponding PEP was solved numerically.
 
-            Raises:
-                ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!") if the PEP has not been solved yet.
+        Raises:
+            ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!") if the PEP has not been solved yet.
 
-            """
+        """
 
-            # If the attribute _dual_variable_value is not None, then simply return it.
-            # Otherwise, raise a ValueError.
-            if self._dual_variable_value is None:
-                # The PEP would have filled the attribute at the end of the solve.
-                raise ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
+        # If the attribute _dual_variable_value is not None, then simply return it.
+        # Otherwise, raise a ValueError.
+        if self._dual_variable_value is None:
+            # The PEP would have filled the attribute after solving the problem.
+            raise ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
 
-            return self._dual_variable_value
+        return self._dual_variable_value
