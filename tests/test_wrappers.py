@@ -6,6 +6,10 @@ from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvex
 
 class TestWrapperCVXPY(unittest.TestCase):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.wrapper = "cvxpy"
+
     def setUp(self):
         # Smooth strongly convex gradient descent set up
         self.L = 1.
@@ -39,18 +43,25 @@ class TestWrapperCVXPY(unittest.TestCase):
     def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically.
-        pepit_tau = self.problem.solve(verbose=0)
+        pepit_tau = self.problem.solve(verbose=0, wrapper=self.wrapper)
 
         # Compute pepit_tau very basically with dimension_reduction_heuristic off and verify all is fine.
-        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None, wrapper="cvxpy")
+        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None, wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", wrapper="cvxpy")
+        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper="cvxpy")
+        pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
+
+
+class TestWrapperMOSEK(TestWrapperCVXPY):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.wrapper = "mosek"

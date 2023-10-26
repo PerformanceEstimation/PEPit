@@ -10,6 +10,5 @@ __all__ = ['additional_complexified_examples_tests',
            'test_point',
            'test_functions_and_operators',
            'test_uselessly_complexified_examples',
-           'test_wrapper_mosek',
-           'test_wrapper_cvxpy',
+           'test_wrappers',
            ]
