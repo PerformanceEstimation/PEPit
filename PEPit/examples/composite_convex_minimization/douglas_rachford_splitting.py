@@ -4,7 +4,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", verbose=1):
+def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -59,6 +59,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", verbose=1
         theta (float): parameter of the scheme.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
@@ -71,7 +72,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", verbose=1
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -122,7 +123,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", verbose=1
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) when theta = 1
     if theta == 1 and alpha == 1 and L == 1 and 0 < n <= 10:
@@ -143,4 +144,4 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", verbose=1
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", solver=None, verbose=1)

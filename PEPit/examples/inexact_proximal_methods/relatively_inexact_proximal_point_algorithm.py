@@ -5,7 +5,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import inexact_proximal_step
 
 
-def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvxpy", verbose=1):
+def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the (possibly non-smooth) convex minimization problem,
 
@@ -50,6 +50,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
         gamma (float): the step-size.
         sigma (float): accuracy parameter of the proximal point computation.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -62,7 +63,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -105,7 +106,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 + sigma) / (4 * gamma * n ** sqrt(1 - sigma ** 2))
@@ -122,4 +123,4 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", solver=None, verbose=1)

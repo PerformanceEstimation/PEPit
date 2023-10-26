@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", verbose=1):
+def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -58,6 +58,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", verbose=1):
         mu (float): the strong convexity parameter.
         gamma (float): the step-size.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
@@ -73,7 +74,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", verbose=1):
         >>> L = 1
         >>> mu = 0.1
         >>> gamma = 2 / (L + mu)
-        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -119,7 +120,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if 1 / L <= gamma <= (2 * L - mu) / L ** 2:
@@ -141,4 +142,4 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)

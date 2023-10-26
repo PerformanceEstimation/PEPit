@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
+def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -64,6 +64,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
         mu (float): the strong convexity parameter.
         lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -76,7 +77,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
          theoretical_tau (float): theoretical value
     
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -140,7 +141,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = rho ** 2
@@ -156,4 +157,4 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", solver=None, verbose=1)

@@ -3,7 +3,7 @@ from PEPit.operators import MonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
+def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -41,6 +41,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
         alpha (float): the step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -53,7 +54,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -100,7 +101,8 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="trace")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="trace")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - 1 / n) ** (n - 1) / n
@@ -116,4 +118,4 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", solver=None, verbose=1)

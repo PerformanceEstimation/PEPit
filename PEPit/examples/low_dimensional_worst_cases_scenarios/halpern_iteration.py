@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
 
-def wc_halpern_iteration(n, wrapper="cvxpy", verbose=1):
+def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the fixed point problem
 
@@ -45,6 +45,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", verbose=1):
     Args:
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -57,7 +58,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -109,7 +110,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose,
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
                               dimension_reduction_heuristic="logdet3",
                               tol_dimension_reduction=1e-5)
 
@@ -127,4 +128,4 @@ def wc_halpern_iteration(n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_halpern_iteration(n=10, wrapper="cvxpy", solver=None, verbose=1)

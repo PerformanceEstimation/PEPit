@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -45,6 +45,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", verbose=1):
         gamma (float): the step-size.
         n (int):  current iteration number.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -58,7 +59,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", verbose=1):
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -102,7 +103,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if gamma == 1 / L:
@@ -126,4 +127,4 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)

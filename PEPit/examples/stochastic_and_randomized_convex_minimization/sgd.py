@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", verbose=1):
+def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the finite sum minimization problem
 
@@ -68,6 +68,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", verbose=1):
         R (float): the initial distance.
         n (int): number of functions.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -83,7 +84,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", verbose=1):
         >>> mu = 0.1
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -135,7 +136,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     kappa = L / mu
@@ -156,4 +157,4 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", solver=None, verbose=1)

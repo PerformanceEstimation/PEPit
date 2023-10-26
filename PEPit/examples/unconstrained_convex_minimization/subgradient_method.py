@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexLipschitzFunction
 
 
-def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", verbose=1):
+def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -59,6 +59,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", verbose=1):
         n (int): the number of iterations.
         gamma (float): step-size.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -74,7 +75,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", verbose=1):
         >>> M = 2
         >>> n = 6
         >>> gamma = 1 / (M * sqrt(n + 1))
-        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -121,7 +122,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = M / sqrt(n + 1)
@@ -141,4 +142,4 @@ if __name__ == "__main__":
     M = 2
     n = 6
     gamma = 1 / (M * sqrt(n + 1))
-    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)

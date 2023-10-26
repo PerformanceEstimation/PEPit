@@ -4,7 +4,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_dykstra(n, wrapper="cvxpy", verbose=1):
+def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex feasibility problem:
 
@@ -45,6 +45,7 @@ def wc_dykstra(n, wrapper="cvxpy", verbose=1):
     Args:
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -57,7 +58,7 @@ def wc_dykstra(n, wrapper="cvxpy", verbose=1):
         theoretical_tau (None): no theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 24x24
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -114,7 +115,8 @@ def wc_dykstra(n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet1")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="logdet1")
     theoretical_tau = None
 
     # Print conclusion if required
@@ -127,4 +129,4 @@ def wc_dykstra(n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", solver=None, verbose=1)

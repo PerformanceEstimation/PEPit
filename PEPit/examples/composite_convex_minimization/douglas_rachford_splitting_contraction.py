@@ -4,7 +4,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="cvxpy", verbose=1):
+def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -69,6 +69,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
         theta (float): parameter of the scheme.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
@@ -81,7 +82,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
         theoretical_tau (float): theoretical value
 
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -139,7 +140,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) when theta = 1
     if theta == 1:
@@ -159,4 +160,4 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", solver=None, verbose=1)

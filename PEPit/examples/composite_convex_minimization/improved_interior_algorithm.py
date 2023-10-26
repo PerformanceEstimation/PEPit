@@ -7,7 +7,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", verbose=1):
+def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -60,6 +60,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", verbose=1)
         lam (float): the step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -74,7 +75,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", verbose=1)
     Example:
         >>> L = 1
         >>> lam = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -140,7 +141,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", verbose=1)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
     if problem.wrapper.solver_name.casefold() != "mosek":
         print("\033[96m(PEPit) We recommend to use MOSEK solver. \033[0m")
 
@@ -161,4 +162,4 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", verbose=1)
 if __name__ == "__main__":
     L = 1
     lam = 1 / L
-    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)

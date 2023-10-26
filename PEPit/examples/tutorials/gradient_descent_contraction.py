@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -43,6 +43,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
         gamma (float): step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -56,7 +57,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -98,7 +99,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - gamma * L) ** 2, (1 - gamma * mu) ** 2) ** n
@@ -115,4 +116,4 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", solver=None, verbose=1)

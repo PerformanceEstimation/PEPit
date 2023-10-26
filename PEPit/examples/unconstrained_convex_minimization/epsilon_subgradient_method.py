@@ -5,7 +5,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import epsilon_subgradient_step
 
 
-def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", verbose=1):
+def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -55,6 +55,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", verbose=
         eps (float): the bound on the value of epsilon (inaccuracy).
         R (float): the bound on initial distance to an optimal solution.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -69,7 +70,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", verbose=
     Example:
         >>> M, n, eps, R = 2, 6, .1, 1
         >>> gamma = 1 / sqrt(n + 1)
-        >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 21x21
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -118,7 +119,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", verbose=
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (R ** 2 + 2 * (n + 1) * gamma * eps + (n + 1) * gamma ** 2 * M ** 2) / (2 * (n + 1) * gamma)
@@ -136,4 +137,4 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", verbose=
 if __name__ == "__main__":
     M, n, eps, R = 2, 6, .1, 1
     gamma = 1 / sqrt(n + 1)
-    pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", solver=None, verbose=1)

@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexQGFunction
 
 
-def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -48,6 +48,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", verbose=1):
         gamma (float): step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -61,7 +62,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", verbose=1):
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -104,7 +105,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / 2 * max(1 / (2 * n * L * gamma + 1), L * gamma)
@@ -121,4 +122,4 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)

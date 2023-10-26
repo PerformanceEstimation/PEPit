@@ -4,7 +4,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import linear_optimization_step
 
 
-def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
+def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -60,6 +60,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
         D (float): diameter of :math:`f_2`.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -72,7 +73,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -140,7 +141,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet6")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="logdet6")
 
     # Compute theoretical guarantee (for comparison)
     # when theta = 1
@@ -157,4 +159,4 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)

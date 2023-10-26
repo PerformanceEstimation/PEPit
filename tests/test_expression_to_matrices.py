@@ -10,6 +10,9 @@ from PEPit.tools.expressions_to_matrices import _expression_to_matrices, _expres
 class TestExpressionToMatrices(unittest.TestCase):
 
     def setUp(self):
+
+        self.tearDown()
+
         self.point1 = Point()
         unused_point = Point()
         self.point2 = Point()

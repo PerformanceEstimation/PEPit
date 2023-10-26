@@ -6,7 +6,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the constrainted composite convex minimization problem
 
@@ -55,6 +55,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", verbose=1):
         gamma (float): step-size (equal to :math:`\\frac{1}{2L}` for guarantee).
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -69,7 +70,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", verbose=1):
     Example:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 3 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -129,7 +130,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = gamma / n
@@ -147,4 +148,4 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", verbose=1):
 if __name__ == "__main__":
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)

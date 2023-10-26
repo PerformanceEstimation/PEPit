@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_information_theoretic(mu, L, n, wrapper="cvxpy", verbose=1):
+def wc_information_theoretic(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -67,6 +67,7 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", verbose=1):
         L (float): the smoothness parameter.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -79,7 +80,7 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 17x17
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -132,7 +133,7 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Theoretical guarantee (for comparison)
     theoretical_tau = 1 / (1 + q * A_new)
@@ -148,4 +149,4 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, wrapper="cvxpy", solver=None, verbose=1)

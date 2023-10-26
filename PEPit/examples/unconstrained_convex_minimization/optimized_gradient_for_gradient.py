@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", verbose=1):
+def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -63,6 +63,7 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", verbose=1):
         L (float): the smoothness parameter.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
 		verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -75,7 +76,7 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, wrapper="cvxpy", verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -133,7 +134,7 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (theta_tilde[0] ** 2)
@@ -149,4 +150,4 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)
