@@ -10,10 +10,9 @@ class Wrapper(object):
 
     Warnings:
         This class must be overwritten by a child class that encodes all particularities of the solver.
-        In particular, the methods: send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem,
+        In particular, the methods send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem,
         get_dual_variables, get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic
         must be overwritten.
-    
 
     Attributes:
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
@@ -29,8 +28,7 @@ class Wrapper(object):
         residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
         prob: instance of the problem (whose type depends on the solver).
         solver_name (str): The name of the solver the wrapper interact with.
-        verbose (int): Level of information details to print
-                       (Override the solver verbose parameter).
+        verbose (int): Level of information details to print (Override the solver verbose parameter).
 
                        - 0: No verbose at all
                        - 1: PEPit information is printed but not solver's
@@ -44,8 +42,7 @@ class Wrapper(object):
         This function initializes all internal variables of the class.
 
         Args:
-            verbose (int): Level of information details to print
-                           (Override the solver verbose parameter).
+            verbose (int): Level of information details to print (Override the solver verbose parameter).
 
                            - 0: No verbose at all
                            - 1: PEPit information is printed but not solver's
@@ -167,8 +164,8 @@ class Wrapper(object):
         _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
         
         Returns:
-            dual_values (list): 
-            residual (np.array):
+            dual_values (list)
+            residual (np.array)
 
         """
         # Return dual_values, residual

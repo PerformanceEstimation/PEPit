@@ -27,8 +27,8 @@ class PEP(object):
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
         list_of_constraints (list): list of :class:`Constraint` objects that are defined
-                                   out of the scope of a :class:`Function`.
-                                   Typically the initial :class:`Constraint`.
+                                    out of the scope of a :class:`Function`.
+                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
@@ -41,12 +41,12 @@ class PEP(object):
         _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
 
         objective (Expression): the expression to be maximized by the solver.
-                                It is set by the method solve. And should not be updated otherwise.
+                                It is set by the method `solve`. And should not be updated otherwise.
 
         G_value (ndarray): the value of the Gram matrix G that the solver found.
         F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
 
-        residual (ndarray): the dual value found by the solver to the lmi constraints G >= 0.
+        residual (ndarray): the dual value found by the solver to the lmi constraints G >> 0.
 
     """
     # Class counter.

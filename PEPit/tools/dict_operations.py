@@ -94,6 +94,7 @@ def symmetrize_dict(my_dict):
     """
     Symmetrize the keys of a dictionary.
     Each entry which key is a tuple is replaced by two entries:
+
         - one with the same key and half the original value,
         - the other one with reversed key and half the original value as well.
 

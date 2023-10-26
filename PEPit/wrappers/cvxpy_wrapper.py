@@ -9,7 +9,7 @@ from PEPit.tools.expressions_to_matrices import expression_to_matrices
 
 class CvxpyWrapper(Wrapper):
     """
-    A :class:`Cvxpy_wrapper` object interfaces PEPit with the `CVXPY<https://www.cvxpy.org/>`_ modelling language.
+    A :class:`Cvxpy_wrapper` object interfaces PEPit with the `CVXPY <https://www.cvxpy.org/>`_ modelling language.
 
     This class overwrites the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,

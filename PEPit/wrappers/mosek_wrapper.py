@@ -13,7 +13,7 @@ from PEPit.tools.expressions_to_matrices import expression_to_sparse_matrices
 
 class MosekWrapper(Wrapper):
     """
-    A :class:`MosekWrapper` object interfaces PEPit with the SDP solver `MOSEK<https://www.mosek.com/>`_.
+    A :class:`MosekWrapper` object interfaces PEPit with the SDP solver `MOSEK <https://www.mosek.com/>`_.
 
     This class overwrites the :class:`Wrapper` for MOSEK. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
