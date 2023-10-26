@@ -1,7 +1,12 @@
 import unittest
+import numpy as np
 
+from PEPit.point import Point
+from PEPit.expression import Expression
 from PEPit.pep import PEP
 from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+
+from PEPit.tools.dict_operations import symmetrize_dict, prune_dict
 
 
 class TestWrapperCVXPY(unittest.TestCase):
@@ -90,7 +95,45 @@ class TestWrapperCVXPY(unittest.TestCase):
             for key, value in comparison_dict.items():
                 self.assertAlmostEqual(value, element.decomposition_dict[key], delta=10**-5)
 
+    def test_proof_consistency(self):
 
+        # Solve the problem
+        self.problem.solve(verbose=0, wrapper=self.wrapper)
+
+        # - <Gram, residual> <= 0
+        constraints_combination = -np.dot(Point.list_of_leaf_points,
+                                          np.dot(self.problem.residual,
+                                                 Point.list_of_leaf_points))
+
+        # LMI constraints
+        # Dual >= 0
+        if self.problem._list_of_psd_sent_to_wrapper:
+            # - <psd_matrix, lmi_dual> <= 0
+            for psd_matrix in self.problem._list_of_psd_sent_to_wrapper:
+                constraints_combination -= np.sum(psd_matrix.eval_dual() * psd_matrix.matrix_of_expressions)
+
+        # Scalar constraints
+        # + <expression, dual> <= 0
+        for constraint in self.problem._list_of_constraints_sent_to_wrapper:
+            constraints_combination += constraint.eval_dual() * constraint.expression
+
+        # Proof reconstruction
+        # At this stage, constraints_combination must be equal to "objective - tau"
+        # which constitutes the proof as it has to be nonpositive.
+        # Compute an expression that should be exactly equal to the constant tau.
+        dual_objective_expression = self.problem.objective - constraints_combination
+        # Operation over the decomposition dict of dual_objective_expression
+        dual_objective_expression_decomposition_dict = prune_dict(
+            symmetrize_dict(dual_objective_expression.decomposition_dict)
+        )
+        # Remove the actual dual_objective from its dict
+        del dual_objective_expression_decomposition_dict[1]
+        # Compute the remaining terms, that should be small and only due to numerical stability errors
+        remaining_terms = np.sum(np.abs([value for key, value in dual_objective_expression_decomposition_dict.items()]))
+
+        # Check whether the proof is complete or not.
+        # There should be no term left.
+        self.assertAlmostEqual(remaining_terms, 0, delta=10**-5)
 
 
 class TestWrapperMOSEK(TestWrapperCVXPY):
