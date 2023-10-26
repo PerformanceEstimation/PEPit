@@ -34,8 +34,13 @@ class TestWrapperCVXPY(unittest.TestCase):
         # Run n steps of the GD method
         self.x1 = self.x0 - self.gamma * self.func.gradient(self.x0)
 
+        # Set an expression lowering the norm of x1-xs.
+        expr = Expression()
+        self.problem.add_psd_matrix([[(self.x1 - self.xs) ** 2, expr], [expr, 1]])
+
         # Set the performance metric to the function values accuracy
-        self.problem.set_performance_metric((self.x1 - self.xs) ** 2)
+        # Since we maximize expr, its value will exactly be the one of the norm of x1-xs.
+        self.problem.set_performance_metric(expr)
 
         # Compute theoretical rate of the above problem
         self.theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
