@@ -24,3 +24,13 @@ Prune a dictionary
 Symmetrize a dictionary
 -----------------------
 .. autofunction:: PEPit.tools.symmetrize_dict
+
+
+Expression to matrix
+--------------------
+.. autofunction:: PEPit.tools.expression_to_matrix
+
+
+Expression to sparse matrix
+---------------------------
+.. autofunction:: PEPit.tools.expression_to_sparse_matrix
