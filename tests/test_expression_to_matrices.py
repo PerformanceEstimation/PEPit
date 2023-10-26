@@ -4,7 +4,7 @@ import numpy as np
 from PEPit.point import Point
 from PEPit.expression import Expression
 
-from PEPit.tools.expressions_to_matrices import _expression_to_matrices, _expression_to_sparse_matrices
+from PEPit.tools.expressions_to_matrices import expression_to_matrices, expression_to_sparse_matrices
 
 
 class TestExpressionToMatrices(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestExpressionToMatrices(unittest.TestCase):
     def test_expression_to_matrices(self):
 
         # Run expression_to_matrices.
-        Gweights, Fweights, cons = _expression_to_matrices(self.combined_expression)
+        Gweights, Fweights, cons = expression_to_matrices(self.combined_expression)
 
         # Compute expected outputs.
         Gweights_expected = np.array([[0., 0., 0.5], [0., 0., 0.], [0.5, 0., 0.]])
@@ -44,7 +44,7 @@ class TestExpressionToMatrices(unittest.TestCase):
 
         # Run expression_to_sparse_matrices.
         Gweights_indi, Gweights_indj, Gweights_val,\
-            Fweights_ind, Fweights_val, cons_val = _expression_to_sparse_matrices(self.combined_expression)
+            Fweights_ind, Fweights_val, cons_val = expression_to_sparse_matrices(self.combined_expression)
 
         # Compute expected outputs.
         Gweights_indi_expected = np.array([2])
