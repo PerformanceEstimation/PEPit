@@ -64,6 +64,34 @@ class TestWrapperCVXPY(unittest.TestCase):
         pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
 
+    def test_dual_sign_in_equality_constraints(self):
+
+        # The equality 1 = some_expression does not lead to the same constraint's expression based on the class of 1.
+        expr = Expression(is_leaf=False, decomposition_dict={1: 1})
+
+        # Browse constraints and store reconstituted element of proof
+        elements_of_proof = list()
+        for constraint in [(self.x0 - self.xs) ** 2 <= expr,
+                           expr >= (self.x0 - self.xs) ** 2,
+                           (self.x0 - self.xs) ** 2 == expr,
+                           expr == (self.x0 - self.xs) ** 2,
+                           (self.x0 - self.xs) ** 2 <= 1,
+                           1 >= (self.x0 - self.xs) ** 2,
+                           (self.x0 - self.xs) ** 2 == 1,
+                           1 == (self.x0 - self.xs) ** 2,
+                           ]:
+            self.problem.list_of_constraints = [constraint]
+            self.problem.solve(verbose=0, wrapper=self.wrapper)
+            elements_of_proof.append(constraint.eval_dual() * constraint.expression)
+
+        # Test whether all elements of proofs are identical
+        comparison_dict = elements_of_proof[0].decomposition_dict
+        for element in elements_of_proof[1:]:
+            for key, value in comparison_dict.items():
+                self.assertAlmostEqual(value, element.decomposition_dict[key], delta=10**-5)
+
+
+
 
 class TestWrapperMOSEK(TestWrapperCVXPY):
 
