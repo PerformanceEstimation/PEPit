@@ -69,6 +69,29 @@ class TestWrapperCVXPY(unittest.TestCase):
         pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
 
+    def test_track_constraints_sent_to_solver(self):
+
+        # Run problem to send constraints to wrapper who sends it to solver
+        self.problem.solve(wrapper=self.wrapper, verbose=0)
+
+        # The wrapper should have sent 5 constraints to the solver: 1 initial, 2 class interpolation, 1 PSD
+        # and 1 for the objective.
+        self.assertEqual(len(self.problem.wrapper._list_of_constraints_sent_to_solver), 5)
+
+    def test_recover_dual_values(self):
+
+        # Run problem and grab the dual values back.
+        self.problem.solve(wrapper=self.wrapper, verbose=0)
+        dual_values, residual = self.problem.wrapper._recover_dual_values()
+
+        # The wrapper should have sent 5 constraints to the solver: 1 initial, 2 class interpolation, 1 PSD
+        # and 1 for the objective.
+        # Then there must be 5 dual variables and a residual of the size of G,
+        # that is the number of leaf points: 3 (xs, x0, g0).
+        self.assertEqual(len(dual_values), 6)
+        self.assertIs(dual_values[0], residual)
+        self.assertEqual(residual.shape, (3, 3))
+
     def test_dual_sign_in_equality_constraints(self):
 
         # The equality 1 = some_expression does not lead to the same constraint's expression based on the class of 1.
