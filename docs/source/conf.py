@@ -43,7 +43,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
-    'sphinxcontrib_autodocgen',
+    # 'sphinxcontrib_autodocgen',
     'myst_parser',
 ]
 
