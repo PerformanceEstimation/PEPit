@@ -1,3 +1,5 @@
+import importlib.util
+
 from PEPit.wrapper import Wrapper
 from PEPit.point import Point
 from PEPit.expression import Expression
@@ -261,10 +263,46 @@ class CvxpyWrapper(Wrapper):
         """
         if self.verbose > 1:
             kwargs['verbose'] = True
+
+        # Verify is CVXPY will try MOSEK first.
+        if "solver" not in kwargs.keys() or kwargs["solver"] == "MOSEK":
+
+            # If MOSEK is installed, CVXPY will run it.
+            # We need to check the presence of a license and handle it in case there is no valid license.
+            is_mosek_installed = importlib.util.find_spec("mosek")
+            if is_mosek_installed:
+
+                # Import mosek.
+                import mosek
+
+                # Create an environment.
+                mosek_env = mosek.Env()
+
+                # Grab the license if there is one.
+                try:
+                    mosek_env.checkoutlicense(mosek.feature.pton)
+                except mosek.Error:
+                    pass
+
+                # Check validity of a potentially found license.
+                if not mosek_env.expirylicenses() >= 0:
+
+                    # In case the license is not valid, ask CVXPY to run SCS.
+                    kwargs["solver"] = "SCS"
+
+            else:
+                # If mosek is not installed, ask CVXPY to run SCS.
+                kwargs["solver"] = "SCS"
+
+        # Solve the problem.
         self.prob.solve(**kwargs)
+
+        # Store main information.
         self.solver_name = self.prob.solver_stats.solver_name
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
+
+        # Return first information.
         return self.prob.status, self.solver_name, self.objective.value
 
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
