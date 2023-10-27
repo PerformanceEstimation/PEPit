@@ -69,13 +69,13 @@ class MosekWrapper(Wrapper):
         self._nb_pep_constraints_in_mosek = 0
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 0
+
         self.env = None
         self.task = None
 
     def setup_environment(self):
         """
         Create MOSEK environment and task.
-        Initialize the main variables of the optimization problem.
 
         """
         import mosek
@@ -86,6 +86,13 @@ class MosekWrapper(Wrapper):
         if self.verbose > 1:
             self.task.set_Stream(mosek.streamtype.log, self._streamprinter)
 
+    def set_main_variables(self):
+        """
+        Initialize the main variables of the optimization problem and set the main constraint G >> 0.
+
+        """
+        import mosek
+
         # "Initialize" the Gram matrix
         self.task.appendbarvars([Point.counter])
         self._nb_pep_SDPconstraints_in_mosek += 1
@@ -93,7 +100,7 @@ class MosekWrapper(Wrapper):
         self.task.appendvars(Expression.counter + 1)
 
         inf = 1.0  # symbolical purposes
-        for i in range(Expression.counter + 1):
+        for i in range(Expression.counter):
             self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf)  # no bounds on function values (nor on tau)
 
     def check_license(self):
@@ -267,8 +274,7 @@ class MosekWrapper(Wrapper):
         """
         import mosek
 
-        # task.putclist([tau.counter], [0.0])
-        assert self.task.getmaxnumvar() == Expression.counter
+        assert self.task.getmaxnumvar() == Expression.counter + 1
         self.objective = objective
         _, _, _, Fweights_ind, Fweights_val, _ = expression_to_sparse_matrices(objective)
         self.task.putclist(Fweights_ind,
@@ -300,7 +306,7 @@ class MosekWrapper(Wrapper):
         self.solver_name = "MOSEK"
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
         xx = self.task.getxx(mosek.soltype.itr)
-        tau = xx[-1]
+        tau = xx[-2]
         self.optimal_F = xx
         problem_status = self.task.getprosta(mosek.soltype.itr)
         return problem_status, self.solver_name, tau

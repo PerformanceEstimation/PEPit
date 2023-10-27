@@ -388,7 +388,7 @@ class PEP(object):
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
-            # They are actually created by wrapper when their environment is set
+        wrapper.set_main_variables()
 
         # Initialize the lists of constraints sent to wrapper
         self._list_of_constraints_sent_to_wrapper = list()
@@ -397,6 +397,7 @@ class PEP(object):
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
+
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
             performance_metric_constraint = (self.objective <= performance_metric)
@@ -602,6 +603,7 @@ class PEP(object):
         self.F_value = F_value
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
         dual_objective = self.check_feasibility(wc_value, verbose=verbose)
+
         # Return the value of the minimal performance metric
         if return_primal_or_dual == "dual":
             return dual_objective

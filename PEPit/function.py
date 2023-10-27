@@ -282,6 +282,8 @@ class Function(object):
 
     def set_class_constraints(self):
         """
+        This method is run by the :class:`PEP` just before solving the problem.
+        It reinitializes the list_of_class_constraints attributes before filling it.
 
         """
         self.list_of_class_constraints = list()

@@ -146,6 +146,13 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc_GD, _ = wc_gradient_descent(L, 1 / L, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, wc_GD, delta=self.relative_precision * wc_GD)
 
+    def test_cyclic_coordinate_descent(self):
+        n = 9
+        L = [1., 2., 10.]
+
+        wc, _ = wc_cyclic_coordinate_descent(L=L, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(wc, 1.48928, delta=self.relative_precision * 1.48928)
+
     def test_gradient_descent_qg_convex(self):
         L, n = 1, 4
         gamma = .1 / L

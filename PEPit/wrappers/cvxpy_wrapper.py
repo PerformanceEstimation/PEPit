@@ -61,7 +61,7 @@ class CvxpyWrapper(Wrapper):
         self.G = None
         self._list_of_solver_constraints = list()
 
-    def setup_environment(self):
+    def set_main_variables(self):
         """
         Create base cvxpy variables and main cvxpy constraint: G >> 0.
 
@@ -70,7 +70,7 @@ class CvxpyWrapper(Wrapper):
 
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
-        self.F = cp.Variable((Expression.counter + 1,))  # need the +1 because the objective will be created afterwards
+        self.F = cp.Variable((Expression.counter,))
         self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
         self._list_of_solver_constraints.append(self.G >> 0)
 

@@ -64,7 +64,11 @@ class Wrapper(object):
         self.verbose = verbose
 
     def setup_environment(self):
-        raise NotImplementedError
+        """
+        May be overwritten if necessary.
+
+        """
+        pass
 
     def check_license(self):
         """
