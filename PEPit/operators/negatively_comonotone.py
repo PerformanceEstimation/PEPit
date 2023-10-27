@@ -62,20 +62,25 @@ class NegativelyComonotoneOperator(Function):
                   "To instantiate a monotone operator, please avoid using the class NegativelyComonotoneOperator\n"
                   "with rho == 0. Instead, please use the class Monotone.\033[0m")
 
+    def set_negative_comonotony_constraint_i_j(self,
+                                               xi, gi, fi,
+                                               xj, gj, fj,
+                                               ):
+        """
+        Formulates the list of interpolation constraints for self (negatively comonotone operator).
+        """
+        # Interpolation conditions of negatively comonotone operator class
+        constraint = ((gi - gj) * (xi - xj) + self.rho * (gi - gj) ** 2 >= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
-        Formulates a list of necessary constraints for self (negatively comonotone operator).
+        Add negative comonotony constraints.
         """
-
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
-                if i < j:
-                    # Necessary conditions of negatively comonotone operator class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) + self.rho * (gi - gj) ** 2 >= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="negative_comonotony",
+                                                      set_class_constraint_i_j=
+                                                      self.set_negative_comonotony_constraint_i_j,
+                                                      )

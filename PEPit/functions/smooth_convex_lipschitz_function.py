@@ -69,6 +69,17 @@ class SmoothConvexLipschitzFunction(SmoothConvexFunction):
                   "Instead, please use the class ConvexFunction (which accounts for the fact \n"
                   "that there might be several subgradients at the same point).\033[0m")
 
+    def set_lipschitz_constraint_i(self,
+                                   xi, gi, fi):
+        """
+        Formulates the Lipschitz constraint by bounding the gradients.
+
+        """
+        # Lipschitz condition on the function (bounded gradient)
+        constraint = (gi ** 2 <= self.M ** 2)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (smooth convex function); see [1, Theorem 4],
@@ -78,9 +89,6 @@ class SmoothConvexLipschitzFunction(SmoothConvexFunction):
         super().add_class_constraints()
 
         # Add Lipschitz continuity interpolation constraints.
-        for point_i in self.list_of_points:
-
-            xi, gi, fi = point_i
-
-            # Lipschitz condition on the function (bounded gradient)
-            self.list_of_class_constraints.append(gi**2 <= self.M**2)
+        self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                     constraint_name="Lipschitz",
+                                                     set_class_constraint_i=self.set_lipschitz_constraint_i)
