@@ -1,4 +1,3 @@
-import numpy as np
 from PEPit.function import Function
 
 
@@ -63,7 +62,7 @@ class CocoerciveOperator(Function):
 
         if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
-                  "To instantiate a monotone opetator, please avoid using the class CocoerciveOperator\n"
+                  "To instantiate a monotone operator, please avoid using the class CocoerciveOperator\n"
                   "with beta == 0. Instead, please use the class Monotone (which accounts for the fact \n"
                   "that the image of the operator at certain points might not be a singleton).\033[0m")
 

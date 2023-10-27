@@ -13,7 +13,7 @@ class LipschitzStronglyMonotoneOperator(Function):
 
     Warning:
         Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
-        in this class are necessary but a priori not sufficient for interpolation. Hence the numerical results
+        in this class are necessary but a priori not sufficient for interpolation. Hence, the numerical results
         obtained when using this class might be non-tight upper bounds (see Discussions in [1, Section 2]).
 
     Attributes:

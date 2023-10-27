@@ -37,7 +37,8 @@ class Function(object):
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
         list_of_psd (list): The list of :class:`PSDMatrix` objects associated with this :class:`Function`.
         list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
-        list_of_class_psd (list): The list of :class:`PSDMatrix` objects appearing in class interpolation constraints.
+        list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated with a class
+                                  interpolation constraints.
         tables_of_constraints (dict): A dictionary containing all the constraints, sorted by table.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
@@ -435,6 +436,8 @@ class Function(object):
 
     def set_class_constraints(self):
         """
+        This method is run by the :class:`PEP` just before solving the problem.
+        It reinitializes the list_of_class_constraints attributes before filling it.
 
         """
         self.list_of_class_constraints = list()
@@ -519,7 +522,7 @@ class Function(object):
                 list_of_functions_which_need_gradient_and_function_value.append((function, weight))
 
         # Return the 3 lists in a specific order: from the smallest need to the biggest one.
-        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, \
+        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
             list_of_functions_which_need_gradient_and_function_value
 
     def add_point(self, triplet):
@@ -628,8 +631,8 @@ class Function(object):
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of leaf functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, \
-            list_of_functions_which_need_gradient_and_function_value = \
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+            list_of_functions_which_need_gradient_and_function_value =\
             self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
@@ -652,8 +655,8 @@ class Function(object):
         # either because it is not differentiable or because it had never been computed so far.
 
         # If "self" gradient is determined by its leaf functions, then we compute it.
-        if list_of_functions_which_need_gradient_and_function_value == list() and \
-                list_of_functions_which_need_gradient_only == list():
+        if list_of_functions_which_need_gradient_and_function_value == list()\
+                and list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
                 g += weight * function.gradient(point=point)

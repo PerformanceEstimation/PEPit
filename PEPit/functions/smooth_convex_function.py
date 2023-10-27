@@ -18,6 +18,12 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         >>> problem = PEP()
         >>> func = problem.declare_function(function_class=SmoothConvexFunction, L=1.)
 
+    References:
+        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+        Smooth strongly convex interpolation and exact worst-case performance of first-order methods.
+        Mathematical Programming, 161(1-2), 307-345.
+        <https://arxiv.org/pdf/1502.05666.pdf>`_
+
     """
 
     def __init__(self,
@@ -29,6 +35,7 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
         """
 
         Args:
+            L (float): The smoothness parameter.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -36,7 +43,6 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
-            L (float): The smoothness parameter.
             name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
