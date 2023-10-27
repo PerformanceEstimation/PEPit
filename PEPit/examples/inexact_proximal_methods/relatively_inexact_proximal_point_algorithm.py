@@ -51,7 +51,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
         sigma (float): accuracy parameter of the proximal point computation.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -64,20 +64,32 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
+        (PEPit) Setting up the problem: size of the Gram matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 88 scalar constraint(s) ...
-                         function 1 : 88 scalar constraint(s) added
+        			Function 1 : Adding 72 scalar constraint(s) ...
+        			Function 1 : 72 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 16 scalar constraint(s) ...
+        			Function 1 : 16 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.007753853579615959
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.007678482388821737
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 9.339211172115614e-09
+        		All the primal scalar constraints are verified up to an error of 1.0034810280098137e-07
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.7290964880672109e-07
+        (PEPit) Final upper bound (dual): 0.007678489787312847 and lower bound (primal example): 0.007678482388821737 
+        (PEPit) Duality gap: absolute: 7.398491109686378e-09 and relative: 9.635355966248009e-07
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
-                PEPit guarantee:         f(x_n) - f(x_*) <= 0.00775385 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n) - f(x_*) <= 0.00767849 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -115,7 +127,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of an inexact proximal point method in distance in function values ***')
-        print('\tPEPit guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

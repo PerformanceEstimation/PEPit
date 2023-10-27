@@ -44,7 +44,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -57,22 +57,32 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
 
     Examples:
         >>> pepit_tau, theoretical_tau = wc_bregman_proximal_point(gamma=3, n=5, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
+        (PEPit) Setting up the problem: size of the Gram matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
-                         function 2 : Adding 42 scalar constraint(s) ...
-                         function 2 : 42 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        			Function 2 : Adding 42 scalar constraint(s) ...
+        			Function 2 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06666740784196148
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06666666577966435
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 7.300917023722597e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 3.627346042650288e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1600769917201519e-08
+        (PEPit) Final upper bound (dual): 0.06666666638907502 and lower bound (primal example): 0.06666666577966435 
+        (PEPit) Duality gap: absolute: 6.094106747012162e-10 and relative: 9.1411602421417e-09
         *** Example file: worst-case performance of the Bregman Proximal Point in function values ***
-                PEPit guarantee:         F(x_n)-F_* <= 0.0666674 Dh(x_*; x_0)
-                Theoretical guarantee:   F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
-
+        	PEPit guarantee:		 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
+        	Theoretical guarantee:	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
+    
     """
 
     # Instantiate PEP
@@ -112,7 +122,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Bregman Proximal Point in function values ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

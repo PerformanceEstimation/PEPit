@@ -9,4 +9,5 @@ __all__ = ['unconstrained_convex_minimization',
            'adaptive_methods',
            'low_dimensional_worst_cases_scenarios',
            'tutorials',
+           'continuous_time_models',
            ]

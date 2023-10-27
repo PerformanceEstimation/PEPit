@@ -69,7 +69,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -82,44 +82,56 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=6, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
+        (PEPit) Setting up the problem: size of the Gram matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 62 scalar constraint(s) ...
-                         function 1 : 62 scalar constraint(s) added
+        			Function 1 : Adding 56 scalar constraint(s) ...
+        			Function 1 : 56 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.13989778793516514
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.7005395180119392e-05 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.13973101296945833
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 2.99936924706653e-06 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.1398878008962302
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.283608596989854e-06 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988778337004493
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.335098252373141e-06 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.1398927512487368
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.2372028101610534e-05 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988824650439619
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.006867894032787e-05 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988779568391294
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.416953129163531e-06 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.1398889451757595
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 3.983502472713177e-05 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988780180833413
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.4785759855262395e-06 after 7 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988778218159367
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 5.360843247635456e-06 after 8 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.13988478099895965
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.59529914206238e-06 after 9 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988791535665998
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.339529753603287e-06 after 10 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.13988791535665998
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 9.339529753603287e-06 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314530774
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 7.356394561198437e-08 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101333230654
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314132523
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101315746582
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 4 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101311324322
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 5 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101297326166
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 6 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101303966996
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.216071300777247e-12 after 7 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101306836934
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 7.45808567822026e-12 after 8 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314164972
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 6.382593300104802e-12 after 9 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101344891796
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 10 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101344891796
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.749538388559788e-11
+        		All the primal scalar constraints are verified up to an error of 6.561007293015564e-11
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.481776410060961e-07
+        (PEPit) Final upper bound (dual): 0.13973101221655027 and lower bound (primal example): 0.13963101344891796 
+        (PEPit) Duality gap: absolute: 9.999876763230886e-05 and relative: 0.0007161644477277393
         *** Example file: worst-case performance of inexact gradient ***
-                PEPit example:           f(x_n)-f_* == 0.139888 (f(x_0)-f_*)
-                Theoretical guarantee:   f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
-
+        	PEPit guarantee:		 f(x_n)-f_* == 0.139731 (f(x_0)-f_*)
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)
+    
     """
 
     # Instantiate PEP
@@ -162,7 +174,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient ***')
-        print('\tPEPit example:\t\t f(x_n)-f_* == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* == {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

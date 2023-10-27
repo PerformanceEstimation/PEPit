@@ -56,7 +56,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         d (int): the dimension.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -72,24 +72,33 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         >>> mu = 0.1
         >>> gamma = 2 / (mu + L)
         >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : Adding 2 scalar constraint(s) ...
-                 function 1 : 2 scalar constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                 partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
-                 partition 1 with 2 blocks: 1 scalar constraint(s) added
+        			Partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
+        			Partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8347107452140342
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8347107438584297
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.4183154650737606e-11
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.950747594358786e-10
+        (PEPit) Final upper bound (dual): 0.8347107438665666 and lower bound (primal example): 0.8347107438584297 
+        (PEPit) Duality gap: absolute: 8.136935569780235e-12 and relative: 9.748209939370677e-12
         *** Example file: worst-case performance of randomized coordinate gradient descent ***
-            PEPit guarantee:	     E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
-            Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
-
+        	PEPit guarantee:		 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
+        	Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -127,7 +136,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

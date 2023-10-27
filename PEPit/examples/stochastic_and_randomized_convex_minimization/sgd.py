@@ -69,7 +69,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         n (int): number of functions.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -85,28 +85,38 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 11x11
+        (PEPit) Setting up the problem: size of the Gram matrix: 11x11
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
-                         function 2 : Adding 2 scalar constraint(s) ...
-                         function 2 : 2 scalar constraint(s) added
-                         function 3 : Adding 2 scalar constraint(s) ...
-                         function 3 : 2 scalar constraint(s) added
-                         function 4 : Adding 2 scalar constraint(s) ...
-                         function 4 : 2 scalar constraint(s) added
-                         function 5 : Adding 2 scalar constraint(s) ...
-                         function 5 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        			Function 2 : Adding 2 scalar constraint(s) ...
+        			Function 2 : 2 scalar constraint(s) added
+        			Function 3 : Adding 2 scalar constraint(s) ...
+        			Function 3 : 2 scalar constraint(s) added
+        			Function 4 : Adding 2 scalar constraint(s) ...
+        			Function 4 : 2 scalar constraint(s) added
+        			Function 5 : Adding 2 scalar constraint(s) ...
+        			Function 5 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 5.041652328250217
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 5.041652165318314
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.85488416412956e-09
+        		All the primal scalar constraints are verified up to an error of 2.157126582913449e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.9611762548955365e-07
+        (PEPit) Final upper bound (dual): 5.041652154374022 and lower bound (primal example): 5.041652165318314 
+        (PEPit) Duality gap: absolute: -1.094429169512523e-08 and relative: -2.170774844486766e-09
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-                PEPit guarantee:         E[||x_1 - x_*||^2] <= 5.04165
-                Theoretical guarantee:   E[||x_1 - x_*||^2] <= 5.04165
-
+        	PEPit guarantee:		 E[||x_1 - x_*||^2] <= 5.04165
+        	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 5.04165
+    
     """
 
     # Instantiate PEP
@@ -146,7 +156,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***')
-        print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

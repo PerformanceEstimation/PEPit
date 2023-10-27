@@ -56,7 +56,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         R (float): the bound on initial distance to an optimal solution.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -71,20 +71,32 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         >>> M, n, eps, R = 2, 6, .1, 1
         >>> gamma = 1 / sqrt(n + 1)
         >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 21x21
+        (PEPit) Setting up the problem: size of the Gram matrix: 21x21
         (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (14 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 188 scalar constraint(s) ...
-                         function 1 : 188 scalar constraint(s) added
+        			Function 1 : Adding 182 scalar constraint(s) ...
+        			Function 1 : 182 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0191201198697333
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0191560420875132
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 9.992007221626409e-16
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 8.140035658377668e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.4537099231463084e-07
+        (PEPit) Final upper bound (dual): 1.019156044756485 and lower bound (primal example): 1.0191560420875132 
+        (PEPit) Duality gap: absolute: 2.668971710306778e-09 and relative: 2.6188057570065385e-09
         *** Example file: worst-case performance of the epsilon-subgradient method ***
-                PEPit guarantee:         min_(0 <= t <= n) f(x_i) - f_* <= 1.01912
-                Theoretical guarantee:   min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
-
+        	PEPit guarantee:		 min_(0 <= t <= n) f(x_i) - f_* <= 1.01916
+        	Theoretical guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
+    
     """
 
     # Instantiate PEP
@@ -127,7 +139,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the epsilon-subgradient method ***')
-        print('\tPEPit guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

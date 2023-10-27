@@ -71,7 +71,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
         sigma (float): noise parameter.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -84,22 +84,34 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 18x18
+        (PEPit) Setting up the problem: size of the Gram matrix: 18x18
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 40 scalar constraint(s) ...
-                         function 1 : 40 scalar constraint(s) added
-                         function 2 : Adding 30 scalar constraint(s) ...
-                         function 2 : 30 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        			Function 2 : Adding 30 scalar constraint(s) ...
+        			Function 2 : 30 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 10 scalar constraint(s) ...
+        			Function 1 : 10 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.28120549805153155
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.2812061652921267
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.538692070583704e-10
+        		All the primal scalar constraints are verified up to an error of 2.1234433933425834e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.755838881401962e-07
+        (PEPit) Final upper bound (dual): 0.2812061650995206 and lower bound (primal example): 0.2812061652921267 
+        (PEPit) Duality gap: absolute: -1.9260609773752435e-10 and relative: -6.849284315563937e-10
         *** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***
-                PEPit guarantee:         ||z_n - z_*||^2 <= 0.281205 ||z_0 - z_*||^2
-                Theoretical guarantee:   ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
-
+        	PEPit guarantee:		 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+        	Theoretical guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+    
     """
 
     # Instantiate PEP
@@ -145,7 +157,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
-        print('\tPEPit guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

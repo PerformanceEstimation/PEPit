@@ -74,20 +74,30 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, wrapper="cvxpy", solver
         >>> mu = 0.1
         >>> gamma = 2 / (L + mu)
         >>> pepit_tau, theoretical_tau = wc_polyak_steps_in_distance_to_optimum(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.66942148764241
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6694214876445734
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.765730096858764e-11
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.680247484013155e-10
+        (PEPit) Final upper bound (dual): 0.6694214876573649 and lower bound (primal example): 0.6694214876445734 
+        (PEPit) Duality gap: absolute: 1.2791434578218741e-11 and relative: 1.91081923934451e-11
         *** Example file: worst-case performance of Polyak steps ***
-                PEPit guarantee:         ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
-                Theoretical guarantee:   ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2 
+        	Theoretical guarantee:	 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -130,7 +140,7 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, wrapper="cvxpy", solver
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEPit guarantee:\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2 '.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2 '.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_1 - x_*||^2 <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

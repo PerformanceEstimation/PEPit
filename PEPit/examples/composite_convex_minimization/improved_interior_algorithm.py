@@ -61,7 +61,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -76,24 +76,34 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
         >>> L = 1
         >>> lam = 1 / L
         >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
+        (PEPit) Setting up the problem: size of the Gram matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                         function 1 : Adding 42 scalar constraint(s) ...
-                         function 1 : 42 scalar constraint(s) added
-                         function 2 : Adding 49 scalar constraint(s) ...
-                         function 2 : 49 scalar constraint(s) added
-                         function 3 : Adding 42 scalar constraint(s) ...
-                         function 3 : 42 scalar constraint(s) added
+        			Function 1 : Adding 42 scalar constraint(s) ...
+        			Function 1 : 42 scalar constraint(s) added
+        			Function 2 : Adding 49 scalar constraint(s) ...
+        			Function 2 : 49 scalar constraint(s) added
+        			Function 3 : Adding 42 scalar constraint(s) ...
+        			Function 3 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.06675394483126838
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06807592082147511
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.2818984835639185e-08
+        (PEPit) Final upper bound (dual): 0.0680759105013995 and lower bound (primal example): 0.06807592082147511 
+        (PEPit) Duality gap: absolute: -1.032007561352355e-08 and relative: -1.5159656291080233e-07
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-                PEPit guarantee:         F(x_n)-F_* <= 0.0667539 (c * Dh(xs;x0) + f1(x0) - F_*)
-                Theoretical guarantee:   F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
-
+        	PEPit guarantee:		 F(x_n)-F_* <= 0.0680759 (c * Dh(xs;x0) + f1(x0) - F_*)
+        	Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
+    
     """
 
     # Instantiate PEP
@@ -152,7 +162,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

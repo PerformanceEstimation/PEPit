@@ -49,7 +49,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, ver
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -63,20 +63,30 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, ver
     Example:
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 35 scalar constraint(s) ...
-                         function 1 : 35 scalar constraint(s) added
+        			Function 1 : Adding 35 scalar constraint(s) ...
+        			Function 1 : 35 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.19230811671886025
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19230769057979225
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 6.487419074163725e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 9.613757534126084e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.03711530175072e-09
+        (PEPit) Final upper bound (dual): 0.1923076915693468 and lower bound (primal example): 0.19230769057979225 
+        (PEPit) Duality gap: absolute: 9.895545494131852e-10 and relative: 5.145683703182944e-09
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -113,7 +123,7 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, ver
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

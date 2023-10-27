@@ -51,7 +51,7 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
         L (float): the Lipschitz constant.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -64,21 +64,31 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 15x15
+        (PEPit) Setting up the problem: size of the Gram matrix: 15x15
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 49 scalar constraint(s) ...
-                         function 1 : 49 scalar constraint(s) added
-                         function 2 : Adding 84 scalar constraint(s) ...
-                         function 2 : 84 scalar constraint(s) added
+        			Function 1 : Adding 49 scalar constraint(s) ...
+        			Function 1 : 49 scalar constraint(s) added
+        			Function 2 : Adding 42 scalar constraint(s) ...
+        			Function 2 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06631469189357277
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06631412695373873
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 2.8742474650345073e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.008097664100977e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.46120931031091e-08
+        (PEPit) Final upper bound (dual): 0.06631413194070576 and lower bound (primal example): 0.06631412695373873 
+        (PEPit) Duality gap: absolute: 4.986967033770995e-09 and relative: 7.520218184052915e-08
         *** Example file: worst-case performance of the Optimistic Gradient Method***
-                PEPit guarantee:         ||x(n) - x(n-1)||^2 <= 0.0663147 ||x0 - xs||^2
-
+        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.0663141 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -123,7 +133,7 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Optimistic Gradient Method***')
-        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

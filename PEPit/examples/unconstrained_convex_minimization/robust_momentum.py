@@ -65,7 +65,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
         lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -78,20 +78,30 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     
     Examples:
         >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        (PEPit) Setting up the problem: size of the Gram matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5285548355275751
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5285548454743232
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.797521527290181e-08
+        (PEPit) Final upper bound (dual): 0.5285548474610776 and lower bound (primal example): 0.5285548454743232 
+        (PEPit) Duality gap: absolute: 1.9867544276408466e-09 and relative: 3.758842520605294e-09
         *** Example file: worst-case performance of the Robust Momentum Method ***
-                PEPit guarantee:         v(x_(n+1)) <= 0.528555 v(x_n)
-                Theoretical guarantee:   v(x_(n+1)) <= 0.528555 v(x_n)
-
+        	PEPit guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
+        	Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
+    
     """
 
     # Instantiate PEP
@@ -149,7 +159,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

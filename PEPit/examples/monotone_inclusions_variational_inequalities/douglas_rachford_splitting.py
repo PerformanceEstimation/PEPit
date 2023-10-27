@@ -61,7 +61,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
         theta (float): algorithm parameter.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -74,22 +74,32 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 4 scalar constraint(s) ...
-                         function 1 : 4 scalar constraint(s) added
-                         function 2 : Adding 2 scalar constraint(s) ...
-                         function 2 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        			Function 2 : Adding 1 scalar constraint(s) ...
+        			Function 2 : 1 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.928770707839351
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.297473722026212e-09
+        		All the primal scalar constraints are verified up to an error of 1.64989273354621e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.4855088898444464e-07
+        (PEPit) Final upper bound (dual): 0.9287707057295752 and lower bound (primal example): 0.928770707839351 
+        (PEPit) Duality gap: absolute: -2.109775798508906e-09 and relative: -2.2715787445719413e-09
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-                PEPit guarantee:         ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
-                Theoretical guarantee:   ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
-
+        	PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+        	Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+    
     """
 
     # Instantiate PEP
@@ -144,7 +154,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

@@ -60,7 +60,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -73,22 +73,32 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
+        (PEPit) Setting up the problem: size of the Gram matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 90 scalar constraint(s) ...
-                         function 1 : 90 scalar constraint(s) added
-                         function 2 : Adding 110 scalar constraint(s) ...
-                         function 2 : 110 scalar constraint(s) added
+        			Function 1 : Adding 90 scalar constraint(s) ...
+        			Function 1 : 90 scalar constraint(s) added
+        			Function 2 : Adding 110 scalar constraint(s) ...
+        			Function 2 : 110 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.027792700548325236
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.027791729871150122
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.497713205381149e-09
+        		All the primal scalar constraints are verified up to an error of 7.050520128663862e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.997247465328208e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.051666237897567e-08
+        (PEPit) Final upper bound (dual): 0.027791732322924277 and lower bound (primal example): 0.027791729871150122 
+        (PEPit) Duality gap: absolute: 2.4517741552265715e-09 and relative: 8.821955907723812e-08
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-                PEPit guarantee:         f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
-                Theoretical guarantee:   f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
-
+        	PEPit guarantee:		 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+        	Theoretical guarantee:	 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -135,7 +145,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
-        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
         if theta == 1 and alpha == 1 and L == 1 and n <= 10:
             print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(theoretical_tau))
 

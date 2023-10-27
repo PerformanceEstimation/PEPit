@@ -56,7 +56,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -71,24 +71,34 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> L = 1
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 14x14
+        (PEPit) Setting up the problem: size of the Gram matrix: 14x14
         (PEPit) Setting up the problem: performance measure is minimum of 3 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                         function 1 : Adding 12 scalar constraint(s) ...
-                         function 1 : 12 scalar constraint(s) added
-                         function 2 : Adding 12 scalar constraint(s) ...
-                         function 2 : 12 scalar constraint(s) added
-                         function 3 : Adding 25 scalar constraint(s) ...
-                         function 3 : 25 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        			Function 2 : Adding 12 scalar constraint(s) ...
+        			Function 2 : 12 scalar constraint(s) added
+        			Function 3 : Adding 25 scalar constraint(s) ...
+        			Function 3 : 25 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.33333185324089176
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3333333333330493
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 4.207745263329343e-14
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.1994184545490794e-14
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.904203090267206e-13
+        (PEPit) Final upper bound (dual): 0.3333333333330737 and lower bound (primal example): 0.3333333333330493 
+        (PEPit) Duality gap: absolute: 2.4369395390522186e-14 and relative: 7.310818617162885e-14
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***
-                PEPit guarantee:         min_t Dh(x_(t-1), x_(t)) <= 0.333332 (F(x_0) - F(x_n))
-                Theoretical guarantee:   min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
-
+        	PEPit guarantee:		 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
+        	Theoretical guarantee:	 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
+    
     """
 
     # Instantiate PEP
@@ -138,7 +148,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips_2 in Bregman distance ***')
-        print('\tPEPit guarantee:\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_t Dh(x_(t-1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

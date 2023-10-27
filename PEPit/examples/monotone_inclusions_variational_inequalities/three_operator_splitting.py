@@ -59,7 +59,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
         theta (float): overrelaxation parameter.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -72,23 +72,33 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 8x8
+        (PEPit) Setting up the problem: size of the Gram matrix: 8x8
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
-                         function 2 : Adding 2 scalar constraint(s) ...
-                         function 2 : 2 scalar constraint(s) added
-                         function 3 : Adding 2 scalar constraint(s) ...
-                         function 3 : 2 scalar constraint(s) added
+        			Function 1 : Adding 1 scalar constraint(s) ...
+        			Function 1 : 1 scalar constraint(s) added
+        			Function 2 : Adding 1 scalar constraint(s) ...
+        			Function 2 : 1 scalar constraint(s) added
+        			Function 3 : Adding 2 scalar constraint(s) ...
+        			Function 3 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.7796889999218343
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7796890707911295
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.062458310263129e-08
+        		All the primal scalar constraints are verified up to an error of 4.036799094997434e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.0385673195889567e-06
+        (PEPit) Final upper bound (dual): 0.7796890635199223 and lower bound (primal example): 0.7796890707911295 
+        (PEPit) Duality gap: absolute: -7.27120719190566e-09 and relative: -9.325778011134313e-09
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-                PEPit guarantee:         ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
-
+        	PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
+    
     """
 
     # Instantiate PEP
@@ -129,7 +139,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
-        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

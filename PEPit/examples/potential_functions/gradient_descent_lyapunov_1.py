@@ -50,7 +50,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -64,20 +64,30 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
     Examples:
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 3.3902995517363515e-18
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 2.458069122242756e-09
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.1620786701078888e-09
+        		All the primal scalar constraints are verified up to an error of 2.157699467921729e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2239204636309262e-08
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 2.458069122242756e-09 
+        (PEPit) Duality gap: absolute: -2.458069122242756e-09 and relative: -1.0
         *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
-                PEPit guarantee:        V_(n+1) - V_(n) <= 3.3903e-18
-                Theoretical guarantee:  V_(n+1) - V_(n) <= 0.0
-
+        	PEPit guarantee:		V_(n+1) - V_(n) <= 0.0
+        	Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0
+    
     """
 
     # Instantiate PEP
@@ -119,7 +129,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t'
+        print('\tPEPit guarantee:\t\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
         if gamma == 1 / L:
             print('\tTheoretical guarantee:\t'

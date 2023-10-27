@@ -57,7 +57,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
-		verbose (int): level of information details to print.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -70,25 +70,32 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
+        (PEPit) Setting up the problem: size of the Gram matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
-                         function 2 : Adding 20 scalar constraint(s) ...
-                         function 2 : 20 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        			Function 2 : Adding 20 scalar constraint(s) ...
+        			Function 2 : 20 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.052630167313517565
-        (PEPit) Postprocessing: solver's output is not entirely feasible (smallest eigenvalue of the Gram matrix is: -7.28e-06 < 0).
-         Small deviation from 0 may simply be due to numerical error. Big ones should be deeply investigated.
-         In any case, from now the provided values of parameters are based on the projection of the Gram matrix onto the cone of symmetric semi-definite matrix.
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.052631584231766296
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.992753634406465e-09
+        		All the primal scalar constraints are verified up to an error of 1.4782311839878215e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.756506718232842e-08
+        (PEPit) Final upper bound (dual): 0.05263158967733932 and lower bound (primal example): 0.052631584231766296 
+        (PEPit) Duality gap: absolute: 5.445573027229589e-09 and relative: 1.0346587712901982e-07
         *** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***
-                PEPit guarantee:         f(x_n)-f_* <= 0.0526302 ||x0 - xs||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -135,7 +142,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Accelerated Proximal Gradient Method in function values***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
