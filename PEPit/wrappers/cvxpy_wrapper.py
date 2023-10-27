@@ -264,6 +264,10 @@ class CvxpyWrapper(Wrapper):
         if self.verbose > 1:
             kwargs['verbose'] = True
 
+        if "solver" in kwargs.keys():
+            if kwargs["solver"] is None:
+                kwargs["solver"] = "MOSEK"
+
         # Verify is CVXPY will try MOSEK first.
         if "solver" not in kwargs.keys() or kwargs["solver"] == "MOSEK":
 
