@@ -112,7 +112,7 @@ class PSDMatrix(object):
 
     def __getitem__(self, item):
         """
-        Access to a element of the underlying matrix of expressions
+        Access to an element of the underlying matrix of expressions
         using subscript of self.
 
         Args:
@@ -157,7 +157,8 @@ class PSDMatrix(object):
                                                            after the corresponding PEP was solved numerically.
 
         Raises:
-            ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!") if the PEP has not been solved yet.
+            ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
+            if the PEP has not been solved yet.
 
         """
 

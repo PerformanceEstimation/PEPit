@@ -11,8 +11,8 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
         .. math:: x \\approx \\mathrm{prox}_{\\gamma f}(x_0)\\triangleq\\arg\\min_x \\left\\{ \\gamma f(x) + \\frac{1}{2}\\|x-x_0\\|^2\\right\\},
 
-    where the meaning of :math:`\\approx` depends on the option "opt" and is explained below.
-    The notions of inaccuracy implemented within this routine are specified using primal and dual proximal problems, denoted by
+    where the meaning of :math:`\\approx` depends on the option "opt" and is explained below. The notions of inaccuracy
+    implemented within this routine are specified using primal and dual proximal problems, denoted by
 
         .. math::
             :nowrap:
@@ -33,11 +33,11 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
         .. math:: \\Phi^{(p)}_{\\gamma f}(x;x_0)-\\Phi^{(d)}_{\\gamma f}(v;x_0) \\leqslant \\varepsilon,
 
-    where :math:`\\varepsilon\\geqslant 0` is the error magnitude, which is returned to the user so that one can constrain
-    it to be bounded by some other values.
+    where :math:`\\varepsilon\\geqslant 0` is the error magnitude, which is returned to the user so that one can
+    constrain it to be bounded by some other values.
 
-    **Relation to the exact proximal operation:**  In the exact case (no error in the computation, :math:`\\varepsilon=0`),
-    :math:`v` corresponds to the solution of the dual proximal problem and one can write
+    **Relation to the exact proximal operation:**  In the exact case (no error in the computation,
+    :math:`\\varepsilon=0`), :math:`v` corresponds to the solution of the dual proximal problem and one can write
 
         .. math:: x = x_0-\\gamma g,
 
@@ -48,7 +48,8 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
         .. math:: x = x_0-\\gamma v + e,
 
-    where :math:`v` is an :math:`\\epsilon`-subgradient of :math:`f` at :math:`x` (notation :math:`v\\in\\partial_{\\epsilon} f(x)`)
+    where :math:`v` is an :math:`\\epsilon`-subgradient of :math:`f` at :math:`x`
+    (notation :math:`v\\in\\partial_{\\epsilon} f(x)`)
     and :math:`e` is some additional computation error. Those elements allow for a common convenient reformulation of
     the primal-dual gap, written in terms of the magnitudes of :math:`\\epsilon` and of :math:`e`:
 
@@ -63,7 +64,8 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
         This approximation requirement is used in one PEPit example: an accelerated inexact forward backward.
 
-        - 'PD_gapII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [1,5]) :
+        - 'PD_gapII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed
+                       (see, e.g., [1,5]) :
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;x_0)-\\Phi^{(d)}_{\\gamma f}(g;x_0) \\leqslant \\varepsilon,
 
@@ -71,7 +73,8 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         requirement is used in two PEPit examples: in a relatively inexact proximal point algorithm and in a partially
         inexact Douglas-Rachford splitting.
 
-        - 'PD_gapIII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed (see, e.g., [3]):
+        - 'PD_gapIII' : the constraint is stronger than the vanilla primal-dual gap, as more structure is imposed
+                        (see, e.g., [3]):
 
             .. math:: \\Phi^{(p)}_{\\gamma f}(x;x_0)-\\Phi^{(d)}_{\\gamma f}(\\tfrac{x_0 - x}{\\gamma};x_0) \\leqslant \\varepsilon,
 

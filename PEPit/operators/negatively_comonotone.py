@@ -25,7 +25,8 @@ class NegativelyComonotoneOperator(Function):
 
     References:
         `[1] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
-        Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity.
+        Convergence of proximal point and extragradient-based methods beyond monotonicity:
+        the case of negative comonotonicity.
         International Conference on Machine Learning.
         <https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf>`_
 

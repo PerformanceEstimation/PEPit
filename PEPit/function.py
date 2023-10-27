@@ -33,7 +33,8 @@ class Function(object):
         list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`Function`.
         list_of_psd (list): The list of :class:`PSDMatrix` objects associated with this :class:`Function`.
         list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
-        list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated associated with class interpolation constraints.
+        list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated with a class
+                                  interpolation constraints.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
@@ -350,7 +351,7 @@ class Function(object):
         # Separate all leaf function in 3 categories based on their need
         for function, weight in self.decomposition_dict.items():
             # If function has already been evaluated on point, then one should reuse some evaluation.
-            # Note the method "is_already_evaluated_on_point" returns a non empty tuple if the function has already
+            # Note the method "is_already_evaluated_on_point" returns a non-empty tuple if the function has already
             # been evaluated, and None otherwise.
             # Those outputs are respectively evaluated as True and False by the following test.
             if function._is_already_evaluated_on_point(point=point):
@@ -368,7 +369,8 @@ class Function(object):
                 list_of_functions_which_need_gradient_and_function_value.append((function, weight))
 
         # Return the 3 lists in a specific order: from the smallest need to the biggest one.
-        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value
+        return list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+            list_of_functions_which_need_gradient_and_function_value
 
     def add_point(self, triplet):
         """
@@ -460,7 +462,7 @@ class Function(object):
 
         # If those values already exist, simply return them.
         # If not, instantiate them before returning.
-        # Note if the non differentiable case, the gradient is recomputed anyway.
+        # Note if the non-differentiable case, the gradient is recomputed anyway.
         associated_grad_and_function_val = self._is_already_evaluated_on_point(point=point)
         # "associated_grad_and_function_val" is a tuple (True) or None (False)
 
@@ -476,7 +478,9 @@ class Function(object):
             f = associated_grad_and_function_val[-1]
 
         # Here we separate the list of leaf functions according to their needs
-        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only, list_of_functions_which_need_gradient_and_function_value = self._separate_leaf_functions_regarding_their_need_on_point(point=point)
+        list_of_functions_which_need_nothing, list_of_functions_which_need_gradient_only,\
+            list_of_functions_which_need_gradient_and_function_value =\
+            self._separate_leaf_functions_regarding_their_need_on_point(point=point)
 
         # If "self" has not been evaluated on "point" yet, then we need to compute new gradient and function value
         # Here we deal with the function value computation
@@ -498,7 +502,8 @@ class Function(object):
         # either because it is not differentiable or because it had never been computed so far.
 
         # If "self" gradient is determined by its leaf functions, then we compute it.
-        if list_of_functions_which_need_gradient_and_function_value == list() and list_of_functions_which_need_gradient_only == list():
+        if list_of_functions_which_need_gradient_and_function_value == list()\
+                and list_of_functions_which_need_gradient_only == list():
             g = Point(is_leaf=False, decomposition_dict=dict())
             for function, weight in self.decomposition_dict.items():
                 g += weight * function.gradient(point=point)

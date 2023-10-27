@@ -3,8 +3,9 @@ from PEPit.function import Function
 
 class CocoerciveStronglyMonotoneOperator(Function):
     """
-    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing some necessary constraints verified by the class of cocoercive and strongly monotone (maximally) operators.
+    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    of :class:`Function`, implementing some necessary constraints verified by the class of cocoercive
+    and strongly monotone (maximally) operators.
 
     Warnings:
         Those constraints might not be sufficient, thus the caracterized class might contain more operators.
@@ -16,7 +17,8 @@ class CocoerciveStronglyMonotoneOperator(Function):
         mu (float): strong monotonicity parameter
         beta (float): cocoercivity parameter
 
-    Cocoercive operators are characterized by the parameters :math:`\\mu` and :math:`\\beta`, hence can be instantiated as
+    Cocoercive operators are characterized by the parameters :math:`\\mu` and :math:`\\beta`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP

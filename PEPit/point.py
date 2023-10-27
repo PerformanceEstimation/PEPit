@@ -180,7 +180,7 @@ class Point(object):
 
         """
 
-        # Multiplying by a scalar value is applying an homothety
+        # Multiplying by a scalar value is applying a homothety
         if isinstance(other, int) or isinstance(other, float):
             # Build the decomposition of the new point
             new_decomposition_dict = dict()
@@ -267,7 +267,7 @@ class Point(object):
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self._value is None:
-            # If leaf, the PEP would have filled the attribute at the end of the solve.
+            # If leaf, the PEP would have filled the attribute after solving the problem.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
             # If linear combination, combine the values of the leaf, and store the result before returning it.

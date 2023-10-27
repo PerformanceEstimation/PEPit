@@ -213,7 +213,8 @@ class MosekWrapper(Wrapper):
         Recover all dual variables from solver.
 
         Returns:
-             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver
+                                 (same ordering).
              residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
 
         Raises:
