@@ -70,14 +70,6 @@ class MosekWrapper(Wrapper):
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 0
 
-        self.env = None
-        self.task = None
-
-    def setup_environment(self):
-        """
-        Create MOSEK environment and task.
-
-        """
         import mosek
 
         self.env = mosek.Env()

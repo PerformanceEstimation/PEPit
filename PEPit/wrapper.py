@@ -63,13 +63,6 @@ class Wrapper(object):
         self.solver_name = None
         self.verbose = verbose
 
-    def setup_environment(self):
-        """
-        May be overwritten if necessary.
-
-        """
-        pass
-
     def check_license(self):
         """
         Check that there is a valid available license for the solver.
