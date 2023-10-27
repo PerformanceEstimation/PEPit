@@ -92,6 +92,8 @@ class RsiEbFunction(Function):
         """
         Formulates the list of necessary conditions for interpolation of self, see [1, Theorem 1].
         """
+        if self.list_of_stationary_points == list():
+            self.stationary_point()
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
                                                       list_of_points_2=self.list_of_points,

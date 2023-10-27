@@ -88,7 +88,7 @@ class BlockSmoothConvexFunction(Function):
 
         # Set tables_of_constraints attributes
         for k in range(self.partition.get_nb_blocks()):
-            self.tables_of_constraints["Cocoercivity_block_{}".format(k)] = [[]*len(self.list_of_points)]
+            self.tables_of_constraints["Cocoercivity_block_{}".format(k)] = [[]]*len(self.list_of_points)
 
         # Browse list of points and create interpolation constraints
         for i, point_i in enumerate(self.list_of_points):

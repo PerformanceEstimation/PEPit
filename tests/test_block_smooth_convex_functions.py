@@ -50,9 +50,9 @@ class TestConstraintsBlockSmoothConvex(unittest.TestCase):
         self.assertEqual(len(self.func3.L), 3)
 
     def test_interpolation_numbers(self):
-        self.func1.add_class_constraints()
-        self.func2.add_class_constraints()
-        self.func3.add_class_constraints()
+        self.func1.set_class_constraints()
+        self.func2.set_class_constraints()
+        self.func3.set_class_constraints()
 
         self.assertEqual(len(self.func1.list_of_class_constraints), 6)
         self.assertEqual(len(self.func2.list_of_class_constraints), 6)

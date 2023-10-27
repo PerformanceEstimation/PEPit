@@ -85,12 +85,14 @@ class ConvexQGFunction(Function):
         Formulates the list of interpolation constraints for self (quadratically maximally growing convex function);
         see [1, Theorem 2.6].
         """
-        if self.list_of_stationary_points != list():
-            self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
-                                                          list_of_points_2=self.list_of_points,
-                                                          constraint_name="*cocoercivity",
-                                                          set_class_constraint_i_j=self.set_star_cocoercivity_constraint_i_j,
-                                                          )
+        if self.list_of_stationary_points == list():
+            self.stationary_point()
+
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="*cocoercivity",
+                                                      set_class_constraint_i_j=self.set_star_cocoercivity_constraint_i_j,
+                                                      )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,

@@ -77,15 +77,15 @@ class TestFunctionsAndOperators(unittest.TestCase):
         ]
 
         self.all_points = [
-            self.point1
-            , self.point2,
+            self.point1,
+            self.point2,
         ]
 
         self.operators_weights = np.random.randn(len(self.all_functions_and_operators))
-        self.new_operator = np.dot(self.operators_weights, self.all_functions_and_operators)
+        self.new_operator: Function = np.dot(self.operators_weights, self.all_functions_and_operators)
 
         self.points_weights = np.random.randn(len(self.all_points))
-        self.new_point = np.dot(self.points_weights, self.all_points)
+        self.new_point: Point = np.dot(self.points_weights, self.all_points)
 
     def test_is_instance(self):
 
@@ -151,26 +151,34 @@ class TestFunctionsAndOperators(unittest.TestCase):
             self.new_operator.oracle(point)
         self.new_operator.oracle(self.new_point)
         self.new_operator.stationary_point()
-        num_points_eval = len(self.all_points) + 2
+
+        # Call stationary point on all functions
+        for function in self.all_functions_and_operators:
+            function.stationary_point()
+
+        # Set the number of points each function has been evaluated on.
+        # Note self.new_operator has been evaluated on 1 point less than the other functions.
+        num_points_eval = len(self.all_points) + 3
 
         # Add function class constraints
         for function in self.all_functions_and_operators:
-            function.add_class_constraints()
+            function.set_class_constraints()
 
         # Verify the number of points stored in list_of_points attributes
         for function in self.all_functions_and_operators:
+            self.assertEqual(len(function.list_of_stationary_points), 1)
             self.assertEqual(len(function.list_of_points), num_points_eval)
-            self.assertEqual(len(function.list_of_stationary_points), 0)
-        self.assertEqual(len(self.new_operator.list_of_points), num_points_eval)
+        self.assertEqual(len(self.new_operator.list_of_points), num_points_eval - 1)
         self.assertEqual(len(self.new_operator.list_of_stationary_points), 1)
 
         # Verify the number of class constraints is coherent with the function classes
         self.assertEqual(len(self.func1.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func2.list_of_class_constraints), num_points_eval ** 2)
         self.assertEqual(len(self.func3.list_of_class_constraints), num_points_eval ** 2)
-        self.assertEqual(len(self.func4.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
+        self.assertEqual(len(self.func4.list_of_class_constraints), num_points_eval * (num_points_eval - 1)
+                         + (num_points_eval - 1))
         self.assertEqual(len(self.func5.list_of_class_constraints), num_points_eval ** 2)
-        self.assertEqual(len(self.func6.list_of_class_constraints), 0)
+        self.assertEqual(len(self.func6.list_of_class_constraints), 2 * (num_points_eval - 1))
         self.assertEqual(len(self.func7.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func8.list_of_class_constraints), num_points_eval ** 2)
         self.assertEqual(len(self.func9.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
