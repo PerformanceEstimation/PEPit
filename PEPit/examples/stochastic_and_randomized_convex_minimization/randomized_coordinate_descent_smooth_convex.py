@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxpy", verbose=1):
+def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -19,7 +19,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
     .. math:: \\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\||^2
 
     is decreasing in expectation over the **randomized block-coordinate descent** algorithm. We use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution
+    of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
     In short, for given values of :math:`L`, :math:`d`, and :math:`\\gamma`, it computes the worst-case value
     of :math:`\\mathbb{E}[\\phi(t, x_t)]` such that :math:`\\phi(x_{t-1}) \\leqslant 1`.
@@ -55,7 +56,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
         d (int): the dimension.
         t (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -68,25 +70,34 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : Adding 12 scalar constraint(s) ...
-                 function 1 : 12 scalar constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                 partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
-                 partition 1 with 2 blocks: 1 scalar constraint(s) added
+        			Partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
+        			Partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 1.0000000759647794
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0000000021855517
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.888278544731664e-09
+        		All the primal scalar constraints are verified up to an error of 8.385744333248845e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.347767642940552e-08
+        (PEPit) Final upper bound (dual): 1.0000000024690172 and lower bound (primal example): 1.0000000021855517 
+        (PEPit) Duality gap: absolute: 2.8346547331636884e-10 and relative: 2.834654726968404e-10
         *** Example file: worst-case performance of randomized  coordinate gradient descent ***
-            PEPit guarantee:	     E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
-            Theoretical guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
-
+        	PEPit guarantee:		 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
+        	Theoretical guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
+    
     """
 
     # Instantiate PEP
@@ -125,7 +136,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 1.
@@ -133,7 +144,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized  coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[phi(t, x_t)] <= {:.6} phi(t-1, x_(t-1))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -142,4 +153,6 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4,
+                                                                                wrapper="cvxpy", solver=None,
+                                                                                verbose=1)

@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
+def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -75,7 +75,8 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
         mu (float): the strong convexity parameter.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -88,21 +89,31 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
 
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        >>> pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.23893532450841679
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.23892507617696113
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.2421790162612716e-08
+        		All the primal scalar constraints are verified up to an error of 2.3083153937765444e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.128560722969591e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.890478893964213e-08
+        (PEPit) Final upper bound (dual): 0.23892508270020568 and lower bound (primal example): 0.23892507617696113 
+        (PEPit) Duality gap: absolute: 6.523244555634022e-09 and relative: 2.7302469292936613e-08
         *** Example file: worst-case performance of the Triple Momentum Method ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.238935 ||x_0-x_*||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -144,7 +155,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = rho ** (2 * n) * L / 2 * kappa
@@ -152,7 +163,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Triple Momentum Method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -160,4 +171,4 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, wrapper="cvxpy", solver=None, verbose=1)

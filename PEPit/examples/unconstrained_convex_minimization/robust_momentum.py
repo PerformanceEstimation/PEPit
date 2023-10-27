@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
+def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -12,8 +12,8 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
-    This code computes a worst-case guarantee for the **robust momentum method** (RMM). That is, it computes the smallest
-    possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
+    This code computes a worst-case guarantee for the **robust momentum method** (RMM).
+    That is, it computes the smallest possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
 
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
@@ -28,7 +28,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
                 q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla f(y_t) - \\mu (y_t - x_\\star)\|^2 \\right),
             \\end{eqnarray}
 
-     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
+    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
 
     **Algorithm**:
 
@@ -62,9 +62,11 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
     Args:    
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
+        lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`,
+                     it is the Triple Momentum Method.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -76,21 +78,31 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
          theoretical_tau (float): theoretical value
     
     Examples:
-        >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        >>> pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5285548355275751
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5285548454743232
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.797521527290181e-08
+        (PEPit) Final upper bound (dual): 0.5285548474610776 and lower bound (primal example): 0.5285548454743232 
+        (PEPit) Duality gap: absolute: 1.9867544276408466e-09 and relative: 3.758842520605294e-09
         *** Example file: worst-case performance of the Robust Momentum Method ***
-                PEPit guarantee:         v(x_(n+1)) <= 0.528555 v(x_n)
-                Theoretical guarantee:   v(x_(n+1)) <= 0.528555 v(x_n)
-
+        	PEPit guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
+        	Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
+    
     """
 
     # Instantiate PEP
@@ -140,7 +152,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = rho ** 2
@@ -148,7 +160,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -156,4 +168,4 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_robust_momentum(mu=0.1, L=1, lam=0.2, wrapper="cvxpy", solver=None, verbose=1)

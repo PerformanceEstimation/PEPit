@@ -4,7 +4,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -63,7 +63,8 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
         gamma (float): proximal step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -75,23 +76,33 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        >>> pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 6 scalar constraint(s) ...
-                         function 1 : 6 scalar constraint(s) added
-                         function 2 : Adding 6 scalar constraint(s) ...
-                         function 2 : 6 scalar constraint(s) added
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
+        			Function 2 : Adding 6 scalar constraint(s) ...
+        			Function 2 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.6560999999942829
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6561000457701127
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.5629838208999835e-09
+        		All the primal scalar constraints are verified up to an error of 1.0696532309201201e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.6272376343894344e-07
+        (PEPit) Final upper bound (dual): 0.6561000458035535 and lower bound (primal example): 0.6561000457701127 
+        (PEPit) Duality gap: absolute: 3.3440805680129415e-11 and relative: 5.096906469634138e-11
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
-                PEPit guarantee:         ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
-                Theoretical guarantee:   ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
-
+        	PEPit guarantee:		 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+        	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -122,7 +133,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - mu * gamma) ** 2, (1 - L * gamma) ** 2) ** n
@@ -130,7 +141,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Gradient Method in function values***')
-        print('\tPEPit guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
@@ -138,4 +149,4 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, wrapper="cvxpy", solver=None, verbose=1)

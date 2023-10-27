@@ -4,7 +4,7 @@ from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
+def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone variational inequality
 
@@ -46,7 +46,8 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
     <https://arxiv.org/pdf/2205.08446.pdf>`_
     
     `[3] Y. Cai, A. Oikonomou, W. Zheng (2022).
-    Tight Last-Iterate Convergence of the Extragradient and the Optimistic Gradient Descent-Ascent Algorithm for Constrained Monotone Variational Inequalities.
+    Tight Last-Iterate Convergence of the Extragradient and the Optimistic Gradient Descent-Ascent Algorithm
+    for Constrained Monotone Variational Inequalities.
     <https://arxiv.org/pdf/2204.09228.pdf>`_
 
     Args:
@@ -54,7 +55,8 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
         gamma (float): the step-size.
         L (float): the Lipschitz constant.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -66,22 +68,32 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 20x20
+        >>> pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 20x20
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 144 scalar constraint(s) ...
-                         function 1 : 144 scalar constraint(s) added
-                         function 2 : Adding 84 scalar constraint(s) ...
-                         function 2 : 84 scalar constraint(s) added
+        			Function 1 : Adding 144 scalar constraint(s) ...
+        			Function 1 : 144 scalar constraint(s) added
+        			Function 2 : Adding 42 scalar constraint(s) ...
+        			Function 2 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.06026126041500441
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06026638367645951
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0031589157511916e-09
+        		All the primal scalar constraints are verified up to an error of 8.813598739720874e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 6.659688382791896e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.840255201567632e-08
+        (PEPit) Final upper bound (dual): 0.060266385379867796 and lower bound (primal example): 0.06026638367645951 
+        (PEPit) Duality gap: absolute: 1.7034082824829433e-09 and relative: 2.8264650682007106e-08
         *** Example file: worst-case performance of the Past Extragradient Method***
-                PEPit guarantee:         ||x(n) - x(n-1)||^2 <= 0.0602613 ||x0 - xs||^2
-
+        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -117,7 +129,7 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -125,11 +137,11 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Past Extragradient Method***')
-        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)

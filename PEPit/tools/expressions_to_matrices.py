@@ -4,7 +4,7 @@ from PEPit.point import Point
 from PEPit.expression import Expression
 
 
-def _expression_to_matrices(expression):
+def expression_to_matrices(expression):
     """
     Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
 
@@ -53,7 +53,7 @@ def _expression_to_matrices(expression):
     return Gweights, Fweights, cons
 
 
-def _expression_to_sparse_matrices(expression):
+def expression_to_sparse_matrices(expression):
     """
     Translate an expression from an :class:`Expression` to a matrix, a vector, and a constant such that
 

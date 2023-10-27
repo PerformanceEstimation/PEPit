@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import BlockSmoothConvexFunction
 
 
-def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
+def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -40,7 +40,8 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
         L (list): list of floats, smoothness parameters (for each block).
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -53,24 +54,33 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
 
     Example:
         >>> L = [1., 2., 10.]
-        >>> pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 34x34
+        >>> pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 34x34
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-		         function 1 : Adding 330 scalar constraint(s) ...
-		         function 1 : 330 scalar constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 330 scalar constraint(s) ...
+        			Function 1 : 330 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-		         partition 1 with 3 blocks: Adding 363 scalar constraint(s)...
-		         partition 1 with 3 blocks: 363 scalar constraint(s) added
+        			Partition 1 with 3 blocks: Adding 363 scalar constraint(s)...
+        			Partition 1 with 3 blocks: 363 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.6485910874364834
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.4892758367502887
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.745171522956692e-09
+        		All the primal scalar constraints are verified up to an error of 7.4478840872416185e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 7.835133702255824e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.797651214794727e-07
+        (PEPit) Final upper bound (dual): 1.4892758368167314 and lower bound (primal example): 1.4892758367502887 
+        (PEPit) Duality gap: absolute: 6.644262917632204e-11 and relative: 4.461405169998919e-11
         *** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***
-	        PEPit guarantee:	  f(x_n)-f_* <= 0.648591 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 1.48928 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -104,7 +114,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -112,7 +122,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -120,4 +130,4 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", verbose=1):
 
 if __name__ == "__main__":
     L = [1., 2., 10.]
-    pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", solver=None, verbose=1)

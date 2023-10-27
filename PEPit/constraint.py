@@ -10,7 +10,7 @@ class Constraint(object):
         name (str): A name set through the set_name method. None is no name is given.
         expression (Expression): The :class:`Expression` that is compared to 0.
         equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
-        _value (float): numerical value of self.expression obtained after solving the PEP via SDP solver.
+        _value (float): numerical value of `self.expression` obtained after solving the PEP via SDP solver.
                         Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
         _dual_variable_value (float): the associated dual variable from the numerical solution to the corresponding PEP.
                                       Set to None before the call to `PEP.solve` from the :class:`PEP`
@@ -66,7 +66,7 @@ class Constraint(object):
         # Store the underlying expression
         self.expression = expression
 
-        # Verify that 'equality_or_inequality' is well defined and store its value
+        # Verify that 'equality_or_inequality' is well-defined and store its value
         assert equality_or_inequality in {'equality', 'inequality'}
         self.equality_or_inequality = equality_or_inequality
 
@@ -125,14 +125,15 @@ class Constraint(object):
                                                after the corresponding PEP was solved numerically.
 
         Raises:
-            ValueError("The PEP must be solved to evaluate Constraints dual variables!") if the PEP has not been solved yet.
+            ValueError("The PEP must be solved to evaluate Constraints dual variables!")
+            if the PEP has not been solved yet.
 
         """
 
         # If the attribute _dual_variable_value is not None, then simply return it.
         # Otherwise, raise a ValueError.
         if self._dual_variable_value is None:
-            # The PEP would have filled the attribute at the end of the solve.
+            # The PEP would have filled the attribute after solving the problem.
             raise ValueError("The PEP must be solved to evaluate Constraints dual variables!")
 
         return self._dual_variable_value

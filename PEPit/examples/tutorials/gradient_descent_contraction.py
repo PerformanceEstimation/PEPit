@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1):
+def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -43,6 +43,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
         gamma (float): step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
@@ -56,21 +57,31 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8100016613979604
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8100000029203449
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.896548260018477e-09
+        		All the primal scalar constraints are verified up to an error of 3.042855638898251e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.0078754315331366e-08
+        (PEPit) Final upper bound (dual): 0.8100000036427537 and lower bound (primal example): 0.8100000029203449 
+        (PEPit) Duality gap: absolute: 7.224087994472939e-10 and relative: 8.918627121515396e-10
         *** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***
-                PEP-it guarantee:        ||x_n - y_n||^2 <= 0.810002 ||x_0 - y_0||^2
-                Theoretical guarantee:   ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
-
+        	PEP-it guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
+        	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
+    
     """
 
     # Instantiate PEP
@@ -98,7 +109,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max((1 - gamma * L) ** 2, (1 - gamma * mu) ** 2) ** n
@@ -115,4 +126,6 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", verbose=1)
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1,
+                                                                 wrapper="cvxpy", solver=None,
+                                                                 verbose=1)

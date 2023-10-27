@@ -3,7 +3,7 @@ from PEPit.operators import MonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
+def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -18,7 +18,8 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
 
     is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
 
-    **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
+    **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows,
+    for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math:: x_{t+1} = J_{\\alpha A}(x_t),
 
@@ -38,7 +39,8 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
         alpha (float): the step-size.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -50,21 +52,31 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
+        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 110 scalar constraint(s) ...
-                         function 1 : 110 scalar constraint(s) added
+        			Function 1 : Adding 55 scalar constraint(s) ...
+        			Function 1 : 55 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03874199421010509
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.038742046287953344
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.905660281263931e-09
+        		All the primal scalar constraints are verified up to an error of 5.7862823421572784e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.069601027862802e-08
+        (PEPit) Final upper bound (dual): 0.03874204889860354 and lower bound (primal example): 0.038742046287953344 
+        (PEPit) Duality gap: absolute: 2.610650196022135e-09 and relative: 6.73854493027619e-08
         *** Example file: worst-case performance of the Proximal Point Method***
-                PEPit guarantee:         ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
-                Theoretical guarantee:   ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
-
+        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
+        	Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -93,7 +105,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - 1 / n) ** (n - 1) / n
@@ -101,7 +113,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
@@ -109,4 +121,4 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2, n=10, wrapper="cvxpy", solver=None, verbose=1)

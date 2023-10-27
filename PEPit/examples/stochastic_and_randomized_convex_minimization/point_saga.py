@@ -5,7 +5,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
+def wc_point_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the finite sum minimization problem
 
@@ -26,11 +26,13 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
 
     .. math:: \\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right] \\leqslant \\tau(n, L, \\mu) V\\left(x^{(0)}\\right),
 
-    is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience; as the
-    bound is valid for all :math:`x^{(0)}`, it is also valid for any pair of consecutive iterates of the algorithm).
+    is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience;
+    as the bound is valid for all :math:`x^{(0)}`,
+    it is also valid for any pair of consecutive iterates of the algorithm).
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right]` when :math:`V\\left(x^{(0)}\\right) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`\\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right]` when :math:`V\\left(x^{(0)}\\right) \\leqslant 1`.
 
     **Algorithm**:
     Point SAGA is described by
@@ -59,7 +61,8 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
         mu (float): the strong convexity parameter.
         n (int): number of functions.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -71,39 +74,49 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 31x31
+        >>> pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 31x31
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 10 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
-                         function 2 : Adding 2 scalar constraint(s) ...
-                         function 2 : 2 scalar constraint(s) added
-                         function 3 : Adding 2 scalar constraint(s) ...
-                         function 3 : 2 scalar constraint(s) added
-                         function 4 : Adding 2 scalar constraint(s) ...
-                         function 4 : 2 scalar constraint(s) added
-                         function 5 : Adding 2 scalar constraint(s) ...
-                         function 5 : 2 scalar constraint(s) added
-                         function 6 : Adding 2 scalar constraint(s) ...
-                         function 6 : 2 scalar constraint(s) added
-                         function 7 : Adding 2 scalar constraint(s) ...
-                         function 7 : 2 scalar constraint(s) added
-                         function 8 : Adding 2 scalar constraint(s) ...
-                         function 8 : 2 scalar constraint(s) added
-                         function 9 : Adding 2 scalar constraint(s) ...
-                         function 9 : 2 scalar constraint(s) added
-                         function 10 : Adding 2 scalar constraint(s) ...
-                         function 10 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        			Function 2 : Adding 2 scalar constraint(s) ...
+        			Function 2 : 2 scalar constraint(s) added
+        			Function 3 : Adding 2 scalar constraint(s) ...
+        			Function 3 : 2 scalar constraint(s) added
+        			Function 4 : Adding 2 scalar constraint(s) ...
+        			Function 4 : 2 scalar constraint(s) added
+        			Function 5 : Adding 2 scalar constraint(s) ...
+        			Function 5 : 2 scalar constraint(s) added
+        			Function 6 : Adding 2 scalar constraint(s) ...
+        			Function 6 : 2 scalar constraint(s) added
+        			Function 7 : Adding 2 scalar constraint(s) ...
+        			Function 7 : 2 scalar constraint(s) added
+        			Function 8 : Adding 2 scalar constraint(s) ...
+        			Function 8 : 2 scalar constraint(s) added
+        			Function 9 : Adding 2 scalar constraint(s) ...
+        			Function 9 : 2 scalar constraint(s) added
+        			Function 10 : Adding 2 scalar constraint(s) ...
+        			Function 10 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9714053941143999
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9714053953788857
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.818284021357577e-10
+        		All the primal scalar constraints are verified up to an error of 4.496377781215699e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.574069365446737e-07
+        (PEPit) Final upper bound (dual): 0.9714053958630251 and lower bound (primal example): 0.9714053953788857 
+        (PEPit) Duality gap: absolute: 4.841393952403905e-10 and relative: 4.983906796724733e-10
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-                PEPit guarantee:         E[V(x^(1))] <= 0.971405 V(x^(0))
-                Theoretical guarantee:   E[V(x^(1))] <= 0.973292 V(x^(0))
-
+        	PEPit guarantee:		 E[V(x^(1))] <= 0.971405 V(x^(0))
+        	Theoretical guarantee:	 E[V(x^(1))] <= 0.973292 V(x^(0))
+    
     """
 
     # Instantiate PEP
@@ -154,7 +167,7 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) : the bound is given in theorem 5 of [1]
     kappa = mu * gamma / (1 + mu * gamma)
@@ -163,7 +176,7 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***')
-        print('\tPEPit guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -171,4 +184,4 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_point_saga(L=1, mu=.01, n=10, wrapper="cvxpy", solver=None, verbose=1)

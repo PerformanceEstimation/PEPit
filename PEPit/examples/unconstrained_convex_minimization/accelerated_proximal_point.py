@@ -5,7 +5,7 @@ from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
+def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -13,15 +13,19 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
 
     where :math:`f` is  convex and possibly non-smooth.
 
-    This code computes a worst-case guarantee an **accelerated proximal point** method, aka **fast proximal point** method (FPP).
+    This code computes a worst-case guarantee an **accelerated proximal point** method,
+    aka **fast proximal point** method (FPP).
     That is, it computes the smallest possible :math:`\\tau(n, A_0,\\vec{\\gamma})` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, A_0, \\vec{\\gamma}) \\left(f(x_0) - f_\\star + \\frac{A_0}{2}  \\|x_0 - x_\\star\\|^2\\right)
 
-    is valid, where :math:`x_n` is the output of FPP (with step-size :math:`\\gamma_t` at step :math:`t\\in \\{0, \\dots, n-1\\}`) and where :math:`x_\\star` is a minimizer of :math:`f` and :math:`A_0` is a positive number.
+    is valid, where :math:`x_n` is the output of FPP (with step-size :math:`\\gamma_t` at step
+    :math:`t\\in \\{0, \\dots, n-1\\}`) and where :math:`x_\\star` is a minimizer of :math:`f`
+    and :math:`A_0` is a positive number.
 
-    In short, for given values of :math:`n`,  :math:`A_0` and :math:`\\vec{\\gamma}`, :math:`\\tau(n)` is computed as the worst-case value
-    of :math:`f(x_n)-f_\\star` when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\|x_0 - x_\\star\\|^2 \\leqslant 1`, for the following method.
+    In short, for given values of :math:`n`,  :math:`A_0` and :math:`\\vec{\\gamma}`, :math:`\\tau(n)`
+    is computed as the worst-case value of :math:`f(x_n)-f_\\star`
+    when :math:`f(x_0) - f_\\star + \\frac{A_0}{2} \\|x_0 - x_\\star\\|^2 \\leqslant 1`, for the following method.
 
     **Algorithm**:
     For :math:`t\\in \\{0, \\dots, n-1\\}`:
@@ -68,6 +72,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
         gammas (list): sequence of step-sizes.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
 
                        - -1: No verbose at all.
@@ -81,21 +86,31 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
 
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 20 scalar constraint(s) ...
-                         function 1 : 20 scalar constraint(s) added
+        			Function 1 : Adding 20 scalar constraint(s) ...
+        			Function 1 : 20 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.015931135941565824
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.015931148923290624
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.713119626105772e-10
+        		All the primal scalar constraints are verified up to an error of 1.4460231649235378e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.0490523713620816e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9451787884841313e-09
+        (PEPit) Final upper bound (dual): 0.015931149263944334 and lower bound (primal example): 0.015931148923290624 
+        (PEPit) Duality gap: absolute: 3.4065371010139067e-10 and relative: 2.138287148915985e-08
         *** Example file: worst-case performance of fast proximal point method ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
-                Theoretical guarantee:   f(x_n)-f_* <= 0.0511881 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.0511881 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
+    
     """
 
     # Instantiate PEP
@@ -129,7 +144,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     accumulation = 0
@@ -140,7 +155,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of fast proximal point method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -148,4 +163,6 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

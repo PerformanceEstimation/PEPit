@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wrapper="cvxpy", verbose=1):
+def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -12,18 +12,20 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for **randomized block-coordinate descent** with step-size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **randomized block-coordinate descent**
+    with step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, d)` such that the guarantee
 
     .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_t - x_\\star\\|^2
     
     holds for any fixed step-size :math:`\\gamma` and any number of blocks :math:`d`,
-    and where :math:`x_\\star` denotes a minimizer of :math:`f`. The notation :math:`\\mathbb{E}` denotes the expectation
-    over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    and where :math:`x_\\star` denotes a minimizer of :math:`f`. The notation :math:`\\mathbb{E}`
+    denotes the expectation over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
-    In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma, d)` is
-    computed as the worst-case value of :math:`\\mathbb{E}[\\|x_{t+1} - x_\star \\|^2]` when
-    :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`,
+    :math:`\\tau(L, \\mu, \\gamma, d)` is computed as the worst-case value of
+    :math:`\\mathbb{E}[\\|x_{t+1} - x_\star \\|^2]` when :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Randomized block-coordinate descent is described by
@@ -37,7 +39,8 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
     where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the :math:`i^{\\text{th}}` partial gradient.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 17]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee
+    can be found in [1, Appendix I, Theorem 17]:
 
     .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2] \\leqslant \\rho^2 \\|x_t-x_\\star\\|^2,
 
@@ -55,7 +58,8 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         gamma (float): the step-size.
         d (int): the dimension.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -70,25 +74,34 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         >>> L = 1
         >>> mu = 0.1
         >>> gamma = 2 / (mu + L)
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                 function 1 : Adding 2 scalar constraint(s) ...
-                 function 1 : 2 scalar constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Setting up the problem: 1 partition(s) added
-                 partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
-                 partition 1 with 2 blocks: 1 scalar constraint(s) added
+        			Partition 1 with 2 blocks: Adding 1 scalar constraint(s)...
+        			Partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.8347107452140342
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8347107438584297
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.4183154650737606e-11
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.950747594358786e-10
+        (PEPit) Final upper bound (dual): 0.8347107438665666 and lower bound (primal example): 0.8347107438584297 
+        (PEPit) Duality gap: absolute: 8.136935569780235e-12 and relative: 9.748209939370677e-12
         *** Example file: worst-case performance of randomized coordinate gradient descent ***
-            PEPit guarantee:	     E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
-            Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
-
+        	PEPit guarantee:		 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
+        	Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -118,7 +131,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = max(((mu * gamma - 1) ** 2 + d - 1) / d, ((L * gamma - 1) ** 2 + d - 1) / d)
@@ -126,7 +139,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -138,4 +151,5 @@ if __name__ == "__main__":
     mu = 0.1
     gamma = 2 / (mu + L)
     pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2,
-                                                                                         wrapper="cvxpy", verbose=1)
+                                                                                         wrapper="cvxpy", solver=None,
+                                                                                         verbose=1)

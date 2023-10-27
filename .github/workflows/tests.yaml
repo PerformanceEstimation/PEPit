@@ -47,20 +47,19 @@ jobs:
     - name: Install PEPit
       run: |
         pip install -e .
-    - name: Setup MOSEK
+    - name: Install MOSEK
       run: |
         pip install mosek
+    - name: Setup MOSEK license, run tests and generate report
       env:
         MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
-    - name: Run tests and generate report
       run: |
         coverage run -m unittest tests/test_*
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
 
 
-no_mosek:
-  linux:
+  linux_no_mosek:
 
     runs-on: ubuntu-20.04
     if: "!contains(github.event.head_commit.message, 'no ci')"
@@ -94,8 +93,7 @@ no_mosek:
       uses: codecov/codecov-action@v3
 
 
-no_mosek_license:
-  linux:
+  linux_no_mosek_license:
 
     runs-on: ubuntu-20.04
     if: "!contains(github.event.head_commit.message, 'no ci')"

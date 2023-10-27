@@ -14,16 +14,22 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
               \\end{eqnarray}
               \\right.
 
-    This relative approximation is used at least in in 3 PEPit examples,
+    This relative approximation is used at least in 3 PEPit examples,
     in particular in 2 unconstrained convex minimizations:
     an inexact gradient descent, and an inexact accelerated gradient.
+
+    References:
+        `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
+        inexact gradient and Newton methods through semidefinite programming performance estimation.
+        SIAM Journal on Optimization, 30(3), 2053-2082.
+        <https://arxiv.org/pdf/1709.05191.pdf>`_
 
     Args:
         x0 (Point): starting point x0.
         f (Function): a function.
         gamma (float): the step size parameter.
         epsilon (float): the required accuracy.
-        notion (string): defines the mode (absolute or relative inaccuracy).
+        notion (string): defines the mode (absolute or relative inaccuracy). By default, notion='absolute'.
 
     Returns:
         x (Point): the output point.
@@ -34,7 +40,7 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
         ValueError: if notion is not set in ['absolute', 'relative'].
 
     Note:
-        When :math:`\\gamma` is set to 0, then the this routine returns
+        When :math:`\\gamma` is set to 0, then this routine returns
         :math:`x_0`, :math:`d_{x_0}`, and :math:`f_{x_0}`.
         It is used as is in the example of unconstrained convex minimization scheme called
         "inexact gradient exact line search" only to access to the direction :math:`d_{x_0}`

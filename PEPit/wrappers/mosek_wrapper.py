@@ -8,36 +8,49 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
-from PEPit.tools.expressions_to_matrices import _expression_to_sparse_matrices
+from PEPit.tools.expressions_to_matrices import expression_to_sparse_matrices
 
 
 class MosekWrapper(Wrapper):
     """
-    A :class:`MosekWrapper` object interfaces PEPit with the SDP solver `MOSEK<https://www.mosek.com/>`_.
+    A :class:`MosekWrapper` object interfaces PEPit with the SDP solver `MOSEK <https://www.mosek.com/>`_.
 
     This class overwrites the :class:`Wrapper` for MOSEK. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
-        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
-                                                    This list does not contain constraints due to internal representation of the 
-                                                    problem by the solver.
-        prob (mosek.task): instance of the problem.
-        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
+                                                    associated to the PEP. This list does not contain constraints
+                                                    due to internal representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        objective (Expression): The objective expression that must be maximized.
+                                This is an additional :class:`Expression` created by the PEP to deal with cases
+                                where the user wants to maximize a minimum of several expressions.
+        dual_values (list): Optimal dual variables after solving
+                            (same ordering as that of _list_of_constraints_sent_to_solver).
+        residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
+        prob: instance of the problem (whose type depends on the solver).
+        solver_name (str): The name of the solver the wrapper interact with.
         verbose (int): Level of information details to print
                        (Override the solver verbose parameter).
 
                        - 0: No verbose at all
                        - 1: PEPit information is printed but not solver's
                        - 2: Both PEPit and solver details are printed
+        _constraint_index_in_mosek (list of integer): indices corresponding to the list of constraints sent to MOSEK.
+        _nb_pep_constraints_in_mosek (int): total number of scalar constraints sent to MOSEK.
+        _list_of_psd_constraints_sent_to_solver (list): list of PSD constraints sent to MOSEK.
+        _nb_pep_SDPconstraints_in_mosek (int): total number of PSD constraints sent to MOSEK.
+        env: MOSEK environment
+        task: Mosek task
 
     """
 
     def __init__(self, verbose=1):
         """
-        This function initialize all internal variables of the class. 
+        This function initializes all internal variables of the class.
         
         Args:
             verbose (int): Level of information details to print
@@ -52,21 +65,25 @@ class MosekWrapper(Wrapper):
 
         # Initialize lists of constraints that are used to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._constraint_index_in_mosek = list()  # index of the MOSEK constraint for each element of the previous list
+        self._constraint_index_in_mosek = list()  # indices of the MOSEK constraints.
         self._nb_pep_constraints_in_mosek = 0
         self._list_of_psd_constraints_sent_to_solver = list()
         self._nb_pep_SDPconstraints_in_mosek = 0
-        self.env = None
-        self.task = None
 
-    def setup_environment(self):
         import mosek
 
         self.env = mosek.Env()
         self.task = self.env.Task()  # initiate MOSEK's task
 
-        if self.verbose >= 1:
+        if self.verbose > 1:
             self.task.set_Stream(mosek.streamtype.log, self._streamprinter)
+
+    def set_main_variables(self):
+        """
+        Initialize the main variables of the optimization problem and set the main constraint G >> 0.
+
+        """
+        import mosek
 
         # "Initialize" the Gram matrix
         self.task.appendbarvars([Point.counter])
@@ -75,7 +92,7 @@ class MosekWrapper(Wrapper):
         self.task.appendvars(Expression.counter + 1)
 
         inf = 1.0  # symbolical purposes
-        for i in range(Expression.counter + 1):
+        for i in range(Expression.counter):
             self.task.putvarbound(i, mosek.boundkey.fr, -inf, +inf)  # no bounds on function values (nor on tau)
 
     def check_license(self):
@@ -125,7 +142,7 @@ class MosekWrapper(Wrapper):
 
         # Add a mosek constraint via task
         self.task.appendcons(1)
-        A_i, A_j, A_val, a_i, a_val, alpha_val = _expression_to_sparse_matrices(constraint.expression)
+        A_i, A_j, A_val, a_i, a_val, alpha_val = expression_to_sparse_matrices(constraint.expression)
 
         sym_A = self.task.appendsparsesymmat(Point.counter, A_i, A_j, A_val)
         self.task.putbaraij(nb_cons, 0, [sym_A], [1.0])
@@ -170,7 +187,7 @@ class MosekWrapper(Wrapper):
         # Store one correspondence constraint per entry of the matrix
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
-                A_i, A_j, A_val, a_i, a_val, alpha_val = _expression_to_sparse_matrices(psd_matrix[i, j])
+                A_i, A_j, A_val, a_i, a_val, alpha_val = expression_to_sparse_matrices(psd_matrix[i, j])
                 # how many constraints in the task so far? This will be the constraint number
                 nb_cons = self.task.getnumcon()
                 # add a constraint in mosek
@@ -196,7 +213,8 @@ class MosekWrapper(Wrapper):
         Recover all dual variables from solver.
 
         Returns:
-             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver
+                                 (same ordering).
              residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
 
         Raises:
@@ -249,10 +267,9 @@ class MosekWrapper(Wrapper):
         """
         import mosek
 
-        # task.putclist([tau.counter], [0.0])
-        assert self.task.getmaxnumvar() == Expression.counter
+        assert self.task.getmaxnumvar() == Expression.counter + 1
         self.objective = objective
-        _, _, _, Fweights_ind, Fweights_val, _ = _expression_to_sparse_matrices(objective)
+        _, _, _, Fweights_ind, Fweights_val, _ = expression_to_sparse_matrices(objective)
         self.task.putclist(Fweights_ind,
                            Fweights_val)  # to be cleaned by calling _expression_to_sparse_matrices(objective)?
         # Input the objective sense (minimize/maximize)
@@ -276,13 +293,13 @@ class MosekWrapper(Wrapper):
         
         """
         import mosek
-
+        if "solver" in kwargs.keys():
+            del kwargs["solver"]
         self.task.optimize(**kwargs)
         self.solver_name = "MOSEK"
-        # wc_value = self.task.getprimalobj(mosek.soltype.itr)
         self.optimal_G = self._get_Gram_from_mosek(self.task.getbarxj(mosek.soltype.itr, 0), Point.counter)
         xx = self.task.getxx(mosek.soltype.itr)
-        tau = xx[-1]
+        tau = xx[-2]
         self.optimal_F = xx
         problem_status = self.task.getprosta(mosek.soltype.itr)
         return problem_status, self.solver_name, tau

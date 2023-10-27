@@ -3,7 +3,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_alternate_projections(n, wrapper="cvxpy", verbose=1):
+def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex feasibility problem:
 
@@ -22,7 +22,8 @@ def wc_alternate_projections(n, wrapper="cvxpy", verbose=1):
 
     In short, for a given value of :math:`n`,
     :math:`\\tau(n)` is computed as the worst-case value of
-    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2`
+    when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
     **Algorithm**: The alternate projection method can be written as
@@ -46,7 +47,8 @@ def wc_alternate_projections(n, wrapper="cvxpy", verbose=1):
     Args:
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -58,28 +60,38 @@ def wc_alternate_projections(n, wrapper="cvxpy", verbose=1):
         theoretical_tau (None): no theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_alternate_projections(n=10, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 24x24
+        >>> pepit_tau, theoretical_tau = wc_alternate_projections(n=10, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 24x24
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 144 scalar constraint(s) ...
-                         function 1 : 144 scalar constraint(s) added
-                         function 2 : Adding 121 scalar constraint(s) ...
-                         function 2 : 121 scalar constraint(s) added
+        			Function 1 : Adding 144 scalar constraint(s) ...
+        			Function 1 : 144 scalar constraint(s) added
+        			Function 2 : Adding 121 scalar constraint(s) ...
+        			Function 2 : 121 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018858674370385117
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 0.0003128757392530764 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.018867679369563788
+        (PEPit) Postprocessing: 4 eigenvalue(s) > 5.5130457131471214e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018851597249912744
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 7.314172662475898e-06 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.018851597249912744
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 7.314172662475898e-06 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01876767933131574
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.716296339389169e-09 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01876767933131574
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.716296339389169e-09 after dimension reduction
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.5561273551433917e-10
+        		All the primal scalar constraints are verified up to an error of 1.6546532893846333e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.6525650314322e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0599646492800727e-08
+        (PEPit) Final upper bound (dual): 0.018867680107650577 and lower bound (primal example): 0.01876767933131574 
+        (PEPit) Duality gap: absolute: 0.00010000077633483609 and relative: 0.005328350648445642
         *** Example file: worst-case performance of the alternate projection method ***
-                PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188516 ||x0 - x_*||^2
-
+        	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188677 ||x0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -110,17 +122,18 @@ def wc_alternate_projections(n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet1")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="logdet1")
     theoretical_tau = None
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the alternate projection method ***')
-        print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_alternate_projections(n=10, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_alternate_projections(n=10, wrapper="cvxpy", solver=None, verbose=1)

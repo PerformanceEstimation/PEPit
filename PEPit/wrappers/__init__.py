@@ -1,6 +1,8 @@
 from .cvxpy_wrapper import CvxpyWrapper
 from .mosek_wrapper import MosekWrapper
 
+# Define a dictionary of wrapper.
+# By convention, the keys must be written with lower cases.
 WRAPPERS = {
     "cvxpy": CvxpyWrapper,
     "mosek": MosekWrapper,

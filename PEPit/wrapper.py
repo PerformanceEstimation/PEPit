@@ -10,21 +10,25 @@ class Wrapper(object):
 
     Warnings:
         This class must be overwritten by a child class that encodes all particularities of the solver.
-        In particular, the methods: send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem,
+        In particular, the methods send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem,
         get_dual_variables, get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic
         must be overwritten.
-    
 
     Attributes:
-        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
-                                                    This list does not contain constraints due to internal representation of the 
-                                                    problem by the solver.
-        prob: instance of the problem (whose type depends on the solver)
-        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
+                                                    associated to the PEP. This list does not contain constraints
+                                                    due to internal representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
-        dual_values (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
-        verbose (int): Level of information details to print
-                       (Override the solver verbose parameter).
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        objective (Expression): The objective expression that must be maximized.
+                                This is an additional :class:`Expression` created by the PEP to deal with cases
+                                where the user wants to maximize a minimum of several expressions.
+        dual_values (list): Optimal dual variables after solving
+                            (same ordering as that of _list_of_constraints_sent_to_solver).
+        residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
+        prob: instance of the problem (whose type depends on the solver).
+        solver_name (str): The name of the solver the wrapper interact with.
+        verbose (int): Level of information details to print (Override the solver verbose parameter).
 
                        - 0: No verbose at all
                        - 1: PEPit information is printed but not solver's
@@ -35,11 +39,10 @@ class Wrapper(object):
     def __init__(self, verbose=1):
         """
         :class:`Wrapper` object should not be instantiated as such: only children class should.
-        This function initialize all internal variables of the class.
+        This function initializes all internal variables of the class.
 
         Args:
-            verbose (int): Level of information details to print
-                           (Override the solver verbose parameter).
+            verbose (int): Level of information details to print (Override the solver verbose parameter).
 
                            - 0: No verbose at all
                            - 1: PEPit information is printed but not solver's
@@ -59,9 +62,6 @@ class Wrapper(object):
         self.prob = None
         self.solver_name = None
         self.verbose = verbose
-
-    def setup_environment(self):
-        raise NotImplementedError
 
     def check_license(self):
         """
@@ -157,17 +157,16 @@ class Wrapper(object):
 
     def _recover_dual_values(self):
         """
-        Postprocess the output of the solver and associate each constraint of the list 
+        Post-process the output of the solver and associate each constraint of the list
         _list_of_constraints_sent_to_solver to their corresponding numerical dual variables.
         
         Returns:
-            dual_values (list): 
-            residual (np.array):
+            dual_values (list)
+            residual (np.array)
 
         """
-
+        # Return dual_values, residual
         raise NotImplementedError("This method must be overwritten in children classes")
-        # return dual_values, residual
 
     def generate_problem(self, objective):
         """
@@ -208,12 +207,11 @@ class Wrapper(object):
 
         Args:
             wc_value (float): the optimal value of the original PEP.
-            tol_dimension_reduction (float): tolerance on the objective for finding
-                                             low-dimensional examples.
+            tol_dimension_reduction (float): tolerance on the objective for finding low-dimensional examples.
         
         """
+        # Add constraint that tau <= wc_value + tol_dimension
         raise NotImplementedError("This method must be overwritten in children classes")
-        # add constraint that tau<= wc_value+tol_dimension
 
     def heuristic(self, weight):
         """

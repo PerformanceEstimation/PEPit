@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import ConvexQGFunction
 
 
-def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
+def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -59,7 +59,8 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
         L (float): the quadratic growth parameter.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
-		verbose (int): level of information details to print.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
@@ -71,21 +72,31 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum_qg_convex(L=1, n=5, wrapper="cvxpy", verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
+        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum_qg_convex(L=1, n=5, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 63 scalar constraint(s) ...
-                         function 1 : 63 scalar constraint(s) added
+        			Function 1 : Adding 63 scalar constraint(s) ...
+        			Function 1 : 63 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.08333167067320212
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.08333332503218598
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 4.858458021311796e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.201736799451241e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.279590498188519e-07
+        (PEPit) Final upper bound (dual): 0.08333333523292924 and lower bound (primal example): 0.08333332503218598 
+        (PEPit) Duality gap: absolute: 1.0200743263966139e-08 and relative: 1.2240893136120858e-07
         *** Example file: worst-case performance of the Heavy-Ball method ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.0833317 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -100,7 +111,6 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
 
     # Then define the starting point x0 of the algorithm as well as corresponding function value f0
     x0 = problem.set_initial_point()
-    f0 = func.value(x0)
 
     # Set the initial constraint that is the distance between f(x0) and f(x^*)
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
@@ -119,7 +129,7 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / (2 * (n + 1))
@@ -127,7 +137,7 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Heavy-Ball method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -135,4 +145,4 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_heavy_ball_momentum_qg_convex(L=1, n=5, wrapper="cvxpy", verbose=1)
+    pepit_tau, theoretical_tau = wc_heavy_ball_momentum_qg_convex(L=1, n=5, wrapper="cvxpy", solver=None, verbose=1)
