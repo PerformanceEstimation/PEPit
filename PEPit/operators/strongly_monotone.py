@@ -82,4 +82,5 @@ class StronglyMonotoneOperator(Function):
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
                                                       constraint_name="strong_monotony",
-                                                      set_class_constraint_i_j=self.set_strong_monotony_constraint_i_j)
+                                                      set_class_constraint_i_j=self.set_strong_monotony_constraint_i_j,
+                                                      symmetry=True)

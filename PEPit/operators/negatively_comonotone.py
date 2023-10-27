@@ -83,4 +83,4 @@ class NegativelyComonotoneOperator(Function):
                                                       constraint_name="negative_comonotony",
                                                       set_class_constraint_i_j=
                                                       self.set_negative_comonotony_constraint_i_j,
-                                                      )
+                                                      symmetry=True)
