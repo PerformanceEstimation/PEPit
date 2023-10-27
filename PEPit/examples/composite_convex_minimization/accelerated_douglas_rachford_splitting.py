@@ -52,8 +52,8 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
     when :math:`\\theta=\\frac{1-\\alpha L}{1+\\alpha L}` and :math:`\\alpha < \\frac{1}{L}`.
 
     **References**:
-    An analysis of the accelerated Douglas-Rachford splitting is available in [1, Theorem 5] for when the convex minimization
-    problem is quadratic.
+    An analysis of the accelerated Douglas-Rachford splitting is available in [1, Theorem 5] for when the convex
+    minimization problem is quadratic.
 
     `[1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
     variants. In 53rd IEEE Conference on Decision and Control (CDC).
@@ -64,7 +64,7 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
         L (float): the smoothness parameter.
         alpha (float): the parameter of the scheme.
         n (int): the number of iterations.
-		wrapper (str): the name of the wrapper to be used.
+        wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
 
@@ -124,7 +124,6 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
 
     # Then define the starting point x0 of the algorithm and its function value f0
     x0 = problem.set_initial_point()
-    f0 = func(x0)
 
     # Set the parameters of the scheme
     theta = (1 - alpha * L) / (1 + alpha * L)
@@ -172,4 +171,6 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2,
+                                                                           wrapper="cvxpy", solver=None,
+                                                                           verbose=1)

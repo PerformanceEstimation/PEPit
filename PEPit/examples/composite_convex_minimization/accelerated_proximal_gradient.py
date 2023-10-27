@@ -38,7 +38,8 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
 
     where :math:`y_{0} = x_0`.
 
-    **Theoretical guarantee**: A **tight** (empirical) worst-case guarantee for FPGM is obtained in [1, method FPGM1 in Sec. 4.2.1, Table 1 in sec 4.2.2], for :math:`\\mu=0`:
+    **Theoretical guarantee**: A **tight** (empirical) worst-case guarantee for FPGM is obtained in
+    [1, method FPGM1 in Sec. 4.2.1, Table 1 in sec 4.2.2], for :math:`\\mu=0`:
 
     .. math:: F(x_n) - F_\\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\\star\\|^2,
 
@@ -150,4 +151,6 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4,
+                                                                  wrapper="cvxpy", solver=None,
+                                                                  verbose=1)

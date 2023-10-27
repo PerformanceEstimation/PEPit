@@ -29,7 +29,8 @@ def wc_accelerated_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbos
 
     where :math:`x_0=y_0=y_{-1}`
 
-    **Theoretical guarantee**: A tight theoretical worst-case guarantee can be found in [1, Theorem 4.1], for :math:`n \\geqslant 1`,
+    **Theoretical guarantee**: A tight theoretical worst-case guarantee can be found in [1, Theorem 4.1],
+    for :math:`n \\geqslant 1`,
 
         .. math:: \\|x_n - y_{n-1}\\|^2 \\leqslant  \\frac{1}{n^2}  \\|x_0 - x_\\star\\|^2.
 

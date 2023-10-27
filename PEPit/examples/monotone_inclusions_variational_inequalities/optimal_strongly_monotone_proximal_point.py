@@ -18,7 +18,8 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
     where :math:`A` is maximally :math:`\\mu`-strongly monotone. 
     We denote by :math:`J_{A}` the resolvent of :math:`A`.
 
-    For any :math:`x` such that :math:`x = J_{A} y` for some :math:`y`, define the resolvent residual :math:`\\tilde{A}x = y - J_{A}y \\in Ax`.
+    For any :math:`x` such that :math:`x = J_{A} y` for some :math:`y`,
+    define the resolvent residual :math:`\\tilde{A}x = y - J_{A}y \\in Ax`.
 
     This code computes a worst-case guarantee for the **Optimal Strongly-monotone Proximal Point Method** (OS-PPM). 
     That is, it computes the smallest possible :math:`\\tau(n, \\mu)` such that the guarantee 
@@ -41,17 +42,21 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
                          &  & + \\frac{(1+2\\mu) \\varphi_{t-1}}{\\varphi_{t+1}} (y_{t-1} - x_t). 
             \\end{eqnarray}
 
-    where :math:`\\varphi_k = \sum_{i=0}^k (1+2\\mu)^{2i}` with :math:`\\varphi_{-1}=0` and :math:`x_0 = y_0 = y_{-1}` is a starting point. 
+    where :math:`\\varphi_k = \sum_{i=0}^k (1+2\\mu)^{2i}` with :math:`\\varphi_{-1}=0`
+    and :math:`x_0 = y_0 = y_{-1}` is a starting point.
 
     This method is equivalent to the Optimal Contractive Halpern iteration.
 
-    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Strongly-monotone Proximal Point Method can be found in [1, Theorem 3.2, Corollary 4.2]:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Strongly-monotone Proximal Point Method
+    can be found in [1, Theorem 3.2, Corollary 4.2]:
 
         .. math:: \\|\\tilde{A}x_n\\|^2 \\leqslant \\left( \\frac{1}{\sum_{k=0}^{N-1} (1+2\\mu)^k} \\right)^2 \\|x_0 - x_\\star\\|^2.
 
     **References**: The detailed approach and tight bound are available in [1].
 
-    `[1] J. Park, E. Ryu (2022). Exact Optimal Accelerated Complexity for Fixed-Point Iterations. In 39th International Conference on Machine Learning (ICML).
+    `[1] J. Park, E. Ryu (2022).
+    Exact Optimal Accelerated Complexity for Fixed-Point Iterations.
+    In 39th International Conference on Machine Learning (ICML).
     <https://proceedings.mlr.press/v162/park22c/park22c.pdf>`_
 
     Args:
@@ -142,4 +147,6 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05,
+                                                                             wrapper="cvxpy", solver=None,
+                                                                             verbose=1)

@@ -23,7 +23,8 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
 
     In short, for a given value of :math:`n`,
     :math:`\\tau(n)` is computed as the worst-case value of
-    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2`
+    when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
     **Algorithm**: The Dykstra projection method can be written as
@@ -38,7 +39,8 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: This method is due to [1].
 
-    `[1] J.P. Boyle, R.L. Dykstra (1986). A method for finding projections onto the intersection of convex sets in Hilbert spaces.
+    `[1] J.P. Boyle, R.L. Dykstra (1986).
+    A method for finding projections onto the intersection of convex sets in Hilbert spaces.
     Lecture Notes in Statistics. Vol. 37. pp. 28–47.
     <https://link.springer.com/chapter/10.1007/978-1-4613-9940-7_3>`_
     
@@ -108,7 +110,6 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
 
     # Run the Dykstra projection method
     x = x0
-    y = x0
     p = null_point
     q = null_point
     for _ in range(n):

@@ -13,13 +13,14 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **optimized gradient method** (OGM), and applies the trace heuristic
-    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved. That is, it computes
-    the smallest possible :math:`\\tau(n, L)` such that the guarantee
+    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved.
+    That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`. Then,
-    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is nearly achieved.
+    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`.
+    Then, it applies the trace heuristic, which allows obtaining a one-dimensional function
+    on which the guarantee is nearly achieved.
 
     **Algorithm**:
     The optimized gradient method is described by
@@ -48,7 +49,8 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2}.
 
-    **References**: The OGM was developed in [1,2]. Low-dimensional worst-case functions for OGM were obtained in [3, 4].
+    **References**: The OGM was developed in [1,2].
+    Low-dimensional worst-case functions for OGM were obtained in [3, 4].
 
     `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
     approach. Mathematical Programming 145(1–2), 451–482.

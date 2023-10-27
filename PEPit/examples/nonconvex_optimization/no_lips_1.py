@@ -12,7 +12,8 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
 
     .. math:: F_\\star \\triangleq \\min_x \\{F(x) \equiv f_1(x)+f_2(x) \\}
 
-    where :math:`f_2` is a closed convex indicator function and :math:`f_1` is possibly non-convex and :math:`L`-smooth relatively to :math:`h`,
+    where :math:`f_2` is a closed convex indicator function and :math:`f_1` is possibly non-convex
+    and :math:`L`-smooth relatively to :math:`h`,
     and where :math:`h` is closed proper and convex.
 
     This code computes a worst-case guarantee for the **NoLips** method.
@@ -29,7 +30,8 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     as the worst-case value of :math:`\\min_{0 \\leqslant t \\leqslant n-1}D_h(x_{t+1}; x_t)` when
     :math:`F(x_0) - F(x_n) \\leqslant 1`.
 
-    **Algorithms**:  This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [1, Section 3]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
+    **Algorithms**:  This method (also known as Bregman Gradient, or Mirror descent) can be found in,
+    e.g., [1, Section 3]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
     .. math:: x_{t+1} = \\arg\\min_{u \\in R^d} \\nabla f(x_t)^T(u - x_t) + \\frac{1}{\\gamma} D_h(u; x_t).
 

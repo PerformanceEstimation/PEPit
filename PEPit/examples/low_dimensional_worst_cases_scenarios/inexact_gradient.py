@@ -27,7 +27,8 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
 
     .. math:: \|\\nabla f(x_t) - d_t\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
-    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
+    where :math:`\\nabla f(x_t)` is the true gradient,
+    and :math:`d_t` is the approximate descent direction that is used.
 
     **Algorithm**:
 
@@ -182,4 +183,6 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=6, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient(L=1, mu=0.1, epsilon=0.1, n=6,
+                                                     wrapper="cvxpy", solver=None,
+                                                     verbose=1)

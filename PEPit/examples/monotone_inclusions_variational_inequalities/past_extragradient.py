@@ -46,7 +46,8 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
     <https://arxiv.org/pdf/2205.08446.pdf>`_
     
     `[3] Y. Cai, A. Oikonomou, W. Zheng (2022).
-    Tight Last-Iterate Convergence of the Extragradient and the Optimistic Gradient Descent-Ascent Algorithm for Constrained Monotone Variational Inequalities.
+    Tight Last-Iterate Convergence of the Extragradient and the Optimistic Gradient Descent-Ascent Algorithm
+    for Constrained Monotone Variational Inequalities.
     <https://arxiv.org/pdf/2204.09228.pdf>`_
 
     Args:

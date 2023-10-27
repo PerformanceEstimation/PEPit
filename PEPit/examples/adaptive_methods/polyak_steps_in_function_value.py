@@ -18,8 +18,8 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", solver=None
     is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective value
     of the step-size of the gradient method.
 
-    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
-    value of :math:`f(x_{t+1})-f_\\star` when :math:`f(x_t)-f_\\star \\leqslant 1`.
+    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is
+    computed as the worst-case value of :math:`f(x_{t+1})-f_\\star` when :math:`f(x_t)-f_\\star \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by
@@ -152,4 +152,6 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_function_value(L=L, mu=mu, gamma=gamma,
+                                                                   wrapper="cvxpy", solver=None,
+                                                                   verbose=1)

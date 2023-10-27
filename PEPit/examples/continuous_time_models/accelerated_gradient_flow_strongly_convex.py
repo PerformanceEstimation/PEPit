@@ -21,10 +21,11 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
     
     .. math:: \\mathcal{V}_{P}(X_t) = f(X_t) - f(x_\\star) + (X_t - x_\\star, \\frac{d}{dt}X_t)^T(P \\otimes I_d)(X_t - x_\\star, \\frac{d}{dt}X_t) ,
     
-    where :math:`I_d` is the identity matrix, :math:`X_t` is the output of an **accelerated gradient** flow, and where :math:`x_\\star` is the minimizer of :math:`f`.
+    where :math:`I_d` is the identity matrix, :math:`X_t` is the output of an **accelerated gradient** flow,
+    and where :math:`x_\\star` is the minimizer of :math:`f`.
     
-    In short, for given values of :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of the derivative of
-    :math:`f(X_t)-f_\\star` when :math:`f(X_t) -  f(x_\\star)\\leqslant 1`.
+    In short, for given values of :math:`\\mu`, :math:`\\tau(\\mu)` is computed as the worst-case value of
+    the derivative of :math:`f(X_t)-f_\\star` when :math:`f(X_t) -  f(x_\\star)\\leqslant 1`.
 
     **Algorithm**:
     For :math:`t \\geqslant 0`,
@@ -41,7 +42,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
         .. math:: \\frac{d}{dt}\\mathcal{V}_P(X_t) \\leqslant -\\sqrt{\\mu}\\mathcal{V}_P(X_t).
 
         For :math:`P = \\begin{pmatrix} \\frac{4}{9}\\mu & \\frac{4}{3}\\sqrt{\\mu} \\\\ \\frac{4}{3}\\sqrt{\\mu} & \\frac{1}{2}\\end{pmatrix}`,
-        for which :math:`\\mathcal{V}_{P}(X_t) \\geqslant 0` along the trajectory, the following **tight** guarantee can be found in [3, Corollary 2.5],
+        for which :math:`\\mathcal{V}_{P}(X_t) \\geqslant 0` along the trajectory, the following **tight** guarantee can
+        be found in [3, Corollary 2.5],
 
         .. math:: \\frac{d}{dt}\\mathcal{V}_P(X_t) \\leqslant -\\frac{4}{3}\\sqrt{\\mu}\\mathcal{V}_P(X_t).
 
@@ -161,4 +163,6 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True,
+                                                                              wrapper="cvxpy", solver=None,
+                                                                              verbose=1)

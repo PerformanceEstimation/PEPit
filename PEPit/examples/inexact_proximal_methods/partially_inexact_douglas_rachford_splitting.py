@@ -12,16 +12,19 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
         .. math:: F_\\star \\triangleq \min_x \\left\\{ F(x) \\equiv f(x) + g(x) \\right\\}
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`g` is closed convex and proper. We
-    denote by :math:`x_\\star = \\arg\\min_x F(x)` the minimizer of :math:`F`. The (exact) proximal operator of :math:`g`,
-    and an approximate version of the proximal operator of :math:`f` are assumed to be available.
+    denote by :math:`x_\\star = \\arg\\min_x F(x)` the minimizer of :math:`F`.
+    The (exact) proximal operator of :math:`g`, and an approximate version of the proximal operator of
+    :math:`f` are assumed to be available.
 
     This code computes a worst-case guarantee for a **partially inexact Douglas-Rachford Splitting** (DRS). That is, it
     computes the smallest possible :math:`\\tau(n,L,\\mu,\\sigma,\\gamma)` such that the guarantee
 
         .. math:: \\|z_{n} - z_\\star\\|^2 \\leqslant \\tau(n,L,\\mu,\\sigma,\\gamma)  \\|z_0 - z_\\star\\|^2
 
-    is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`), :math:`z_\\star` is its fixed point,
-    :math:`\\gamma` is a step-size, and :math:`\\sigma` is the level of inaccuracy.
+    is valid, where :math:`z_n` is the output of the DRS (initiated at :math:`x_0`),
+    :math:`z_\\star` is its fixed point,
+    :math:`\\gamma` is a step-size,
+    and :math:`\\sigma` is the level of inaccuracy.
 
     **Algorithm**: The partially inexact Douglas-Rachford splitting under consideration is described by
 
@@ -165,4 +168,6 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_partially_inexact_douglas_rachford_splitting(mu=.1, L=5, n=5, gamma=1.4, sigma=.2,
+                                                                                 wrapper="cvxpy", solver=None,
+                                                                                 verbose=1)

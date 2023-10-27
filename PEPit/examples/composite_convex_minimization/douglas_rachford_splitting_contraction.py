@@ -118,12 +118,6 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
     func1 = problem.declare_function(SmoothStronglyConvexFunction, mu=mu, L=L)
     func2 = problem.declare_function(ConvexFunction)
 
-    # Define the function to optimize as the sum of func1 and func2
-    func = func1 + func2
-
-    # Start by defining its unique optimal point xs = x_*
-    xs = func.stationary_point()
-
     # Then define the starting points w0 and w0p of the algorithm
     w0 = problem.set_initial_point()
     w0p = problem.set_initial_point()
@@ -170,4 +164,6 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2,
+                                                                           wrapper="cvxpy", solver=None,
+                                                                           verbose=1)

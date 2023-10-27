@@ -143,4 +143,6 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, wrapper="cvxpy", solver=No
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_strongly_convex(mu=0.1, L=1, n=2,
+                                                                         wrapper="cvxpy", solver=None,
+                                                                         verbose=1)

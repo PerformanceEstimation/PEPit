@@ -12,8 +12,8 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly-convex.
 
-    This code computes a worst-case guarantee for the **robust momentum method** (RMM). That is, it computes the smallest
-    possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
+    This code computes a worst-case guarantee for the **robust momentum method** (RMM).
+    That is, it computes the smallest possible :math:`\\tau(n, \\mu, L, \\lambda)` such that the guarantee
 
         .. math:: v(x_{n+1}) \\leqslant \\tau(n, \\mu, L, \\lambda) v(x_{n}),
 
@@ -28,7 +28,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
                 q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla f(y_t) - \\mu (y_t - x_\\star)\|^2 \\right),
             \\end{eqnarray}
 
-     with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
+    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
 
     **Algorithm**:
 
@@ -62,7 +62,8 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     Args:    
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`, it is the Triple Momentum Method.
+        lam (float): if :math:`\\lambda=1` it is the gradient descent, if :math:`\\lambda=0`,
+                     it is the Triple Momentum Method.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.

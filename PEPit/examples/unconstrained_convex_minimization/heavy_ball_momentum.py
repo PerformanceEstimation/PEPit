@@ -41,7 +41,8 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
 
         .. math:: f(x_n) - f_\\star \\leqslant (1 - \\alpha \\mu)^n (f(x_0) - f_\\star).
 
-    **References**: This methods was first introduce in [1, Section 2], and convergence upper bound was proven in [2, Theorem 4].
+    **References**: This methods was first introduce in [1, Section 2],
+    and convergence upper bound was proven in [2, Theorem 4].
 
     `[1] B.T. Polyak (1964). Some methods of speeding up the convergence of iteration method.
     URSS Computational Mathematics and Mathematical Physics.
@@ -153,4 +154,6 @@ if __name__ == "__main__":
     L = 1.
     alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
     beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
-    pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2,
+                                                        wrapper="cvxpy", solver=None,
+                                                        verbose=1)

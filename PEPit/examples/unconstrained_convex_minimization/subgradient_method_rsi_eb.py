@@ -19,8 +19,9 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
     is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
-    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, \\mu, L, \\gamma)` is computed as the worst-case
-    value of :math:`\\| x_n - x_\\star \\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`,
+    :math:`\\tau(n, \\mu, L, \\gamma)` is computed as the worst-case value of
+    :math:`\\| x_n - x_\\star \\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Sub-gradient descent is described by
@@ -133,4 +134,6 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
 if __name__ == "__main__":
     mu = .1
     L = 1
-    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4,
+                                                              wrapper="cvxpy", solver=None,
+                                                              verbose=1)

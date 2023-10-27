@@ -14,8 +14,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
 
     This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method,
-    and looks for a low-dimensional worst-case example nearly achieving this worst-case guarantee using :math:`12` iterations
-    of the logdet heuristic.
+    and looks for a low-dimensional worst-case example nearly achieving this worst-case guarantee using
+    :math:`12` iterations of the logdet heuristic.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L) D^2,
@@ -28,7 +28,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **Algorithm**:
 
-    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
+    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1].
+    For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             \\begin{eqnarray}

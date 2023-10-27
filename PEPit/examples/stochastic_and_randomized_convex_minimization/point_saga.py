@@ -26,11 +26,13 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
 
     .. math:: \\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right] \\leqslant \\tau(n, L, \\mu) V\\left(x^{(0)}\\right),
 
-    is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience; as the
-    bound is valid for all :math:`x^{(0)}`, it is also valid for any pair of consecutive iterates of the algorithm).
+    is valid (note that we use the notation :math:`x^{(0)},x^{(1)}` to denote two consecutive iterates for convenience;
+    as the bound is valid for all :math:`x^{(0)}`,
+    it is also valid for any pair of consecutive iterates of the algorithm).
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right]` when :math:`V\\left(x^{(0)}\\right) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
+    :math:`\\mathbb{E}\\left[V\\left(x^{(1)}\\right)\\right]` when :math:`V\\left(x^{(0)}\\right) \\leqslant 1`.
 
     **Algorithm**:
     Point SAGA is described by

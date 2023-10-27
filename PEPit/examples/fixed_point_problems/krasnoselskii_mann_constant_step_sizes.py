@@ -129,4 +129,6 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4,
+                                                                           wrapper="cvxpy", solver=None,
+                                                                           verbose=1)

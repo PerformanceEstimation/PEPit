@@ -28,7 +28,8 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
     :math:`\\tau(n, L)` is computed as the worst-case value of
     :math:`\\min_{t\\leqslant n} D_h(x_{t-1}; x_t)` when :math:`D_h(x_\\star; x_0) \\leqslant 1`.
 
-    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in, e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
+    **Algorithm**: This method (also known as Bregman Gradient, or Mirror descent) can be found in,
+    e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math:: x_{t+1} = \\arg\\min_{u} \\{f_2(u)+\\langle \\nabla f_1(x_t) \\mid u - x_t \\rangle + \\frac{1}{\\gamma} D_h(u; x_t)\\}.
 
@@ -164,4 +165,6 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
 if __name__ == "__main__":
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_no_lips_in_bregman_divergence(L=L, gamma=gamma, n=10, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_no_lips_in_bregman_divergence(L=L, gamma=gamma, n=10,
+                                                                  wrapper="cvxpy", solver=None,
+                                                                  verbose=1)

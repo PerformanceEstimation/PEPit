@@ -126,4 +126,6 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1,
+                                                                 wrapper="cvxpy", solver=None,
+                                                                 verbose=1)

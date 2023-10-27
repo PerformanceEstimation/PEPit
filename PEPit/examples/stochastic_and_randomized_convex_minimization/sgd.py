@@ -10,15 +10,17 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
 
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
-    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex. In the sequel, we use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex.
+    In the sequel, we use the notation :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution
+    of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
     e.g., :math:`F(x)\\equiv\\mathbb{E}[f_i(x)]`. In addition, we assume a bounded variance at
     the optimal point (which is denoted by :math:`x_\\star`):
 
     .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n\\|\\nabla f_i(x_\\star)\\|^2 \\leqslant v^2.
 
     This code computes a worst-case guarantee for one step of the **stochastic gradient descent** (SGD) in expectation,
-    for the distance to an optimal point. That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, v, R, n)` such that
+    for the distance to an optimal point. That is, it computes the smallest possible
+    :math:`\\tau(L, \\mu, \\gamma, v, R, n)` such that
 
     .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, v, R, n)
 

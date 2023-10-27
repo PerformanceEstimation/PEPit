@@ -111,7 +111,6 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose
 
     # Then define the starting point x0 of the algorithm as well as corresponding function value f0
     x0 = problem.set_initial_point()
-    f0 = func.value(x0)
 
     # Set the initial constraint that is the distance between f(x0) and f(x^*)
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)

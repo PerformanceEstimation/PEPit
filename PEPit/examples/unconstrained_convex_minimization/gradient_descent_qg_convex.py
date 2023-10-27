@@ -132,4 +132,6 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, ver
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex(L=L, gamma=.2 / L, n=4,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

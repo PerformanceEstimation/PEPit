@@ -18,7 +18,8 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
 
     is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
 
-    **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
+    **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows,
+    for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math:: x_{t+1} = J_{\\alpha A}(x_t),
 

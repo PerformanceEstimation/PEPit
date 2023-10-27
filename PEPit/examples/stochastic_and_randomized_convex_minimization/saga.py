@@ -14,7 +14,8 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
 
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
     closed, proper, and convex with a proximal operator readily available. In the sequel, we use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
     e.g., :math:`F(x)\\equiv h(x)+\\mathbb{E}[f_i(x)]`.
 
     This code computes the exact rate for a Lyapunov (or energy) function for **SAGA** [1].
@@ -30,7 +31,8 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
     We consider the case :math:`t=0` in the code below, without loss of generality.
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V^{(1)}]` when :math:`V(x^{(0)}) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V^{(1)}]`
+    when :math:`V(x^{(0)}) \\leqslant 1`.
 
     **Algorithm**: One iteration of SAGA [1] is described as follows: at iteration :math:`t`, pick
     :math:`j\\in\\{1,\ldots,n\\}` uniformely at random and set:

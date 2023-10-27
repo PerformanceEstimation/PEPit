@@ -33,7 +33,8 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
 
         .. math:: f(x_n) - f_\\star \\leqslant \\left(\\frac{L-\\mu}{L+\\mu}\\right)^{2n} (f(x_0) - f_\\star).
 
-    **References**: The detailed approach (based on convex relaxations) is available in [1], along with theoretical bound.
+    **References**: The detailed approach (based on convex relaxations) is available in [1],
+    along with theoretical bound.
 
     `[1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
     line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.

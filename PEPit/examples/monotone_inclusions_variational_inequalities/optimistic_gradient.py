@@ -17,7 +17,8 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
 
         .. math:: \\|\\tilde{x}_n - \\tilde{x}_{n-1}\\|^2 \\leqslant \\tau(n) \\|x_0 - x_\\star\\|^2,
 
-    is valid, where :math:`\\tilde{x}_n` is the output of the **optimistic gradient method** and :math:`x_0` its starting point.
+    is valid, where :math:`\\tilde{x}_n` is the output of the **optimistic gradient method**
+    and :math:`x_0` its starting point.
 
     **Algorithm**: The optimistic gradient method is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
     

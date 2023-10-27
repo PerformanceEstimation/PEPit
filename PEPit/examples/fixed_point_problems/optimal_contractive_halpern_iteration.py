@@ -8,7 +8,8 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
 
     .. math:: \\mathrm{Find}\\, x:\\, x = Ax,
 
-    where :math:`A` is a :math:`1/\gamma`-contractive operator, i.e. a :math:`L`-Lipschitz operator with :math:`L=1/\gamma`.
+    where :math:`A` is a :math:`1/\gamma`-contractive operator,
+    i.e. a :math:`L`-Lipschitz operator with :math:`L=1/\gamma`.
 
     This code computes a worst-case guarantee for the **Optimal Contractive Halpern Iteration**.
     That is, it computes the smallest possible :math:`\\tau(n, \\gamma)` such that the guarantee
@@ -26,13 +27,16 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
 
     where :math:`\\varphi_k = \sum_{i=0}^k \gamma^{2i}` and :math:`x_0` is a starting point.
 
-    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Contractive Halpern iteration can be found in [1, Corollary 3.3, Theorem 4.1]:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Contractive Halpern iteration
+    can be found in [1, Corollary 3.3, Theorem 4.1]:
 
         .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(1 + \\frac{1}{\\gamma}\\right)^2 \\left( \\frac{1}{\\sum_{k=0}^n \\gamma^k} \\right)^2 \\|x_0 - x_\\star\\|^2.
 
     **References**: The detailed approach and tight bound are available in [1].
 
-    `[1] J. Park, E. Ryu (2022). Exact Optimal Accelerated Complexity for Fixed-Point Iterations. In 39th International Conference on Machine Learning (ICML).
+    `[1] J. Park, E. Ryu (2022).
+    Exact Optimal Accelerated Complexity for Fixed-Point Iterations.
+    In 39th International Conference on Machine Learning (ICML).
     <https://proceedings.mlr.press/v162/park22c/park22c.pdf>`_
 
     Args:
@@ -121,4 +125,6 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimal_contractive_halpern_iteration(n=10, gamma=1.1,
+                                                                          wrapper="cvxpy", solver=None,
+                                                                          verbose=1)

@@ -20,8 +20,8 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
     .. math:: f(x_n) - f(x_\\star) \\leqslant \\tau(n, \\gamma, \\sigma) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the method, :math:`\\gamma` is some step-size, and :math:`\\sigma` is the
-    level of accuracy of the approximate proximal point oracle.
+    is valid, where :math:`x_n` is the output of the method, :math:`\\gamma` is some step-size, and :math:`\\sigma` is
+    the level of accuracy of the approximate proximal point oracle.
 
     **Algorithm**: The approximate proximal point method under consideration is described by
 
@@ -135,4 +135,6 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_relatively_inexact_proximal_point_algorithm(n=8, gamma=10, sigma=.65,
+                                                                                wrapper="cvxpy", solver=None,
+                                                                                verbose=1)

@@ -18,8 +18,8 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
 
         .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
-    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`. Then, it looks for a low-dimensional nearly achieving this
-    performance.
+    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
+    Then, it looks for a low-dimensional nearly achieving this performance.
 
     **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 

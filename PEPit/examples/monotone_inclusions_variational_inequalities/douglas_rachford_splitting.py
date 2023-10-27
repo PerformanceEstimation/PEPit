@@ -16,8 +16,9 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
     monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively
     :math:`\\alpha A` and :math:`\\alpha B`.
 
-    This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
-    :math:`w^{(0)}_t` and :math:`w^{(1)}_t`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
+    This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS).
+    That is, given two initial points :math:`w^{(0)}_t` and :math:`w^{(1)}_t`,
+    this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
     .. math:: \\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, \\mu, \\alpha, \\theta) \\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2,
@@ -29,7 +30,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
     factor :math:`\\tau(L, \\mu, \\alpha, \\theta)` is computed as the worst-case value of
     :math:`\\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2` when :math:`\\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2 \\leqslant 1`.
 
-    **Algorithm**: One iteration of the Douglas-Rachford splitting is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
+    **Algorithm**: One iteration of the Douglas-Rachford splitting is described as follows,
+    for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
@@ -142,8 +144,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
         theoretical_tau = ((theta + c) / 2 / (mu + 1)) ** 2
     elif (L <= 1) & (mu >= (L ** 2 + 1) / (L - 1) ** 2) & (theta <= - (2 * (mu + 1) * (L + 1) *
                                                                        (mu + (mu - 1) * L ** 2 - 2 * mu * L - 1)) / (
-                                                                   mu + L * (L ** 2 + L + 1) + 2 * mu ** 2 * (
-                                                                   L - 1) + mu * L * (1 - (L - 3) * L) + 1)):
+                                                                   mu + L * (L ** 2 + L + 1) + 2 * mu ** 2 * (L - 1)
+                                                                   + mu * L * (1 - (L - 3) * L) + 1)):
         theoretical_tau = (1 - theta * (L + mu) / (L + 1) / (mu + 1)) ** 2
     else:
         theoretical_tau = (2 - theta) / 4 / mu / (L ** 2 + 1) * (
@@ -162,4 +164,6 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

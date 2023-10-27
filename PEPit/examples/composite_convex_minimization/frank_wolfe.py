@@ -25,7 +25,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **Algorithm**:
 
-    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
+    This method was first presented in [1]. A more recent version can be found in, e.g., [2, Algorithm 1].
+    For :math:`t \\in \\{0, \\dots, n-1\\}`,
 
         .. math::
             \\begin{eqnarray}

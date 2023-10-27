@@ -52,9 +52,9 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
     for the method (typical of accelerated methods).
 
     The line with ":math:`\\approx_{\\varepsilon}`" can be described as the pair :math:`(x_{t+1},v_{t+1})` satisfying
-    an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition), it requires
-    the existence of some :math:`w_{t+1}` such that :math:`v_{t+1} \\in \\partial g(w_{t+1})` and for which the accuracy
-    requirement
+    an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition),
+    it requires the existence of some :math:`w_{t+1}` such that :math:`v_{t+1} \\in \\partial g(w_{t+1})`
+    and for which the accuracy requirement
 
      .. math:: \\gamma^2 || x_{t+1} - y_t + \\gamma v_{t+1} ||^2 + \\gamma  (g(x_{t+1}) - g(w_{t+1}) - v_{t+1}(x_{t+1} - w_{t+1})) \\leqslant \\varepsilon_t,
 
@@ -174,4 +174,6 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11,
+                                                                         wrapper="cvxpy", solver=None,
+                                                                         verbose=1)

@@ -22,7 +22,8 @@ def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
 
     In short, for a given value of :math:`n`,
     :math:`\\tau(n)` is computed as the worst-case value of
-    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2`
+    when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
     **Algorithm**: The alternate projection method can be written as

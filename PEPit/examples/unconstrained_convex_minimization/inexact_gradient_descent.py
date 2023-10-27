@@ -150,4 +150,6 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient_descent(L=1, mu=.1, epsilon=.1, n=2,
+                                                             wrapper="cvxpy", solver=None,
+                                                             verbose=1)

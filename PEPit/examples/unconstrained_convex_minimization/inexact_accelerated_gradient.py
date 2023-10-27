@@ -24,7 +24,8 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, wrapper="cvxpy", solver=None,
 
     .. math:: \\|\\nabla f(y_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(y_t)\\|,
 
-    where :math:`\\nabla f(y_t)` is the true gradient at :math:`y_t` and :math:`d_t` is the approximate descent direction that is used.
+    where :math:`\\nabla f(y_t)` is the true gradient at :math:`y_t` and :math:`d_t` is
+    the approximate descent direction that is used.
 
     **Algorithm**:
     The inexact accelerated gradient method of this example is provided by
@@ -143,4 +144,6 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, wrapper="cvxpy", solver=None,
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5,
+                                                                 wrapper="cvxpy", solver=None,
+                                                                 verbose=1)

@@ -12,18 +12,20 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex.
 
-    This code computes a worst-case guarantee for **randomized block-coordinate descent** with step-size :math:`\\gamma`.
+    This code computes a worst-case guarantee for **randomized block-coordinate descent**
+    with step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, d)` such that the guarantee
 
     .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2] \\leqslant \\tau(L, \\mu, \\gamma, d) \\|x_t - x_\\star\\|^2
     
     holds for any fixed step-size :math:`\\gamma` and any number of blocks :math:`d`,
-    and where :math:`x_\\star` denotes a minimizer of :math:`f`. The notation :math:`\\mathbb{E}` denotes the expectation
-    over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    and where :math:`x_\\star` denotes a minimizer of :math:`f`. The notation :math:`\\mathbb{E}`
+    denotes the expectation over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
-    In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma, d)` is
-    computed as the worst-case value of :math:`\\mathbb{E}[\\|x_{t+1} - x_\star \\|^2]` when
-    :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`\\mu`, :math:`L`, :math:`d`, and :math:`\\gamma`,
+    :math:`\\tau(L, \\mu, \\gamma, d)` is computed as the worst-case value of
+    :math:`\\mathbb{E}[\\|x_{t+1} - x_\star \\|^2]` when :math:`\\|x_t - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Randomized block-coordinate descent is described by
@@ -37,7 +39,8 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
     where :math:`\\gamma` is a step-size and :math:`\\nabla_i f(x_t)` is the :math:`i^{\\text{th}}` partial gradient.
 
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee can be found in [1, Appendix I, Theorem 17]:
+    When :math:`\\gamma \\leqslant \\frac{1}{L}`, the **tight** theoretical guarantee
+    can be found in [1, Appendix I, Theorem 17]:
 
     .. math:: \\mathbb{E}[\\|x_{t+1} - x_\star \\|^2] \\leqslant \\rho^2 \\|x_t-x_\\star\\|^2,
 
@@ -148,4 +151,5 @@ if __name__ == "__main__":
     mu = 0.1
     gamma = 2 / (mu + L)
     pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=2,
-                                                                                         wrapper="cvxpy", solver=None, verbose=1)
+                                                                                         wrapper="cvxpy", solver=None,
+                                                                                         verbose=1)

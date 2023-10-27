@@ -109,4 +109,6 @@ def wc_krasnoselskii_mann_increasing_step_sizes(n, wrapper="cvxpy", solver=None,
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_krasnoselskii_mann_increasing_step_sizes(n=3,
+                                                                             wrapper="cvxpy", solver=None,
+                                                                             verbose=1)

@@ -19,7 +19,8 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
     .. math :: V_{n+1} \\leqslant V_n,
 
-    where :math:`x_{n+1}` is obtained from a gradient step from :math:`x_{n}` with fixed step-size :math:`\\gamma=\\frac{1}{L}`.
+    where :math:`x_{n+1}` is obtained from a gradient step from :math:`x_{n}`
+    with fixed step-size :math:`\\gamma=\\frac{1}{L}`.
 
     **Algorithm**: Onte iteration of gradient descent is described by
 
@@ -141,4 +142,6 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

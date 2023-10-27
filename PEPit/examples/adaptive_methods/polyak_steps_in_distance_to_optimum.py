@@ -10,16 +10,17 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, wrapper="cvxpy", solver
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex, and :math:`x_\\star=\\arg\\min_x f(x)`.
 
-    This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step-sizes** (PS).
-    That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
+    This code computes a worst-case guarantee for a variant of a **gradient method** relying on **Polyak step-sizes**
+    (PS). That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma)` such that the guarantee
 
     .. math:: \\|x_{t+1} - x_\\star\\|^2 \\leqslant \\tau(L, \\mu, \\gamma) \\|x_{t} - x_\\star\\|^2
 
     is valid, where :math:`x_t` is the output of the gradient method with PS and :math:`\\gamma` is the effective
     value of the step-size of the gradient method with PS.
 
-    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is computed as the worst-case
-    value of :math:`\\|x_{t+1} - x_\\star\\|^2` when :math:`\\|x_{t} - x_\\star\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`L`, :math:`\\mu`, and :math:`\\gamma`, :math:`\\tau(L, \\mu, \\gamma)` is
+    computed as the worst-case value of :math:`\\|x_{t+1} - x_\\star\\|^2` when
+    :math:`\\|x_{t} - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     Gradient descent is described by
@@ -151,4 +152,6 @@ if __name__ == "__main__":
     L = 1
     mu = 0.1
     gamma = 2 / (L + mu)
-    pepit_tau, theoretical_tau = wc_polyak_steps_in_distance_to_optimum(L=L, mu=mu, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_polyak_steps_in_distance_to_optimum(L=L, mu=mu, gamma=gamma,
+                                                                        wrapper="cvxpy", solver=None,
+                                                                        verbose=1)

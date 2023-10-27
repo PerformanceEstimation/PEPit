@@ -19,7 +19,8 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
     .. math:: \\phi(t, x_t) = (t \\gamma \\frac{L}{d} + 1)(f(x_t) - f_\\star) + \\frac{L}{2} \\|x_t - x_\\star\||^2
 
     is decreasing in expectation over the **randomized block-coordinate descent** algorithm. We use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution
+    of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
 
     In short, for given values of :math:`L`, :math:`d`, and :math:`\\gamma`, it computes the worst-case value
     of :math:`\\mathbb{E}[\\phi(t, x_t)]` such that :math:`\\phi(x_{t-1}) \\leqslant 1`.
@@ -152,4 +153,6 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4,
+                                                                                wrapper="cvxpy", solver=None,
+                                                                                verbose=1)

@@ -160,4 +160,6 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10.,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

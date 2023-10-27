@@ -41,7 +41,8 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
                 w_{t+1} & = & w_t - \\theta (x_{t+1} - y_{t+1}).
             \\end{eqnarray}
 
-    **References**: The TOS was proposed in [1], the analysis of such operator splitting methods using PEPs was proposed in [2].
+    **References**: The TOS was proposed in [1],
+    the analysis of such operator splitting methods using PEPs was proposed in [2].
 
     `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
     Set-valued and variational analysis, 25(4), 829-858.
@@ -146,4 +147,6 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3,
+                                                             wrapper="cvxpy", solver=None,
+                                                             verbose=1)

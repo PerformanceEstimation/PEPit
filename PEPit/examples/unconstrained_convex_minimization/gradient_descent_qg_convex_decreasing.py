@@ -154,4 +154,6 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", solver=None,
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex_decreasing(L=1, n=6, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex_decreasing(L=1, n=6,
+                                                                          wrapper="cvxpy", solver=None,
+                                                                          verbose=1)

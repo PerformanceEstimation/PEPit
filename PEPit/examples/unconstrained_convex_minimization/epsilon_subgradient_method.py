@@ -18,12 +18,14 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
 
     .. math:: \\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star \\leqslant \\tau(n, M, \\gamma, \\varepsilon, R) 
 
-    is valid, where :math:`x_t` are the iterates of the :math:`\\varepsilon` **-subgradient method** after :math:`t\\leqslant n` steps,
+    is valid, where :math:`x_t` are the iterates of the :math:`\\varepsilon` **-subgradient method**
+    after :math:`t\\leqslant n` steps,
     where :math:`x_\\star` is a minimizer of :math:`f`, where :math:`M` is an upper bound on the norm of all
     :math:`\\varepsilon`-subgradients encountered, and when :math:`\\|x_0-x_\\star\\|\\leqslant R`.
 
-    In short, for given values of :math:`M`, of the accuracy :math:`\\varepsilon`, of the step-size :math:`\\gamma`, of the initial
-    distance :math:`R`, and of the number of iterations :math:`n`, :math:`\\tau(n, M, \\gamma, \\varepsilon, R)` is computed as the worst-case value of
+    In short, for given values of :math:`M`, of the accuracy :math:`\\varepsilon`, of the step-size :math:`\\gamma`,
+    of the initial distance :math:`R`, and of the number of iterations :math:`n`,
+    :math:`\\tau(n, M, \\gamma, \\varepsilon, R)` is computed as the worst-case value of
     :math:`\\min_{0 \leqslant t \leqslant n} f(x_t) - f_\\star`.
 
     **Algorithm**:
@@ -43,7 +45,8 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
 
     **References**: 
 
-    `[1] R.D. Millán, M.P. Machado (2019). Inexact proximal epsilon-subgradient methods for composite convex optimization problems.
+    `[1] R.D. Millán, M.P. Machado (2019).
+    Inexact proximal epsilon-subgradient methods for composite convex optimization problems.
     Journal of Global Optimization 75.4 (2019): 1029-1060.
     <https://arxiv.org/pdf/1805.10120.pdf>`_
    
@@ -149,4 +152,6 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
 if __name__ == "__main__":
     M, n, eps, R = 2, 6, .1, 1
     gamma = 1 / sqrt(n + 1)
-    pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

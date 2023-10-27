@@ -11,13 +11,14 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
     .. math:: F_\\star \\triangleq \\min_x \\left\\{F(x) \\equiv \\frac{1}{n} \\sum_{i=1}^n f_i(x)\\right\\},
 
     where :math:`f_1, ..., f_n` are :math:`L`-smooth and :math:`\\mu`-strongly convex. In the sequel, we use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
-    e.g., :math:`F(x)\\equiv\\mathbb{E}[f_i(x)]`. In addition, we assume a zero variance at the optimal point
-    (which is denoted by :math:`x_\\star`):
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`, e.g., :math:`F(x)\\equiv\\mathbb{E}[f_i(x)]`.
+    In addition, we assume a zero variance at the optimal point (which is denoted by :math:`x_\\star`):
 
     .. math:: \\mathbb{E}\\left[\\|\\nabla f_i(x_\\star)\\|^2\\right] = \\frac{1}{n} \\sum_{i=1}^n \\|\\nabla f_i(x_\\star)\\|^2 = 0,
     
-    where the expectation :math:`\\mathbb{E}` is taken over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
+    where the expectation :math:`\\mathbb{E}` is taken over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`.
     
     This kind of situations happens for example in machine learning in the interpolation regime,
     that is if there exists a model :math:`x_\\star`
@@ -25,7 +26,8 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
     :math:`\\mathcal{L}(x_\\star, z_i) = f_i(x_\\star)` is zero.
 
     This code computes a worst-case guarantee for one step of the **stochastic gradient descent** (SGD) in expectation,
-    for the distance to optimal point. That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, n)` such that
+    for the distance to optimal point.
+    That is, it computes the smallest possible :math:`\\tau(L, \\mu, \\gamma, n)` such that
 
     .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\tau(L, \\mu, \\gamma, n) \\|x_0 - x_\\star\\|^2
 
@@ -169,4 +171,6 @@ if __name__ == "__main__":
     mu = 0.1
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5,
+                                                         wrapper="cvxpy", solver=None,
+                                                         verbose=1)

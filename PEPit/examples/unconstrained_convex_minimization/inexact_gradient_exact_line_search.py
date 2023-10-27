@@ -17,14 +17,16 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, wrapper="cvxpy", so
 
         .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu, \\varepsilon) ( f(x_0) - f_\\star )
 
-    is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction and an exact linesearch**,
-    and where :math:`x_\\star` is the minimizer of :math:`f`.
+    is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction
+    and an exact linesearch**, and where :math:`x_\\star` is the minimizer of :math:`f`.
 
-    The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\varepsilon < 1`)
+    The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by
+    (with :math:`0 \\leqslant \\varepsilon < 1`)
 
         .. math:: \\|\\nabla f(x_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
-    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
+    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t`
+    is the approximate descent direction that is used.
 
     **Algorithm**:
 
@@ -146,4 +148,6 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, wrapper="cvxpy", so
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2,
+                                                                       wrapper="cvxpy", solver=None,
+                                                                       verbose=1)

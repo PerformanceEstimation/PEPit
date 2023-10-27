@@ -137,4 +137,6 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_2(L=L, gamma=1 / L, n=10,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

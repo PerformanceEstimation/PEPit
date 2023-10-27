@@ -18,9 +18,9 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
 
         .. math:: F(y_n) - F(x_\\star) \\leqslant \\tau(n, L, \\alpha, \\theta) \\|x_0 - x_\\star\\|^2.
 
-    is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_\\star`, but not :math:`w_k` (see definitions in the section **Algorithm**). Hence
-    we require the initial condition on :math:`x_0` (arbitrary choice, partially justified by
-    the fact we choose :math:`f_2` to be the smooth function).
+    is valid, where it is known that :math:`x_k` and :math:`y_k` converge to :math:`x_\\star`, but not :math:`w_k`
+    (see definitions in the section **Algorithm**). Hence we require the initial condition on :math:`x_0`
+    (arbitrary choice, partially justified by the fact we choose :math:`f_2` to be the smooth function).
 
     Note that :math:`y_n` is feasible as it
     has a finite value for :math:`f_1` (output of the proximal operator on :math:`f_1`) and as :math:`f_2` is smooth.
@@ -154,4 +154,6 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

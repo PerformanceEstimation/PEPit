@@ -25,9 +25,10 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
     and :math:`w^{(0)}_{n}` and :math:`w^{(1)}_{n}` are the two corresponding :math:`n^{\\mathrm{th}}` outputs of TOS.
     (i.e., how do the iterates contract when the method is started from two different initial points).
 
-    In short, for given values of :math:`n`, :math:`L_1`, :math:`L_3`, :math:`\\mu_1`, :math:`\\alpha` and :math:`\\theta`,
-    the contraction factor :math:`\\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta)` is computed as the worst-case value of
-    :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2` when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L_1`, :math:`L_3`, :math:`\\mu_1`, :math:`\\alpha`
+    and :math:`\\theta`, the contraction factor :math:`\\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta)`
+    is computed as the worst-case value of :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2`
+    when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     One iteration of the algorithm is described in [1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
@@ -153,4 +154,6 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
 if __name__ == "__main__":
     L3 = 1
     alpha = 1 / L3
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4,
+                                                             wrapper="cvxpy", solver=None,
+                                                             verbose=1)

@@ -16,8 +16,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
     where :math:`f_1` is a :math:`L`-smooth convex function, and :math:`f_2` is a closed convex indicator function.
     We use a kernel function :math:`h` that is assumed to be closed, proper, and strongly convex (see [1, Section 5]).
 
-    This code computes a worst-case guarantee for **Improved interior gradient algorithm** (IGA). That is, it computes the
-    smallest possible :math:`\\tau(\\mu,L,c,\\lambda,n)` such that the guarantee
+    This code computes a worst-case guarantee for **Improved interior gradient algorithm** (IGA).
+    That is, it computes the smallest possible :math:`\\tau(\\mu,L,c,\\lambda,n)` such that the guarantee
 
     .. math:: F(x_n) - F(x_\\star) \\leqslant \\tau(\\mu,L,c,\\lambda,n)  (c D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star))
 
@@ -172,4 +172,6 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
 if __name__ == "__main__":
     L = 1
     lam = 1 / L
-    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)
