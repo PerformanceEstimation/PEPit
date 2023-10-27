@@ -47,12 +47,12 @@ jobs:
     - name: Install PEPit
       run: |
         pip install -e .
-    - name: Setup MOSEK
+    - name: Install MOSEK
       run: |
         pip install mosek
+    - name: Setup MOSEK license, run tests and generate report
       env:
         MOSEKLM_LICENSE_FILE: ${{ secrets.MSK_LICENSE }}
-    - name: Run tests and generate report
       run: |
         coverage run -m unittest tests/test_*
     - name: Upload Coverage to Codecov
