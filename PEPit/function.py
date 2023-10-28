@@ -354,11 +354,12 @@ class Function(object):
         table_of_constraints = np.array(table_of_constraints).reshape(1, -1)
         point_names = [point[0].name or "Point_{}".format(point_index) for point_index, point in
                        enumerate(list_of_points)]
-        df = pd.DataFrame(table_of_constraints, columns=point_names)
-        df.columns.name = "IC_{}".format(function_id)
+        if table_of_constraints.shape != (0,):
+            df = pd.DataFrame(table_of_constraints, columns=point_names)
+            df.columns.name = "IC_{}".format(function_id)
 
-        # Add the table of constraints to the attribute tables_of_constraints
-        self.tables_of_constraints[constraint_name] = df
+            # Add the table of constraints to the attribute tables_of_constraints
+            self.tables_of_constraints[constraint_name] = df
 
     def add_constraints_from_two_lists_of_points(self, list_of_points_1, list_of_points_2,
                                                  constraint_name, set_class_constraint_i_j,
@@ -433,11 +434,12 @@ class Function(object):
                          enumerate(list_of_points_1)]
         point_names_2 = [point[0].name or "Point_{}".format(point_index) for point_index, point in
                          enumerate(list_of_points_2)]
-        df = pd.DataFrame(table_of_constraints, columns=point_names_2, index=point_names_1)
-        df.columns.name = "IC_{}".format(function_id)
+        if table_of_constraints.shape != (0,):
+            df = pd.DataFrame(table_of_constraints, columns=point_names_2, index=point_names_1)
+            df.columns.name = "IC_{}".format(function_id)
 
-        # Add the table of constraints to the attribute tables_of_constraints
-        self.tables_of_constraints[constraint_name] = df
+            # Add the table of constraints to the attribute tables_of_constraints
+            self.tables_of_constraints[constraint_name] = df
 
     def get_class_constraints_duals(self):
         """

@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import pandas
 
 from PEPit import PEP
 from PEPit.point import Point
@@ -32,28 +33,28 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         self.pep = PEP()
 
-        self.func1 = ConvexFunction()
-        self.func2 = ConvexIndicatorFunction(D=np.inf)
-        self.func3 = ConvexLipschitzFunction(M=1)
-        self.func4 = ConvexQGFunction(L=1)
-        self.func5 = ConvexSupportFunction(M=np.inf)
-        self.func6 = RsiEbFunction(mu=.1, L=1)
-        self.func7 = SmoothConvexFunction(L=1)
-        self.func8 = SmoothConvexLipschitzFunction(L=1, M=1)
-        self.func9 = SmoothFunction(L=1)
-        self.func10 = SmoothStronglyConvexFunction(mu=.1, L=1)
-        self.func11 = StronglyConvexFunction(mu=.1)
+        self.func1 = ConvexFunction(name="f1")
+        self.func2 = ConvexIndicatorFunction(D=np.inf, name="f2")
+        self.func3 = ConvexLipschitzFunction(M=1, name="f3")
+        self.func4 = ConvexQGFunction(L=1, name="f4")
+        self.func5 = ConvexSupportFunction(M=np.inf, name="f5")
+        self.func6 = RsiEbFunction(mu=.1, L=1, name="f6")
+        self.func7 = SmoothConvexFunction(L=1, name="f7")
+        self.func8 = SmoothConvexLipschitzFunction(L=1, M=1, name="f8")
+        self.func9 = SmoothFunction(L=1, name="f9")
+        self.func10 = SmoothStronglyConvexFunction(mu=.1, L=1, name="f10")
+        self.func11 = StronglyConvexFunction(mu=.1, name="f11")
 
-        self.operator1 = CocoerciveOperator(beta=1.)
-        self.operator2 = CocoerciveStronglyMonotoneOperator(mu=.1, beta=1.)
-        self.operator3 = LipschitzOperator(L=1.)
-        self.operator4 = LipschitzStronglyMonotoneOperator(mu=.1, L=1.)
-        self.operator5 = MonotoneOperator()
-        self.operator6 = NegativelyComonotoneOperator(rho=1)
-        self.operator7 = StronglyMonotoneOperator(mu=.1)
+        self.operator1 = CocoerciveOperator(beta=1., name="op1")
+        self.operator2 = CocoerciveStronglyMonotoneOperator(mu=.1, beta=1., name="op2")
+        self.operator3 = LipschitzOperator(L=1., name="op3")
+        self.operator4 = LipschitzStronglyMonotoneOperator(mu=.1, L=1., name="op4")
+        self.operator5 = MonotoneOperator(name="op5")
+        self.operator6 = NegativelyComonotoneOperator(rho=1, name="op6")
+        self.operator7 = StronglyMonotoneOperator(mu=.1, name="op7")
 
-        self.point1 = Point(is_leaf=True, decomposition_dict=None)
-        self.point2 = Point(is_leaf=True, decomposition_dict=None)
+        self.point1 = Point(is_leaf=True, decomposition_dict=None, name="pt1")
+        self.point2 = Point(is_leaf=True, decomposition_dict=None, name="pt2")
 
         self.all_functions_and_operators = [
             self.func1,
@@ -83,9 +84,11 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         self.operators_weights = np.random.randn(len(self.all_functions_and_operators))
         self.new_operator: Function = np.dot(self.operators_weights, self.all_functions_and_operators)
+        self.new_operator.set_name("combined op")
 
         self.points_weights = np.random.randn(len(self.all_points))
         self.new_point: Point = np.dot(self.points_weights, self.all_points)
+        self.new_point.set_name("combined point")
 
     def test_is_instance(self):
 
@@ -192,3 +195,29 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.operator6.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator7.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.new_operator.list_of_class_constraints), 0)
+
+    def test_name(self):
+
+        all_names = ["f{}".format(i) for i in range(1, 12)] + ["op{}".format(i) for i in range(1, 8)]
+        for function, name in zip(self.all_functions_and_operators, all_names):
+            self.assertEqual(function.get_name(), name)
+
+    def test_tables_of_constraints(self):
+
+        self.pep.set_initial_condition((self.point1 - self.point2)**2 <= 1)
+        self.pep.set_performance_metric((self.func7.gradient(self.point1) - self.func7.gradient(self.point2))**2)
+        self.pep.solve()
+
+        for function in self.all_functions_and_operators:
+            tables_of_constraints = function.tables_of_constraints
+            for table in tables_of_constraints.values():
+                self.assertIsInstance(table, pandas.DataFrame)
+                self.assertNotEqual(table.shape, (0,))
+
+        tables_of_duals = self.func7.get_class_constraints_duals()
+        self.assertEqual(len(tables_of_duals), 1)
+        table_of_duals = tables_of_duals["cocoercivity"]
+        self.assertEqual(table_of_duals.columns.name, "IC_f7")
+        self.assertEqual(table_of_duals.columns[0], self.point1.get_name())
+        self.assertEqual(table_of_duals.columns[1], self.point2.get_name())
+        self.assertAlmostEqual(np.sum(np.array(table_of_duals) - np.array([[0, 2], [2, 0]]))**2, 0)
