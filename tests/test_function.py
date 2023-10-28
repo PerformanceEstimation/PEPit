@@ -7,6 +7,7 @@ from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.functions.convex_function import ConvexFunction
+from PEPit.operators.cocoercive_strongly_monotone import CocoerciveStronglyMonotoneOperator
 
 
 class TestFunction(unittest.TestCase):
@@ -16,6 +17,7 @@ class TestFunction(unittest.TestCase):
 
         self.func1 = Function(is_leaf=True, decomposition_dict=None, name="f1")
         self.func2 = ConvexFunction(is_leaf=True, decomposition_dict=None)
+        self.func3 = self.pep.declare_function(CocoerciveStronglyMonotoneOperator, mu=.1, beta=1., name="f3")
 
         self.point = Point(is_leaf=True, decomposition_dict=None)
 
@@ -23,10 +25,14 @@ class TestFunction(unittest.TestCase):
 
         self.assertIsInstance(self.func1, Function)
         self.assertIsInstance(self.func2, Function)
+        self.assertIsInstance(self.func2, ConvexFunction)
+        self.assertIsInstance(self.func3, Function)
+        self.assertIsInstance(self.func3, CocoerciveStronglyMonotoneOperator)
 
     def test_name(self):
 
         self.assertIsNone(self.func2.get_name())
+        self.assertEqual(self.func3.get_name(), "f3")
 
         self.func2.set_name("f2")
 
@@ -38,12 +44,13 @@ class TestFunction(unittest.TestCase):
         composite_function = self.func1 + self.func2
         self.assertIs(self.func1.counter, 0)
         self.assertIs(self.func2.counter, 1)
+        self.assertIs(self.func3.counter, 2)
         self.assertIs(composite_function.counter, None)
-        self.assertIs(Function.counter, 2)
+        self.assertIs(Function.counter, 3)
 
         new_function = Function(is_leaf=True, decomposition_dict=None)
-        self.assertIs(new_function.counter, 2)
-        self.assertIs(Function.counter, 3)
+        self.assertIs(new_function.counter, 3)
+        self.assertIs(Function.counter, 4)
 
     def compute_linear_combination(self):
 
