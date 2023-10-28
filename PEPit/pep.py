@@ -145,9 +145,12 @@ class PEP(object):
         # Return it
         return f
 
-    def set_initial_point(self):
+    def set_initial_point(self, name=None):
         """
         Create a new leaf :class:`Point` and store it in the attribute `list_of_points`.
+
+        Args:
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             x (Point): the newly created :class:`Point`.
@@ -157,34 +160,43 @@ class PEP(object):
         # Create a new point from scratch
         x = Point(is_leaf=True, decomposition_dict=None)
 
+        # Set name
+        if name is not None:
+            x.set_name(name=name)
+
         # Store it in list_of_points
         self.list_of_points.append(x)
 
         # Return it
         return x
 
-    def set_initial_condition(self, condition):
+    def set_initial_condition(self, condition, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
         Typically, a condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
 
         Args:
             condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
 
         """
+        # Set name
+        if name is not None:
+            condition.set_name(name=name)
 
         # Call add_constraint method
         self.add_constraint(constraint=condition)
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
 
         Args:
             constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
@@ -194,15 +206,20 @@ class PEP(object):
         # Verify constraint is an actual Constraint object
         assert isinstance(constraint, Constraint)
 
+        # Set name
+        if name is not None:
+            constraint.set_name(name=name)
+
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
-    def add_psd_matrix(self, matrix_of_expressions):
+    def add_psd_matrix(self, matrix_of_expressions, name=None):
         """
         Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
@@ -210,6 +227,10 @@ class PEP(object):
 
         """
         matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
+
+        # Set name
+        if name is not None:
+            matrix.set_name(name=name)
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
@@ -233,15 +254,21 @@ class PEP(object):
         # Return it
         return block_partition
 
-    def set_performance_metric(self, expression):
+    def set_performance_metric(self, expression, name=None):
         """
         Store a performance metric in the attribute `list_of_performance_metrics`.
         The objective of the PEP (which is maximized) is the minimum of the elements of `list_of_performance_metrics`.
 
         Args:
             expression (Expression): a new performance metric.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         """
+        assert isinstance(expression, Expression)
+
+        # Set name
+        if name is not None:
+            expression.set_name(name=name)
 
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)

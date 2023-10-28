@@ -79,7 +79,8 @@ class Function(object):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
-            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
+            name (str, optional): name of the object. None by default.
+                                  Can be updated later through the method `set_name`.
 
         Note:
             If `is_leaf` is True, then `decomposition_dict` must be provided as None.
@@ -274,12 +275,13 @@ class Function(object):
         # P / v = P * (1/v)
         return self.__rmul__(other=1 / denominator)
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`Function`.
 
         Args:
             constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
@@ -289,15 +291,20 @@ class Function(object):
         # Verify constraint is an actual Constraint object
         assert isinstance(constraint, Constraint)
 
+        # Set name
+        if name is not None:
+            constraint.set_name(name=name)
+
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
-    def add_psd_matrix(self, matrix_of_expressions):
+    def add_psd_matrix(self, matrix_of_expressions, name=None):
         """
         Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
@@ -305,6 +312,10 @@ class Function(object):
 
         """
         matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
+
+        # Set name
+        if name is not None:
+            matrix.set_name(name=name)
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
@@ -727,12 +738,13 @@ class Function(object):
         # Return gradient and function value
         return g, f
 
-    def gradient(self, point):
+    def gradient(self, point, name=None):
         """
         Return the gradient (or a subgradient) of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: a gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
@@ -742,14 +754,15 @@ class Function(object):
 
         """
 
-        return self.subgradient(point)
+        return self.subgradient(point, name=name)
 
-    def subgradient(self, point):
+    def subgradient(self, point, name=None):
         """
         Return a subgradient of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: a subgradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
@@ -765,14 +778,19 @@ class Function(object):
         # Call oracle but only return the gradient
         g, _ = self.oracle(point)
 
+        # Set name
+        if name is not None:
+            g.set_name(name=name)
+
         return g
 
-    def value(self, point):
+    def value(self, point, name=None):
         """
         Return the function value of this :class:`Function` on point.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
@@ -793,6 +811,10 @@ class Function(object):
             # Otherwise, call oracle but only return the function value
             _, f = self.oracle(point)
 
+        # Set name
+        if name is not None:
+            f.set_name(name=name)
+
         # Return the function value
         return f
 
@@ -811,7 +833,7 @@ class Function(object):
         # Call the method value on point
         return self.value(point=point)
 
-    def stationary_point(self, return_gradient_and_function_value=False):
+    def stationary_point(self, return_gradient_and_function_value=False, name=None):
         """
         Create a new stationary point, as well as its zero gradient and its function value.
 
@@ -819,6 +841,7 @@ class Function(object):
             return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
                                                        gradient (:class:`Point`), function value (:class:`Expression`).
                                                        Otherwise, return only the point (:class:`Point`).
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point or tuple: an optimal point
@@ -833,17 +856,24 @@ class Function(object):
         # Add the triplet to the list of points of the function as well as to its list of stationary points
         self.add_point((point, g, f))
 
+        # Set name
+        if name is not None:
+            point.set_name(name=name)
+
         # Return the required information
         if return_gradient_and_function_value:
             return point, g, f
         else:
             return point
 
-    def fixed_point(self):
+    def fixed_point(self, name=None):
 
         """
         This routine outputs a fixed point of this function, that is :math:`x` such that :math:`x\\in\\partial f(x)`.
         If self is an operator :math:`A`, the fixed point is such that :math:`Ax = x`.
+
+        Args:
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             x (Point): a fixed point of the differential of self.
@@ -858,6 +888,10 @@ class Function(object):
 
         # Add triplet to self's list of points (by definition gx = x)
         self.add_point((x, x, fx))
+
+        # Set name
+        if name is not None:
+            x.set_name(name=name)
 
         # Return the aforementioned triplet
         return x, x, fx
