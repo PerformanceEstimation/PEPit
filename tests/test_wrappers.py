@@ -50,29 +50,32 @@ class TestWrapperCVXPY(unittest.TestCase):
         # Compute theoretical rate of the above problem
         self.theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
 
+        # Define a verbose for all tests
+        self.verbose = 0
+
     def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically.
-        pepit_tau = self.problem.solve(verbose=0, wrapper=self.wrapper)
+        pepit_tau = self.problem.solve(verbose=self.verbose, wrapper=self.wrapper)
 
         # Compute pepit_tau very basically with dimension_reduction_heuristic off and verify all is fine.
-        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None, wrapper=self.wrapper)
+        pepit_tau2 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic=None, wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace", wrapper=self.wrapper)
+        pepit_tau3 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic="trace", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2", wrapper=self.wrapper)
+        pepit_tau4 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic="logdet2", wrapper=self.wrapper)
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
 
     def test_track_constraints_sent_to_solver(self):
 
         # Run problem to send constraints to wrapper who sends it to solver
-        self.problem.solve(wrapper=self.wrapper, verbose=0)
+        self.problem.solve(wrapper=self.wrapper, verbose=self.verbose)
 
         # The wrapper should have sent 5 constraints to the solver: 1 initial, 2 class interpolation, 1 PSD
         # and 1 for the objective.
@@ -81,7 +84,7 @@ class TestWrapperCVXPY(unittest.TestCase):
     def test_recover_dual_values(self):
 
         # Run problem and grab the dual values back.
-        self.problem.solve(wrapper=self.wrapper, verbose=0)
+        self.problem.solve(wrapper=self.wrapper, verbose=self.verbose)
         dual_values, residual = self.problem.wrapper._recover_dual_values()
 
         # The wrapper should have sent 5 constraints to the solver: 1 initial, 2 class interpolation, 1 PSD
@@ -109,7 +112,7 @@ class TestWrapperCVXPY(unittest.TestCase):
                            1 == (self.x0 - self.xs) ** 2,
                            ]:
             self.problem.list_of_constraints = [constraint]
-            self.problem.solve(verbose=0, wrapper=self.wrapper)
+            self.problem.solve(verbose=self.verbose, wrapper=self.wrapper)
             elements_of_proof.append(constraint.eval_dual() * constraint.expression)
 
         # Test whether all elements of proofs are identical
@@ -121,7 +124,7 @@ class TestWrapperCVXPY(unittest.TestCase):
     def test_proof_consistency(self):
 
         # Solve the problem
-        self.problem.solve(verbose=0, wrapper=self.wrapper)
+        self.problem.solve(verbose=self.verbose, wrapper=self.wrapper)
 
         # - <Gram, residual> <= 0
         constraints_combination = -np.dot(Point.list_of_leaf_points,
