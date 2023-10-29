@@ -45,7 +45,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: The algorithm is presented in, among others, [1, 2]. The logdet heuristic is presented in [3].
 
-    [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
+    [1] M .Frank, P. Wolfe (1956).
+    An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
 
     `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.

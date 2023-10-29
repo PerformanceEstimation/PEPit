@@ -54,15 +54,18 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     **References**:
     The optimized gradient method was developed in [1, 2]; the corresponding lower bound was first obtained in [3].
 
-    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145(1–2), 451–482.
+    `[1] Y. Drori, M. Teboulle (2014).
+    Performance of first-order methods for smooth convex minimization: a novel approach.
+    Mathematical Programming 145(1–2), 451–482.
     <https://arxiv.org/pdf/1206.3209.pdf>`_
 
-    `[2] D. Kim, J. Fessler (2016). Optimized first-order methods for smooth convex minimization. Mathematical
-    Programming 159.1-2: 81-107.
+    `[2] D. Kim, J. Fessler (2016).
+    Optimized first-order methods for smooth convex minimization.
+    Mathematical Programming 159.1-2: 81-107.
     <https://arxiv.org/pdf/1406.5468.pdf>`_
 
-    `[3] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
+    `[3] Y. Drori  (2017).
+    The exact information-based complexity of smooth convex minimization.
     Journal of Complexity, 39, 1-16.
     <https://arxiv.org/pdf/1606.01424.pdf>`_
 

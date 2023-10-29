@@ -49,7 +49,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
 
     **References**:
 
-    `[1] A. Auslender, M. Teboulle (2006). Interior gradient and proximal methods for convex and conic optimization.
+    `[1] A. Auslender, M. Teboulle (2006).
+    Interior gradient and proximal methods for convex and conic optimization.
     SIAM Journal on Optimization 16.3 (2006): 697-725.
     <https://epubs.siam.org/doi/pdf/10.1137/S1052623403427823>`_
 

@@ -46,12 +46,14 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
 
     **References**: The detailed analyses can be found in [1, 2].
 
-    `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
-    inexact gradient and Newton methods through semidefinite programming performance estimation.
+    `[1] E. De Klerk, F. Glineur, A. Taylor (2020).
+    Worst-case convergence analysis of inexact gradient
+    and Newton methods through semidefinite programming performance estimation.
     SIAM Journal on Optimization, 30(3), 2053-2082.
     <https://arxiv.org/pdf/1709.05191.pdf>`_
 
-    `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods.
+    `[2] O. Gannot (2021).
+    A frequency-domain analysis of inexact gradient methods.
     Mathematical Programming (to appear).
     <https://arxiv.org/pdf/1912.13494.pdf>`_
 

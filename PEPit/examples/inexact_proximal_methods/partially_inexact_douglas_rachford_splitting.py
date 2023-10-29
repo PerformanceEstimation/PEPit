@@ -58,12 +58,14 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
     **References**: The method is from [1], its PEP formulation and the worst-case analysis from [2],
     see [2, Section 4.4] for more details.
 
-    `[1] J. Eckstein and W. Yao (2018). Relative-error approximate versions of Douglas–Rachford splitting and
-    special cases of the ADMM. Mathematical Programming, 170(2), 417-444.
+    `[1] J. Eckstein and W. Yao (2018).
+    Relative-error approximate versions of Douglas–Rachford splitting and special cases of the ADMM.
+    Mathematical Programming, 170(2), 417-444.
     <https://link.springer.com/article/10.1007/s10107-017-1160-5>`_
 
-    `[2] M. Barre, A. Taylor, F. Bach (2020). Principled analyses and design of
-    first-order methods with inexact proximal operators, arXiv 2006.06041v2.
+    `[2] M. Barre, A. Taylor, F. Bach (2020).
+    Principled analyses and design of first-order methods with inexact proximal operators,
+    arXiv 2006.06041v2.
     <https://arxiv.org/pdf/2006.06041v2.pdf>`_
 
     Args:

@@ -44,12 +44,14 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
     **References**: This methods was first introduce in [1, Section 2],
     and convergence upper bound was proven in [2, Theorem 4].
 
-    `[1] B.T. Polyak (1964). Some methods of speeding up the convergence of iteration method.
+    `[1] B.T. Polyak (1964).
+    Some methods of speeding up the convergence of iteration method.
     URSS Computational Mathematics and Mathematical Physics.
     <https://www.sciencedirect.com/science/article/pii/0041555364901375>`_
 
-    `[2] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015). Global convergence of the Heavy-ball method for
-    convex optimization. European Control Conference (ECC).
+    `[2] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015).
+    Global convergence of the Heavy-ball method for convex optimization.
+    European Control Conference (ECC).
     <https://arxiv.org/pdf/1412.7457.pdf>`_
 
     Args:

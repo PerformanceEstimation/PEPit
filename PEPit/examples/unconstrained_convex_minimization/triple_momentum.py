@@ -66,8 +66,9 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     **References**:
     The triple momentum method was discovered and analyzed in [1].
 
-    `[1] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018), The fastest known globally convergent first-order method for
-    minimizing strongly convex functions. IEEE Control Systems Letters, 2(1), 49-54.
+    `[1] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018).
+    The fastest known globally convergent first-order method for minimizing strongly convex functions.
+    IEEE Control Systems Letters, 2(1), 49-54.
     <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
 
     Args:

@@ -47,8 +47,9 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
 
     **References**:
 
-    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017). Exact worst-case performance of first-order methods for composite
-    convex optimization. SIAM Journal on Optimization, 27(3):1283–1313.
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Exact worst-case performance of first-order methods for composite convex optimization.
+    SIAM Journal on Optimization, 27(3):1283–1313.
     <https://arxiv.org/pdf/1512.07516.pdf>`_
 
 

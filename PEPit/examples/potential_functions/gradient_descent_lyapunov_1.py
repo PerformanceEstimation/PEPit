@@ -36,12 +36,14 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
     **References**: The detailed potential function can found in [1] and the SDP approach can be found in [2].
 
-    `[1] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods.
+    `[1] N. Bansal, A. Gupta (2019).
+    Potential-function proofs for gradient methods.
     Theory of Computing, 15(1), 1-32.
     <https://arxiv.org/pdf/1712.04581.pdf>`_
 
-    `[2] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
-    via potential functions. Conference on Learning Theory (COLT).
+    `[2] A. Taylor, F. Bach (2019).
+    Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions.
+    Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:

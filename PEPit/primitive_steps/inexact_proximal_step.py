@@ -82,24 +82,28 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
     References:
 
-        `[1] R.T. Rockafellar (1976). Monotone operators and the proximal point algorithm. SIAM journal on control
-        and optimization, 14(5), 877-898.
+        `[1] R.T. Rockafellar (1976).
+        Monotone operators and the proximal point algorithm. SIAM journal on control and optimization, 14(5), 877-898.
         <https://epubs.siam.org/doi/pdf/10.1137/0314056>`_
 
-        `[2] R.D. Monteiro, B.F. Svaiter (2013). An accelerated hybrid proximal extragradient method for convex
-        optimization and its implications to second-order methods. SIAM Journal on Optimization, 23(2), 1092-1125.
+        `[2] R.D. Monteiro, B.F. Svaiter (2013).
+        An accelerated hybrid proximal extragradient method for convex optimization
+        and its implications to second-order methods.
+        SIAM Journal on Optimization, 23(2), 1092-1125.
         <https://epubs.siam.org/doi/abs/10.1137/110833786>`_
 
-        `[3] S. Salzo, S. Villa (2012). Inexact and accelerated proximal point algorithms.
+        `[3] S. Salzo, S. Villa (2012).
+        Inexact and accelerated proximal point algorithms.
         Journal of Convex analysis, 19(4), 1167-1192.
         <http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf>`_
 
-        `[4] M. Barre, A. Taylor, F. Bach (2020). Principled analyses and design of
-        first-order methods with inexact proximal operators.
+        `[4] M. Barre, A. Taylor, F. Bach (2020).
+        Principled analyses and design of first-order methods with inexact proximal operators.
         <https://arxiv.org/pdf/2006.06041v3.pdf>`_
 
-        `[5] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
-        in Optimization: Vol. 5, No. 1-2.
+        `[5] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+        Acceleration Methods.
+        Foundations and Trends in Optimization: Vol. 5, No. 1-2.
         <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:

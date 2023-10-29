@@ -21,10 +21,11 @@ class SmoothConvexLipschitzFunction(SmoothConvexFunction):
         >>> func = problem.declare_function(function_class=SmoothConvexLipschitzFunction, L=1., M=1.)
 
     References:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
-        Exact worst-case performance of first-order methods for composite convex optimization.
-        SIAM Journal on Optimization, 27(3):1283–1313.
-        <https://arxiv.org/pdf/1512.07516.pdf>`_
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Exact worst-case performance of first-order methods for composite convex optimization.
+    SIAM Journal on Optimization, 27(3):1283–1313.
+    <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     """
 

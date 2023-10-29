@@ -36,7 +36,8 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
 
     **References**:
 
-    `[1] Y. Censor, S.A. Zenios (1992). Proximal minimization algorithm with D-functions.
+    `[1] Y. Censor, S.A. Zenios (1992).
+    Proximal minimization algorithm with D-functions.
     Journal of Optimization Theory and Applications, 73(3), 451-464.
     <https://link.springer.com/content/pdf/10.1007/BF00940051.pdf>`_
 

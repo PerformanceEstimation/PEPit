@@ -22,10 +22,11 @@ class SmoothStronglyConvexFunction(Function):
         >>> func = problem.declare_function(function_class=SmoothStronglyConvexFunction, mu=.1, L=1.)
 
     References:
-        `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
-        Smooth strongly convex interpolation and exact worst-case performance of first-order methods.
-        Mathematical Programming, 161(1-2), 307-345.
-        <https://arxiv.org/pdf/1502.05666.pdf>`_
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Smooth strongly convex interpolation and exact worst-case performance of first-order methods.
+    Mathematical Programming, 161(1-2), 307-345.
+    <https://arxiv.org/pdf/1502.05666.pdf>`_
 
     """
 

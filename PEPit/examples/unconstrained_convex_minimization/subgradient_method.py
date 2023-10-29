@@ -43,14 +43,17 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: Classical references on this topic include [1, 2].
 
-    `[1] Y. Nesterov (2003). Introductory lectures on convex optimization: A basic course.
+    `[1] Y. Nesterov (2003).
+    Introductory lectures on convex optimization: A basic course.
     Springer Science & Business Media.
     <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
 
-    `[2] S. Boyd, L. Xiao, A. Mutapcic (2003). Subgradient Methods (lecture notes).
+    `[2] S. Boyd, L. Xiao, A. Mutapcic (2003).
+    Subgradient Methods (lecture notes).
     <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
 
-    `[3] Y. Drori, M. Teboulle (2016). An optimal variant of Kelley's cutting-plane method.
+    `[3] Y. Drori, M. Teboulle (2016).
+    An optimal variant of Kelley's cutting-plane method.
     Mathematical Programming, 160(1), 321-351.
     <https://arxiv.org/pdf/1409.2636.pdf>`_
 

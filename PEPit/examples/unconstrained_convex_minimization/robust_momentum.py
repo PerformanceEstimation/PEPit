@@ -55,8 +55,9 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    `[1] S. Cyrus, B. Hu, B. Van Scoy, L. Lessard (2018). A robust accelerated optimization algorithm for strongly
-    convex functions. American Control Conference (ACC).
+    `[1] S. Cyrus, B. Hu, B. Van Scoy, L. Lessard (2018).
+    A robust accelerated optimization algorithm for strongly convex functions.
+    American Control Conference (ACC).
     <https://arxiv.org/pdf/1710.04753.pdf>`_
          
     Args:    

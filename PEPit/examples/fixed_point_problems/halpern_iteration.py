@@ -33,7 +33,9 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: The detailed approach and tight bound are available in [1].
 
-    `[1] F. Lieder (2021). On the convergence rate of the Halpern-iteration. Optimization Letters, 15(2), 405-418.
+    `[1] F. Lieder (2021).
+    On the convergence rate of the Halpern-iteration.
+    Optimization Letters, 15(2), 405-418.
     <http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf>`_
 
     Args:

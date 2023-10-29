@@ -42,12 +42,15 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     **References**: The detailed setup and results are availaible in [1]. The PEP approach for studying such settings
     is presented in [2].
 
-    `[1] J. Bolte, S. Sabach, M. Teboulle, Y. Vaisbourd (2018). First order methods beyond convexity and Lipschitz
-    gradient continuity with applications to quadratic inverse problems. SIAM Journal on Optimization, 28(3), 2131-2151.
+    `[1] J. Bolte, S. Sabach, M. Teboulle, Y. Vaisbourd (2018).
+    First order methods beyond convexity and Lipschitz gradient continuity
+    with applications to quadratic inverse problems.
+    SIAM Journal on Optimization, 28(3), 2131-2151.
     <https://arxiv.org/pdf/1706.06461.pdf>`_
 
-    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
-    first-order methods. Mathematical Programming, 1-43.
+    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
+    Optimal complexity and certification of Bregman first-order methods.
+    Mathematical Programming, 1-43.
     <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     DISCLAIMER: This example requires some experience with PEPit and PEPs (see Section 4 in [2]).

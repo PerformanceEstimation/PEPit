@@ -56,8 +56,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
     <https://jmlr.org/papers/volume22/20-195/20-195.pdf>`_
 
     `[2] J.M. Sanz-Serna and K. C. Zygalakis (2021)
-    The connections between Lyapunov functions for some optimization algorithms and differential equations. In SIAM
-    Journal on Numerical Analysis, 59 pp 1542-1565.
+    The connections between Lyapunov functions for some optimization algorithms and differential equations.
+    In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
     <https://arxiv.org/pdf/2009.00673.pdf>`_
 
     `[3] C. Moucer, A. Taylor, F. Bach (2022).

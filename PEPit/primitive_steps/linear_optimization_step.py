@@ -15,7 +15,8 @@ def linear_optimization_step(dir, ind):
     .. math:: - \\text{dir} \\in \\partial \\text{ind}(x).
 
     References:
-        [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
+        [1] M .Frank, P. Wolfe (1956).
+        An algorithm for quadratic programming.
         Naval research logistics quarterly, 3(1-2), 95-110.
 
     Args:

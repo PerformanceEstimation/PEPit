@@ -33,12 +33,14 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    `[1] Taylor, A. B. (2017). Convex interpolation and performance estimation of first-order methods for
-    convex optimization. PhD Thesis, UCLouvain.
+    `[1] Taylor, A. B. (2017).
+    Convex interpolation and performance estimation of first-order methods for convex optimization.
+    PhD Thesis, UCLouvain.
     <https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01>`_
 
-    `[2] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021). The exact worst-case convergence rate of the
-    gradient method with fixed step lengths for L-smooth functions. Optimization Letters, 16(6), 1649-1661.
+    `[2] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
+    The exact worst-case convergence rate of the gradient method with fixed step lengths for L-smooth functions.
+    Optimization Letters, 16(6), 1649-1661.
     <https://arxiv.org/pdf/2104.05468v3.pdf>`_
 
     Args:

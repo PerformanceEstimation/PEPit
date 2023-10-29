@@ -43,18 +43,23 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
 
     **References**:
 
-    `[1] A. Taylor, J. Hendrickx, F. Glineur (2018). Exact worst-case convergence rates of the proximal gradient
-    method for composite convex minimization. Journal of Optimization Theory and Applications, 178(2), 455-476.
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2018).
+    Exact worst-case convergence rates of the proximal gradient method for composite convex minimization.
+    Journal of Optimization Theory and Applications, 178(2), 455-476.
     <https://arxiv.org/pdf/1705.04398.pdf>`_
 
-    [2] B. Polyak (1987). Introduction to Optimization. Optimization Software New York.
+    [2] B. Polyak (1987).
+    Introduction to Optimization.
+    Optimization Software New York.
 
-    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    `[3] E. Ryu, S. Boyd (2016).
+    A primer on monotone operator methods.
     Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
-    `[4] L. Lessard, B. Recht, A. Packard (2016). Analysis and design of optimization algorithms via
-    integral quadratic constraints. SIAM Journal on Optimization 26(1), 57–95.
+    `[4] L. Lessard, B. Recht, A. Packard (2016).
+    Analysis and design of optimization algorithms via integral quadratic constraints.
+    SIAM Journal on Optimization 26(1), 57–95.
     <https://arxiv.org/pdf/1408.3595.pdf>`_
 
     Args:

@@ -36,8 +36,9 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
     **References**: The detailed approach (based on convex relaxations) is available in [1],
     along with theoretical bound.
 
-    `[1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
-    line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
+    `[1] E. De Klerk, F. Glineur, A. Taylor (2017).
+    On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions.
+    Optimization Letters, 11(7), 1185-1199.
     <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
 
     Args:

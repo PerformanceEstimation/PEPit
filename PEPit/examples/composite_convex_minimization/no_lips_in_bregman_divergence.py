@@ -42,13 +42,14 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
 
     **References**:
 
-    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
-    Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
+    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017).
+    A Descent Lemma Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
     Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
     <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
-    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
-    first-order methods. Mathematical Programming, 1-43.
+    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
+    Optimal complexity and certification of Bregman first-order methods.
+    Mathematical Programming, 1-43.
     <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:

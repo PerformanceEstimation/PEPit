@@ -44,7 +44,8 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
 
     **References**: The TOS was introduced in [1].
 
-    `[1] D. Davis, W. Yin (2017). A three-operator splitting scheme and its optimization applications.
+    `[1] D. Davis, W. Yin (2017).
+    A three-operator splitting scheme and its optimization applications.
     Set-valued and variational analysis, 25(4), 829-858.
     <https://arxiv.org/pdf/1504.01032.pdf>`_
 

@@ -44,15 +44,19 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
 
     **References**: The potential can be found in the historical [1]; and in more recent works, e.g., [2, 3].
 
-    `[1] Y. Nesterov (1983). A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
+    `[1] Y. Nesterov (1983).
+    A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
     In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
     <http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf>`_
 
-    `[2] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods. Theory of Computing, 15(1), 1-32.
+    `[2] N. Bansal, A. Gupta (2019).
+    Potential-function proofs for gradient methods.
+    Theory of Computing, 15(1), 1-32.
     <https://arxiv.org/pdf/1712.04581.pdf>`_
 
-    `[3] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
-    in Optimization: Vol. 5, No. 1-2.
+    `[3] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+    Acceleration Methods.
+    Foundations and Trends in Optimization: Vol. 5, No. 1-2.
     <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:

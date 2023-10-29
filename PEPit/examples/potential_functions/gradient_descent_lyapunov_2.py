@@ -36,8 +36,9 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
     **References**: The detailed potential function and SDP approach can be found in [1].
 
-    `[1] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
-    via potential functions. Conference on Learning Theory (COLT).
+    `[1] A. Taylor, F. Bach (2019).
+    Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions.
+    Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:

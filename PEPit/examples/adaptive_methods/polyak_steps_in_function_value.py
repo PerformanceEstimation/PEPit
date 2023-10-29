@@ -49,7 +49,8 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", solver=None
 
     **References**:
 
-    `[1] M. Barré, A. Taylor, A. d’Aspremont (2020). Complexity guarantees for Polyak steps with momentum.
+    `[1] M. Barré, A. Taylor, A. d’Aspremont (2020).
+    Complexity guarantees for Polyak steps with momentum.
     In Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/2002.00915.pdf>`_
 

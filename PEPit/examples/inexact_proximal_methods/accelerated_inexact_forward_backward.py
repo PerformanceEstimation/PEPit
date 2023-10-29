@@ -66,8 +66,10 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
 
     **References**: The method and theoretical result can be found in [1, Section 3].
 
-    `[1] M. Barre, A. Taylor, F. Bach (2021). A note on approximate accelerated forward-backward methods with
-    absolute and relative errors, and possibly strongly convex objectives. arXiv:2106.15536v2.
+    `[1] M. Barre, A. Taylor, F. Bach (2021).
+    A note on approximate accelerated forward-backward methods with
+    absolute and relative errors, and possibly strongly convex objectives.
+    arXiv:2106.15536v2.
     <https://arxiv.org/pdf/2106.15536v2.pdf>`_
 
     Args:

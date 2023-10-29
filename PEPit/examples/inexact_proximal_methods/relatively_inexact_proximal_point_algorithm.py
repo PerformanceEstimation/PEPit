@@ -41,8 +41,9 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
 
     **References**: The precise formulation is presented in [1, Section 3.5.1].
 
-    `[1] M. Barre, A. Taylor, F. Bach (2020). Principled analyses and design of first-order methods with inexact
-    proximal operators. arXiv 2006.06041v2.
+    `[1] M. Barre, A. Taylor, F. Bach (2020).
+    Principled analyses and design of first-order methods with inexact proximal operators.
+    arXiv 2006.06041v2.
     <https://arxiv.org/pdf/2006.06041.pdf>`_
 
     Args:

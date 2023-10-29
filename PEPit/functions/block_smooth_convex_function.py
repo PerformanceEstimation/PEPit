@@ -25,10 +25,11 @@ class BlockSmoothConvexFunction(Function):
         >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
 
     References:
-        `[1] Z. Shi, R. Liu (2016).
-        Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
-        In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
-        <https://arxiv.org/pdf/1608.04826.pdf>`_
+
+    `[1] Z. Shi, R. Liu (2016).
+    Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
+    In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+    <https://arxiv.org/pdf/1608.04826.pdf>`_
 
     """
 

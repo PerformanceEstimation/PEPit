@@ -491,5 +491,91 @@ International Conference on Machine Learning (ICML).
 [55] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
 [Optimal first-order methods for convex functions with a quadratic upper bound.](https://arxiv.org/pdf/2205.15033.pdf)
 
-[56] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[56] W. Su, S. Boyd, E. J. Candès (2016).
+[A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights.](https://jmlr.org/papers/volume17/15-084/15-084.pdf)
+In the Journal of Machine Learning Research (JMLR).
+
+[57] C. Moucer, A. Taylor, F. Bach (2022).
+[A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.](https://arxiv.org/pdf/2205.12772.pdf)
+
+[58] A. C. Wilson, B. Recht, M. I. Jordan (2021).
+[A Lyapunov analysis of accelerated methods in optimization.](https://jmlr.org/papers/volume22/20-195/20-195.pdf)
+In the Journal of Machine Learning Reasearch (JMLR), 22(113):1−34, 2021.
+
+[59] J.M. Sanz-Serna and K. C. Zygalakis (2021)
+[The connections between Lyapunov functions for some optimization algorithms and differential equations.](https://arxiv.org/pdf/2009.00673.pdf)
+In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
+
+[60] D. Scieur, V. Roulet, F. Bach and A. D'Aspremont (2017).
+[Integration methods and accelerated optimization algorithms.](https://papers.nips.cc/paper/2017/file/bf62768ca46b6c3b5bea9515d1a1fc45-Paper.pdf)
+In Advances in Neural Information Processing Systems (NIPS).
+
+[61] J. Park, E. Ryu (2022).
+[Exact Optimal Accelerated Complexity for Fixed-Point Iterations.](https://proceedings.mlr.press/v162/park22c/park22c.pdf)
+In 39th International Conference on Machine Learning (ICML).
+
+[62] M. Barre, A. Taylor, F. Bach (2020).
+[Principled analyses and design of first-order methods with inexact proximal operators.](https://arxiv.org/pdf/2006.06041v2.pdf)
+
+[63] Y. Drori and A. Taylor (2020).
+[Efficient first-order methods for convex minimization: a constructive approach.](https://arxiv.org/pdf/1803.05676.pdf)
+Mathematical Programming 184 (1), 183-220.
+
+[64] Z. Shi, R. Liu (2016).
+[Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.](https://arxiv.org/pdf/1608.04826.pdf)
+In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+
+[65] R.D. Millán, M.P. Machado (2019).
+[Inexact proximal epsilon-subgradient methods for composite convex optimization problems.](https://arxiv.org/pdf/1805.10120.pdf)
+Journal of Global Optimization 75.4 (2019): 1029-1060.
+
+[66] M. Kirszbraun (1934).
+Uber die zusammenziehende und Lipschitzsche transformationen.
+Fundamenta Mathematicae, 22 (1934).
+
+[67] F.A. Valentine (1943).
+On the extension of a vector function so as to preserve a Lipschitz condition.
+Bulletin of the American Mathematical Society, 49 (2).
+
+[68] F.A. Valentine (1945).
+A Lipschitz condition preserving extension for a vector function.
+American Journal of Mathematics, 67(1).
+
+[69] M. Kirszbraun (1934).
+Uber die zusammenziehende und Lipschitzsche transformationen.
+Fundamenta Mathematicae, 22 (1934).
+
+[70] F.A. Valentine (1943).
+On the extension of a vector function so as to preserve a Lipschitz condition.
+Bulletin of the American Mathematical Society, 49 (2).
+
+[71] F.A. Valentine (1945).
+A Lipschitz condition preserving extension for a vector function.
+American Journal of Mathematics, 67(1).
+
+[72] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
+[Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity.](https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf)
+International Conference on Machine Learning.
+
+[73] A. Brøndsted, R.T. Rockafellar.
+[On the subdifferentiability of convex functions.](https://www.jstor.org/stable/2033889)
+Proceedings of the American Mathematical Society 16(4), 605–611 (1965)
+
+[74] R.T. Rockafellar (1976).
+[Monotone operators and the proximal point algorithm.](https://epubs.siam.org/doi/pdf/10.1137/0314056)
+SIAM journal on control and optimization, 14(5), 877-898.
+
+[75] R.D. Monteiro, B.F. Svaiter (2013).
+[An accelerated hybrid proximal extragradient method for convex optimization and its implications to second-order methods.](https://epubs.siam.org/doi/abs/10.1137/110833786)
+SIAM Journal on Optimization, 23(2), 1092-1125.
+
+[76] S. Salzo, S. Villa (2012).
+[Inexact and accelerated proximal point algorithms.](http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf)
+Journal of Convex analysis, 19(4), 1167-1192.
+
+[77] H. H. Bauschke and P. L. Combettes (2017).
+Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
+Springer New York, 2nd ed.
+
+[78] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
 [PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)

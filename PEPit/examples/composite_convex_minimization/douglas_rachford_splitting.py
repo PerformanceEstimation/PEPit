@@ -45,12 +45,14 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
 
     **References**:
 
-    `[1] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    `[1] E. Ryu, S. Boyd (2016).
+    A primer on monotone operator methods.
     Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
-    `[2] A. Taylor, J. Hendrickx, F. Glineur (2017). Performance Estimation Toolbox (PESTO): automated worst-case
-    analysis of first-order optimization methods. In 56th IEEE Conference on Decision and Control (CDC).
+    `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods.
+    In 56th IEEE Conference on Decision and Control (CDC).
     <https://github.com/AdrienTaylor/Performance-Estimation-Toolbox>`_
 
     Args:

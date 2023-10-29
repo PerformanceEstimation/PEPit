@@ -36,7 +36,6 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
     .. math:: \\| x_n - x_\\star \\|^2 \\leqslant (1 - 2\\gamma\\mu + L^2 \\gamma^2)^n \\|x_0-x_\\star\\|^2.
 
     **References**:
-
     Definition and convergence guarantees can be found in [1].
 
     `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).

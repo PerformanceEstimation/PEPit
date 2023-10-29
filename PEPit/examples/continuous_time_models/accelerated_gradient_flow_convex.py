@@ -42,8 +42,8 @@ def wc_accelerated_gradient_flow_convex(t, wrapper="cvxpy", solver=None, verbose
     **References**:
 
     `[1] W. Su, S. Boyd, E. J. Candès (2016).
-    A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights. In the Journal of
-    Machine Learning Research (JMLR).
+    A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights.
+    In the Journal of Machine Learning Research (JMLR).
     <https://jmlr.org/papers/volume17/15-084/15-084.pdf>`_
 
     `[2] C. Moucer, A. Taylor, F. Bach (2022).

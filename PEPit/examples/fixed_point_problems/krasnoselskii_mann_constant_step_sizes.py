@@ -35,8 +35,10 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
 
     **Reference**:
 
-    `[1] F. Lieder (2018). Projection Based Methods for Conic Linear Programming
-    Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.  PhD thesis, HHU Düsseldorf.
+    `[1] F. Lieder (2018).
+    Projection Based Methods for Conic Linear Programming
+    Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.
+    PhD thesis, HHU Düsseldorf.
     <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
 
     Args:
