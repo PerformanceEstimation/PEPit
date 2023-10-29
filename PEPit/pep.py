@@ -221,12 +221,18 @@ class PEP(object):
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
             name (str, optional): name of the object. Not overwriting is None. None by default.
 
+        Returns:
+            (PSDMatrix) the :class:`PSDMatrix` to be added to the :class:`PEP`.
+
         Raises:
             AssertionError: if provided matrix is not a square matrix.
             TypeError: if provided matrix does not contain only Expressions.
 
         """
-        matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
+        if isinstance(matrix_of_expressions, PSDMatrix):
+            matrix = matrix_of_expressions
+        else:
+            matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
 
         # Set name
         if name is not None:
@@ -234,6 +240,8 @@ class PEP(object):
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
+
+        return matrix
 
     @staticmethod
     def declare_block_partition(d):

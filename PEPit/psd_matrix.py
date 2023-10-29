@@ -98,7 +98,7 @@ class PSDMatrix(object):
     @staticmethod
     def _store(matrix_of_expressions):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterables of Expressions): a square matrix of :class:`Expression`.
@@ -164,7 +164,8 @@ class PSDMatrix(object):
         # Otherwise, compute it and return it.
         if self._value is None:
             try:
-                self._value = np.array([[expression.eval() for expression in line] for line in self.matrix_of_expressions])
+                self._value = np.array([[expression.eval() for expression in line]
+                                        for line in self.matrix_of_expressions])
             except ValueError:
                 raise ValueError("The PEP must be solved to evaluate PSDMatrix!")
 
