@@ -75,7 +75,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         >>> gamma = 1 / sqrt(n + 1)
         >>> pepit_tau, theoretical_tau = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 21x21
-        (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (14 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -92,7 +92,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         		All the primal scalar constraints are verified up to an error of 9.992007221626409e-16
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 8.140035658377668e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 8.140035658377668e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.4537099231463084e-07
         (PEPit) Final upper bound (dual): 1.019156044756485 and lower bound (primal example): 1.0191560420875132 
         (PEPit) Duality gap: absolute: 2.668971710306778e-09 and relative: 2.6188057570065385e-09

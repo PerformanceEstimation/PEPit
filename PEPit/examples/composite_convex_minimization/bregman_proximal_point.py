@@ -60,7 +60,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
     Examples:
         >>> pepit_tau, theoretical_tau = wc_bregman_proximal_point(gamma=3, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 14x14
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -77,7 +77,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
         		All the primal scalar constraints are verified up to an error of 7.300917023722597e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 3.627346042650288e-10
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.627346042650288e-10
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1600769917201519e-08
         (PEPit) Final upper bound (dual): 0.06666666638907502 and lower bound (primal example): 0.06666666577966435 
         (PEPit) Duality gap: absolute: 6.094106747012162e-10 and relative: 9.1411602421417e-09

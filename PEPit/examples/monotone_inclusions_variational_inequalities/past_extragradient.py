@@ -70,7 +70,7 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_past_extragradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 20x20
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -81,16 +81,16 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06026638367645951
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06026638371348259
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0031589157511916e-09
-        		All the primal scalar constraints are verified up to an error of 8.813598739720874e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0034351046829282e-09
+        		All the primal scalar constraints are verified up to an error of 8.834041276273297e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 6.659688382791896e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.840255201567632e-08
-        (PEPit) Final upper bound (dual): 0.060266385379867796 and lower bound (primal example): 0.06026638367645951 
-        (PEPit) Duality gap: absolute: 1.7034082824829433e-09 and relative: 2.8264650682007106e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.653590985767508e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.799251158012433e-08
+        (PEPit) Final upper bound (dual): 0.06026638541530024 and lower bound (primal example): 0.06026638371348259 
+        (PEPit) Duality gap: absolute: 1.7018176451388811e-09 and relative: 2.823825722196363e-08
         *** Example file: worst-case performance of the Past Extragradient Method***
         	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
     

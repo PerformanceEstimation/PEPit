@@ -68,7 +68,7 @@ def wc_accelerated_gradient_flow_convex(t, wrapper="cvxpy", solver=None, verbose
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -83,7 +83,7 @@ def wc_accelerated_gradient_flow_convex(t, wrapper="cvxpy", solver=None, verbose
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 5.296563188039727e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.296563188039727e-11
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.5004650319851282e-10
         (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): -4.440892098500626e-15 
         (PEPit) Duality gap: absolute: 4.440892098500626e-15 and relative: -1.0

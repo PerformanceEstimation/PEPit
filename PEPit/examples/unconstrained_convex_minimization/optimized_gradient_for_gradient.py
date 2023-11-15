@@ -78,7 +78,7 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", solver=None, verbo
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimized_gradient_for_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -93,7 +93,7 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", solver=None, verbo
         		All the primal scalar constraints are verified up to an error of 1.851107461758872e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.897293067292418e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.897293067292418e-11
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0436663734975135e-10
         (PEPit) Final upper bound (dual): 0.30700730461344283 and lower bound (primal example): 0.307007304609862 
         (PEPit) Duality gap: absolute: 3.5808578324747486e-12 and relative: 1.1663754505858493e-11

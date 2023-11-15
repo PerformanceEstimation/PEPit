@@ -90,7 +90,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 11x11
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
@@ -113,7 +113,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
         		All the primal scalar constraints are verified up to an error of 2.1146270370529728e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.8089919395053243e-09
         (PEPit) Final upper bound (dual): 0.8100000000728617 and lower bound (primal example): 0.8099999999882777 
         (PEPit) Duality gap: absolute: 8.458400646560449e-11 and relative: 1.044246993417637e-10

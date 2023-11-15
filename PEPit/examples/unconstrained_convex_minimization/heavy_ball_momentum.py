@@ -80,7 +80,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
         >>> beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
         >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 5x5
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -95,7 +95,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
         		All the primal scalar constraints are verified up to an error of 2.3525640133886805e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1216875770062036e-07
         (PEPit) Final upper bound (dual): 0.7534930169804492 and lower bound (primal example): 0.7534930184723507 
         (PEPit) Duality gap: absolute: -1.4919014912351258e-09 and relative: -1.979980510316926e-09

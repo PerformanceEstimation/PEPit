@@ -82,7 +82,7 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_information_theoretic(mu=.001, L=1, n=15, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 17x17
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -97,7 +97,7 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 2.6490565304427935e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.0900580550698854e-05
         (PEPit) Final upper bound (dual): 0.7566088219545419 and lower bound (primal example): 0.7566088333863785 
         (PEPit) Duality gap: absolute: -1.1431836588471356e-08 and relative: -1.5109308911059783e-08

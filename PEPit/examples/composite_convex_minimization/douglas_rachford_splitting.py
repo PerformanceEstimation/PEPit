@@ -76,7 +76,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
     Example:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, alpha=1, theta=1, n=9, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 22x22
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -93,7 +93,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
         		All the primal scalar constraints are verified up to an error of 7.050520128663862e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.997247465328208e-10
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.997247465328208e-10
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.051666237897567e-08
         (PEPit) Final upper bound (dual): 0.027791732322924277 and lower bound (primal example): 0.027791729871150122 
         (PEPit) Duality gap: absolute: 2.4517741552265715e-09 and relative: 8.821955907723812e-08

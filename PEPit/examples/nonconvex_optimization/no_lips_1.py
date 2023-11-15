@@ -77,7 +77,7 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> gamma = 1 / (2 * L)
         >>> pepit_tau, theoretical_tau = wc_no_lips_1(L=L, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 20x20
-        (PEPit) Setting up the problem: performance measure is minimum of 5 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 5 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -90,16 +90,16 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19999999999153728
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19999999999153717
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 2.4158453015843406e-12
+        		All the primal scalar constraints are verified up to an error of 2.415956323886803e-12
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.575910023000674e-12
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.834893737462826e-11
-        (PEPit) Final upper bound (dual): 0.19999999999319756 and lower bound (primal example): 0.19999999999153728 
-        (PEPit) Duality gap: absolute: 1.6602830221756903e-12 and relative: 8.301415111229714e-12
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.576047642211146e-12
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.834093507252019e-11
+        (PEPit) Final upper bound (dual): 0.1999999999931975 and lower bound (primal example): 0.19999999999153717 
+        (PEPit) Duality gap: absolute: 1.6603385333269216e-12 and relative: 8.301692666985887e-12
         *** Example file: worst-case performance of the NoLips in Bregman divergence ***
         	PEPit guarantee:		 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
         	Theoretical guarantee :	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))

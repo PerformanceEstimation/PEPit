@@ -439,7 +439,7 @@ class PEP(object):
 
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
+                  ' performance measure is the minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions and general constraints
         if verbose:
@@ -753,7 +753,7 @@ class PEP(object):
         if inequality_constraint_dual_values:
             inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
             if verbose:
-                message = "\t\tAll the dual scalar values associated to inequality constraints are nonnegative"
+                message = "\t\tAll the dual scalar values associated with inequality constraints are nonnegative"
                 if inequality_constraint_dual_min_value < 0:
                     message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
                 print(message)

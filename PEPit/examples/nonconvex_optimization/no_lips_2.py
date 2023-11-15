@@ -77,7 +77,7 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_no_lips_2(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 14x14
-        (PEPit) Setting up the problem: performance measure is minimum of 3 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 3 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -93,11 +93,11 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3333333333330493
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 4.207745263329343e-14
+        		All the primal scalar constraints are verified up to an error of 4.196643033083092e-14
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.1994184545490794e-14
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.904203090267206e-13
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.199523786044634e-14
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.914928381589679e-13
         (PEPit) Final upper bound (dual): 0.3333333333330737 and lower bound (primal example): 0.3333333333330493 
         (PEPit) Duality gap: absolute: 2.4369395390522186e-14 and relative: 7.310818617162885e-14
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***

@@ -64,7 +64,7 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> L = 3
         >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -79,14 +79,14 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 6.633613956752438e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 7.0696173743789816e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.0696173743789816e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.547098305159261e-08
-        (PEPit) Final upper bound (dual): 0.16666667331941884 and lower bound (primal example): 0.1666666649793712
+        (PEPit) Final upper bound (dual): 0.16666667331941884 and lower bound (primal example): 0.1666666649793712 
         (PEPit) Duality gap: absolute: 8.340047652488636e-09 and relative: 5.004028642152831e-08
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
         	PEPit guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-
+    
     """
 
     # Instantiate PEP

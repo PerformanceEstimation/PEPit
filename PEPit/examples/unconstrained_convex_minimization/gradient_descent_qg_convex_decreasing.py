@@ -82,7 +82,7 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", solver=None,
     Example:
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_qg_convex_decreasing(L=1, n=6, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 9x9
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -97,7 +97,7 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", solver=None,
         		All the primal scalar constraints are verified up to an error of 6.537865110400887e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.781039101724198e-10
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.781039101724198e-10
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.076454220612452e-09
         (PEPit) Final upper bound (dual): 0.10554738755645543 and lower bound (primal example): 0.10554738683923168 
         (PEPit) Duality gap: absolute: 7.172237526109626e-10 and relative: 6.7952772123428116e-09

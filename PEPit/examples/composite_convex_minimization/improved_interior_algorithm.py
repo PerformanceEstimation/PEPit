@@ -78,7 +78,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
         >>> lam = 1 / L
         >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 22x22
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -91,18 +91,18 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06807592082147511
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06807717876241919
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.2818984835639185e-08
-        (PEPit) Final upper bound (dual): 0.0680759105013995 and lower bound (primal example): 0.06807592082147511 
-        (PEPit) Duality gap: absolute: -1.032007561352355e-08 and relative: -1.5159656291080233e-07
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9786985790819003e-08
+        (PEPit) Final upper bound (dual): 0.06807717277007506 and lower bound (primal example): 0.06807717876241919 
+        (PEPit) Duality gap: absolute: -5.992344120908655e-09 and relative: -8.802280338057462e-08
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-        	PEPit guarantee:		 F(x_n)-F_* <= 0.0680759 (c * Dh(xs;x0) + f1(x0) - F_*)
+        	PEPit guarantee:		 F(x_n)-F_* <= 0.0680772 (c * Dh(xs;x0) + f1(x0) - F_*)
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
     
     """

@@ -62,7 +62,7 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 24x24
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -73,22 +73,22 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02575645205498293
-        (PEPit) Postprocessing: 6 eigenvalue(s) > 8.634660515752737e-08 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02575645181334978
+        (PEPit) Postprocessing: 6 eigenvalue(s) > 8.710562863672514e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02565645181421173
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447137211820049 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02565645181421173
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447137211820049 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451810811397
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447084376111912 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451810811397
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447084376111912 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.4529754414635007e-10
-        		All the primal scalar constraints are verified up to an error of 4.844444845275575e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.721634879362454e-12
+        		All the primal scalar constraints are verified up to an error of 5.100808664337819e-12
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.990158453368192e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.812573499074675e-08
-        (PEPit) Final upper bound (dual): 0.02575645534456756 and lower bound (primal example): 0.02565645181421173 
-        (PEPit) Duality gap: absolute: 0.00010000353035582998 and relative: 0.0038977926908987316
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.7781954429936124e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.97201083318334e-08
+        (PEPit) Final upper bound (dual): 0.025756455102383596 and lower bound (primal example): 0.025656451810811397 
+        (PEPit) Duality gap: absolute: 0.00010000329157219823 and relative: 0.0038977833844529406
         *** Example file: worst-case performance of the Dykstra projection method ***
         	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0257565 ||x0 - x_*||^2
     

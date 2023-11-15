@@ -79,7 +79,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         >>> gamma = 1 / (2 * L)
         >>> pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 15x15
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -98,7 +98,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         		All the primal scalar constraints are verified up to an error of 1.4396019099027768e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite up to an error of 1.039633194677115e-21
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.4920273295805233e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.4920273295805233e-11
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.426985490058363e-10
         (PEPit) Final upper bound (dual): 0.666666666662425 and lower bound (primal example): 0.6666666666481619 
         (PEPit) Duality gap: absolute: 1.4263146219661849e-11 and relative: 2.139471933008663e-11

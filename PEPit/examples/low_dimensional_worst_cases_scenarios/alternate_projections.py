@@ -62,7 +62,7 @@ def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_alternate_projections(n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 24x24
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -73,22 +73,22 @@ def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.018867679369563788
-        (PEPit) Postprocessing: 4 eigenvalue(s) > 5.5130457131471214e-08 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.018867679370681505
+        (PEPit) Postprocessing: 4 eigenvalue(s) > 5.512562645368077e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01876767933131574
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.716296339389169e-09 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.01876767933131574
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.716296339389169e-09 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.018767679335018744
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.7430816238284485e-09 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.018767679335018744
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 2.7430816238284485e-09 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.5561273551433917e-10
-        		All the primal scalar constraints are verified up to an error of 1.6546532893846333e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.543305290992105e-10
+        		All the primal scalar constraints are verified up to an error of 1.6319162687850053e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.6525650314322e-11
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0599646492800727e-08
-        (PEPit) Final upper bound (dual): 0.018867680107650577 and lower bound (primal example): 0.01876767933131574 
-        (PEPit) Duality gap: absolute: 0.00010000077633483609 and relative: 0.005328350648445642
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.6567156492364636e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.056980182671661e-08
+        (PEPit) Final upper bound (dual): 0.01886768010878965 and lower bound (primal example): 0.018767679335018744 
+        (PEPit) Duality gap: absolute: 0.00010000077377090438 and relative: 0.0053283505107801065
         *** Example file: worst-case performance of the alternate projection method ***
         	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188677 ||x0 - x_*||^2
     

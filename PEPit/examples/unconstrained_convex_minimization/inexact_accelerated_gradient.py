@@ -71,7 +71,7 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, wrapper="cvxpy", solver=None,
     Example:
         >>> pepit_tau, theoretical_tau = wc_inexact_accelerated_gradient(L=1, epsilon=0.1, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 13x13
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -88,7 +88,7 @@ def wc_inexact_accelerated_gradient(L, epsilon, n, wrapper="cvxpy", solver=None,
         		All the primal scalar constraints are verified up to an error of 2.7598597017106097e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.4089929790920282e-07
         (PEPit) Final upper bound (dual): 0.03938804252543366 and lower bound (primal example): 0.039388047868526704 
         (PEPit) Duality gap: absolute: -5.3430930443965075e-09 and relative: -1.3565264930699812e-07

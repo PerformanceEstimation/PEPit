@@ -73,26 +73,26 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum_qg_convex(L=1, n=5, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the Gram matrix: 9x9
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: size of the Gram matrix: 8x8
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        			Function 1 : Adding 63 scalar constraint(s) ...
-        			Function 1 : 63 scalar constraint(s) added
+        			Function 1 : Adding 48 scalar constraint(s) ...
+        			Function 1 : 48 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.08333332503218598
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.08333333312648067
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 4.858458021311796e-09
+        		All the primal scalar constraints are verified up to an error of 1.0360445487633818e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.201736799451241e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.279590498188519e-07
-        (PEPit) Final upper bound (dual): 0.08333333523292924 and lower bound (primal example): 0.08333332503218598 
-        (PEPit) Duality gap: absolute: 1.0200743263966139e-08 and relative: 1.2240893136120858e-07
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.384283773139436e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.3121924686696765e-09
+        (PEPit) Final upper bound (dual): 0.08333333333812117 and lower bound (primal example): 0.08333333312648067 
+        (PEPit) Duality gap: absolute: 2.1164049679445185e-10 and relative: 2.539685967837512e-09
         *** Example file: worst-case performance of the Heavy-Ball method ***
         	PEPit guarantee:		 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
