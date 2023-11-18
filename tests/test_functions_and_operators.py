@@ -216,7 +216,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         tables_of_duals = self.func7.get_class_constraints_duals()
         self.assertEqual(len(tables_of_duals), 1)
-        table_of_duals = tables_of_duals["cocoercivity"]
+        table_of_duals = tables_of_duals["smoothness_convexity"]
         self.assertEqual(table_of_duals.columns.name, "IC_f7")
         self.assertEqual(table_of_duals.columns[0], self.point1.get_name())
         self.assertEqual(table_of_duals.columns[1], self.point2.get_name())

@@ -97,10 +97,12 @@ class RsiEbFunction(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="RSI",
-                                                      set_class_constraint_i_j=self.set_rsi_constraints_i_j)
+                                                      constraint_name="rsi",
+                                                      set_class_constraint_i_j=self.set_rsi_constraints_i_j,
+                                                      )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="EB",
-                                                      set_class_constraint_i_j=self.set_eb_constraints_i_j)
+                                                      constraint_name="eb",
+                                                      set_class_constraint_i_j=self.set_eb_constraints_i_j,
+                                                      )

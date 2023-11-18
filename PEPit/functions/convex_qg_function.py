@@ -68,12 +68,12 @@ class ConvexQGFunction(Function):
 
         return constraint
 
-    def set_star_cocoercivity_constraint_i_j(self,
-                                             xi, gi, fi,
-                                             xj, gj, fj,
-                                             ):
+    def set_qg_convexity_constraint_i_j(self,
+                                        xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
         """
-        Formulates the list of interpolation constraints for self (smooth strongly convex function).
+        Formulates the list of interpolation constraints for self (qg convex function).
         """
         # Interpolation conditions of QG convex functions class
         constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
@@ -90,8 +90,8 @@ class ConvexQGFunction(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="*cocoercivity",
-                                                      set_class_constraint_i_j=self.set_star_cocoercivity_constraint_i_j,
+                                                      constraint_name="qg_convexity",
+                                                      set_class_constraint_i_j=self.set_qg_convexity_constraint_i_j,
                                                       )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,

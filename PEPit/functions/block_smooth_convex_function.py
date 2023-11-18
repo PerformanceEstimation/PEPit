@@ -89,7 +89,7 @@ class BlockSmoothConvexFunction(Function):
 
         # Set tables_of_constraints attributes
         for k in range(self.partition.get_nb_blocks()):
-            self.tables_of_constraints["Cocoercivity_block_{}".format(k)] = [[]]*len(self.list_of_points)
+            self.tables_of_constraints["smoothness_convexity_block_{}".format(k)] = [[]]*len(self.list_of_points)
 
         # Browse list of points and create interpolation constraints
         for i, point_i in enumerate(self.list_of_points):
@@ -108,7 +108,7 @@ class BlockSmoothConvexFunction(Function):
 
                 if point_i == point_j:
                     for k in range(self.partition.get_nb_blocks()):
-                        self.tables_of_constraints["Cocoercivity_block_{}".format(k)][i].append(0)
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(0)
 
                 else:
 
@@ -120,6 +120,7 @@ class BlockSmoothConvexFunction(Function):
                         
                         # Necessary conditions for interpolation
                         constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L[k]) * (gik - gjk) ** 2)
-                        constraint.set_name("IC_{}_cocoercivity_block_{}({}, {})".format(function_id, k, xi_id, xj_id))
-                        self.tables_of_constraints["Cocoercivity_block_{}".format(k)][i].append(constraint)
+                        constraint.set_name("IC_{}_smoothness_convexity_block_{}({}, {})".format(function_id, k,
+                                                                                                 xi_id, xj_id))
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(constraint)
                         self.list_of_class_constraints.append(constraint)

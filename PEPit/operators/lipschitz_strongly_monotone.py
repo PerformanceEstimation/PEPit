@@ -78,12 +78,12 @@ class LipschitzStronglyMonotoneOperator(Function):
                   " L == np.inf. Instead, please use the class StronglyMonotoneOperator (which accounts for the fact\n"
                   "that the image of the operator at certain points might not be a singleton).\033[0m")
 
-    def set_strong_monotony_constraint_i_j(self,
-                                     xi, gi, fi,
-                                     xj, gj, fj,
-                                     ):
+    def set_strong_monotonicity_constraint_i_j(self,
+                                               xi, gi, fi,
+                                               xj, gj, fj,
+                                               ):
         """
-        Set strong monotony constraint for operators.
+        Set strong monotonicity constraint for operators.
 
         """
         # Set constraint
@@ -91,12 +91,12 @@ class LipschitzStronglyMonotoneOperator(Function):
 
         return constraint
 
-    def set_lipschitz_constraint_i_j(self,
-                                     xi, gi, fi,
-                                     xj, gj, fj,
-                                     ):
+    def set_lipschitz_continuity_constraint_i_j(self,
+                                                xi, gi, fi,
+                                                xj, gj, fj,
+                                                ):
         """
-        Set Lipschitz constraint for operators.
+        Set Lipschitz continuity constraint for operators.
 
         """
         # Set constraint
@@ -112,13 +112,16 @@ class LipschitzStronglyMonotoneOperator(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="strong_monotony",
-                                                      set_class_constraint_i_j=self.set_strong_monotony_constraint_i_j,
-                                                      symmetry=True)
+                                                      constraint_name="strong_monotonicity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_strong_monotonicity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="Lipschitz",
-                                                      set_class_constraint_i_j=self.set_lipschitz_constraint_i_j,
-                                                      symmetry=True)
-
+                                                      constraint_name="lipschitz_continuity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_lipschitz_continuity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

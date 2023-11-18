@@ -1,18 +1,18 @@
 import numpy as np
-from PEPit.functions.smooth_convex_function import SmoothConvexFunction
+from PEPit.function import Function
 
 
-class SmoothConvexLipschitzFunction(SmoothConvexFunction):
+class SmoothConvexLipschitzFunction(Function):
     """
-    The :class:`SmoothConvexLipschitzFunction` class implements smooth convex Lipschitz continuous functions
-    as particular cases of :class:`SmoothConvexFunction`.
+    The :class:`SmoothConvexLipschitzFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    by implementing interpolation constraints of the class of smooth convex Lipschitz continuous functions.
 
     Attributes:
         L (float): smoothness parameter
-        M (float): Lipschitz parameter
+        M (float): Lipschitz continuity parameter
 
-    Smooth convex Lipschitz continuous functions are characterized by the smoothness parameters `L` and `M`,
-    hence can be instantiated as
+    Smooth convex Lipschitz continuous functions are characterized by the smoothness parameters `L`
+    and Lipschitz continuity parameter `M`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -55,28 +55,39 @@ class SmoothConvexLipschitzFunction(SmoothConvexFunction):
             hence `reuse_gradient` is set to True.
 
         """
-        # Inherit from SmoothConvexFunction as a special case of it.
-        super().__init__(L=L,
-                         is_leaf=is_leaf,
+        super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True,
                          name=name,
                          )
 
-        # Add M attributes that SmoothConvexFunction does not have.
+        # Store L and M
+        self.L = L
         self.M = M
 
-        if self.L == np.inf and self.M == np.inf:
+        if self.L == np.inf:
             print("\033[96m(PEPit) Smooth convex Lipschitz continuous functions are necessarily differentiable.\n"
-                  "To instantiate a convex function, please avoid using the class SmoothConvexLipschitzFunction with "
-                  "L == np.inf and M == np.inf.\n"
-                  "Instead, please use the class ConvexFunction (which accounts for the fact \n"
+                  "To instantiate a convex Lipschitz continuous function, please avoid using the class\n"
+                  "SmoothConvexLipschitzFunction with L == np.inf.\n"
+                  "Instead, please use the class ConvexLipschitzFunction (which accounts for the fact \n"
                   "that there might be several subgradients at the same point).\033[0m")
 
-    def set_lipschitz_constraint_i(self,
-                                   xi, gi, fi):
+    def set_smoothness_convexity_constraint_i_j(self,
+                                                xi, gi, fi,
+                                                xj, gj, fj,
+                                                ):
         """
-        Formulates the Lipschitz constraint by bounding the gradients.
+        Formulates the list of interpolation constraints for smooth convex functions.
+        """
+        # Interpolation conditions of smooth convex functions class
+        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * (gi - gj) ** 2)
+
+        return constraint
+
+    def set_lipschitz_continuity_constraint_i(self,
+                                              xi, gi, fi):
+        """
+        Formulates the Lipschitz continuity constraint by bounding the gradients.
 
         """
         # Lipschitz condition on the function (bounded gradient)
@@ -86,13 +97,19 @@ class SmoothConvexLipschitzFunction(SmoothConvexFunction):
 
     def add_class_constraints(self):
         """
-        Formulates the list of interpolation constraints for self (smooth convex function); see [1, Theorem 4],
+        Formulates the list of interpolation constraints for smooth convex functions; see [1, Theorem 4],
         and add the Lipschitz continuity interpolation constraints.
         """
-        # Add smooth convex interpolation constraints.
-        super().add_class_constraints()
+        # Add Smoothness convexity interpolation constraints
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="smoothness_convexity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_smoothness_convexity_constraint_i_j,
+                                                      )
 
-        # Add Lipschitz continuity interpolation constraints.
+        # Add Lipschitz continuity interpolation constraints
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
-                                                     constraint_name="Lipschitz",
-                                                     set_class_constraint_i=self.set_lipschitz_constraint_i)
+                                                     constraint_name="lipschitz_continuity",
+                                                     set_class_constraint_i=self.set_lipschitz_continuity_constraint_i,
+                                                     )

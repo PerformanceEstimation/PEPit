@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from PEPit.function import Function
 
 
@@ -71,10 +70,10 @@ class SmoothStronglyConvexFunction(Function):
                   "L == np.inf. Instead, please use the class StronglyConvexFunction (which accounts for the fact\n"
                   "that there might be several sub-gradients at the same point).\033[0m")
 
-    def set_cocoercivity_constraint_i_j(self,
-                                        xi, gi, fi,
-                                        xj, gj, fj,
-                                        ):
+    def set_smoothness_strong_convexity_constraint_i_j(self,
+                                                       xi, gi, fi,
+                                                       xj, gj, fj,
+                                                       ):
         """
         Formulates the list of interpolation constraints for self (smooth strongly convex function).
         """
@@ -89,10 +88,11 @@ class SmoothStronglyConvexFunction(Function):
 
     def add_class_constraints(self):
         """
-        Add cocoercivity constraints.
+        Add class constraints.
         """
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="cocoercivity",
-                                                      set_class_constraint_i_j=self.set_cocoercivity_constraint_i_j,
+                                                      constraint_name="smoothness_strong_convexity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_smoothness_strong_convexity_constraint_i_j,
                                                       )

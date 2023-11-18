@@ -68,9 +68,9 @@ class ConvexSupportFunction(Function):
 
         return constraint
 
-    def set_lipschitz_constraint_i(self, xi, gi, fi):
+    def set_lipschitz_continuity_constraint_i(self, xi, gi, fi):
         """
-        Set Lipschitz constraint so that its Fenchel transform has a bounded support.
+        Set Lipschitz continuity constraint so that its Fenchel transform has a bounded support.
 
         """
         # Set constraint
@@ -97,15 +97,19 @@ class ConvexSupportFunction(Function):
         """
 
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
-                                                     constraint_name="Fenchel_value",
-                                                     set_class_constraint_i=self.set_fenchel_value_constraint_i)
+                                                     constraint_name="fenchel_value",
+                                                     set_class_constraint_i=self.set_fenchel_value_constraint_i,
+                                                     )
 
         if self.M != np.inf:
             self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
-                                                         constraint_name="Lipschitz",
-                                                         set_class_constraint_i=self.set_lipschitz_constraint_i)
+                                                         constraint_name="lipschitz_continuity",
+                                                         set_class_constraint_i=
+                                                         self.set_lipschitz_continuity_constraint_i,
+                                                         )
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
                                                       constraint_name="convexity",
-                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j)
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

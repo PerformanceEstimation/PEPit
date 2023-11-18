@@ -90,4 +90,5 @@ class CocoerciveOperator(Function):
                                                       list_of_points_2=self.list_of_points,
                                                       constraint_name="cocoercivity",
                                                       set_class_constraint_i_j=self.set_cocoercivity_constraint_i_j,
-                                                      symmetry=True)
+                                                      symmetry=True,
+                                                      )

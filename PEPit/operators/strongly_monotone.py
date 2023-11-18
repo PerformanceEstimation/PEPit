@@ -60,12 +60,12 @@ class StronglyMonotoneOperator(Function):
         # Store mu
         self.mu = mu
 
-    def set_strong_monotony_constraint_i_j(self,
-                                           xi, gi, fi,
-                                           xj, gj, fj,
-                                           ):
+    def set_strong_monotonicity_constraint_i_j(self,
+                                               xi, gi, fi,
+                                               xj, gj, fj,
+                                               ):
         """
-        Set strong monotony constraint for operators.
+        Set strong monotonicity constraint for operators.
 
         """
         # Set constraint
@@ -81,6 +81,8 @@ class StronglyMonotoneOperator(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="strong_monotony",
-                                                      set_class_constraint_i_j=self.set_strong_monotony_constraint_i_j,
-                                                      symmetry=True)
+                                                      constraint_name="strong_monotonicity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_strong_monotonicity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

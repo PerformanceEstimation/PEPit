@@ -66,10 +66,10 @@ class NegativelyComonotoneOperator(Function):
                   "To instantiate a monotone operator, please avoid using the class NegativelyComonotoneOperator\n"
                   "with rho == 0. Instead, please use the class Monotone.\033[0m")
 
-    def set_negative_comonotony_constraint_i_j(self,
-                                               xi, gi, fi,
-                                               xj, gj, fj,
-                                               ):
+    def set_negative_comonotonicity_constraint_i_j(self,
+                                                   xi, gi, fi,
+                                                   xj, gj, fj,
+                                                   ):
         """
         Formulates the list of interpolation constraints for self (negatively comonotone operator).
         """
@@ -80,11 +80,12 @@ class NegativelyComonotoneOperator(Function):
 
     def add_class_constraints(self):
         """
-        Add negative comonotony constraints.
+        Add negative comonotonicity constraints.
         """
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="negative_comonotony",
+                                                      constraint_name="negative_comonotonicity",
                                                       set_class_constraint_i_j=
-                                                      self.set_negative_comonotony_constraint_i_j,
-                                                      symmetry=True)
+                                                      self.set_negative_comonotonicity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

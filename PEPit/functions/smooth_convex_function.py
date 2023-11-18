@@ -1,11 +1,11 @@
 import numpy as np
-from PEPit.functions.smooth_strongly_convex_function import SmoothStronglyConvexFunction
+from PEPit.function import Function
 
 
-class SmoothConvexFunction(SmoothStronglyConvexFunction):
+class SmoothConvexFunction(Function):
     """
-    The :class:`SmoothConvexFunction` class implements smooth convex functions as particular cases
-    of :class:`SmoothStronglyConvexFunction`.
+    The :class:`SmoothConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    by implementing interpolation constraints of the class of smooth convex functions.
 
     Attributes:
         L (float): smoothness parameter
@@ -50,17 +50,41 @@ class SmoothConvexFunction(SmoothStronglyConvexFunction):
             Smooth convex functions are necessarily differentiable, hence `reuse_gradient` is set to True.
 
         """
-        # Inherit from SmoothStronglyConvexFunction as a special case of it with mu=0.
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True,
-                         mu=0,
-                         L=L,
                          name=name,
                          )
+
+        # Store L
+        self.L = L
 
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of smooth convex functions is necessarily differentiable.\n"
                   "To instantiate a convex function, please avoid using the class SmoothConvexFunction with \n"
                   "L == np.inf. Instead, please use the class ConvexFunction (which accounts for the fact \n"
                   "that there might be several subgradients at the same point).\033[0m")
+
+    def set_smoothness_convexity_constraint_i_j(self,
+                                                xi, gi, fi,
+                                                xj, gj, fj,
+                                                ):
+        """
+        Formulates the list of interpolation constraints for self (smooth convex function).
+        """
+        # Interpolation conditions of smooth convex functions class
+        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * (gi - gj) ** 2)
+
+        return constraint
+
+    def add_class_constraints(self):
+        """
+        Add class constraints.
+        """
+        # Add Smoothness convexity interpolation constraints
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="smoothness_convexity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_smoothness_convexity_constraint_i_j,
+                                                      )

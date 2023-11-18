@@ -47,12 +47,12 @@ class MonotoneOperator(Function):
                          name=name,
                          )
 
-    def set_monotony_constraint_i_j(self,
-                                    xi, gi, fi,
-                                    xj, gj, fj,
-                                    ):
+    @staticmethod
+    def set_monotonicity_constraint_i_j(xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
         """
-        Set monotony constraint for operators.
+        Set monotonicity constraint for operators.
 
         """
         # Set constraint
@@ -68,6 +68,7 @@ class MonotoneOperator(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="monotony",
-                                                      set_class_constraint_i_j=self.set_monotony_constraint_i_j,
-                                                      symmetry=True)
+                                                      constraint_name="monotonicity",
+                                                      set_class_constraint_i_j=self.set_monotonicity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

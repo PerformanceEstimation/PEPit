@@ -83,12 +83,12 @@ class LipschitzOperator(Function):
             print("\033[96m(PEPit) The class of L-Lipschitz operators with L == np.inf implies no constraint: \n"
                   "it contains all multi-valued mappings. This might imply issues in your code.\033[0m")
 
-    def set_lipschitz_constraint_i_j(self,
-                                     xi, gi, fi,
-                                     xj, gj, fj,
-                                     ):
+    def set_lipschitz_continuity_constraint_i_j(self,
+                                                xi, gi, fi,
+                                                xj, gj, fj,
+                                                ):
         """
-        Set Lipschitz constraint for operators.
+        Set Lipschitz continuity constraint for operators.
 
         """
         # Set constraint
@@ -104,7 +104,8 @@ class LipschitzOperator(Function):
 
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
-                                                      constraint_name="Lipschitz",
-                                                      set_class_constraint_i_j=self.set_lipschitz_constraint_i_j,
-                                                      symmetry=True)
-
+                                                      constraint_name="lipschitz_continuity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_lipschitz_continuity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )
