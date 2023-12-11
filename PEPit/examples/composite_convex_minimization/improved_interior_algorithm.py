@@ -153,7 +153,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
-    if problem.wrapper.solver_name.casefold() != "mosek":
+    if problem.wrapper.solver_name.casefold() != "mosek" and verbose > 0:
         print("\033[96m(PEPit) We recommend to use MOSEK solver. \033[0m")
 
     # Compute theoretical guarantee (for comparison)

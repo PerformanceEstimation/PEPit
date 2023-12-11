@@ -55,6 +55,8 @@ class TestPSDMatrix(unittest.TestCase):
         # And the dual variables are
         #     [[bound ** (-1/4)/4, - bound ** (1/4)/4], [- bound ** (1/4)/4, bound ** (3/4)/4]],
         #     [[bound ** (-1/4)/2, - 1/2], [- 1/2, bound ** (1/4)/2]].
+        
+        self.verbose = 0
 
     def test_is_instance(self):
 
@@ -106,7 +108,7 @@ class TestPSDMatrix(unittest.TestCase):
         self.assertRaises(ValueError, self.psd2.eval)
 
         # Solve the problem.
-        self.problem.solve()
+        self.problem.solve(verbose=self.verbose)
         
         # Now we can have access to the optimal values of the PSD matrices.
         optimal_psd1 = [[self.bound, self.bound ** (1/2)], [self.bound ** (1/2), 1]]
@@ -122,7 +124,7 @@ class TestPSDMatrix(unittest.TestCase):
         self.assertRaises(ValueError, self.psd2.eval_dual)
 
         # Solve the problem.
-        self.problem.solve()
+        self.problem.solve(verbose=self.verbose)
 
         # Now we can have access to the optimal dual values of the LMI constraints.
         optimal_dual_lmi1 = [[self.bound ** (-1/4)/4, - self.bound ** (1/4)/4], [- self.bound ** (1/4)/4, self.bound ** (3/4)/4]]

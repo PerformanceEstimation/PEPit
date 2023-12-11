@@ -562,8 +562,9 @@ class PEP(object):
 
         # Raise explicit error when wc_value in infinite
         if wc_value is None:
-            print("\033[96m(PEPit) Problem issue: PEPit didn't find any nontrivial worst-case guarantee. "
-                  "It seems that the optimal value of your problem is unbounded.\033[0m")
+            if verbose:
+                print("\033[96m(PEPit) PEP issue: PEPit didn't find any nontrivial worst-case guarantee. "
+                      "It seems that the optimal value of your problem is unbounded.\033[0m")
 
             # Skip the following as no variable has a value
             return wc_value
@@ -807,7 +808,7 @@ class PEP(object):
             if absolute_duality_gap < 0:
                 message += " and negative"
             message += ".\n\t\tThe solver might not have converged properly.\n"\
-                       "\t\tWe recommend to use another wrapper or solver for confirmation.\033[0m"
+                       "\t\tWe recommend to use another solver for confirmation.\033[0m"
             print(message)
 
         return dual_objective
