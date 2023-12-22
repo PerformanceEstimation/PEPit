@@ -22,7 +22,7 @@ class LipschitzOperator(Function):
         >>> func = problem.declare_function(function_class=LipschitzOperator, L=1.)
 
     Notes:
-        By setting L=1, we define a non expansive operator.
+        By setting L=1, we define a non-expansive operator.
 
         By setting L<1, we define a contracting operator.
 
@@ -85,14 +85,15 @@ class LipschitzOperator(Function):
         see [1, 2, 3] or e.g., [4, Fact 2].
         """
 
-        for point_i in self.list_of_points:
+        for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
 
-            for point_j in self.list_of_points:
+            for j, point_j in enumerate(self.list_of_points):
 
                 xj, gj, fj = point_j
 
-                if (xi != xj) | (gi != gj):
+                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
+                if i < j:
                     # Interpolation conditions of Lipschitz operator class
                     self.list_of_class_constraints.append((gi - gj) ** 2 - self.L ** 2 * (xi - xj) ** 2 <= 0)

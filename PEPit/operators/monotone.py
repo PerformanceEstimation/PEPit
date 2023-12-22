@@ -49,14 +49,15 @@ class MonotoneOperator(Function):
         see, e.g., [1, Theorem 20.21].
         """
 
-        for point_i in self.list_of_points:
+        for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
 
-            for point_j in self.list_of_points:
+            for j, point_j in enumerate(self.list_of_points):
 
                 xj, gj, fj = point_j
 
-                if (xi != xj) | (gi != gj):
+                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
+                if i < j:
                     # Interpolation conditions of monotone operator class
                     self.list_of_class_constraints.append((gi - gj) * (xi - xj) >= 0)
