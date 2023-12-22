@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_optimized_gradient(L, n, verbose=1):
+def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -13,13 +13,14 @@ def wc_optimized_gradient(L, n, verbose=1):
     where :math:`f` is :math:`L`-smooth and convex.
 
     This code computes a worst-case guarantee for **optimized gradient method** (OGM), and applies the trace heuristic
-    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved. That is, it computes
-    the smallest possible :math:`\\tau(n, L)` such that the guarantee
+    for trying to find a low-dimensional worst-case example on which this guarantee is nearly achieved.
+    That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`. Then,
-    it applies the trace heuristic, which allows obtaining a one-dimensional function on which the guarantee is nearly achieved.
+    is valid, where :math:`x_n` is the output of OGM and where :math:`x_\\star` is a minimizer of :math:`f`.
+    Then, it applies the trace heuristic, which allows obtaining a one-dimensional function
+    on which the guarantee is nearly achieved.
 
     **Algorithm**:
     The optimized gradient method is described by
@@ -48,7 +49,8 @@ def wc_optimized_gradient(L, n, verbose=1):
 
     .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{2\\theta_n^2}.
 
-    **References**: The OGM was developed in [1,2]. Low-dimensional worst-case functions for OGM were obtained in [3, 4].
+    **References**: The OGM was developed in [1,2].
+    Low-dimensional worst-case functions for OGM were obtained in [3, 4].
 
     `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
     approach. Mathematical Programming 145(1–2), 451–482.
@@ -69,37 +71,49 @@ def wc_optimized_gradient(L, n, verbose=1):
     Args:
         L (float): the smoothness parameter.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        >>> pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.07675218017587908
-        (PEPit) Postprocessing: 5 eigenvalue(s) > 0.00012110342786525262 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0767518265733206
+        (PEPit) Postprocessing: 6 eigenvalue(s) > 0 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.0767421794376856
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 5.187978263167338e-09 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.0766518263678761
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 8.430457643734283e-09 after dimension reduction
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.872825531822352e-11
+        		All the primal scalar constraints are verified up to an error of 1.9493301200643187e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.3578267940913163e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.653093053290753e-08
+        (PEPit) Final upper bound (dual): 0.0767518302587488 and lower bound (primal example): 0.0766518263678761 
+        (PEPit) Duality gap: absolute: 0.00010000389087269634 and relative: 0.0013046511167619983
         *** Example file: worst-case performance of optimized gradient method ***
-                PEPit example:           f(y_n)-f_* == 0.0767422 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(y_n)-f_* == 0.0767518 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -138,7 +152,8 @@ def wc_optimized_gradient(L, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="trace")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="trace")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / 2 / theta_new ** 2
@@ -146,7 +161,7 @@ def wc_optimized_gradient(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEPit example:\t\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(y_n)-f_* == {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -154,4 +169,4 @@ def wc_optimized_gradient(L, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)

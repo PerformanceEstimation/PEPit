@@ -9,7 +9,7 @@ def phi(mu, idx):
     return ((1 + 2 * mu) ** (2 * idx + 2) - 1) / ((1 + 2 * mu) ** 2 - 1)
 
 
-def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
+def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -18,7 +18,8 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
     where :math:`A` is maximally :math:`\\mu`-strongly monotone. 
     We denote by :math:`J_{A}` the resolvent of :math:`A`.
 
-    For any :math:`x` such that :math:`x = J_{A} y` for some :math:`y`, define the resolvent residual :math:`\\tilde{A}x = y - J_{A}y \\in Ax`.
+    For any :math:`x` such that :math:`x = J_{A} y` for some :math:`y`,
+    define the resolvent residual :math:`\\tilde{A}x = y - J_{A}y \\in Ax`.
 
     This code computes a worst-case guarantee for the **Optimal Strongly-monotone Proximal Point Method** (OS-PPM). 
     That is, it computes the smallest possible :math:`\\tau(n, \\mu)` such that the guarantee 
@@ -41,49 +42,65 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
                          &  & + \\frac{(1+2\\mu) \\varphi_{t-1}}{\\varphi_{t+1}} (y_{t-1} - x_t). 
             \\end{eqnarray}
 
-    where :math:`\\varphi_k = \sum_{i=0}^k (1+2\\mu)^{2i}` with :math:`\\varphi_{-1}=0` and :math:`x_0 = y_0 = y_{-1}` is a starting point. 
+    where :math:`\\varphi_k = \sum_{i=0}^k (1+2\\mu)^{2i}` with :math:`\\varphi_{-1}=0`
+    and :math:`x_0 = y_0 = y_{-1}` is a starting point.
 
     This method is equivalent to the Optimal Contractive Halpern iteration.
 
-    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Strongly-monotone Proximal Point Method can be found in [1, Theorem 3.2, Corollary 4.2]:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for the Optimal Strongly-monotone Proximal Point Method
+    can be found in [1, Theorem 3.2, Corollary 4.2]:
 
         .. math:: \\|\\tilde{A}x_n\\|^2 \\leqslant \\left( \\frac{1}{\sum_{k=0}^{N-1} (1+2\\mu)^k} \\right)^2 \\|x_0 - x_\\star\\|^2.
 
     **References**: The detailed approach and tight bound are available in [1].
 
-    `[1] J. Park, E. Ryu (2022). Exact Optimal Accelerated Complexity for Fixed-Point Iterations. In 39th International Conference on Machine Learning (ICML).
+    `[1] J. Park, E. Ryu (2022).
+    Exact Optimal Accelerated Complexity for Fixed-Point Iterations.
+    In 39th International Conference on Machine Learning (ICML).
     <https://proceedings.mlr.press/v162/park22c/park22c.pdf>`_
 
     Args:
         n (int): number of iterations.
         mu (float): :math:`\\mu \ge 0`. :math:`A` will be maximal :math:`\\mu`-strongly monotone.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 12x12
+        >>> pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 12x12
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 110 scalar constraint(s) ...
-                         function 1 : 110 scalar constraint(s) added
+        			Function 1 : Adding 55 scalar constraint(s) ...
+        			Function 1 : 55 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.003937868091430488
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.003936989547244047
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0607807556608727e-09
+        		All the primal scalar constraints are verified up to an error of 3.5351675688243754e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.804099035739487e-08
+        (PEPit) Final upper bound (dual): 0.003936990621254958 and lower bound (primal example): 0.003936989547244047 
+        (PEPit) Duality gap: absolute: 1.0740109105886186e-09 and relative: 2.7280004117370406e-07
         *** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***
-                PEPit guarantee:         ||AxN||^2 <= 0.00393787 ||x0 - x_*||^2
-                Theoretical guarantee:   ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2
-
+        	PEPit guarantee:		 ||AxN||^2 <= 0.00393699 ||x0 - x_*||^2
+        	Theoretical guarantee:	 ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -114,7 +131,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (2 * mu / ((1 + 2 * mu) ** n - 1)) ** 2
@@ -122,7 +139,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***')
-        print('\tPEPit guarantee:\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -130,4 +147,6 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05,
+                                                                             wrapper="cvxpy", solver=None,
+                                                                             verbose=1)

@@ -25,7 +25,8 @@ class NegativelyComonotoneOperator(Function):
 
     References:
         `[1] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
-        Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity.
+        Convergence of proximal point and extragradient-based methods beyond monotonicity:
+        the case of negative comonotonicity.
         International Conference on Machine Learning.
         <https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf>`_
 
@@ -58,7 +59,7 @@ class NegativelyComonotoneOperator(Function):
 
         if self.rho == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
-                  "To instantiate a monotone opetator, please avoid using the class NegativelyComonotoneOperator\n"
+                  "To instantiate a monotone operator, please avoid using the class NegativelyComonotoneOperator\n"
                   "with rho == 0. Instead, please use the class Monotone.\033[0m")
 
     def add_class_constraints(self):

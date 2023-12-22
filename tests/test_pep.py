@@ -50,7 +50,7 @@ class TestPEP(unittest.TestCase):
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
         self.assertEqual(len(self.func.list_of_class_constraints), 0)
 
-        pepit_tau = self.problem.solve(verbose=0)
+        self.problem.solve(verbose=0)
         self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 3)
@@ -145,19 +145,31 @@ class TestPEP(unittest.TestCase):
         # Verify value of the psd matrix.
         for i in range(2):
             for j in range(2):
-                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j), places=3)
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval()[i, j], pepit_tau ** (2 - i - j),
+                                       places=3)
 
         # Verify dual value of the lmi constraint.
         for i in range(2):
             for j in range(2):
-                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1), places=3)
+                self.assertAlmostEqual(self.problem.list_of_psd[0].eval_dual()[i, j], -1/2 * (-pepit_tau) ** (i+j-1),
+                                       places=3)
+
+    def test_consistency(self):
+
+        # Solve twice the same problem in a row and verify the two lists of constraints have same length.
+        _ = self.problem.solve(verbose=0)
+        l1 = self.problem._list_of_constraints_sent_to_wrapper
+        _ = self.problem.solve(verbose=0)
+        l2 = self.problem._list_of_constraints_sent_to_wrapper
+
+        self.assertEqual(len(l1), len(l2))
 
     def test_dimension_reduction(self):
 
-        # Compute pepit_tau very basically
+        # Compute pepit_tau very basically.
         pepit_tau = self.problem.solve(verbose=0)
 
-        # Return the full problem and verify the problem value is still pepit_tau
+        # Compute pepit_tau very basically with dimension_reduction_heuristic off and verify all is fine.
         pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
@@ -170,3 +182,15 @@ class TestPEP(unittest.TestCase):
         # the solve method returns the worst-case performance, not the chosen heuristic value.
         pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
+
+    def test_unbounded_result(self):
+
+        # The problem has 1 initial constraint.
+        self.assertEqual(len(self.problem.list_of_constraints), 1)
+
+        # Remove it to make the solution unbounded.
+        self.problem.list_of_constraints = []
+
+        # Check the behavior of PEP in this case.
+        # It should stop the code before trying to assign no existent values to variables and return None
+        self.assertIsNone(self.problem.solve(verbose=0))

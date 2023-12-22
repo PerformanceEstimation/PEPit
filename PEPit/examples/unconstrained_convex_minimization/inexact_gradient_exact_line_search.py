@@ -4,7 +4,7 @@ from PEPit.primitive_steps import exact_linesearch_step
 from PEPit.primitive_steps import inexact_gradient_step
 
 
-def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
+def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -17,14 +17,16 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
 
         .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu, \\varepsilon) ( f(x_0) - f_\\star )
 
-    is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction and an exact linesearch**,
-    and where :math:`x_\\star` is the minimizer of :math:`f`.
+    is valid, where :math:`x_n` is the output of the **gradient descent with an inexact descent direction
+    and an exact linesearch**, and where :math:`x_\\star` is the minimizer of :math:`f`.
 
-    The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by (with :math:`0 \\leqslant \\varepsilon < 1`)
+    The inexact descent direction :math:`d` is assumed to satisfy a relative inaccuracy described by
+    (with :math:`0 \\leqslant \\varepsilon < 1`)
 
         .. math:: \\|\\nabla f(x_t) - d_t\\| \\leqslant \\varepsilon \\|\\nabla f(x_t)\\|,
 
-    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t` is the approximate descent direction that is used.
+    where :math:`\\nabla f(x_t)` is the true gradient, and :math:`d_t`
+    is the approximate descent direction that is used.
 
     **Algorithm**:
 
@@ -58,33 +60,47 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
         mu (float): the strong convexity parameter.
         epsilon (float): level of inaccuracy.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 9x9
+        >>> pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 9x9
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 18 scalar constraint(s) ...
-                         function 1 : 18 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 6 scalar constraint(s) ...
+        			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.5191057273345401
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5189166579835516
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.855519391036226e-09
+        		All the primal scalar constraints are verified up to an error of 2.1749565343176513e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.349049574835928e-08
+        (PEPit) Final upper bound (dual): 0.5189166453796771 and lower bound (primal example): 0.5189166579835516 
+        (PEPit) Duality gap: absolute: -1.260387449963929e-08 and relative: -2.4288822310342565e-08
         *** Example file: worst-case performance of inexact gradient descent with exact linesearch ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.519106 (f(x_0)-f_*)
-                Theoretical guarantee:   f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+    
     """
 
     # Instantiate PEP
@@ -114,7 +130,7 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     Leps = (1 + epsilon) * L
@@ -124,7 +140,7 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient descent with exact linesearch ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -132,4 +148,6 @@ def wc_inexact_gradient_exact_line_search(L, mu, epsilon, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_inexact_gradient_exact_line_search(L=1, mu=0.1, epsilon=0.1, n=2,
+                                                                       wrapper="cvxpy", solver=None,
+                                                                       verbose=1)

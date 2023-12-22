@@ -3,8 +3,9 @@ from PEPit.function import Function
 
 class CocoerciveStronglyMonotoneOperator(Function):
     """
-    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing some necessary constraints verified by the class of cocoercive and strongly monotone (maximally) operators.
+    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    of :class:`Function`, implementing some necessary constraints verified by the class of cocoercive
+    and strongly monotone (maximally) operators.
 
     Warnings:
         Those constraints might not be sufficient, thus the caracterized class might contain more operators.
@@ -16,7 +17,8 @@ class CocoerciveStronglyMonotoneOperator(Function):
         mu (float): strong monotonicity parameter
         beta (float): cocoercivity parameter
 
-    Cocoercive operators are characterized by the parameters :math:`\\mu` and :math:`\\beta`, hence can be instantiated as
+    Cocoercive operators are characterized by the parameters :math:`\\mu` and :math:`\\beta`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -66,14 +68,14 @@ class CocoerciveStronglyMonotoneOperator(Function):
         if self.mu == 0:
             print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
                   " \n"
-                  "To instantiate a cocoercive (non strongly) monotone opetator,"
+                  "To instantiate a cocoercive (non strongly) monotone operator,"
                   " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
                   "with mu == 0. Instead, please use the class CocoerciveOperator.\033[0m")
 
         if self.beta == 0:
             print("\033[96m(PEPit) The class of cocoercive and strongly monotone operators is necessarily continuous."
                   " \n"
-                  "To instantiate a non cocoercive strongly monotone opetator,"
+                  "To instantiate a non cocoercive strongly monotone operator,"
                   " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
                   "with beta == 0. Instead, please use the class StronglyMonotoneOperator.\033[0m")
 

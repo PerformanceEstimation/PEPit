@@ -3,7 +3,7 @@ from PEPit.functions.convex_qg_function import ConvexQGFunction
 from PEPit.primitive_steps import exact_linesearch_step
 
 
-def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
+def wc_conjugate_gradient_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -52,33 +52,47 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
     Args:
         L (float): the quadratic growth parameter.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
+        >>> pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 27x27
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 351 scalar constraint(s) ...
-                         function 1 : 351 scalar constraint(s) added
+        			Function 1 : Adding 195 scalar constraint(s) ...
+        			Function 1 : 195 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 156 scalar constraint(s) ...
+        			Function 1 : 156 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.038461130525391705
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.038461537777152104
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 9.102635033370141e-10
+        		All the primal scalar constraints are verified up to an error of 6.985771551504261e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 6.487940056145134e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.3524476901692115e-07
+        (PEPit) Final upper bound (dual): 0.038461545907145095 and lower bound (primal example): 0.038461537777152104 
+        (PEPit) Duality gap: absolute: 8.129992991323665e-09 and relative: 2.113798215357174e-07
         *** Example file: worst-case performance of conjugate gradient method ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.0384611 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -112,7 +126,7 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / (2 * (n + 1))
@@ -120,7 +134,7 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of conjugate gradient method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -128,4 +142,4 @@ def wc_conjugate_gradient_qg_convex(L, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, verbose=1)
+    pepit_tau, theoretical_tau = wc_conjugate_gradient_qg_convex(L=1, n=12, wrapper="cvxpy", solver=None, verbose=1)

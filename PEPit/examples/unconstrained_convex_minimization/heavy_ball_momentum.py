@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
+def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -41,7 +41,8 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
 
         .. math:: f(x_n) - f_\\star \\leqslant (1 - \\alpha \\mu)^n (f(x_0) - f_\\star).
 
-    **References**: This methods was first introduce in [1, Section 2], and convergence upper bound was proven in [2, Theorem 4].
+    **References**: This methods was first introduce in [1, Section 2],
+    and convergence upper bound was proven in [2, Theorem 4].
 
     `[1] B.T. Polyak (1964). Some methods of speeding up the convergence of iteration method.
     URSS Computational Mathematics and Mathematical Physics.
@@ -57,12 +58,14 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
         alpha (float): parameter of the scheme.
         beta (float): parameter of the scheme such that :math:`0<\\beta<1` and :math:`0<\\alpha<2(1+\\beta)`.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -73,21 +76,31 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
         >>> L = 1.
         >>> alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
         >>> beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
-        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 5x5
+        >>> pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 5x5
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 12 scalar constraint(s) ...
-                         function 1 : 12 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.753492450790045
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7534930184723507
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.447704542447025e-09
+        		All the primal scalar constraints are verified up to an error of 2.3525640133886805e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1216875770062036e-07
+        (PEPit) Final upper bound (dual): 0.7534930169804492 and lower bound (primal example): 0.7534930184723507 
+        (PEPit) Duality gap: absolute: -1.4919014912351258e-09 and relative: -1.979980510316926e-09
         *** Example file: worst-case performance of the Heavy-Ball method ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.753492 (f(x_0) - f(x_*))
-                Theoretical guarantee:   f(x_n)-f_* <= 0.9025 (f(x_0) - f(x_*))
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.753493 (f(x_0) - f(x_*))
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) - f(x_*))
+    
     """
 
     # Instantiate PEP
@@ -121,7 +134,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - alpha * mu) ** n
@@ -129,7 +142,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Heavy-Ball method ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -141,4 +154,6 @@ if __name__ == "__main__":
     L = 1.
     alpha = 1 / (2 * L)  # alpha \in [0, 1 / L]
     beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
-    pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2, verbose=1)
+    pepit_tau, theoretical_tau = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=2,
+                                                        wrapper="cvxpy", solver=None,
+                                                        verbose=1)

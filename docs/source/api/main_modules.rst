@@ -41,8 +41,8 @@ Constraint
    :show-inheritance:
 
 
-Symmetric positive semidefinite matrix
---------------------------------------
+Symmetric positive semi-definite matrix
+---------------------------------------
 .. autoclass:: PEPit.PSDMatrix
    :members:
    :show-inheritance:
@@ -51,5 +51,12 @@ Symmetric positive semidefinite matrix
 Function
 --------
 .. autoclass:: PEPit.Function
+   :members:
+   :show-inheritance:
+
+
+Wrapper
+-------
+.. autoclass:: PEPit.Wrapper
    :members:
    :show-inheritance:

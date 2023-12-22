@@ -1,5 +1,4 @@
-import cvxpy as cp
-import numpy as np
+import importlib.util
 
 from PEPit.wrapper import Wrapper
 from PEPit.point import Point
@@ -7,64 +6,86 @@ from PEPit.expression import Expression
 from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
+from PEPit.tools.expressions_to_matrices import expression_to_matrices
 
-class Cvxpy_wrapper(Wrapper):
+
+class CvxpyWrapper(Wrapper):
     """
-    A :class:`Cvxpy_wrapper` object interfaces PEPit with the `CVXPY<https://www.cvxpy.org/>`_ modelling language.
+    A :class:`Cvxpy_wrapper` object interfaces PEPit with the `CVXPY <https://www.cvxpy.org/>`_ modelling language.
 
-    This class overwrittes the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
+    This class overwrites the :class:`Wrapper` for CVXPY. In particular, it implements the methods:
     send_constraint_to_solver, send_lmi_constraint_to_solver, generate_problem, get_dual_variables,
     get_primal_variables, eval_constraint_dual_values, solve, prepare_heuristic, and heuristic.
     
     Attributes:
-        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects associated to the PEP.
-                                                    This list does not contain constraints due to internal representation of the 
-                                                    problem by the solver.
-        _list_of_constraints_sent_to_solver_full (list): full list of constraints associated to the solver.
-        prob (cvxpy.Problem): instance of the problem.
-        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
+                                                    associated to the PEP. This list does not contain constraints
+                                                    due to internal representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
-        optimal_dual (list): Optimal dual variables after solving (same ordering as that of _list_of_constraints_sent_to_solver)
-        F (cvxpy.Variable): CVXPY variable corresponding to leaf :class:`Expression` objects of the PEP.
-        G (cvxpy.Variable): CVXPY variable corresponding the Gram matrix of the PEP.
-        verbose (bool): verbosity:
+        optimal_G (numpy.array): Gram matrix of the PEP after solving.
+        objective (Expression): The objective expression that must be maximized.
+                                This is an additional :class:`Expression` created by the PEP to deal with cases
+                                where the user wants to maximize a minimum of several expressions.
+        dual_values (list): Optimal dual variables after solving
+                            (same ordering as that of _list_of_constraints_sent_to_solver).
+        residual (Iterable of Iterables of floats): The residual of the problem, i.e. the dual variable of the Gram.
+        prob: instance of the problem (whose type depends on the solver).
+        solver_name (str): The name of the solver the wrapper interact with.
+        verbose (int): Level of information details to print
+                       (Override the solver verbose parameter).
 
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed (overwrittes CVXPY's setting)
+                       - 0: No verbose at all
+                       - 1: PEPit information is printed but not solver's
+                       - 2: Both PEPit and solver details are printed
+        F (cvxpy.Variable): a 1D cvxpy.Variable that represents PEPit's Expressions.
+        G (cvxpy.Variable): a 2D cvxpy.Variable that represents PEPit's Gram matrix.
+        _list_of_solver_constraints (list of cvxpy.Constraint): the list of constraints of the problem in CVXPY format.
 
     """
-    def __init__(self, verbose=False):
+
+    def __init__(self, verbose=1):
         """
         This function initialize all internal variables of the class. 
         
         Args:
-            verbose (bool): verbose mode of the solver.
+            verbose (int): Level of information details to print
+                           (Override the solver verbose parameter).
+
+                           - 0: No verbose at all
+                           - 1: PEPit information is printed but not solver's
+                           - 2: Both PEPit and solver details are printed
 
         """
-        # Initialize lists of constraints that are used to solve the SDP.
-        # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_solver = list()
+        super().__init__(verbose=verbose)
+
+        # Initialize attributes
+        self.F = None
+        self.G = None
         self._list_of_solver_constraints = list()
-        self._list_of_constraints_sent_to_solver_full = list()
-        self.F = cp.Variable((Expression.counter+1,)) # need the +1 because the objective will be created afterwards
-        self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+
+    def set_main_variables(self):
+        """
+        Create base cvxpy variables and main cvxpy constraint: G >> 0.
+
+        """
+        import cvxpy as cp
 
         # Express the constraints from F, G and objective
         # Start with the main LMI condition
-        self._list_of_solver_constraints = [self.G >> 0]
-        self.verbose = verbose
-        
+        self.F = cp.Variable((Expression.counter,))
+        self.G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+        self._list_of_solver_constraints.append(self.G >> 0)
+
     def check_license(self):
         """
         Check that there is a valid available license for CVXPY.
 
         Returns:
-            license (bool): no license needed: True
-            
+            license presence (bool): no license needed: True
+
         """
         return True
-        
+
     def _expression_to_solver(self, expression):
         """
         Create a cvxpy compatible expression from an :class:`Expression`.
@@ -76,12 +97,14 @@ class Cvxpy_wrapper(Wrapper):
             cvxpy_variable (cvxpy Variable): The expression in terms of F and G.
 
         """
-        Gweights, Fweights, cons = self._expression_to_matrices(expression)
+        import cvxpy as cp
+        
+        Gweights, Fweights, cons = expression_to_matrices(expression)
         cvxpy_variable = cons + self.F @ Fweights + cp.sum(cp.multiply(self.G, Gweights))
 
         # Return the input expression in a cvxpy variable
         return cvxpy_variable
-    
+
     def send_constraint_to_solver(self, constraint):
         """
         Transform a PEPit :class:`Constraint` into a CVXPY one
@@ -127,7 +150,8 @@ class Cvxpy_wrapper(Wrapper):
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """
-
+        import cvxpy as cp
+        
         # Sanity check
         assert isinstance(psd_matrix, PSDMatrix)
 
@@ -158,7 +182,8 @@ class Cvxpy_wrapper(Wrapper):
         Recover all dual variables from solver.
 
         Returns:
-             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver (same ordering).
+             dual_values (list): list of dual variables (floats) associated to _list_of_constraints_sent_to_solver
+                                 (same ordering).
              residual (np.array): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
 
         Raises:
@@ -166,19 +191,19 @@ class Cvxpy_wrapper(Wrapper):
             is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
-        
+
         assert self._list_of_solver_constraints == self.prob.constraints
         dual_values_temp = [constraint.dual_value for constraint in self.prob.constraints]
         dual_values = list()
-        
+
         # Store residual, dual value of the main lmi
         residual = dual_values_temp[0]
         dual_values.append(residual)
         assert residual.shape == (Point.counter, Point.counter)
 
-        # Set counterself._list_of_constraints_sent_to_solver_full
-        counter = 1 
-        counter2 = 1 # number of dual variables (no artificial ones due to LMI)
+        # Set counter
+        counter = 1
+        counter2 = 1  # number of dual variables (no artificial ones due to LMI)
 
         for constraint_or_psd in self._list_of_constraints_sent_to_solver:
             if isinstance(constraint_or_psd, Constraint):
@@ -202,7 +227,7 @@ class Cvxpy_wrapper(Wrapper):
 
         # Return the position of the reached performance metric
         return dual_values, residual
-        
+
     def generate_problem(self, objective):
         """
         Instantiate an optimization model using the cvxpy format, whose objective corresponds to a
@@ -215,10 +240,13 @@ class Cvxpy_wrapper(Wrapper):
             prob (cvxpy.Problem): the PEP in cvxpy format.
 
         """
-        self.objective = self._expression_to_solver(objective)
-        self.prob = cp.Problem(objective=cp.Maximize(self.objective), constraints=self._list_of_solver_constraints)
-        return self.prob
+        import cvxpy as cp
         
+        cvxpy_objective = self._expression_to_solver(objective)
+        self.objective = cvxpy_objective
+        self.prob = cp.Problem(objective=cp.Maximize(cvxpy_objective), constraints=self._list_of_solver_constraints)
+        return self.prob
+
     def solve(self, **kwargs):
         """
         Solve the PEP.
@@ -235,11 +263,52 @@ class Cvxpy_wrapper(Wrapper):
         """
         if self.verbose > 1:
             kwargs['verbose'] = True
+
+        if "solver" in kwargs.keys():
+            if kwargs["solver"] is None:
+                kwargs["solver"] = "MOSEK"
+
+        # Verify is CVXPY will try MOSEK first.
+        if "solver" not in kwargs.keys() or kwargs["solver"] == "MOSEK":
+
+            # If MOSEK is installed, CVXPY will run it.
+            # We need to check the presence of a license and handle it in case there is no valid license.
+            is_mosek_installed = importlib.util.find_spec("mosek")
+            if is_mosek_installed:
+
+                # Import mosek.
+                import mosek
+
+                # Create an environment.
+                mosek_env = mosek.Env()
+
+                # Grab the license if there is one.
+                try:
+                    mosek_env.checkoutlicense(mosek.feature.pton)
+                except mosek.Error:
+                    pass
+
+                # Check validity of a potentially found license.
+                if not mosek_env.expirylicenses() >= 0:
+
+                    # In case the license is not valid, ask CVXPY to run SCS.
+                    kwargs["solver"] = "SCS"
+
+            else:
+                # If mosek is not installed, ask CVXPY to run SCS.
+                kwargs["solver"] = "SCS"
+
+        # Solve the problem.
         self.prob.solve(**kwargs)
+
+        # Store main information.
+        self.solver_name = self.prob.solver_stats.solver_name
         self.optimal_G = self.G.value
         self.optimal_F = self.F.value
-        return self.prob.status, self.prob.solver_stats.solver_name, self.objective.value, self.prob
-        
+
+        # Return first information.
+        return self.prob.status, self.solver_name, self.objective.value
+
     def prepare_heuristic(self, wc_value, tol_dimension_reduction):
         """
         Add the constraint that the objective stay close to its actual value before using 
@@ -255,7 +324,7 @@ class Cvxpy_wrapper(Wrapper):
         """
         # Add the constraint that the objective stay close to its actual value
         self._list_of_solver_constraints.append(self.objective >= wc_value - tol_dimension_reduction)
-        
+
     def heuristic(self, weight):
         """
         Change the objective of the PEP, specifically for finding low-dimensional examples.
@@ -265,6 +334,8 @@ class Cvxpy_wrapper(Wrapper):
             weight (np.array): weights that will be used in the heuristic.
         
         """
+        import cvxpy as cp
+
         obj = cp.sum(cp.multiply(self.G, weight))
         self.prob = cp.Problem(objective=cp.Minimize(obj), constraints=self._list_of_solver_constraints)
         return self.prob

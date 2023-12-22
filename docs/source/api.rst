@@ -9,3 +9,4 @@ API and modules
    api/functions_and_operators
    api/steps
    api/tools
+   api/wrappers

@@ -6,7 +6,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_saga(L, mu, n, verbose=1):
+def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the finite sum convex minimization problem
 
@@ -14,7 +14,8 @@ def wc_saga(L, mu, n, verbose=1):
 
     where the functions :math:`f_i` are assumed to be :math:`L`-smooth :math:`\\mu`-strongly convex, and :math:`h` is
     closed, proper, and convex with a proximal operator readily available. In the sequel, we use the notation 
-    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
+    :math:`\\mathbb{E}` for denoting the expectation over the uniform distribution of the index
+    :math:`i \\sim \\mathcal{U}\\left([|1, n|]\\right)`,
     e.g., :math:`F(x)\\equiv h(x)+\\mathbb{E}[f_i(x)]`.
 
     This code computes the exact rate for a Lyapunov (or energy) function for **SAGA** [1].
@@ -30,7 +31,8 @@ def wc_saga(L, mu, n, verbose=1):
     We consider the case :math:`t=0` in the code below, without loss of generality.
 
     In short, for given values of :math:`n`, :math:`L`, and :math:`\\mu`,
-    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V^{(1)}]` when :math:`V(x^{(0)}) \\leqslant 1`.
+    :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of :math:`\\mathbb{E}[V^{(1)}]`
+    when :math:`V(x^{(0)}) \\leqslant 1`.
 
     **Algorithm**: One iteration of SAGA [1] is described as follows: at iteration :math:`t`, pick
     :math:`j\\in\\{1,\ldots,n\\}` uniformely at random and set:
@@ -58,43 +60,55 @@ def wc_saga(L, mu, n, verbose=1):
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
         n (int): number of functions.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 27x27
+        >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 27x27
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 6 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
-                         function 2 : Adding 6 scalar constraint(s) ...
-                         function 2 : 6 scalar constraint(s) added
-                         function 3 : Adding 6 scalar constraint(s) ...
-                         function 3 : 6 scalar constraint(s) added
-                         function 4 : Adding 6 scalar constraint(s) ...
-                         function 4 : 6 scalar constraint(s) added
-                         function 5 : Adding 6 scalar constraint(s) ...
-                         function 5 : 6 scalar constraint(s) added
-                         function 6 : Adding 6 scalar constraint(s) ...
-                         function 6 : 6 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        			Function 2 : Adding 6 scalar constraint(s) ...
+        			Function 2 : 6 scalar constraint(s) added
+        			Function 3 : Adding 6 scalar constraint(s) ...
+        			Function 3 : 6 scalar constraint(s) added
+        			Function 4 : Adding 6 scalar constraint(s) ...
+        			Function 4 : 6 scalar constraint(s) added
+        			Function 5 : Adding 6 scalar constraint(s) ...
+        			Function 5 : 6 scalar constraint(s) added
+        			Function 6 : Adding 6 scalar constraint(s) ...
+        			Function 6 : 6 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.9666748513396348
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9666666451656595
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.407941346480772e-09
+        		All the primal scalar constraints are verified up to an error of 1.4346716234068732e-07
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.824905589324927e-07
+        (PEPit) Final upper bound (dual): 0.9666666537075449 and lower bound (primal example): 0.9666666451656595 
+        (PEPit) Duality gap: absolute: 8.541885421209372e-09 and relative: 8.836433390898197e-09
         *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
-                PEPit guarantee:         V^(1) <= 0.966675 V^(0)
-                Theoretical guarantee:   V^(1) <= 0.966667 V^(0)
-
+        	PEPit guarantee:		 V^(1) <= 0.966667 V^(0)
+        	Theoretical guarantee:	 V^(1) <= 0.966667 V^(0)
+    
     """
 
     # Instantiate PEP
@@ -155,7 +169,7 @@ def wc_saga(L, mu, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison) : the bound is given in Theorem 1 of [1]
     theoretical_tau = (1 - gamma * mu)
@@ -163,7 +177,7 @@ def wc_saga(L, mu, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of SAGA for Lyapunov function V_t ***')
-        print('\tPEPit guarantee:\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t V^(1) <= {:.6} V^(0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t V^(1) <= {:.6} V^(0)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -171,4 +185,4 @@ def wc_saga(L, mu, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, verbose=1)
+    pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, wrapper="cvxpy", solver=None, verbose=1)

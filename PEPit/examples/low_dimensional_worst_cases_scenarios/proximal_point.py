@@ -3,7 +3,7 @@ from PEPit.operators import MonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_proximal_point(alpha, n, verbose=1):
+def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -18,8 +18,8 @@ def wc_proximal_point(alpha, n, verbose=1):
 
         .. math:: \\|x_n - x_{n-1}\\|^2 \\leqslant \\tau(n, \\alpha) \\|x_0 - x_\\star\\|^2,
 
-    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`. Then, it looks for a low-dimensional nearly achieving this
-    performance.
+    is valid, where :math:`x_\\star` is such that :math:`0 \\in Ax_\\star`.
+    Then, it looks for a low-dimensional nearly achieving this performance.
 
     **Algorithm**: The proximal point algorithm for monotone inclusions is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
@@ -40,37 +40,49 @@ def wc_proximal_point(alpha, n, verbose=1):
     Args:
         alpha (float): the step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 13x13
+        >>> pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 13x13
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 132 scalar constraint(s) ...
-                         function 1 : 132 scalar constraint(s) added
+        			Function 1 : Adding 66 scalar constraint(s) ...
+        			Function 1 : 66 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.03504735907840766
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.885183851963194e-06 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0350493891186265
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 6.668982718413771e-09 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); objective value: 0.03503739338571882
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 1.9044504527414672e-06 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03494938907009
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 3.285085131308424e-10 after dimension reduction
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.8548497077664176e-11
+        		All the primal scalar constraints are verified up to an error of 1.1291529170009973e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.034322726414018e-08
+        (PEPit) Final upper bound (dual): 0.03504939011652487 and lower bound (primal example): 0.03494938907009 
+        (PEPit) Duality gap: absolute: 0.00010000104643487218 and relative: 0.0028613102859773296
         *** Example file: worst-case performance of the Proximal Point Method***
-                PEPit example:           ||x(n) - x(n-1)||^2 == 0.0350374 ||x0 - xs||^2
-                Theoretical guarantee:   ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2
-
+        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 == 0.0350494 ||x0 - xs||^2
+        	Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2
+    
     """
 
     # Instantiate PEP
@@ -99,7 +111,8 @@ def wc_proximal_point(alpha, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="trace")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="trace")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (1 - 1 / n) ** (n - 1) / n
@@ -107,7 +120,7 @@ def wc_proximal_point(alpha, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEPit example:\t\t ||x(n) - x(n-1)||^2 == {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 == {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
@@ -115,4 +128,4 @@ def wc_proximal_point(alpha, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point(alpha=2.2, n=11, wrapper="cvxpy", solver=None, verbose=1)

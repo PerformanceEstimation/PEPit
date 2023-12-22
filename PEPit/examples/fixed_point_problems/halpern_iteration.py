@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.operators import LipschitzOperator
 
 
-def wc_halpern_iteration(n, verbose=1):
+def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the fixed point problem
 
@@ -38,33 +38,45 @@ def wc_halpern_iteration(n, verbose=1):
 
     Args:
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 28x28
+        >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 28x28
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 702 scalar constraint(s) ...
-                         function 1 : 702 scalar constraint(s) added
+        			Function 1 : Adding 351 scalar constraint(s) ...
+        			Function 1 : 351 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.005933984368783424
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.005917282090077699
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.755174265259971e-09
+        		All the primal scalar constraints are verified up to an error of 1.3075734314749177e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.4389586421813856e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.425619306975869e-07
+        (PEPit) Final upper bound (dual): 0.005917288963138354 and lower bound (primal example): 0.005917282090077699 
+        (PEPit) Duality gap: absolute: 6.873060655332441e-09 and relative: 1.1615232383221049e-06
         *** Example file: worst-case performance of Halpern Iterations ***
-                PEPit guarantee:         ||xN - AxN||^2 <= 0.00593398 ||x0 - x_*||^2
-                Theoretical guarantee:   ||xN - AxN||^2 <= 0.00591716 ||x0 - x_*||^2
-
+        	PEPit guarantee:		 ||xN - AxN||^2 <= 0.00591729 ||x0 - x_*||^2
+        	Theoretical guarantee:	 ||xN - AxN||^2 <= 0.00591716 ||x0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -92,7 +104,7 @@ def wc_halpern_iteration(n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (2 / (n + 1)) ** 2
@@ -100,7 +112,7 @@ def wc_halpern_iteration(n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Halpern Iterations ***')
-        print('\tPEPit guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -108,4 +120,4 @@ def wc_halpern_iteration(n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, verbose=1)
+    pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, wrapper="cvxpy", solver=None, verbose=1)
