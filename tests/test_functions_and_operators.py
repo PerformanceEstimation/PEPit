@@ -90,6 +90,8 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.new_point: Point = np.dot(self.points_weights, self.all_points)
         self.new_point.set_name("combined point")
 
+        self.verbose = 0
+
     def test_is_instance(self):
 
         for function in self.all_functions_and_operators:
@@ -206,7 +208,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         self.pep.set_initial_condition((self.point1 - self.point2)**2 <= 1)
         self.pep.set_performance_metric((self.func7.gradient(self.point1) - self.func7.gradient(self.point2))**2)
-        self.pep.solve()
+        self.pep.solve(verbose=self.verbose)
 
         for function in self.all_functions_and_operators:
             tables_of_constraints = function.tables_of_constraints

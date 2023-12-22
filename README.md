@@ -268,12 +268,12 @@ PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/
 
 This toolbox has been created by
 
-- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) (main contributor #1) 
-- [**Céline Moucer**](https://www.linkedin.com/in/c%C3%A9line-moucer-88068b173/) (main contributor #2)
-- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) (project supervision)
-- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) (project supervision)
-- [**Adrien Taylor**](https://adrientaylor.github.io/) (contributor & main project supervision)
-- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) (contributor & main project supervision)
+- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) 
+- [**Céline Moucer**](https://cmoucer.github.io)
+- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html)
+- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/)
+- [**Adrien Taylor**](https://adrientaylor.github.io/)
+- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
 
 ### Acknowledgments
 

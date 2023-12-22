@@ -49,7 +49,7 @@ class LipschitzOperator(Function):
     """
 
     def __init__(self,
-                 L=1.,
+                 L,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True,

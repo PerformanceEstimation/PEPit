@@ -37,7 +37,7 @@ class CocoerciveStronglyMonotoneOperator(Function):
 
     def __init__(self,
                  mu,
-                 beta=1.,
+                 beta,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True,

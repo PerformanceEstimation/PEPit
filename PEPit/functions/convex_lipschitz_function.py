@@ -28,7 +28,7 @@ class ConvexLipschitzFunction(Function):
     """
 
     def __init__(self,
-                 M=1.,
+                 M,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False,

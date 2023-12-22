@@ -30,8 +30,8 @@ class SmoothConvexLipschitzFunction(Function):
     """
 
     def __init__(self,
-                 L=1.,
-                 M=1.,
+                 L,
+                 M,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=True,

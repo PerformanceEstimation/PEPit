@@ -37,7 +37,7 @@ class ConvexSupportFunction(Function):
         """
 
         Args:
-            M (float): Lipschitz constant of self.
+            M (float): Lipschitz constant of self. Default value set to infinity.
             is_leaf (bool): True if self is defined from scratch.
                             False is self is defined as linear combination of leaf .
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.

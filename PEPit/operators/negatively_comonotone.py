@@ -61,6 +61,9 @@ class NegativelyComonotoneOperator(Function):
         # Store the beta parameter
         self.rho = rho
 
+        if self.rho < 0:
+            print("\033[96m(PEPit) The parameters rho is expected to be positive.\033[0m")
+
         if self.rho == 0:
             print("\033[96m(PEPit) The class of cocoercive operators is necessarily continuous. \n"
                   "To instantiate a monotone operator, please avoid using the class NegativelyComonotoneOperator\n"

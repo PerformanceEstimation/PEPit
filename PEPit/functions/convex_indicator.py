@@ -37,7 +37,7 @@ class ConvexIndicatorFunction(Function):
         """
 
         Args:
-            D (float): Diameter of the support of self.
+            D (float): Diameter of the support of self. Default value set to infinity.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
