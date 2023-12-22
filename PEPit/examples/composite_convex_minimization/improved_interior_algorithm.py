@@ -7,7 +7,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import bregman_gradient_step
 
 
-def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
+def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -16,8 +16,8 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
     where :math:`f_1` is a :math:`L`-smooth convex function, and :math:`f_2` is a closed convex indicator function.
     We use a kernel function :math:`h` that is assumed to be closed, proper, and strongly convex (see [1, Section 5]).
 
-    This code computes a worst-case guarantee for **Improved interior gradient algorithm** (IGA). That is, it computes the
-    smallest possible :math:`\\tau(\\mu,L,c,\\lambda,n)` such that the guarantee
+    This code computes a worst-case guarantee for **Improved interior gradient algorithm** (IGA).
+    That is, it computes the smallest possible :math:`\\tau(\\mu,L,c,\\lambda,n)` such that the guarantee
 
     .. math:: F(x_n) - F(x_\\star) \\leqslant \\tau(\\mu,L,c,\\lambda,n)  (c D_h(x_\\star;x_0) + f_1(x_0) - f_1(x_\\star))
 
@@ -59,12 +59,14 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
         c (float): initial value.
         lam (float): the step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -73,25 +75,35 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
     Example:
         >>> L = 1
         >>> lam = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 22x22
+        >>> pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 22x22
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                         function 1 : Adding 42 scalar constraint(s) ...
-                         function 1 : 42 scalar constraint(s) added
-                         function 2 : Adding 49 scalar constraint(s) ...
-                         function 2 : 49 scalar constraint(s) added
-                         function 3 : Adding 42 scalar constraint(s) ...
-                         function 3 : 42 scalar constraint(s) added
+        			Function 1 : Adding 42 scalar constraint(s) ...
+        			Function 1 : 42 scalar constraint(s) added
+        			Function 2 : Adding 49 scalar constraint(s) ...
+        			Function 2 : 49 scalar constraint(s) added
+        			Function 3 : Adding 42 scalar constraint(s) ...
+        			Function 3 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.06675394483126838
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06807592082147511
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.2818984835639185e-08
+        (PEPit) Final upper bound (dual): 0.0680759105013995 and lower bound (primal example): 0.06807592082147511 
+        (PEPit) Duality gap: absolute: -1.032007561352355e-08 and relative: -1.5159656291080233e-07
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-                PEPit guarantee:         F(x_n)-F_* <= 0.0667539 (c * Dh(xs;x0) + f1(x0) - F_*)
-                Theoretical guarantee:   F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
-
+        	PEPit guarantee:		 F(x_n)-F_* <= 0.0680759 (c * Dh(xs;x0) + f1(x0) - F_*)
+        	Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
+    
     """
 
     # Instantiate PEP
@@ -139,19 +151,18 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    cvxpy_prob = problem.solve(verbose=pepit_verbose, return_full_cvxpy_problem=True)
-    pepit_tau = cvxpy_prob.value
-    if cvxpy_prob.solver_stats.solver_name == "SCS":
-        print("\033[96m(PEPit) We recommend to use another solver than SCS, such as MOSEK. \033[0m")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
+    if problem.wrapper.solver_name.casefold() != "mosek":
+        print("\033[96m(PEPit) We recommend to use MOSEK solver. \033[0m")
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = (4 * L) / (c * (n + 1) ** 2)
 
     # Print conclusion if required
     if verbose != -1:
-        print(
-            '*** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('*** Example file:'
+              ' worst-case performance of the Improved interior gradient algorithm in function values ***')
+        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -161,4 +172,6 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, verbose=1):
 if __name__ == "__main__":
     L = 1
     lam = 1 / L
-    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5, verbose=1)
+    pepit_tau, theoretical_tau = wc_improved_interior_algorithm(L=L, mu=1, c=1, lam=lam, n=5,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

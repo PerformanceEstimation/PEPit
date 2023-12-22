@@ -4,7 +4,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_dykstra(n, verbose=1):
+def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex feasibility problem:
 
@@ -23,7 +23,8 @@ def wc_dykstra(n, verbose=1):
 
     In short, for a given value of :math:`n`,
     :math:`\\tau(n)` is computed as the worst-case value of
-    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
+    :math:`\\|\\mathrm{Proj}_{Q_1}(x_n)-\\mathrm{Proj}_{Q_2}(x_n)\\|^2`
+    when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
     Then, it looks for a low-dimensional nearly achieving this performance.
     
     **Algorithm**: The Dykstra projection method can be written as
@@ -38,46 +39,59 @@ def wc_dykstra(n, verbose=1):
 
     **References**: This method is due to [1].
 
-    `[1] J.P. Boyle, R.L. Dykstra (1986). A method for finding projections onto the intersection of convex sets in Hilbert spaces.
+    `[1] J.P. Boyle, R.L. Dykstra (1986).
+    A method for finding projections onto the intersection of convex sets in Hilbert spaces.
     Lecture Notes in Statistics. Vol. 37. pp. 28–47.
     <https://link.springer.com/chapter/10.1007/978-1-4613-9940-7_3>`_
     
     Args:
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (None): no theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 24x24
+        >>> pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 24x24
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 144 scalar constraint(s) ...
-                         function 1 : 144 scalar constraint(s) added
-                         function 2 : Adding 121 scalar constraint(s) ...
-                         function 2 : 121 scalar constraint(s) added
+        			Function 1 : Adding 144 scalar constraint(s) ...
+        			Function 1 : 144 scalar constraint(s) added
+        			Function 2 : Adding 121 scalar constraint(s) ...
+        			Function 2 : 121 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); optimal value: 0.020649148184166164
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.003245910668057083 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02575645205498293
+        (PEPit) Postprocessing: 6 eigenvalue(s) > 8.634660515752737e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.02124334648210737
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal_inaccurate (solver: SCS); objective value: 0.02124334648210737
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.002134191248999246 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02565645181421173
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447137211820049 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.02565645181421173
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447137211820049 after dimension reduction
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.4529754414635007e-10
+        		All the primal scalar constraints are verified up to an error of 4.844444845275575e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.990158453368192e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.812573499074675e-08
+        (PEPit) Final upper bound (dual): 0.02575645534456756 and lower bound (primal example): 0.02565645181421173 
+        (PEPit) Duality gap: absolute: 0.00010000353035582998 and relative: 0.0038977926908987316
         *** Example file: worst-case performance of the Dykstra projection method ***
-                PEPit example:   ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0212433 ||x0 - x_*||^2
-
+        	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0257565 ||x0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -96,7 +110,6 @@ def wc_dykstra(n, verbose=1):
 
     # Run the Dykstra projection method
     x = x0
-    y = x0
     p = null_point
     q = null_point
     for _ in range(n):
@@ -113,17 +126,18 @@ def wc_dykstra(n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose, dimension_reduction_heuristic="logdet1")
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose,
+                              dimension_reduction_heuristic="logdet1")
     theoretical_tau = None
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Dykstra projection method ***')
-        print('\tPEPit example:\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_dykstra(n=10, verbose=1)
+    pepit_tau, theoretical_tau = wc_dykstra(n=10, wrapper="cvxpy", solver=None, verbose=1)

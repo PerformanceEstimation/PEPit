@@ -12,9 +12,11 @@ from tests.additional_complexified_examples_tests import wc_proximal_gradient_co
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified2
 from tests.additional_complexified_examples_tests import wc_proximal_point_complexified
 from tests.additional_complexified_examples_tests import wc_proximal_point_complexified2
+from tests.additional_complexified_examples_tests import wc_proximal_point_complexified3
 from tests.additional_complexified_examples_tests import wc_gradient_exact_line_search_complexified
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified
 from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified2
+from tests.additional_complexified_examples_tests import wc_inexact_gradient_exact_line_search_complexified3
 from tests.additional_complexified_examples_tests import \
     wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
 from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_convex_complexified
@@ -53,23 +55,36 @@ class TestExamples(unittest.TestCase):
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
 
     def test_PPA_modified(self):
-        n, gamma = 2, 1
+        n, gamma = 2, 1.3
 
-        wc, theory = wc_proximal_point_complexified(n, gamma, verbose=self.verbose)
+        wc, theory = wc_proximal_point_complexified(gamma, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_PPA_modified2(self):
+        n, gamma = 5, 1.3
+
+        wc, theory = wc_proximal_point_complexified3(gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_PPA_vs_PPA_modified(self):
-        n, gamma = 2, 1
+        n, gamma = 2, 1.1
 
-        wc_modified, theory = wc_proximal_point_complexified(n, gamma, verbose=self.verbose)
-        wc, theory = wc_proximal_point(n, gamma, verbose=self.verbose)
+        wc_modified, theory = wc_proximal_point_complexified(gamma, n, verbose=self.verbose)
+        wc, theory = wc_proximal_point(gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
 
     def test_PPA_vs_PPA_modified2(self):
-        n, gamma = 3, 2
+        n, gamma = 3, 2.1
 
-        wc_modified, theory = wc_proximal_point_complexified2(n, gamma, verbose=self.verbose)
-        wc, theory = wc_proximal_point(n, gamma, verbose=self.verbose)
+        wc_modified, theory = wc_proximal_point_complexified2(gamma, n, verbose=self.verbose)
+        wc, theory = wc_proximal_point(gamma, n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
+
+    def test_PPA_vs_PPA_modified3(self):
+        n, gamma = 4, 3.3
+
+        wc_modified, theory = wc_proximal_point_complexified3(gamma, n, verbose=self.verbose)
+        wc, theory = wc_proximal_point(gamma, n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
 
     def test_ELS_modified(self):
@@ -92,6 +107,13 @@ class TestExamples(unittest.TestCase):
                                                                          verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_inexact_ELS_modified3(self):
+        L, mu, epsilon, n = 2, .05, .2, 2
+
+        wc, theory = wc_inexact_gradient_exact_line_search_complexified3(L=L, mu=mu, epsilon=epsilon, n=n,
+                                                                         verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
     def test_ELS_vs_ELS_modified(self):
         L, mu, n = 1.5, .12, 3
 
@@ -111,6 +133,14 @@ class TestExamples(unittest.TestCase):
         L, mu, epsilon, n = 2.3, .23, .2, 2
 
         wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified2(L=L, mu=mu, epsilon=epsilon, n=n,
+                                                                                  verbose=self.verbose)
+        wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
+        self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
+
+    def test_inexact_ELS_vs_ELS_modified3(self):
+        L, mu, epsilon, n = 2.5, .13, .2, 3
+
+        wc_modified, theory = wc_inexact_gradient_exact_line_search_complexified3(L=L, mu=mu, epsilon=epsilon, n=n,
                                                                                   verbose=self.verbose)
         wc, theory = wc_inexact_gradient_exact_line_search(L=L, mu=mu, epsilon=epsilon, n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)

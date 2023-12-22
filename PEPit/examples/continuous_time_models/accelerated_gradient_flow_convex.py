@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions.convex_function import ConvexFunction
 
 
-def wc_accelerated_gradient_flow_convex(t, verbose=1):
+def wc_accelerated_gradient_flow_convex(t, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -52,33 +52,45 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
     Args:
         t (float): time step
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
 
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 4x4
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 2 scalar constraint(s) ...
-                         function 1 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: -1.2008648627755779e-18
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: -4.440892098500626e-15
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 5.296563188039727e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.5004650319851282e-10
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): -4.440892098500626e-15 
+        (PEPit) Duality gap: absolute: 4.440892098500626e-15 and relative: -1.0
         *** Example file: worst-case performance of an accelerated gradient flow ***
-                PEPit guarantee:         d/dt V(X_t,t) <= -1.20086e-18
-                Theoretical guarantee:   d/dt V(X_t) <= 0.0
-
+        	PEPit guarantee:		 d/dt V(X_t,t) <= 0.0
+        	Theoretical guarantee:	 d/dt V(X_t) <= 0.0
+    
     """
 
     # Instantiate PEP
@@ -108,7 +120,7 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 0.
@@ -116,7 +128,7 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an accelerated gradient flow ***')
-        print('\tPEPit guarantee:\t d/dt V(X_t,t) <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t d/dt V(X_t,t) <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t d/dt V(X_t) <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -124,4 +136,4 @@ def wc_accelerated_gradient_flow_convex(t, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_convex(t=3.4, wrapper="cvxpy", solver=None, verbose=1)

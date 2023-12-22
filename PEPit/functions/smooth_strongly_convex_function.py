@@ -11,7 +11,8 @@ class SmoothStronglyConvexFunction(Function):
         mu (float): strong convexity parameter
         L (float): smoothness parameter
 
-    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and :math:`L`, hence can be instantiated as
+    Smooth strongly convex functions are characterized by parameters :math:`\\mu` and :math:`L`,
+    hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -79,9 +80,9 @@ class SmoothStronglyConvexFunction(Function):
                 xj, gj, fj = point_j
 
                 if point_i != point_j:
-
                     # Interpolation conditions of smooth strongly convex functions class
                     self.list_of_class_constraints.append(fi - fj >=
-                                        gj * (xi - xj)
-                                        + 1/(2*self.L) * (gi - gj) ** 2
-                                        + self.mu / (2 * (1 - self.mu / self.L)) * (xi - xj - 1/self.L * (gi - gj))**2)
+                                                          gj * (xi - xj)
+                                                          + 1 / (2 * self.L) * (gi - gj) ** 2
+                                                          + self.mu / (2 * (1 - self.mu / self.L)) * (
+                                                                      xi - xj - 1 / self.L * (gi - gj)) ** 2)

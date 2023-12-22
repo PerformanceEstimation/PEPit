@@ -73,10 +73,9 @@ class SmoothFunction(Function):
                 xj, gj, fj = point_j
 
                 if point_i != point_j:
-
                     # Interpolation conditions of smooth functions class
-                    self.list_of_class_constraints.append(fi - fj
-                                        - self.L/4 * (xi - xj)**2
-                                        - 1/2 * (gi + gj) * (xi - xj)
-                                        + 1/(4 * self.L) * (gi - gj)**2
-                                        <= 0)
+                    self.list_of_class_constraints.append(fi - fj >=
+                                                          - self.L / 4 * (xi - xj) ** 2
+                                                          + 1 / 2 * (gi + gj) * (xi - xj)
+                                                          + 1 / (4 * self.L) * (gi - gj) ** 2
+                                                          )

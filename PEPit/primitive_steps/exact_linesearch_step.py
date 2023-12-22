@@ -54,7 +54,8 @@ def exact_linesearch_step(x0, f, directions):
         Two such examples are provided in the `conjugate gradient` and `gradient with exact line search` example files.
 
     References:
-        `[1] Y. Drori and A. Taylor (2020). Efficient first-order methods for convex minimization: a constructive approach.
+        `[1] Y. Drori and A. Taylor (2020).
+        Efficient first-order methods for convex minimization: a constructive approach.
         Mathematical Programming 184 (1), 183-220.
         <https://arxiv.org/pdf/1803.05676.pdf>`_
 

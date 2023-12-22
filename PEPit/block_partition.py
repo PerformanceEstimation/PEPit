@@ -1,5 +1,4 @@
-from PEPit.point import Point
-from PEPit.point import null_point
+from PEPit.point import Point, null_point
 from PEPit.constraint import Constraint
 
 
@@ -11,8 +10,10 @@ class BlockPartition(object):
     Attributes:
         blocks_dict (dict): dictionary describing the decomposition of :class:`Point` objects.
                             Keys are :class:`Point` objects.
-                            Values are lists of :class:`Point` objects corresponding to the decompositions of the key in blocks.
-        list_of_constraints (list): The list of :class:`Constraint` objects associated with this :class:`BlockPartition`.
+                            Values are lists of :class:`Point` objects corresponding to the decompositions of the key
+                            in blocks.
+        list_of_constraints (list): The list of :class:`Constraint` objects associated with this
+                                    :class:`BlockPartition`.
         d (int): encodes the number of blocks (:math:`d \\geq 1`).
         counter (int): counts the number of :class:`BlockPartition` objects.
 
@@ -78,7 +79,7 @@ class BlockPartition(object):
 
         Raises:
             AssertionError: if provided `point` is not a :class:`Point` or `block_number` is not a valid integer
-                            (which should be non negative and strictly smaller than the number of blocks)
+                            (which should be nonnegative and strictly smaller than the number of blocks)
 
         """
         assert isinstance(point, Point) and isinstance(block_number, int)

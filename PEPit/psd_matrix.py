@@ -78,7 +78,7 @@ class PSDMatrix(object):
         Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
 
         Args:
-            matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            matrix_of_expressions (Iterable of Iterables of Expressions): a square matrix of :class:`Expression`.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
@@ -112,7 +112,7 @@ class PSDMatrix(object):
 
     def __getitem__(self, item):
         """
-        Access to a element of the underlying matrix of expressions
+        Access to an element of the underlying matrix of expressions
         using subscript of self.
 
         Args:
@@ -149,22 +149,23 @@ class PSDMatrix(object):
         return self._value
 
     def eval_dual(self):
-            """
-            Compute, store and return the value of the dual variable of this :class:`PSDMatrix`.
+        """
+        Compute, store and return the value of the dual variable of this :class:`PSDMatrix`.
 
-            Returns:
-                self._dual_variable_value (ndarray of floats): The value of the dual variable of this :class:`PSDMatrix`
-                                                               after the corresponding PEP was solved numerically.
+        Returns:
+            self._dual_variable_value (ndarray of floats): The value of the dual variable of this :class:`PSDMatrix`
+                                                           after the corresponding PEP was solved numerically.
 
-            Raises:
-                ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!") if the PEP has not been solved yet.
+        Raises:
+            ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
+            if the PEP has not been solved yet.
 
-            """
+        """
 
-            # If the attribute _dual_variable_value is not None, then simply return it.
-            # Otherwise, raise a ValueError.
-            if self._dual_variable_value is None:
-                # The PEP would have filled the attribute at the end of the solve.
-                raise ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
+        # If the attribute _dual_variable_value is not None, then simply return it.
+        # Otherwise, raise a ValueError.
+        if self._dual_variable_value is None:
+            # The PEP would have filled the attribute after solving the problem.
+            raise ValueError("The PEP must be solved to evaluate PSDMatrix dual variables!")
 
-            return self._dual_variable_value
+        return self._dual_variable_value

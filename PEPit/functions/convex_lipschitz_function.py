@@ -4,7 +4,8 @@ from PEPit.function import Function
 class ConvexLipschitzFunction(Function):
     """
     The :class:`ConvexLipschitzFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
-    implementing the interpolation constraints of the class of convex closed proper (CCP) Lipschitz continuous functions.
+    implementing the interpolation constraints of the class of convex closed proper (CCP)
+    Lipschitz continuous functions.
 
     Attributes:
         M (float): Lipschitz parameter

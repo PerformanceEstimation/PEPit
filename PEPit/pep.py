@@ -1,6 +1,10 @@
-import numpy as np
-import cvxpy as cp
+import importlib.util
 
+import numpy as np
+
+from PEPit.tools.dict_operations import prune_dict, symmetrize_dict
+
+from PEPit.wrappers import WRAPPERS
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -16,24 +20,33 @@ class PEP(object):
     It stores the following information.
 
     Attributes:
+        counter (int): counts the number of :class:`PEP` objects.
+                       Ideally, only one is defined at a time.
+
         list_of_functions (list): list of leaf :class:`Function` objects that are defined through the pipeline.
         list_of_points (list): list of :class:`Point` objects that are defined out of the scope of a :class:`Function`.
                                Typically the initial :class:`Point`.
         list_of_constraints (list): list of :class:`Constraint` objects that are defined
-                                   out of the scope of a :class:`Function`.
-                                   Typically the initial :class:`Constraint`.
+                                    out of the scope of a :class:`Function`.
+                                    Typically the initial :class:`Constraint`.
         list_of_performance_metrics (list): list of :class:`Expression` objects.
                                             The pep maximizes the minimum of all performance metrics.
         list_of_psd (list): list of :class:`PSDMatrix` objects.
                             The PEP consider the associated LMI constraints psd_matrix >> 0.
-        _list_of_constraints_sent_to_cvxpy (list): a list of all the :class:`Constraint` objects that are sent to CVXPY
-                                                   for solving the SDP. It should not be updated manually.
-                                                   Only the `solve` method takes care of it.
-        _list_of_cvxpy_constraints (list): a list of all the CVXPY Constraints objects that have been sent by PEPit
-                                           for solving the SDP. It should not be updated manually.
-                                           Only the `solve` method takes care of it.
-        counter (int): counts the number of :class:`PEP` objects.
-                       Ideally, only one is defined at a time.
+
+        wrapper_name (str): name of the used wrapper.
+        wrapper (Wrapper): :class:`Wrapper` object that interfaces between the :class:`PEP` and the solver.
+
+        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects sent to the wrapper.
+        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
+
+        objective (Expression): the expression to be maximized by the solver.
+                                It is set by the method `solve`. And should not be updated otherwise.
+
+        G_value (ndarray): the value of the Gram matrix G that the solver found.
+        F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
+
+        residual (ndarray): the dual value found by the solver to the lmi constraints G >> 0.
 
     """
     # Class counter.
@@ -60,17 +73,34 @@ class PEP(object):
         # points and constraints that are independent of the functions,
         # as well as the list of matrices that must be constraint to be positive symmetric definite
         # and the list of performance metrics.
-        # The PEP will maximize the minimum of the latest.
+        # The PEP will maximize the minimum of the latter.
         self.list_of_functions = list()
         self.list_of_points = list()
         self.list_of_constraints = list()
         self.list_of_performance_metrics = list()
         self.list_of_psd = list()
 
-        # Initialize lists of constraints that are used to solve the SDP.
+        # Initialize wrapper information
+        # The wrapper will be determined in the method "solve".
+        self.wrapper_name = None
+        self.wrapper = None
+
+        # Initialize lists of constraints that will be sent to the wrapper to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
-        self._list_of_constraints_sent_to_cvxpy = list()
-        self._list_of_cvxpy_constraints = list()
+        self._list_of_constraints_sent_to_wrapper = list()
+        self._list_of_psd_sent_to_wrapper = list()
+
+        # The attribute objective will contain a leaf Expression when set in the method "solve".
+        self.objective = None
+        # The Gram matrix G and the vector of Expressions F will obtain value from the solver,
+        # stored in the 2 following attributes.
+        # From those values, all Points and Expressions receive a primal value.
+        self.G_value = None
+        self.F_value = None
+        # All PEP Constraints receive also a dual value.
+        # The constraint G >= 0 is the only constraint that is not defined from the class Constraint.
+        # Its dual value, called residual, is then stored in the following attribute.
+        self.residual = None
 
     @staticmethod
     def _reset_classes():
@@ -98,7 +128,7 @@ class PEP(object):
         Args:
             function_class (class): a subclass of :class:`Function` that overwrite the `add_class_constraints` method.
             kwargs (dict): dictionary of parameters that characterize the function class.
-                           Can also contains the boolean `reuse_gradient`,
+                           Can also contain the boolean `reuse_gradient`,
                            that enforces using only one subgradient per point.
 
         Returns:
@@ -136,7 +166,7 @@ class PEP(object):
     def set_initial_condition(self, condition):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
-        Typically an condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
+        Typically, a condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
 
         Args:
             condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
@@ -169,7 +199,7 @@ class PEP(object):
 
     def add_psd_matrix(self, matrix_of_expressions):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
@@ -216,151 +246,32 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
 
-    @staticmethod
-    def _expression_to_cvxpy(expression, F, G):
+    def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", verbose=1,
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4, **kwargs):
         """
-        Create a cvxpy compatible expression from an :class:`Expression`.
+        Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
+        instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
 
         Args:
-            expression (Expression): any expression.
-            F (cvxpy Variable): a vector representing the function values.
-            G (cvxpy Variable): a matrix representing the Gram matrix of all leaf :class:`Point` objects.
+            wrapper (str, optional): Reference to a solver, interfaced by a :class:`PEPit.Wrapper`.
+                                     Default is "cvxpy", other native option include "mosek".
+            return_primal_or_dual (str, optional): If "dual", it returns a worst-case upper bound of the PEP
+                                                   (dual value of the objective).
+                                                   If "primal", it returns a worst-case lower bound of the PEP
+                                                   (primal value of the objective).
+                                                   Default is "dual".
+                                                   Note both value should be almost the same by strong duality.
 
-        Returns:
-            cvxpy_variable (cvxpy Variable): The expression in terms of F and G.
+            verbose (int, optional): Level of information details to print
+                                     (Override the solver verbose parameter).
 
-        """
-        cvxpy_variable = 0
-        Fweights = np.zeros((Expression.counter,))
-        Gweights = np.zeros((Point.counter, Point.counter))
-
-        # If simple function value, then simply return the right coordinate in F
-        if expression.get_is_leaf():
-            Fweights[expression.counter] += 1
-        # If composite, combine all the cvxpy expression found from leaf expressions
-        else:
-            for key, weight in expression.decomposition_dict.items():
-                # Function values are stored in F
-                if type(key) == Expression:
-                    assert key.get_is_leaf()
-                    Fweights[key.counter] += weight
-                # Inner products are stored in G
-                elif type(key) == tuple:
-                    point1, point2 = key
-                    assert point1.get_is_leaf()
-                    assert point2.get_is_leaf()
-                    Gweights[point1.counter, point2.counter] += weight
-                # Constants are simply constants
-                elif key == 1:
-                    cvxpy_variable += weight
-                # Others don't exist and raise an Exception
-                else:
-                    raise TypeError("Expressions are made of function values, inner products and constants only!")
-
-        cvxpy_variable += F @ Fweights + cp.sum(cp.multiply(G, Gweights))
-
-        # Return the input expression in a cvxpy variable
-        return cvxpy_variable
-
-    def send_constraint_to_cvxpy(self, constraint, F, G):
-        """
-        Transform a PEPit :class:`Constraint` into a CVXPY one
-        and add the 2 formats of the constraints into the tracking lists.
-
-        Args:
-            constraint (Constraint): a :class:`Constraint` object to be sent to CVXPY.
-            F (CVXPY Variable): a CVXPY Variable referring to function values.
-            G (CVXPY Variable): a CVXPY Variable referring to points and gradients.
-
-        Raises:
-            ValueError if the attribute `equality_or_inequality` of the :class:`Constraint`
-            is neither `equality`, nor `inequality`.
-
-        """
-
-        # Sanity check
-        assert isinstance(constraint, Constraint)
-
-        # Add constraint to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
-        # all the constraints that have been sent to CVXPY as well as the order.
-        self._list_of_constraints_sent_to_cvxpy.append(constraint)
-
-        # Distinguish equality and inequality
-        if constraint.equality_or_inequality == 'inequality':
-            cvxpy_constraint = self._expression_to_cvxpy(constraint.expression, F, G) <= 0
-        elif constraint.equality_or_inequality == 'equality':
-            cvxpy_constraint = self._expression_to_cvxpy(constraint.expression, F, G) == 0
-        else:
-            # Raise an exception otherwise
-            raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
-                             ' must either be \'equality\' or \'inequality\'.'
-                             'Got {}'.format(constraint.equality_or_inequality))
-
-        # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
-        self._list_of_cvxpy_constraints.append(cvxpy_constraint)
-
-    def send_lmi_constraint_to_cvxpy(self, psd_counter, psd_matrix, F, G, verbose):
-        """
-        Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
-        and add the 2 formats of the constraints into the tracking lists.
-
-        Args:
-            psd_counter (int): a counter useful for the verbose mode.
-            psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
-            F (CVXPY Variable): a CVXPY Variable referring to function values.
-            G (CVXPY Variable): a CVXPY Variable referring to points and gradients.
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
-
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed
-
-        """
-
-        # Sanity check
-        assert isinstance(psd_matrix, PSDMatrix)
-
-        # Add psd_matrix to the attribute _list_of_constraints_sent_to_cvxpy to keep track of
-        # all the constraints that have been sent to CVXPY as well as the order.
-        self._list_of_constraints_sent_to_cvxpy.append(psd_matrix)
-
-        # Create a symmetric matrix in CVXPY
-        M = cp.Variable(psd_matrix.shape, symmetric=True)
-
-        # Store the lmi constraint
-        cvxpy_constraints_list = [M >> 0]
-
-        # Store one correspondence constraint per entry of the matrix
-        for i in range(psd_matrix.shape[0]):
-            for j in range(psd_matrix.shape[1]):
-                cvxpy_constraints_list.append(M[i, j] == self._expression_to_cvxpy(psd_matrix[i, j], F, G))
-
-        # Print a message if verbose mode activated
-        if verbose:
-            print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
-
-        # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
-        self._list_of_cvxpy_constraints += cvxpy_constraints_list
-
-    def solve(self, verbose=1, return_full_cvxpy_problem=False,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-5,
-              **kwargs):
-        """
-        Transform the :class:`PEP` under the SDP form, and solve it.
-
-        Args:
-            verbose (int): Level of information details to print (Override the CVXPY solver verbose parameter).
-
-                            - 0: No verbose at all
-                            - 1: PEPit information is printed but not CVXPY's
-                            - 2: Both PEPit and CVXPY details are printed
-            return_full_cvxpy_problem (bool): If True, return the cvxpy Problem object.
-                                              If False, return the worst case value only.
-                                              Set to False by default.
+                                     - 0: No verbose at all
+                                     - 1: PEPit information is printed but not solver's
+                                     - 2: Both PEPit and solver details are printed
             dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
                                                            (rank of the Gram matrix). Set to None to deactivate
                                                            it (default value). Available heuristics are:
-                                                           
+
                                                             - "trace": minimize :math:`Tr(G)`
                                                             - "logdet{an integer n}": minimize
                                                               :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
@@ -374,21 +285,88 @@ class PEP(object):
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction_heuristic" is not None)
                                                        The default value is 1e-5.
-            kwargs (keywords, optional): Additional CVXPY solver specific arguments.
+            kwargs (keywords, optional): Additional solver-specific arguments.
 
         Returns:
-            float or cp.Problem: Value of the performance metric of cp.Problem object corresponding to the SDP.
-                                 The value only is returned by default.
+            float: Worst case guarantee of the PEP.
 
         """
-        # Set CVXPY verbose to True if verbose mode is at least 2
-        kwargs["verbose"] = verbose >= 2
+        wrapper_name = wrapper.lower()
 
-        # Initialize lists of constraints that are used to solve the SDP.
-        # Those lists should not be updated by hand, only the solve method does update them.
-        # If solve is called again, they should be reinitialized.
-        self._list_of_constraints_sent_to_cvxpy = list()
-        self._list_of_cvxpy_constraints = list()
+        # Check that the solver is installed, if it is not, switch to CVXPY.
+        found_python_package = importlib.util.find_spec(wrapper_name)
+        if found_python_package is None:
+            if verbose:
+                print('\033[96m(PEPit) {} not found in system environment,'
+                      ' switching to cvxpy\033[0m'.format(wrapper_name))
+            wrapper_name = "cvxpy"
+
+        # Initiate a wrapper to interface with the solver
+        wrapper = WRAPPERS[wrapper_name](verbose=verbose)
+
+        # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
+        if not wrapper.check_license():
+            if verbose:
+                print('\033[96m(PEPit) No valid {} license found, switching to cvxpy\033[96m'.format(wrapper_name))
+            wrapper_name = "cvxpy"
+            wrapper = WRAPPERS[wrapper_name](verbose=verbose)
+
+        # Store wrapper information in self
+        self.wrapper_name = wrapper_name
+        self.wrapper = wrapper
+
+        # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
+        out = self._solve_with_wrapper(wrapper, verbose, return_primal_or_dual,
+                                       dimension_reduction_heuristic,
+                                       eig_regularization, tol_dimension_reduction, **kwargs)
+        return out
+
+    def _solve_with_wrapper(self, wrapper, verbose=1, return_primal_or_dual="dual",
+                            dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4,
+                            **kwargs):
+        """
+        Internal solve method. Translate the :class:`PEP` to an SDP, and solve it via the wrapper.
+
+        Args:
+            wrapper (Wrapper): Interface to the solver.
+            verbose (int, optional): Level of information details to print
+                                     (Override the CVXPY solver verbose parameter).
+
+                            - 0: No verbose at all
+                            - 1: PEPit information is printed but not CVXPY's
+                            - 2: Both PEPit and solver details are printed
+            return_primal_or_dual (str, optional): If "dual", it returns a worst-case upper bound of the PEP
+                                                   (dual value of the objective).
+                                                   If "primal", it returns a worst-case lower bound of the PEP
+                                                   (primal value of the objective).
+                                                   Default is "dual".
+                                                   Note both value should be almost the same by strong duality.
+            dimension_reduction_heuristic (str, optional): An heuristic to reduce the dimension of the solution
+                                                           (rank of the Gram matrix). Set to None to deactivate
+                                                           it (default value). Available heuristics are:
+
+                                                            - "trace": minimize :math:`Tr(G)`
+                                                            - "logdet{an integer n}": minimize
+                                                              :math:`\\log\\left(\\mathrm{Det}(G)\\right)`
+                                                              using n iterations of local approximation problems.
+
+            eig_regularization (float, optional): The regularization we use to make
+                                                  :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
+                                                  (only used when "dimension_reduction_heuristic" is not None)
+                                                  The default value is 1e-5.
+            tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
+                                                       Precisely, the second problem minimizes "optimal_value - tol"
+                                                       (only used when "dimension_reduction_heuristic" is not None)
+                                                       The default value is 1e-5.
+            kwargs (keywords, optional): Additional solver-specific arguments.
+
+        Returns:
+            float: Worst-case guarantee of the PEP.
+
+        """
+
+        # Create an expression that serve for the objective (min of the performance measures)
+        self.objective = Expression(is_leaf=True)
 
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
@@ -398,30 +376,32 @@ class PEP(object):
 
         # Create all class constraints
         for function in list_of_leaf_functions:
-            function.add_class_constraints()
-            
+            function.set_class_constraints()
+
         # Create all partition constraints
         for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
 
-        # Define the cvxpy variables
-        objective = cp.Variable()
-        F = cp.Variable((Expression.counter,))
-        G = cp.Variable((Point.counter, Point.counter), symmetric=True)
+        # Report the creation of variables (G,F)
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' size of the main PSD matrix: {}x{}'.format(Point.counter, Point.counter))
+                  ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
+        wrapper.set_main_variables()
 
-        # Express the constraints from F, G and objective
-        # Start with the main LMI condition
-        self._list_of_cvxpy_constraints = [G >> 0]
+        # Initialize the lists of constraints sent to wrapper
+        self._list_of_constraints_sent_to_wrapper = list()
+        self._list_of_psd_sent_to_wrapper = list()
 
         # Defining performance metrics
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
+
         for performance_metric in self.list_of_performance_metrics:
             assert isinstance(performance_metric, Expression)
-            self._list_of_cvxpy_constraints.append(objective <= self._expression_to_cvxpy(performance_metric, F, G))
+            performance_metric_constraint = (self.objective <= performance_metric)
+            wrapper.send_constraint_to_solver(performance_metric_constraint)
+            self._list_of_constraints_sent_to_wrapper.append(performance_metric_constraint)
+
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
@@ -430,17 +410,20 @@ class PEP(object):
         if verbose:
             print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
         for condition in self.list_of_constraints:
-            self.send_constraint_to_cvxpy(condition, F, G)
+            wrapper.send_constraint_to_solver(condition)
+            self._list_of_constraints_sent_to_wrapper.append(condition)
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' initial conditions and general constraints ({} constraint(s) added)'.format(len(self.list_of_constraints)))
+                  ' initial conditions and general constraints ({} constraint(s) added)'.format(
+                    len(self.list_of_constraints)))
 
         # Defining general lmi constraints
         if len(self.list_of_psd) > 0:
             if verbose:
                 print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
             for psd_counter, psd_matrix in enumerate(self.list_of_psd):
-                self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
         # Defining class constraints
         if verbose:
@@ -451,42 +434,49 @@ class PEP(object):
             function_counter += 1
 
             if verbose:
-                print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_constraints), 'scalar constraint(s) ...')
+                print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
+                      'scalar constraint(s) ...')
 
             for constraint in function.list_of_class_constraints:
-                self.send_constraint_to_cvxpy(constraint, F, G)
+                wrapper.send_constraint_to_solver(constraint)
+                self._list_of_constraints_sent_to_wrapper.append(constraint)
 
             if verbose:
-                print('\t\t function', function_counter, ':', len(function.list_of_class_constraints), 'scalar constraint(s) added')
+                print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_constraints),
+                      'scalar constraint(s) added')
 
             if len(function.list_of_class_psd) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_class_psd), 'lmi constraint(s) ...')
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_psd),
+                          'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
-                    self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_class_psd), 'lmi constraint(s) added')
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_psd),
+                          'lmi constraint(s) added')
 
         # Other function constraints
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
+                  ' additional constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
         function_counter = 0
         for function in list_of_functions_with_constraints:
             function_counter += 1
 
             if len(function.list_of_constraints) > 0:
                 if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_constraints),
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_constraints),
                           'scalar constraint(s) ...')
 
                 for constraint in function.list_of_constraints:
-                    self.send_constraint_to_cvxpy(constraint, F, G)
+                    wrapper.send_constraint_to_solver(constraint)
+                    self._list_of_constraints_sent_to_wrapper.append(constraint)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_constraints),
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_constraints),
                           'scalar constraint(s) added')
 
             if len(function.list_of_psd) > 0:
@@ -495,137 +485,302 @@ class PEP(object):
                           'lmi constraint(s) ...')
 
                 for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                    self.send_lmi_constraint_to_cvxpy(psd_counter, psd_matrix, F, G, verbose)
+                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
+                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
 
                 if verbose:
-                    print('\t\t function', function_counter, ':', len(function.list_of_psd),
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_psd),
                           'lmi constraint(s) added')
 
         # Defining block partition constraints
         if verbose and len(BlockPartition.list_of_partitions) > 0:
-            print('(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
+            print(
+                '(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
 
         partition_counter = 0
         for partition in BlockPartition.list_of_partitions:
             partition_counter += 1
             if verbose:
-                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
             for constraint in partition.list_of_constraints:
-                self.send_constraint_to_cvxpy(constraint, F, G)
+                wrapper.send_constraint_to_solver(constraint)
+                self._list_of_constraints_sent_to_wrapper.append(constraint)
             if verbose:
-                print('\t\t partition', partition_counter, 'with', partition.get_nb_blocks(),
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
                       'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
-        # Create the cvxpy problem
+        # Instantiate the problem
         if verbose:
             print('(PEPit) Compiling SDP')
-        prob = cp.Problem(objective=cp.Maximize(objective), constraints=self._list_of_cvxpy_constraints)
+        wrapper.generate_problem(self.objective)
 
         # Solve it
         if verbose:
             print('(PEPit) Calling SDP solver')
-        prob.solve(**kwargs)
+        solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
         if verbose:
-            print('(PEPit) Solver status: {} (solver: {}); optimal value: {}'.format(prob.status,
-                                                                                     prob.solver_stats.solver_name,
-                                                                                     prob.value))
-
-        # Store the obtained value
-        wc_value = prob.value
+            print('(PEPit) Solver status: {} (wrapper:{}, solver: {}); optimal value: {}'.format(solver_status,
+                                                                                                 self.wrapper_name,
+                                                                                                 solver_name,
+                                                                                                 wc_value))
 
         # Raise explicit error when wc_value in infinite
-        if wc_value == np.inf:
-            raise UserWarning("PEPit didn't find any nontrivial worst-case guarantee. "
-                              "It seems that the optimal value of your problem is unbounded.")
+        if wc_value is None:
+            print("\033[96m(PEPit) Problem issue: PEPit didn't find any nontrivial worst-case guarantee. "
+                  "It seems that the optimal value of your problem is unbounded.\033[0m")
+
+            # Skip the following as no variable has a value
+            return wc_value
 
         # Keep dual values before dimension reduction in memory
         # Dimension aims at finding low dimension lower bound functions,
         # but solves a different problem with an extra condition and different objective,
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
-        assert self._list_of_cvxpy_constraints == prob.constraints
-        dual_values = [constraint.dual_value for constraint in prob.constraints]
+        self.residual = wrapper.assign_dual_values()
+        G_value, F_value = wrapper.get_primal_variables()
 
         # Perform a dimension reduction if required
         if dimension_reduction_heuristic:
 
             # Print the estimated dimension before dimension reduction
-            nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+            nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
+            wrapper.prepare_heuristic(wc_value, tol_dimension_reduction)
             if verbose:
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} before dimension reduction'.format(nb_eigenvalues,
                                                                                                         eig_threshold))
                 print('(PEPit) Calling SDP solver')
 
-            # Add the constraint that the objective stay close to its actual value
-            self._list_of_cvxpy_constraints.append(objective >= wc_value - tol_dimension_reduction)
-
-            # Translate the heuristic into cvxpy objective and solve the associated problem
+            # Translate the heuristic into the objective and solve the associated problem
             if dimension_reduction_heuristic == "trace":
-                heuristic = cp.trace(G)
-                prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=self._list_of_cvxpy_constraints)
-                prob.solve(**kwargs)
-
-                # Store the actualized obtained value
-                wc_value = objective.value
+                wrapper.heuristic(np.identity(Point.counter))
+                solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                 # Compute minimal number of dimensions
-                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+                G_value, F_value = wrapper.get_primal_variables()
+                nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G_value)
 
             elif dimension_reduction_heuristic.startswith("logdet"):
                 niter = int(dimension_reduction_heuristic[6:])
-                for i in range(1, 1+niter):
+                for i in range(1, 1 + niter):
                     W = np.linalg.inv(corrected_G_value + eig_regularization * np.eye(Point.counter))
-                    heuristic = cp.sum(cp.multiply(G, W))
-                    prob = cp.Problem(objective=cp.Minimize(heuristic), constraints=self._list_of_cvxpy_constraints)
-                    prob.solve(**kwargs)
-
-                    # Store the actualized obtained value
-                    wc_value = objective.value
+                    wrapper.heuristic(W)
+                    solver_status, solver_name, wc_value = wrapper.solve(**kwargs)
 
                     # Compute minimal number of dimensions
-                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(G.value)
+                    G_value, F_value = wrapper.get_primal_variables()
+                    nb_eigenvalues, eig_threshold, corrected_G_value = self.get_nb_eigenvalues_and_corrected_matrix(
+                        G_value)
 
-                    # Print the estimated dimension after i dimension reduction steps
+                    # Print the estimated dimension after niter dimension reduction steps
                     if verbose:
                         print('(PEPit) Solver status: {} (solver: {});'
-                              ' objective value: {}'.format(prob.status,
-                                                            prob.solver_stats.solver_name,
+                              ' objective value: {}'.format(solver_status,
+                                                            solver_name,
                                                             wc_value))
-                        print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
-                            nb_eigenvalues, eig_threshold, i))
+                        print(
+                            '(PEPit) Postprocessing: {} eigenvalue(s) > {} after {} dimension reduction step(s)'.format(
+                                nb_eigenvalues, eig_threshold, i))
 
             else:
                 raise ValueError("The argument \'dimension_reduction_heuristic\' must be \'trace\'"
-                                 "or \`logdet\` followed by an interger."
+                                 "or \`logdet\` followed by an integer."
                                  "Got {}".format(dimension_reduction_heuristic))
 
             # Print the estimated dimension after dimension reduction
             if verbose:
                 print('(PEPit) Solver status: {} (solver: {});'
-                      ' objective value: {}'.format(prob.status,
-                                                    prob.solver_stats.solver_name,
+                      ' objective value: {}'.format(solver_status,
+                                                    solver_name,
                                                     wc_value))
                 print('(PEPit) Postprocessing: {} eigenvalue(s) > {} after dimension reduction'.format(nb_eigenvalues,
                                                                                                        eig_threshold))
 
         # Store all the values of points and function values
-        self._eval_points_and_function_values(F.value, G.value, verbose=verbose)
+        self.G_value = G_value
+        self.F_value = F_value
+        self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
+        dual_objective = self.check_feasibility(wc_value, verbose=verbose)
 
-        # Store all the dual values in constraints
-        self._eval_constraint_dual_values(dual_values)
-
-        # Return the value of the minimal performance metric or the full cvxpy Problem object
-        if return_full_cvxpy_problem:
-            # Return the cvxpy Problem object
-            return prob
-        else:
-            # Return the value of the minimal performance metric
+        # Return the value of the minimal performance metric
+        if return_primal_or_dual == "dual":
+            return dual_objective
+        elif return_primal_or_dual == "primal":
             return wc_value
+        else:
+            raise ValueError("The argument \'return_primal_or_dual\' must be \'dual\' or \`primal\`."
+                             "Got {}".format(return_primal_or_dual))
+
+    def check_feasibility(self, wc_value, verbose=1):
+        """
+        Check primal feasibility and display precision.
+        Check dual feasibility and display precision.
+        Compute and display primal-dual gap.
+
+        Args:
+            wc_value (float): the primal value of the PEP objective returned by the solver.
+            verbose (int, optional): If larger or equal than 1, print intermediate information.
+
+        Returns:
+            (float): the dual value of the PEP objective.
+
+        Notes:
+            The dual feasibility consists in
+
+                - verifying that the dual values associated to inequality constraints are nonnegative,
+                - and verifying that the residual corresponds to the right linear combination of the constraints.
+
+            The second point essentially means that verifying the dual feasibility consists in reconstructing the proof.
+
+        """
+
+        ################################################################################################################
+        #################################################### Primal ####################################################
+        ################################################################################################################
+        if verbose:
+            print("(PEPit) Primal feasibility check:")
+
+        # Verify that the given wc_value corresponds to the objective value
+        assert wc_value == self.objective.eval()
+
+        # Grab the smallest eigenvalue of G
+        G_min_eig_val = np.min(np.linalg.eigh(self.G_value)[0])
+        if verbose:
+            message = "\t\tThe solver found a Gram matrix that is positive semi-definite"
+            if G_min_eig_val < 0:
+                message += " up to an error of {}".format(-G_min_eig_val)
+            print(message)
+
+        # Grab the smallest eigenvalue of all the PSD matrices
+        if self._list_of_psd_sent_to_wrapper:
+            psd_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval())[0])
+                                      for psd_matrix in self._list_of_psd_sent_to_wrapper])
+            if verbose:
+                message = "\t\tAll required PSD matrices are indeed positive semi-definite"
+                if psd_min_eig_val < 0:
+                    message += " up to an error of {}".format(-psd_min_eig_val)
+                print(message)
+
+        # Get the max value of all transgression of the constraints
+        if self._list_of_constraints_sent_to_wrapper:
+            max_constraint_error = np.max(
+                [constraint.eval()
+                 for constraint in self._list_of_constraints_sent_to_wrapper
+                 if constraint.equality_or_inequality == "inequality"]
+                + [np.abs(constraint.eval())
+                   for constraint in self._list_of_constraints_sent_to_wrapper
+                   if constraint.equality_or_inequality == "equality"]
+            )
+            if verbose:
+                message = "\t\tAll the primal scalar constraints are verified"
+                if max_constraint_error > 0:
+                    message += " up to an error of {}".format(max_constraint_error)
+                print(message)
+
+        ################################################################################################################
+        ##################################################### Dual #####################################################
+        ################################################################################################################
+        if verbose:
+            print("(PEPit) Dual feasibility check:")
+
+        # Verify that all dual variables are nonnegative.
+        # Moreover, linear combination of the constraints with the right coefficients should lead to objective <= tau
+
+        # Residual >= 0
+        residual_min_eig_val = np.min(np.linalg.eigh(self.residual)[0])
+        if verbose:
+            message = "\t\tThe solver found a residual matrix that is positive semi-definite"
+            if residual_min_eig_val < 0:
+                message += " up to an error of {}".format(-residual_min_eig_val)
+            print(message)
+        # - <Gram, residual> <= 0
+        constraints_combination = -np.dot(Point.list_of_leaf_points, np.dot(self.residual, Point.list_of_leaf_points))
+
+        # LMI constraints
+        # Dual >= 0
+        if self._list_of_psd_sent_to_wrapper:
+            lmi_dual_min_eig_val = np.min([np.min(np.linalg.eigh(psd_matrix.eval_dual())[0])
+                                           for psd_matrix in self._list_of_psd_sent_to_wrapper])
+            if verbose:
+                message = "\t\tAll the dual matrices to lmi are positive semi-definite"
+                if lmi_dual_min_eig_val < 0:
+                    message += " up to an error of {}".format(-lmi_dual_min_eig_val)
+                print(message)
+            # - <psd_matrix, lmi_dual> <= 0
+            for psd_matrix in self._list_of_psd_sent_to_wrapper:
+                constraints_combination -= np.sum(psd_matrix.eval_dual() * psd_matrix.matrix_of_expressions)
+
+        # Scalar constraints
+        # Dual of inequality constraints >= 0
+        inequality_constraint_dual_values = [constraint.eval_dual()
+                                             for constraint in self._list_of_constraints_sent_to_wrapper
+                                             if constraint.equality_or_inequality == "inequality"]
+        if inequality_constraint_dual_values:
+            inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
+            if verbose:
+                message = "\t\tAll the dual scalar values associated to inequality constraints are nonnegative"
+                if inequality_constraint_dual_min_value < 0:
+                    message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
+                print(message)
+        # + <expression, dual> <= 0
+        for constraint in self._list_of_constraints_sent_to_wrapper:
+            constraints_combination += constraint.eval_dual() * constraint.expression
+
+        # Proof reconstruction
+        # At this stage, constraints_combination must be equal to "objective - tau"
+        # which constitutes the proof as it has to be non-positive.
+        # Compute an expression that should be exactly equal to the constant tau.
+        dual_objective_expression = self.objective - constraints_combination
+        # Operation over the decomposition dict of dual_objective_expression
+        dual_objective_expression_decomposition_dict = prune_dict(
+            symmetrize_dict(
+                dual_objective_expression.decomposition_dict
+            )
+        )
+        # Get the actual dual_objective from its dict
+        if 1 in dual_objective_expression_decomposition_dict.keys():
+            dual_objective = dual_objective_expression_decomposition_dict[1]
+        else:
+            dual_objective = 0.
+        # Compute the remaining terms, that should be small and only due to numerical stability errors
+        remaining_terms = np.sum(np.abs([value for key, value in dual_objective_expression_decomposition_dict.items()
+                                         if key != 1]))
+        if verbose:
+            message = "(PEPit) The worst-case guarantee proof is perfectly reconstituted"
+            if remaining_terms > 0:
+                message += " up to an error of {}".format(remaining_terms)
+            print(message)
+
+        ################################################################################################################
+        ################################################## Duality Gap #################################################
+        ################################################################################################################
+        absolute_duality_gap = dual_objective - wc_value
+        if verbose:
+            print('(PEPit) Final upper bound (dual): {} and lower bound (primal example): {} '.format(dual_objective,
+                                                                                                      wc_value))
+
+        if wc_value != 0:
+            relative_duality_gap = (dual_objective - wc_value) / wc_value
+            if verbose:
+                print('(PEPit) Duality gap: absolute: {} and relative: {}'.format(absolute_duality_gap,
+                                                                                  relative_duality_gap))
+        else:
+            relative_duality_gap = 0
+
+        if abs(absolute_duality_gap) > 10**-3 and abs(relative_duality_gap) > 10**-6:
+            message = "\033[96m(PEPit) Warning: the duality gap seems surprisingly large"
+            if absolute_duality_gap < 0:
+                message += " and negative"
+            message += ".\n\t\tThe solver might not have converged properly.\n"\
+                       "\t\tWe recommend to use another wrapper or solver for confirmation.\033[0m"
+            print(message)
+
+        return dual_objective
 
     @staticmethod
     def get_nb_eigenvalues_and_corrected_matrix(M):
         """
-        Compute the number of True non zero eigenvalues of M, and recompute M with corrected eigenvalues.
+        Compute the number of True non-zero eigenvalues of M, and recompute M with corrected eigenvalues.
 
         Args:
             M (nd.array): a 2 dimensional array, supposedly symmetric.
@@ -644,12 +799,12 @@ class PEP(object):
         eig_val, eig_vec = np.linalg.eigh(S)
 
         # Get the right threshold to use.
-        eig_threshold = max(np.max(eig_val)/1e3, 2 * np.max(-eig_val))
+        eig_threshold = max(np.max(eig_val) / 1e3, 2 * np.max(-eig_val))
 
         # Correct eig_val accordingly.
         non_zero_eig_vals = eig_val >= eig_threshold
         nb_eigenvalues = int(np.sum(non_zero_eig_vals))
-        nb_zeros = M.shape[0]-nb_eigenvalues
+        nb_zeros = M.shape[0] - nb_eigenvalues
         corrected_eig_val = non_zero_eig_vals * eig_val
 
         # Recompute M (or S) accordingly.
@@ -657,20 +812,20 @@ class PEP(object):
 
         # Get the highest eigenvalue that has been set to 0, if any.
         eig_threshold = 0
-        
+
         if nb_zeros > 0:
             eig_threshold = max(np.max(eig_val[non_zero_eig_vals == 0]), 0)
 
         return nb_eigenvalues, eig_threshold, corrected_S
 
-    def _eval_points_and_function_values(self, F_value, G_value, verbose):
+    def _eval_points_and_function_values(self, F_value, G_value, verbose=1):
         """
         Store values of :class:`Point` and :class:`Expression objects at optimum after the PEP has been solved.
 
         Args:
             F_value (nd.array): value of the cvxpy variable F
             G_value (nd.array): value of the cvxpy variable G
-            verbose (bool): if True, details of computation are printed
+            verbose (int, optional): If larger or equal than 1, print intermediate information.
 
         Raises:
             TypeError if some matrix in `self.list_of_psd` contains some entry that :class:`Expression` objects
@@ -729,55 +884,3 @@ class PEP(object):
                                 raise TypeError(
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
-
-    def _eval_constraint_dual_values(self, dual_values):
-        """
-        Store all dual values in associated :class:`Constraint` and :class:`PSDMatrix` objects.
-
-        Args:
-            dual_values (list): the list of dual values of the problem constraints.
-
-        Returns:
-             position_of_minimal_objective (np.float): the position, in the list of performance metric,
-                                                       of the one that is actually reached.
-
-        Raises:
-            TypeError if the attribute `_list_of_constraints_sent_to_cvxpy` of this object
-            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
-
-        """
-        # Store residual, dual value of the main lmi
-        self.residual = dual_values[0]
-        assert self.residual.shape == (Point.counter, Point.counter)
-
-        # Set counter
-        counter = len(self.list_of_performance_metrics)+1
-
-        # The dual variables associated to performance metric all have nonnegative values of sum 1.
-        # Generally, only 1 performance metric is used.
-        # Then its associated dual values is 1 while the others'associated dual values are 0.
-        performance_metric_dual_values = np.array(dual_values[1:counter])
-        position_of_minimal_objective = np.argmax(performance_metric_dual_values)
-
-        for constraint_or_psd in self._list_of_constraints_sent_to_cvxpy:
-            if isinstance(constraint_or_psd, Constraint):
-                constraint_or_psd._dual_variable_value = dual_values[counter]
-                counter += 1
-            elif isinstance(constraint_or_psd, PSDMatrix):
-                assert dual_values[counter].shape == constraint_or_psd.shape
-                constraint_or_psd._dual_variable_value = dual_values[counter]
-                counter += 1
-                size = constraint_or_psd.shape[0] * constraint_or_psd.shape[1]
-                constraint_or_psd.entries_dual_variable_value = np.array(dual_values[counter:counter + size]
-                                                                         ).reshape(constraint_or_psd.shape)
-                counter += size
-            else:
-                raise TypeError("The list of constraints that are sent to CVXPY should contain only"
-                                "\'Constraint\' objects of \'PSDMatrix\' objects."
-                                "Got {}".format(type(constraint_or_psd)))
-
-        # Verify nothing is left
-        assert len(dual_values) == counter
-
-        # Return the position of the reached performance metric
-        return position_of_minimal_objective

@@ -6,7 +6,7 @@ from PEPit.operators import StronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
+def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone inclusion problem
 
@@ -16,8 +16,9 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively
     :math:`\\alpha A` and :math:`\\alpha B`.
 
-    This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS). That is, given two initial points
-    :math:`w^{(0)}_t` and :math:`w^{(1)}_t`, this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
+    This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS).
+    That is, given two initial points :math:`w^{(0)}_t` and :math:`w^{(1)}_t`,
+    this code computes the smallest possible :math:`\\tau(L, \\mu, \\alpha, \\theta)`
     (a.k.a. "contraction factor") such that the guarantee
 
     .. math:: \\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, \\mu, \\alpha, \\theta) \\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2,
@@ -29,7 +30,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     factor :math:`\\tau(L, \\mu, \\alpha, \\theta)` is computed as the worst-case value of
     :math:`\\|w^{(0)}_{t+1} - w^{(1)}_{t+1}\\|^2` when :math:`\\|w^{(0)}_{t} - w^{(1)}_{t}\\|^2 \\leqslant 1`.
 
-    **Algorithm**: One iteration of the Douglas-Rachford splitting is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
+    **Algorithm**: One iteration of the Douglas-Rachford splitting is described as follows,
+    for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
         .. math::
             :nowrap:
@@ -59,35 +61,47 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
         mu (float): the strongly monotone parameter.
         alpha (float): the step-size in the resolvent.
         theta (float): algorithm parameter.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 4 scalar constraint(s) ...
-                         function 1 : 4 scalar constraint(s) added
-                         function 2 : Adding 2 scalar constraint(s) ...
-                         function 2 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        			Function 2 : Adding 1 scalar constraint(s) ...
+        			Function 2 : 1 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.928770693164459
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.928770707839351
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.297473722026212e-09
+        		All the primal scalar constraints are verified up to an error of 1.64989273354621e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.4855088898444464e-07
+        (PEPit) Final upper bound (dual): 0.9287707057295752 and lower bound (primal example): 0.928770707839351 
+        (PEPit) Duality gap: absolute: -2.109775798508906e-09 and relative: -2.2715787445719413e-09
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-                PEPit guarantee:         ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
-                Theoretical guarantee:   ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
-
+        	PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+        	Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+    
     """
 
     # Instantiate PEP
@@ -119,7 +133,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison), see [2, Theorem 3]
     mu = alpha * mu
@@ -130,8 +144,8 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
         theoretical_tau = ((theta + c) / 2 / (mu + 1)) ** 2
     elif (L <= 1) & (mu >= (L ** 2 + 1) / (L - 1) ** 2) & (theta <= - (2 * (mu + 1) * (L + 1) *
                                                                        (mu + (mu - 1) * L ** 2 - 2 * mu * L - 1)) / (
-                                                                   mu + L * (L ** 2 + L + 1) + 2 * mu ** 2 * (
-                                                                   L - 1) + mu * L * (1 - (L - 3) * L) + 1)):
+                                                                   mu + L * (L ** 2 + L + 1) + 2 * mu ** 2 * (L - 1)
+                                                                   + mu * L * (1 - (L - 3) * L) + 1)):
         theoretical_tau = (1 - theta * (L + mu) / (L + 1) / (mu + 1)) ** 2
     else:
         theoretical_tau = (2 - theta) / 4 / mu / (L ** 2 + 1) * (
@@ -142,7 +156,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
@@ -150,4 +164,6 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9, verbose=1)
+    pepit_tau, theoretical_tau = wc_douglas_rachford_splitting(L=1, mu=.1, alpha=1.3, theta=.9,
+                                                               wrapper="cvxpy", solver=None,
+                                                               verbose=1)

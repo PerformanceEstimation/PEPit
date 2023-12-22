@@ -6,7 +6,7 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import inexact_proximal_step
 
 
-def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
+def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem,
 
@@ -52,9 +52,9 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
     for the method (typical of accelerated methods).
 
     The line with ":math:`\\approx_{\\varepsilon}`" can be described as the pair :math:`(x_{t+1},v_{t+1})` satisfying
-    an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition), it requires
-    the existence of some :math:`w_{t+1}` such that :math:`v_{t+1} \\in \\partial g(w_{t+1})` and for which the accuracy
-    requirement
+    an accuracy requirement provided by [1, Definition 2.3]. More precisely (but without providing any intuition),
+    it requires the existence of some :math:`w_{t+1}` such that :math:`v_{t+1} \\in \\partial g(w_{t+1})`
+    and for which the accuracy requirement
 
      .. math:: \\gamma^2 || x_{t+1} - y_t + \\gamma v_{t+1} ||^2 + \\gamma  (g(x_{t+1}) - g(w_{t+1}) - v_{t+1}(x_{t+1} - w_{t+1})) \\leqslant \\varepsilon_t,
 
@@ -74,35 +74,49 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
         L (float): smoothness parameter.
         zeta (float): relative approximation parameter in (0,1).
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 59x59
+        >>> pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 59x59
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                         function 1 : Adding 156 scalar constraint(s) ...
-                         function 1 : 156 scalar constraint(s) added
-                         function 2 : Adding 528 scalar constraint(s) ...
-                         function 2 : 528 scalar constraint(s) added
+        			Function 1 : Adding 156 scalar constraint(s) ...
+        			Function 1 : 156 scalar constraint(s) added
+        			Function 2 : Adding 506 scalar constraint(s) ...
+        			Function 2 : 506 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 1 function(s)
+        			Function 1 : Adding 22 scalar constraint(s) ...
+        			Function 1 : 22 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.018869997698251897
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.018734101450651804
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.169436183689734e-09
+        		All the primal scalar constraints are verified up to an error of 2.3055138501440475e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 3.9318808809398555e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.038962372016442e-06
+        (PEPit) Final upper bound (dual): 0.018734107018754872 and lower bound (primal example): 0.018734101450651804 
+        (PEPit) Duality gap: absolute: 5.5681030688981e-09 and relative: 2.9721751446501176e-07
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-                PEPit guarantee:         F(x_n)-F_* <= 0.01887 ||x_0 - x_*||^2
-                Theoretical guarantee:   F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 F(x_n)-F_* <= 0.0187341 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -144,7 +158,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 2 * L / (1 - zeta ** 2) / n ** 2
@@ -152,7 +166,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
@@ -160,4 +174,6 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_inexact_forward_backward(L=1.3, zeta=.45, n=11,
+                                                                         wrapper="cvxpy", solver=None,
+                                                                         verbose=1)

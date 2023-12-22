@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothFunction
 
 
-def wc_gradient_descent(L, gamma, n, verbose=1):
+def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -45,12 +45,14 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
         L (float): the smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -59,21 +61,31 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     Example:
         >>> L = 1
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is minimum of 6 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.2666769474847614
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.26666666551166657
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.5045561757111027e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.491578307483797e-09
+        (PEPit) Final upper bound (dual): 0.2666666657156721 and lower bound (primal example): 0.26666666551166657 
+        (PEPit) Duality gap: absolute: 2.0400553468746807e-10 and relative: 7.650207583915017e-10
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-                PEPit guarantee:         min_i ||f'(x_i)||^2 <= 0.266677 (f(x_0)-f_*)
-                Theoretical guarantee:   min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
-
+        	PEPit guarantee:		 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
+        	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
+    
     """
 
     # Instantiate PEP
@@ -104,7 +116,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = 4 / 3 * L / n
@@ -112,7 +124,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEPit guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -122,4 +134,4 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 if __name__ == "__main__":
     L = 1
     gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)

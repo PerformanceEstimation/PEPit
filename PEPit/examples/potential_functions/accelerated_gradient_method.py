@@ -4,7 +4,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothConvexFunction
 
 
-def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
+def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -59,12 +59,14 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
         L (float): the smoothness parameter.
         gamma (float): the step-size.
         lam (float): the initial value for sequence :math:`(\\lambda_t)_t`.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -72,21 +74,31 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
 
     Examples:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 6x6
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 12 scalar constraint(s) ...
-                         function 1 : 12 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 5.264872499157039e-14
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 7.94632223606942e-09
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.9439082173289184e-10
+        		All the primal scalar constraints are verified up to an error of 2.9403765314447956e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.223563804320635e-08
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.94632223606942e-09 
+        (PEPit) Duality gap: absolute: -7.94632223606942e-09 and relative: -1.0
         *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
-                PEPit guarantee:         V_(n+1) - V_n <= 5.26487e-14
-                Theoretical guarantee:   V_(n+1) - V_n <= 0.0
-
+        	PEPit guarantee:		 V_(n+1) - V_n <= 0.0
+        	Theoretical guarantee:	 V_(n+1) - V_n <= 0.0
+    
     """
 
     # Instantiate PEP
@@ -126,7 +138,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     if gamma == 1 / L:
@@ -138,7 +150,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of accelerated gradient method for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1 / L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 
@@ -148,4 +160,6 @@ def wc_accelerated_gradient_method(L, gamma, lam, verbose=1):
 
 if __name__ == "__main__":
     L = 1
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10.,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

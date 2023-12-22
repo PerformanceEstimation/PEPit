@@ -3,7 +3,7 @@ import numpy as np
 
 from PEPit.constraint import Constraint
 
-from PEPit.tools.dict_operations import merge_dict
+from PEPit.tools.dict_operations import merge_dict, prune_dict
 
 
 class Expression(object):
@@ -19,7 +19,8 @@ class Expression(object):
                                    False if self is a linear combination of existing :class:`Expression` objects.
         _value (float): numerical value of self obtained after solving the PEP via SDP solver.
                         Set to None before the call to the method `PEP.solve` from the :class:`PEP`.
-        decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
+        decomposition_dict (dict): decomposition of self as a linear combination of
+                                   **leaf** :class:`Expression` objects.
                                    Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                    And values are their associated coefficients.
         counter (int): counts the number of **leaf** :class:`Expression` objects.
@@ -60,7 +61,8 @@ class Expression(object):
             is_leaf (bool): True if self is a function value defined from scratch
                                       (not as linear combination of other function values).
                                       False if self is a linear combination of existing :class:`Expression` objects.
-            decomposition_dict (dict): decomposition of self as a linear combination of **leaf** :class:`Expression` objects.
+            decomposition_dict (dict): decomposition of self as a linear combination of
+                                       **leaf** :class:`Expression` objects.
                                        Keys are :class:`Expression` objects or tuple of 2 :class:`Point` objects.
                                        And values are their associated coefficients.
 
@@ -126,13 +128,16 @@ class Expression(object):
         # If other is an Expression, merge the decomposition_dicts
         if isinstance(other, Expression):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
-        # It other is a scalar constant, add it to the decomposition_dict of self
+        # If other is a scalar constant, add it to the decomposition_dict of self
         elif isinstance(other, int) or isinstance(other, float):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, {1: other})
         # Raise an Exception in any other scenario
         else:
             raise TypeError("Expression can be added only to other expression or scalar values!"
                             "Got {}".format(type(other)))
+
+        # Remove leaf with null coefficients
+        merged_decomposition_dict = prune_dict(merged_decomposition_dict)
 
         # Create and return the newly created Expression
         return Expression(is_leaf=False, decomposition_dict=merged_decomposition_dict)
@@ -362,7 +367,8 @@ class Expression(object):
         Compute, store and return the value of this :class:`Expression`.
 
         Returns:
-            self._value (np.array): Value of this :class:`Expression` after the corresponding PEP was solved numerically.
+            self._value (np.array): Value of this :class:`Expression`
+                                    after the corresponding PEP was solved numerically.
 
         Raises:
             ValueError("The PEP must be solved to evaluate Expressions!") if the PEP has not been solved yet.
@@ -374,7 +380,7 @@ class Expression(object):
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self._value is None:
-            # If leaf function value, the PEP would have filled the attribute at the end of the solve.
+            # If leaf function value, the PEP would have filled the attribute after solving the problem.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Expressions!")
             # If linear combination,

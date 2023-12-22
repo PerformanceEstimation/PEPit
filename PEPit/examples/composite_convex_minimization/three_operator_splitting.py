@@ -5,7 +5,7 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
+def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem,
 
@@ -25,9 +25,10 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     and :math:`w^{(0)}_{n}` and :math:`w^{(1)}_{n}` are the two corresponding :math:`n^{\\mathrm{th}}` outputs of TOS.
     (i.e., how do the iterates contract when the method is started from two different initial points).
 
-    In short, for given values of :math:`n`, :math:`L_1`, :math:`L_3`, :math:`\\mu_1`, :math:`\\alpha` and :math:`\\theta`,
-    the contraction factor :math:`\\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta)` is computed as the worst-case value of
-    :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2` when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
+    In short, for given values of :math:`n`, :math:`L_1`, :math:`L_3`, :math:`\\mu_1`, :math:`\\alpha`
+    and :math:`\\theta`, the contraction factor :math:`\\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta)`
+    is computed as the worst-case value of :math:`\\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2`
+    when :math:`\\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2 \\leqslant 1`.
 
     **Algorithm**:
     One iteration of the algorithm is described in [1]. For :math:`t \\in \\{0, \\dots, n-1\\}`,
@@ -54,12 +55,14 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
         alpha (float): parameter of the scheme.
         theta (float): parameter of the scheme.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value.
@@ -68,24 +71,34 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     Example:
         >>> L3 = 1
         >>> alpha = 1 / L3
-        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 26x26
+        >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 26x26
         (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-                         function 1 : Adding 56 scalar constraint(s) ...
-                         function 1 : 56 scalar constraint(s) added
-                         function 2 : Adding 56 scalar constraint(s) ...
-                         function 2 : 56 scalar constraint(s) added
-                         function 3 : Adding 56 scalar constraint(s) ...
-                         function 3 : 56 scalar constraint(s) added
+        			Function 1 : Adding 56 scalar constraint(s) ...
+        			Function 1 : 56 scalar constraint(s) added
+        			Function 2 : Adding 56 scalar constraint(s) ...
+        			Function 2 : 56 scalar constraint(s) added
+        			Function 3 : Adding 56 scalar constraint(s) ...
+        			Function 3 : 56 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.47544137382115453
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.4754523280192519
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.32207763279334e-10
+        		All the primal scalar constraints are verified up to an error of 2.2438998784068964e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 5.155823636112884e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.293077507135036e-07
+        (PEPit) Final upper bound (dual): 0.475452328074928 and lower bound (primal example): 0.4754523280192519 
+        (PEPit) Duality gap: absolute: 5.5676074861565894e-11 and relative: 1.1710127720588522e-10
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
-                PEPit guarantee:         ||w^2_n - w^1_n||^2 <= 0.475441 ||x0 - ws||^2
-
+        	PEPit guarantee:		 ||w^2_n - w^1_n||^2 <= 0.475452 ||x0 - ws||^2
+    
     """
 
     # Instantiate PEP
@@ -124,7 +137,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = None
@@ -132,7 +145,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
-        print('\tPEPit guarantee:\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
@@ -141,4 +154,6 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, verbose=1):
 if __name__ == "__main__":
     L3 = 1
     alpha = 1 / L3
-    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_three_operator_splitting(mu1=0.1, L1=10, L3=L3, alpha=alpha, theta=1, n=4,
+                                                             wrapper="cvxpy", solver=None,
+                                                             verbose=1)
