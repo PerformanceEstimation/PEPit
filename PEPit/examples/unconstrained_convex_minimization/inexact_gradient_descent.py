@@ -54,7 +54,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
 
     `[2] O. Gannot (2021).
     A frequency-domain analysis of inexact gradient methods.
-    Mathematical Programming (to appear).
+    Mathematical Programming.
     <https://arxiv.org/pdf/1912.13494.pdf>`_
 
     Args:

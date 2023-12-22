@@ -27,13 +27,18 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
 
         .. math:: x_{t+1} = \\frac{1}{t + 2} x_0 + \\left(1 - \\frac{1}{t + 2}\\right) Ax_t.
 
-    **Theoretical guarantee**: A **tight** worst-case guarantee for Halpern iteration can be found in [1, Theorem 2.1]:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for Halpern iteration can be found in [2, Theorem 2.1]:
 
         .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2.
 
-    **References**: The detailed approach and tight bound are available in [1].
+    **References**: The method was first proposed in [1]. The detailed analysis and tight bound are available in [2].
 
-    `[1] F. Lieder (2021).
+    `[1] B. Halpern (1967).
+    Fixed points of nonexpanding maps.
+    American Mathematical Society, 73(6), 957–961.
+    <https://www.ams.org/journals/bull/1967-73-06/S0002-9904-1967-11864-0/S0002-9904-1967-11864-0.pdf>`_
+
+    `[2] F. Lieder (2021).
     On the convergence rate of the Halpern-iteration.
     Optimization Letters, 15(2), 405-418.
     <http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf>`_

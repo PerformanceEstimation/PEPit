@@ -59,7 +59,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
     <https://github.com/AdrienTaylor/Performance-Estimation-Toolbox>`_
 
     `[2] B. Hu, P. Seiler, L. Lessard (2020). Analysis of biased stochastic gradient descent using sequential
-    semidefinite programs. Mathematical programming (to appear).
+    semidefinite programs. Mathematical programming.
     <https://arxiv.org/pdf/1711.00987.pdf>`_
 
     `[3] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses

@@ -56,7 +56,7 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
     <https://arxiv.org/pdf/1709.05191.pdf>`_
 
     `[2] O. Gannot (2021). A frequency-domain analysis of inexact gradient methods.
-    Mathematical Programming (to appear).
+    Mathematical Programming.
     <https://arxiv.org/pdf/1912.13494.pdf>`_
 
     `[3] F. Maryam, H. Hindi, S. Boyd (2003). Log-det heuristic for matrix rank minimization with applications to Hankel
