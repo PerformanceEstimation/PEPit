@@ -114,7 +114,7 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.9714053958630251 and lower bound (primal example): 0.9714053953788857 
         (PEPit) Duality gap: absolute: 4.841393952403905e-10 and relative: 4.983906796724733e-10
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
-        	PEPit guarantee:		 E[V(x^(1))] <= 0.971405 V(x^(0))
+        	PEPit guarantee:	 E[V(x^(1))] <= 0.971405 V(x^(0))
         	Theoretical guarantee:	 E[V(x^(1))] <= 0.973292 V(x^(0))
     
     """
@@ -176,7 +176,7 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***')
-        print('\tPEPit guarantee:\t\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[V(x^(1))] <= {:.6} V(x^(0))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

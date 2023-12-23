@@ -82,7 +82,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Final upper bound (dual): 0.06666666638907502 and lower bound (primal example): 0.06666666577966435 
         (PEPit) Duality gap: absolute: 6.094106747012162e-10 and relative: 9.1411602421417e-09
         *** Example file: worst-case performance of the Bregman Proximal Point in function values ***
-        	PEPit guarantee:		 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
+        	PEPit guarantee:	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
     
     """
@@ -124,7 +124,7 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Bregman Proximal Point in function values ***')
-        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} Dh(x_*; x_0)'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

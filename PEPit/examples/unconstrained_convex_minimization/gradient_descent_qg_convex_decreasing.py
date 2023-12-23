@@ -102,7 +102,7 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", solver=None,
         (PEPit) Final upper bound (dual): 0.10554738755645543 and lower bound (primal example): 0.10554738683923168 
         (PEPit) Duality gap: absolute: 7.172237526109626e-10 and relative: 6.7952772123428116e-09
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.105547 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.105547 ||x_0 - x_*||^2
         	Theoretical conjecture:	 f(x_n)-f_* <= 0.105547 ||x_0 - x_*||^2
     
     """
@@ -146,7 +146,7 @@ def wc_gradient_descent_qg_convex_decreasing(L, n, wrapper="cvxpy", solver=None,
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical conjecture:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

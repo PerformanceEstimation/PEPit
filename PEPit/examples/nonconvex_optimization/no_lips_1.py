@@ -101,7 +101,7 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.1999999999931975 and lower bound (primal example): 0.19999999999153717 
         (PEPit) Duality gap: absolute: 1.6603385333269216e-12 and relative: 8.301692666985887e-12
         *** Example file: worst-case performance of the NoLips in Bregman divergence ***
-        	PEPit guarantee:		 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
+        	PEPit guarantee:	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
         	Theoretical guarantee :	 min_t Dh(x_(t+1), x_(t)) <= 0.2 (F(x_0) - F(x_n))
     
     """
@@ -152,7 +152,7 @@ def wc_no_lips_1(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips in Bregman divergence ***')
-        print('\tPEPit guarantee:\t\t min_t Dh(x_(t+1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_t Dh(x_(t+1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(pepit_tau))
         print('\tTheoretical guarantee :\t min_t Dh(x_(t+1), x_(t)) <= {:.6} (F(x_0) - F(x_n))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

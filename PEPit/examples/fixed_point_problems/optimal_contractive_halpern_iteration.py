@@ -78,7 +78,7 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
         (PEPit) Final upper bound (dual): 0.010613268001708536 and lower bound (primal example): 0.010613261462073679 
         (PEPit) Duality gap: absolute: 6.5396348579438435e-09 and relative: 6.161757986753765e-07
         *** Example file: worst-case performance of Optimal Contractive Halpern Iterations ***
-        	PEPit guarantee:		 ||xN - AxN||^2 <= 0.0106133 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||xN - AxN||^2 <= 0.0106133 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||xN - AxN||^2 <= 0.0106132 ||x0 - x_*||^2
     
     """
@@ -117,7 +117,7 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Optimal Contractive Halpern Iterations ***')
-        print('\tPEPit guarantee:\t\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

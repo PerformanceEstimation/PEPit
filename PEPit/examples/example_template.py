@@ -118,7 +118,7 @@ def wc_example_template(arg1, arg2, arg3, wrapper="cvxpy", solver=None, verbose=
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of ``NAME OF THE METHOD`` ***')
-        print('\tPEPit guarantee:\t\t ``PERFORMANCE METRIC`` <= {:.6} ``INITIALIZATION``'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ``PERFORMANCE METRIC`` <= {:.6} ``INITIALIZATION``'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ``PERFORMANCE METRIC`` <= {:.6} ``INITIALIZATION``'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

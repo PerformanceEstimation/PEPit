@@ -100,7 +100,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
         (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.94632223606942e-09 
         (PEPit) Duality gap: absolute: -7.94632223606942e-09 and relative: -1.0
         *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
-        	PEPit guarantee:		 V_(n+1) - V_n <= 0.0
+        	PEPit guarantee:	 V_(n+1) - V_n <= 0.0
         	Theoretical guarantee:	 V_(n+1) - V_n <= 0.0
     
     """
@@ -154,7 +154,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of accelerated gradient method for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t V_(n+1) - V_n <= {:.6}'.format(pepit_tau))
         if gamma == 1 / L:
             print('\tTheoretical guarantee:\t V_(n+1) - V_n <= {:.6}'.format(theoretical_tau))
 

@@ -80,7 +80,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
         (PEPit) Final upper bound (dual): 0.14062498615478927 and lower bound (primal example): 0.1406249823498115 
         (PEPit) Duality gap: absolute: 3.804977777299712e-09 and relative: 2.7057623145755453e-08
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
-        	PEPit guarantee:		 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
+        	PEPit guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
         	Theoretical guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
     
     """
@@ -123,7 +123,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Kranoselskii-Mann iterations ***')
-        print('\tPEPit guarantee:\t\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t 1/4||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

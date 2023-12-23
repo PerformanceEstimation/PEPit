@@ -98,7 +98,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
         (PEPit) Final upper bound (dual): 0.7796890635199223 and lower bound (primal example): 0.7796890707911295 
         (PEPit) Duality gap: absolute: -7.27120719190566e-09 and relative: -9.325778011134313e-09
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
-        	PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
+        	PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
     
     """
 
@@ -140,7 +140,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case contraction factor of the Three Operator Splitting ***')
-        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

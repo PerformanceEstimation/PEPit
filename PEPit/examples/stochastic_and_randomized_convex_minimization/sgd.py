@@ -116,7 +116,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 5.041652154374022 and lower bound (primal example): 5.041652165318314 
         (PEPit) Duality gap: absolute: -1.094429169512523e-08 and relative: -2.170774844486766e-09
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-        	PEPit guarantee:		 E[||x_1 - x_*||^2] <= 5.04165
+        	PEPit guarantee:	 E[||x_1 - x_*||^2] <= 5.04165
         	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 5.04165
     
     """
@@ -158,7 +158,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***')
-        print('\tPEPit guarantee:\t\t E[||x_1 - x_*||^2] <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_1 - x_*||^2] <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

@@ -90,7 +90,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.03305791391531532 and lower bound (primal example): 0.03304790577532096 
         (PEPit) Duality gap: absolute: 1.0008139994355236e-05 and relative: 0.00030283734353385173
         *** Example file: worst-case performance of Halpern Iterations ***
-        	PEPit guarantee:		 ||xN - AxN||^2 == 0.0330579 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||xN - AxN||^2 == 0.0330579 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||xN - AxN||^2 <= 0.0330579 ||x0 - x_*||^2
     
     """
@@ -130,7 +130,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Halpern Iterations ***')
-        print('\tPEPit guarantee:\t\t ||xN - AxN||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||xN - AxN||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||xN - AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

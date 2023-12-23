@@ -99,7 +99,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         (PEPit) Final upper bound (dual): 0.8347107438665666 and lower bound (primal example): 0.8347107438584297 
         (PEPit) Duality gap: absolute: 8.136935569780235e-12 and relative: 9.748209939370677e-12
         *** Example file: worst-case performance of randomized coordinate gradient descent ***
-        	PEPit guarantee:		 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
+        	PEPit guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
         	Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
     
     """
@@ -139,7 +139,7 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of randomized coordinate gradient descent ***')
-        print('\tPEPit guarantee:\t\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t E[||x_(t+1) - x_*||^2] <= {:.6} ||x_t - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

@@ -108,7 +108,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, v
         (PEPit) Final upper bound (dual): 0.015931149263944334 and lower bound (primal example): 0.015931148923290624 
         (PEPit) Duality gap: absolute: 3.4065371010139067e-10 and relative: 2.138287148915985e-08
         *** Example file: worst-case performance of fast proximal point method ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0511881 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
     
     """
@@ -155,7 +155,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, v
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of fast proximal point method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

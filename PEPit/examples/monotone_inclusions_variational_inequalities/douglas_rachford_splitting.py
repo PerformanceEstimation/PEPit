@@ -99,7 +99,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
         (PEPit) Final upper bound (dual): 0.9287707057295752 and lower bound (primal example): 0.928770707839351 
         (PEPit) Duality gap: absolute: -2.109775798508906e-09 and relative: -2.2715787445719413e-09
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
-        	PEPit guarantee:		 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
+        	PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
         	Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
     
     """
@@ -156,7 +156,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
-        print('\tPEPit guarantee:\t\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

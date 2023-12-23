@@ -101,7 +101,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.5285548474610776 and lower bound (primal example): 0.5285548454743232 
         (PEPit) Duality gap: absolute: 1.9867544276408466e-09 and relative: 3.758842520605294e-09
         *** Example file: worst-case performance of the Robust Momentum Method ***
-        	PEPit guarantee:		 v(x_(n+1)) <= 0.528555 v(x_n)
+        	PEPit guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
         	Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
     
     """
@@ -161,7 +161,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Robust Momentum Method ***')
-        print('\tPEPit guarantee:\t\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t v(x_(n+1)) <= {:.6} v(x_n)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

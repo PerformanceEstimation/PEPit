@@ -108,7 +108,7 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.0767518302587488 and lower bound (primal example): 0.0767518265733206 
         (PEPit) Duality gap: absolute: 3.6854281987297455e-09 and relative: 4.801746568479483e-08
         *** Example file: worst-case performance of optimized gradient method ***
-        	PEPit guarantee:		 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2
     
     """
@@ -157,7 +157,7 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of optimized gradient method ***')
-        print('\tPEPit guarantee:\t\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

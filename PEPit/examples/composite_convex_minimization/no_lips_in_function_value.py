@@ -103,7 +103,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         (PEPit) Final upper bound (dual): 0.666666666662425 and lower bound (primal example): 0.6666666666481619 
         (PEPit) Duality gap: absolute: 1.4263146219661849e-11 and relative: 2.139471933008663e-11
         *** Example file: worst-case performance of the NoLips in function values ***
-        	PEPit guarantee:		 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
+        	PEPit guarantee:	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
         	Theoretical guarantee:	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
     
     """
@@ -155,7 +155,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the NoLips in function values ***')
-        print('\tPEPit guarantee:\t\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n) - F_* <= {:.6} Dh(x_*; x_0)'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

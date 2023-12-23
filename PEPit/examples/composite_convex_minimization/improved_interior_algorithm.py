@@ -102,7 +102,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
         (PEPit) Final upper bound (dual): 0.06807717277007506 and lower bound (primal example): 0.06807717876241919 
         (PEPit) Duality gap: absolute: -5.992344120908655e-09 and relative: -8.802280338057462e-08
         *** Example file: worst-case performance of the Improved interior gradient algorithm in function values ***
-        	PEPit guarantee:		 F(x_n)-F_* <= 0.0680772 (c * Dh(xs;x0) + f1(x0) - F_*)
+        	PEPit guarantee:	 F(x_n)-F_* <= 0.0680772 (c * Dh(xs;x0) + f1(x0) - F_*)
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.111111 (c * Dh(xs;x0) + f1(x0) - F_*)
     
     """
@@ -163,7 +163,7 @@ def wc_improved_interior_algorithm(L, mu, c, lam, n, wrapper="cvxpy", solver=Non
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Improved interior gradient algorithm in function values ***')
-        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} (c * Dh(xs;x0) + f1(x0) - F_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

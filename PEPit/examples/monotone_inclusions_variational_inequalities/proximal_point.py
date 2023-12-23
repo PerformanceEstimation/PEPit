@@ -74,7 +74,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.03874204889860354 and lower bound (primal example): 0.038742046287953344 
         (PEPit) Duality gap: absolute: 2.610650196022135e-09 and relative: 6.73854493027619e-08
         *** Example file: worst-case performance of the Proximal Point Method***
-        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
+        	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
         	Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.038742 ||x0 - xs||^2
     
     """
@@ -113,7 +113,7 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Point Method***')
-        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

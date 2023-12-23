@@ -79,7 +79,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
         (PEPit) Final upper bound (dual): 0.8100000036427537 and lower bound (primal example): 0.8100000029203449 
         (PEPit) Duality gap: absolute: 7.224087994472939e-10 and relative: 8.918627121515396e-10
         *** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***
-        	PEPit guarantee:		 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
+        	PEPit guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
         	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
     
     """
@@ -117,7 +117,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***')
-        print('\tPEPit guarantee:\t\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

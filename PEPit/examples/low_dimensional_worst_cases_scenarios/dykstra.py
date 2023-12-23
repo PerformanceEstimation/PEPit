@@ -90,7 +90,7 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.025756455102383596 and lower bound (primal example): 0.025656451810811397 
         (PEPit) Duality gap: absolute: 0.00010000329157219823 and relative: 0.0038977833844529406
         *** Example file: worst-case performance of the Dykstra projection method ***
-        	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0257565 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0257565 ||x0 - x_*||^2
     
     """
 
@@ -133,7 +133,7 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Dykstra projection method ***')
-        print('\tPEPit guarantee:\t\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

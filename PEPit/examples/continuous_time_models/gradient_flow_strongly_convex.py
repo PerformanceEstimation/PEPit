@@ -84,7 +84,7 @@ def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1
         (PEPit) Final upper bound (dual): -0.20000002574229303 and lower bound (primal example): -0.20000002010543685 
         (PEPit) Duality gap: absolute: -5.636856176272076e-09 and relative: 2.8184278048074267e-08
         *** Example file: worst-case performance of the gradient flow ***
-        	PEPit guarantee:		 d/dt[f(X_t)-f_*] <= -0.2 (f(X_t) - f(x_*))
+        	PEPit guarantee:	 d/dt[f(X_t)-f_*] <= -0.2 (f(X_t) - f(x_*))
         	Theoretical guarantee:	 d/dt[f(X_t)-f_*] <= -0.2 (f(X_t) - f(x_*))
     
     """
@@ -128,7 +128,7 @@ def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the gradient flow ***')
-        print('\tPEPit guarantee:\t\t d/dt[f(X_t)-f_*] <= {:.6} (f(X_t) - f(x_*))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t d/dt[f(X_t)-f_*] <= {:.6} (f(X_t) - f(x_*))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t d/dt[f(X_t)-f_*] <= {:.6} (f(X_t) - f(x_*))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

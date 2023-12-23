@@ -88,7 +88,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
         (PEPit) Final upper bound (dual): 0.007678489787312847 and lower bound (primal example): 0.007678482388821737 
         (PEPit) Duality gap: absolute: 7.398491109686378e-09 and relative: 9.635355966248009e-07
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
-        	PEPit guarantee:		 f(x_n) - f(x_*) <= 0.00767849 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n) - f(x_*) <= 0.00767849 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2
     
     """
@@ -128,7 +128,7 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of an inexact proximal point method in distance in function values ***')
-        print('\tPEPit guarantee:\t\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n) - f(x_*) <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

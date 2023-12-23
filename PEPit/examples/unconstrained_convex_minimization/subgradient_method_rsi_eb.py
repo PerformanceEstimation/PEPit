@@ -85,7 +85,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
         (PEPit) Final upper bound (dual): 0.960596009998838 and lower bound (primal example): 0.9605960099986828 
         (PEPit) Duality gap: absolute: 1.5520917884259688e-13 and relative: 1.6157591456455218e-13
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
     
     """
@@ -123,7 +123,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

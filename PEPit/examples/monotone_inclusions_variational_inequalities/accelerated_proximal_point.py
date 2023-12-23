@@ -79,7 +79,7 @@ def wc_accelerated_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbos
         (PEPit) Final upper bound (dual): 0.010000027890024786 and lower bound (primal example): 0.01000002559061373 
         (PEPit) Duality gap: absolute: 2.2994110556590064e-09 and relative: 2.2994051713400514e-07
         *** Example file: worst-case performance of the Accelerated Proximal Point Method***
-        	PEPit guarantee:		 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
+        	PEPit guarantee:	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
         	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
     
     """
@@ -120,7 +120,7 @@ def wc_accelerated_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbos
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Accelerated Proximal Point Method***')
-        print('\tPEPit guarantee:\t\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - x_s||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

@@ -85,7 +85,7 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.2666666657156721 and lower bound (primal example): 0.26666666551166657 
         (PEPit) Duality gap: absolute: 2.0400553468746807e-10 and relative: 7.650207583915017e-10
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-        	PEPit guarantee:		 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
+        	PEPit guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
         	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
     
     """
@@ -126,7 +126,7 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('\tPEPit guarantee:\t\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

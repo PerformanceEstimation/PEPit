@@ -116,7 +116,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
         (PEPit) Final upper bound (dual): 0.018734107018754872 and lower bound (primal example): 0.018734101450651804 
         (PEPit) Duality gap: absolute: 5.5681030688981e-09 and relative: 2.9721751446501176e-07
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
-        	PEPit guarantee:		 F(x_n)-F_* <= 0.0187341 ||x_0 - x_*||^2
+        	PEPit guarantee:	 F(x_n)-F_* <= 0.0187341 ||x_0 - x_*||^2
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2
     
     """
@@ -168,7 +168,7 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of an inexact accelerated forward backward method ***')
-        print('\tPEPit guarantee:\t\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t F(x_n)-F_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

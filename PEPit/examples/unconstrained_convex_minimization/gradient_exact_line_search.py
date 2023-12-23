@@ -83,7 +83,7 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
         (PEPit) Final upper bound (dual): 0.44812496921062095 and lower bound (primal example): 0.4481249685889447 
         (PEPit) Duality gap: absolute: 6.216762660216091e-10 and relative: 1.3872832571216518e-09
         *** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.448125 (f(x_0)-f_*)
     
     """
@@ -124,7 +124,7 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with exact linesearch (ELS) ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

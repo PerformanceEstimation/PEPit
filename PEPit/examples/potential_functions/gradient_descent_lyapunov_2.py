@@ -82,7 +82,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, ve
         (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 4.129020680920803e-09 
         (PEPit) Duality gap: absolute: -4.129020680920803e-09 and relative: -1.0
         *** Example file: worst-case performance of gradient descent with fixed step size for a given Lyapunov function***
-        	PEPit guarantee:		V_(n+1) - V_(n) <= 0.0
+        	PEPit guarantee:	V_(n+1) - V_(n) <= 0.0
         	Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0
     
     """
@@ -126,7 +126,7 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, ve
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of gradient descent with fixed step size for a given Lyapunov function***')
-        print('\tPEPit guarantee:\t\t'
+        print('\tPEPit guarantee:\t'
               'V_(n+1) - V_(n) <= {:.6}'.format(pepit_tau))
         if gamma == 1 / L:
             print('\tTheoretical guarantee:\t'

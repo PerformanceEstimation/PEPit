@@ -105,7 +105,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
         (PEPit) Final upper bound (dual): 0.6561000458035535 and lower bound (primal example): 0.6561000457701127 
         (PEPit) Duality gap: absolute: 3.3440805680129415e-11 and relative: 5.096906469634138e-11
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
-        	PEPit guarantee:		 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
+        	PEPit guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
         	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
     
     """
@@ -146,7 +146,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Proximal Gradient Method in function values***')
-        print('\tPEPit guarantee:\t\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - x_*||^2 <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)

@@ -93,7 +93,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.07828954284798424 and lower bound (primal example): 0.07828953904645822 
         (PEPit) Duality gap: absolute: 3.801526024527213e-09 and relative: 4.855726666459652e-08
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2
     
     """
@@ -141,7 +141,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     if verbose != -1:
         print('*** Example file:'
               ' worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x0 - xs||^2'.format(theoretical_tau))
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau

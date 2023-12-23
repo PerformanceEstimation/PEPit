@@ -114,7 +114,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
         (PEPit) Final upper bound (dual): 0.2812061650995206 and lower bound (primal example): 0.2812061652921267 
         (PEPit) Duality gap: absolute: -1.9260609773752435e-10 and relative: -6.849284315563937e-10
         *** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***
-        	PEPit guarantee:		 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
+        	PEPit guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
         	Theoretical guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
     
     """
@@ -162,7 +162,7 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***')
-        print('\tPEPit guarantee:\t\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||z_n - z_*||^2 <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)

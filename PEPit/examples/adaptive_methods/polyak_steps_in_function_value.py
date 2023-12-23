@@ -97,7 +97,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", solver=None
         (PEPit) Final upper bound (dual): 0.6694214228930617 and lower bound (primal example): 0.6694214253294206 
         (PEPit) Duality gap: absolute: -2.4363588924103396e-09 and relative: -3.6394994247628294e-09
         *** Example file: worst-case performance of Polyak steps ***
-        	PEPit guarantee:		 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*) 
+        	PEPit guarantee:	 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*) 
         	Theoretical guarantee:	 f(x_1) - f_* <= 0.669421 (f(x_0) - f_*)
     
     """
@@ -142,7 +142,7 @@ def wc_polyak_steps_in_function_value(L, mu, gamma, wrapper="cvxpy", solver=None
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Polyak steps ***')
-        print('\tPEPit guarantee:\t\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*) '.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f_* <= {:.6} (f(x_0) - f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

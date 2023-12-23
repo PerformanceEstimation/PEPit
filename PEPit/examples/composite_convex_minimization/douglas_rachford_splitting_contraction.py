@@ -109,7 +109,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
         (PEPit) Final upper bound (dual): 0.3501278016887412 and lower bound (primal example): 0.3501278029546837 
         (PEPit) Duality gap: absolute: -1.2659425174810224e-09 and relative: -3.6156583590274623e-09
         *** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***
-        	PEPit guarantee:		 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
+        	PEPit guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
         	Theoretical guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
     
     """
@@ -158,7 +158,7 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***')
-        print('\tPEPit guarantee:\t\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(pepit_tau))
         if theta == 1:
             print('\tTheoretical guarantee:\t ||w - wp||^2 <= {:.6} ||w0 - w0p||^2'.format(theoretical_tau))
 

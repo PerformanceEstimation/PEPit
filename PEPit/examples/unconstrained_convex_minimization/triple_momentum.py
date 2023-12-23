@@ -112,7 +112,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.23892508270020568 and lower bound (primal example): 0.23892507617696113 
         (PEPit) Duality gap: absolute: 6.523244555634022e-09 and relative: 2.7302469292936613e-08
         *** Example file: worst-case performance of the Triple Momentum Method ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
     
     """
@@ -164,7 +164,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Triple Momentum Method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0-x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

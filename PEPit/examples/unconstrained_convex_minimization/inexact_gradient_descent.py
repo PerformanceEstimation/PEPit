@@ -100,7 +100,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
         (PEPit) Final upper bound (dual): 0.5189166992915334 and lower bound (primal example): 0.5189167048760179 
         (PEPit) Duality gap: absolute: -5.584484541465429e-09 and relative: -1.0761813001953176e-08
         *** Example file: worst-case performance of inexact gradient method in distance in function values ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
     
     """
@@ -144,7 +144,7 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of inexact gradient method in distance in function values ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

@@ -79,7 +79,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 1.4892758368167314 and lower bound (primal example): 1.4892758367502887 
         (PEPit) Duality gap: absolute: 6.644262917632204e-11 and relative: 4.461405169998919e-11
         *** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 1.48928 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 1.48928 ||x_0 - x_*||^2
     
     """
 
@@ -122,7 +122,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau

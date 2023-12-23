@@ -92,7 +92,7 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.06026638541530024 and lower bound (primal example): 0.06026638371348259 
         (PEPit) Duality gap: absolute: 1.7018176451388811e-09 and relative: 2.823825722196363e-08
         *** Example file: worst-case performance of the Past Extragradient Method***
-        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
+        	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
     
     """
 
@@ -137,7 +137,7 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Past Extragradient Method***')
-        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

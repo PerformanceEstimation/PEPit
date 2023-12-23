@@ -100,7 +100,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.7559287543574007 and lower bound (primal example): 0.7559287513714278 
         (PEPit) Duality gap: absolute: 2.9859729133718815e-09 and relative: 3.950071892297578e-09
         *** Example file: worst-case performance of subgradient method ***
-        	PEPit guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
+        	PEPit guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
         	Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
     
     """
@@ -143,7 +143,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of subgradient method ***')
-        print('\tPEPit guarantee:\t\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 \leq t \leq n) f(x_i) - f_* <= {:.6} ||x_0 - x_*||'.format(
             theoretical_tau))
 

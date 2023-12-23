@@ -97,7 +97,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         (PEPit) Final upper bound (dual): 1.019156044756485 and lower bound (primal example): 1.0191560420875132 
         (PEPit) Duality gap: absolute: 2.668971710306778e-09 and relative: 2.6188057570065385e-09
         *** Example file: worst-case performance of the epsilon-subgradient method ***
-        	PEPit guarantee:		 min_(0 <= t <= n) f(x_i) - f_* <= 1.01916
+        	PEPit guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.01916
         	Theoretical guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.04491
     
     """
@@ -142,7 +142,7 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the epsilon-subgradient method ***')
-        print('\tPEPit guarantee:\t\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
+        print('\tPEPit guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(pepit_tau))
         print('\tTheoretical guarantee:\t min_(0 <= t <= n) f(x_i) - f_* <= {:.6}'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

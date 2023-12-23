@@ -90,7 +90,7 @@ def wc_conjugate_gradient_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose=
         (PEPit) Final upper bound (dual): 0.038461545907145095 and lower bound (primal example): 0.038461537777152104 
         (PEPit) Duality gap: absolute: 8.129992991323665e-09 and relative: 2.113798215357174e-07
         *** Example file: worst-case performance of conjugate gradient method ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0384615 ||x_0 - x_*||^2
     
     """
@@ -134,7 +134,7 @@ def wc_conjugate_gradient_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose=
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of conjugate gradient method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

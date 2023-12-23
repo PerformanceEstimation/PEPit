@@ -100,7 +100,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
         (PEPit) Final upper bound (dual): 0.7534930169804492 and lower bound (primal example): 0.7534930184723507 
         (PEPit) Duality gap: absolute: -1.4919014912351258e-09 and relative: -1.979980510316926e-09
         *** Example file: worst-case performance of the Heavy-Ball method ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.753493 (f(x_0) - f(x_*))
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.753493 (f(x_0) - f(x_*))
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) - f(x_*))
     
     """
@@ -144,7 +144,7 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Heavy-Ball method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*))'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

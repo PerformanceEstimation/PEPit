@@ -98,7 +98,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
         (PEPit) Final upper bound (dual): 0.027791732322924277 and lower bound (primal example): 0.027791729871150122 
         (PEPit) Duality gap: absolute: 2.4517741552265715e-09 and relative: 8.821955907723812e-08
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
-        	PEPit guarantee:		 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
+        	PEPit guarantee:	 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
         	Theoretical guarantee:	 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
     
     """
@@ -147,7 +147,7 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***')
-        print('\tPEPit guarantee:\t\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(pepit_tau))
         if theta == 1 and alpha == 1 and L == 1 and n <= 10:
             print('\tTheoretical guarantee:\t f(y_n)-f_* <= {:.3} ||x0 - xs||^2'.format(theoretical_tau))
 

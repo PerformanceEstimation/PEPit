@@ -98,7 +98,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
         (PEPit) Final upper bound (dual): 0.003936990621254958 and lower bound (primal example): 0.003936989547244047 
         (PEPit) Duality gap: absolute: 1.0740109105886186e-09 and relative: 2.7280004117370406e-07
         *** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***
-        	PEPit guarantee:		 ||AxN||^2 <= 0.00393699 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||AxN||^2 <= 0.00393699 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2
     
     """
@@ -139,7 +139,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***')
-        print('\tPEPit guarantee:\t\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||AxN||^2 <= {:.6} ||x0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

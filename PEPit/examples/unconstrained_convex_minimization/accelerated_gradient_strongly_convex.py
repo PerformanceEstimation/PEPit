@@ -88,7 +88,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, wrapper="cvxpy", solver=No
         (PEPit) Final upper bound (dual): 0.3476022268314509 and lower bound (primal example): 0.34760222631660587 
         (PEPit) Duality gap: absolute: 5.148450554770534e-10 and relative: 1.4811327905826417e-09
         *** Example file: worst-case performance of the accelerated gradient method ***
-        	PEPit guarantee:		 f(x_n)-f_* <= 0.347602 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.347602 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.467544 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
     
     """
@@ -133,7 +133,7 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, wrapper="cvxpy", solver=No
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the accelerated gradient method ***')
-        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)'.format(
+        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)'.format(
             pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)'.format(
             theoretical_tau))

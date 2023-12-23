@@ -88,7 +88,7 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Final upper bound (dual): 0.06631413197861648 and lower bound (primal example): 0.06631412698565144 
         (PEPit) Duality gap: absolute: 4.992965041417108e-09 and relative: 7.529263021885893e-08
         *** Example file: worst-case performance of the Optimistic Gradient Method***
-        	PEPit guarantee:		 ||x(n) - x(n-1)||^2 <= 0.0663141 ||x0 - xs||^2
+        	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0663141 ||x0 - xs||^2
     
     """
 
@@ -134,7 +134,7 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Optimistic Gradient Method***')
-        print('\tPEPit guarantee:\t\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

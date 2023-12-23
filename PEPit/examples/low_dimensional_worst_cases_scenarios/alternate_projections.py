@@ -90,7 +90,7 @@ def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Final upper bound (dual): 0.01886768010878965 and lower bound (primal example): 0.018767679335018744 
         (PEPit) Duality gap: absolute: 0.00010000077377090438 and relative: 0.0053283505107801065
         *** Example file: worst-case performance of the alternate projection method ***
-        	PEPit guarantee:		 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188677 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0188677 ||x0 - x_*||^2
     
     """
 
@@ -129,7 +129,7 @@ def wc_alternate_projections(n, wrapper="cvxpy", solver=None, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the alternate projection method ***')
-        print('\tPEPit guarantee:\t\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == {:.6} ||x0 - x_*||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
