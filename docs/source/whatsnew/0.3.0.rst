@@ -6,7 +6,9 @@ For users:
 
 - The :class:`BlockPartition` has been created and allows to decompose the space into orthogonal subspaces to treat points differently in each subspaces. This is useful in particular to study Coordinate descent like methods.
 
-- Operators classes :class:`CocoerciveStronglyMonotoneOperator` and :class:`NegativelyComonotoneOperator` as well as the Function class :class:`SmoothConvexLipschitzFunction` have been added.
+- The function classes :class:`SmoothConvexLipschitzFunction` and :class:`SmoothStronglyConvexQuadraticFunction` have been added.
+
+- The operators classes :class:`CocoerciveStronglyMonotoneOperator`, :class:`NegativelyComonotoneOperator`, :class:`NonexpansiveOperator`, :class:`LinearOperator`, :class:`SymmetricLinearOperator` and :class:`SkewSymmetricLinearOperator` have been added.
 
 - Most operators classes had redundant class constraints. They have been removed, reducing the size of the PEP and then the computation load.
 
