@@ -49,10 +49,11 @@ def wc_gradient_descent_lc(mug, Lg, typeM, muM, LM, gamma, n, verbose=1):
     the following **tight** theoretical guarantee is **conjectured** in [1, Conjecture 4.2],
     and the associated **lower** theoretical guarantee is stated in [1, Conjecture 4.3]:
 
-    .. math:: g(Mx_n)-g_\\star \\leqslant \\frac{L}{2} \\max\\{\\frac{\\kappa_g {M^*}^2}{\\kappa_g -1 + (1-\\kappa_g {M^*}^2 L \\gamma )^{-2n}}, (1-L\\gamma)^{2n} \\} \\|x_0-x_\\star\\|^2,
+    .. math:: g(Mx_n)-g_\\star \\leqslant \\frac{L}{2} \\max\\left\\{\\frac{\\kappa_g {M^*}^2}{\\kappa_g -1 + (1-\\kappa_g {M^*}^2 L \\gamma )^{-2n}}, (1-L\\gamma)^{2n} \\right\\} \\|x_0-x_\\star\\|^2,
 
     where :math:`L = L_g L_M^2`, :math:`\kappa_g = \\frac{\\mu_g}{L_g}`, :math:`\kappa_M = \\frac{\\mu_M}{L_M}`,
-    :math:`M^* = \\mathrm{proj}_{[\\kappa_M,1]} (\\sqrt{\\frac{h_0}{L\\gamma}})` for :math:`h_0` solution of
+    :math:`M^* = \\mathrm{proj}_{[\\kappa_M,1]} \\left(\\sqrt{\\frac{h_0}{L\\gamma}}\\right)` for :math:`h_0` solution of
+
     .. math:: (1-\\kappa_g)(1-\kappa_g h_0)^{2n+1} = 1 - (2n+1)\\kappa_g h_0.
 
     **References**:

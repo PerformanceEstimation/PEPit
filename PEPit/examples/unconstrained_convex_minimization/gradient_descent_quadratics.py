@@ -26,24 +26,24 @@ def wc_gradient_descent_quadratics(mu, L, gamma, n, wrapper="cvxpy", solver=None
     **Algorithm**:
     Gradient descent is described by
 
-    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
+        .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
     where :math:`\\gamma` is a step-size.
     
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{2}{L}` and :math:`0 \\leqslant \\mu \\leqslant L `, the **tight** theoretical guarantee can be
-    found in [1, Equation (4.17)] (it is a conjecture in this work but it is provable):
+        When :math:`\\gamma \\leqslant \\frac{2}{L}` and :math:`0 \\leqslant \\mu \\leqslant L`,
+        the **tight** theoretical conjecture can be found in [1, Equation (4.17)]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2} \\max\\{\\alpha(1-\\alpha L\\gamma)^{2n}, (1-L\\gamma)^{2n} \\} \\|x_0-x_\\star\\|^2,
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2} \\max\\left\\{\\alpha(1-\\alpha L\\gamma)^{2n}, (1-L\\gamma)^{2n} \\right\\} \\|x_0-x_\\star\\|^2,
 
-    where :math:`\\alpha = \\mathrm{proj}_{[\\frac{\\mu}{L},1]} (\\frac{1}{L\\gamma (2n+1)}) `.
+    where :math:`\\alpha = \\mathrm{proj}_{[\\frac{\\mu}{L},1]} \\left(\\frac{1}{L\\gamma (2n+1)}\\right)`.
 
     **References**:
 
-    `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).
-    Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
-    arXiv preprint
-    <https://arxiv.org/pdf/2302.08781.pdf>`_
+        `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).
+        Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
+        arXiv preprint
+        <https://arxiv.org/pdf/2302.08781.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter.
