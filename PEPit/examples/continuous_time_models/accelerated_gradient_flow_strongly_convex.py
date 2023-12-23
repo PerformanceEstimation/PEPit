@@ -1,7 +1,7 @@
 from math import sqrt
 
 from PEPit import PEP
-from PEPit.functions.strongly_convex import StronglyConvexFunction
+from PEPit.functions.strongly_convex_function import StronglyConvexFunction
 
 
 def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", solver=None, verbose=1):

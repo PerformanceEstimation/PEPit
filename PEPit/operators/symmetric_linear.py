@@ -1,12 +1,14 @@
 import numpy as np
-from PEPit.function import Function
+
+from PEPit import Function
 from PEPit import Expression
 from PEPit import PSDMatrix
 
+
 class SymmetricLinearOperator(Function):
     """
-    The :class:`SymmetricLinearOperator` class overwrites the `add_class_constraints` method
-    of :class:`Function`, implementing interpolation constraints for the class of symmetric linear operators.
+    The :class:`SymmetricLinearOperator` class overwrites the `add_class_constraints` method of :class:`Function`,
+    implementing the interpolation constraints for the class of symmetric linear operators.
 
     Note:
         Operator values can be requested through `gradient` and `function values` should not be used.
@@ -25,19 +27,21 @@ class SymmetricLinearOperator(Function):
         >>> M = problem.declare_function(function_class=SymmetricLinearOperator, mu=.1, L=1.)
 
     References:
-        `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).
-        Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
-        arXiv preprint
-        <https://arxiv.org/pdf/2302.08781.pdf>`_
+
+    `[1] N. Bousselmi, J. Hendrickx, F. Glineur (2023).
+    Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
+    arXiv preprint
+    <https://arxiv.org/pdf/2302.08781.pdf>`_
 
     """
 
     def __init__(self,
                  mu,
-                 L=1.,
+                 L,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -50,6 +54,7 @@ class SymmetricLinearOperator(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Symmetric Linear operators are necessarily continuous,
@@ -58,42 +63,53 @@ class SymmetricLinearOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
+
         # Store L and mu
         self.mu = mu
         self.L = L
 
-        if self.L == np.inf:
-            print("\033[96m(PEPit) The class of Symmetric Linear operators is necessarily continuous.\n"
-                  "To instantiate an operator, please avoid using the class SymmetricLinearOperator with\n"
-                  " L == np.inf. \033[0m")
+    @staticmethod
+    def set_symmetric_linear_constraint_i_j(xi, gi, fi,
+                                            xj, gj, fj,
+                                            ):
+        """
+        Formulates the list of interpolation constraints for self (Symmetric linear operator).
+        """
+        # Interpolation conditions of symmetric linear operators class
+        constraint = (xi * gj == xj * gi)
+
+        return constraint
 
     def add_class_constraints(self):
         """
         Formulates the list of necessary and sufficient conditions for interpolation of self
         (Symmetric Linear operator), see [1, Theorem 3.3].
+
         """
+        # Add the class constraint for symmetric linear operators
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="symmetric_linearity",
+                                                      set_class_constraint_i_j=self.set_symmetric_linear_constraint_i_j,
+                                                      symmetry=True,
+                                                      )
 
+        # Create a PSD matrix to enforce the eigenvalues to lie into the interval [mu, L]
         N = len(self.list_of_points)
-        T = np.empty([N, N], dtype = Expression)
+        T = np.empty([N, N], dtype=Expression)
 
-        i = 0
-        for point_i in self.list_of_points:
+        for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
-            
-            j = 0
-            for point_j in self.list_of_points:
+
+            for j, point_j in enumerate(self.list_of_points):
 
                 xj, gj, fj = point_j
-                
-                if (i != j):
-                
-                    self.list_of_class_constraints.append(xi*gj == xj*gi)
 
-                T[i,j] = self.L*gi*xj - gi*gj - self.mu*self.L*xi*xj + self.mu*xi*gj
-                j = j + 1
-            i = i + 1
-            
+                T[i, j] = self.L * gi * xj - gi * gj - self.mu * self.L * xi * xj + self.mu * xi * gj
+
         psd_matrix = PSDMatrix(matrix_of_expressions=T)
         self.list_of_class_psd.append(psd_matrix)

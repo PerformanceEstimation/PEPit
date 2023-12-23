@@ -5,8 +5,10 @@ import numpy as np
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_lc
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex_decreasing
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_quadratics
 from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method_rsi_eb
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
@@ -64,6 +66,7 @@ from PEPit.examples.monotone_inclusions_variational_inequalities import \
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_increasing_step_sizes
+from PEPit.examples.fixed_point_problems import wc_inconsistent_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_optimal_contractive_halpern_iteration
 from PEPit.examples.potential_functions import wc_accelerated_gradient_method
 from PEPit.examples.potential_functions import wc_gradient_descent_lyapunov_1
@@ -128,14 +131,35 @@ class TestExamplesCVXPY(unittest.TestCase):
     def test_information_theoretic(self):
         mu, L, n = .01, 3, 3
 
-        wc, theory = wc_information_theoretic(mu, L, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_information_theoretic(mu=mu, L=L, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_gradient_descent(self):
         L, n = 3, 4
         gamma = 1 / L
 
-        wc, theory = wc_gradient_descent(L, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_descent(L=L, gamma=gamma, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_gradient_descent_lc(self):
+        Lg, mug = 3, .3
+        LM, muM = 1., 0.1
+        gamma, n = 1 / (Lg * LM ** 2), 3
+        for typeM in ["gen", "sym", "skew"]:
+
+            wc, theory = wc_gradient_descent_lc(mug=mug, Lg=Lg,
+                                                typeM=typeM, muM=muM, LM=LM,
+                                                gamma=gamma, n=n,
+                                                verbose=self.verbose)
+
+            self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_gradient_descent_quadratics(self):
+        L, mu, n = 3, .3, 4
+        gamma = 1/L
+        wc, theory = wc_gradient_descent_quadratics(mu=mu, L=L, gamma=gamma, n=n,
+                                                    wrapper=self.wrapper, verbose=self.verbose)
+
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_cyclic_coordinate_descent_one_block(self):
@@ -546,6 +570,11 @@ class TestExamplesCVXPY(unittest.TestCase):
         ref_pesto_bound = 0.059527
         wc, _ = wc_krasnoselskii_mann_increasing_step_sizes(n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, ref_pesto_bound, delta=self.relative_precision * ref_pesto_bound)
+
+    def test_wc_inconsistent_halpern_iteration(self):
+        n = 25
+        wc, theory = wc_inconsistent_halpern_iteration(n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
 
     def test_wc_optimal_contractive_halpern_iteration(self):
         n, gamma = 3, 1.13

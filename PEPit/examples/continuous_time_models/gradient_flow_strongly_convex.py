@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions.strongly_convex import StronglyConvexFunction
+from PEPit.functions.strongly_convex_function import StronglyConvexFunction
 
 
 def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1):

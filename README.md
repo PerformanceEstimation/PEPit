@@ -264,7 +264,9 @@ PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/
 - [Cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive)
 
 
-## Authors
+## Contributors
+
+### Creators
 
 This toolbox has been created by
 
@@ -275,16 +277,21 @@ This toolbox has been created by
 - [**Adrien Taylor**](https://adrientaylor.github.io/)
 - [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
 
+### External contributions
+
+All external contributions are welcome.
+Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/contributing.html).
+
+The contributors to this toolbox are:
+- [**Gyumin Roh**](https://rkm0959.tistory.com/)
+- [**Jisun Park**](https://jisunp515.github.io)
+- [**Nizar Bousselmi**](https://nizarbousselmi.github.io)
+
 ### Acknowledgments
 
 The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/)
 for his feedbacks on preliminary versions of the toolbox,
 as well as for support regarding the continuous integration.
-
-## Contributions
-
-All external contributions are welcome.
-Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/contributing.html).
 
 ## References
 

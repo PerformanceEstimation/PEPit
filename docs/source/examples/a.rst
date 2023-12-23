@@ -124,3 +124,13 @@ Conjugate gradient for quadratically upper bounded convex objective
 Heavy Ball momentum for quadratically upper bounded convex objective
 --------------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_heavy_ball_momentum_qg_convex
+
+
+Gradient descent for smooth strongly convex quadratic objective
+---------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_quadratics
+
+
+Gradient descent for smooth strongly convex objective with linear mapping
+-------------------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_lc

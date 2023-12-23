@@ -17,6 +17,7 @@ from PEPit.functions import SmoothConvexLipschitzFunction
 from PEPit.functions import SmoothFunction
 from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import StronglyConvexFunction
+from PEPit.functions import SmoothStronglyConvexQuadraticFunction
 
 from PEPit.operators import CocoerciveOperator
 from PEPit.operators import CocoerciveStronglyMonotoneOperator
@@ -25,6 +26,10 @@ from PEPit.operators import LipschitzStronglyMonotoneOperator
 from PEPit.operators import MonotoneOperator
 from PEPit.operators import NegativelyComonotoneOperator
 from PEPit.operators import StronglyMonotoneOperator
+from PEPit.operators import NonexpansiveOperator
+from PEPit.operators import LinearOperator
+from PEPit.operators import SymmetricLinearOperator
+from PEPit.operators import SkewSymmetricLinearOperator
 
 
 class TestFunctionsAndOperators(unittest.TestCase):
@@ -44,6 +49,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.func9 = SmoothFunction(L=1, name="f9")
         self.func10 = SmoothStronglyConvexFunction(mu=.1, L=1, name="f10")
         self.func11 = StronglyConvexFunction(mu=.1, name="f11")
+        self.func12 = SmoothStronglyConvexQuadraticFunction(L=1, mu=.1, name="f12")
 
         self.operator1 = CocoerciveOperator(beta=1., name="op1")
         self.operator2 = CocoerciveStronglyMonotoneOperator(mu=.1, beta=1., name="op2")
@@ -52,6 +58,10 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.operator5 = MonotoneOperator(name="op5")
         self.operator6 = NegativelyComonotoneOperator(rho=1, name="op6")
         self.operator7 = StronglyMonotoneOperator(mu=.1, name="op7")
+        self.operator8 = NonexpansiveOperator(name="op8")
+        self.operator9 = LinearOperator(L=1, name="op9")
+        self.operator10 = SymmetricLinearOperator(mu=.1, L=1, name="op10")
+        self.operator11 = SkewSymmetricLinearOperator(L=1, name="op11")
 
         self.point1 = Point(is_leaf=True, decomposition_dict=None, name="pt1")
         self.point2 = Point(is_leaf=True, decomposition_dict=None, name="pt2")
@@ -68,6 +78,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
             self.func9,
             self.func10,
             self.func11,
+            self.func12,
             self.operator1,
             self.operator2,
             self.operator3,
@@ -75,6 +86,10 @@ class TestFunctionsAndOperators(unittest.TestCase):
             self.operator5,
             self.operator6,
             self.operator7,
+            self.operator8,
+            self.operator9,
+            self.operator10,
+            self.operator11,
         ]
 
         self.all_points = [
@@ -108,6 +123,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertIsInstance(self.func9, SmoothFunction)
         self.assertIsInstance(self.func10, SmoothStronglyConvexFunction)
         self.assertIsInstance(self.func11, StronglyConvexFunction)
+        self.assertIsInstance(self.func12, SmoothStronglyConvexQuadraticFunction)
         self.assertIsInstance(self.operator1, CocoerciveOperator)
         self.assertIsInstance(self.operator2, CocoerciveStronglyMonotoneOperator)
         self.assertIsInstance(self.operator3, LipschitzOperator)
@@ -115,6 +131,10 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertIsInstance(self.operator5, MonotoneOperator)
         self.assertIsInstance(self.operator6, NegativelyComonotoneOperator)
         self.assertIsInstance(self.operator7, StronglyMonotoneOperator)
+        self.assertIsInstance(self.operator8, NonexpansiveOperator)
+        self.assertIsInstance(self.operator9, LinearOperator)
+        self.assertIsInstance(self.operator10, SymmetricLinearOperator)
+        self.assertIsInstance(self.operator11, SkewSymmetricLinearOperator)
 
         self.assertIsInstance(self.point1, Point)
         self.assertIsInstance(self.point2, Point)
@@ -157,6 +177,9 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.new_operator.oracle(self.new_point)
         self.new_operator.stationary_point()
 
+        # Call adjunct of linear operator
+        self.operator9.T.gradient(self.new_point)
+
         # Call stationary point on all functions
         for function in self.all_functions_and_operators:
             function.stationary_point()
@@ -189,6 +212,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.func9.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func10.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func11.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
+        self.assertEqual(len(self.func12.list_of_class_constraints), num_points_eval * (num_points_eval + 1) / 2)
         self.assertEqual(len(self.operator1.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator2.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.operator3.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
@@ -196,26 +220,39 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.operator5.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator6.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator7.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
+        self.assertEqual(len(self.operator8.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
+        self.assertEqual(len(self.operator9.list_of_class_constraints), num_points_eval)
+        self.assertEqual(len(self.operator10.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
+        self.assertEqual(len(self.operator11.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.new_operator.list_of_class_constraints), 0)
 
     def test_name(self):
 
-        all_names = ["f{}".format(i) for i in range(1, 12)] + ["op{}".format(i) for i in range(1, 8)]
+        all_names = ["f{}".format(i) for i in range(1, 13)] + ["op{}".format(i) for i in range(1, 12)]
         for function, name in zip(self.all_functions_and_operators, all_names):
             self.assertEqual(function.get_name(), name)
 
     def test_tables_of_constraints(self):
 
+        # Artificially evaluate at least one point on all the functions but self.func7
+        new_operator = self.new_operator + self.operator9.T
+        del new_operator.decomposition_dict[self.func7]
+        new_operator.gradient(self.new_point)
+
+        # Define and solve a PEP that depends only on self.func7
         self.pep.set_initial_condition((self.point1 - self.point2)**2 <= 1)
         self.pep.set_performance_metric((self.func7.gradient(self.point1) - self.func7.gradient(self.point2))**2)
         self.pep.solve(verbose=self.verbose)
 
+        # Verify that all the functions have still been taken into account
+        # and that their tables of constraints are as expected
         for function in self.all_functions_and_operators:
             tables_of_constraints = function.tables_of_constraints
             for table in tables_of_constraints.values():
                 self.assertIsInstance(table, pandas.DataFrame)
                 self.assertNotEqual(table.shape, (0,))
 
+        # Make further test on self.func7 table of class constraints
         tables_of_duals = self.func7.get_class_constraints_duals()
         self.assertEqual(len(tables_of_duals), 1)
         table_of_duals = tables_of_duals["smoothness_convexity"]

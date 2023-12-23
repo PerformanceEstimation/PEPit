@@ -11,7 +11,7 @@ class LipschitzOperator(Function):
         Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        L (float) Lipschitz parameter
+        L (float): Lipschitz parameter
 
     Cocoercive operators are characterized by the parameter :math:`L`, hence can be instantiated as
 

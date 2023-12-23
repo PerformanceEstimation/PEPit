@@ -23,6 +23,12 @@ Lipschitz continuous
    :members:
    :show-inheritance:
 
+Nonexpansive
+------------
+.. autoclass:: PEPit.operators.NonexpansiveOperator
+   :members:
+   :show-inheritance:
+
 Strongly monotone and Lipschitz continuous
 ------------------------------------------
 .. autoclass:: PEPit.operators.LipschitzStronglyMonotoneOperator
@@ -44,5 +50,23 @@ Cocoercive and strongly monotone
 Negatively comonotone
 ---------------------
 .. autoclass:: PEPit.operators.NegativelyComonotoneOperator
+   :members:
+   :show-inheritance:
+
+Linear Operator
+---------------
+.. autoclass:: PEPit.operators.LinearOperator
+   :members:
+   :show-inheritance:
+
+Skew Symmetric Linear Operator
+------------------------------
+.. autoclass:: PEPit.operators.SkewSymmetricLinearOperator
+   :members:
+   :show-inheritance:
+
+Symmetric Linear Operator
+-------------------------
+.. autoclass:: PEPit.operators.SymmetricLinearOperator
    :members:
    :show-inheritance:

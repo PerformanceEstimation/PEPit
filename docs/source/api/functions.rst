@@ -76,3 +76,9 @@ Convex and smooth by block
 .. autoclass:: PEPit.functions.BlockSmoothConvexFunction
    :members:
    :show-inheritance:
+
+Strongly convex and smooth quadratic
+------------------------------------
+.. autoclass:: PEPit.functions.SmoothStronglyConvexQuadraticFunction
+   :members:
+   :show-inheritance:
