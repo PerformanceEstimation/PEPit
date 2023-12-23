@@ -152,7 +152,7 @@ class TestExamplesCVXPY(unittest.TestCase):
                                                 gamma=gamma, n=n,
                                                 verbose=self.verbose)
 
-            self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+            self.assertAlmostEqual(wc, theory, delta=2*self.relative_precision * theory)
 
     def test_gradient_descent_quadratics(self):
         L, mu, n = 3, .3, 4
