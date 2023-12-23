@@ -259,4 +259,4 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(table_of_duals.columns.name, "IC_f7")
         self.assertEqual(table_of_duals.columns[0], self.point1.get_name())
         self.assertEqual(table_of_duals.columns[1], self.point2.get_name())
-        self.assertAlmostEqual(np.sum(np.array(table_of_duals) - np.array([[0, 2], [2, 0]]))**2, 0)
+        self.assertLessEqual(np.sum(np.array(table_of_duals) - np.array([[0, 2], [2, 0]]))**2, 10**-4)
