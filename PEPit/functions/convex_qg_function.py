@@ -28,10 +28,11 @@ class ConvexQGFunction(Function):
     """
 
     def __init__(self,
-                 L=1,
+                 L,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=False):
+                 reuse_gradient=False,
+                 name=None):
         """
 
         Args:
@@ -43,41 +44,58 @@ class ConvexQGFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=reuse_gradient,
+                         name=name,
+                         )
 
         # Store L
         self.L = L
+
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
+        """
+        Formulates the list of interpolation constraints for self (CCP function).
+        """
+        # Interpolation conditions of convex functions class
+        constraint = (fi - fj >= gj * (xi - xj))
+
+        return constraint
+
+    def set_qg_convexity_constraint_i_j(self,
+                                        xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
+        """
+        Formulates the list of interpolation constraints for self (qg convex function).
+        """
+        # Interpolation conditions of QG convex functions class
+        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
+
+        return constraint
 
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (quadratically maximally growing convex function);
         see [1, Theorem 2.6].
         """
+        if self.list_of_stationary_points == list():
+            self.stationary_point()
 
-        for point_i in self.list_of_stationary_points:
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_stationary_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="qg_convexity",
+                                                      set_class_constraint_i_j=self.set_qg_convexity_constraint_i_j,
+                                                      )
 
-            xi, gi, fi = point_i
-
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L) * gj ** 2)
-
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                if i != j:
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

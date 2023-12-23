@@ -20,7 +20,8 @@ class ConvexFunction(Function):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=False):
+                 reuse_gradient=False,
+                 name=None):
         """
 
         Args:
@@ -31,26 +32,34 @@ class ConvexFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=reuse_gradient,
+                         name=name,
+                         )
 
-    def add_class_constraints(self):
+    @staticmethod
+    def set_convexity_constraint_i_j(xi, gi, fi,
+                                     xj, gj, fj,
+                                     ):
         """
         Formulates the list of interpolation constraints for self (CCP function).
         """
+        # Interpolation conditions of convex functions class
+        constraint = (fi - fj >= gj * (xi - xj))
 
-        for point_i in self.list_of_points:
+        return constraint
 
-            xi, gi, fi = point_i
+    def add_class_constraints(self):
+        """
+        Add the convexity constraints.
+        """
 
-            for point_j in self.list_of_points:
-
-                xj, gj, fj = point_j
-
-                if point_i != point_j:
-
-                    # Interpolation conditions of convex functions class
-                    self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj))
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="convexity",
+                                                      set_class_constraint_i_j=self.set_convexity_constraint_i_j,
+                                                      )

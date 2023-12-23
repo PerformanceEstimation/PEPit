@@ -1,8 +1,10 @@
-from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexQuadraticFunction
 import numpy as np
 
-def wc_gradient_descent_quadratics(mu, L, gamma, n, verbose=1):
+from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexQuadraticFunction
+
+
+def wc_gradient_descent_quadratics(mu, L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -24,30 +26,32 @@ def wc_gradient_descent_quadratics(mu, L, gamma, n, verbose=1):
     **Algorithm**:
     Gradient descent is described by
 
-    .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
+        .. math:: x_{t+1} = x_t - \\gamma \\nabla f(x_t),
 
     where :math:`\\gamma` is a step-size.
     
     **Theoretical guarantee**:
-    When :math:`\\gamma \\leqslant \\frac{2}{L}` and :math:`0 \\leqslant \\mu \\leqslant L `, the **tight** theoretical guarantee can be
-    found in [1, Equation (4.17)] (it is a conjecture in this work but it is provable):
+        When :math:`\\gamma \\leqslant \\frac{2}{L}` and :math:`0 \\leqslant \\mu \\leqslant L`,
+        the **tight** theoretical conjecture can be found in [1, Equation (4.17)]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2} \\max\\{\\alpha(1-\\alpha L\\gamma)^{2n}, (1-L\\gamma)^{2n} \\} \\|x_0-x_\\star\\|^2,
+        .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2} \\max\\left\\{\\alpha(1-\\alpha L\\gamma)^{2n}, (1-L\\gamma)^{2n} \\right\\} \\|x_0-x_\\star\\|^2,
 
-    where :math:`\\alpha = \\mathrm{proj}_{[\\frac{\\mu}{L},1]} (\\frac{1}{L\\gamma (2n+1)}) `.
+    where :math:`\\alpha = \\mathrm{proj}_{[\\frac{\\mu}{L},1]} \\left(\\frac{1}{L\\gamma (2n+1)}\\right)`.
 
     **References**:
 
-    `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).
-    Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
-    arXiv preprint
-    <https://arxiv.org/pdf/2302.08781.pdf>`_
+        `[1] N. Bousselmi, J. Hendrickx, F. Glineur  (2023).
+        Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems.
+        arXiv preprint
+        <https://arxiv.org/pdf/2302.08781.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter.
         L (float): the smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): Level of information details to print.
                         
                         - -1: No verbose at all.
@@ -63,24 +67,35 @@ def wc_gradient_descent_quadratics(mu, L, gamma, n, verbose=1):
         >>> L = 3.
         >>> mu = 0.3
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_quadratics(mu=mu, L=L, gamma=1 / L, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 36 scalar constraint(s) ...
-                         function 1 : 36 scalar constraint(s) added
-                         function 1 : Adding 1 lmi constraint(s) ...
-                         Size of PSD matrix 1: 6x6
-                		   function 1 : 1 lmi constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 21 scalar constraint(s) ...
+        			Function 1 : 21 scalar constraint(s) added
+        			Function 1 : Adding 1 lmi constraint(s) ...
+        		 Size of PSD matrix 1: 6x6
+        			Function 1 : 1 lmi constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.06495738898558603
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0649573836866313
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.909122375079227e-10
+        		All required PSD matrices are indeed positive semi-definite up to an error of 8.456976505538092e-09
+        		All the primal scalar constraints are verified up to an error of 8.495850689627105e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual matrices to lmi are positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.5432361579460934
+        (PEPit) Final upper bound (dual): 0.06495738812047232 and lower bound (primal example): 0.0649573836866313 
+        (PEPit) Duality gap: absolute: 4.4338410165600806e-09 and relative: 6.825769088776581e-08
         *** Example file: worst-case performance of gradient descent on quadratics with fixed step-sizes ***
-        	PEPit guarantee:	    f(x_n)-f_* <= 0.0649574 ||x_0 - x_*||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0649574 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0649574 ||x_0 - x_*||^2
-
+    
     """
 
     # Instantiate PEP
@@ -110,29 +125,31 @@ def wc_gradient_descent_quadratics(mu, L, gamma, n, verbose=1):
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(verbose=pepit_verbose)
-    
+
     # Compute theoretical guarantee (for comparison)
-    t = 1 / (L*gamma*(2*n+1))
-    if t < mu/L:
-        alpha = mu/L
+    t = 1 / (L * gamma * (2 * n + 1))
+    if t < mu / L:
+        alpha = mu / L
     elif t > 1:
         alpha = 1
     else:
         alpha = t
-        
-    theoretical_tau = 0.5*L*np.max((alpha*(1-alpha*L*gamma)**(2*n),(1-L*gamma)**(2*n)))
+
+    theoretical_tau = 0.5 * L * np.max((alpha * (1 - alpha * L * gamma) ** (2 * n), (1 - L * gamma) ** (2 * n)))
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent on quadratics with fixed step-sizes ***')
         print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
-        
-    # Return the worst-case guarantee of the evaluated method
+
+    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
     L = 3
     mu = 0.3
-    pepit_tau, theoretical_tau = wc_gradient_descent_quadratics(mu=mu, L=L, gamma=1 / L, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_quadratics(mu=mu, L=L, gamma=1 / L, n=4,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

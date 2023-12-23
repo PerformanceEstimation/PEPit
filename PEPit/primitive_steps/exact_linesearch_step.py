@@ -78,9 +78,13 @@ def exact_linesearch_step(x0, f, directions):
     gx, fx = f.oracle(x)
 
     # Add constraints
-    f.add_constraint((x - x0) * gx == 0)
+    constraint = ((x - x0) * gx == 0)
+    constraint.set_name("exact_linesearch({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
     for d in directions:
-        f.add_constraint(d * gx == 0)
+        constraint = (d * gx == 0)
+        constraint.set_name("exact_linesearch({})_on_{}_in_direction_{}".format(f.get_name(), x0.get_name(), d.get_name()))
+        f.add_constraint(constraint)
 
     # Return triplet of points
     return x, gx, fx

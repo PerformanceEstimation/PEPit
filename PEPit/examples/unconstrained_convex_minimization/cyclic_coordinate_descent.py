@@ -56,7 +56,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
         >>> L = [1., 2., 10.]
         >>> pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent(L=L, n=9, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 34x34
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -74,7 +74,7 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 7.4478840872416185e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 7.835133702255824e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.835133702255824e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.797651214794727e-07
         (PEPit) Final upper bound (dual): 1.4892758368167314 and lower bound (primal example): 1.4892758367502887 
         (PEPit) Duality gap: absolute: 6.644262917632204e-11 and relative: 4.461405169998919e-11

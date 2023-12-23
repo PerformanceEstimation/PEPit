@@ -42,10 +42,12 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
+    [1] M .Frank, P. Wolfe (1956).
+    An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
 
-    `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
+    `[2] M. Jaggi (2013).
+    Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
     In 30th International Conference on Machine Learning (ICML).
     <http://proceedings.mlr.press/v28/jaggi13.pdf>`_
 
@@ -69,7 +71,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 26x26
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -80,16 +82,16 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953919276976
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953904645822
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.142287185121064e-09
-        		All the primal scalar constraints are verified up to an error of 7.764325904435765e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.140365475126263e-09
+        		All the primal scalar constraints are verified up to an error of 7.758491793463662e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 3.478870372420793e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.188030142585899e-07
-        (PEPit) Final upper bound (dual): 0.07828954299790562 and lower bound (primal example): 0.07828953919276976 
-        (PEPit) Duality gap: absolute: 3.8051358591806306e-09 and relative: 4.8603375347648545e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.474580080029191e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2084335345375351e-07
+        (PEPit) Final upper bound (dual): 0.07828954284798424 and lower bound (primal example): 0.07828953904645822 
+        (PEPit) Duality gap: absolute: 3.801526024527213e-09 and relative: 4.855726666459652e-08
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
         	PEPit guarantee:		 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2

@@ -165,7 +165,7 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
 Derive proofs and adversarial objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When one can the `solve` method,
+When one calls the `solve` method,
 **PEPit** does much more that just finding the worst-case value.
 
 In particular, it stores possible values of each points, gradients and function values that achieve this worst-case guarantee,
@@ -210,6 +210,34 @@ Then, after solving the system, you can require its associated dual variable val
 .. code-block::
 
     constraint.eval_dual()
+
+Naming PEPit objects
+~~~~~~~~~~~~~~~~~~~~
+
+In order to ease the proof reconstruction, PEPit now allows to associate names to the created objects.
+This is particularly useful on constraints in order to associate the found dual values to some recognisable constraints.
+
+As an example, if a user creates several constraints in a row as
+
+.. code-block::
+
+    for _ in range(n):
+        constraint = ...
+        constraint.set_name(name)
+        problem.add_constraint(constraint)
+
+the latter can easily list their names in front of their dual values as
+
+.. code-block::
+
+    for constraint in problem.list_of_constraints:
+        print("the constraint {} comes with the dual values {}.".format(constraint.get_name(), constraint.eval_dual()))
+
+Functions generally contain several "interpolation constraints".
+If a user sets a name to a function as well as to all the points the oracle has been called on,
+then, its interpolation constraints will be attributed a name accordingly.
+Then, using the method `get_class_constraints_duals`,
+the user has access to the tables of dual values related to its interpolation constraints.
 
 Output pdf
 ~~~~~~~~~~

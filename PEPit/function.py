@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.constraint import Constraint
@@ -19,6 +22,7 @@ class Function(object):
     and some are linear combinations of pre-existing ones.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         _is_leaf (bool): True if self is defined from scratch.
                          False if self is defined as linear combination of leaves.
         decomposition_dict (dict): decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -35,6 +39,7 @@ class Function(object):
         list_of_class_constraints (list): The list of class interpolation :class:`Constraint` objects.
         list_of_class_psd (list): The list of :class:`PSDMatrix` objects associated with a class
                                   interpolation constraints.
+        tables_of_constraints (dict): A dictionary containing all the constraints, sorted by table.
         counter (int): counts the number of **leaf** :class:`Function` objects.
 
     Note:
@@ -61,6 +66,7 @@ class Function(object):
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False,
+                 name=None,
                  ):
         """
         :class:`Function` objects can also be instantiated via the following arguments.
@@ -73,6 +79,8 @@ class Function(object):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str, optional): name of the object. None by default.
+                                  Can be updated later through the method `set_name`.
 
         Note:
             If `is_leaf` is True, then `decomposition_dict` must be provided as None.
@@ -90,6 +98,8 @@ class Function(object):
             >>> new_func = Function(is_leaf=False, decomposition_dict = {func1: -1/5, func2: 1/5})
 
         """
+        # Initialize name of the function
+        self.name = name
 
         # Store inputs
         self._is_leaf = is_leaf
@@ -118,6 +128,25 @@ class Function(object):
         self.list_of_psd = list()
         self.list_of_class_constraints = list()
         self.list_of_class_psd = list()
+
+        # Initialize dictionary that will contain the tables of constraints
+        self.tables_of_constraints = dict()
+
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
 
     def get_is_leaf(self):
         """
@@ -246,12 +275,13 @@ class Function(object):
         # P / v = P * (1/v)
         return self.__rmul__(other=1 / denominator)
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`Function`.
 
         Args:
             constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
@@ -261,15 +291,20 @@ class Function(object):
         # Verify constraint is an actual Constraint object
         assert isinstance(constraint, Constraint)
 
+        # Set name
+        if name is not None:
+            constraint.set_name(name=name)
+
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
-    def add_psd_matrix(self, matrix_of_expressions):
+    def add_psd_matrix(self, matrix_of_expressions, name=None):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
@@ -278,8 +313,193 @@ class Function(object):
         """
         matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
 
+        # Set name
+        if name is not None:
+            matrix.set_name(name=name)
+
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
+
+    def add_constraints_from_one_list_of_points(self, list_of_points,
+                                                constraint_name, set_class_constraint_i):
+        """
+        Add a class constraint of one input on all the points of `list_of_points`.
+        Creates a table corresponding to this set of constraints.
+
+        Args:
+            list_of_points (list): the list of points the constraint apply on.
+            constraint_name (str): generic name for this constraint.
+            set_class_constraint_i (Callable): a function that takes a point in input and returns a :class:`Constraint`.
+
+        """
+
+        # Set function ID
+        function_id = self.get_name()
+        if function_id is None:
+            function_id = "Function_{}".format(self.counter)
+
+        # Initialize table of constraints
+        table_of_constraints = list()
+
+        # Browse list of points and create interpolation constraints
+        for i, point_i in enumerate(list_of_points):
+
+            xi, gi, fi = point_i
+            xi_id = xi.get_name()
+            if xi_id is None:
+                xi_id = "Point_{}".format(i)
+
+            # Create interpolation constraint
+            constraint = set_class_constraint_i(xi, gi, fi)
+
+            # Set name to newly created constraint
+            constraint.set_name("IC_{}_{}({})".format(function_id, constraint_name, xi_id))
+
+            # Add constraint to the table of constraints
+            table_of_constraints.append(constraint)
+
+            # Add constraint to the list of class constraints
+            self.list_of_class_constraints.append(constraint)
+
+        # Complete table of constraints
+        table_of_constraints = np.array(table_of_constraints).reshape(1, -1)
+        point_names = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                       enumerate(list_of_points)]
+        if table_of_constraints.shape != (0,):
+            df = pd.DataFrame(table_of_constraints, columns=point_names)
+            df.columns.name = "IC_{}".format(function_id)
+
+            # Add the table of constraints to the attribute tables_of_constraints
+            self.tables_of_constraints[constraint_name] = df
+
+    def add_constraints_from_two_lists_of_points(self, list_of_points_1, list_of_points_2,
+                                                 constraint_name, set_class_constraint_i_j,
+                                                 symmetry=False):
+        """
+        Add a class constraint of two inputs on all the couple of points of
+        `list_of_points_1` :math:`\\times` `list_of_points_2`.
+        Creates a table corresponding to this set of constraints.
+
+        Args:
+            list_of_points_1 (list): the first list of points the grid is generated from.
+            list_of_points_2 (list): the second list of points the grid is generated from.
+            constraint_name (str): generic name for this constraint.
+            set_class_constraint_i_j (Callable): a function that takes two points in input
+                                                 and returns a :class:`Constraint`.
+            symmetry (bool, optional): A boolean specifying if the constraint function is symmetric or not.
+                                       If so, the number of constraints is divided by 2.
+                                       Set to False by default.
+
+        """
+
+        # Set function ID
+        function_id = self.get_name()
+        if function_id is None:
+            function_id = "Function_{}".format(self.counter)
+
+        # Initialize table of constraints
+        table_of_constraints = list()
+
+        # Browse list of points and create interpolation constraints
+        for i, point_i in enumerate(list_of_points_1):
+
+            xi, gi, fi = point_i
+            xi_id = xi.get_name()
+            if xi_id is None:
+                xi_id = "Point_{}".format(i)
+
+            # Initialize row of constraints
+            row_of_constraints = list()
+
+            for j, point_j in enumerate(list_of_points_2):
+
+                xj, gj, fj = point_j
+                xj_id = xj.get_name()
+                if xj_id is None:
+                    xj_id = "Point_{}".format(j)
+
+                if i == j or (i > j and symmetry):
+                    row_of_constraints.append(0)
+
+                else:
+                    # Create interpolation constraint
+                    constraint = set_class_constraint_i_j(xi, gi, fi,
+                                                          xj, gj, fj,
+                                                          )
+
+                    # Set name to newly created constraint
+                    constraint.set_name("IC_{}_{}({}, {})".format(function_id, constraint_name, xi_id, xj_id))
+
+                    # Add constraint to the row of constraints
+                    row_of_constraints.append(constraint)
+
+                    # Add constraint to the list of class constraints
+                    self.list_of_class_constraints.append(constraint)
+
+            # Add row of constraints to the table of constraints
+            table_of_constraints.append(row_of_constraints)
+
+        # Complete table of constraints
+        table_of_constraints = np.array(table_of_constraints)
+        point_names_1 = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                         enumerate(list_of_points_1)]
+        point_names_2 = [point[0].name or "Point_{}".format(point_index) for point_index, point in
+                         enumerate(list_of_points_2)]
+        if table_of_constraints.shape != (0,):
+            df = pd.DataFrame(table_of_constraints, columns=point_names_2, index=point_names_1)
+            df.columns.name = "IC_{}".format(function_id)
+
+            # Add the table of constraints to the attribute tables_of_constraints
+            self.tables_of_constraints[constraint_name] = df
+
+    def get_class_constraints_duals(self):
+        """
+        This method browses all the tables of :class:`Constraint`s generated by the `add_class_constraints` method,
+        grab the dual variables values associated with the constraints and return a dictionary with all the dual tables.
+
+        Returns:
+             dict: a dictionary which keys are the names of the generic constraints provided to the methods
+                   `add_constraints_from_one_list_of_points` and `add_constraints_from_two_lists_of_points`,
+                   and the keys are pandas.DataFrames containing the dual values associated with the constraints.
+
+        """
+
+        # Initialize the dictionary.
+        tables_of_duals = dict()
+
+        # Browse the tables.
+        for key, table in self.tables_of_constraints.items():
+
+            # Create a table of dual values from the current table of constraints.
+            new_table = []
+
+            # Browse the table of constraints.
+            for index, row in table.iterrows():
+                new_row = []
+                for element in row:
+                    # If there is an actual constraint, return its dual value.
+                    if isinstance(element, Constraint):
+                        new_row.append(element.eval_dual())
+                    # If there is a scalar number, simply return it.
+                    elif isinstance(element, float) or isinstance(element, int):
+                        new_row.append(element)
+                    else:
+                        raise TypeError("The elements of table of constraints must either be Constraints objects"
+                                        " or scalar values. Got {}.".format(type(element)))
+                new_table.append(new_row)
+
+            # Transform the table into a pandas.DataFrame.
+            new_table = np.array(new_table)
+            df = pd.DataFrame(new_table, columns=table.columns, index=table.index)
+
+            # Add a name to the pandas.DataFrame.
+            df.columns.name = table.columns.name
+
+            # Store into the dict to be returned.
+            tables_of_duals[key] = df
+
+        # Return the dictionary of tables of dual values.
+        return tables_of_duals
 
     def set_class_constraints(self):
         """
@@ -487,7 +707,7 @@ class Function(object):
         if associated_grad_and_function_val is None:
 
             # If no leaf function need a new function value, it means that they all have one,
-            # and then "self"'s one is determined by linear combination.
+            # and then "self" 's one is determined by linear combination.
             if list_of_functions_which_need_gradient_and_function_value == list():
                 f = Expression(is_leaf=False, decomposition_dict=dict())
                 for function, weight in self.decomposition_dict.items():
@@ -518,12 +738,13 @@ class Function(object):
         # Return gradient and function value
         return g, f
 
-    def gradient(self, point):
+    def gradient(self, point, name=None):
         """
         Return the gradient (or a subgradient) of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: a gradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
@@ -533,14 +754,15 @@ class Function(object):
 
         """
 
-        return self.subgradient(point)
+        return self.subgradient(point, name=name)
 
-    def subgradient(self, point):
+    def subgradient(self, point, name=None):
         """
         Return a subgradient of this :class:`Function` evaluated at `point`.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: a subgradient (:class:`Point`) of this :class:`Function` on point (:class:`Point`).
@@ -556,14 +778,19 @@ class Function(object):
         # Call oracle but only return the gradient
         g, _ = self.oracle(point)
 
+        # Set name
+        if name is not None:
+            g.set_name(name=name)
+
         return g
 
-    def value(self, point):
+    def value(self, point, name=None):
         """
         Return the function value of this :class:`Function` on point.
 
         Args:
             point (Point): any point.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point: the function value (:class:`Expression`) of this :class:`Function` on point (:class:`Point`).
@@ -584,6 +811,10 @@ class Function(object):
             # Otherwise, call oracle but only return the function value
             _, f = self.oracle(point)
 
+        # Set name
+        if name is not None:
+            f.set_name(name=name)
+
         # Return the function value
         return f
 
@@ -602,7 +833,7 @@ class Function(object):
         # Call the method value on point
         return self.value(point=point)
 
-    def stationary_point(self, return_gradient_and_function_value=False):
+    def stationary_point(self, return_gradient_and_function_value=False, name=None):
         """
         Create a new stationary point, as well as its zero gradient and its function value.
 
@@ -610,6 +841,7 @@ class Function(object):
             return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
                                                        gradient (:class:`Point`), function value (:class:`Expression`).
                                                        Otherwise, return only the point (:class:`Point`).
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             Point or tuple: an optimal point
@@ -624,17 +856,24 @@ class Function(object):
         # Add the triplet to the list of points of the function as well as to its list of stationary points
         self.add_point((point, g, f))
 
+        # Set name
+        if name is not None:
+            point.set_name(name=name)
+
         # Return the required information
         if return_gradient_and_function_value:
             return point, g, f
         else:
             return point
 
-    def fixed_point(self):
+    def fixed_point(self, name=None):
 
         """
         This routine outputs a fixed point of this function, that is :math:`x` such that :math:`x\\in\\partial f(x)`.
         If self is an operator :math:`A`, the fixed point is such that :math:`Ax = x`.
+
+        Args:
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             x (Point): a fixed point of the differential of self.
@@ -649,6 +888,10 @@ class Function(object):
 
         # Add triplet to self's list of points (by definition gx = x)
         self.add_point((x, x, fx))
+
+        # Set name
+        if name is not None:
+            x.set_name(name=name)
 
         # Return the aforementioned triplet
         return x, x, fx

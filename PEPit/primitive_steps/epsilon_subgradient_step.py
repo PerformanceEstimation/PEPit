@@ -47,7 +47,9 @@ def epsilon_subgradient_step(x0, f, gamma):
     fstarg0 = g0 * y - fy
 
     # epsilon-subgradient condition:
-    f.add_constraint(f0 + fstarg0 - g0 * x0 <= epsilon)
+    constraint = (f0 + fstarg0 - g0 * x0 <= epsilon)
+    constraint.set_name("epsilon_subgradient({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     # Return the newly obtained point, the epsilon-subgradient, the value of f in x0, and epsilon.
     return x, g0, f0, epsilon

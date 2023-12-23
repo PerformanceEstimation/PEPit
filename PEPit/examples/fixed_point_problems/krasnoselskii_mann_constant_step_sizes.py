@@ -35,8 +35,10 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
 
     **Reference**:
 
-    `[1] F. Lieder (2018). Projection Based Methods for Conic Linear Programming
-    Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.  PhD thesis, HHU Düsseldorf.
+    `[1] F. Lieder (2018).
+    Projection Based Methods for Conic Linear Programming
+    Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.
+    PhD thesis, HHU Düsseldorf.
     <https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf>`_
 
     Args:
@@ -58,7 +60,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
     Example:
         >>> pepit_tau, theoretical_tau = wc_krasnoselskii_mann_constant_step_sizes(n=3, gamma=3 / 4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -73,7 +75,7 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
         		All the primal scalar constraints are verified up to an error of 1.7378567473969042e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.412159703651858e-08
         (PEPit) Final upper bound (dual): 0.14062498615478927 and lower bound (primal example): 0.1406249823498115 
         (PEPit) Duality gap: absolute: 3.804977777299712e-09 and relative: 2.7057623145755453e-08

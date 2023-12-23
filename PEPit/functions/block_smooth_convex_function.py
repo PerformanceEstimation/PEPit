@@ -25,10 +25,11 @@ class BlockSmoothConvexFunction(Function):
         >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
 
     References:
-        `[1] Z. Shi, R. Liu (2016).
-        Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
-        In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
-        <https://arxiv.org/pdf/1608.04826.pdf>`_
+
+    `[1] Z. Shi, R. Liu (2016).
+    Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
+    In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+    <https://arxiv.org/pdf/1608.04826.pdf>`_
 
     """
 
@@ -37,7 +38,8 @@ class BlockSmoothConvexFunction(Function):
                  L,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -51,6 +53,7 @@ class BlockSmoothConvexFunction(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Smooth convex functions by blocks are necessarily differentiable, hence `reuse_gradient` is set to True.
@@ -58,7 +61,9 @@ class BlockSmoothConvexFunction(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
 
         # Store partition and L
         assert isinstance(partition, BlockPartition)
@@ -77,16 +82,35 @@ class BlockSmoothConvexFunction(Function):
         see [1, Lemma 1.1].
 
         """
+        # Set function ID
+        function_id = self.get_name()
+        if function_id is None:
+            function_id = "Function_{}".format(self.counter)
 
-        for point_i in self.list_of_points:
+        # Set tables_of_constraints attributes
+        for k in range(self.partition.get_nb_blocks()):
+            self.tables_of_constraints["smoothness_convexity_block_{}".format(k)] = [[]]*len(self.list_of_points)
+
+        # Browse list of points and create interpolation constraints
+        for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
+            xi_id = xi.get_name()
+            if xi_id is None:
+                xi_id = "Point_{}".format(i)
 
-            for point_j in self.list_of_points:
+            for j, point_j in enumerate(self.list_of_points):
 
                 xj, gj, fj = point_j
+                xj_id = xj.get_name()
+                if xj_id is None:
+                    xj_id = "Point_{}".format(j)
 
-                if point_i != point_j:
+                if point_i == point_j:
+                    for k in range(self.partition.get_nb_blocks()):
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(0)
+
+                else:
 
                     for k in range(self.partition.get_nb_blocks()):
 
@@ -95,4 +119,8 @@ class BlockSmoothConvexFunction(Function):
                         gjk = self.partition.get_block(gj, k)
                         
                         # Necessary conditions for interpolation
-                        self.list_of_class_constraints.append(fi - fj >= gj * (xi - xj) + 1 / (2 * self.L[k]) * (gik - gjk) ** 2)
+                        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L[k]) * (gik - gjk) ** 2)
+                        constraint.set_name("IC_{}_smoothness_convexity_block_{}({}, {})".format(function_id, k,
+                                                                                                 xi_id, xj_id))
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(constraint)
+                        self.list_of_class_constraints.append(constraint)

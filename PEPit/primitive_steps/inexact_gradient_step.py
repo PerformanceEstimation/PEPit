@@ -19,8 +19,9 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     an inexact gradient descent, and an inexact accelerated gradient.
 
     References:
-        `[1] E. De Klerk, F. Glineur, A. Taylor (2020). Worst-case convergence analysis of
-        inexact gradient and Newton methods through semidefinite programming performance estimation.
+        `[1] E. De Klerk, F. Glineur, A. Taylor (2020).
+        Worst-case convergence analysis of inexact gradient and Newton methods
+        through semidefinite programming performance estimation.
         SIAM Journal on Optimization, 30(3), 2053-2082.
         <https://arxiv.org/pdf/1709.05191.pdf>`_
 
@@ -54,12 +55,16 @@ def inexact_gradient_step(x0, f, gamma, epsilon, notion='absolute'):
     # Define dx0 as a proxy to gx0.
     dx0 = Point()
     if notion == 'absolute':
-        f.add_constraint((gx0 - dx0) ** 2 - epsilon ** 2 <= 0)
+        constraint = ((gx0 - dx0) ** 2 - epsilon ** 2 <= 0)
     elif notion == 'relative':
-        f.add_constraint((gx0 - dx0) ** 2 - epsilon ** 2 * (gx0 ** 2) <= 0)
+        constraint = ((gx0 - dx0) ** 2 - epsilon ** 2 * (gx0 ** 2) <= 0)
     else:
         raise ValueError("inexact_gradient_step supports only notion in ['absolute', 'relative'],"
                          " got {}".format(notion))
+
+    # Add constraint to list of constraints.
+    constraint.set_name("inexact_gradient_step({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     # Perform an inexact gradient step in the direction dx0.
     x = x0 - gamma * dx0

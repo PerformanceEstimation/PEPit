@@ -82,24 +82,28 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
 
     References:
 
-        `[1] R.T. Rockafellar (1976). Monotone operators and the proximal point algorithm. SIAM journal on control
-        and optimization, 14(5), 877-898.
+        `[1] R.T. Rockafellar (1976).
+        Monotone operators and the proximal point algorithm. SIAM journal on control and optimization, 14(5), 877-898.
         <https://epubs.siam.org/doi/pdf/10.1137/0314056>`_
 
-        `[2] R.D. Monteiro, B.F. Svaiter (2013). An accelerated hybrid proximal extragradient method for convex
-        optimization and its implications to second-order methods. SIAM Journal on Optimization, 23(2), 1092-1125.
+        `[2] R.D. Monteiro, B.F. Svaiter (2013).
+        An accelerated hybrid proximal extragradient method for convex optimization
+        and its implications to second-order methods.
+        SIAM Journal on Optimization, 23(2), 1092-1125.
         <https://epubs.siam.org/doi/abs/10.1137/110833786>`_
 
-        `[3] S. Salzo, S. Villa (2012). Inexact and accelerated proximal point algorithms.
+        `[3] S. Salzo, S. Villa (2012).
+        Inexact and accelerated proximal point algorithms.
         Journal of Convex analysis, 19(4), 1167-1192.
         <http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf>`_
 
-        `[4] M. Barre, A. Taylor, F. Bach (2020). Principled analyses and design of
-        first-order methods with inexact proximal operators.
+        `[4] M. Barre, A. Taylor, F. Bach (2020).
+        Principled analyses and design of first-order methods with inexact proximal operators.
         <https://arxiv.org/pdf/2006.06041v3.pdf>`_
 
-        `[5] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
-        in Optimization: Vol. 5, No. 1-2.
+        `[5] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+        Acceleration Methods.
+        Foundations and Trends in Optimization: Vol. 5, No. 1-2.
         <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:
@@ -135,7 +139,7 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         eps_var = Expression()
         e = x - x0 + gamma * v
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(e ** 2 / 2 + gamma * eps_sub <= eps_var)
+        constraint = (e ** 2 / 2 + gamma * eps_sub <= eps_var)
 
     elif opt == 'PD_gapII':
         # This option constrain x to satisfy the following requirement: ||e||^2 / 2 <= epsVar,
@@ -146,7 +150,7 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         fx = Expression()
         f.add_point((x, gx, fx))
         eps_var = Expression()
-        f.add_constraint(e ** 2 / 2 <= eps_var)
+        constraint = (e ** 2 / 2 <= eps_var)
         w, v, fw = x, gx, fx
 
     elif opt == 'PD_gapIII':
@@ -159,10 +163,14 @@ def inexact_proximal_step(x0, f, gamma, opt='PD_gapII'):
         f.add_point((w, v, fw))
         eps_var = Expression()
         eps_sub = fx - fw - v * (x - w)
-        f.add_constraint(gamma * eps_sub <= eps_var)
+        constraint = (gamma * eps_sub <= eps_var)
 
     else:
         raise ValueError("inexact_proximal_step supports only opt in ['PD_gapI', 'PD_gapII', 'PD_gapIII'],"
                          " got {}".format(opt))
+
+    # Add constraint to list of constraints
+    constraint.set_name("inexact_proximal({})_on_{}".format(f.get_name(), x0.get_name()))
+    f.add_constraint(constraint)
 
     return x, gx, fx, w, v, fw, eps_var

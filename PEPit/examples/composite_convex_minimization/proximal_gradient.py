@@ -43,18 +43,23 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
 
     **References**:
 
-    `[1] A. Taylor, J. Hendrickx, F. Glineur (2018). Exact worst-case convergence rates of the proximal gradient
-    method for composite convex minimization. Journal of Optimization Theory and Applications, 178(2), 455-476.
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2018).
+    Exact worst-case convergence rates of the proximal gradient method for composite convex minimization.
+    Journal of Optimization Theory and Applications, 178(2), 455-476.
     <https://arxiv.org/pdf/1705.04398.pdf>`_
 
-    [2] B. Polyak (1987). Introduction to Optimization. Optimization Software New York.
+    [2] B. Polyak (1987).
+    Introduction to Optimization.
+    Optimization Software New York.
 
-    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    `[3] E. Ryu, S. Boyd (2016).
+    A primer on monotone operator methods.
     Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
-    `[4] L. Lessard, B. Recht, A. Packard (2016). Analysis and design of optimization algorithms via
-    integral quadratic constraints. SIAM Journal on Optimization 26(1), 57–95.
+    `[4] L. Lessard, B. Recht, A. Packard (2016).
+    Analysis and design of optimization algorithms via integral quadratic constraints.
+    SIAM Journal on Optimization 26(1), 57–95.
     <https://arxiv.org/pdf/1408.3595.pdf>`_
 
     Args:
@@ -78,7 +83,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
     Example:
         >>> pepit_tau, theoretical_tau = wc_proximal_gradient(L=1, mu=.1, gamma=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -95,7 +100,7 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
         		All the primal scalar constraints are verified up to an error of 1.0696532309201201e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.6272376343894344e-07
         (PEPit) Final upper bound (dual): 0.6561000458035535 and lower bound (primal example): 0.6561000457701127 
         (PEPit) Duality gap: absolute: 3.3440805680129415e-11 and relative: 5.096906469634138e-11

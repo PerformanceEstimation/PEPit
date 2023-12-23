@@ -145,9 +145,12 @@ class PEP(object):
         # Return it
         return f
 
-    def set_initial_point(self):
+    def set_initial_point(self, name=None):
         """
         Create a new leaf :class:`Point` and store it in the attribute `list_of_points`.
+
+        Args:
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Returns:
             x (Point): the newly created :class:`Point`.
@@ -157,34 +160,43 @@ class PEP(object):
         # Create a new point from scratch
         x = Point(is_leaf=True, decomposition_dict=None)
 
+        # Set name
+        if name is not None:
+            x.set_name(name=name)
+
         # Store it in list_of_points
         self.list_of_points.append(x)
 
         # Return it
         return x
 
-    def set_initial_condition(self, condition):
+    def set_initial_condition(self, condition, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
         Typically, a condition of the form :math:`\\|x_0 - x_\\star\\|^2 \\leq 1`.
 
         Args:
             condition (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
 
         """
+        # Set name
+        if name is not None:
+            condition.set_name(name=name)
 
         # Call add_constraint method
         self.add_constraint(constraint=condition)
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`PEP`.
 
         Args:
             constraint (Constraint): typically resulting from a comparison of 2 :class:`Expression` objects.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         Raises:
             AssertionError: if provided `constraint` is not a :class:`Constraint` object.
@@ -194,25 +206,42 @@ class PEP(object):
         # Verify constraint is an actual Constraint object
         assert isinstance(constraint, Constraint)
 
+        # Set name
+        if name is not None:
+            constraint.set_name(name=name)
+
         # Add constraint to the list of self's constraints
         self.list_of_constraints.append(constraint)
 
-    def add_psd_matrix(self, matrix_of_expressions):
+    def add_psd_matrix(self, matrix_of_expressions, name=None):
         """
         Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
+
+        Returns:
+            (PSDMatrix) the :class:`PSDMatrix` to be added to the :class:`PEP`.
 
         Raises:
             AssertionError: if provided matrix is not a square matrix.
             TypeError: if provided matrix does not contain only Expressions.
 
         """
-        matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
+        if isinstance(matrix_of_expressions, PSDMatrix):
+            matrix = matrix_of_expressions
+        else:
+            matrix = PSDMatrix(matrix_of_expressions=matrix_of_expressions)
+
+        # Set name
+        if name is not None:
+            matrix.set_name(name=name)
 
         # Add constraint to the list of self's constraints
         self.list_of_psd.append(matrix)
+
+        return matrix
 
     @staticmethod
     def declare_block_partition(d):
@@ -233,15 +262,21 @@ class PEP(object):
         # Return it
         return block_partition
 
-    def set_performance_metric(self, expression):
+    def set_performance_metric(self, expression, name=None):
         """
         Store a performance metric in the attribute `list_of_performance_metrics`.
         The objective of the PEP (which is maximized) is the minimum of the elements of `list_of_performance_metrics`.
 
         Args:
             expression (Expression): a new performance metric.
+            name (str, optional): name of the object. Not overwriting is None. None by default.
 
         """
+        assert isinstance(expression, Expression)
+
+        # Set name
+        if name is not None:
+            expression.set_name(name=name)
 
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
@@ -404,7 +439,7 @@ class PEP(object):
 
         if verbose:
             print('(PEPit) Setting up the problem:'
-                  ' performance measure is minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
+                  ' performance measure is the minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
 
         # Defining initial conditions and general constraints
         if verbose:
@@ -527,8 +562,9 @@ class PEP(object):
 
         # Raise explicit error when wc_value in infinite
         if wc_value is None:
-            print("\033[96m(PEPit) Problem issue: PEPit didn't find any nontrivial worst-case guarantee. "
-                  "It seems that the optimal value of your problem is unbounded.\033[0m")
+            if verbose:
+                print("\033[96m(PEPit) Problem issue: PEPit didn't find any nontrivial worst-case guarantee. "
+                      "It seems that the optimal value of your problem is unbounded.\033[0m")
 
             # Skip the following as no variable has a value
             return wc_value
@@ -718,7 +754,7 @@ class PEP(object):
         if inequality_constraint_dual_values:
             inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
             if verbose:
-                message = "\t\tAll the dual scalar values associated to inequality constraints are nonnegative"
+                message = "\t\tAll the dual scalar values associated with inequality constraints are nonnegative"
                 if inequality_constraint_dual_min_value < 0:
                     message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
                 print(message)
@@ -772,7 +808,7 @@ class PEP(object):
             if absolute_duality_gap < 0:
                 message += " and negative"
             message += ".\n\t\tThe solver might not have converged properly.\n"\
-                       "\t\tWe recommend to use another wrapper or solver for confirmation.\033[0m"
+                       "\t\tWe recommend to use another solver for confirmation.\033[0m"
             print(message)
 
         return dual_objective

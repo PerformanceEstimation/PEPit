@@ -27,13 +27,20 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
 
         .. math:: x_{t+1} = \\frac{1}{t + 2} x_0 + \\left(1 - \\frac{1}{t + 2}\\right) Ax_t.
 
-    **Theoretical guarantee**: A **tight** worst-case guarantee for Halpern iteration can be found in [1, Theorem 2.1]:
+    **Theoretical guarantee**: A **tight** worst-case guarantee for Halpern iteration can be found in [2, Theorem 2.1]:
 
         .. math:: \\|x_n - Ax_n\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2.
 
-    **References**: The detailed approach and tight bound are available in [1].
+    **References**: The method was first proposed in [1]. The detailed analysis and tight bound are available in [2].
 
-    `[1] F. Lieder (2021). On the convergence rate of the Halpern-iteration. Optimization Letters, 15(2), 405-418.
+    `[1] B. Halpern (1967).
+    Fixed points of nonexpanding maps.
+    American Mathematical Society, 73(6), 957–961.
+    <https://www.ams.org/journals/bull/1967-73-06/S0002-9904-1967-11864-0/S0002-9904-1967-11864-0.pdf>`_
+
+    `[2] F. Lieder (2021).
+    On the convergence rate of the Halpern-iteration.
+    Optimization Letters, 15(2), 405-418.
     <http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf>`_
 
     Args:
@@ -54,7 +61,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_halpern_iteration(n=25, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 28x28
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -69,7 +76,7 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 1.3075734314749177e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 4.4389586421813856e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.4389586421813856e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.425619306975869e-07
         (PEPit) Final upper bound (dual): 0.005917288963138354 and lower bound (primal example): 0.005917282090077699 
         (PEPit) Duality gap: absolute: 6.873060655332441e-09 and relative: 1.1615232383221049e-06

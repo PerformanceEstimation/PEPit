@@ -88,7 +88,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, v
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_point(A0=5, gammas=[(i + 1) / 1.1 for i in range(3)], n=3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -103,7 +103,7 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, v
         		All the primal scalar constraints are verified up to an error of 1.4460231649235378e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.0490523713620816e-10
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.0490523713620816e-10
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9451787884841313e-09
         (PEPit) Final upper bound (dual): 0.015931149263944334 and lower bound (primal example): 0.015931148923290624 
         (PEPit) Duality gap: absolute: 3.4065371010139067e-10 and relative: 2.138287148915985e-08

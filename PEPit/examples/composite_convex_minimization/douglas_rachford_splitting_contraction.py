@@ -46,19 +46,22 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
 
     Details on the SDP formulations can be found in
 
-    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020). Operator splitting performance estimation:
-    Tight contraction factors and optimal parameter selection. SIAM Journal on Optimization, 30(3), 2251-2271.
+    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+    Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+    SIAM Journal on Optimization, 30(3), 2251-2271.
     <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     When :math:`\\theta = 1`, the bound can be compared with that of [2, Theorem 2]
 
-    `[2] P. Giselsson, and S. Boyd (2016). Linear convergence and metric selection in
-    Douglas-Rachford splitting and ADMM. IEEE Transactions on Automatic Control, 62(2), 532-544.
+    `[2] P. Giselsson, and S. Boyd (2016).
+    Linear convergence and metric selection in Douglas-Rachford splitting and ADMM.
+    IEEE Transactions on Automatic Control, 62(2), 532-544.
     <https://arxiv.org/pdf/1410.8479.pdf>`_
 
     A description for the DRS method can be found in [3, 7.3]
 
-    `[3] E. Ryu, S. Boyd (2016). A primer on monotone operator methods.
+    `[3] E. Ryu, S. Boyd (2016).
+    A primer on monotone operator methods.
     Applied and Computational Mathematics 15(1), 3-43.
     <https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf>`_
 
@@ -83,28 +86,28 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
 
     Examples:
         >>> pepit_tau, theoretical_tau = wc_douglas_rachford_splitting_contraction(mu=.1, L=1, alpha=3, theta=1, n=2, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the Gram matrix: 12x12
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: size of the Gram matrix: 10x10
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-        			Function 1 : Adding 20 scalar constraint(s) ...
-        			Function 1 : 20 scalar constraint(s) added
-        			Function 2 : Adding 20 scalar constraint(s) ...
-        			Function 2 : 20 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        			Function 2 : Adding 12 scalar constraint(s) ...
+        			Function 2 : 12 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3501278083996464
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3501278029546837
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.505804481915657e-10
-        		All the primal scalar constraints are verified up to an error of 4.1891414781503045e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.581993336260348e-10
+        		All the primal scalar constraints are verified up to an error of 1.7788042150357342e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.736147684681236e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.544680308543697e-07
-        (PEPit) Final upper bound (dual): 0.3501278053913164 and lower bound (primal example): 0.3501278083996464 
-        (PEPit) Duality gap: absolute: -3.0083300295302706e-09 and relative: -8.59209110890293e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1407815086579577e-07
+        (PEPit) Final upper bound (dual): 0.3501278016887412 and lower bound (primal example): 0.3501278029546837 
+        (PEPit) Duality gap: absolute: -1.2659425174810224e-09 and relative: -3.6156583590274623e-09
         *** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***
         	PEPit guarantee:		 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
         	Theoretical guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2

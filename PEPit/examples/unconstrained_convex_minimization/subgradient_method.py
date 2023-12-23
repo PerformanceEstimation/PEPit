@@ -43,14 +43,17 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: Classical references on this topic include [1, 2].
 
-    `[1] Y. Nesterov (2003). Introductory lectures on convex optimization: A basic course.
+    `[1] Y. Nesterov (2003).
+    Introductory lectures on convex optimization: A basic course.
     Springer Science & Business Media.
     <https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf>`_
 
-    `[2] S. Boyd, L. Xiao, A. Mutapcic (2003). Subgradient Methods (lecture notes).
+    `[2] S. Boyd, L. Xiao, A. Mutapcic (2003).
+    Subgradient Methods (lecture notes).
     <https://web.stanford.edu/class/ee392o/subgrad_method.pdf>`_
 
-    `[3] Y. Drori, M. Teboulle (2016). An optimal variant of Kelley's cutting-plane method.
+    `[3] Y. Drori, M. Teboulle (2016).
+    An optimal variant of Kelley's cutting-plane method.
     Mathematical Programming, 160(1), 321-351.
     <https://arxiv.org/pdf/1409.2636.pdf>`_
 
@@ -77,7 +80,7 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
         >>> gamma = 1 / (M * sqrt(n + 1))
         >>> pepit_tau, theoretical_tau = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 9x9
-        (PEPit) Setting up the problem: performance measure is minimum of 7 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 7 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -86,16 +89,16 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7559287513713981
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7559287513714278
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.0475404274451079e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.251428765044933e-08
-        (PEPit) Final upper bound (dual): 0.7559287543573691 and lower bound (primal example): 0.7559287513713981 
-        (PEPit) Duality gap: absolute: 2.985970914970437e-09 and relative: 3.950069248660432e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.0475429120359347e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.251581484359109e-08
+        (PEPit) Final upper bound (dual): 0.7559287543574007 and lower bound (primal example): 0.7559287513714278 
+        (PEPit) Duality gap: absolute: 2.9859729133718815e-09 and relative: 3.950071892297578e-09
         *** Example file: worst-case performance of subgradient method ***
         	PEPit guarantee:		 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
         	Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||

@@ -1,11 +1,12 @@
 from math import sqrt
+import numpy as np
 
 from PEPit import PEP
 from PEPit.point import Point
 from PEPit.operators import NonexpansiveOperator
 
 
-def wc_inconsistent_halpern_iteration(n, verbose=1):
+def wc_inconsistent_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the fixed point problem
 
@@ -36,19 +37,23 @@ def wc_inconsistent_halpern_iteration(n, verbose=1):
 
         .. math:: x_{t+1} = \\frac{1}{t + 2} x_0 + \\left(1 - \\frac{1}{t + 2}\\right) Ax_t.
 
-    **Theoretical guarantee**: A worst-case guarantee for Halpern iteration can be found in [1, Theorem 2.1]:
+    **Theoretical guarantee**: A worst-case guarantee for Halpern iteration can be found in [1, Theorem 8]:
 
-        .. math:: \\|x_n - Ax_n - v\\|^2 \\leqslant \\left(\\frac{2}{n+1}\\right)^2 \\|x_0 - x_\\star\\|^2.
+        .. math:: \\|x_n - Ax_n - v\\|^2 \\leqslant \\left(\\frac{\\sqrt{Hn + 12} + 1}{n + 1}\\right)^2 \\|x_0 - x_\\star\\|^2.
 
     **References**: The detailed approach is available in [1].
 
-    `[1] J. Park, E. Ryu (2023). Accelerated Infeasibility Detection of Constrained Optimization and Fixed-Point Iterations. International Conference on Machine Learning.
-    <http://https://arxiv.org/abs/2303.15876>`_
+    `[1] J. Park, E. Ryu (2023).
+    Accelerated Infeasibility Detection of Constrained Optimization and Fixed-Point Iterations.
+    International Conference on Machine Learning.
+    <https://arxiv.org/pdf/2303.15876.pdf>`_
 
     Args:
         n (int): number of iterations.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
         verbose (int): Level of information details to print.
-                        
+
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
@@ -60,21 +65,30 @@ def wc_inconsistent_halpern_iteration(n, verbose=1):
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_inconsistent_halpern_iteration(n=25, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 29x29
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: size of the Gram matrix: 29x29
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 729 scalar constraint(s) ...
-                         function 1 : 729 scalar constraint(s) added
-        (PEPit) Setting up the problem: constraints for 0 function(s)
+        			Function 1 : Adding 378 scalar constraint(s) ...
+        			Function 1 : 378 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); optimal value: 0.026779232124681585
-        *** Example file: worst-case performance of Halpern Iterations ***
-                PEPit guarantee:         ||xN - AxN - v||^2 <= 0.0267792 ||x0 - x_*||^2
-                Theoretical guarantee:   ||xN - AxN - v||^2 <= 0.0213127 ||x0 - x_*||^2
-
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02678884717170149
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 4.2928149923682213e-10
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.9511359559460285e-06
+        (PEPit) Final upper bound (dual): 0.02678881575052497 and lower bound (primal example): 0.02678884717170149 
+        (PEPit) Duality gap: absolute: -3.142117652177312e-08 and relative: -1.1729200708183147e-06
+        *** Example file: worst-case performance of (possibly inconsistent) Halpern Iterations ***
+        	PEPit guarantee:	 ||xN - AxN - v||^2 <= 0.0267888 ||x0 - x_*||^2
+        	Theoretical guarantee:	 ||xN - AxN - v||^2 <= 0.0366417 ||x0 - x_*||^2
+    
     """
 
     # Instantiate PEP
@@ -104,13 +118,11 @@ def wc_inconsistent_halpern_iteration(n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
-    
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
+
     # Compute theoretical guarantee (for comparison)
-    sum = 0
-    for cnt in range(n):
-        sum += 1 / (cnt + 1)
-    theoretical_tau = ( (sqrt(sum + 4) + 1) / (n + 1) ) ** 2
+    Hn = np.sum(1 / np.arange(1, n+1))
+    theoretical_tau = ((sqrt(Hn + 12) + 1) / (n + 1)) ** 2
 
     # Print conclusion if required
     if verbose != -1:
@@ -123,6 +135,4 @@ def wc_inconsistent_halpern_iteration(n, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_inconsistent_halpern_iteration(n=25, verbose=1)
-    
-
+    pepit_tau, theoretical_tau = wc_inconsistent_halpern_iteration(n=25, wrapper="cvxpy", solver=None, verbose=1)

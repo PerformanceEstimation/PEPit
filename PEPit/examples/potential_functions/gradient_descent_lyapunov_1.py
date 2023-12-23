@@ -36,12 +36,14 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
 
     **References**: The detailed potential function can found in [1] and the SDP approach can be found in [2].
 
-    `[1] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods.
+    `[1] N. Bansal, A. Gupta (2019).
+    Potential-function proofs for gradient methods.
     Theory of Computing, 15(1), 1-32.
     <https://arxiv.org/pdf/1712.04581.pdf>`_
 
-    `[2] A. Taylor, F. Bach (2019). Stochastic first-order methods: non-asymptotic and computer-aided analyses
-    via potential functions. Conference on Learning Theory (COLT).
+    `[2] A. Taylor, F. Bach (2019).
+    Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions.
+    Conference on Learning Theory (COLT).
     <https://arxiv.org/pdf/1902.00947.pdf>`_
 
     Args:
@@ -66,7 +68,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_lyapunov_1(L=L, gamma=1 / L, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -81,7 +83,7 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
         		All the primal scalar constraints are verified up to an error of 2.157699467921729e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2239204636309262e-08
         (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 2.458069122242756e-09 
         (PEPit) Duality gap: absolute: -2.458069122242756e-09 and relative: -1.0

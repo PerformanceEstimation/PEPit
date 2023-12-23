@@ -41,6 +41,9 @@ class TestPEP(unittest.TestCase):
         # Compute theoretical rate of the above problem
         self.theoretical_tau = max((1 - self.mu * self.gamma) ** 2, (1 - self.L * self.gamma) ** 2)
 
+        # Define a verbose for all tests
+        self.verbose = 0
+
     def test_is_instance(self):
 
         self.assertIsInstance(self.problem, PEP)
@@ -50,7 +53,7 @@ class TestPEP(unittest.TestCase):
         self.assertEqual(len(self.problem.list_of_performance_metrics), 1)
         self.assertEqual(len(self.func.list_of_class_constraints), 0)
 
-        self.problem.solve(verbose=0)
+        self.problem.solve(verbose=self.verbose)
         self.assertEqual(len(self.func.list_of_class_constraints), 2)
         self.assertEqual(Point.counter, 3)
         self.assertEqual(Expression.counter, 3)
@@ -58,7 +61,7 @@ class TestPEP(unittest.TestCase):
 
     def test_eval_points_and_function_values(self):
 
-        self.problem.solve(verbose=0)
+        self.problem.solve(verbose=self.verbose)
 
         for triplet in self.func.list_of_points:
 
@@ -73,7 +76,7 @@ class TestPEP(unittest.TestCase):
         self.x2, self.dx1, _ = inexact_gradient_step(self.x1, self.func, self.gamma, epsilon=.1, notion='absolute')
         self.problem.set_performance_metric((self.x2 - self.xs) ** 2)
 
-        self.problem.solve(verbose=0)
+        self.problem.solve(verbose=self.verbose)
 
         self.assertIsInstance(self.x1.eval(), np.ndarray)
         self.assertIsInstance(self.dx1.eval(), np.ndarray)
@@ -81,7 +84,7 @@ class TestPEP(unittest.TestCase):
 
     def test_eval_constraint_dual_values(self):
 
-        pepit_tau = self.problem.solve(verbose=0)
+        pepit_tau = self.problem.solve(verbose=self.verbose)
         self.assertAlmostEqual(pepit_tau, self.theoretical_tau, delta=self.theoretical_tau * 10 ** -3)
 
         for condition in self.problem.list_of_constraints:
@@ -109,7 +112,7 @@ class TestPEP(unittest.TestCase):
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
-        pepit_tau = self.problem.solve(verbose=0)
+        pepit_tau = self.problem.solve(verbose=self.verbose)
 
         # This must be R
         self.assertAlmostEqual(pepit_tau, R, delta=R * 10 ** -3)
@@ -130,7 +133,7 @@ class TestPEP(unittest.TestCase):
 
         # Overwrite performance metric to evaluate the maximal value expr can take
         self.problem.list_of_performance_metrics = [expr]
-        pepit_tau = self.problem.solve(verbose=0)
+        pepit_tau = self.problem.solve(verbose=self.verbose)
 
         # This must be the square root of theoretical tau
         theoretical_tau = np.sqrt(self.theoretical_tau)
@@ -157,9 +160,9 @@ class TestPEP(unittest.TestCase):
     def test_consistency(self):
 
         # Solve twice the same problem in a row and verify the two lists of constraints have same length.
-        _ = self.problem.solve(verbose=0)
+        _ = self.problem.solve(verbose=self.verbose)
         l1 = self.problem._list_of_constraints_sent_to_wrapper
-        _ = self.problem.solve(verbose=0)
+        _ = self.problem.solve(verbose=self.verbose)
         l2 = self.problem._list_of_constraints_sent_to_wrapper
 
         self.assertEqual(len(l1), len(l2))
@@ -167,20 +170,20 @@ class TestPEP(unittest.TestCase):
     def test_dimension_reduction(self):
 
         # Compute pepit_tau very basically.
-        pepit_tau = self.problem.solve(verbose=0)
+        pepit_tau = self.problem.solve(verbose=self.verbose)
 
         # Compute pepit_tau very basically with dimension_reduction_heuristic off and verify all is fine.
-        pepit_tau2 = self.problem.solve(verbose=0, dimension_reduction_heuristic=None)
+        pepit_tau2 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic=None)
         self.assertAlmostEqual(pepit_tau2, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using trace heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau3 = self.problem.solve(verbose=0, dimension_reduction_heuristic="trace")
+        pepit_tau3 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic="trace")
         self.assertAlmostEqual(pepit_tau3, pepit_tau, delta=10 ** -2)
 
         # Verify that, even with dimension reduction (using 2 steps of local regularization of the log det heuristic),
         # the solve method returns the worst-case performance, not the chosen heuristic value.
-        pepit_tau4 = self.problem.solve(verbose=0, dimension_reduction_heuristic="logdet2")
+        pepit_tau4 = self.problem.solve(verbose=self.verbose, dimension_reduction_heuristic="logdet2")
         self.assertAlmostEqual(pepit_tau4, pepit_tau, delta=10 ** -2)
 
     def test_unbounded_result(self):
@@ -193,4 +196,4 @@ class TestPEP(unittest.TestCase):
 
         # Check the behavior of PEP in this case.
         # It should stop the code before trying to assign no existent values to variables and return None
-        self.assertIsNone(self.problem.solve(verbose=0))
+        self.assertIsNone(self.problem.solve(verbose=self.verbose))

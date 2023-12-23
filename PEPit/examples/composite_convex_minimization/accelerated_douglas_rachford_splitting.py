@@ -55,8 +55,9 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
     An analysis of the accelerated Douglas-Rachford splitting is available in [1, Theorem 5] for when the convex
     minimization problem is quadratic.
 
-    `[1] P. Patrinos, L. Stella, A. Bemporad (2014). Douglas-Rachford splitting: Complexity estimates and accelerated
-    variants. In 53rd IEEE Conference on Decision and Control (CDC).
+    `[1] P. Patrinos, L. Stella, A. Bemporad (2014).
+    Douglas-Rachford splitting: Complexity estimates and accelerated variants.
+    In 53rd IEEE Conference on Decision and Control (CDC).
     <https://arxiv.org/pdf/1407.6723.pdf>`_
 
     Args:
@@ -79,28 +80,28 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_douglas_rachford_splitting(mu=.1, L=1, alpha=.9, n=2, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the Gram matrix: 11x11
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: size of the Gram matrix: 9x9
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-        			Function 1 : Adding 20 scalar constraint(s) ...
-        			Function 1 : 20 scalar constraint(s) added
-        			Function 2 : Adding 20 scalar constraint(s) ...
-        			Function 2 : 20 scalar constraint(s) added
+        			Function 1 : Adding 12 scalar constraint(s) ...
+        			Function 1 : 12 scalar constraint(s) added
+        			Function 2 : Adding 12 scalar constraint(s) ...
+        			Function 2 : 12 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19291481429464125
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.192914822762597
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.5546541876142187e-10
-        		All the primal scalar constraints are verified up to an error of 7.773913214548234e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.655442687317297e-09
+        		All the primal scalar constraints are verified up to an error of 1.4452059383419924e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.1725144793017575e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3189803992299066e-08
-        (PEPit) Final upper bound (dual): 0.19291481454944295 and lower bound (primal example): 0.19291481429464125 
-        (PEPit) Duality gap: absolute: 2.5480170751102094e-10 and relative: 1.320799071044171e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.332087161994639e-08
+        (PEPit) Final upper bound (dual): 0.19291482672195612 and lower bound (primal example): 0.192914822762597 
+        (PEPit) Duality gap: absolute: 3.959359118343997e-09 and relative: 2.0523871943300208e-08
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
         	PEPit guarantee:			 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
         	Theoretical guarantee for quadratics:	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2

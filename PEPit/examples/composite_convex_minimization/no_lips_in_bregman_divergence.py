@@ -42,13 +42,14 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
 
     **References**:
 
-    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
-    Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
+    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017).
+    A Descent Lemma Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
     Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
     <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
-    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
-    first-order methods. Mathematical Programming, 1-43.
+    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
+    Optimal complexity and certification of Bregman first-order methods.
+    Mathematical Programming, 1-43.
     <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
@@ -76,7 +77,7 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_no_lips_in_bregman_divergence(L=L, gamma=gamma, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 36x36
-        (PEPit) Setting up the problem: performance measure is minimum of 10 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 10 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -89,16 +90,16 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.022222222222163288
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.022222222222201146
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 7.244205235679146e-15
+        		All the primal scalar constraints are verified up to an error of 2.9698465908722937e-15
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.5840440282266755e-14
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.853513371907187e-13
-        (PEPit) Final upper bound (dual): 0.022222222222178442 and lower bound (primal example): 0.022222222222163288 
-        (PEPit) Duality gap: absolute: 1.5154544286133387e-14 and relative: 6.81954492877811e-13
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.016518693845357e-15
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0942663016198577e-13
+        (PEPit) Final upper bound (dual): 0.022222222222206895 and lower bound (primal example): 0.022222222222201146 
+        (PEPit) Duality gap: absolute: 5.748873599387139e-15 and relative: 2.586993119726666e-13
         *** Example file: worst-case performance of the NoLips_2 in Bregman divergence ***
         	PEPit guarantee:		 min_t Dh(x_(t-1); x_t) <= 0.0222222 Dh(x_*; x_0)
         	Theoretical guarantee:	 min_t Dh(x_(t-1); x_t) <= 0.0222222 Dh(x_*; x_0)

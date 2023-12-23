@@ -36,8 +36,9 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
     **References**: The detailed approach (based on convex relaxations) is available in [1],
     along with theoretical bound.
 
-    `[1] E. De Klerk, F. Glineur, A. Taylor (2017). On the worst-case complexity of the gradient method with exact
-    line search for smooth strongly convex functions. Optimization Letters, 11(7), 1185-1199.
+    `[1] E. De Klerk, F. Glineur, A. Taylor (2017).
+    On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions.
+    Optimization Letters, 11(7), 1185-1199.
     <https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf>`_
 
     Args:
@@ -60,7 +61,7 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
     Example:
         >>> pepit_tau, theoretical_tau = wc_gradient_exact_line_search(L=1, mu=.1, n=2, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -77,7 +78,7 @@ def wc_gradient_exact_line_search(L, mu, n, wrapper="cvxpy", solver=None, verbos
         		All the primal scalar constraints are verified up to an error of 1.8619346286996574e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3895833635451835e-07
         (PEPit) Final upper bound (dual): 0.44812496921062095 and lower bound (primal example): 0.4481249685889447 
         (PEPit) Duality gap: absolute: 6.216762660216091e-10 and relative: 1.3872832571216518e-09

@@ -8,6 +8,7 @@ class PSDMatrix(object):
     A :class:`PSDMatrix` encodes a square matrix of :class:`Expression` objects that is constrained to be symmetric PSD.
 
     Attributes:
+        name (str): A name set through the set_name method. None is no name is given.
         matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression` objects.
         shape (tuple of ints): the shape of the underlying matrix of :class:`Expression` objects.
         _value (2D ndarray of floats): numerical values of :class:`Expression` objects
@@ -35,12 +36,16 @@ class PSDMatrix(object):
     # It counts the number of generated constraints
     counter = 0
 
-    def __init__(self, matrix_of_expressions):
+    def __init__(self,
+                 matrix_of_expressions,
+                 name=None,
+                 ):
         """
         :class:`PSDMatrix` objects are instantiated via the following argument.
 
         Args:
             matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression`.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Instantiating the :class:`PSDMatrix` objects of the first example can be done by
 
@@ -56,6 +61,8 @@ class PSDMatrix(object):
             TypeError: if provided matrix does not contain only Expressions and / or scalar values.
 
         """
+        # Initialize name of the psd matrix
+        self.name = name
 
         # Update the counter
         self.counter = PSDMatrix.counter
@@ -72,10 +79,26 @@ class PSDMatrix(object):
         self._dual_variable_value = None
         self.entries_dual_variable_value = None
 
+    def set_name(self, name):
+        """
+        Assign a name to self for easier identification purpose.
+
+        Args:
+            name (str): a name to be given to self.
+
+        """
+        self.name = name
+
+    def get_name(self):
+        """
+        Returns (str): the attribute name.
+        """
+        return self.name
+
     @staticmethod
     def _store(matrix_of_expressions):
         """
-        Store a new matrix of :class:`Expression`\s that we enforce to be positive semidefinite.
+        Store a new matrix of :class:`Expression`\s that we enforce to be positive semi-definite.
 
         Args:
             matrix_of_expressions (Iterable of Iterables of Expressions): a square matrix of :class:`Expression`.
@@ -141,7 +164,8 @@ class PSDMatrix(object):
         # Otherwise, compute it and return it.
         if self._value is None:
             try:
-                self._value = np.array([[expression.eval() for expression in line] for line in self.matrix_of_expressions])
+                self._value = np.array([[expression.eval() for expression in line]
+                                        for line in self.matrix_of_expressions])
             except ValueError:
                 raise ValueError("The PEP must be solved to evaluate PSDMatrix!")
 

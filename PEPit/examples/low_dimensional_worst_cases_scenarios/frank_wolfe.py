@@ -45,7 +45,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**: The algorithm is presented in, among others, [1, 2]. The logdet heuristic is presented in [3].
 
-    [1] M .Frank, P. Wolfe (1956). An algorithm for quadratic programming.
+    [1] M .Frank, P. Wolfe (1956).
+    An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
 
     `[2] M. Jaggi (2013). Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
@@ -76,7 +77,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 26x26
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
@@ -87,32 +88,32 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953919276976
-        (PEPit) Postprocessing: 15 eigenvalue(s) > 1.6844294247582112e-08 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953904645822
+        (PEPit) Postprocessing: 15 eigenvalue(s) > 1.6888130186731306e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953871440194
-        (PEPit) Postprocessing: 11 eigenvalue(s) > 4.086498447171313e-09 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953918116352
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953725941896
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.1861651266980264e-08 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953903506054
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953918672622
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953903905457
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953905299943
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953893599122
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953909800384
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953897127347
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953873475287
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953853593198
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953873475287
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953853593198
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.319991201741552e-10
-        		All the primal scalar constraints are verified up to an error of 8.434523635081348e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.838754901390161e-10
+        		All the primal scalar constraints are verified up to an error of 9.411701695771768e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 3.478870372420793e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.188030142585899e-07
-        (PEPit) Final upper bound (dual): 0.07828954299790562 and lower bound (primal example): 0.07818953873475287 
-        (PEPit) Duality gap: absolute: 0.00010000426315275035 and relative: 0.0012789979934783972
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.474580080029191e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2084335345375351e-07
+        (PEPit) Final upper bound (dual): 0.07828954284798424 and lower bound (primal example): 0.07818953853593198 
+        (PEPit) Duality gap: absolute: 0.00010000431205225979 and relative: 0.0012789986221277267
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
         	PEPit guarantee:		 f(x_n)-f_* == 0.0782895 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2

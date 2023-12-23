@@ -54,15 +54,18 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     **References**:
     The optimized gradient method was developed in [1, 2]; the corresponding lower bound was first obtained in [3].
 
-    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145(1–2), 451–482.
+    `[1] Y. Drori, M. Teboulle (2014).
+    Performance of first-order methods for smooth convex minimization: a novel approach.
+    Mathematical Programming 145(1–2), 451–482.
     <https://arxiv.org/pdf/1206.3209.pdf>`_
 
-    `[2] D. Kim, J. Fessler (2016). Optimized first-order methods for smooth convex minimization. Mathematical
-    Programming 159.1-2: 81-107.
+    `[2] D. Kim, J. Fessler (2016).
+    Optimized first-order methods for smooth convex minimization.
+    Mathematical Programming 159.1-2: 81-107.
     <https://arxiv.org/pdf/1406.5468.pdf>`_
 
-    `[3] Y. Drori  (2017). The exact information-based complexity of smooth convex minimization.
+    `[3] Y. Drori  (2017).
+    The exact information-based complexity of smooth convex minimization.
     Journal of Complexity, 39, 1-16.
     <https://arxiv.org/pdf/1606.01424.pdf>`_
 
@@ -85,7 +88,7 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimized_gradient(L=3, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -100,7 +103,7 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 4.178030258567e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.3578267940913163e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.3578267940913163e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.653093053290753e-08
         (PEPit) Final upper bound (dual): 0.0767518302587488 and lower bound (primal example): 0.0767518265733206 
         (PEPit) Duality gap: absolute: 3.6854281987297455e-09 and relative: 4.801746568479483e-08

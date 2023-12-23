@@ -21,18 +21,20 @@ class CocoerciveOperator(Function):
         >>> func = problem.declare_function(function_class=CocoerciveOperator, beta=1.)
 
     References:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
-        Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
-        SIAM Journal on Optimization, 30(3), 2251-2271.
-        <https://arxiv.org/pdf/1812.00146.pdf>`_
+
+    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+    Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+    SIAM Journal on Optimization, 30(3), 2251-2271.
+    <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
     def __init__(self,
-                 beta=1.,
+                 beta,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -44,6 +46,7 @@ class CocoerciveOperator(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Cocoercive operators are necessarily continuous, hence `reuse_gradient` is set to True.
@@ -51,7 +54,9 @@ class CocoerciveOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
 
         # Store the beta parameter
         self.beta = beta
@@ -62,21 +67,28 @@ class CocoerciveOperator(Function):
                   "with beta == 0. Instead, please use the class Monotone (which accounts for the fact \n"
                   "that the image of the operator at certain points might not be a singleton).\033[0m")
 
+    def set_cocoercivity_constraint_i_j(self,
+                                        xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
+        """
+        Set cocoercivity constraint for operator.
+
+        """
+        # Set constraint
+        constraint = ((gi - gj) * (xi - xj) - self.beta * (gi - gj) ** 2 >= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (cocoercive maximally monotone operator),
         see, e.g., [1, Proposition 2].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
-                if i < j:
-                    # Interpolation conditions of cocoercive operator class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) - self.beta * (gi - gj) ** 2 >= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="cocoercivity",
+                                                      set_class_constraint_i_j=self.set_cocoercivity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

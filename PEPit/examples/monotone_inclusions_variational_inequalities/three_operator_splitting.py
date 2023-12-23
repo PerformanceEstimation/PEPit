@@ -74,7 +74,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
     Example:
         >>> pepit_tau, theoretical_tau = wc_three_operator_splitting(L=1, mu=.1, beta=1, alpha=.9, theta=1.3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 8x8
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -93,7 +93,7 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
         		All the primal scalar constraints are verified up to an error of 4.036799094997434e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.0385673195889567e-06
         (PEPit) Final upper bound (dual): 0.7796890635199223 and lower bound (primal example): 0.7796890707911295 
         (PEPit) Duality gap: absolute: -7.27120719190566e-09 and relative: -9.325778011134313e-09

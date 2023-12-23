@@ -44,15 +44,19 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
 
     **References**: The potential can be found in the historical [1]; and in more recent works, e.g., [2, 3].
 
-    `[1] Y. Nesterov (1983). A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
+    `[1] Y. Nesterov (1983).
+    A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.
     In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
     <http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf>`_
 
-    `[2] N. Bansal, A. Gupta (2019). Potential-function proofs for gradient methods. Theory of Computing, 15(1), 1-32.
+    `[2] N. Bansal, A. Gupta (2019).
+    Potential-function proofs for gradient methods.
+    Theory of Computing, 15(1), 1-32.
     <https://arxiv.org/pdf/1712.04581.pdf>`_
 
-    `[3] A. d’Aspremont, D. Scieur, A. Taylor (2021). Acceleration Methods. Foundations and Trends
-    in Optimization: Vol. 5, No. 1-2.
+    `[3] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+    Acceleration Methods.
+    Foundations and Trends in Optimization: Vol. 5, No. 1-2.
     <https://arxiv.org/pdf/2101.09545.pdf>`_
 
     Args:
@@ -76,7 +80,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_method(L=L, gamma=1 / L, lam=10., wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -91,7 +95,7 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
         		All the primal scalar constraints are verified up to an error of 2.9403765314447956e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.223563804320635e-08
         (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.94632223606942e-09 
         (PEPit) Duality gap: absolute: -7.94632223606942e-09 and relative: -1.0

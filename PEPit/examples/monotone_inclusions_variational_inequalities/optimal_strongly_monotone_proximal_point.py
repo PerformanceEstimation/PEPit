@@ -78,7 +78,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
     Example:
         >>> pepit_tau, theoretical_tau = wc_optimal_strongly_monotone_proximal_point(n=10, mu=0.05, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 12x12
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -93,7 +93,7 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
         		All the primal scalar constraints are verified up to an error of 3.5351675688243754e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.804099035739487e-08
         (PEPit) Final upper bound (dual): 0.003936990621254958 and lower bound (primal example): 0.003936989547244047 
         (PEPit) Duality gap: absolute: 1.0740109105886186e-09 and relative: 2.7280004117370406e-07

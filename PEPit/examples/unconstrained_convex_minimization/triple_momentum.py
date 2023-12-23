@@ -66,8 +66,9 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     **References**:
     The triple momentum method was discovered and analyzed in [1].
 
-    `[1] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018), The fastest known globally convergent first-order method for
-    minimizing strongly convex functions. IEEE Control Systems Letters, 2(1), 49-54.
+    `[1] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018).
+    The fastest known globally convergent first-order method for minimizing strongly convex functions.
+    IEEE Control Systems Letters, 2(1), 49-54.
     <http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf>`_
 
     Args:
@@ -91,7 +92,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_triple_momentum(mu=0.1, L=1., n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -106,7 +107,7 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 2.3083153937765444e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 2.128560722969591e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.128560722969591e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.890478893964213e-08
         (PEPit) Final upper bound (dual): 0.23892508270020568 and lower bound (primal example): 0.23892507617696113 
         (PEPit) Duality gap: absolute: 6.523244555634022e-09 and relative: 2.7302469292936613e-08

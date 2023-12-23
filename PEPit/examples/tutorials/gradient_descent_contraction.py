@@ -59,7 +59,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_contraction(L=L, mu=0.1, gamma=1 / L, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -74,12 +74,12 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
         		All the primal scalar constraints are verified up to an error of 3.042855638898251e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.0078754315331366e-08
         (PEPit) Final upper bound (dual): 0.8100000036427537 and lower bound (primal example): 0.8100000029203449 
         (PEPit) Duality gap: absolute: 7.224087994472939e-10 and relative: 8.918627121515396e-10
         *** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***
-        	PEP-it guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
+        	PEPit guarantee:		 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
         	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
     
     """
@@ -117,7 +117,7 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***')
-        print('\tPEP-it guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t ||x_n - y_n||^2 <= {:.6} ||x_0 - y_0||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)

@@ -27,7 +27,8 @@ class MonotoneOperator(Function):
     def __init__(self,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=False):
+                 reuse_gradient=False,
+                 name=None):
         """
         Args:
             is_leaf (bool): True if self is defined from scratch.
@@ -37,11 +38,27 @@ class MonotoneOperator(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=reuse_gradient)
+                         reuse_gradient=reuse_gradient,
+                         name=name,
+                         )
+
+    @staticmethod
+    def set_monotonicity_constraint_i_j(xi, gi, fi,
+                                        xj, gj, fj,
+                                        ):
+        """
+        Set monotonicity constraint for operators.
+
+        """
+        # Set constraint
+        constraint = ((gi - gj) * (xi - xj) >= 0)
+
+        return constraint
 
     def add_class_constraints(self):
         """
@@ -49,15 +66,9 @@ class MonotoneOperator(Function):
         see, e.g., [1, Theorem 20.21].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
-                if i < j:
-                    # Interpolation conditions of monotone operator class
-                    self.list_of_class_constraints.append((gi - gj) * (xi - xj) >= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="monotonicity",
+                                                      set_class_constraint_i_j=self.set_monotonicity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

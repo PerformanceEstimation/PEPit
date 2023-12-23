@@ -19,6 +19,6 @@ __all__ = ['cocoercive', 'CocoerciveOperator',
            'negatively_comonotone', 'NegativelyComonotoneOperator',
            'nonexpansive', 'NonexpansiveOperator',
            'skew_symmetric_linear', 'SkewSymmetricLinearOperator',
-           'strongly_monotone', 'StronglyMonotoneOperator'
+           'strongly_monotone', 'StronglyMonotoneOperator',
            'symmetric_linear', 'SymmetricLinearOperator',
            ]

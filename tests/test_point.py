@@ -10,13 +10,26 @@ class TestPoint(unittest.TestCase):
     def setUp(self):
         self.pep = PEP()
 
-        self.A = Point(is_leaf=True, decomposition_dict=None)
+        self.A = Point(is_leaf=True, decomposition_dict=None, name="pointA")
         self.B = Point(is_leaf=True, decomposition_dict=None)
 
     def test_is_instance(self):
 
         self.assertIsInstance(self.A, Point)
         self.assertIsInstance(self.B, Point)
+
+    def test_name(self):
+
+        self.assertEqual(self.A.get_name(), "pointA")
+
+        self.assertIsNone(self.B.get_name())
+        self.B.set_name("pointB")
+        self.assertEqual(self.B.get_name(), "pointB")
+
+        C = self.A + self.B
+        self.assertIsNone(C.get_name())
+        C.set_name("pointC")
+        self.assertEqual(C.get_name(), "pointC")
 
     def test_counter(self):
 

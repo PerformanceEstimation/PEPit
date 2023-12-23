@@ -36,7 +36,6 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
     .. math:: \\| x_n - x_\\star \\|^2 \\leqslant (1 - 2\\gamma\\mu + L^2 \\gamma^2)^n \\|x_0-x_\\star\\|^2.
 
     **References**:
-
     Definition and convergence guarantees can be found in [1].
 
     `[1] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
@@ -66,7 +65,7 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
         >>> L = 1
         >>> pepit_tau, theoretical_tau = wc_subgradient_method_rsi_eb(mu=mu, L=L, gamma=mu / L ** 2, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -81,10 +80,10 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.902929158448038e-12
-        (PEPit) Final upper bound (dual): 0.9605960099988379 and lower bound (primal example): 0.9605960099986828 
-        (PEPit) Duality gap: absolute: 1.5509815654013437e-13 and relative: 1.614603380877535e-13
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9007807847382036e-12
+        (PEPit) Final upper bound (dual): 0.960596009998838 and lower bound (primal example): 0.9605960099986828 
+        (PEPit) Duality gap: absolute: 1.5520917884259688e-13 and relative: 1.6157591456455218e-13
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
         	PEPit guarantee:		 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2

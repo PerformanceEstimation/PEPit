@@ -76,7 +76,7 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> pepit_tau, theoretical_tau = wc_saga(L=1, mu=.1, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 27x27
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 6 function(s)
@@ -101,7 +101,7 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
         		All the primal scalar constraints are verified up to an error of 1.4346716234068732e-07
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.824905589324927e-07
         (PEPit) Final upper bound (dual): 0.9666666537075449 and lower bound (primal example): 0.9666666451656595 
         (PEPit) Duality gap: absolute: 8.541885421209372e-09 and relative: 8.836433390898197e-09

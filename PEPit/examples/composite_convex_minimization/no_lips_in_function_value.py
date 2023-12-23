@@ -44,13 +44,14 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
     **References**: NoLips was proposed [1] for convex problems involving relative smoothness.
     The worst-case analysis using a PEP, as well as the tightness are provided in [2].
 
-    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017). A Descent Lemma
-    Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
+    `[1] H.H. Bauschke, J. Bolte, M. Teboulle (2017).
+    A Descent Lemma Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.
     Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
     <https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf>`_
 
-    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021). Optimal complexity and certification of Bregman
-    first-order methods. Mathematical Programming, 1-43.
+    `[2] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
+    Optimal complexity and certification of Bregman first-order methods.
+    Mathematical Programming, 1-43.
     <https://arxiv.org/pdf/1911.08510.pdf>`_
 
     Notes:
@@ -78,7 +79,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         >>> gamma = 1 / (2 * L)
         >>> pepit_tau, theoretical_tau = wc_no_lips_in_function_value(L=L, gamma=gamma, n=3, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 15x15
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
@@ -97,7 +98,7 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         		All the primal scalar constraints are verified up to an error of 1.4396019099027768e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite up to an error of 1.039633194677115e-21
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 1.4920273295805233e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.4920273295805233e-11
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.426985490058363e-10
         (PEPit) Final upper bound (dual): 0.666666666662425 and lower bound (primal example): 0.6666666666481619 
         (PEPit) Duality gap: absolute: 1.4263146219661849e-11 and relative: 2.139471933008663e-11

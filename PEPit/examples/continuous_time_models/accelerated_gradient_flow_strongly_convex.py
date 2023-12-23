@@ -1,7 +1,7 @@
 from math import sqrt
 
 from PEPit import PEP
-from PEPit.functions.strongly_convex import StronglyConvexFunction
+from PEPit.functions.strongly_convex_function import StronglyConvexFunction
 
 
 def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", solver=None, verbose=1):
@@ -56,8 +56,8 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
     <https://jmlr.org/papers/volume22/20-195/20-195.pdf>`_
 
     `[2] J.M. Sanz-Serna and K. C. Zygalakis (2021)
-    The connections between Lyapunov functions for some optimization algorithms and differential equations. In SIAM
-    Journal on Numerical Analysis, 59 pp 1542-1565.
+    The connections between Lyapunov functions for some optimization algorithms and differential equations.
+    In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
     <https://arxiv.org/pdf/2009.00673.pdf>`_
 
     `[3] C. Moucer, A. Taylor, F. Bach (2022).
@@ -83,7 +83,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
     Example:
         >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_flow_strongly_convex(mu=0.1, psd=True, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -98,7 +98,7 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
         		All the primal scalar constraints are verified up to an error of 5.118823388165078e-16
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative up to an error of 5.482952099021607e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.482952099021607e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.328561771704438e-08
         (PEPit) Final upper bound (dual): -0.31622777578996025 and lower bound (primal example): -0.31622777856752843 
         (PEPit) Duality gap: absolute: 2.7775681754604875e-09 and relative: -8.783441442249373e-09

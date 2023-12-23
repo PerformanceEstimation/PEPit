@@ -11,7 +11,7 @@ class LipschitzOperator(Function):
         Operator values can be requested through `gradient` and `function values` should not be used.
 
     Attributes:
-        L (float) Lipschitz parameter
+        L (float): Lipschitz parameter
 
     Cocoercive operators are characterized by the parameter :math:`L`, hence can be instantiated as
 
@@ -49,10 +49,11 @@ class LipschitzOperator(Function):
     """
 
     def __init__(self,
-                 L=1.,
+                 L,
                  is_leaf=True,
                  decomposition_dict=None,
-                 reuse_gradient=True):
+                 reuse_gradient=True,
+                 name=None):
         """
 
         Args:
@@ -64,6 +65,7 @@ class LipschitzOperator(Function):
             reuse_gradient (bool): If True, the same subgradient is returned
                                    when one requires it several times on the same :class:`Point`.
                                    If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
 
         Note:
             Lipschitz continuous operators are necessarily continuous, hence `reuse_gradient` is set to True.
@@ -71,7 +73,9 @@ class LipschitzOperator(Function):
         """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
-                         reuse_gradient=True)
+                         reuse_gradient=True,
+                         name=name,
+                         )
         # Store L
         self.L = L
 
@@ -79,21 +83,29 @@ class LipschitzOperator(Function):
             print("\033[96m(PEPit) The class of L-Lipschitz operators with L == np.inf implies no constraint: \n"
                   "it contains all multi-valued mappings. This might imply issues in your code.\033[0m")
 
+    def set_lipschitz_continuity_constraint_i_j(self,
+                                                xi, gi, fi,
+                                                xj, gj, fj,
+                                                ):
+        """
+        Set Lipschitz continuity constraint for operators.
+
+        """
+        # Set constraint
+        constraint = ((gi - gj) ** 2 - self.L ** 2 * (xi - xj) ** 2 <= 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (Lipschitz operator),
         see [1, 2, 3] or e.g., [4, Fact 2].
         """
 
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-
-                xj, gj, fj = point_j
-
-                # By symetry of the interpolation condition, we can avoid repetition by setting i<j.
-                if i < j:
-                    # Interpolation conditions of Lipschitz operator class
-                    self.list_of_class_constraints.append((gi - gj) ** 2 - self.L ** 2 * (xi - xj) ** 2 <= 0)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="lipschitz_continuity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_lipschitz_continuity_constraint_i_j,
+                                                      symmetry=True,
+                                                      )

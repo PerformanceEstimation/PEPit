@@ -89,10 +89,10 @@ More precisely, this code snippet allows computing the worst-case value of <img 
 
 ```Python
 from PEPit import PEP
-from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import SmoothConvexFunction
 
 
-def wc_gradient_descent(L, gamma, n, verbose=1):
+def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -108,7 +108,8 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     is valid, where :math:`x_n` is the output of gradient descent with fixed step-size :math:`\\gamma`, and
     where :math:`x_\\star` is a minimizer of :math:`f`.
 
-    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`, :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
+    In short, for given values of :math:`n`, :math:`L`, and :math:`\\gamma`,
+    :math:`\\tau(n, L, \\gamma)` is computed as the worst-case
     value of :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
     **Algorithm**:
@@ -127,20 +128,23 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     **References**:
 
-    `[1] Y. Drori, M. Teboulle (2014). Performance of first-order methods for smooth convex minimization: a novel
-    approach. Mathematical Programming 145(1–2), 451–482.
+    `[1] Y. Drori, M. Teboulle (2014).
+    Performance of first-order methods for smooth convex minimization: a novel approach.
+    Mathematical Programming 145(1–2), 451–482.
     <https://arxiv.org/pdf/1206.3209.pdf>`_
 
     Args:
         L (float): the smoothness parameter.
         gamma (float): step-size.
         n (int): number of iterations.
-        verbose (int): Level of information details to print.
+        wrapper (str): the name of the wrapper to be used.
+        solver (str): the name of the solver the wrapper should use.
+        verbose (int): level of information details to print.
                         
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
-                        - 2: This example's output + PEPit information + CVXPY details.
+                        - 2: This example's output + PEPit information + solver details.
 
     Returns:
         pepit_tau (float): worst-case value
@@ -148,28 +152,38 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     Example:
         >>> L = 3
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=1)
-        (PEPit) Setting up the problem: size of the main PSD matrix: 7x7
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                         function 1 : Adding 30 scalar constraint(s) ...
-                         function 1 : 30 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: SCS); optimal value: 0.16666664596175398
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.1666666649793712
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.325029587061441e-10
+        		All the primal scalar constraints are verified up to an error of 6.633613956752438e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.0696173743789816e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.547098305159261e-08
+        (PEPit) Final upper bound (dual): 0.16666667331941884 and lower bound (primal example): 0.1666666649793712 
+        (PEPit) Duality gap: absolute: 8.340047652488636e-09 and relative: 5.004028642152831e-08
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
-                PEPit guarantee:         f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-                Theoretical guarantee:   f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-
+        	PEPit guarantee:		 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+    
     """
 
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a strongly convex smooth function
-    func = problem.declare_function(SmoothStronglyConvexFunction, mu=0, L=L)
+    # Declare a smooth convex function
+    func = problem.declare_function(SmoothConvexFunction, L=L)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -191,7 +205,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(verbose=pepit_verbose)
+    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
     theoretical_tau = L / (2 * (2 * n * L * gamma + 1))
@@ -199,7 +213,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
@@ -208,7 +222,7 @@ def wc_gradient_descent(L, gamma, n, verbose=1):
 
 if __name__ == "__main__":
     L = 3
-    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=1 / L, n=4, wrapper="cvxpy", solver=None, verbose=1)
 
 ```
 
@@ -250,27 +264,34 @@ PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/
 - [Cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive)
 
 
-## Authors
+## Contributors
+
+### Creators
 
 This toolbox has been created by
 
-- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) (main contributor #1) 
-- [**Céline Moucer**](https://www.linkedin.com/in/c%C3%A9line-moucer-88068b173/) (main contributor #2)
-- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) (project supervision)
-- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) (project supervision)
-- [**Adrien Taylor**](https://adrientaylor.github.io/) (contributor & main project supervision)
-- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) (contributor & main project supervision)
+- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) 
+- [**Céline Moucer**](https://cmoucer.github.io)
+- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html)
+- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/)
+- [**Adrien Taylor**](https://adrientaylor.github.io/)
+- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
+
+### External contributions
+
+All external contributions are welcome.
+Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/contributing.html).
+
+The contributors to this toolbox are:
+- [**Gyumin Roh**](https://rkm0959.tistory.com/)
+- [**Jisun Park**](https://jisunp515.github.io)
+- [**Nizar Bousselmi**](https://nizarbousselmi.github.io)
 
 ### Acknowledgments
 
 The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/)
 for his feedbacks on preliminary versions of the toolbox,
 as well as for support regarding the continuous integration.
-
-## Contributions
-
-All external contributions are welcome.
-Please read the [contribution guidelines](https://pepit.readthedocs.io/en/latest/contributing.html).
 
 ## References
 
@@ -423,7 +444,7 @@ In Advances in Neural Information Processing Systems (NIPS).
 
 [38] B. Hu, P. Seiler, L. Lessard (2020).
 [Analysis of biased stochastic gradient descent using sequential semidefinite programs.](https://arxiv.org/pdf/1711.00987.pdf)
-Mathematical programming (to appear).
+Mathematical programming.
 
 [39] A. Taylor, F. Bach (2019).
 [Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions.](https://arxiv.org/pdf/1902.00947.pdf)
@@ -441,55 +462,145 @@ Journal of Optimization Theory and Applications 183, 179–198.
 [Tight sublinear convergence rate of the proximal point algorithm for maximal monotone inclusion problem.](https://epubs.siam.org/doi/pdf/10.1137/19M1299049)
 SIAM Journal on Optimization, 30(3), 1905-1921.
 
-[43] F. Lieder (2021).
+[43] B. Halpern (1967).
+[Fixed points of nonexpanding maps.](https://www.ams.org/journals/bull/1967-73-06/S0002-9904-1967-11864-0/S0002-9904-1967-11864-0.pdf)
+American Mathematical Society, 73(6), 957–961.
+
+[44] F. Lieder (2021).
 [On the convergence rate of the Halpern-iteration.](http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf)
 Optimization Letters, 15(2), 405-418.
 
-[44] F. Lieder (2018).
+[45] F. Lieder (2018).
 [Projection Based Methods for Conic Linear Programming Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.](https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf)
 PhD thesis, HHU Düsseldorf.
 
-[45] Y. Nesterov (1983).
-[A method for solving the convex programming problem with convergence rate :math:`O(1/k^2)`.](http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf)
+[46] Y. Nesterov (1983).
+[A method for solving the convex programming problem with convergence rate O(1/k^2).](http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf)
 In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
 
-[46] N. Bansal, A. Gupta (2019).
+[47] N. Bansal, A. Gupta (2019).
 [Potential-function proofs for gradient methods.](https://arxiv.org/pdf/1712.04581.pdf)
 Theory of Computing, 15(1), 1-32.
 
-[47] M. Barre, A. Taylor, F. Bach (2021).
+[48] M. Barre, A. Taylor, F. Bach (2021).
 [A note on approximate accelerated forward-backward methods with absolute and relative errors, and possibly strongly convex objectives.](https://arxiv.org/pdf/2106.15536v2.pdf)
 arXiv:2106.15536v2.
 
-[48] J. Eckstein and W. Yao (2018).
+[49] J. Eckstein and W. Yao (2018).
 [Relative-error approximate versions of Douglas–Rachford splitting and special cases of the ADMM.](https://link.springer.com/article/10.1007/s10107-017-1160-5)
 Mathematical Programming, 170(2), 417-444.
 
-[49] M. Barré, A. Taylor, A. d’Aspremont (2020).
+[50] M. Barré, A. Taylor, A. d’Aspremont (2020).
 [Complexity guarantees for Polyak steps with momentum.](https://arxiv.org/pdf/2002.00915.pdf)
 In Conference on Learning Theory (COLT).
 
-[50] D. Kim, J. Fessler (2017).
+[51] D. Kim, J. Fessler (2017).
 [On the convergence analysis of the optimized gradient method.](https://arxiv.org/pdf/1510.08573.pdf)
 Journal of Optimization Theory and Applications, 172(1), 187-205.
 
-[51] Steven Diamond and Stephen Boyd (2016).
+[52] Steven Diamond and Stephen Boyd (2016).
 [CVXPY: A Python-embedded modeling language for convex optimization.](https://arxiv.org/pdf/1603.00943.pdf)
 Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
 
-[52] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen (2018).
+[53] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen (2018).
 [A rewriting system for convex optimization problems.](https://arxiv.org/pdf/1709.04494.pdf)
 Journal of Control and Decision (JCD) 5.1.42--60 (2018).
 
-[53] Adrien Taylor, Bryan Van Scoy, Laurent Lessard (2018).
+[54] Adrien Taylor, Bryan Van Scoy, Laurent Lessard (2018).
 [Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.](https://arxiv.org/pdf/1803.06073.pdf)
 International Conference on Machine Learning (ICML).
 
-[54] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+[55] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
 [Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.](https://arxiv.org/pdf/2203.00342.pdf)
 
-[55] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+[56] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
 [Optimal first-order methods for convex functions with a quadratic upper bound.](https://arxiv.org/pdf/2205.15033.pdf)
 
-[56] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[57] W. Su, S. Boyd, E. J. Candès (2016).
+[A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights.](https://jmlr.org/papers/volume17/15-084/15-084.pdf)
+In the Journal of Machine Learning Research (JMLR).
+
+[58] C. Moucer, A. Taylor, F. Bach (2022).
+[A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.](https://arxiv.org/pdf/2205.12772.pdf)
+
+[59] A. C. Wilson, B. Recht, M. I. Jordan (2021).
+[A Lyapunov analysis of accelerated methods in optimization.](https://jmlr.org/papers/volume22/20-195/20-195.pdf)
+In the Journal of Machine Learning Reasearch (JMLR), 22(113):1−34, 2021.
+
+[60] J.M. Sanz-Serna and K. C. Zygalakis (2021)
+[The connections between Lyapunov functions for some optimization algorithms and differential equations.](https://arxiv.org/pdf/2009.00673.pdf)
+In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
+
+[61] D. Scieur, V. Roulet, F. Bach and A. D'Aspremont (2017).
+[Integration methods and accelerated optimization algorithms.](https://papers.nips.cc/paper/2017/file/bf62768ca46b6c3b5bea9515d1a1fc45-Paper.pdf)
+In Advances in Neural Information Processing Systems (NIPS).
+
+[62] J. Park, E. Ryu (2022).
+[Exact Optimal Accelerated Complexity for Fixed-Point Iterations.](https://proceedings.mlr.press/v162/park22c/park22c.pdf)
+In 39th International Conference on Machine Learning (ICML).
+
+[63] M. Barre, A. Taylor, F. Bach (2020).
+[Principled analyses and design of first-order methods with inexact proximal operators.](https://arxiv.org/pdf/2006.06041v2.pdf)
+
+[64] Y. Drori and A. Taylor (2020).
+[Efficient first-order methods for convex minimization: a constructive approach.](https://arxiv.org/pdf/1803.05676.pdf)
+Mathematical Programming 184 (1), 183-220.
+
+[65] Z. Shi, R. Liu (2016).
+[Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.](https://arxiv.org/pdf/1608.04826.pdf)
+In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+
+[66] R.D. Millán, M.P. Machado (2019).
+[Inexact proximal epsilon-subgradient methods for composite convex optimization problems.](https://arxiv.org/pdf/1805.10120.pdf)
+Journal of Global Optimization 75.4 (2019): 1029-1060.
+
+[67] M. Kirszbraun (1934).
+Uber die zusammenziehende und Lipschitzsche transformationen.
+Fundamenta Mathematicae, 22 (1934).
+
+[68] F.A. Valentine (1943).
+On the extension of a vector function so as to preserve a Lipschitz condition.
+Bulletin of the American Mathematical Society, 49 (2).
+
+[69] F.A. Valentine (1945).
+A Lipschitz condition preserving extension for a vector function.
+American Journal of Mathematics, 67(1).
+
+[70] M. Kirszbraun (1934).
+Uber die zusammenziehende und Lipschitzsche transformationen.
+Fundamenta Mathematicae, 22 (1934).
+
+[71] F.A. Valentine (1943).
+On the extension of a vector function so as to preserve a Lipschitz condition.
+Bulletin of the American Mathematical Society, 49 (2).
+
+[72] F.A. Valentine (1945).
+A Lipschitz condition preserving extension for a vector function.
+American Journal of Mathematics, 67(1).
+
+[73] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
+[Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity.](https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf)
+International Conference on Machine Learning.
+
+[74] A. Brøndsted, R.T. Rockafellar.
+[On the subdifferentiability of convex functions.](https://www.jstor.org/stable/2033889)
+Proceedings of the American Mathematical Society 16(4), 605–611 (1965)
+
+[75] R.T. Rockafellar (1976).
+[Monotone operators and the proximal point algorithm.](https://epubs.siam.org/doi/pdf/10.1137/0314056)
+SIAM journal on control and optimization, 14(5), 877-898.
+
+[76] R.D. Monteiro, B.F. Svaiter (2013).
+[An accelerated hybrid proximal extragradient method for convex optimization and its implications to second-order methods.](https://epubs.siam.org/doi/abs/10.1137/110833786)
+SIAM Journal on Optimization, 23(2), 1092-1125.
+
+[77] S. Salzo, S. Villa (2012).
+[Inexact and accelerated proximal point algorithms.](http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf)
+Journal of Convex analysis, 19(4), 1167-1192.
+
+[78] H. H. Bauschke and P. L. Combettes (2017).
+Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
+Springer New York, 2nd ed.
+
+[79] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
 [PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)

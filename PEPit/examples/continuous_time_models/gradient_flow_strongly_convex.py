@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions.strongly_convex import StronglyConvexFunction
+from PEPit.functions.strongly_convex_function import StronglyConvexFunction
 
 
 def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1):
@@ -64,7 +64,7 @@ def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1
     Example:
         >>> pepit_tau, theoretical_tau = wc_gradient_flow_strongly_convex(mu=0.1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 3x3
-        (PEPit) Setting up the problem: performance measure is minimum of 1 element(s)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
@@ -79,7 +79,7 @@ def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1
         		All the primal scalar constraints are verified up to an error of 7.074164865006338e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated to inequality constraints are nonnegative
+        		All the dual scalar values associated with inequality constraints are nonnegative
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.684432710751497e-09
         (PEPit) Final upper bound (dual): -0.20000002574229303 and lower bound (primal example): -0.20000002010543685 
         (PEPit) Duality gap: absolute: -5.636856176272076e-09 and relative: 2.8184278048074267e-08
