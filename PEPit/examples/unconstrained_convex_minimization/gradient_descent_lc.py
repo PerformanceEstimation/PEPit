@@ -66,7 +66,7 @@ def wc_gradient_descent_lc(mug, Lg, typeM, muM, LM, gamma, n, verbose=1):
     Args:
         mug (float): the strong convexity parameter of :math:`g(y)`.
         Lg (float): the smoothness parameter of :math:`g(y)`.
-        typeM (string): type of matrix M ("gen", "sym" or "skew").
+        typeM (string): type of matrix :math:`M` ("gen", "sym" or "skew").
         muM (float): lower bound on :math:`\\|M\\|` (if typeM != "sym", then muM must be set to zero).
         LM (float): upper bound on :math:`\\|M\\|`.
         gamma (float): step-size.
