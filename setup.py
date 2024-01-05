@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-version = "0.3.0"
+version = "0.3.2"
 
 setuptools.setup(
     name="PEPit",
@@ -14,7 +14,7 @@ setuptools.setup(
                 "to pep their optimization algorithms as easily as they implement them",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["cvxpy>=1.1.17"],
+    install_requires=["cvxpy>=1.1.17", "pandas>=1.0.0"],
     url="https://github.com/PerformanceEstimation/PEPit",
     project_urls={
         "Documentation": "https://pepit.readthedocs.io/en/{}/".format(version),
