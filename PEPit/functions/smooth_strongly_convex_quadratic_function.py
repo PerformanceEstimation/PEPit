@@ -1,6 +1,7 @@
 import numpy as np
 from PEPit.function import Function
 from PEPit import Expression
+from PEPit import Point
 from PEPit import PSDMatrix
 
 
@@ -66,6 +67,8 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
+        self.b = Point()
+        self.c = Expression()
 
     def set_value_constraint_i(self,
                                xi, gi, fi):
@@ -73,11 +76,8 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         Set the value of the function.
 
         """
-        # Select one stationary point
-        xs = self.list_of_stationary_points[0][0]
-
         # Value constraint
-        constraint = (fi == 0.5 * (xi - xs) * gi)
+        constraint = (fi == 0.5 * xi * (gi-self.b) + self.b * xi + self.c )
 
         return constraint
 
@@ -88,11 +88,9 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         """
         Ensure the Hessian is symmetric.
         """
-        # Select one stationary point
-        xs = self.list_of_stationary_points[0][0]
 
         # Symmetry constraint
-        constraint = ((xi - xs) * gj == (xj - xs) * gi)
+        constraint = ( xi * (gj-self.b) == xj * (gi-self.b) )
 
         return constraint
 
@@ -101,9 +99,6 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         Formulates the list of interpolation constraints for self (smooth strongly convex quadratic function);
         see [1, Theorem 3.9].
         """
-        # Create a stationary point is none exists
-        if self.list_of_stationary_points == list():
-            self.stationary_point()
 
         # Add the quadratic interpolation constraint
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
@@ -118,8 +113,6 @@ class SmoothStronglyConvexQuadraticFunction(Function):
                                                       symmetry=True,
                                                       )
 
-        # Select one stationary point
-        xs = self.list_of_stationary_points[0][0]
 
         # Create a PSD matrix to enforce the smoothness and strong convexity
         N = len(self.list_of_points)
@@ -132,7 +125,7 @@ class SmoothStronglyConvexQuadraticFunction(Function):
             for j, point_j in enumerate(self.list_of_points):
                 xj, gj, fj = point_j
 
-                T[i, j] = (self.L + self.mu) * gi * (xj - xs) - gi * gj - self.mu * self.L * (xi - xs) * (xj - xs)
+                T[i, j] = (self.L + self.mu) * 1/2 * ( (gi-self.b) * xj + (gj-self.b) * xi ) - (gi-self.b) * (gj-self.b) - self.mu * self.L * xi * xj
 
         psd_matrix = PSDMatrix(matrix_of_expressions=T)
         self.list_of_class_psd.append(psd_matrix)
