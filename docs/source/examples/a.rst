@@ -134,3 +134,13 @@ Gradient descent for smooth strongly convex quadratic objective
 Gradient descent for smooth strongly convex objective with linear mapping
 -------------------------------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_lc
+
+
+Gradient descent with silver step-size for convex objective
+-----------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_silver_stepsize_convex
+
+
+Gradient descent with silver step-size for strongly convex objective
+--------------------------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_gradient_descent_silver_stepsize_strongly_convex
