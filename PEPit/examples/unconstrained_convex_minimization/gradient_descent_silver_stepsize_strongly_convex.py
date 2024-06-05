@@ -4,7 +4,7 @@ import math
 import warnings
 
 
-def wc_silver_stepsize_strongly_convex(kappa, n, verbose=1):
+def wc_gradient_descent_silver_stepsize_strongly_convex(kappa, n, verbose=1):
     """
     Consider the strongly convex minimization problem
 
@@ -61,7 +61,7 @@ def wc_silver_stepsize_strongly_convex(kappa, n, verbose=1):
 
     Example:
         >>> kappa = 100
-        >>> pepit_tau, theoretical_tau = wc_silver_stepsize_strongly_convex(kappa = kappa, n=8, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_silver_stepsize_strongly_convex(kappa = kappa, n=8, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -176,4 +176,4 @@ def wc_silver_stepsize_strongly_convex(kappa, n, verbose=1):
 
 if __name__ == "__main__":
     kappa = 10
-    pepit_tau, theoretical_tau = wc_silver_stepsize_strongly_convex(kappa = kappa, n=8, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_silver_stepsize_strongly_convex(kappa = kappa, n=8, verbose=1)

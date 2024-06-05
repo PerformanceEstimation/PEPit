@@ -4,7 +4,7 @@ import math
 import warnings
 
 
-def wc_silver_stepsize_convex(L, n, verbose=1):
+def wc_gradient_descent_silver_stepsize_convex(L, n, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -56,7 +56,7 @@ def wc_silver_stepsize_convex(L, n, verbose=1):
 
     Example:
         >>> L = 10
-        >>> pepit_tau, theoretical_tau = pepit_tau, theoretical_tau = wc_silver_stepsize_convex(L = L, n = 7, verbose=1)
+        >>> pepit_tau, theoretical_tau = pepit_tau, theoretical_tau = wc_gradient_descent_silver_stepsize_convex(L = L, n = 7, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -150,4 +150,4 @@ def wc_silver_stepsize_convex(L, n, verbose=1):
 
 if __name__ == "__main__":
     L = 10
-    pepit_tau, theoretical_tau = wc_silver_stepsize_convex(L = L, n = 7, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_silver_stepsize_convex(L = L, n = 7, verbose=1)

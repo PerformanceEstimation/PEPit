@@ -9,8 +9,8 @@ from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex_decreasing
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_quadratics
-from PEPit.examples.unconstrained_convex_minimization.silver_stepsize_convex import wc_silver_stepsize_convex
-from PEPit.examples.unconstrained_convex_minimization.silver_stepsize_strongly_convex import wc_silver_stepsize_strongly_convex
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_silver_stepsize_convex
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_silver_stepsize_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method_rsi_eb
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
@@ -166,15 +166,15 @@ class TestExamplesCVXPY(unittest.TestCase):
 
     def test_gradient_descent_silver_stepsize_convex(self):
         L, n = 2.8, 2
-        wc, theory = wc_silver_stepsize_convex(L=L, n=n,
-                                               verbose=self.verbose)
+        wc, theory = wc_gradient_descent_silver_stepsize_convex(L=L, n=n,
+                                                                verbose=self.verbose)
 
         self.assertLessEqual(wc, theory)
 
     def test_gradient_descent_silver_stepsize_strongly_convex(self):
         kappa, n = 12, 17
-        wc, theory = wc_silver_stepsize_strongly_convex(kappa=kappa, n=n,
-                                                        verbose=self.verbose)
+        wc, theory = wc_gradient_descent_silver_stepsize_strongly_convex(kappa=kappa, n=n,
+                                                                         verbose=self.verbose)
 
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
