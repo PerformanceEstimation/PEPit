@@ -45,9 +45,9 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
 
     **Theoretical guarantee**: An empirically tight one-iteration guarantee is provided in the code of PESTO [1]:
 
-        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left(1-\\frac{\\mu}{L}\\right)^2 \\|x_0-x_\\star\\|^2,
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left(\\max(1 - \\gamma\\mu, L\\gamma - 1\\right)^2 \\|x_0-x_\\star\\|^2.
 
-    when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number :math:`n` of
+    Note that we observe the guarantee does not depend on the number :math:`n` of
     functions for this particular setting, thereby implying that the guarantees are also valid for expectation
     minimization settings (i.e., when :math:`n` goes to infinity).
 
@@ -87,39 +87,39 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
     Example:
         >>> mu = 0.1
         >>> L = 1
-        >>> gamma = 1 / L
+        >>> gamma = 2.3 / L
         >>> pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 11x11
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
-        			Function 1 : Adding 2 scalar constraint(s) ...
-        			Function 1 : 2 scalar constraint(s) added
-        			Function 2 : Adding 2 scalar constraint(s) ...
-        			Function 2 : 2 scalar constraint(s) added
-        			Function 3 : Adding 2 scalar constraint(s) ...
-        			Function 3 : 2 scalar constraint(s) added
-        			Function 4 : Adding 2 scalar constraint(s) ...
-        			Function 4 : 2 scalar constraint(s) added
-        			Function 5 : Adding 2 scalar constraint(s) ...
-        			Function 5 : 2 scalar constraint(s) added
+                    Function 1 : Adding 2 scalar constraint(s) ...
+                    Function 1 : 2 scalar constraint(s) added
+                    Function 2 : Adding 2 scalar constraint(s) ...
+                    Function 2 : 2 scalar constraint(s) added
+                    Function 3 : Adding 2 scalar constraint(s) ...
+                    Function 3 : 2 scalar constraint(s) added
+                    Function 4 : Adding 2 scalar constraint(s) ...
+                    Function 4 : 2 scalar constraint(s) added
+                    Function 5 : Adding 2 scalar constraint(s) ...
+                    Function 5 : 2 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8099999999882777
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.6900000253579406
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.1380952365332445e-10
-        		All the primal scalar constraints are verified up to an error of 2.1146270370529728e-10
+                The solver found a Gram matrix that is positive semi-definite up to an error of 8.383282219939888e-10
+                All the primal scalar constraints are verified up to an error of 1.3451663949393122e-09
         (PEPit) Dual feasibility check:
-        		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.8089919395053243e-09
-        (PEPit) Final upper bound (dual): 0.8100000000728617 and lower bound (primal example): 0.8099999999882777 
-        (PEPit) Duality gap: absolute: 8.458400646560449e-11 and relative: 1.044246993417637e-10
+                The solver found a residual matrix that is positive semi-definite
+                All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.686991036398934e-08
+        (PEPit) Final upper bound (dual): 1.6900000229643413 and lower bound (primal example): 1.6900000253579406
+        (PEPit) Duality gap: absolute: -2.3935993187507165e-09 and relative: -1.4163309365890418e-09
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size and with zero variance at the optimal point ***
-        	PEPit guarantee:	 E[||x_1 - x_*||^2] <= 0.81 ||x_0 - x_*||^2
-        	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 0.81 ||x_0 - x_*||^2
+            PEPit guarantee:	 E[||x_1 - x_*||^2] <= 1.69 ||x_0 - x_*||^2
+            Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 1.69 ||x_0 - x_*||^2
     
     """
 
@@ -153,8 +153,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    kappa = L / mu
-    theoretical_tau = (1 - 1 / kappa) ** 2
+    theoretical_tau = max(1 - gamma*mu, L*gamma-1) ** 2
 
     # Print conclusion if required
     if verbose != -1:
@@ -170,7 +169,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
 if __name__ == "__main__":
     mu = 0.1
     L = 1
-    gamma = 1 / L
+    gamma = 2.3 / L
     pepit_tau, theoretical_tau = wc_sgd_overparametrized(L=L, mu=mu, gamma=gamma, n=5,
                                                          wrapper="cvxpy", solver=None,
                                                          verbose=1)
