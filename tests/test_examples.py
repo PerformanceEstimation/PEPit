@@ -172,8 +172,8 @@ class TestExamplesCVXPY(unittest.TestCase):
         self.assertLessEqual(wc, theory)
 
     def test_gradient_descent_silver_stepsize_strongly_convex(self):
-        kappa, n = 12, 17
-        wc, theory = wc_gradient_descent_silver_stepsize_strongly_convex(kappa=kappa, n=n,
+        L, mu, n = 3.2, .1, 17
+        wc, theory = wc_gradient_descent_silver_stepsize_strongly_convex(L=L, mu=mu, n=n,
                                                                          verbose=self.verbose)
 
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
