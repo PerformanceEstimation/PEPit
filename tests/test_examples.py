@@ -9,6 +9,8 @@ from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_qg_convex_decreasing
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_quadratics
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_silver_stepsize_convex
+from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_silver_stepsize_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method_rsi_eb
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
@@ -159,6 +161,20 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1/L
         wc, theory = wc_gradient_descent_quadratics(mu=mu, L=L, gamma=gamma, n=n,
                                                     wrapper=self.wrapper, verbose=self.verbose)
+
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_gradient_descent_silver_stepsize_convex(self):
+        L, n = 2.8, 2
+        wc, theory = wc_gradient_descent_silver_stepsize_convex(L=L, n=n,
+                                                                verbose=self.verbose)
+
+        self.assertLessEqual(wc, theory)
+
+    def test_gradient_descent_silver_stepsize_strongly_convex(self):
+        L, mu, n = 3.2, .1, 17
+        wc, theory = wc_gradient_descent_silver_stepsize_strongly_convex(L=L, mu=mu, n=n,
+                                                                         verbose=self.verbose)
 
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
