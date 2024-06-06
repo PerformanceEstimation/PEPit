@@ -10,3 +10,4 @@ What's new in PEPit
    whatsnew/0.2.0
    whatsnew/0.2.1
    whatsnew/0.3.2
+   whatsnew/0.3.3

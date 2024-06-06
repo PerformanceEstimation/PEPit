@@ -13,7 +13,8 @@ def wc_gradient_descent_silver_stepsize_convex(L, n, wrapper="cvxpy", solver=Non
 
     where :math:`f` is :math:`L`-smooth and convex.
 
-    This code computes a worst-case guarantee for :math:'n' steps of the **gradient descent** method tuned according to the silver stepsize schedule.
+    This code computes a worst-case guarantee for :math:`n` steps of the **gradient descent** method tuned
+    according to the silver stepsize schedule.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L) \\|x_0 - x_\\star\\|^2
@@ -29,12 +30,12 @@ def wc_gradient_descent_silver_stepsize_convex(L, n, wrapper="cvxpy", solver=Non
 
     .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t),
 
-    where :math:`\\gamma_t` is a step-size of the :math:'t^{th}' step of the silver step-size schedule described in [1].
+    where :math:`\\gamma_t` is a step-size of the :math:`t^{th}` step of the silver step-size schedule described in [1].
 
     **Theoretical guarantee**:
     The theoretical guarantee for the convergence rate of the silver stepsize can be found in [1, Theorem 1.1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{1 + \\sqrt{4(1 + \\sqrt(2))^{2k}-3}} \\|x_0-x_\\star\\|^2,
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{1 + \\sqrt{4(1 + \\sqrt{2})^{2k}-3}} \\|x_0-x_\\star\\|^2,
 
     where :math:`k` is such that :math:`n = 2^k - 1`.
 
@@ -51,6 +52,7 @@ def wc_gradient_descent_silver_stepsize_convex(L, n, wrapper="cvxpy", solver=Non
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         verbose (int): Level of information details to print.
+
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.

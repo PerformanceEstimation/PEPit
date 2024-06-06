@@ -13,7 +13,8 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu` strongly-convex.
 
-    This code computes a worst-case guarantee for :math:'n' steps of the **gradient descent** method tuned according to the silver stepsize schedule.
+    This code computes a worst-case guarantee for :math:`n` steps of the **gradient descent** method tuned
+    according to the silver stepsize schedule.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: \\|x_n - x_\\star\\|^2 \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2
@@ -29,7 +30,7 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
 
     .. math:: x_{t+1} = x_t - \\gamma_t \\nabla f(x_t),
 
-    where :math:`\\gamma_t` is a step-size of the :math:'t^{th}' step of the silver step-size schedule described in [1].
+    where :math:`\\gamma_t` is a step-size of the :math:`t^{th}` step of the silver step-size schedule described in [1].
 
     **Theoretical guarantee**:
     The theoretical guarantee for the convergence rate of the silver stepsize can be found in [1, Theorem 4.1]:
@@ -37,11 +38,11 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
 
     When :math:`n \\leq n^\\star`, the guarantee is given by
 
-    .. math:: \\|x_n - x_\\star\\|^2 \\leqslant e^{-\\frac{n^\\log_2(1 + \\sqrt{2})}{L/\\mu}} \\|x_0-x_\\star\\|^2,
+    .. math:: \\|x_n - x_\\star\\|^2 \\leqslant e^{-\\frac{n^{\\log_2(1 + \\sqrt{2})}}{L/\\mu}} \\|x_0-x_\\star\\|^2,
 
     When :math:`n > n^\\star` the guarantee is given by
     
-    .. math:: \\|x_n - x_\\star\\|^2 \\leqslant e^{-\\frac{n}{n^*} (n^*)^\\frac{\\log_2(\\rho)}{L/\\mu}} \\|x_0-x_\\star\\|^2
+    .. math:: \\|x_n - x_\\star\\|^2 \\leqslant e^{-\\frac{n}{n^*} \\frac{(n^*)^{\\log_2(\\rho)}}{L/\\mu}} \\|x_0-x_\\star\\|^2
 
     **References**:
 
@@ -53,10 +54,11 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
     Args:
         L (float): the smoothness parameter.
         mu (float): the strong convexity parameter.
-        n (int): number of iterations (must be a power of 2).
+        n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         verbose (int): Level of information details to print.
+
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
