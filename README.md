@@ -602,5 +602,13 @@ Journal of Convex analysis, 19(4), 1167-1192.
 Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
 Springer New York, 2nd ed.
 
-[79] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+[79] J. M. Altschuler, P. A. Parrilo (2023).
+Acceleration by Stepsize Hedging I: Multi-Step Descent and the Silver Stepsize Schedule.
+arXiv preprint arXiv:2309.07879.
+
+[80] J. M. Altschuler, P. A. Parrilo (2023).
+Acceleration by Stepsize Hedging II: Silver Stepsize Schedule for Smooth Convex Optimization.
+arXiv preprint arXiv:2309.16530.
+
+[81] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
 [PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)
