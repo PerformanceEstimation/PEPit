@@ -73,24 +73,25 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-                    Function 1 : Adding 72 scalar constraint(s) ...
-                    Function 1 : 72 scalar constraint(s) added
+        			Function 1 : Adding 72 scalar constraint(s) ...
+        			Function 1 : 72 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: SCS); optimal value: 0.01698449239366679
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.22144968332064685
         (PEPit) Primal feasibility check:
-                The solver found a Gram matrix that is positive semi-definite
-                All the primal scalar constraints are verified up to an error of 1.4327414732603905e-06
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.709908798754045e-14
         (PEPit) Dual feasibility check:
-                The solver found a residual matrix that is positive semi-definite up to an error of 1.628693891005565e-15
-                All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.697508620658037e-18
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 0.00010098436068739503
-        (PEPit) Final upper bound (dual): 0.016978316564473066 and lower bound (primal example): 0.01698449239366679 
-        (PEPit) Duality gap: absolute: -6.1758291937247245e-06 and relative: -0.00036361576493316804
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.029501372712101e-15
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0411976074102435e-12
+        (PEPit) Final upper bound (dual): 0.22144968332063517 and lower bound (primal example): 0.22144968332064685 
+        (PEPit) Duality gap: absolute: -1.1685097334179773e-14 and relative: -5.276637635674737e-14
         *** Example file: worst-case performance of gradient descent with silver step-sizes ***
-            PEPit guarantee:	 ||x_n - x_*||^2 <= 0.0169783 ||x_0 - x_*||^2
-            Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.0169783 ||x_0 - x_*||^2
+        	PEPit guarantee:	 ||x_n - x_*||^2 <= 0.22145 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.22145 ||x_0 - x_*||^2
+    
     """
 
     # Set n if not a power of 2
