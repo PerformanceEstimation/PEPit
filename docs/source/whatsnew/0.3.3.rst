@@ -5,3 +5,5 @@ For users:
 ----------
 
 - Silver step-sizes have been added in the PEPit.examples.unconstrained_convex_minimization module.
+
+- An monotone inclusion example has been added which covers parameterized frugal resolvent splittings, including the Malitsky-Tam algorithm, Douglas-Rachford, the Ryu Three Operator Splitting, and a set of novel block splitting methods. This example compares a fixed step size for this class with one optimized using the dual of the PEP.

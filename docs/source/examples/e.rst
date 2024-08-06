@@ -39,3 +39,9 @@ Optimistic gradient
 Past extragradient
 ------------------
 .. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_past_extragradient
+
+
+Frugal Resolvent splittings
+---------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_frugal_resolvent_splitting
+.. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_reduced_frugal_resolvent_splitting
