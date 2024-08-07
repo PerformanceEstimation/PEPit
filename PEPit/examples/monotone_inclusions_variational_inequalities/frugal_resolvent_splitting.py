@@ -13,7 +13,7 @@ def wc_frugal_resolvent_splitting(L, W, lipschitz_values, mu_values, alpha=1, ga
     We denote by :math:`J_{\\alpha A_i}` the resolvent of :math:`\\alpha A_i`. 
     We denote the lifted vector operator :math:`\\mathbf{A}` as :math:`\\mathbf{A} = [A_1, \\dots, A_n]`, 
     and use lifted :math:`\\mathbf{x} = [x_1, \\dots, x_n]` and :math:`\\mathbf{v} = [v_1, \\dots, v_n]`. 
-    We denote by :math:`L, W \\in \mathbb{R}^{n \\times n}` the algorithm design matrices, and by :math:`l` and :math:`\\mu` the vectors of Lipschitz and strong convexity constants of the lifted operator :math:`\\mathbf{A}`. 
+    We denote by :math:`L, W \\in \\mathbb{R}^{n \\times n}` the algorithm design matrices, and by :math:`l` and :math:`\\mu` the vectors of Lipschitz and strong convexity constants of the lifted operator :math:`\\mathbf{A}`. 
     :math:`L` is assumed to be strictly lower diagonal.
 
     This code computes a worst-case guarantee for any frugal resolvent splitting with design matrices :math:`L, W`. 
