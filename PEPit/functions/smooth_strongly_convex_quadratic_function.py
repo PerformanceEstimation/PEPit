@@ -1,4 +1,7 @@
+import numpy as np
 from PEPit.function import Function
+from PEPit import Expression
+from PEPit import PSDMatrix
 
 
 class SmoothStronglyConvexQuadraticFunction(Function):
@@ -64,8 +67,32 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         self.mu = mu
         self.L = L
 
-        # Create a stationary point
-        self.stationary_point()
+        # Create the unique stationary point
+        super().stationary_point()
+
+    def stationary_point(self, return_gradient_and_function_value=False, name=None):
+        """
+        Access the unique stationary point that has been created in __init__,
+        as well as its zero gradient and its function value.
+
+        Args:
+            return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
+                                                       gradient (:class:`Point`), function value (:class:`Expression`).
+                                                       Otherwise, return only the point (:class:`Point`).
+            name (str, optional): name of the object. Unused since no object is created.
+
+        Returns:
+            Point or tuple: the minimizer
+
+        """
+        # Create a new point, null gradient and new function value
+        point, g, f = self.list_of_stationary_points[0]
+
+        # Return the required information
+        if return_gradient_and_function_value:
+            return point, g, f
+        else:
+            return point
 
     def set_value_constraint_i(self,
                                xi, gi, fi):
@@ -96,22 +123,6 @@ class SmoothStronglyConvexQuadraticFunction(Function):
 
         return constraint
 
-    def set_smoothness_strong_convexity_constraint_i_j(self,
-                                                       xi, gi, fi,
-                                                       xj, gj, fj,
-                                                       ):
-        """
-        Formulates the list of interpolation constraints for self (smooth strongly convex function).
-        """
-        # Interpolation conditions of smooth strongly convex functions class
-        constraint = (fi - fj >=
-                      gj * (xi - xj)
-                      + 1 / (2 * self.L) * (gi - gj) ** 2
-                      + self.mu / (2 * (1 - self.mu / self.L)) * (
-                              xi - xj - 1 / self.L * (gi - gj)) ** 2)
-
-        return constraint
-
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (smooth strongly convex quadratic function);
@@ -130,10 +141,21 @@ class SmoothStronglyConvexQuadraticFunction(Function):
                                                       symmetry=True,
                                                       )
 
-        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
-                                                      list_of_points_2=self.list_of_points,
-                                                      constraint_name="smoothness_strong_convexity",
-                                                      set_class_constraint_i_j=
-                                                      self.set_smoothness_strong_convexity_constraint_i_j,
-                                                      symmetry=False,
-                                                      )
+        # Select one stationary point
+        xs = self.list_of_stationary_points[0][0]
+
+        # Create a PSD matrix to enforce the smoothness and strong convexity
+        N = len(self.list_of_points)
+        T = np.empty((N, N), dtype=Expression)
+
+        for i, point_i in enumerate(self.list_of_points):
+
+            xi, gi, fi = point_i
+
+            for j, point_j in enumerate(self.list_of_points):
+                xj, gj, fj = point_j
+
+                T[i, j] = (self.L + self.mu) * gi * (xj - xs) - gi * gj - self.mu * self.L * (xi - xs) * (xj - xs)
+
+        psd_matrix = PSDMatrix(matrix_of_expressions=T)
+        self.list_of_class_psd.append(psd_matrix)

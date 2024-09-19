@@ -1,0 +1,6 @@
+What's new in PEPit 0.3.3
+=========================
+
+- A fix has been added in the class :class:`SmoothStronglyConvexQuadraticFunction`. Prior to that fix, using this class without stationary point in a PEP solved with the direct interface to MOSEK was problematic due to the late creation of a stationary point. After this fix, a stationary point is automatically created when instantiating this class of functions.
+
+- Another modification has been made to the class :class:`SmoothStronglyConvexQuadraticFunction`. Prior to that, the minimum value was assumed to be 0. This is not the case anymore.

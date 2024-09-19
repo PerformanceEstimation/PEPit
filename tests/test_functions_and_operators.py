@@ -215,7 +215,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.func9.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func10.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func11.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
-        self.assertEqual(len(self.func12.list_of_class_constraints), num_points_eval * (3 * num_points_eval - 1) / 2)
+        self.assertEqual(len(self.func12.list_of_class_constraints), num_points_eval * (num_points_eval + 1) / 2)
 
         self.assertEqual(len(self.operator1.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator2.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
