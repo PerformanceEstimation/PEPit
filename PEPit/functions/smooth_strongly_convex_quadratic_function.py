@@ -135,4 +135,5 @@ class SmoothStronglyConvexQuadraticFunction(Function):
                                                       constraint_name="smoothness_strong_convexity",
                                                       set_class_constraint_i_j=
                                                       self.set_smoothness_strong_convexity_constraint_i_j,
+                                                      symmetry=False,
                                                       )
