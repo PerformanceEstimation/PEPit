@@ -67,6 +67,33 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         self.mu = mu
         self.L = L
 
+        # Create the unique stationary point
+        super().stationary_point()
+
+    def stationary_point(self, return_gradient_and_function_value=False, name=None):
+        """
+        Access the unique stationary point that has been created in __init__,
+        as well as its zero gradient and its function value.
+
+        Args:
+            return_gradient_and_function_value (bool): if True, return the triplet point (:class:`Point`),
+                                                       gradient (:class:`Point`), function value (:class:`Expression`).
+                                                       Otherwise, return only the point (:class:`Point`).
+            name (str, optional): name of the object. Unused since no object is created.
+
+        Returns:
+            Point or tuple: the minimizer
+
+        """
+        # Create a new point, null gradient and new function value
+        point, g, f = self.list_of_stationary_points[0]
+
+        # Return the required information
+        if return_gradient_and_function_value:
+            return point, g, f
+        else:
+            return point
+
     def set_value_constraint_i(self,
                                xi, gi, fi):
         """
@@ -74,10 +101,10 @@ class SmoothStronglyConvexQuadraticFunction(Function):
 
         """
         # Select one stationary point
-        xs = self.list_of_stationary_points[0][0]
+        xs, _, fs = self.list_of_stationary_points[0]
 
         # Value constraint
-        constraint = (fi == 0.5 * (xi - xs) * gi)
+        constraint = (fi - fs == 0.5 * (xi - xs) * gi)
 
         return constraint
 
@@ -101,10 +128,6 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         Formulates the list of interpolation constraints for self (smooth strongly convex quadratic function);
         see [1, Theorem 3.9].
         """
-        # Create a stationary point is none exists
-        if self.list_of_stationary_points == list():
-            self.stationary_point()
-
         # Add the quadratic interpolation constraint
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
                                                      constraint_name="value",

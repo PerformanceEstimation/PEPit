@@ -8,6 +8,7 @@ from .improved_interior_algorithm import wc_improved_interior_algorithm
 from .no_lips_in_function_value import wc_no_lips_in_function_value
 from .no_lips_in_bregman_divergence import wc_no_lips_in_bregman_divergence
 from .proximal_gradient import wc_proximal_gradient
+from .proximal_gradient_quadratics import wc_proximal_gradient_quadratics
 from .three_operator_splitting import wc_three_operator_splitting
 
 __all__ = ['accelerated_douglas_rachford_splitting', 'wc_accelerated_douglas_rachford_splitting',
@@ -20,5 +21,6 @@ __all__ = ['accelerated_douglas_rachford_splitting', 'wc_accelerated_douglas_rac
            'no_lips_in_function_value', 'wc_no_lips_in_function_value',
            'no_lips_in_bregman_divergence', 'wc_no_lips_in_bregman_divergence',
            'proximal_gradient', 'wc_proximal_gradient',
+           'proximal_gradient_quadratics', 'wc_proximal_gradient_quadratics',
            'three_operator_splitting', 'wc_three_operator_splitting',
            ]
