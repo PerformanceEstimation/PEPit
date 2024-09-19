@@ -7,7 +7,8 @@ A gentle introduction to performance estimation problems is provided in this
 <https://francisbach.com/computer-aided-analyses/>`_.
 
 The PEPit implementation is in line with the framework as exposed in [3,4]
-and follow-up works (for which proper references are provided in the example files).
+and follow-up works (for which proper references are provided in the `example files
+<https://pepit.readthedocs.io/en/latest/examples.html#>`_).
 A gentle introduction to the toolbox is provided in [1].
 
 When to use PEPit?
@@ -27,7 +28,7 @@ How tu use PEPit?
 Installation
 ^^^^^^^^^^^^
 
-PEPit is available on pypi, hence can be installed very simply by running
+PEPit is available on PyPI, hence can be installed very simply by running the command line:
 
 ``pip install pepit``
 
@@ -47,7 +48,8 @@ Basic usage: getting worst-case guarantees
 The main object is called a **PEP**.
 It stores the problem you will describe to **PEPit**.
 
-First create a **PEP** object.
+First create a `**PEP**
+<https://pepit.readthedocs.io/en/latest/api/main_modules.html#PEPit.PEP>`_ object.
 
 .. code-block::
 
@@ -59,7 +61,9 @@ First create a **PEP** object.
     problem = PEP()
 
 
-From now, you can declare functions thanks to the `declare_function` method.
+From now, you can declare `functions
+<https://pepit.readthedocs.io/en/latest/api/functions_and_operators.html>`_ thanks to the `declare_function
+<https://pepit.readthedocs.io/en/latest/api/main_modules.html#PEPit.PEP.declare_function>`_ method.
 
 .. code-block::
 
@@ -67,12 +71,13 @@ From now, you can declare functions thanks to the `declare_function` method.
 
 .. code-block::
 
-    func = problem.declare_function(SmoothConvexFunction, L=L)
+    func = problem.declare_function(SmoothConvexFunction, L=1)
 
 .. warning::
     To enforce the same subgradient to be returned each time one is required,
-    we introduced the attribute `reuse_gradient` in the `Function` class.
-    Some classes of functions contain only differentiable functions (e.g. smooth convex function).
+    we introduced the attribute `reuse_gradient` in the `Function
+    <https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#function>`_ class.
+    Some classes of functions contain only differentiable functions (e.g. smooth convex functions).
     In those, the `reuse_gradient` attribute is set to True by default.
 
     When the same subgradient is used several times in the same code and when it is difficult to
@@ -84,18 +89,25 @@ From now, you can declare functions thanks to the `declare_function` method.
     `no Lips in Bregman divergence
     <https://pepit.readthedocs.io/en/latest/examples/b.html#no-lips-in-bregman-divergence>`_.
 
-You can also define a new point with
+You can also define a new `point
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#point>`_ with
 
 .. code-block::
 
     x0 = problem.set_initial_point()
 
 
-and give a name to the value of `func` on `x0`
+and store the value of `func` on `x0`
 
 .. code-block::
 
     f0 = func(x0)
+
+or
+
+.. code-block::
+
+    f0 = func.value(x0)
 
 
 as well as the (sub)gradient of `func` on `x0`
@@ -104,7 +116,6 @@ as well as the (sub)gradient of `func` on `x0`
 
     g0 = func.gradient(x0)
 
-
 or
 
 .. code-block::
@@ -112,7 +123,8 @@ or
     g0 = func.subgradient(x0)
 
 
-There is a more compact way to do it using the `oracle` method.
+There is a more compact way to do it using the `oracle
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#PEPit.Function.oracle>`_ method.
 
 .. code-block::
 
@@ -123,6 +135,19 @@ You can declare a stationary point of `func`, defined as a point which gradient 
 .. code-block::
 
     xs = func.stationary_point()
+
+Then you can define the associated function value using:
+
+.. code-block::
+
+    fs = func(xs)
+
+Alternatively, you can use an option of the `stationary_point
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#PEPit.Function.stationary_point>`_ method to get the stationary point and properties of func on the latter.
+
+.. code-block::
+
+    xs, gs, fs = func.stationary_point(return_gradient_and_function_value=True)
 
 
 You can combine points and gradients naturally
@@ -165,7 +190,8 @@ Finally, you can ask PEPit to solve the system for you and return the worst-case
 Derive proofs and adversarial objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When one calls the `solve` method,
+When one calls the `solve
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#PEPit.PEP.solve>`_ method,
 **PEPit** does much more that just finding the worst-case value.
 
 In particular, it stores possible values of each points, gradients and function values that achieve this worst-case guarantee,
@@ -198,7 +224,7 @@ You can also get the dual variables values of constraints at optimum,
 which essentially allows you to write the proof of the worst-case guarantee you just obtained.
 
 Let's consider again the previous example, but this time,
-let's give a name to a constraint before using it.
+let's store a constraint before using it.
 
 .. code-block::
 
@@ -215,7 +241,8 @@ Naming PEPit objects
 ~~~~~~~~~~~~~~~~~~~~
 
 In order to ease the proof reconstruction, PEPit now allows to associate names to the created objects.
-This is particularly useful on constraints in order to associate the found dual values to some recognisable constraints.
+This is particularly useful on `constraints
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#constraint>`_ in order to associate the found dual values to some recognisable constraints.
 
 As an example, if a user creates several constraints in a row as
 
@@ -226,7 +253,7 @@ As an example, if a user creates several constraints in a row as
         constraint.set_name(name)
         problem.add_constraint(constraint)
 
-the latter can easily list their names in front of their dual values as
+the latter can easily list their names in front of their dual values with
 
 .. code-block::
 
@@ -236,7 +263,8 @@ the latter can easily list their names in front of their dual values as
 Functions generally contain several "interpolation constraints".
 If a user sets a name to a function as well as to all the points the oracle has been called on,
 then, its interpolation constraints will be attributed a name accordingly.
-Then, using the method `get_class_constraints_duals`,
+Then, using the method `get_class_constraints_duals
+<https://pepit.readthedocs.io/en/0.3.2/api/main_modules.html#PEPit.Function.get_class_constraints_duals>`_,
 the user has access to the tables of dual values related to its interpolation constraints.
 
 Output pdf
@@ -258,7 +286,7 @@ You can use the trace heuristic by specifying
 
     problem.solve(dimension_reduction_heuristic="trace")
     
-You can use the n iteration of the log det heuristic by specifying "logdetn". For example, for
+You can use n iterations of the log det heuristic by specifying "logdet{n}". For example, for
 using 5 iterations of the logdet heuristic:
 
 .. code-block::
@@ -271,7 +299,7 @@ Finding Lyapunov
 
 In a later release, we will provide tools to help finding good Lyapunov functions to study a given method.
 
-This tool will be based on the very recent work [7].
+This tool will be based on the method described in [7].
 
 References
 ----------
