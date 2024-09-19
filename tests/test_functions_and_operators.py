@@ -161,7 +161,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         # Test points counters
         for order, point in enumerate(self.all_points):
-            self.assertEqual(point.counter, order+1) #+1 because there is a Point() that corresponds to the linear term of the quadratic function
+            self.assertEqual(point.counter, order)
         self.assertIs(self.new_point.counter, None)
 
     def test_add_constraints(self):

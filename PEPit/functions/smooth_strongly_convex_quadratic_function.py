@@ -1,8 +1,4 @@
-import numpy as np
 from PEPit.function import Function
-from PEPit import Expression
-from PEPit import Point
-from PEPit import PSDMatrix
 
 
 class SmoothStronglyConvexQuadraticFunction(Function):
@@ -67,8 +63,9 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         # Store mu and L
         self.mu = mu
         self.L = L
-        self.b = Point()
-        self.c = Expression()
+
+        # Create a stationary point
+        self.stationary_point()
 
     def set_value_constraint_i(self,
                                xi, gi, fi):
@@ -76,8 +73,11 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         Set the value of the function.
 
         """
+        # Select one stationary point
+        xs, _, fs = self.list_of_stationary_points[0]
+
         # Value constraint
-        constraint = (fi == 0.5 * xi * (gi-self.b) + self.b * xi + self.c )
+        constraint = (fi - fs == 0.5 * (xi - xs) * gi)
 
         return constraint
 
@@ -88,9 +88,27 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         """
         Ensure the Hessian is symmetric.
         """
+        # Select one stationary point
+        xs = self.list_of_stationary_points[0][0]
 
         # Symmetry constraint
-        constraint = ( xi * (gj-self.b) == xj * (gi-self.b) )
+        constraint = ((xi - xs) * gj == (xj - xs) * gi)
+
+        return constraint
+
+    def set_smoothness_strong_convexity_constraint_i_j(self,
+                                                       xi, gi, fi,
+                                                       xj, gj, fj,
+                                                       ):
+        """
+        Formulates the list of interpolation constraints for self (smooth strongly convex function).
+        """
+        # Interpolation conditions of smooth strongly convex functions class
+        constraint = (fi - fj >=
+                      gj * (xi - xj)
+                      + 1 / (2 * self.L) * (gi - gj) ** 2
+                      + self.mu / (2 * (1 - self.mu / self.L)) * (
+                              xi - xj - 1 / self.L * (gi - gj)) ** 2)
 
         return constraint
 
@@ -99,7 +117,6 @@ class SmoothStronglyConvexQuadraticFunction(Function):
         Formulates the list of interpolation constraints for self (smooth strongly convex quadratic function);
         see [1, Theorem 3.9].
         """
-
         # Add the quadratic interpolation constraint
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
                                                      constraint_name="value",
@@ -113,19 +130,9 @@ class SmoothStronglyConvexQuadraticFunction(Function):
                                                       symmetry=True,
                                                       )
 
-
-        # Create a PSD matrix to enforce the smoothness and strong convexity
-        N = len(self.list_of_points)
-        T = np.empty((N, N), dtype=Expression)
-
-        for i, point_i in enumerate(self.list_of_points):
-
-            xi, gi, fi = point_i
-
-            for j, point_j in enumerate(self.list_of_points):
-                xj, gj, fj = point_j
-
-                T[i, j] = (self.L + self.mu) * 1/2 * ( (gi-self.b) * xj + (gj-self.b) * xi ) - (gi-self.b) * (gj-self.b) - self.mu * self.L * xi * xj
-
-        psd_matrix = PSDMatrix(matrix_of_expressions=T)
-        self.list_of_class_psd.append(psd_matrix)
+        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+                                                      list_of_points_2=self.list_of_points,
+                                                      constraint_name="smoothness_strong_convexity",
+                                                      set_class_constraint_i_j=
+                                                      self.set_smoothness_strong_convexity_constraint_i_j,
+                                                      )
