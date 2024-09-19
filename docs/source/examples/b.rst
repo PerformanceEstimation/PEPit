@@ -11,6 +11,11 @@ Proximal gradient
 .. autofunction:: PEPit.examples.composite_convex_minimization.wc_proximal_gradient
 
 
+Proximal gradient on quadratics
+-------------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_proximal_gradient_quadratics
+
+
 Accelerated proximal gradient
 -----------------------------
 .. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_proximal_gradient

@@ -38,6 +38,7 @@ from PEPit.examples.composite_convex_minimization import wc_improved_interior_al
 from PEPit.examples.composite_convex_minimization import wc_no_lips_in_bregman_divergence
 from PEPit.examples.composite_convex_minimization import wc_no_lips_in_function_value
 from PEPit.examples.composite_convex_minimization import wc_proximal_gradient
+from PEPit.examples.composite_convex_minimization import wc_proximal_gradient_quadratics
 from PEPit.examples.composite_convex_minimization import wc_three_operator_splitting
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
@@ -433,6 +434,12 @@ class TestExamplesCVXPY(unittest.TestCase):
         L, mu, gamma, n = 1, .1, 1, 2
 
         wc, theory = wc_proximal_gradient(L=L, mu=mu, gamma=gamma, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_proximal_gradient_quadratics(self):
+        L, mu, gamma, n = 1, .1, 1, 2
+
+        wc, theory = wc_proximal_gradient_quadratics(L=L, mu=mu, gamma=gamma, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_three_operator_splitting(self):
