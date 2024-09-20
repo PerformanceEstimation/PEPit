@@ -1,4 +1,4 @@
-from PEPit import PEP, null_point, Constraint
+from PEPit import PEP, null_point
 from PEPit.primitive_steps import proximal_step
 from PEPit.functions import SmoothStronglyConvexFunction
 from numpy import array
