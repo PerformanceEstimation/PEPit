@@ -28,7 +28,7 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
                 q_t & = & (L - \\mu) \\left(f(x_t) - f_\\star - \\frac{\\mu}{2}\|y_t - x_\\star\|^2 - \\frac{1}{2}\|\\nabla f(y_t) - \\mu (y_t - x_\\star)\|^2 \\right),
             \\end{eqnarray}
 
-    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}``.
+    with :math:`\\kappa = \\frac{\\mu}{L}`, :math:`\\rho = \\lambda (1 - \\frac{1}{\\kappa}) + (1 - \\lambda) \\left(1 - \\frac{1}{\\sqrt{\\kappa}}\\right)`, and :math:`l = \\mu^2  \\frac{\\kappa - \\kappa \\rho^2 - 1}{2 \\rho (1 - \\rho)}`.
 
     **Algorithm**:
 
