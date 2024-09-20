@@ -40,6 +40,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install coverage
+    - name: Update version in setup.py
+      run: >-
+        sed -i "s/{{VERSION_PLACEHOLDER}}/0.0.3/g" setup.py
     - name: Install PEPit
       run: |
         pip install -e .
