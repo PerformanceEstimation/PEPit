@@ -63,6 +63,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.operator10 = SymmetricLinearOperator(mu=.1, L=1, name="op10")
         self.operator11 = SkewSymmetricLinearOperator(L=1, name="op11")
 
+        self.point0 = self.func12.list_of_stationary_points[0][0]
         self.point1 = Point(is_leaf=True, decomposition_dict=None, name="pt1")
         self.point2 = Point(is_leaf=True, decomposition_dict=None, name="pt2")
 
@@ -93,6 +94,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         ]
 
         self.all_points = [
+            self.point0,
             self.point1,
             self.point2,
         ]
@@ -136,8 +138,8 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertIsInstance(self.operator10, SymmetricLinearOperator)
         self.assertIsInstance(self.operator11, SkewSymmetricLinearOperator)
 
-        self.assertIsInstance(self.point1, Point)
-        self.assertIsInstance(self.point2, Point)
+        for point in self.all_points:
+            self.assertIsInstance(point, Point)
 
         self.assertIsInstance(self.new_operator, Function)
         self.assertIsInstance(self.new_point, Point)
@@ -172,7 +174,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.new_operator.list_of_class_constraints), 0)
 
         # Call oracles on combination of functions
-        for point in self.all_points:
+        for point in self.all_points[1:]:
             self.new_operator.oracle(point)
         self.new_operator.oracle(self.new_point)
         self.new_operator.stationary_point()
@@ -182,11 +184,12 @@ class TestFunctionsAndOperators(unittest.TestCase):
 
         # Call stationary point on all functions
         for function in self.all_functions_and_operators:
-            function.stationary_point()
+            if not function.list_of_stationary_points:
+                function.stationary_point()
 
         # Set the number of points each function has been evaluated on.
         # Note self.new_operator has been evaluated on 1 point less than the other functions.
-        num_points_eval = len(self.all_points) + 3
+        num_points_eval = len(self.all_points[1:]) + 3
 
         # Add function class constraints
         for function in self.all_functions_and_operators:
@@ -213,6 +216,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.func10.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func11.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.func12.list_of_class_constraints), num_points_eval * (num_points_eval + 1) / 2)
+
         self.assertEqual(len(self.operator1.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator2.list_of_class_constraints), num_points_eval * (num_points_eval - 1))
         self.assertEqual(len(self.operator3.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
