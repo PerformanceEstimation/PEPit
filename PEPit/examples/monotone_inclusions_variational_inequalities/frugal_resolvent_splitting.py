@@ -158,12 +158,6 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
     # Set the initial constraint that is the distance between v0 and v1
     problem.set_initial_condition(sum((v0[i] - v1[i]) ** 2 for i in range(n)) <= 1)
 
-    # Constraint on the lifted starting points so each sums to 0
-    # v0constraint = Constraint(expression=sum((v0[i] for i in range(n)), start=null_point)**2, equality_or_inequality="equality")
-    # v1constraint = Constraint(expression=sum((v1[i] for i in range(n)), start=null_point)**2, equality_or_inequality="equality")
-    # problem.set_initial_condition(v0constraint)
-    # problem.set_initial_condition(v1constraint)
-
     # Define the step for each element of the lifted vector    
     def resolvent(i, x, v, L, alpha):
         Lx = sum((L[i, j]*x[j] for j in range(i)), start=null_point)
