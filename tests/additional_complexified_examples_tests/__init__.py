@@ -11,6 +11,7 @@ from .proximal_point_useless_partition import wc_proximal_point_complexified2
 from .proximal_point_LMI import wc_proximal_point_complexified3
 from .randomized_coordinate_descent_smooth_convex import wc_randomized_coordinate_descent_smooth_convex_complexified
 from .randomized_coordinate_descent_smooth_strongly_convex import wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
+from .frugal_resolvent_splitting import wc_reduced_frugal_resolvent_splitting_dr, wc_frugal_resolvent_splitting_dr
 
 
 __all__ = ['gradient_descent_blocks', 'wc_gradient_descent_blocks',
@@ -26,4 +27,6 @@ __all__ = ['gradient_descent_blocks', 'wc_gradient_descent_blocks',
            'proximal_point_LMI', 'wc_proximal_point_complexified3',
            'randomized_coordinate_descent_smooth_convex', 'wc_randomized_coordinate_descent_smooth_convex_complexified',
            'randomized_coordinate_descent_smooth_strongly_convex', 'wc_randomized_coordinate_descent_smooth_strongly_convex_complexified',
+           'frugal_resolvent_splitting', 
+           'wc_reduced_frugal_resolvent_splitting_dr', 'wc_frugal_resolvent_splitting_dr'
            ]

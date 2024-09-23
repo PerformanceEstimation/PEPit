@@ -1,31 +1,32 @@
 from PEPit import PEP, null_point
 from PEPit.primitive_steps import proximal_step
 from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.operators import MonotoneOperator
 from numpy import array
 
-def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5, wrapper="cvxpy", solver=None, verbose=1):
+def wc_frugal_resolvent_splitting(L, W, problem, alpha=1, gamma=0.5, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the the problem
 
-    .. math:: \\mathrm{Find}\\, x:\\, 0 = \\sum_{i=1}^{n} A_i(x),
+    .. math:: \\mathrm{Find}\\, x:\\, 0 \\in \\sum_{i=1}^{n} A_i(x),
 
-    where :math:`A_i` is the subgradient of an :math:`l_i`-smooth and :math:`\\mu_i`-strongly convex function for all :math:`i \\leq n`. 
+    where :math:`A_i` is a maximal monotone operator for all :math:`i \\leq n`. 
     We denote by :math:`J_{\\alpha A_i}` the resolvent of :math:`\\alpha A_i`. 
     We denote the lifted vector operator :math:`\\mathbf{A}` as :math:`\\mathbf{A} = [A_1, \\dots, A_n]`, 
     and use lifted :math:`\\mathbf{x}^T = [x_1, \\dots, x_n]` and :math:`\\mathbf{v}^T = [v_1, \\dots, v_n]`. 
-    We denote by :math:`L, W \\in \\mathbb{R}^{n \\times n}` the algorithm design matrices, and by :math:`l` and :math:`\\mu` the vectors of smoothness and strong convexity constants of the functions associated with the lifted operator :math:`\\mathbf{A}`. 
+    We denote by :math:`L, W \\in \\mathbb{R}^{n \\times n}` the algorithm design matrices. 
 
     This code computes a worst-case guarantee for any frugal resolvent splitting with design matrices :math:`L, W`. 
-    As shown in [1] and [2], this can include the Malitsky-Tam [3], Ryu Three Operator Splitting [4], Douglas-Rachford [5], or block splitting algorithms [1].
+    As shown in [1] and [2], this includes the block splitting algorithms of [1], and (via linear transformation of the iterates), the Malitsky-Tam [3], Ryu Three Operator Splitting [4], and Douglas-Rachford [5] algorithms.
     That is, given two lifted initial points :math:`\\mathbf{v}^{(0)}_t` and :math:`\\mathbf{v}^{(1)}_t` (each of which sums to 0),
-    this code computes the smallest possible :math:`\\tau(L, W, l, \\mu, \\alpha, \\gamma)`
+    this code computes the smallest possible :math:`\\tau(L, W, \\alpha, \\gamma)`
     (a.k.a. "contraction factor") such that the guarantee
 
-    .. math:: \\|\\mathbf{v}^{(0)}_{t+1} - \\mathbf{v}^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, W, l, \\mu, \\alpha, \\gamma) \\|\\mathbf{v}^{(0)}_{t} - \\mathbf{v}^{(1)}_{t}\\|^2,
+    .. math:: \\|\\mathbf{v}^{(0)}_{t+1} - \\mathbf{v}^{(1)}_{t+1}\\|^2 \\leqslant \\tau(L, W, \\alpha, \\gamma) \\|\\mathbf{v}^{(0)}_{t} - \\mathbf{v}^{(1)}_{t}\\|^2,
 
     is valid, where :math:`\\mathbf{v}^{(0)}_{t+1}` and :math:`\\mathbf{v}^{(1)}_{t+1}` are obtained after one iteration of the frugal resolvent splitting from respectively :math:`\\mathbf{v}^{(0)}_{t}` and :math:`\\mathbf{v}^{(1)}_{t}`.
 
-    In short, for given values of :math:`L`, :math:`W`, :math:`l`, :math:`\\mu`, :math:`\\alpha` and :math:`\\gamma`, the contraction factor :math:`\\tau(L, W, l, \\mu, \\alpha, \\gamma)` is computed as the worst-case value of
+    In short, for given values of :math:`L`, :math:`W`, :math:`\\alpha` and :math:`\\gamma`, the contraction factor :math:`\\tau(L, W, \\alpha, \\gamma)` is computed as the worst-case value of
     :math:`\\|\\mathbf{v}^{(0)}_{t+1} - \\mathbf{v}^{(1)}_{t+1}\\|^2` when :math:`\\|\\mathbf{v}^{(0)}_{t} - \\mathbf{v}^{(1)}_{t}\\|^2 \\leqslant 1`.
 
     **Algorithm**: One iteration of the parameterized frugal resolvent splitting is described as follows:
@@ -38,7 +39,7 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
                 \\mathbf{v}_{t+1} & = & \\mathbf{v}_t - \\gamma \\mathbf{W} \\mathbf{x}_{t+1}.
             \\end{eqnarray}
 
-    :math:`L` is assumed to be strictly lower triangular to make each resolvent :math:`J_{A_i}` of the algorithm rely only on :math:`\\mathbf{v}_i` and the results of the previous resolvents in that iteration (and not subsequent resolvents).
+    :math:`L` is assumed to be strictly lower triangular to make each resolvent :math:`J_{A_i}` of the algorithm rely only on the value of :math:`v_i` and the results of the previous resolvents in that iteration (and not subsequent resolvents).
 
     :math:`W` is assumed to be positive semi-definite with a nullspace equal to the span of the ones vector, so that :math:`W 1 = 0`, ensuring that the output vector sums to 0 like the input.
     
@@ -63,8 +64,7 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
     Args:
         L (ndarray): n x n numpy array of resolvent multipliers for step 1.
         W (ndarray): n x n numpy array of resolvent multipliers for step 2.
-        l_values (array): n smoothness parameters for the functions.
-        mu_values (array): n strong convexity parameters for the functions.
+        problem (PEP): PEP problem with exactly n maximal monotone operators.
         alpha (float): resolvent scaling parameter.
         gamma (float): step size parameter.
         wrapper (str): the name of the wrapper to be used.
@@ -80,15 +80,13 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
         pepit_tau (float): worst-case value
 
     Example:
+        >>> problem = PEP()
+        >>> problem.declare_function(SmoothStronglyConvexFunction, L=2, mu=1)
+        >>> problem.declare_function(MonotoneOperator)
         >>> pepit_tau = wc_frugal_resolvent_splitting(
                             L=array([[0,0],[2,0]]), 
                             W=array([[1,-1],[-1,1]]),
-                            l_values=[2, 1000],
-                            mu_values=[1, 0],
-                            alpha=1,
-                            gamma=0.5,
-                            wrapper="cvxpy", 
-                            verbose=1)
+                            problem=problem)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -119,7 +117,7 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
         >>> comparison()
         ---------------------------------------------------------------------------
         Contraction factors of different designs with fixed step size, optimal step size, and optimal W matrix
-        when n=4 and each function has l=2, mu=1
+        with 4 smooth strongly convex functions having l=2, mu=1
         ---------------------------------------------------------------------------
                                 Contraction Factors
         Design   constant step size 0.5  optimized step size     optimized W matrix
@@ -137,15 +135,12 @@ def wc_frugal_resolvent_splitting(L, W, l_values, mu_values, alpha=1, gamma=0.5,
     # Store the number of operators
     n = W.shape[0]
 
+    # Get problem operators
+    operators = problem.list_of_functions
+
     # Validate input sizes are consistent
     assert L.shape == W.shape == (n,n)
-    assert len(l_values) == len(mu_values) == n
-
-    # Instantiate PEP
-    problem = PEP()
-
-    # Declare operators (works for LipschitzStronglyMonotoneOperator as well)
-    operators = [problem.declare_function(SmoothStronglyConvexFunction, L=l, mu=mu) for l, mu in zip(l_values, mu_values)]
+    assert len(operators) == n
 
     # Define the starting points v0 and v1 for the n-1 independent values
     v0 = [problem.set_initial_point() for _ in range(n-1)]
@@ -244,30 +239,36 @@ def comparison():
         [-1. , -1. , -0.2,  2.2]])
     
     print('---------------------------------------------------------------------------')
-    print('Contraction factors of different designs with fixed step size, optimal step size, and optimal W matrix\n when n=4 and each function has l=2, mu=1')
+    print('Contraction factors of different designs with fixed step size, optimal step size, and optimal W matrix\n with 4 smooth strongly convex functions having l=2, mu=1')
     print('---------------------------------------------------------------------------')
     print('\t\t\tContraction Factors\t\t\t')
     print('Design\t', 'constant step size 0.5\t', 'optimized step size\t', 'optimized W matrix\t')
     print('---------------------------------------------------------------------------')
 
     # Malitsky-Tam [3]
-    tau_MT = wc_frugal_resolvent_splitting(L_MT, W_MT, l_values, mu_values, gamma=0.5, verbose=-1)
-    tau_MT_opt_step = wc_frugal_resolvent_splitting(L_MT, W_MT, l_values, mu_values, gamma=1.09, verbose=-1)
-    tau_MT_opt_W = wc_frugal_resolvent_splitting(L_MT, W_MT_opt, l_values, mu_values, gamma=1, verbose=-1)
+    taus = []
+    for W, gamma in [(W_MT, 0.5), (W_MT, 1.09), (W_MT_opt, 1)]:
+        problem = PEP()
+        operators = [problem.declare_function(SmoothStronglyConvexFunction, L=l, mu=mu) for l, mu in zip(l_values, mu_values)]
+        taus.append(wc_frugal_resolvent_splitting(L_MT, W, problem, gamma=gamma, verbose=-1))
     # string format for the output of the function rounding to 3 decimal places with tab separation
-    print('MT \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(tau_MT, tau_MT_opt_step, tau_MT_opt_W))
+    print('MT \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(*taus))
 
     # Fully Connected
-    tau_f = wc_frugal_resolvent_splitting(L_full, W_full, l_values, mu_values, gamma=0.5, verbose=-1)
-    tau_f_opt_step = wc_frugal_resolvent_splitting(L_full, W_full, l_values, mu_values, gamma=1.09, verbose=-1)
-    tau_f_opt_W = wc_frugal_resolvent_splitting(L_full, W_full_opt, l_values, mu_values, gamma=1, verbose=-1)
-    print('Full \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(tau_f, tau_f_opt_step, tau_f_opt_W))
+    taus = []
+    for W, gamma in [(W_full, 0.5), (W_full, 1.09), (W_full_opt, 1)]:
+        problem = PEP()
+        operators = [problem.declare_function(SmoothStronglyConvexFunction, L=l, mu=mu) for l, mu in zip(l_values, mu_values)]
+        taus.append(wc_frugal_resolvent_splitting(L_full, W, problem, gamma=gamma, verbose=-1))
+    print('Full \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(*taus))
 
     # 2-Block [1]
-    tau_b = wc_frugal_resolvent_splitting(L_block, W_block, l_values, mu_values, gamma=0.5, verbose=-1)
-    tau_b_opt_step = wc_frugal_resolvent_splitting(L_block, W_block, l_values, mu_values, gamma=1.09, verbose=-1)
-    tau_b_opt_W = wc_frugal_resolvent_splitting(L_block, W_block_opt, l_values, mu_values, gamma=1, verbose=-1)
-    print('Block \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(tau_b, tau_b_opt_step, tau_b_opt_W))
+    taus = []
+    for W, gamma in [(W_block, 0.5), (W_block, 1.09), (W_block_opt, 1)]:
+        problem = PEP()
+        operators = [problem.declare_function(SmoothStronglyConvexFunction, L=l, mu=mu) for l, mu in zip(l_values, mu_values)]
+        taus.append(wc_frugal_resolvent_splitting(L_block, W, problem, gamma=gamma, verbose=-1))
+    print('Block \t {:.3f} \t\t\t {:.3f} \t\t\t {:.3f}'.format(*taus))
     print('---------------------------------------------------------------------------')
     print('''    Optimized step sizes and W matrix found using the dual of the PEP as in [1]. 
     MT is the Malitsky-Tam algorithm from [3].
@@ -278,15 +279,18 @@ def comparison():
 if __name__ == "__main__":
     # Douglas-Rachford [5]
     print("\n1. Basic test using Douglas-Rachford matrices\n")
+
+    # Instantiate PEP
+    problem = PEP()
+
+    # Declare operators
+    problem.declare_function(SmoothStronglyConvexFunction, L=2, mu=1)
+    problem.declare_function(MonotoneOperator)
+
     pepit_tau = wc_frugal_resolvent_splitting(
                             L=array([[0,0],[2,0]]), 
                             W=array([[1,-1],[-1,1]]),
-                            l_values=[2, 1000],
-                            mu_values=[1, 0],
-                            alpha=1,
-                            gamma=0.5,
-                            wrapper="cvxpy", 
-                            verbose=1)
+                            problem=problem)
 
     # Comparison for 4 operators for Malitsky-Tam, Fully Connected, and 2-Block designs
     # with and without optimized step sizes and W matrices from [1]
