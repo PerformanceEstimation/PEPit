@@ -22,7 +22,7 @@ from tests.additional_complexified_examples_tests import \
 from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_convex_complexified
 from tests.additional_complexified_examples_tests import wc_gradient_descent_useless_blocks
 from tests.additional_complexified_examples_tests import wc_gradient_descent_blocks
-
+from tests.additional_complexified_examples_tests import wc_reduced_frugal_resolvent_splitting_dr, wc_frugal_resolvent_splitting_dr
 
 class TestExamples(unittest.TestCase):
 
@@ -178,3 +178,21 @@ class TestExamples(unittest.TestCase):
 
         wc_modified, theory = wc_gradient_descent_blocks(L=[L], n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, theory, delta=self.relative_precision * theory)
+
+    def test_reduced_frugal_resolvent_splitting_dr(self):
+        l = 1
+        mu = .1
+        alpha = 1.3
+        gamma = 0.9
+        ref = 0.928771 # see wc_douglas_rachford_splitting
+        wc = wc_reduced_frugal_resolvent_splitting_dr(l, mu, alpha, gamma, verbose=self.verbose)
+        self.assertAlmostEqual(wc, ref, delta=self.relative_precision * ref)
+        
+    def test_frugal_resolvent_splitting_dr(self):
+        l = 1
+        mu = .1
+        alpha = 1.3
+        gamma = 0.9
+        ref = 0.928771 # see wc_douglas_rachford_splitting
+        wc = wc_frugal_resolvent_splitting_dr(l, mu, alpha, gamma, verbose=self.verbose)
+        self.assertAlmostEqual(wc, ref, delta=self.relative_precision * ref)
