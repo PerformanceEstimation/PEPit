@@ -40,6 +40,9 @@ jobs:
         pip install lxml_html_clean
         pip install -r requirements.txt
         pip install mosek
+    - name: Update version in setup.py
+      run: >-
+        sed -i "s/{{VERSION_PLACEHOLDER}}/0.0.0/g" setup.py
     - name: Install PEPit
       run: |
         pip install -e .
