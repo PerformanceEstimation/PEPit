@@ -386,7 +386,7 @@ class Function(object):
             constraint_name (str): generic name for this constraint.
             set_class_constraint_i_j (Callable): a function that takes two points in input
                                                  and returns a :class:`Constraint`.
-            symmetry (bool, optional): A boolean specifying if the constraint function is symmetric or not.
+            symmetry (bool or int, optional): A boolean specifying if the constraint function is symmetric or not. If equals -1, means a skew symmetric constraint.
                                        If so, the number of constraints is divided by 2.
                                        Set to False by default.
 
@@ -418,7 +418,7 @@ class Function(object):
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)
 
-                if i == j or (i > j and symmetry):
+                if (i == j and symmetry != -1) or (i > j and symmetry):
                     row_of_constraints.append(0)
 
                 else:
