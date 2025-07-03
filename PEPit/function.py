@@ -274,6 +274,14 @@ class Function(object):
 
         # P / v = P * (1/v)
         return self.__rmul__(other=1 / denominator)
+    
+    def last_call_before_problem_formulation(self):
+        """
+        blabla
+
+        """
+
+    
 
     def add_constraint(self, constraint, name=None):
         """

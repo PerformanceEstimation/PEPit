@@ -11,6 +11,10 @@ from .smooth_function import SmoothFunction
 from .smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from .smooth_strongly_convex_quadratic_function import SmoothStronglyConvexQuadraticFunction
 from .strongly_convex_function import StronglyConvexFunction
+from .refined_block_smooth_convex_function import Refined_BlockSmoothConvexFunction
+from .lojasiewicz_smooth_function import LojasiewiczSmoothFunction
+from .refined_lojasiewicz_smooth_function import Refined_LojasiewiczSmoothFunction
+from .expert_refined_lojasiewicz_smooth_function import ExpertRefined_LojasiewiczSmoothFunction
 
 __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
            'convex_function', 'ConvexFunction',
@@ -25,4 +29,8 @@ __all__ = ['block_smooth_convex_function', 'BlockSmoothConvexFunction',
            'smooth_strongly_convex_function', 'SmoothStronglyConvexFunction', 
            'smooth_strongly_convex_quadratic_function', 'SmoothStronglyConvexQuadraticFunction',
            'strongly_convex_function', 'StronglyConvexFunction',
+           'refined_block_smooth_convex_function', 'Refined_BlockSmoothConvexFunction',
+           'lojasiewicz_smooth_function', 'LojasiewiczSmoothFunction',
+           'refined_lojasiewicz_smooth_function', 'Refined_LojasiewiczSmoothFunction',
+           'expert_refined_lojasiewicz_smooth_function', 'ExpertRefined_LojasiewiczSmoothFunction',
            ]

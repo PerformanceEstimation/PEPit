@@ -400,15 +400,20 @@ class PEP(object):
 
         """
 
-        # Create an expression that serve for the objective (min of the performance measures)
-        self.objective = Expression(is_leaf=True)
-
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
                                   if function.get_is_leaf()]
         list_of_functions_with_constraints = [function for function in Function.list_of_functions
                                               if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
 
+
+	# Last call for functions to add new variables (e.g., when they need to know how many points require to be interpolated)
+        for function in list_of_leaf_functions:
+            function.last_call_before_problem_formulation()
+            
+        # Create an expression that serve for the objective (min of the performance measures)
+        self.objective = Expression(is_leaf=True)
+        
         # Create all class constraints
         for function in list_of_leaf_functions:
             function.set_class_constraints()

@@ -1,8 +1,10 @@
 from .cocoercive import CocoerciveOperator
 from .cocoercive_strongly_monotone import CocoerciveStronglyMonotoneOperator
+from .refined_cocoercive_strongly_monotone import Refined_CocoerciveStronglyMonotoneOperator
 from .linear import LinearOperator
 from .lipschitz import LipschitzOperator
 from .lipschitz_strongly_monotone import LipschitzStronglyMonotoneOperator
+from .refined_lipschitz_strongly_monotone import Refined_LipschitzStronglyMonotoneOperator
 from .monotone import MonotoneOperator
 from .negatively_comonotone import NegativelyComonotoneOperator
 from .nonexpansive import NonexpansiveOperator
@@ -21,4 +23,6 @@ __all__ = ['cocoercive', 'CocoerciveOperator',
            'skew_symmetric_linear', 'SkewSymmetricLinearOperator',
            'strongly_monotone', 'StronglyMonotoneOperator',
            'symmetric_linear', 'SymmetricLinearOperator',
+           'refined_cocoercive_strongly_monotone', 'Refined_CocoerciveStronglyMonotoneOperator',
+           'refined_lipschitz_strongly_monotone', 'Refined_LipschitzStronglyMonotoneOperator',
            ]

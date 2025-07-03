@@ -6,6 +6,7 @@ from .inexact_proximal_step import inexact_proximal_step
 from .linear_optimization_step import linear_optimization_step
 from .proximal_step import proximal_step
 from .epsilon_subgradient_step import epsilon_subgradient_step
+from .shifted_optimization_step import shifted_optimization_step
 
 __all__ = ['bregman_gradient_step',
            'bregman_proximal_step',
@@ -15,4 +16,5 @@ __all__ = ['bregman_gradient_step',
            'linear_optimization_step',
            'proximal_step',
            'epsilon_subgradient_step',
+           'shifted_optimization_step',
            ]
