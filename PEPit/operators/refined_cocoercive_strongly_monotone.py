@@ -184,15 +184,15 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
                     
                         T = self.get_psd_constraint_i_j_k(xi, ti,
                         				  xj, tj,
-                        				  xj, tk,
+                        				  xk, tk,
                         				  self.Mab[:,counter], 1)
                         psd_matrix = PSDMatrix(matrix_of_expressions=T)
                         self.list_of_class_psd.append(psd_matrix)
-                        #T = self.get_psd_constraint_i_j_k(xi, ti,
-                        #				  xj, tj,
-                        #				  xj, tk,
-                        #				  self.Mba[:,counter],0)
-                        #psd_matrix = PSDMatrix(matrix_of_expressions=T)
-                        #self.list_of_class_psd.append(psd_matrix)
+                        T = self.get_psd_constraint_i_j_k(xi, ti,
+                        				  xj, tj,
+                        				  xk, tk,
+                        				  self.Mba[:,counter],0)
+                        psd_matrix = PSDMatrix(matrix_of_expressions=T)
+                        self.list_of_class_psd.append(psd_matrix)
                         self.list_of_class_psd.append(psd_matrix)
                         counter += 1 

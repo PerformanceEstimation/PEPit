@@ -108,9 +108,9 @@ class Refined_LipschitzStronglyMonotoneOperator(Function):
         	Aij = (ti-tj)**2 - self.L**2 * (xi-xj)**2
         	Aik = (ti-tk)**2 - self.L**2 * (xi-xk)**2
         	Ajk = (tk-tj)**2 - self.L**2 * (xk-xj)**2
-        	Bij = 2*self.L * (- (ti-tj)*(xi-xj) + self.mu * (ti-tj)**2)
-        	Bik = 2*self.L * (- (ti-tk)*(xi-xk) + self.mu * (ti-tk)**2)
-        	Bjk = 2*self.L * (- (tk-tj)*(xk-xj) + self.mu * (tk-tj)**2)
+        	Bij = 2*self.L * (- (ti-tj)*(xi-xj) + self.mu * (xi-xj)**2)
+        	Bik = 2*self.L * (- (ti-tk)*(xi-xk) + self.mu * (xi-xk)**2)
+        	Bjk = 2*self.L * (- (tk-tj)*(xk-xj) + self.mu * (xk-xj)**2)
         else:
         	Bij = (ti-tj)**2 - self.L**2 * (xi-xj)**2
         	Bik = (ti-tk)**2 - self.L**2 * (xi-xk)**2
@@ -177,14 +177,14 @@ class Refined_LipschitzStronglyMonotoneOperator(Function):
                     if not (point_i == point_j and point_i == point_k):
                         T = self.get_psd_constraint_i_j_k(xi, ti,
                         				  xj, tj,
-                        				  xj, tk,
+                        				  xk, tk,
                         				  self.Mab[:,counter],1)
                         psd_matrix = PSDMatrix(matrix_of_expressions=T)
                         self.list_of_class_psd.append(psd_matrix)
-                        #T = self.get_psd_constraint_i_j_k(xi, ti,
-                        #				  xj, tj,
-                        #				  xj, tk,
-                        #				  self.Mba[:,counter],0)
-                        #psd_matrix = PSDMatrix(matrix_of_expressions=T)
-                        #self.list_of_class_psd.append(psd_matrix)
+                        T = self.get_psd_constraint_i_j_k(xi, ti,
+                        				  xj, tj,
+                        				  xk, tk,
+                        				  self.Mba[:,counter],0)
+                        psd_matrix = PSDMatrix(matrix_of_expressions=T)
+                        self.list_of_class_psd.append(psd_matrix)
                         counter += 1 
