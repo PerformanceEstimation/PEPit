@@ -8,13 +8,14 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
     """
     The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some necessary constraints verified by the class of cocoercive
-    and strongly monotone (maximally) operators.
+    and strongly monotone (maximally) operators. Those conditions are presented in [1, Appendix F] and are
+    stronger than those used in [2].
 
     Warnings:
         Those constraints might not be sufficient, thus the caracterized class might contain more operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         mu (float): strong monotonicity parameter
@@ -30,11 +31,16 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
         >>> func = problem.declare_function(function_class=CocoerciveStronglyMonotoneOperator, mu=.1, beta=1.)
 
     References:
+    	`[1] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
+    	A constructive approach to strengthen algebraic descriptions of function and operator classes.
+    	<https://arxiv.org/pdf/2504.14377.pdf>`_
+    	
+    	`[2] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+    	Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+    	SIAM Journal on Optimization, 30(3), 2251-2271.
+    	<https://arxiv.org/pdf/1812.00146.pdf>`_
+    
 
-    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
-    Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
-    SIAM Journal on Optimization, 30(3), 2251-2271.
-    <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 
@@ -90,8 +96,7 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
         
     def last_call_before_problem_formulation(self):
         """
-        FXXX
-
+        Adds necessary variables to the PEP to be able to formulate the necessary interpolation conditions.
         """
         nb_pts = len(self.list_of_points)
         preallocate = nb_pts * (nb_pts**2-1)
@@ -108,8 +113,7 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
                                                 M, opt,
                                                 ):
         """
-        Set XXX constraint for operators.
-
+        Formulates the necessary interpolation constraints for self (cocoercive strongly monotone operators).
         """
         
         if opt == 1:
@@ -157,8 +161,10 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
         	 
     def add_class_constraints(self):
         """
-        Add interpolation constraints for self (cocoercive strongly monotone operator).
+        Formulates the list of necessary conditions for interpolation of self (cocoercive strongly monotone and
+        maximally monotone operator), see, e.g., discussions in [2, Appendix F].
         """
+        
         counter = 0
         for i, point_i in enumerate(self.list_of_points):
 
