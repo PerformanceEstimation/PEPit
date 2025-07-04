@@ -12,6 +12,38 @@ class Refined_BlockSmoothConvexFunction(Function):
                  decomposition_dict=None,
                  reuse_gradient=True,
                  name=None):
+    """
+    The :class:`Refined_BlockSmoothConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    by implementing necessary constraints for interpolation of the class of smooth convex functions by blocks.
+    The implemented constraint is that of [2, Section 3.1].
+
+    Attributes:
+        partition (BlockPartition): partitioning of the variables (in blocks).
+        L (list): smoothness parameters (one per block).
+        
+    Smooth convex functions by blocks are characterized by a list of parameters :math:`L_i` (one per block),
+    hence can be instantiated as
+
+    Example:
+        >>> from PEPit import PEP
+        >>> from PEPit.functions import BlockSmoothConvexFunction
+        >>> problem = PEP()
+        >>> partition = problem.declare_block_partition(d=3)
+        >>> L = [1, 4, 10]
+        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
+
+    References:
+
+    `[1] Z. Shi, R. Liu (2016).
+    Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
+    In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+    <https://arxiv.org/pdf/1608.04826.pdf>`_
+    
+    `[2] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
+    A constructive approach to strengthen algebraic descriptions of function and operator classes.
+    <https://arxiv.org/pdf/2504.14377.pdf>`_
+
+    """
         
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
@@ -33,8 +65,8 @@ class Refined_BlockSmoothConvexFunction(Function):
         
     def last_call_before_problem_formulation(self):
         """
-        FXXX
-
+        Last call before modeling and solving the full PEP. Add necessarily intermediate variable before solving.
+        
         """
         nb_pts = len(self.list_of_points)
         preallocate = nb_pts * (nb_pts**2  - 1) * (self.partition.get_nb_blocks()**2)
@@ -45,7 +77,7 @@ class Refined_BlockSmoothConvexFunction(Function):
     def add_class_constraints(self):
         """
         Formulates the list of necessary constraints for interpolation for self (block smooth convex function);
-        see [1, Proposition 7].
+        see [2, Proposition 3.9].
 
         """
         # Set function ID

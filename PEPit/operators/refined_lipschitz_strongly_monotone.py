@@ -105,7 +105,8 @@ class Refined_LipschitzStronglyMonotoneOperator(Function):
                                                 M, opt,
                                                 ):
         """
-        Formulates the necessary interpolation constraints for self (Lipschitz strongly monotone operators).
+        Formulates necessary interpolation constraints for self (Lipschitz strongly monotone operators).
+        
         """
         
         if opt == 1:
@@ -155,8 +156,8 @@ class Refined_LipschitzStronglyMonotoneOperator(Function):
         """
         Formulates the list of necessary conditions for interpolation of self (Lipschitz strongly monotone and
         maximally monotone operator), see, e.g., discussions in [2, Appendix E].
-        """
         
+        """
         counter = 0
         for i, point_i in enumerate(self.list_of_points):
 
