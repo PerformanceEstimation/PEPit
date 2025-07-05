@@ -1,9 +1,10 @@
 from PEPit import PEP
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.functions import SmoothFunction
+
 from PEPit.functions import LojasiewiczSmoothFunction
 from PEPit.functions import Refined_LojasiewiczSmoothFunction
 from PEPit.functions import ExpertRefined_LojasiewiczSmoothFunction
-from PEPit.functions import SmoothStronglyConvexFunction
-from PEPit.functions import SmoothFunction
 
 
 import PEPit.examples.unconstrained_convex_minimization.cyclic_coordinate_descent as CCD
@@ -22,102 +23,6 @@ from PEPit.primitive_steps import proximal_step
 
 import numpy as np
 
-
-def wc_gradient_descent_NaiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
-    # Instantiate PEP
-    problem = PEP()
-
-    # Declare a smooth convex function
-    func = problem.declare_function(LojasiewiczSmoothFunction, L=L, mu=mu)
-
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.stationary_point()
-    fs = func(xs)
-
-    # Then define the starting point x0 of the algorithm
-    x0 = problem.set_initial_point()
-    g = func.gradient(x0)
-
-    # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( (x0-xs)**2 <= 1)
-    x = x0
-    problem.set_performance_metric( g**2 )
-    for i in range(n):
-        x = x - gamma * g
-        g = func.gradient(x)
-        problem.set_performance_metric( g**2 )
-        
-    # Solve the PEP
-    pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
-
-
-    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
-    return pepit_tau
-
-def wc_gradient_descent_ImprovedLojaciewicz(L, mu, gamma, alpha, n, wrapper="cvxpy", solver=None, verbose=1):
-    # Instantiate PEP
-    problem = PEP()
-
-    # Declare a smooth convex function
-    func = problem.declare_function(Refined_LojasiewiczSmoothFunction, L=L, mu=mu, alpha=alpha)
-
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.stationary_point()
-    fs = func(xs)
-
-    # Then define the starting point x0 of the algorithm
-    x0 = problem.set_initial_point()
-    g = func.gradient(x0)
-
-    # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( (x0-xs)**2 <= 1)
-    x = x0
-    problem.set_performance_metric( g**2 )
-    for i in range(n):
-        x = x - gamma * g
-        g = func.gradient(x)
-        problem.set_performance_metric( g**2 )
-
-    # Solve the PEP
-    pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
-
-
-    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
-    return pepit_tau
-
-def wc_gradient_descent_ExpertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
-    # Instantiate PEP
-    problem = PEP()
-
-    # Declare a smooth convex function
-    func = problem.declare_function(ExpertRefined_LojasiewiczSmoothFunction, L=L, mu=mu)
-
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.stationary_point()
-    fs = func(xs)
-
-    # Then define the starting point x0 of the algorithm
-    x0 = problem.set_initial_point()
-    g = func.gradient(x0)
-
-    # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( (x0-xs)**2 <= 1)
-    x = x0
-    problem.set_performance_metric( g**2 )
-    for i in range(n):
-        x = x - gamma * g
-        g = func.gradient(x)
-        problem.set_performance_metric( g**2 )
-
-    # Solve the PEP
-    pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
-
-
-    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
-    return pepit_tau
 def wc_cyclic_coordinate_descent_refined(L, n, wrapper="mosek", solver=None, verbose=1):
 
     # Instantiate PEP
@@ -462,23 +367,10 @@ def wc_optimistic_gradient_refined2(n, gamma, L, mu, wrapper="cvxpy", solver=Non
     
         
 if __name__ == "__main__":
-    L, mu, gamma, n = 2, .05, 2, 3
-    alpha = (mu/2/(L+mu))
-    verbose = 0
-    pepit_tau_naive = wc_gradient_descent_NaiveLojaciewicz(L, mu, gamma, n, verbose=verbose)
-    pepit_tau_improved = wc_gradient_descent_ImprovedLojaciewicz(L, mu, gamma, alpha, n, verbose=verbose)
-    pepit_tau_expert = wc_gradient_descent_ExpertLojaciewicz(L, mu, gamma, n, verbose=verbose)
-    
-    print('*** Gradient descent, Loja*** ')
-    print('\tPEPit guarantee (std inequalities):\t min_(0<=i<=n) ||nabla f(x_(i))||^2_2 <= {:.6} ||x0-x*||^2_2'.format(pepit_tau_naive))
-    print('\tPEPit guarantee (refined inequalities):\t min_(0<=i<=n) ||nabla f(x_(i))||^2_2 <= {:.6}  ||x0-x*||^2_2'.format(pepit_tau_improved))
-    print('\tPEPit guarantee (expert inequalities):\t min_(0<=i<=n) ||nabla f(x_(i))||^2_2 <= {:.6}  ||x0-x*||^2_2'.format(pepit_tau_expert))
-    print('\tIs the refined inequality stronger? {}'.format(pepit_tau_improved<=pepit_tau_naive))
-    
     L = [.1,3] 
     n = 1
     verbose = -1
-    pepit_tau_refined, _ = wc_cyclic_coordinate_descent_refined( L, n, verbose = verbose )
+    pepit_tau_refined, _ = wc_cyclic_coordinate_descent_refined( L, n, verbose = 1 )
     pepit_tau, _ = CCD.wc_cyclic_coordinate_descent( L, n, verbose = verbose )
     print('*** Cyclic coordinate descent *** ')
     print('\tPEPit guarantee (std inequalities):\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
