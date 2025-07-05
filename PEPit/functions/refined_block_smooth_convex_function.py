@@ -5,13 +5,6 @@ from PEPit.expression import Expression
 import numpy as np
 
 class Refined_BlockSmoothConvexFunction(Function):
-    def __init__(self,
-                 partition,
-                 L,
-                 is_leaf=True,
-                 decomposition_dict=None,
-                 reuse_gradient=True,
-                 name=None):
     """
     The :class:`Refined_BlockSmoothConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
     by implementing necessary constraints for interpolation of the class of smooth convex functions by blocks.
@@ -44,7 +37,32 @@ class Refined_BlockSmoothConvexFunction(Function):
     <https://arxiv.org/pdf/2504.14377.pdf>`_
 
     """
-        
+    def __init__(self,
+                 partition,
+                 L,
+                 is_leaf=True,
+                 decomposition_dict=None,
+                 reuse_gradient=True,
+                 name=None):
+        """
+
+        Args:
+            partition (BlockPartition): a :class:`BlockPartition`.
+            L (list): smoothness parameters (list of floats).
+                      The size of the list must be equal to the number of blocks of the partition.
+            is_leaf (bool): True if self is defined from scratch.
+                            False if self is defined as linear combination of leaf.
+            decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
+                                       Keys are :class:`Function` objects and values are their associated coefficients.
+            reuse_gradient (bool): If True, the same subgradient is returned
+                                   when one requires it several times on the same :class:`Point`.
+                                   If False, a new subgradient is computed each time one is required.
+            name (str): name of the object. None by default. Can be updated later through the method `set_name`.
+
+        Note:
+            Smooth convex functions by blocks are necessarily differentiable, hence `reuse_gradient` is set to True.
+
+        """
         super().__init__(is_leaf=is_leaf,
                          decomposition_dict=decomposition_dict,
                          reuse_gradient=True,

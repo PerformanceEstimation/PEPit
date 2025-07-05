@@ -45,6 +45,9 @@ from PEPit.examples.composite_convex_minimization import wc_three_operator_split
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
 from PEPit.examples.nonconvex_optimization import wc_no_lips_2
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naiveLojaciewicz as wc_gradient_Lojaciewicz_a
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refinedLojaciewicz as wc_gradient_Lojaciewicz_b
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expertLojaciewicz as wc_gradient_Lojaciewicz_c
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
@@ -487,6 +490,28 @@ class TestExamplesCVXPY(unittest.TestCase):
 
         wc, theory = wc_no_lips_2(L, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_lojaciewicz_a(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+
+        wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(theory, wc)
+
+    def test_lojaciewicz_b(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+        alpha = (mu/2/(L+mu))
+
+        wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(theory, wc)
+
+    def test_lojaciewicz_c(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+
+        wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
 
     def test_saga(self):
         L, mu, n = 1, 0.1, 5

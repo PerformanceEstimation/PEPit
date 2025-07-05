@@ -9,7 +9,7 @@ class LojasiewiczSmoothFunction(Function):
     (sometimes also referred to as a Polyak-Lojasiewicz inequality). Extensive descriptions of such classes of
     functions can be found in [1, 2].
     
-    The conditions implemented here are presented in [3, Proposition 3.4].
+    The conditions implemented here are presented in [4, Proposition 3.4] with smoothness conditions from [3].
 
     Warning:
         Smooth functions satisfying a Lojasiewicz property do not enjoy known interpolation conditions.
@@ -139,7 +139,6 @@ class LojasiewiczSmoothFunction(Function):
         
         """
         
-
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_stationary_points,
                                                       constraint_name="basic_Lojasiewicz",

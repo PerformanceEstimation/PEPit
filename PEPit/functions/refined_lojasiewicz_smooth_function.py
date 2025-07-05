@@ -165,10 +165,10 @@ class Refined_LojasiewiczSmoothFunction(Function):
                                                       constraint_name="smoothness",
                                                       set_class_constraint_i_j=self.set_SmoothnessSimple,
                                                       )
-
-        self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
-                                                      list_of_points_2=self.list_of_points,
-                                                      constraint_name="combined_smoothness_lojasiewicz",
-                                                      set_class_constraint_i_j=self.set_CombinedSmoothnessLojasiewicz,
-                                                      )
+        if self.alpha != None:
+        	self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
+        							list_of_points_2=self.list_of_points,
+        							constraint_name="combined_smoothness_lojasiewicz",
+        							set_class_constraint_i_j=self.set_CombinedSmoothnessLojasiewicz,
+        							)
 
