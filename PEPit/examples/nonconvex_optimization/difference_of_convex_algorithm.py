@@ -25,7 +25,7 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
     .. math:: x_{t+1} \\in \\argmin_x f_1(x) - \\langle \\nabla f_2(x_t), x\\rangke,
     
 
-    **Theoretical guarantee**: The results are compared with
+    **Theoretical guarantee**: The results are compared with XXXXXXX
 
     **References**:
 

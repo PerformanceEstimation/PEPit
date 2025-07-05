@@ -277,7 +277,9 @@ class Function(object):
     
     def last_call_before_problem_formulation(self):
         """
-        blabla
+        This function is called before PEPit starts the modelling steps; it is a last chance for the functions
+        to create new variables, etc. accounting for the fact that they have at their disposal the list of points
+        to be interpolated.
 
         """
 
