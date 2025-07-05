@@ -7,6 +7,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_inexact_gradient
 from PEPit.examples.stochastic_and_randomized_convex_minimization import \
     wc_randomized_coordinate_descent_smooth_strongly_convex
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
+from PEPit.examples.unconstrained_convex_minimization import wc_cyclic_coordinate_descent
 
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified2
@@ -22,6 +23,7 @@ from tests.additional_complexified_examples_tests import \
 from tests.additional_complexified_examples_tests import wc_randomized_coordinate_descent_smooth_convex_complexified
 from tests.additional_complexified_examples_tests import wc_gradient_descent_useless_blocks
 from tests.additional_complexified_examples_tests import wc_gradient_descent_blocks
+from tests.additional_complexified_examples_tests import wc_cyclic_coordinate_descent_refined
 
 
 class TestExamples(unittest.TestCase):
@@ -165,6 +167,16 @@ class TestExamples(unittest.TestCase):
         wc, theory = wc_randomized_coordinate_descent_smooth_strongly_convex(L=L, mu=mu, gamma=gamma, d=d,
                                                                              verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
+
+
+    def test_cyclic_coordinate(self):
+        L = [1., 3.]
+        n = 2
+        
+        wc_base, _ = wc_cyclic_coordinate_descent(L=L, n=n, verbose=self.verbose)
+        wc_refined, _ = wc_cyclic_coordinate_descent_refined(L=L, n=n, verbose=self.verbose)
+        
+        self.assertLessEqual(wc_refined, (1 + self.relative_precision) * wc_base)
 
     def test_gradient_descent_useless_blocks(self):
         L, gamma, n = 1, 1, 5
