@@ -7,11 +7,6 @@ from PEPit.functions import Refined_LojasiewiczSmoothFunction
 from PEPit.functions import ExpertRefined_LojasiewiczSmoothFunction
 
 
-import PEPit.examples.unconstrained_convex_minimization.cyclic_coordinate_descent as CCD
-from PEPit.functions import Refined_BlockSmoothConvexFunction
-from PEPit.block_partition import BlockPartition
-from PEPit.functions import BlockSmoothConvexFunction
-
 from PEPit.primitive_steps import shifted_optimization_step
 
 from PEPit.functions import ConvexIndicatorFunction
@@ -23,53 +18,6 @@ from PEPit.primitive_steps import proximal_step
 
 import numpy as np
 
-def wc_cyclic_coordinate_descent_refined(L, n, wrapper="mosek", solver=None, verbose=1):
-
-    # Instantiate PEP
-    problem = PEP()
-
-    # Declare a partition of the ambient space in d blocks of variables
-    d = len(L)
-    partition = problem.declare_block_partition(d=d)
-
-    # Declare a strongly convex smooth function
-    func = problem.declare_function(Refined_BlockSmoothConvexFunction, L=L, partition=partition)
-
-    # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
-    xs = func.stationary_point()
-    fs = func(xs)
-
-    # Then define the starting point x0 of the algorithm
-    x0 = problem.set_initial_point()
-
-    # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition((x0 - xs) ** 2 <= 1)
-
-    # Run n steps of the GD method
-    x = x0
-    gx, fx = func.oracle(x)
-    for k in range(n):
-        i = k % d
-        x = x - 1 / L[i] * partition.get_block(gx, i)
-        gx, fx = func.oracle(x)
-
-    # Set the performance metric to the function values accuracy
-    problem.set_performance_metric(fx - fs)
-
-    # Solve the PEP
-    pepit_verbose = max(verbose, 0)
-    pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
-
-    # Compute theoretical guarantee (for comparison)
-    theoretical_tau = None
-
-    # Print conclusion if required
-    if verbose != -1:
-        print('*** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***')
-        print('\tPEPit guarantee:\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-
-    # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
-    return pepit_tau, theoretical_tau
     
 
 def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="cvxpy", solver=None, verbose=1):
@@ -367,15 +315,7 @@ def wc_optimistic_gradient_refined2(n, gamma, L, mu, wrapper="cvxpy", solver=Non
     
         
 if __name__ == "__main__":
-    L = [.1,3] 
-    n = 1
-    verbose = -1
-    pepit_tau_refined, _ = wc_cyclic_coordinate_descent_refined( L, n, verbose = 1 )
-    pepit_tau, _ = CCD.wc_cyclic_coordinate_descent( L, n, verbose = verbose )
-    print('*** Cyclic coordinate descent *** ')
-    print('\tPEPit guarantee (std inequalities):\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau))
-    print('\tPEPit guarantee (refined inequalities):\t f(x_n)-f_* <= {:.6} ||x_0 - x_*||^2'.format(pepit_tau_refined))
-    print('\tNote: the difference between the bounds is typically small and might disappear as the problem becomes larger (e.g., larger d) due to numerical inaccuracies.')
+    verbose = 0
     
     L1, L2, mu1, mu2, eta = 2., 5., 0, 0, 1
     n = 5
