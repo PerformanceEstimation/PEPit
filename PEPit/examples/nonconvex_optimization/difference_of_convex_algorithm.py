@@ -1,8 +1,9 @@
 from PEPit import PEP
-from PEPit.functions import SmoothFunction
+from PEPit.functions import SmoothStronglyConvexFunction
+from PEPit.primitive_steps import shifted_optimization_step
 
 
-def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="cvxpy", solver=None, verbose=1):(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -22,26 +23,31 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
     **Algorithm**:
     DCA is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
-    .. math:: x_{t+1} \\in \\argmin_x f_1(x) - \\langle \\nabla f_2(x_t), x\\rangke,
+    .. math:: x_{t+1} \\in \\argmin_x f_1(x) - \\langle \\nabla f_2(x_t), x\\rangle,
     
 
-    **Theoretical guarantee**: The results are compared with XXXXXXX
+    **Theoretical guarantee**: The results are compared with [1, Theorem 3]; a more complete picture can be obtained from [2], also by
+    possibly allowing for non-convex functions :math:`f_1` and :math:`f_2` (i.e., possibly negative values for :math:`\\mu_1`, :math:`\\mu_2`.
 
     **References**:
 
-    `[1] Taylor, A. B. (2017).
-    Convex interpolation and performance estimation of first-order methods for convex optimization.
-    PhD Thesis, UCLouvain.
-    <https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01>`_
+    `[1] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
+    On the rate of convergence of the difference-of-convex algorithm (DCA).
+    Journal of Optimization Theory and Applications, 202(1), 475-496.
+    <https://arxiv.org/pdf/2109.13566>`_
+    
+    `[2] T. Rotaru, P. Patrinos, F. Glineur (2025).
+    Tight Analysis of Difference-of-Convex Algorithm (DCA) Improves Convergence Rates for Proximal Gradient Descent.
+    Journal of Optimization Theory and Applications, 202(1), 475-496.
+    <https://arxiv.org/pdf/2503.04486>`_
 
-    `[2] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
-    The exact worst-case convergence rate of the gradient method with fixed step lengths for L-smooth functions.
-    Optimization Letters, 16(6), 1649-1661.
-    <https://arxiv.org/pdf/2104.05468v3.pdf>`_
 
     Args:
-        L (float): the smoothness parameter.
-        gamma (float): step-size.
+        mu1 (float): strong convexity parameter for f1.
+        mu2 (float): strong convexity parameter for f2.
+        L1 (float): smoothness parameter for f1.
+        L2 (float): smoothness parameter for f2.
+        alpha (float): boosting parameter (defaulted to 0).
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
@@ -54,35 +60,36 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
 
     Returns:
         pepit_tau (float): worst-case value.
-        theoretical_tau (float): theoretical value.
+        theoretical_tau (float): reference theoretical value [1, Theorem 3].
 
     Example:
-        >>> L = 1
-        >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
-        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
+        >>> L1, L2, mu1, mu2 = 2., 5., .15, .1
+        >>> pepit_tau, theory = wc_difference_of_convex_algorithm(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=5, alpha = 0, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 15x15
         (PEPit) Setting up the problem: performance measure is the minimum of 6 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-        			Function 1 : Adding 30 scalar constraint(s) ...
-        			Function 1 : 30 scalar constraint(s) added
-        (PEPit) Setting up the problem: additional constraints for 0 function(s)
-        (PEPit) Compiling SDP
-        (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.26666666551166657
-        (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified
-        (PEPit) Dual feasibility check:
-        		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.5045561757111027e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.491578307483797e-09
-        (PEPit) Final upper bound (dual): 0.2666666657156721 and lower bound (primal example): 0.26666666551166657 
-        (PEPit) Duality gap: absolute: 2.0400553468746807e-10 and relative: 7.650207583915017e-10
-        *** Example file: worst-case performance of gradient descent with fixed step-size ***
-        	PEPit guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
-        	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)
+        (PEPit) Setting up the problem: initial conditions and general constraints (7 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
+				Function 1 : Adding 42 scalar constraint(s) ...
+				Function 1 : 42 scalar constraint(s) added
+				Function 2 : Adding 42 scalar constraint(s) ...
+				Function 2 : 42 scalar constraint(s) added
+	(PEPit) Setting up the problem: additional constraints for 0 function(s)
+	(PEPit) Compiling SDP
+	(PEPit) Calling SDP solver
+	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.4911306712600766
+	(PEPit) Primal feasibility check:
+			The solver found a Gram matrix that is positive semi-definite
+			All the primal scalar constraints are verified
+	(PEPit) Dual feasibility check:
+			The solver found a residual matrix that is positive semi-definite
+			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 8.62220939235375e-09
+	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.719678585376814e-07
+	(PEPit) Final upper bound (dual): 0.4911306767128882 and lower bound (primal example): 0.4911306712600766 
+	(PEPit) Duality gap: absolute: 5.452811591144524e-09 and relative: 1.1102567830175294e-08
+	*** Example file: worst-case performance of DCA ***
+		PEPit guarantee:	 min_i ||f'(x_i)||^2 <= 0.491131 (f(x_0)-f_*)
+        	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.491131 (f(x_0)-f_*)
     
     """
     
@@ -123,17 +130,26 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
     
-    Delta = 1;
-    A = 2 * (L1 * L2 - mu1 * L2 * (L1 >= L2) - mu2 * L1 * (L2 > L1));
-    B = L1 + L2 + mu1 * (L1 / L2 - 3) * (L1 >= L2) + mu2 * (L2 / L1 - 3) * (L2 > L1);
-    C = (L1 * L2 - mu1 * L2 * (L1 >= L2) - mu2 * L1 * (L2 > L1)) / (L1 - mu2);
-    theory = A * Delta / (B * n + C);
+    # Compute theoretical guarantee (for comparison)
+    if alpha == 0:
+    	Delta = 1;
+    	A = 2 * (L1 * L2 - mu1 * L2 * (L1 >= L2) - mu2 * L1 * (L2 > L1))
+    	B = L1 + L2 + mu1 * (L1 / L2 - 3) * (L1 >= L2) + mu2 * (L2 / L1 - 3) * (L2 > L1)
+    	C = (L1 * L2 - mu1 * L2 * (L1 >= L2) - mu2 * L1 * (L2 > L1)) / (L1 - mu2)
+    	theoretical_tau = A * Delta / (B * n + C)
+    else:
+    	theoretical_tau = None
 	
+    # Print conclusion if required
+    if verbose != -1:
+        print('*** Example file: worst-case performance of DCA ***')
+        print('\tPEPit guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t min_i ||f\'(x_i)||^2 <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
+
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
-    return pepit_tau, theory
+    return pepit_tau, theoretical_tau
 
 
-if __name__ == "__main__":
-    L = 1
-    gamma = 1 / L
-    pepit_tau, theoretical_tau = wc_gradient_descent(L=L, gamma=gamma, n=5, wrapper="cvxpy", solver=None, verbose=1)
+if __name__ == "__main__":    
+    L1, L2, mu1, mu2 = 2., 5., .15, .1
+    pepit_tau, theoretical_tau = wc_difference_of_convex_algorithm(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=5, alpha = 0, wrapper="mosek", solver=None, verbose=1)

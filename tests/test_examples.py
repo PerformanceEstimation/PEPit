@@ -48,6 +48,7 @@ from PEPit.examples.nonconvex_optimization import wc_no_lips_2
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naiveLojaciewicz as wc_gradient_Lojaciewicz_a
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refinedLojaciewicz as wc_gradient_Lojaciewicz_b
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expertLojaciewicz as wc_gradient_Lojaciewicz_c
+from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_DCA
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
@@ -513,6 +514,12 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
+
+    def test_DCA(self):
+        L1, L2, mu1, mu2 = 2., 3.2, .2, .1
+        wc, theory = wc_DCA(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=6, alpha = 0, wrapper="mosek", solver=None, verbose=self.verbose)
+
         self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
 
     def test_saga(self):
