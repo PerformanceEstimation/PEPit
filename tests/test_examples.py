@@ -106,6 +106,10 @@ from PEPit.examples.continuous_time_models import wc_gradient_flow_convex
 from PEPit.examples.continuous_time_models import wc_accelerated_gradient_flow_strongly_convex
 from PEPit.examples.continuous_time_models import wc_gradient_flow_strongly_convex
 from PEPit.examples.tutorials import wc_gradient_descent_contraction
+from PEPit.examples.online_learning import wc_online_gradient_descent
+from PEPit.examples.online_learning import wc_online_frank_wolfe
+from PEPit.examples.online_learning import wc_online_follow_leader
+from PEPit.examples.online_learning import wc_online_follow_regularized_leader
 
 
 class TestExamplesCVXPY(unittest.TestCase):
@@ -625,13 +629,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc1, _ = wc_optimistic_gradient_operators_refined(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
         wc2, _ = wc_optimistic_gradient_operators_refined_cocoercive(n=n2, gamma=gamma, mu=0, beta=beta, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
-
-    def test_Ogm_plot(self):
-    	beta, mu = 1/4, .05
-    	pepit_tau, theoretical_tau = wc_optimistic_gradient_operators_refined_cocoercive(n=1, gamma=1 / 4, mu=mu, beta=beta, wrapper="cvxpy", solver=None, verbose=1)
-    	L = 1/4
-    	pepit_tau, theoretical_tau = wc_optimistic_gradient_operators_refined(n=1, gamma=1 / 4, L=L, wrapper="cvxpy", solver=None, verbose=1)
-
+        
     def test_past_extragradient(self):
         n1, n2, L, gamma = 5, 6, 1, 1 / 4
 
@@ -751,6 +749,32 @@ class TestExamplesCVXPY(unittest.TestCase):
 
         wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_online_gradient_descent(self):
+        M, D, n = 1,.5,4
+        wc, theory = wc_online_gradient_descent(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_online_frank_wolfe(self):
+        M, D, n = 1,.5, 2
+        wc, theory = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertLessEqual(wc, theory)
+
+    def test_online_follow_leader(self):
+        M, D, n = 1,.5, 2
+        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertLessEqual(wc1, wc2)
+
+    def test_online_follow_regularized_leader(self):
+        M, D, n = 1,.5, 2
+        wc, theory = wc_online_follow_regularized_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+        
 
 
 class TestExamplesMosek(TestExamplesCVXPY):

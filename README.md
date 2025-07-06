@@ -235,7 +235,7 @@ if __name__ == "__main__":
 A lot of common optimization methods can be studied through this framework,
 using numerous steps and under a large variety of function / operator classes.
 
-PEPit provides the following [steps](https://pepit.readthedocs.io/en/latest/api/steps.html) (often referred to as "oracles"):
+PEPit supports the following [steps](https://pepit.readthedocs.io/en/latest/api/steps.html) (often referred to as "oracles"):
 
 - [Inexact gradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#inexact-gradient-step)
 - [Exact line-search step](https://pepit.readthedocs.io/en/latest/api/steps.html#exact-line-search-step)
@@ -244,28 +244,32 @@ PEPit provides the following [steps](https://pepit.readthedocs.io/en/latest/api/
 - [Bregman gradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-gradient-step)
 - [Bregman proximal step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-proximal-step)
 - [Linear optimization step](https://pepit.readthedocs.io/en/latest/api/steps.html#linear-optimization-step)
+- [Linearly shifted optimization step](https://pepit.readthedocs.io/en/latest/api/steps.html#linearly-shifted-optimization-step)
 - [Epsilon-subgradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#epsilon-subgradient-step)
 
-PEPit provides the following [function classes](https://pepit.readthedocs.io/en/latest/api/functions.html) CNIs:
+PEPit supports the following [function classes](https://pepit.readthedocs.io/en/latest/api/functions.html):
 
 - [Convex](https://pepit.readthedocs.io/en/latest/api/functions.html#convex)
 - [Strongly convex](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-convex)
 - [Smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth)
 - [Convex and smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-smooth)
+- [Convex and block-smooth](https://pepit.readthedocs.io/en/latest/api/functions.htmlconvex-and-smooth-by-block) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-smooth-by-block-refined-expensive-version)),
 - [Strongly convex and smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-convex-and-smooth)
 - [Convex and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-lipschitz-continuous)
 - [Convex indicator](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-indicator)
 - [Convex support](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-support-functions)
 - [Convex quadratically growing](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-quadratically-upper-bounded)
 - [Functions verifying restricted secant inequality and upper error bound](https://pepit.readthedocs.io/en/latest/api/functions.html#restricted-secant-inequality-and-error-bound)
+- [Smooth function satisfying a quadratic Lojasiewicz inequality](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality) ([stronger variant 1](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-expensive-version), [stronger variant 2](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-very-expensive-version))
 
-PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
+PEPit supports the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
 
 - [Monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#monotone)
 - [Strongly monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone)
 - [Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#lipschitz-continuous)
-- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous)
+- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-very-expensive-version))
 - [Cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive)
+- [Strongly monotone and cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-refined-expensive-version))
 
 
 ## Contributors
@@ -290,6 +294,7 @@ The contributors to this toolbox are:
 - [**Gyumin Roh**](https://rkm0959.tistory.com/)
 - [**Jisun Park**](https://jisunp515.github.io)
 - [**Nizar Bousselmi**](https://nizarbousselmi.github.io)
+- Online learning settings written jointly with [**Julien Weibel**](https://www.normalesup.org/~jweibel/), [**Pierre Gaillard**](http://pierre.gaillard.me/), and [**Wouter Koolen**](https://wouterkoolen.info/).
 
 ### Acknowledgments
 

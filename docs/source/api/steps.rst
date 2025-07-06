@@ -17,10 +17,6 @@ Proximal step
 -------------
 .. autofunction:: PEPit.primitive_steps.proximal_step
 
-Linearly shifted optimization step
-----------------------------------
-.. autofunction:: PEPit.primitive_steps.shifted_optimization_step
-
 Inexact proximal step
 ---------------------
 .. autofunction:: PEPit.primitive_steps.inexact_proximal_step
@@ -36,6 +32,10 @@ Bregman proximal step
 Linear optimization step
 ------------------------
 .. autofunction:: PEPit.primitive_steps.linear_optimization_step
+
+Linearly shifted optimization step
+----------------------------------
+.. autofunction:: PEPit.primitive_steps.shifted_optimization_step
 
 Epsilon-subgradient step
 ------------------------
