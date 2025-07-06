@@ -507,22 +507,22 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_lojaciewicz_b(self):
-        L, mu, n = 1, .2, 3
+        L, mu, n = 1, .2, 1
         gamma = 1 / L
-        alpha = (mu/2/(L+mu))
+        alpha = (2*mu/(2*L+mu))
 
         wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_lojaciewicz_c(self):
-        L, mu, n = 1, .2, 3
+        L, mu, n = 1, .2, 1
         gamma = 1 / L
 
         wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_DCA(self):
         L1, L2, mu1, mu2 = 2., 3.2, .2, .1

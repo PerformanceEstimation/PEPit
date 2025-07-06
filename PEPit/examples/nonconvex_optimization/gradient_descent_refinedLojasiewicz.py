@@ -81,30 +81,29 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
-        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
+	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+	(PEPit) Setting up the problem: interpolation conditions for 1 function(s)
 				Function 1 : Adding 16 scalar constraint(s) ...
 				Function 1 : 16 scalar constraint(s) added
 	(PEPit) Setting up the problem: additional constraints for 0 function(s)
 	(PEPit) Compiling SDP
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9046481481233357
+	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.727272727239017
 	(PEPit) Primal feasibility check:
 			The solver found a Gram matrix that is positive semi-definite
-			All the primal scalar constraints are verified
+			All the primal scalar constraints are verified up to an error of 9.529710354172494e-12
 	(PEPit) Dual feasibility check:
 			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.657373060406863e-09
-			(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.111445986352425e-08
-			(PEPit) Final upper bound (dual): 0.9046481461132734 and lower bound (primal example): 0.9046481481233357 
-			(PEPit) Duality gap: absolute: -2.0100623387975247e-09 and relative: -2.221927213323032e-09
+			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.521136597015314e-11
+	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.812156896706273e-11
+	(PEPit) Final upper bound (dual): 0.7272727272394729 and lower bound (primal example): 0.727272727239017 
+	(PEPit) Duality gap: absolute: 4.558575739110893e-13 and relative: 6.268041641568012e-13
 	*** Example file: worst-case performance of gradient descent with fixed step-size ***
 	*** 	 (smooth problem satisfying a Lojasiewicz inequality; refined version) ***
-		PEPit guarantee:	 f(x_1) - f(x_*) <= 0.904648 (f(x_0)-f_*)
+		PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
 		Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
-
     
     """
     # Instantiate PEP
@@ -140,16 +139,14 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
     m, mp = -L, mu
     if ( gamma >= 0 and gamma <= 1/L):
         theoretical_tau = (mp * ( 1 - L * gamma) + np.sqrt( (L-m) * (m-mp) * (2-L*gamma) * mp * gamma + (L-m)**2 )**2 / (L-m+mp)**2)
-        theoretical_tau = theoretical_tau**n
     elif (gamma >= 1/L and gamma <= 3/( m + L + np.sqrt( m**2 - L *m + L**2 ) ) ) :
         theoretical_tau = ( ( L * gamma - 2 ) * ( m * gamma - 2 ) * mp * gamma ) / ( (L+m-mp) * gamma - 2) + 1
-        theoretical_tau = theoretical_tau**n 
     elif ( gamma >= 3 / ( m + L + np.sqrt( m**2 - m * L + L**2) ) and gamma <= 2/L ):
         theoretical_tau = ( L * gamma - 1 )**2 / ( ( L * gamma - 1 )**2 + mp * gamma * ( 2 - L * gamma) )
-        theoretical_tau = theoretical_tau**n 
     else:
         theoretical_tau = None
 
+    theoretical_tau = theoretical_tau**n 
 
     # Print conclusion if required
     if verbose != -1:

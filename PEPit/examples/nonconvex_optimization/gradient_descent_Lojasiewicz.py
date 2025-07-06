@@ -130,16 +130,14 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
     m, mp = -L, mu
     if ( gamma >= 0 and gamma <= 1/L):
         theoretical_tau = (mp * ( 1 - L * gamma) + np.sqrt( (L-m) * (m-mp) * (2-L*gamma) * mp * gamma + (L-m)**2 )**2 / (L-m+mp)**2)
-        theoretical_tau = theoretical_tau**n
     elif (gamma >= 1/L and gamma <= 3/( m + L + np.sqrt( m**2 - L *m + L**2 ) ) ) :
         theoretical_tau = ( ( L * gamma - 2 ) * ( m * gamma - 2 ) * mp * gamma ) / ( (L+m-mp) * gamma - 2) + 1
-        theoretical_tau = theoretical_tau**n 
     elif ( gamma >= 3 / ( m + L + np.sqrt( m**2 - m * L + L**2) ) and gamma <= 2/L ):
         theoretical_tau = ( L * gamma - 1 )**2 / ( ( L * gamma - 1 )**2 + mp * gamma * ( 2 - L * gamma) )
-        theoretical_tau = theoretical_tau**n 
     else:
         theoretical_tau = None
 
+    theoretical_tau = theoretical_tau**n 
 
     # Print conclusion if required
     if verbose != -1:
