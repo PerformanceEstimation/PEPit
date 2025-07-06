@@ -763,9 +763,9 @@ class TestExamplesCVXPY(unittest.TestCase):
         self.assertLessEqual(wc, theory)
 
     def test_online_follow_leader(self):
-        M, D, n = 1,.5, 2
-        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
-        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=self.verbose) 
+        M, D, n = 1,1, 2
+        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=1) 
+        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=1)
 
         self.assertLessEqual(wc1, wc2)
 

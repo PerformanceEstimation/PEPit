@@ -294,7 +294,9 @@ The contributors to this toolbox are:
 - [**Gyumin Roh**](https://rkm0959.tistory.com/)
 - [**Jisun Park**](https://jisunp515.github.io)
 - [**Nizar Bousselmi**](https://nizarbousselmi.github.io)
-- Online learning settings written jointly with [**Julien Weibel**](https://www.normalesup.org/~jweibel/), [**Pierre Gaillard**](http://pierre.gaillard.me/), and [**Wouter Koolen**](https://wouterkoolen.info/).
+- [**Henry Shugart**](https://statistics.wharton.upenn.edu/profile/hshugart/)
+- Online learning settings written jointly with [**Julien Weibel**](https://www.normalesup.org/~jweibel/), [**Pierre Gaillard**](http://pierre.gaillard.me/), and [**Wouter Koolen**](https://wouterkoolen.info/)
+- SDP-representation of refined quadratic Lojasiewicz inequalities, strongly monotone operators with Lipschitz or cocoercive properties, and convex functions with block-smoothness written jointly with [**Anne Rubbens**](https://www.uclouvain.be/fr/people/anne.rubbens)
 
 ### Acknowledgments
 

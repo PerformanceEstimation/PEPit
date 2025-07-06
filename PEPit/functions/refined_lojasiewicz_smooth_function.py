@@ -127,10 +127,12 @@ class Refined_LojasiewiczSmoothFunction(Function):
         Formulates necessary interpolation constraints for self (smooth Lojasiewicz functions), see [4, Proposition 3.2].
         
         """
-        const = (self.L+self.mu)*(1-self.alpha)**2 / ((self.L+self.mu)*(1-self.alpha)**2-(self.L-self.mu))
+        _,_,fs = self.list_of_stationary_points[0]
+        const = self.alpha / ( 1 - self.alpha ) /( 2 * self.mu - ( self.L + self.mu ) * self.alpha)
 
-        constraint = (fi - fj >= 1/4 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2
-                      + self.alpha / ( 1 - self.alpha ) * ( (fj + gj**2 / 2/self.L) - self.L/4 * const * (xj - xi + (gi+gj)/self.L)**2 ) )
+        constraint = (fi - fj >= 1/2 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2 \
+        		+  const * ( (1-self.alpha)**2 * ( self.L + self.mu ) * ( fi - fs - gi**2/2/self.L ) \
+        		- ( self.L - self.mu ) * (fj - fs + gj**2 / 2 / self.L ) ) )
 
         return constraint
         
@@ -142,7 +144,7 @@ class Refined_LojasiewiczSmoothFunction(Function):
         Formulates a list of interpolation constraints for self (smooth (not necessarily convex) function),
         see [3, Theorem 3.10].
         """
-        constraint = (fi - fj >= 1/4 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2 )
+        constraint = (fi - fj >= 1/2 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2 )
 
         return constraint
     

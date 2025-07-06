@@ -126,10 +126,7 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
-    # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 4 / 3 * L / n
-    
-    # for convenience (see bounds in [4, Theorem 3])
+    # Compute theoretical guarantee (for comparison, see bounds in [4, Theorem 3])
     m, mp = -L, mu
     if ( gamma >= 0 and gamma <= 1/L):
         theoretical_tau = (mp * ( 1 - L * gamma) + np.sqrt( (L-m) * (m-mp) * (2-L*gamma) * mp * gamma + (L-m)**2 )**2 / (L-m+mp)**2)

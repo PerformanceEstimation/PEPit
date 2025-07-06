@@ -129,7 +129,7 @@ class LojasiewiczSmoothFunction(Function):
         see [3, Theorem 3.10].
         """
         
-        constraint = (fi - fj >= 1/4 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2 )
+        constraint = (fi - fj >= 1/2 * (gi + gj) * (xi - xj) + 1 / (4 * self.L) * (gj - gi) ** 2 - self.L/4 * (xj - xi)**2 )
 
         return constraint
     
