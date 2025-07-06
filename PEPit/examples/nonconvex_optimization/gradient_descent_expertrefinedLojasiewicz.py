@@ -13,7 +13,7 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
     .. math:: f(x)-f_\\star \\leqslant \\frac{1}{2\\mu}\|\\nabla f(x) \|^2,
     
     details can be found in [1,2,3]. The example here relies on the :class:`ExpertRefined_LojasiewiczSmoothFunction`
-    description of smooth Lojasiewicz functions (based on [4, Proposition 3.4]).
+    description of smooth Lojasiewicz functions (based on [5, Proposition 3.4]).
 
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\gamma)` such that the guarantee
@@ -51,6 +51,10 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
     	Conditions for linear convergence of the gradient method for non-convex optimization.
     	Optimization Letters.
     	<https://arxiv.org/pdf/2204.00647>`_
+    	
+    	`[5] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
+    	A constructive approach to strengthen algebraic descriptions of function and operator classes.
+    	<https://arxiv.org/pdf/2504.14377.pdf>`_
 
     Args:
         L (float): the smoothness parameter.

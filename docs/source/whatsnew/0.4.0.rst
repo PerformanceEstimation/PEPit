@@ -1,0 +1,14 @@
+What's new in PEPit 0.4.0
+=========================
+
+- New class of functions: smooth functions satisfying a quadratic Lojaciewics property. Note that there is no guaranteed interpolation result for them. We incorporated three different implementations (types of conditions) for them, ranging from the natural quadratic inequalities to equivalent more expensive ones (SDP-represented) that should better capture the class.
+
+- Refined classes of functions: Similarly, we have introduced a SDP-representation of convex block-smooth functions that should be able to better capture this class of problems (but for which the SDP are much more costly, which might or might not be worth solving).
+
+- Refined classes of operators: Similarly, we have introduced a SDP-representation of strongly monotone operators that are also either Lipschitz or cocoercive. The new SDP-represented conditions should be able to better capture those classes of problems at the cost of (much) more costly PEPs to be solved (which might or might not be worth).
+
+- New primitive step: linearly shifted optimization (minimize function + linear term), which is among others used in the difference-of-convex algorithm (DCA, also known as the convex-concave procedure).
+
+- New examples: (i) Refined block-coordinate descent (refined interpolation techniques--but computationnaly more expensive) (ii) introduction of quadratic Lojasiewicz inequalities, examples on gradient descent (with different ways to improse Lojasiewicz inequalities, from naive ones to more advanced SDP-representable ones) (iii) optimistic gradient with more advanced SDP-representable monotonocity/Lipschitz characterization, (iv) difference-of-convex algorithm (DCA, also known as the convex-concave procedure),  (v) online learning settings (online gradient descent, online Frank-Wolfe).
+
+- Refined/corrected examples: SGD: the closed-form solution was previously only in an un-updated PR, Douglas-Rachford splitting had a few typos in their references.

@@ -36,6 +36,16 @@ Optimistic gradient
 .. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_optimistic_gradient
 
 
+Optimistic gradient (more expensive/less conservative version)
+--------------------------------------------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_optimistic_gradient_refined
+
+
+Optimistic gradient, cocoercive problem (more expensive/less conservative version)
+----------------------------------------------------------------------------------
+.. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_optimistic_gradient_refined_cocoercive
+
+
 Past extragradient
 ------------------
 .. autofunction:: PEPit.examples.monotone_inclusions_variational_inequalities.wc_past_extragradient

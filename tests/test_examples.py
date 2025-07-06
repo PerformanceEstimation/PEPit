@@ -71,6 +71,10 @@ from PEPit.examples.monotone_inclusions_variational_inequalities import \
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_optimistic_gradient as wc_optimistic_gradient_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_optimistic_gradient_refined as wc_optimistic_gradient_operators_refined
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_optimistic_gradient_refined_cocoercive as wc_optimistic_gradient_operators_refined_cocoercive
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_past_extragradient as wc_past_extragradient_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
 from PEPit.examples.fixed_point_problems import wc_krasnoselskii_mann_constant_step_sizes
@@ -607,6 +611,26 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
         wc2, _ = wc_optimistic_gradient_operators(n=n2, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
+
+    def test_optimistic_gradient_refined(self):
+        n1, n2, L, gamma = 2, 2, 1, 1 / 4
+
+        wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators_refined(n=n2, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+
+    def test_optimistic_gradient_cocoercive(self):
+        n1, n2, L, gamma, beta = 1, 1, 1, 1 / 4, 1
+
+        wc1, _ = wc_optimistic_gradient_operators_refined(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators_refined_cocoercive(n=n2, gamma=gamma, mu=0, beta=beta, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+
+    def test_Ogm_plot(self):
+    	beta, mu = 1/4, .05
+    	pepit_tau, theoretical_tau = wc_optimistic_gradient_operators_refined_cocoercive(n=1, gamma=1 / 4, mu=mu, beta=beta, wrapper="cvxpy", solver=None, verbose=1)
+    	L = 1/4
+    	pepit_tau, theoretical_tau = wc_optimistic_gradient_operators_refined(n=1, gamma=1 / 4, L=L, wrapper="cvxpy", solver=None, verbose=1)
 
     def test_past_extragradient(self):
         n1, n2, L, gamma = 5, 6, 1, 1 / 4

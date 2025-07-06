@@ -200,5 +200,4 @@ class Refined_CocoerciveStronglyMonotoneOperator(Function):
                         				  self.Mba[:,counter],0)
                         psd_matrix = PSDMatrix(matrix_of_expressions=T)
                         self.list_of_class_psd.append(psd_matrix)
-                        self.list_of_class_psd.append(psd_matrix)
                         counter += 1 

@@ -45,7 +45,7 @@ def wc_sgd_overparametrized(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbo
 
     **Theoretical guarantee**: An empirically tight one-iteration guarantee is provided in the code of PESTO [1]:
 
-        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left(\\max(1 - \\gamma\\mu, L\\gamma - 1\\right)^2 \\|x_0-x_\\star\\|^2.
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left(\\max(1 - \\gamma\\mu, L\\gamma - 1\\right)\\right)^2 \\|x_0-x_\\star\\|^2.
 
     Note that we observe the guarantee does not depend on the number :math:`n` of
     functions for this particular setting, thereby implying that the guarantees are also valid for expectation

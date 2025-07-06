@@ -35,6 +35,12 @@ Strongly monotone and Lipschitz continuous
    :members:
    :show-inheritance:
 
+Strongly monotone and Lipschitz continuous (refined expensive version)
+----------------------------------------------------------------------
+.. autoclass:: PEPit.operators.Refined_LipschitzStronglyMonotoneOperator
+   :members:
+   :show-inheritance:
+
 Cocoercive
 ----------
 .. autoclass:: PEPit.operators.CocoerciveOperator
@@ -44,6 +50,12 @@ Cocoercive
 Cocoercive and strongly monotone
 --------------------------------
 .. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperator
+   :members:
+   :show-inheritance:
+
+Cocoercive and strongly monotone (refined expensive version)
+------------------------------------------------------------
+.. autoclass:: PEPit.operators.Refined_CocoerciveStronglyMonotoneOperator
    :members:
    :show-inheritance:
 

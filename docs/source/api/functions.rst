@@ -77,8 +77,33 @@ Convex and smooth by block
    :members:
    :show-inheritance:
 
+Convex and smooth by block (refined expensive version)
+------------------------------------------------------
+.. autoclass:: PEPit.functions.Refined_BlockSmoothConvexFunction
+   :members:
+   :show-inheritance:
+   
 Strongly convex and smooth quadratic
 ------------------------------------
 .. autoclass:: PEPit.functions.SmoothStronglyConvexQuadraticFunction
    :members:
    :show-inheritance:
+   
+Smooth function satisfying quadratic Lojasiewicz inequality
+-----------------------------------------------------------
+.. autoclass:: PEPit.functions.LojasiewiczSmoothFunction
+   :members:
+   :show-inheritance:
+
+Smooth function satisfying quadratic Lojasiewicz inequality (refined expensive version)
+---------------------------------------------------------------------------------------
+.. autoclass:: PEPit.functions.Refined_LojasiewiczSmoothFunction
+   :members:
+   :show-inheritance:
+
+Smooth function satisfying quadratic Lojasiewicz inequality (refined very expensive version)
+--------------------------------------------------------------------------------------------
+.. autoclass:: PEPit.functions.ExpertRefined_LojasiewiczSmoothFunction
+   :members:
+   :show-inheritance:
+

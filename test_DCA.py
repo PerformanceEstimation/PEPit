@@ -117,6 +117,7 @@ def wc_optimistic_gradient_refined(n, gamma, beta, mu, wrapper="cvxpy", solver=N
     if verbose != -1:
         print('*** Example file: worst-case performance of the Optimistic Gradient Method***')
         print('\tPEPit guarantee:\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
+        print('func got evaluated at {:} points....(supposed to have 2*{} LMIs)'.format(len(F.list_of_points),len(F.list_of_points)*(len(F.list_of_points)**2-1)))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau
@@ -225,10 +226,10 @@ def wc_optimistic_gradient_refined2(n, gamma, L, mu, wrapper="cvxpy", solver=Non
         
 if __name__ == "__main__":
     verbose = 0
-    n, beta, mu = 3, 1, 0.2
+    n, beta, mu = 1, 1, 0.2
     gamma = 1
-    pepit_tau, theory  = wc_optimistic_gradient(n, gamma, beta, mu, wrapper="mosek", solver=None, verbose=verbose)
-    pepit_tau_refined, theory  = wc_optimistic_gradient_refined(n, gamma, beta, mu, wrapper="mosek", solver=None, verbose=verbose)
+    pepit_tau, theory  = wc_optimistic_gradient(n, gamma, beta, mu, wrapper="mosek", solver=None, verbose=1)
+    pepit_tau_refined, theory  = wc_optimistic_gradient_refined(n, gamma, beta, mu, wrapper="mosek", solver=None, verbose=1)
     print('*** OG (Cocoercive) *** ')
     print('\tPEPit guarantee (std inequalities):\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau))
     print('\tPEPit guarantee (refined inequalities):\t ||x(n) - x(n-1)||^2 <= {:.6} ||x0 - xs||^2'.format(pepit_tau_refined))

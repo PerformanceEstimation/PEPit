@@ -23,7 +23,7 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
     **Algorithm**:
     DCA is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
-    .. math:: x_{t+1} \\in \\argmin_x f_1(x) - \\langle \\nabla f_2(x_t), x\\rangle,
+    .. math:: x_{t+1} \\in \\mathrm{argmin}_x\\,\\{ f_1(x) - \\langle \\nabla f_2(x_t), x\\rangle\\},
     
 
     **Theoretical guarantee**: The results are compared with [1, Theorem 3]; a more complete picture can be obtained from [2], also by
