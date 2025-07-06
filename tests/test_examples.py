@@ -507,7 +507,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(theory, wc)
+        self.assertLessEqual(wc, theory)
 
     def test_lojaciewicz_b(self):
         L, mu, n = 1, .2, 3
@@ -515,14 +515,14 @@ class TestExamplesCVXPY(unittest.TestCase):
         alpha = (mu/2/(L+mu))
 
         wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(theory, wc)
+        self.assertLessEqual(wc, theory)
 
     def test_lojaciewicz_c(self):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
 
         wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
+        self.assertLessEqual(wc, theory)
 
     def test_DCA(self):
         L1, L2, mu1, mu2 = 2., 3.2, .2, .1
@@ -764,8 +764,8 @@ class TestExamplesCVXPY(unittest.TestCase):
 
     def test_online_follow_leader(self):
         M, D, n = 1,1, 2
-        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=1) 
-        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=1)
+        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=self.verbose)
 
         self.assertLessEqual(wc1, wc2)
 

@@ -147,6 +147,7 @@ class ExpertRefined_LojasiewiczSmoothFunction(Function):
 
         # Browse list of points and create necessary constraints for interpolation [3, Lemma 3.4]
         counter = 0
+        _,_,fs = self.list_of_stationary_points[0]
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -161,11 +162,10 @@ class ExpertRefined_LojasiewiczSmoothFunction(Function):
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)
                 
-                #if not (point_i == point_j):
-                if True:
+                if not (point_i == point_j):
                     A = -fi + fj + 1/2 * ( gi + gj ) * ( xi - xj ) + 1/4/self.L *  ( gi - gj )**2 - self.L/4 * ( xi - xj )**2 
-                    B = (self.L + self.mu) * ( fi - 1/2/self.L * gi**2 )
-                    C = (self.L - self.mu) * ( fj - 1/2/self.L * gj**2 )
+                    B = (self.L + self.mu) * ( fi  - fs - 1/2/self.L * gi**2 )
+                    C = (self.L - self.mu) * ( fj  - fs - 1/2/self.L * gj**2 )
                     
                     D = 2 * self.mu * ( B - C - ( self.L + 3 * self.mu ) * A ) / ( 2 * self.L + self.mu)
                     E = 4 * self.mu**2 * (( self.L + self.mu) * A + B ) / ( 2 * self.L + self.mu) **2
