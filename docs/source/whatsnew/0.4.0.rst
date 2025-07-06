@@ -7,8 +7,8 @@ What's new in PEPit 0.4.0
 
 - Refined classes of operators: Similarly, we have introduced a SDP-representation of strongly monotone operators that are also either Lipschitz or cocoercive. The new SDP-represented conditions should be able to better capture those classes of problems at the cost of (much) more costly PEPs to be solved (which might or might not be worth).
 
-- New primitive step: linearly shifted optimization (minimize function + linear term), which is among others used in the difference-of-convex algorithm (DCA, also known as the convex-concave procedure).
+- New primitive step: linearly shifted optimization (minimize given function + linear term), which is among others used in the difference-of-convex algorithm (DCA, also known as the convex-concave procedure).
 
 - New examples: (i) Refined block-coordinate descent (refined interpolation techniques--but computationnaly more expensive) (ii) introduction of quadratic Lojasiewicz inequalities, examples on gradient descent (with different ways to improse Lojasiewicz inequalities, from naive ones to more advanced SDP-representable ones) (iii) optimistic gradient with more advanced SDP-representable monotonocity/Lipschitz characterization, (iv) difference-of-convex algorithm (DCA, also known as the convex-concave procedure),  (v) online learning settings (online gradient descent, online Frank-Wolfe, follow the leader, follow the regularized leader).
 
-- Refined/corrected examples: SGD: the closed-form solution was previously only in an un-updated PR, Douglas-Rachford splitting had a few typos in their references.
+- Refined/corrected examples: SGD: the closed-form solution was previously only in an non-pushed PR, Douglas-Rachford splitting had a few typos in their references.
