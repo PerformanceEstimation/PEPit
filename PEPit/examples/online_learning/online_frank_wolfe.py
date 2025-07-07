@@ -9,11 +9,12 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the online convex minimization problem, whose goal is to sequentially minimize the regret
 
-    .. math:: R_n \\triangleq \\min_{x\\in Q} \sum_{i=1}^n f_i(x_i)-f_i(x_\\star),
+    .. math:: R_n \\triangleq \\min_{x\\in Q} \sum_{i=1}^n f_i(x_i)-f_i(x),
 
     where the functions :math:`f_i` are :math:`M`-Lipschitz and convex, and where :math:`Q` is a
-    bounded closed convex set with diameter upper bounded by :math:`D`, and where :math:`x_\\star\\in Q`
-    is a reference point. Classical references on the topic include [1, 2].
+    bounded closed convex set with diameter upper bounded by :math:`D`. We also denote by :math:`x_\\star\\in Q`
+    the solution to the minimization problem defining :math:`R_n` (i.e., :math:`x_\\star` is a reference point).
+    Classical references on the topic include [1, 2].
 
     This code computes a worst-case guarantee for **online Frank-Wolfe** (OFW), see [1, Algorithm 27];
     the code uses the choice [3, Section 2] here. That is, it computes the smallest possible

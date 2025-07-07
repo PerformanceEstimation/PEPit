@@ -8,11 +8,13 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
     """
     Consider the online convex minimization problem, whose goal is to sequentially minimize the regret
 
-    .. math:: R_n \\triangleq \\min_{x\\in Q} \sum_{i=1}^n f_i(x_i)-f_i(x_\\star),
+    .. math:: R_n \\triangleq \\min_{x\\in Q} \sum_{i=1}^n f_i(x_i)-f_i(x),
 
     where the functions :math:`f_i` are :math:`M`-Lipschitz and convex, and where :math:`Q` is a
-    bounded closed convex set with diameter upper bounded by :math:`D`, and where :math:`x_\\star\\in Q`
-    is a reference point. Classical references on the topic include [1, 2].
+    bounded closed convex set with diameter upper bounded by :math:`D`. We also denote by :math:`x_\\star\\in Q`
+    the solution to the minimization problem defining :math:`R_n` (i.e., :math:`x_\\star` is a reference point).
+    Classical references on the topic include [1, 2]; such algorithms were studied using the performance
+    estimation technique in [3] and using the related IQCs in [4].
 
     This code computes a worst-case guarantee for **online gradient descent** (OGD) with a step-size :math:`\\gamma=D/M/\\sqrt{n}`.
     That is, it computes the smallest possible :math:`\\tau(n, M, D)` such that the guarantee
@@ -47,6 +49,14 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
     `[2] F. Orabona (2025).
     A Modern Introduction to Online Learning.
     <https://arxiv.org/pdf/1912.13213>`_
+    
+    `[3] J. Weibel, P. Gaillard, W.M. Koolen, A. Taylor (2025).
+    Optimized projection-free algorithms for online learning: construction and worst-case analysis
+    <https://arxiv.org/pdf/2506.05855>`_
+    
+    `[4] F. Jakob, A. Iannelli (2025).
+    Online Convex Optimization and Integral Quadratic Constraints: A new approach to regret analysis
+    <https://arxiv.org/pdf/2503.23600?>`_
 
     Args:
         M (float): the Lipschitz parameter.
