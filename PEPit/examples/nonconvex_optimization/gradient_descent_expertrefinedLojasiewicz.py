@@ -97,24 +97,22 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
 	(PEPit) Setting up the problem: additional constraints for 0 function(s)
 	(PEPit) Compiling SDP
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7272727270797326
+	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6832742770838611
 	(PEPit) Primal feasibility check:
 			The solver found a Gram matrix that is positive semi-definite
-			All required PSD matrices are indeed positive semi-definite up to an error of 1.6069490871558884e-10
+			All required PSD matrices are indeed positive semi-definite up to an error of 7.27706965150763e-06
 			All the primal scalar constraints are verified
 	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual matrices to lmi are positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.2430734841792994e-10
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.016076821272936e-09
-	(PEPit) Final upper bound (dual): 0.7272727274253242 and lower bound (primal example): 0.7272727270797326 
-	(PEPit) Duality gap: absolute: 3.4559166639525074e-10 and relative: 4.751885414195694e-10
+			The solver found a residual matrix that is positive semi-definite up to an error of 1.6437548385829792e-17
+			All the dual matrices to lmi are positive semi-definite up to an error of 7.152896048249063e-16
+			All the dual scalar values associated with inequality constraints are nonnegative
+	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.95644513206695e-08
+	(PEPit) Final upper bound (dual): 0.6832673918891382 and lower bound (primal example): 0.6832742770838611 
+	(PEPit) Duality gap: absolute: -6.885194722916488e-06 and relative: -1.0076765588632628e-05
 	*** Example file: worst-case performance of gradient descent with fixed step-size ***
 	*** 	 (smooth problem satisfying a Lojasiewicz inequality; expert version) ***
-		PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
+		PEPit guarantee:	 f(x_1) - f(x_*) <= 0.683267 (f(x_0)-f_*)
 		Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
-
-
 
     """
     # Instantiate PEP
