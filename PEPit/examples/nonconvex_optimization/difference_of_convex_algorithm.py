@@ -27,7 +27,7 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
     
 
     **Theoretical guarantee**: The results are compared with [1, Theorem 3]; a more complete picture can be obtained from [2], also by
-    possibly allowing for non-convex functions :math:`f_1` and :math:`f_2` (i.e., possibly negative values for :math:`\\mu_1`, :math:`\\mu_2`.
+    possibly allowing for non-convex functions :math:`f_1` and :math:`f_2` (i.e., possibly negative values for :math:`\\mu_1`, :math:`\\mu_2`).
 
     **References**:
 
