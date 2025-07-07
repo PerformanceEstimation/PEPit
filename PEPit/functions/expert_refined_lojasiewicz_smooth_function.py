@@ -147,7 +147,7 @@ class ExpertRefined_LojasiewiczSmoothFunction(Function):
 
         # Browse list of points and create necessary constraints for interpolation [3, Lemma 3.4]
         counter = 0
-        #_,_,fs = self.list_of_stationary_points[0]
+        _,_,fs = self.list_of_stationary_points[0]
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -164,15 +164,15 @@ class ExpertRefined_LojasiewiczSmoothFunction(Function):
                 
                 if not (point_i == point_j):
                     A = -fi + fj + 1/2 * ( gi + gj ) * ( xi - xj ) + 1/4/self.L *  ( gi - gj )**2 - self.L/4 * ( xi - xj )**2 
-                    B = (self.L + self.mu) * ( fi  - 1/2/self.L * gi**2 )
-                    C = (self.L - self.mu) * ( fj - 1/2/self.L * gj**2 )
+                    B = (self.L + self.mu) * ( fi - fs - 1/2/self.L * gi**2 )
+                    C = (self.L - self.mu) * ( fj - fs + 1/2/self.L * gj**2 )
                     
                     D = 2 * self.mu * ( B - C - ( self.L + 3 * self.mu ) * A ) / ( 2 * self.L + self.mu)
-                    E = 4 * self.mu**2 * (( self.L + self.mu) * A + B ) / ( 2 * self.L + self.mu) **2
+                    E = 4 * self.mu**2 * (( self.L + self.mu) * A - 2* B ) / ( 2 * self.L + self.mu) **2
                     F = - 2 * self.mu * A - D - E - 8 * self.mu**3 * B / ( 2 * self.L + self.mu )**3
                     
                     M22 = - 6 * self.mu * A - D - 2 * self.M13[counter]
-                    M33 = - 6 * self.mu * A - 2 * D + E - 2 * self.M24[counter] 
+                    M33 = - 6 * self.mu * A - 2 * D - E - 2 * self.M24[counter] 
                     
                     T = np.array([[-2*self.mu*A, 0, self.M13[counter], self.M14[counter]],
                     			[0,M22, -self.M14[counter], self.M24[counter]],

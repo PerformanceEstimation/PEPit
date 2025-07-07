@@ -160,6 +160,6 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
     
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
-    alpha = (mu/2/(L+mu))
+    alpha = (2*mu/(2*L+mu))
     verbose = 0
     pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
