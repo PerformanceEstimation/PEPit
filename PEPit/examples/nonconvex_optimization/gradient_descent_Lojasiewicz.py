@@ -103,7 +103,7 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a smooth convex function
+    # Declare a smooth function satisfying a quadratic Lojasiewicz inequality
     func = problem.declare_function(LojasiewiczSmoothFunction, L=L, mu=mu)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
@@ -115,11 +115,14 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition( func(x0) - fs <= 1)
+    
+    # Run gradient descent
     x = x0
     for i in range(n):
         g = func.gradient(x)
         x = x - gamma * g
     
+    # Set up performance measure
     problem.set_performance_metric( func(x) - fs )
     
     # Solve

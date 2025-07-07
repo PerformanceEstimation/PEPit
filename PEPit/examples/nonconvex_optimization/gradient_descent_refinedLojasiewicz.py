@@ -109,7 +109,7 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a smooth convex function
+    # Declare a smooth function satisfying a quadratic Lojasiewicz inequality
     func = problem.declare_function(Refined_LojasiewiczSmoothFunction, L=L, mu=mu, alpha=alpha)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
@@ -121,21 +121,22 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
 
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition( func(x0) - fs <= 1)
+    
+    # Run gradient descent
     x = x0
     for i in range(n):
         g = func.gradient(x)
         x = x - gamma * g
     
+    # Set up performance measure
     problem.set_performance_metric( func(x) - fs )
     
     # Solve
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
-    # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 4 / 3 * L / n
     
-    # for convenience (see bounds in [4, Theorem 3])
+    # Compute theoretical guarantee (see bounds in [4, Theorem 3])
     m, mp = -L, mu
     if ( gamma >= 0 and gamma <= 1/L):
         theoretical_tau = (mp * ( 1 - L * gamma) + np.sqrt( (L-m) * (m-mp) * (2-L*gamma) * mp * gamma + (L-m)**2 )**2 / (L-m+mp)**2)
