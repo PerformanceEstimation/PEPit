@@ -410,8 +410,10 @@ class TestExamplesCVXPY(unittest.TestCase):
     def test_conditional_gradient_frank_wolfe(self):
         D, L, n = 1., 1., 10
 
-        wc, theory = wc_frank_wolfe(L, D, n, wrapper=self.wrapper, verbose=self.verbose)
-        self.assertLessEqual(wc, theory)
+        wc_D, theory = wc_frank_wolfe(L, D=D, R=np.infty, center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        wc_R, _ = wc_frank_wolfe(L, D=np.infty, R=D/2, center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc_R, wc_D)
+        self.assertLessEqual(wc_D, theory)
 
     def test_douglas_rachford_splitting_contraction(self):
         mu, L, alpha, theta, n = 0.1, 1, 3, 1, 1
