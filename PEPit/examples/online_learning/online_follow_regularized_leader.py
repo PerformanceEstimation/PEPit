@@ -88,7 +88,7 @@ def wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, v
 	(PEPit) Setting up the problem: additional constraints for 0 function(s)
 	(PEPit) Compiling SDP
 	(PEPit) Calling SDP solver
-	(PEPit) Solver status: prosta.prim_and_dual_feas (wrapper:mosek, solver: MOSEK); optimal value: 0.7071067900029648
+	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7071067900029648
 	(PEPit) Primal feasibility check:
 			The solver found a Gram matrix that is positive semi-definite
 			All the primal scalar constraints are verified up to an error of 1.7911056637842648e-08
