@@ -86,16 +86,16 @@ def wc_polyak_steps_in_distance_to_optimum(L, mu, gamma, wrapper="cvxpy", solver
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6694214876445734
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6694214876445957
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.765730096858764e-11
+        		All the primal scalar constraints are verified up to an error of 1.7665928615795412e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.680247484013155e-10
-        (PEPit) Final upper bound (dual): 0.6694214876573649 and lower bound (primal example): 0.6694214876445734 
-        (PEPit) Duality gap: absolute: 1.2791434578218741e-11 and relative: 1.91081923934451e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.682795799602065e-10
+        (PEPit) Final upper bound (dual): 0.6694214876573941 and lower bound (primal example): 0.6694214876445957 
+        (PEPit) Duality gap: absolute: 1.2798317960971417e-11 and relative: 1.911847497755585e-11
         *** Example file: worst-case performance of Polyak steps ***
         	PEPit guarantee:	 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2 
         	Theoretical guarantee:	 ||x_1 - x_*||^2 <= 0.669421 ||x_0 - x_*||^2

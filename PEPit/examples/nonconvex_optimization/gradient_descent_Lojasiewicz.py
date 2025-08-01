@@ -75,29 +75,29 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
         >>> gamma = 1 / L
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_naiveLojaciewicz(L=L, gamma=gamma, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
-	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
-	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-	(PEPit) Setting up the problem: interpolation conditions for 1 function(s)
-				Function 1 : Adding 10 scalar constraint(s) ...
-				Function 1 : 10 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.72727192783787
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite
-			All the primal scalar constraints are verified up to an error of 2.2204271665771103e-06
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite up to an error of 2.1061537691935822e-16
-			All the dual scalar values associated with inequality constraints are nonnegative
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.37616942361438e-08
-	(PEPit) Final upper bound (dual): 0.7272732098274564 and lower bound (primal example): 0.72727192783787 
-	(PEPit) Duality gap: absolute: 1.2819895863769304e-06 and relative: 1.7627376189098874e-06
-	*** Example file: worst-case performance of gradient descent with fixed step-size ***
-	*** 	 (smooth problem satisfying a Lojasiewicz inequality; basic version) ***
-		PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
-		Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 1 function(s)
+        			Function 1 : Adding 10 scalar constraint(s) ...
+        			Function 1 : 10 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7272727088286305
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.45387237307569e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.656794643018536e-08
+        (PEPit) Final upper bound (dual): 0.7272727115834279 and lower bound (primal example): 0.7272727088286305 
+        (PEPit) Duality gap: absolute: 2.754797390203123e-09 and relative: 3.7878465075914795e-09
+        *** Example file: worst-case performance of gradient descent with fixed step-size ***
+        *** 	 (smooth problem satisfying a Lojasiewicz inequality; basic version) ***
+        	PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
+        	Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
     
     """
     # Instantiate PEP

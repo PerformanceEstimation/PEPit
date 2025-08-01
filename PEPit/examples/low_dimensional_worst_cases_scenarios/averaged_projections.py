@@ -62,22 +62,22 @@ def wc_averaged_projections(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06844885734754097
-        (PEPit) Postprocessing: 4 eigenvalue(s) > 7.891514481701609e-10 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0684488573474302
+        (PEPit) Postprocessing: 4 eigenvalue(s) > 7.89314275744705e-10 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06834885735342248
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 6.225469110482089e-11 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06834885735342248
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 6.225469110482089e-11 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06834885794771604
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 6.675793636702899e-09 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.06834885794771604
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 6.675793636702899e-09 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.9433797563300196e-12
-        		All the primal scalar constraints are verified up to an error of 1.8770332510520404e-12
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.4702057470351053e-10
+        		All the primal scalar constraints are verified up to an error of 2.313877735249381e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.778816524040534e-13
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.015729320638442e-10
-        (PEPit) Final upper bound (dual): 0.06844885735573535 and lower bound (primal example): 0.06834885735342248 
-        (PEPit) Duality gap: absolute: 0.0001000000023128611 and relative: 0.0014630822838160252
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.760213634525396e-13
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0486379622054575e-10
+        (PEPit) Final upper bound (dual): 0.06844885735562138 and lower bound (primal example): 0.06834885794771604 
+        (PEPit) Duality gap: absolute: 9.99994079053379e-05 and relative: 0.001463073574423631
         *** Example file: worst-case performance of the averaged projection method ***
         	PEPit guarantee:	 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0684489 ||x0 - x_*||^2
     

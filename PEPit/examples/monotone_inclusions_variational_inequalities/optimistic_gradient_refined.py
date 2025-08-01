@@ -69,87 +69,85 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
         theoretical_tau (None): no theoretical bound.
 
     Example:
-    	>>> L = 1/4
-        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=1, gamma=1 / 4, L=L, wrapper="cvxpy", solver=None, verbose=1)
-	(PEPit) Setting up the problem: size of the Gram matrix: 7x7
-	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
-	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
-	(PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
-	(PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-				Function 1 : Adding 9 scalar constraint(s) ...
-				Function 1 : 9 scalar constraint(s) added
-				Function 2 : Adding 0 scalar constraint(s) ...
-				Function 2 : 0 scalar constraint(s) added
-				Function 2 : Adding 48 lmi constraint(s) ...
-		 	Size of PSD matrix 1: 7x7
-		 	Size of PSD matrix 2: 7x7
-		 	Size of PSD matrix 3: 7x7
-		 	Size of PSD matrix 4: 7x7
-		 	Size of PSD matrix 5: 7x7
-		 	Size of PSD matrix 6: 7x7
-		 	Size of PSD matrix 7: 7x7
-		 	Size of PSD matrix 8: 7x7
-		 	Size of PSD matrix 9: 7x7
-		 	Size of PSD matrix 10: 7x7
-		 	Size of PSD matrix 11: 7x7
-		 	Size of PSD matrix 12: 7x7
-		 	Size of PSD matrix 13: 7x7
-		 	Size of PSD matrix 14: 7x7
-		 	Size of PSD matrix 15: 7x7
-		 	Size of PSD matrix 16: 7x7
-		 	Size of PSD matrix 17: 7x7
-		 	Size of PSD matrix 18: 7x7
-		 	Size of PSD matrix 19: 7x7
-		 	Size of PSD matrix 20: 7x7
-		 	Size of PSD matrix 21: 7x7
-		 	Size of PSD matrix 22: 7x7
-		 	Size of PSD matrix 23: 7x7
-		 	Size of PSD matrix 24: 7x7
-		 	Size of PSD matrix 25: 7x7
-		 	Size of PSD matrix 26: 7x7
-		 	Size of PSD matrix 27: 7x7
-		 	Size of PSD matrix 28: 7x7
-		 	Size of PSD matrix 29: 7x7
-		 	Size of PSD matrix 30: 7x7
-		 	Size of PSD matrix 31: 7x7
-		 	Size of PSD matrix 32: 7x7
-		 	Size of PSD matrix 33: 7x7
-		 	Size of PSD matrix 34: 7x7
-		 	Size of PSD matrix 35: 7x7
-		 	Size of PSD matrix 36: 7x7
-		 	Size of PSD matrix 37: 7x7
-		 	Size of PSD matrix 38: 7x7
-		 	Size of PSD matrix 39: 7x7
-		 	Size of PSD matrix 40: 7x7
-		 	Size of PSD matrix 41: 7x7
-		 	Size of PSD matrix 42: 7x7
-		 	Size of PSD matrix 43: 7x7
-		 	Size of PSD matrix 44: 7x7
-		 	Size of PSD matrix 45: 7x7
-		 	Size of PSD matrix 46: 7x7
-		 	Size of PSD matrix 47: 7x7
-		 	Size of PSD matrix 48: 7x7
-				Function 2 : 48 lmi constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.333333140563453
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite
-			All required PSD matrices are indeed positive semi-definite up to an error of 3.5890351499672374e-09
-			All the primal scalar constraints are verified
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual matrices to lmi are positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.221621779541138e-08
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.5245921878695306e-06
-	(PEPit) Final upper bound (dual): 1.3333331393149042 and lower bound (primal example): 1.333333140563453 
-	(PEPit) Duality gap: absolute: -1.2485488198876737e-09 and relative: -9.364117502997411e-10
-	*** Example file: worst-case performance of the Optimistic Gradient Method***
-		PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 1.33333 ||x0 - xs||^2
+        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=5, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+        (PEPit) Setting up the problem: size of the Gram matrix: 7x7
+        (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
+        (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
+        (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
+        (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
+        			Function 1 : Adding 9 scalar constraint(s) ...
+        			Function 1 : 9 scalar constraint(s) added
+        			Function 2 : Adding 0 scalar constraint(s) ...
+        			Function 2 : 0 scalar constraint(s) added
+        			Function 2 : Adding 48 lmi constraint(s) ...
+        		 Size of PSD matrix 1: 7x7
+        		 Size of PSD matrix 2: 7x7
+        		 Size of PSD matrix 3: 7x7
+        		 Size of PSD matrix 4: 7x7
+        		 Size of PSD matrix 5: 7x7
+        		 Size of PSD matrix 6: 7x7
+        		 Size of PSD matrix 7: 7x7
+        		 Size of PSD matrix 8: 7x7
+        		 Size of PSD matrix 9: 7x7
+        		 Size of PSD matrix 10: 7x7
+        		 Size of PSD matrix 11: 7x7
+        		 Size of PSD matrix 12: 7x7
+        		 Size of PSD matrix 13: 7x7
+        		 Size of PSD matrix 14: 7x7
+        		 Size of PSD matrix 15: 7x7
+        		 Size of PSD matrix 16: 7x7
+        		 Size of PSD matrix 17: 7x7
+        		 Size of PSD matrix 18: 7x7
+        		 Size of PSD matrix 19: 7x7
+        		 Size of PSD matrix 20: 7x7
+        		 Size of PSD matrix 21: 7x7
+        		 Size of PSD matrix 22: 7x7
+        		 Size of PSD matrix 23: 7x7
+        		 Size of PSD matrix 24: 7x7
+        		 Size of PSD matrix 25: 7x7
+        		 Size of PSD matrix 26: 7x7
+        		 Size of PSD matrix 27: 7x7
+        		 Size of PSD matrix 28: 7x7
+        		 Size of PSD matrix 29: 7x7
+        		 Size of PSD matrix 30: 7x7
+        		 Size of PSD matrix 31: 7x7
+        		 Size of PSD matrix 32: 7x7
+        		 Size of PSD matrix 33: 7x7
+        		 Size of PSD matrix 34: 7x7
+        		 Size of PSD matrix 35: 7x7
+        		 Size of PSD matrix 36: 7x7
+        		 Size of PSD matrix 37: 7x7
+        		 Size of PSD matrix 38: 7x7
+        		 Size of PSD matrix 39: 7x7
+        		 Size of PSD matrix 40: 7x7
+        		 Size of PSD matrix 41: 7x7
+        		 Size of PSD matrix 42: 7x7
+        		 Size of PSD matrix 43: 7x7
+        		 Size of PSD matrix 44: 7x7
+        		 Size of PSD matrix 45: 7x7
+        		 Size of PSD matrix 46: 7x7
+        		 Size of PSD matrix 47: 7x7
+        		 Size of PSD matrix 48: 7x7
+        			Function 2 : 48 lmi constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.062499619318542
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All required PSD matrices are indeed positive semi-definite up to an error of 2.6762453073848446e-09
+        		All the primal scalar constraints are verified up to an error of 4.417966050890063e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual matrices to lmi are positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.522728191736381e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.5494369449556818e-05
+        (PEPit) Final upper bound (dual): 1.0624996259179762 and lower bound (primal example): 1.062499619318542 
+        (PEPit) Duality gap: absolute: 6.599434110299285e-09 and relative: 6.211234329224494e-09
+        *** Example file: worst-case performance of the Optimistic Gradient Method***
+        	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 1.0625 ||x0 - xs||^2
     
     """
-
     # Instantiate PEP
     problem = PEP()
 
@@ -199,5 +197,4 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
 
 
 if __name__ == "__main__":
-    L = 1
-    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=1, gamma=1 / 4, L=L, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=1, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)

@@ -91,16 +91,16 @@ def wc_information_theoretic(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7566088333863785
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7566088333863759
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 2.6490565304427935e-09
+        		All the primal scalar constraints are verified up to an error of 2.649056531701061e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.0900580550698854e-05
-        (PEPit) Final upper bound (dual): 0.7566088219545419 and lower bound (primal example): 0.7566088333863785 
-        (PEPit) Duality gap: absolute: -1.1431836588471356e-08 and relative: -1.5109308911059783e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.090066388573269e-05
+        (PEPit) Final upper bound (dual): 0.7566088219545406 and lower bound (primal example): 0.7566088333863759 
+        (PEPit) Duality gap: absolute: -1.1431835256203726e-08 and relative: -1.5109307150219134e-08
         *** Example file: worst-case performance of the information theoretic exact method ***
         	PEP-it guarantee:	 ||z_n - x_* ||^2 <= 0.756609 ||z_0 - x_*||^2
         	Theoretical guarantee:	 ||z_n - x_* ||^2 <= 0.756605 ||z_0 - x_*||^2

@@ -82,16 +82,16 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953904645822
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953896022825
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.140365475126263e-09
-        		All the primal scalar constraints are verified up to an error of 7.758491793463662e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.135149894158463e-09
+        		All the primal scalar constraints are verified up to an error of 7.746795427365782e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.474580080029191e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2084335345375351e-07
-        (PEPit) Final upper bound (dual): 0.07828954284798424 and lower bound (primal example): 0.07828953904645822 
-        (PEPit) Duality gap: absolute: 3.801526024527213e-09 and relative: 4.855726666459652e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.4682721500621377e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2155275372348722e-07
+        (PEPit) Final upper bound (dual): 0.07828954275558239 and lower bound (primal example): 0.07828953896022825 
+        (PEPit) Duality gap: absolute: 3.795354142077656e-09 and relative: 4.847843265504128e-08
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0782895 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2

@@ -73,16 +73,16 @@ def wc_gradient_flow_strongly_convex(mu, wrapper="cvxpy", solver=None, verbose=1
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: -0.20000002010543685
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: -0.20000002010539425
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.21571816563555e-10
-        		All the primal scalar constraints are verified up to an error of 7.074164865006338e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.215841463375114e-10
+        		All the primal scalar constraints are verified up to an error of 7.074286711983291e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.684432710751497e-09
-        (PEPit) Final upper bound (dual): -0.20000002574229303 and lower bound (primal example): -0.20000002010543685 
-        (PEPit) Duality gap: absolute: -5.636856176272076e-09 and relative: 2.8184278048074267e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.684026647576401e-09
+        (PEPit) Final upper bound (dual): -0.200000025742216 and lower bound (primal example): -0.20000002010539425 
+        (PEPit) Duality gap: absolute: -5.6368217593583125e-09 and relative: 2.8184105963528753e-08
         *** Example file: worst-case performance of the gradient flow ***
         	PEPit guarantee:	 d/dt[f(X_t)-f_*] <= -0.2 (f(X_t) - f(x_*))
         	Theoretical guarantee:	 d/dt[f(X_t)-f_*] <= -0.2 (f(X_t) - f(x_*))

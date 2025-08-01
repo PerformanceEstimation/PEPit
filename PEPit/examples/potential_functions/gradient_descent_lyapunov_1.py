@@ -77,16 +77,16 @@ def wc_gradient_descent_lyapunov_1(L, gamma, n, wrapper="cvxpy", solver=None, ve
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 2.458069122242756e-09
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 2.4580691354971276e-09
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.1620786701078888e-09
-        		All the primal scalar constraints are verified up to an error of 2.157699467921729e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.1620786664767181e-09
+        		All the primal scalar constraints are verified up to an error of 2.1576994605307466e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2239204636309262e-08
-        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 2.458069122242756e-09 
-        (PEPit) Duality gap: absolute: -2.458069122242756e-09 and relative: -1.0
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2234708671485967e-08
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 2.4580691354971276e-09 
+        (PEPit) Duality gap: absolute: -2.4580691354971276e-09 and relative: -1.0
         *** Example file: worst-case performance of gradient descent with fixed step-size for a given Lyapunov function***
         	PEPit guarantee:	V_(n+1) - V_(n) <= 0.0
         	Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0

@@ -90,16 +90,16 @@ def wc_no_lips_2(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3333333333330493
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3333333333330492
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 4.196643033083092e-14
+        		All the primal scalar constraints are verified up to an error of 4.18554080283684e-14
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.199523786044634e-14
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.914928381589679e-13
-        (PEPit) Final upper bound (dual): 0.3333333333330737 and lower bound (primal example): 0.3333333333330493 
-        (PEPit) Duality gap: absolute: 2.4369395390522186e-14 and relative: 7.310818617162885e-14
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.1967204284666985e-14
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.917219186068013e-13
+        (PEPit) Final upper bound (dual): 0.3333333333330736 and lower bound (primal example): 0.3333333333330492 
+        (PEPit) Duality gap: absolute: 2.4369395390522186e-14 and relative: 7.310818617162887e-14
         *** Example file: worst-case performance of the NoLips_2 in Bregman distance ***
         	PEPit guarantee:	 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))
         	Theoretical guarantee:	 min_t Dh(x_(t-1), x_(t)) <= 0.333333 (F(x_0) - F(x_n))

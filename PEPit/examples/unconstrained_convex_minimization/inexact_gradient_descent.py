@@ -89,16 +89,16 @@ def wc_inexact_gradient_descent(L, mu, epsilon, n, wrapper="cvxpy", solver=None,
         			Function 1 : 2 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5189167048760179
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5189167024522467
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.328901122905122e-09
-        		All the primal scalar constraints are verified up to an error of 9.223752428511034e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.510283035307193e-09
+        		All the primal scalar constraints are verified up to an error of 9.704962500300951e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.0409575365469605e-07
-        (PEPit) Final upper bound (dual): 0.5189166992915334 and lower bound (primal example): 0.5189167048760179 
-        (PEPit) Duality gap: absolute: -5.584484541465429e-09 and relative: -1.0761813001953176e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.049446752352651e-07
+        (PEPit) Final upper bound (dual): 0.5189166963250256 and lower bound (primal example): 0.5189167024522467 
+        (PEPit) Duality gap: absolute: -6.127221174878628e-09 and relative: -1.1807716240242786e-08
         *** Example file: worst-case performance of inexact gradient method in distance in function values ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.518917 (f(x_0)-f_*)

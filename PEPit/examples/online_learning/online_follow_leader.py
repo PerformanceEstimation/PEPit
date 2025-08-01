@@ -70,28 +70,28 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-				Function 1 : Adding 9 scalar constraint(s) ...
-				Function 1 : 9 scalar constraint(s) added
-				Function 2 : Adding 4 scalar constraint(s) ...
-				Function 2 : 4 scalar constraint(s) added
-				Function 3 : Adding 15 scalar constraint(s) ...
-				Function 3 : 15 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9330127036100446
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite
-			All the primal scalar constraints are verified up to an error of 5.581592632530885e-09
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.1864238886638586e-10
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.363987770546799e-08
-	(PEPit) Final upper bound (dual): 0.9330127041164931 and lower bound (primal example): 0.9330127036100446 
-	(PEPit) Duality gap: absolute: 5.064484387418133e-10 and relative: 5.428097996760877e-10
-	*** Example file: worst-case regret of online follow the leader ***
-		PEPit guarantee:	 R_n <= 0.933013
-
+        			Function 1 : Adding 9 scalar constraint(s) ...
+        			Function 1 : 9 scalar constraint(s) added
+        			Function 2 : Adding 4 scalar constraint(s) ...
+        			Function 2 : 4 scalar constraint(s) added
+        			Function 3 : Adding 15 scalar constraint(s) ...
+        			Function 3 : 15 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9330127285845171
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.958065311703632e-09
+        		All the primal scalar constraints are verified up to an error of 3.481293675555719e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2781705987788661e-07
+        (PEPit) Final upper bound (dual): 0.93301273263622 and lower bound (primal example): 0.9330127285845171 
+        (PEPit) Duality gap: absolute: 4.051702862106765e-09 and relative: 4.342601915253229e-09
+        *** Example file: worst-case regret of online follow the leader ***
+        	PEPit guarantee:	 R_n <= 0.933013
+    
     """
     # Instantiate PEP
     problem = PEP()

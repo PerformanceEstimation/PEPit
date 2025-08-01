@@ -70,25 +70,25 @@ def wc_difference_of_convex_algorithm(mu1, mu2, L1, L2, n, alpha = 0, wrapper="c
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (7 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-				Function 1 : Adding 42 scalar constraint(s) ...
-				Function 1 : 42 scalar constraint(s) added
-				Function 2 : Adding 42 scalar constraint(s) ...
-				Function 2 : 42 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.4911306712600766
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite
-			All the primal scalar constraints are verified
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 8.62220939235375e-09
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.719678585376814e-07
-	(PEPit) Final upper bound (dual): 0.4911306767128882 and lower bound (primal example): 0.4911306712600766 
-	(PEPit) Duality gap: absolute: 5.452811591144524e-09 and relative: 1.1102567830175294e-08
-	*** Example file: worst-case performance of DCA ***
-		PEPit guarantee:	 min_i ||f'(x_i)||^2 <= 0.491131 (f(x_0)-f_*)
+        			Function 1 : Adding 42 scalar constraint(s) ...
+        			Function 1 : 42 scalar constraint(s) added
+        			Function 2 : Adding 42 scalar constraint(s) ...
+        			Function 2 : 42 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: prosta.prim_and_dual_feas (wrapper:mosek, solver: MOSEK); optimal value: 0.49113062165416893
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 8.798134450149764e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.0048489946103415e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.102726387109924e-07
+        (PEPit) Final upper bound (dual): 0.4911306282045956 and lower bound (primal example): 0.49113062165416893 
+        (PEPit) Duality gap: absolute: 6.550426645546281e-09 and relative: 1.3337442946407816e-08
+        *** Example file: worst-case performance of DCA ***
+        	PEPit guarantee:	 min_i ||f'(x_i)||^2 <= 0.491131 (f(x_0)-f_*)
         	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.491131 (f(x_0)-f_*)
     
     """

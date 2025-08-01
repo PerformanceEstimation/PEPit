@@ -101,16 +101,16 @@ def wc_triple_momentum(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.23892507617696113
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.23892507610108352
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.2421790162612716e-08
-        		All the primal scalar constraints are verified up to an error of 2.3083153937765444e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.2413384091344622e-08
+        		All the primal scalar constraints are verified up to an error of 2.3063312517808757e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.128560722969591e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.890478893964213e-08
-        (PEPit) Final upper bound (dual): 0.23892508270020568 and lower bound (primal example): 0.23892507617696113 
-        (PEPit) Duality gap: absolute: 6.523244555634022e-09 and relative: 2.7302469292936613e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.1341759240263788e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.962063006166431e-08
+        (PEPit) Final upper bound (dual): 0.23892508261738885 and lower bound (primal example): 0.23892507610108352 
+        (PEPit) Duality gap: absolute: 6.516305328663208e-09 and relative: 2.7273425774305555e-08
         *** Example file: worst-case performance of the Triple Momentum Method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.238925 ||x_0-x_*||^2

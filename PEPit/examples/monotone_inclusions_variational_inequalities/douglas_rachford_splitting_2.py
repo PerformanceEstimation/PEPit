@@ -76,27 +76,27 @@ def wc_douglas_rachford_splitting_2(beta, mu, alpha, theta, wrapper="cvxpy", sol
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-        			Function 1 : Adding 2 scalar constraint(s) ...
-        			Function 1 : 2 scalar constraint(s) added
+        			Function 1 : Adding 1 scalar constraint(s) ...
+        			Function 1 : 1 scalar constraint(s) added
         			Function 2 : Adding 1 scalar constraint(s) ...
         			Function 2 : 1 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.928770707839351
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9145301164750972
         (PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite up to an error of 5.115160308023067e-10
-			All the primal scalar constraints are verified up to an error of 1.8039681970449806e-09
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2557649586852904e-08
-	(PEPit) Final upper bound (dual): 0.9145301167694716 and lower bound (primal example): 0.9145301164750972 
-	(PEPit) Duality gap: absolute: 2.9437441373403317e-10 and relative: 3.218859701074142e-10
-	*** Example file: worst-case performance of the Douglas Rachford Splitting***
-		PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.91453 ||w_(t)^0 - w_(t)^1||^2
-		Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.91453 ||w_(t)^0 - w_(t)^1||^2
-
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.115160308023067e-10
+        		All the primal scalar constraints are verified up to an error of 1.8039681970449806e-09
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2557649586852904e-08
+        (PEPit) Final upper bound (dual): 0.9145301167694716 and lower bound (primal example): 0.9145301164750972 
+        (PEPit) Duality gap: absolute: 2.9437441373403317e-10 and relative: 3.218859701074142e-10
+        *** Example file: worst-case performance of the Douglas Rachford Splitting***
+        	PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.91453 ||w_(t)^0 - w_(t)^1||^2
+        	Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.91453 ||w_(t)^0 - w_(t)^1||^2
+    
     """
 
     # Instantiate PEP

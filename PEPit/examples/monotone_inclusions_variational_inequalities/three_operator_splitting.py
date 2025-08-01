@@ -87,16 +87,16 @@ def wc_three_operator_splitting(L, mu, beta, alpha, theta, wrapper="cvxpy", solv
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7796890707911295
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7796890707911133
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.062458310263129e-08
-        		All the primal scalar constraints are verified up to an error of 4.036799094997434e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0624581227994185e-08
+        		All the primal scalar constraints are verified up to an error of 4.036798317841317e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.0385673195889567e-06
-        (PEPit) Final upper bound (dual): 0.7796890635199223 and lower bound (primal example): 0.7796890707911295 
-        (PEPit) Duality gap: absolute: -7.27120719190566e-09 and relative: -9.325778011134313e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.038567561950643e-06
+        (PEPit) Final upper bound (dual): 0.7796890635199042 and lower bound (primal example): 0.7796890707911133 
+        (PEPit) Duality gap: absolute: -7.271209079284802e-09 and relative: -9.325780431816304e-09
         *** Example file: worst-case contraction factor of the Three Operator Splitting ***
         	PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.779689 ||w_(t)^0 - w_(t)^1||^2
     

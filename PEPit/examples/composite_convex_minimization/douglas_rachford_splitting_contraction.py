@@ -98,16 +98,16 @@ def wc_douglas_rachford_splitting_contraction(mu, L, alpha, theta, n, wrapper="c
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3501278029546837
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.35012780295429113
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.581993336260348e-10
-        		All the primal scalar constraints are verified up to an error of 1.7788042150357342e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.5819643752082932e-10
+        		All the primal scalar constraints are verified up to an error of 1.7787298300930843e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1407815086579577e-07
-        (PEPit) Final upper bound (dual): 0.3501278016887412 and lower bound (primal example): 0.3501278029546837 
-        (PEPit) Duality gap: absolute: -1.2659425174810224e-09 and relative: -3.6156583590274623e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1344535856561752e-07
+        (PEPit) Final upper bound (dual): 0.350127801688298 and lower bound (primal example): 0.35012780295429113 
+        (PEPit) Duality gap: absolute: -1.2659931436509453e-09 and relative: -3.615802952432828e-09
         *** Example file: worst-case performance of the Douglas-Rachford splitting in distance ***
         	PEPit guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2
         	Theoretical guarantee:	 ||w - wp||^2 <= 0.350128 ||w0 - w0p||^2

@@ -87,23 +87,28 @@ def wc_proximal_gradient_quadratics(L, mu, gamma, n, wrapper="cvxpy", solver=Non
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-        			Function 1 : Adding 22 scalar constraint(s) ...
-        			Function 1 : 22 scalar constraint(s) added
+        			Function 1 : Adding 10 scalar constraint(s) ...
+        			Function 1 : 10 scalar constraint(s) added
+        			Function 1 : Adding 1 lmi constraint(s) ...
+        		 Size of PSD matrix 1: 4x4
+        			Function 1 : 1 lmi constraint(s) added
         			Function 2 : Adding 6 scalar constraint(s) ...
         			Function 2 : 6 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6561000187100321
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6561000114872446
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.8506403023071055e-09
-        		All the primal scalar constraints are verified up to an error of 5.880885747128195e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.796118427878115e-09
+        		All required PSD matrices are indeed positive semi-definite up to an error of 4.525137966284814e-09
+        		All the primal scalar constraints are verified up to an error of 1.511348379779065e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
+        		All the dual matrices to lmi are positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.8758326292663516e-07
-        (PEPit) Final upper bound (dual): 0.6561000176340664 and lower bound (primal example): 0.6561000187100321 
-        (PEPit) Duality gap: absolute: -1.0759656499104153e-09 and relative: -1.6399415016416052e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 0.548909470924843
+        (PEPit) Final upper bound (dual): 0.6561000103069384 and lower bound (primal example): 0.6561000114872446 
+        (PEPit) Duality gap: absolute: -1.180306186121527e-09 and relative: -1.798972969755044e-09
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
         	PEPit guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
         	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
