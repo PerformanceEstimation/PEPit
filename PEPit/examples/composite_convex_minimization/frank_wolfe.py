@@ -42,9 +42,10 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    [1] M .Frank, P. Wolfe (1956).
+    `[1] M .Frank, P. Wolfe (1956).
     An algorithm for quadratic programming.
     Naval research logistics quarterly, 3(1-2), 95-110.
+    <https://arxiv.org/pdf/1608.04826.pdf>`_
 
     `[2] M. Jaggi (2013).
     Revisiting Frank-Wolfe: Projection-free sparse convex optimization.
