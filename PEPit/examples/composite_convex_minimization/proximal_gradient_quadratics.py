@@ -48,9 +48,10 @@ def wc_proximal_gradient_quadratics(L, mu, gamma, n, wrapper="cvxpy", solver=Non
     Journal of Optimization Theory and Applications, 178(2), 455-476.
     <https://arxiv.org/pdf/1705.04398.pdf>`_
 
-    [2] B. Polyak (1987).
+    `[2] B. Polyak (1987).
     Introduction to Optimization.
     Optimization Software New York.
+    <https://www.researchgate.net/profile/Boris-Polyak-2/publication/342978480_Introduction_to_Optimization/links/5f1033e5299bf1e548ba4636/Introduction-to-Optimization.pdf>`_
 
     `[3] E. Ryu, S. Boyd (2016).
     A primer on monotone operator methods.
