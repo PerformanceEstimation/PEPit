@@ -64,7 +64,7 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     Example:
         >>> M, D, n = 1,.5,2
-        >>> pepit_tau, theoretical_tau = wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_online_follow_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -149,4 +149,4 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
 if __name__ == "__main__":
     M, D, n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1) 
+    pepit_tau, theoretical_tau = wc_online_follow_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 

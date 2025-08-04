@@ -75,10 +75,8 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> L = 1
-        >>> mu = .2
-        >>> alpha = (mu/2/(L+mu))
-        >>> gamma = 1 / L
+        >>> L, mu, gamma, n = 1, .2, 1, 1
+        >>> alpha = (2*mu/(2*L+mu))
         >>> pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
@@ -162,5 +160,4 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
     alpha = (2*mu/(2*L+mu))
-    verbose = 0
     pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)

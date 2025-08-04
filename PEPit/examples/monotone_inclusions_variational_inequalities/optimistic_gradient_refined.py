@@ -69,7 +69,7 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=5, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=1, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...

@@ -81,12 +81,12 @@ def wc_gradient_descent_lc(mug, Lg, typeM, muM, LM, gamma, n, verbose=1):
     Returns:
         pepit_tau (float): worst-case value
         theoretical_tau (float): theoretical value
-
+        
     Example:
         >>> Lg = 3.; mug = 0.3
-        >>> typeM = "sym"; LM = 1.; muM = 0.
+        >>> typeM = "gen"; LM = 1.; muM = 0.1
         >>> L = Lg*LM**2
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lc(mug = mug, Lg=Lg, typeM=typeM, muM = muM, LM=LM, gamma=1 / L, n=3, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_lc(mug = mug, Lg=Lg, typeM=typeM, muM = muM, LM=LM,  gamma=1 / L, n=3, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 16x16
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...

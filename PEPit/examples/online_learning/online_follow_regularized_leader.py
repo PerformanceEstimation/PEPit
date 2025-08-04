@@ -159,4 +159,4 @@ def wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, v
 
 if __name__ == "__main__":
     M, D, n = 1, .5, 2
-    pepit_tau, theoretical_tau = wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1) 
+    pepit_tau, theoretical_tau = wc_online_follow_regularized_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 
