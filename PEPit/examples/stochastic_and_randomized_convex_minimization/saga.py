@@ -52,8 +52,8 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    `[1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
-    non-strongly convex composite objectives. In Advances in Neural Information Processing Systems (NIPS).
+    `[1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for non-strongly convex composite objectives.
+    In Advances in Neural Information Processing Systems (NIPS).
     <http://papers.nips.cc/paper/2014/file/ede7e2b6d13a41ddf9f4bdef84fdc737-Paper.pdf>`_
 
     Args:

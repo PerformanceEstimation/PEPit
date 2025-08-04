@@ -51,17 +51,18 @@ def wc_accelerated_gradient_flow_strongly_convex(mu, psd=True, wrapper="cvxpy", 
     **References**:
 
     `[1] A. C. Wilson, B. Recht, M. I. Jordan (2021).
-    A Lyapunov analysis of accelerated methods in optimization. In the Journal of Machine Learning Reasearch (JMLR),
-    22(113):1−34, 2021.
+    A Lyapunov analysis of accelerated methods in optimization.
+    In the Journal of Machine Learning Reasearch (JMLR), 22(113):1−34, 2021.
     <https://jmlr.org/papers/volume22/20-195/20-195.pdf>`_
 
-    `[2] J.M. Sanz-Serna and K. C. Zygalakis (2021)
+    `[2] J.M. Sanz-Serna and K. C. Zygalakis (2021).
     The connections between Lyapunov functions for some optimization algorithms and differential equations.
     In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
     <https://arxiv.org/pdf/2009.00673.pdf>`_
 
     `[3] C. Moucer, A. Taylor, F. Bach (2022).
     A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.
+    In SIAM Journal on Optimization 33 (3), 1558-1586.
     <https://arxiv.org/pdf/2205.12772.pdf>`_
 
     Args:
