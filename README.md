@@ -318,7 +318,7 @@ as well as for support regarding the continuous integration.
 [4] A. Taylor, J. Hendrickx, F. Glineur (2017).
 [Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods](https://adrientaylor.github.io/share/PESTO_CDC_2017.pdf). In 56th IEEE Conference on Decision and Control (CDC).
 
-[5] B Goujaud, C. Moucer, F. Glineur, J.M. Hendrickx, A.B. Taylor, A. Dieuleveut (2024).
+[5] B. Goujaud, C. Moucer, F. Glineur, J.M. Hendrickx, A.B. Taylor, A. Dieuleveut (2024).
 [PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python](https://arxiv.org/pdf/2201.04040). Mathematical Programming Computation 16 (3), 337-367.
 
 [6] R.T. Rockafellar (1976).
