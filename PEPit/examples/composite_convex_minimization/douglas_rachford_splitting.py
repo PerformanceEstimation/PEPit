@@ -87,16 +87,16 @@ def wc_douglas_rachford_splitting(L, alpha, theta, n, wrapper="cvxpy", solver=No
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.027791729871150122
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02779172988059079
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.497713205381149e-09
-        		All the primal scalar constraints are verified up to an error of 7.050520128663862e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.4990957076994907e-09
+        		All the primal scalar constraints are verified up to an error of 7.054584369795003e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.997247465328208e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.051666237897567e-08
-        (PEPit) Final upper bound (dual): 0.027791732322924277 and lower bound (primal example): 0.027791729871150122 
-        (PEPit) Duality gap: absolute: 2.4517741552265715e-09 and relative: 8.821955907723812e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.0070786282625263e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.968467133801908e-08
+        (PEPit) Final upper bound (dual): 0.02779173233376415 and lower bound (primal example): 0.02779172988059079 
+        (PEPit) Duality gap: absolute: 2.4531733623656127e-09 and relative: 8.826990521661848e-08
         *** Example file: worst-case performance of the Douglas Rachford Splitting in function values ***
         	PEPit guarantee:	 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2
         	Theoretical guarantee:	 f(y_n)-f_* <= 0.0278 ||x0 - xs||^2

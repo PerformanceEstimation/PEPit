@@ -77,16 +77,16 @@ def wc_relatively_inexact_proximal_point_algorithm(n, gamma, sigma, wrapper="cvx
         			Function 1 : 16 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.007678482388821737
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.007678482388840032
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 9.339211172115614e-09
-        		All the primal scalar constraints are verified up to an error of 1.0034810280098137e-07
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 9.339212542016798e-09
+        		All the primal scalar constraints are verified up to an error of 1.0034811793400425e-07
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.7290964880672109e-07
-        (PEPit) Final upper bound (dual): 0.007678489787312847 and lower bound (primal example): 0.007678482388821737 
-        (PEPit) Duality gap: absolute: 7.398491109686378e-09 and relative: 9.635355966248009e-07
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.7288283121426635e-07
+        (PEPit) Final upper bound (dual): 0.00767848978733238 and lower bound (primal example): 0.007678482388840032 
+        (PEPit) Duality gap: absolute: 7.39849234827894e-09 and relative: 9.635357579294535e-07
         *** Example file: worst-case performance of an inexact proximal point method in distance in function values ***
         	PEPit guarantee:	 f(x_n) - f(x_*) <= 0.00767849 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n) - f(x_*) <= 0.00849444 ||x_0 - x_*||^2

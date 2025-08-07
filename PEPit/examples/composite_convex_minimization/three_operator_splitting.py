@@ -87,16 +87,16 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.4754523280192519
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.4754523346392658
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.32207763279334e-10
-        		All the primal scalar constraints are verified up to an error of 2.2438998784068964e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.5440593281219272e-09
+        		All the primal scalar constraints are verified up to an error of 5.277754989985173e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.155823636112884e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.293077507135036e-07
-        (PEPit) Final upper bound (dual): 0.475452328074928 and lower bound (primal example): 0.4754523280192519 
-        (PEPit) Duality gap: absolute: 5.5676074861565894e-11 and relative: 1.1710127720588522e-10
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.1469231961323311e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1184938806991412e-06
+        (PEPit) Final upper bound (dual): 0.4754523347677999 and lower bound (primal example): 0.4754523346392658 
+        (PEPit) Duality gap: absolute: 1.285341277856844e-10 and relative: 2.703407227628939e-10
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
         	PEPit guarantee:	 ||w^2_n - w^1_n||^2 <= 0.475452 ||x0 - ws||^2
     

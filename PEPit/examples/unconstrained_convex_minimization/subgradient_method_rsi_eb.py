@@ -79,11 +79,11 @@ def wc_subgradient_method_rsi_eb(mu, L, gamma, n, wrapper="cvxpy", solver=None, 
         		The solver found a Gram matrix that is positive semi-definite
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
-        		The solver found a residual matrix that is positive semi-definite
+        		The solver found a residual matrix that is positive semi-definite up to an error of 6.555981041081373e-24
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9007807847382036e-12
-        (PEPit) Final upper bound (dual): 0.960596009998838 and lower bound (primal example): 0.9605960099986828 
-        (PEPit) Duality gap: absolute: 1.5520917884259688e-13 and relative: 1.6157591456455218e-13
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.8993396496580087e-12
+        (PEPit) Final upper bound (dual): 0.9605960099988382 and lower bound (primal example): 0.9605960099986828 
+        (PEPit) Duality gap: absolute: 1.5543122344752192e-13 and relative: 1.6180706751814954e-13
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.960596 ||x_0 - x_*||^2

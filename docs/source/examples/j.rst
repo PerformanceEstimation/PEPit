@@ -1,51 +1,26 @@
-Low dimensional worst-cases scenarios
-=====================================
+Continuous-time models
+======================
 
 .. contents::
    :depth: 1
    :local:
 
 
-Inexact gradient
-----------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_inexact_gradient
+Gradient flow for strongly convex functions
+-------------------------------------------
+.. autofunction:: PEPit.examples.continuous_time_models.wc_gradient_flow_strongly_convex
 
 
-Non-convex gradient descent
----------------------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_gradient_descent
+Gradient flow for convex functions
+----------------------------------
+.. autofunction:: PEPit.examples.continuous_time_models.wc_gradient_flow_convex
 
 
-Optimized gradient
-------------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_optimized_gradient
+Accelerated gradient flow for strongly convex functions
+-------------------------------------------------------
+.. autofunction:: PEPit.examples.continuous_time_models.wc_accelerated_gradient_flow_strongly_convex
 
 
-Frank Wolfe
------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_frank_wolfe
-
-
-Proximal point
---------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_proximal_point
-
-
-Halpern iteration
------------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_halpern_iteration
-
-
-Alternate projections
----------------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_alternate_projections
-
-
-Averaged projections
---------------------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_averaged_projections
-
-
-Dykstra
--------
-.. autofunction:: PEPit.examples.low_dimensional_worst_cases_scenarios.wc_dykstra
+Accelerated gradient flow for convex functions
+----------------------------------------------
+.. autofunction:: PEPit.examples.continuous_time_models.wc_accelerated_gradient_flow_convex

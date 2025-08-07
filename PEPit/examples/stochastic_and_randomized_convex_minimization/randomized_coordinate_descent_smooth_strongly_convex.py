@@ -88,16 +88,16 @@ def wc_randomized_coordinate_descent_smooth_strongly_convex(L, mu, gamma, d, wra
         			Partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8347107438584297
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8347107438584286
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.4183154650737606e-11
+        		All the primal scalar constraints are verified up to an error of 1.4182960361708297e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.950747594358786e-10
-        (PEPit) Final upper bound (dual): 0.8347107438665666 and lower bound (primal example): 0.8347107438584297 
-        (PEPit) Duality gap: absolute: 8.136935569780235e-12 and relative: 9.748209939370677e-12
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.950643229604953e-10
+        (PEPit) Final upper bound (dual): 0.8347107438665652 and lower bound (primal example): 0.8347107438584286 
+        (PEPit) Duality gap: absolute: 8.136602502872847e-12 and relative: 9.747810918620281e-12
         *** Example file: worst-case performance of randomized coordinate gradient descent ***
         	PEPit guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2
         	Theoretical guarantee:	 E[||x_(t+1) - x_*||^2] <= 0.834711 ||x_t - x_*||^2

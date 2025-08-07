@@ -7,7 +7,7 @@ class MonotoneOperator(Function):
     implementing interpolation constraints for the class of maximally monotone operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     General maximally monotone operators are not characterized by any parameter, hence can be instantiated as
 
@@ -18,9 +18,10 @@ class MonotoneOperator(Function):
         >>> h = problem.declare_function(function_class=MonotoneOperator)
 
     References:
-        [1] H. H. Bauschke and P. L. Combettes (2017).
+        `[1] H. H. Bauschke and P. L. Combettes (2017).
         Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
-        Springer New York, 2nd ed.
+        Springer New York.
+        <https://link.springer.com/book/10.1007/978-3-319-48311-5>`_
 
     """
 

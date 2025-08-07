@@ -87,16 +87,16 @@ def wc_optimized_gradient_for_gradient(L, n, wrapper="cvxpy", solver=None, verbo
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.307007304609862
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3070073046098571
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.851107461758872e-11
+        		All the primal scalar constraints are verified up to an error of 1.851027664478977e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.897293067292418e-11
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0436663734975135e-10
-        (PEPit) Final upper bound (dual): 0.30700730461344283 and lower bound (primal example): 0.307007304609862 
-        (PEPit) Duality gap: absolute: 3.5808578324747486e-12 and relative: 1.1663754505858493e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.8972117293793012e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0435452497813057e-10
+        (PEPit) Final upper bound (dual): 0.30700730461343734 and lower bound (primal example): 0.3070073046098571 
+        (PEPit) Duality gap: absolute: 3.580247209811205e-12 and relative: 1.1661765554278782e-11
         *** Example file: worst-case performance of optimized gradient method for gradient ***
         	PEP-it guarantee:	 ||f'(x_n)||^2 <= 0.307007 (f(x_0) - f_*)
         	Theoretical guarantee:	 ||f'(x_n)||^2 <= 0.307007 (f(x_0) - f_*)

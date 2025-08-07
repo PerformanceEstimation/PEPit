@@ -18,3 +18,4 @@ Examples
    examples/j
    examples/k
    examples/l
+   examples/m

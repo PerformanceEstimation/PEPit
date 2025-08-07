@@ -52,8 +52,8 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **References**:
 
-    `[1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for
-    non-strongly convex composite objectives. In Advances in Neural Information Processing Systems (NIPS).
+    `[1] A. Defazio, F. Bach, S. Lacoste-Julien (2014). SAGA: A fast incremental gradient method with support for non-strongly convex composite objectives.
+    In Advances in Neural Information Processing Systems (NIPS).
     <http://papers.nips.cc/paper/2014/file/ede7e2b6d13a41ddf9f4bdef84fdc737-Paper.pdf>`_
 
     Args:
@@ -95,16 +95,16 @@ def wc_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9666666451656595
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9666666468916689
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.407941346480772e-09
-        		All the primal scalar constraints are verified up to an error of 1.4346716234068732e-07
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 9.722904118628244e-09
+        		All the primal scalar constraints are verified up to an error of 1.6644436180148978e-07
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.824905589324927e-07
-        (PEPit) Final upper bound (dual): 0.9666666537075449 and lower bound (primal example): 0.9666666451656595 
-        (PEPit) Duality gap: absolute: 8.541885421209372e-09 and relative: 8.836433390898197e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.3298968511181845e-07
+        (PEPit) Final upper bound (dual): 0.9666666567891312 and lower bound (primal example): 0.9666666468916689 
+        (PEPit) Duality gap: absolute: 9.897462294183867e-09 and relative: 1.0238754306884701e-08
         *** Example file: worst-case performance of SAGA for Lyapunov function V_t ***
         	PEPit guarantee:	 V^(1) <= 0.966667 V^(0)
         	Theoretical guarantee:	 V^(1) <= 0.966667 V^(0)

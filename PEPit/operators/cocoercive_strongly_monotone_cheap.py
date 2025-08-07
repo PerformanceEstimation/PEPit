@@ -1,9 +1,9 @@
 from PEPit.function import Function
 
 
-class CocoerciveStronglyMonotoneOperator(Function):
+class CocoerciveStronglyMonotoneOperatorCheap(Function):
     """
-    The :class:`CocoerciveStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    The :class:`CocoerciveStronglyMonotoneOperatorCheap` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some necessary constraints verified by the class of cocoercive
     and strongly monotone (maximally) operators.
 
@@ -11,7 +11,7 @@ class CocoerciveStronglyMonotoneOperator(Function):
         Those constraints might not be sufficient, thus the caracterized class might contain more operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         mu (float): strong monotonicity parameter
@@ -22,9 +22,9 @@ class CocoerciveStronglyMonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.operators import CocoerciveStronglyMonotoneOperator
+        >>> from PEPit.operators import CocoerciveStronglyMonotoneOperatorCheap
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=CocoerciveStronglyMonotoneOperator, mu=.1, beta=1.)
+        >>> func = problem.declare_function(function_class=CocoerciveStronglyMonotoneOperatorCheap, mu=.1, beta=1.)
 
     References:
 

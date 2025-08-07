@@ -69,16 +69,16 @@ def wc_krasnoselskii_mann_constant_step_sizes(n, gamma, wrapper="cvxpy", solver=
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.1406249823498115
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.14062498234979368
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.6923151650319117e-09
-        		All the primal scalar constraints are verified up to an error of 1.7378567473969042e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.6922988181656422e-09
+        		All the primal scalar constraints are verified up to an error of 1.7378302130666157e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.412159703651858e-08
-        (PEPit) Final upper bound (dual): 0.14062498615478927 and lower bound (primal example): 0.1406249823498115 
-        (PEPit) Duality gap: absolute: 3.804977777299712e-09 and relative: 2.7057623145755453e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.412221535886069e-08
+        (PEPit) Final upper bound (dual): 0.14062498615475635 and lower bound (primal example): 0.14062498234979368 
+        (PEPit) Duality gap: absolute: 3.804962678266577e-09 and relative: 2.7057515774843113e-08
         *** Example file: worst-case performance of Kranoselskii-Mann iterations ***
         	PEPit guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2
         	Theoretical guarantee:	 1/4||xN - AxN||^2 <= 0.140625 ||x0 - x_*||^2

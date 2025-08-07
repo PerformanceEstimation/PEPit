@@ -13,18 +13,21 @@ def linear_optimization_step(dir, ind):
     One can notice that :math:`x` is solution of this problem if and only if
 
     .. math:: - \\text{dir} \\in \\partial \\text{ind}(x).
+    
+    Linear optimization oracles are classically used in conditional gradient-type algorithm (a.k.a., Frank-Wolfe) [1].
 
     References:
-        [1] M .Frank, P. Wolfe (1956).
+        `[1] M. Frank, P. Wolfe (1956).
         An algorithm for quadratic programming.
         Naval research logistics quarterly, 3(1-2), 95-110.
+        <https://arxiv.org/pdf/1608.04826.pdf>`_
 
     Args:
         dir (Point): direction of optimization
         ind (ConvexIndicatorFunction): convex indicator function
 
     Returns:
-        x (Point): the optimal point.
+        x (Point): oracle output.
         gx (Point): the (sub)gradient of ind on x.
         fx (Expression): the function value of ind on x.
 

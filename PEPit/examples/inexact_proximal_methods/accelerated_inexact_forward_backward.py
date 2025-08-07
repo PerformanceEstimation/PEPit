@@ -105,16 +105,16 @@ def wc_accelerated_inexact_forward_backward(L, zeta, n, wrapper="cvxpy", solver=
         			Function 1 : 22 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.018734101450651804
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.01873410580582522
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.169436183689734e-09
-        		All the primal scalar constraints are verified up to an error of 2.3055138501440475e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.304319288506321e-09
+        		All the primal scalar constraints are verified up to an error of 2.3567102051987032e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.9318808809398555e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.038962372016442e-06
-        (PEPit) Final upper bound (dual): 0.018734107018754872 and lower bound (primal example): 0.018734101450651804 
-        (PEPit) Duality gap: absolute: 5.5681030688981e-09 and relative: 2.9721751446501176e-07
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.004365051623187e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.752173775145065e-07
+        (PEPit) Final upper bound (dual): 0.018734111503870048 and lower bound (primal example): 0.01873410580582522 
+        (PEPit) Duality gap: absolute: 5.698044827640025e-09 and relative: 3.0415355217371857e-07
         *** Example file: worst-case performance of an inexact accelerated forward backward method ***
         	PEPit guarantee:	 F(x_n)-F_* <= 0.0187341 ||x_0 - x_*||^2
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.0269437 ||x_0 - x_*||^2

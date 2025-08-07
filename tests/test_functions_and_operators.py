@@ -20,9 +20,9 @@ from PEPit.functions import StronglyConvexFunction
 from PEPit.functions import SmoothStronglyConvexQuadraticFunction
 
 from PEPit.operators import CocoerciveOperator
-from PEPit.operators import CocoerciveStronglyMonotoneOperator
+from PEPit.operators import CocoerciveStronglyMonotoneOperatorCheap
 from PEPit.operators import LipschitzOperator
-from PEPit.operators import LipschitzStronglyMonotoneOperator
+from PEPit.operators import LipschitzStronglyMonotoneOperatorCheap
 from PEPit.operators import MonotoneOperator
 from PEPit.operators import NegativelyComonotoneOperator
 from PEPit.operators import StronglyMonotoneOperator
@@ -52,9 +52,9 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.func12 = SmoothStronglyConvexQuadraticFunction(L=1, mu=.1, name="f12")
 
         self.operator1 = CocoerciveOperator(beta=1., name="op1")
-        self.operator2 = CocoerciveStronglyMonotoneOperator(mu=.1, beta=1., name="op2")
+        self.operator2 = CocoerciveStronglyMonotoneOperatorCheap(mu=.1, beta=1., name="op2")
         self.operator3 = LipschitzOperator(L=1., name="op3")
-        self.operator4 = LipschitzStronglyMonotoneOperator(mu=.1, L=1., name="op4")
+        self.operator4 = LipschitzStronglyMonotoneOperatorCheap(mu=.1, L=1., name="op4")
         self.operator5 = MonotoneOperator(name="op5")
         self.operator6 = NegativelyComonotoneOperator(rho=1, name="op6")
         self.operator7 = StronglyMonotoneOperator(mu=.1, name="op7")
@@ -127,9 +127,9 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertIsInstance(self.func11, StronglyConvexFunction)
         self.assertIsInstance(self.func12, SmoothStronglyConvexQuadraticFunction)
         self.assertIsInstance(self.operator1, CocoerciveOperator)
-        self.assertIsInstance(self.operator2, CocoerciveStronglyMonotoneOperator)
+        self.assertIsInstance(self.operator2, CocoerciveStronglyMonotoneOperatorCheap)
         self.assertIsInstance(self.operator3, LipschitzOperator)
-        self.assertIsInstance(self.operator4, LipschitzStronglyMonotoneOperator)
+        self.assertIsInstance(self.operator4, LipschitzStronglyMonotoneOperatorCheap)
         self.assertIsInstance(self.operator5, MonotoneOperator)
         self.assertIsInstance(self.operator6, NegativelyComonotoneOperator)
         self.assertIsInstance(self.operator7, StronglyMonotoneOperator)

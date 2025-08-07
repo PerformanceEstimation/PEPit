@@ -33,6 +33,10 @@ Linear optimization step
 ------------------------
 .. autofunction:: PEPit.primitive_steps.linear_optimization_step
 
+Linearly shifted optimization step
+----------------------------------
+.. autofunction:: PEPit.primitive_steps.shifted_optimization_step
+
 Epsilon-subgradient step
 ------------------------
 .. autofunction:: PEPit.primitive_steps.epsilon_subgradient_step

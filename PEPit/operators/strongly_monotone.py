@@ -8,7 +8,7 @@ class StronglyMonotoneOperator(Function):
     (maximally monotone) operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         mu (float): strong monotonicity parameter

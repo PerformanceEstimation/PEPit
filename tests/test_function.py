@@ -7,7 +7,7 @@ from PEPit.point import Point
 from PEPit.expression import Expression
 from PEPit.function import Function
 from PEPit.functions.convex_function import ConvexFunction
-from PEPit.operators.cocoercive_strongly_monotone import CocoerciveStronglyMonotoneOperator
+from PEPit.operators.cocoercive_strongly_monotone_cheap import CocoerciveStronglyMonotoneOperatorCheap
 
 
 class TestFunction(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestFunction(unittest.TestCase):
 
         self.func1 = Function(is_leaf=True, decomposition_dict=None, name="f1")
         self.func2 = ConvexFunction(is_leaf=True, decomposition_dict=None)
-        self.func3 = self.pep.declare_function(CocoerciveStronglyMonotoneOperator, mu=.1, beta=1., name="f3")
+        self.func3 = self.pep.declare_function(CocoerciveStronglyMonotoneOperatorCheap, mu=.1, beta=1., name="f3")
 
         self.point = Point(is_leaf=True, decomposition_dict=None)
 
@@ -27,7 +27,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsInstance(self.func2, Function)
         self.assertIsInstance(self.func2, ConvexFunction)
         self.assertIsInstance(self.func3, Function)
-        self.assertIsInstance(self.func3, CocoerciveStronglyMonotoneOperator)
+        self.assertIsInstance(self.func3, CocoerciveStronglyMonotoneOperatorCheap)
 
     def test_name(self):
 

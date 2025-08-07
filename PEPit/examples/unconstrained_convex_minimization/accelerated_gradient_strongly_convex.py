@@ -77,16 +77,16 @@ def wc_accelerated_gradient_strongly_convex(mu, L, n, wrapper="cvxpy", solver=No
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.34760222631660587
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.3476022263165957
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.9078112028836573e-09
-        		All the primal scalar constraints are verified up to an error of 1.3491461073322775e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.9077689453863704e-09
+        		All the primal scalar constraints are verified up to an error of 1.349111329596031e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.191295818299753e-08
-        (PEPit) Final upper bound (dual): 0.3476022268314509 and lower bound (primal example): 0.34760222631660587 
-        (PEPit) Duality gap: absolute: 5.148450554770534e-10 and relative: 1.4811327905826417e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1911053831538528e-08
+        (PEPit) Final upper bound (dual): 0.347602226831412 and lower bound (primal example): 0.3476022263165957 
+        (PEPit) Duality gap: absolute: 5.148163007007156e-10 and relative: 1.4810500673601024e-09
         *** Example file: worst-case performance of the accelerated gradient method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.347602 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.467544 (f(x_0) - f(x_*) + mu/2*||x_0 - x_*||**2)

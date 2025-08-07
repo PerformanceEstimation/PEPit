@@ -74,24 +74,24 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.26666666551166657
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.2666666655116666
         (PEPit) Postprocessing: 7 eigenvalue(s) > 0 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.266566659234068
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.1259768792760665e-07 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.26656666877866464
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.26656665923389067
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.1259924068173275e-07 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2665666687640418
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.26656666877866464
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.2665666687640418
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.201211870048895e-11
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.171828087683806e-11
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.5045561757111027e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.491578307483797e-09
-        (PEPit) Final upper bound (dual): 0.2666666657156721 and lower bound (primal example): 0.26656666877866464 
-        (PEPit) Duality gap: absolute: 9.99969370074627e-05 and relative: 0.000375129184251059
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.5045553432130066e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.49157760320874e-09
+        (PEPit) Final upper bound (dual): 0.2666666657156721 and lower bound (primal example): 0.2665666687640418 
+        (PEPit) Duality gap: absolute: 9.999695163032118e-05 and relative: 0.0003751292391279272
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
         	PEPit guarantee:	 min_i ||f'(x_i)||^2 == 0.266667 (f(x_0)-f_*)
         	Theoretical guarantee:	 min_i ||f'(x_i)||^2 <= 0.266667 (f(x_0)-f_*)

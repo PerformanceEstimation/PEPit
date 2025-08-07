@@ -92,16 +92,16 @@ def wc_accelerated_douglas_rachford_splitting(mu, L, alpha, n, wrapper="cvxpy", 
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.192914822762597
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19291482276257793
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.655442687317297e-09
-        		All the primal scalar constraints are verified up to an error of 1.4452059383419924e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.6554381338528585e-09
+        		All the primal scalar constraints are verified up to an error of 1.4452049501567643e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.332087161994639e-08
-        (PEPit) Final upper bound (dual): 0.19291482672195612 and lower bound (primal example): 0.192914822762597 
-        (PEPit) Duality gap: absolute: 3.959359118343997e-09 and relative: 2.0523871943300208e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.332184313444333e-08
+        (PEPit) Final upper bound (dual): 0.19291482672193344 and lower bound (primal example): 0.19291482276257793 
+        (PEPit) Duality gap: absolute: 3.959355510119167e-09 and relative: 2.0523853239582232e-08
         *** Example file: worst-case performance of the Accelerated Douglas Rachford Splitting in function values ***
         	PEPit guarantee:			 F(y_n)-F_* <= 0.192915 ||x0 - ws||^2
         	Theoretical guarantee for quadratics:	 F(y_n)-F_* <= 1.68889 ||x0 - ws||^2

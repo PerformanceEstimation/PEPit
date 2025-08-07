@@ -73,22 +73,22 @@ def wc_dykstra(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02575645181334978
-        (PEPit) Postprocessing: 6 eigenvalue(s) > 8.710562863672514e-08 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.025756451962234826
+        (PEPit) Postprocessing: 6 eigenvalue(s) > 8.663938612734702e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451810811397
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447084376111912 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451810811397
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447084376111912 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451722815107
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447129803180574 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.025656451722815107
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 0.009447129803180574 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.721634879362454e-12
-        		All the primal scalar constraints are verified up to an error of 5.100808664337819e-12
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.4387615127435673e-10
+        		All the primal scalar constraints are verified up to an error of 4.817901633202837e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.7781954429936124e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.97201083318334e-08
-        (PEPit) Final upper bound (dual): 0.025756455102383596 and lower bound (primal example): 0.025656451810811397 
-        (PEPit) Duality gap: absolute: 0.00010000329157219823 and relative: 0.0038977833844529406
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.908644654925377e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.751031937655801e-08
+        (PEPit) Final upper bound (dual): 0.02575645525161499 and lower bound (primal example): 0.025656451722815107 
+        (PEPit) Duality gap: absolute: 0.00010000352879988364 and relative: 0.0038977926441385144
         *** Example file: worst-case performance of the Dykstra projection method ***
         	PEPit guarantee:	 ||Proj_Q1 (xn) - Proj_Q2 (xn)||^2 == 0.0257565 ||x0 - x_*||^2
     

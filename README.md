@@ -21,20 +21,24 @@ Source Code (MIT): [https://github.com/PerformanceEstimation/PEPit](https://gith
 
 This code comes jointly with the following [`reference`](https://arxiv.org/pdf/2201.04040.pdf):
 
-    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
+    B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut.
     "PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python."
+     Math. Prog. Comp. 16, 337–367 (2024). https://doi.org/10.1007/s12532-024-00259-7
 
-When using the toolbox in a project, please refer to this note via this Bibtex entry:
+When using the toolbox in a project, please refer to the Bibtex entry:
 
 ```bibtex
-@article{pepit2022,
+@article{pepit2024,
   title={{PEPit}: computer-assisted worst-case analyses of first-order optimization methods in {P}ython},
   author={Goujaud, Baptiste and Moucer, C\'eline and Glineur, Fran\c{c}ois and Hendrickx, Julien and Taylor, Adrien and Dieuleveut, Aymeric},
-  journal={arXiv preprint arXiv:2201.04040},
-  year={2022}
+  journal={Math.~Prog.~Comp.},
+  volume={16},
+  pages={337–367},
+  year={2024},
+  publisher={Springer},
+  doi={https://doi.org/10.1007/s12532-024-00259-7}
 }
 ```
-
 
 ## Demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/PerformanceEstimation/PEPit/blob/master/ressources/demo/PEPit_demo.ipynb)
 
@@ -231,7 +235,7 @@ if __name__ == "__main__":
 A lot of common optimization methods can be studied through this framework,
 using numerous steps and under a large variety of function / operator classes.
 
-PEPit provides the following [steps](https://pepit.readthedocs.io/en/latest/api/steps.html) (often referred to as "oracles"):
+PEPit supports the following [steps](https://pepit.readthedocs.io/en/latest/api/steps.html) (often referred to as "oracles"):
 
 - [Inexact gradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#inexact-gradient-step)
 - [Exact line-search step](https://pepit.readthedocs.io/en/latest/api/steps.html#exact-line-search-step)
@@ -240,28 +244,32 @@ PEPit provides the following [steps](https://pepit.readthedocs.io/en/latest/api/
 - [Bregman gradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-gradient-step)
 - [Bregman proximal step](https://pepit.readthedocs.io/en/latest/api/steps.html#bregman-proximal-step)
 - [Linear optimization step](https://pepit.readthedocs.io/en/latest/api/steps.html#linear-optimization-step)
+- [Linearly shifted optimization step](https://pepit.readthedocs.io/en/latest/api/steps.html#linearly-shifted-optimization-step)
 - [Epsilon-subgradient step](https://pepit.readthedocs.io/en/latest/api/steps.html#epsilon-subgradient-step)
 
-PEPit provides the following [function classes](https://pepit.readthedocs.io/en/latest/api/functions.html) CNIs:
+PEPit supports the following [function classes](https://pepit.readthedocs.io/en/latest/api/functions.html):
 
 - [Convex](https://pepit.readthedocs.io/en/latest/api/functions.html#convex)
 - [Strongly convex](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-convex)
 - [Smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth)
 - [Convex and smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-smooth)
+- [Convex and block-smooth](https://pepit.readthedocs.io/en/latest/api/functions.htmlconvex-and-smooth-by-block) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-smooth-by-block-refined-expensive-version)),
 - [Strongly convex and smooth](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-convex-and-smooth)
 - [Convex and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-lipschitz-continuous)
 - [Convex indicator](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-indicator)
 - [Convex support](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-support-functions)
 - [Convex quadratically growing](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-quadratically-upper-bounded)
 - [Functions verifying restricted secant inequality and upper error bound](https://pepit.readthedocs.io/en/latest/api/functions.html#restricted-secant-inequality-and-error-bound)
+- [Smooth function satisfying a quadratic Lojasiewicz inequality](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-expensive-version))
 
-PEPit provides the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
+PEPit supports the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
 
 - [Monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#monotone)
 - [Strongly monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone)
 - [Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#lipschitz-continuous)
-- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous)
+- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-monotone-and-lipschitz-continuous-expensive-version))
 - [Cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive)
+- [Strongly monotone and cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-expensive-version))
 
 
 ## Contributors
@@ -286,6 +294,9 @@ The contributors to this toolbox are:
 - [**Gyumin Roh**](https://rkm0959.tistory.com/)
 - [**Jisun Park**](https://jisunp515.github.io)
 - [**Nizar Bousselmi**](https://nizarbousselmi.github.io)
+- [**Henry Shugart**](https://statistics.wharton.upenn.edu/profile/hshugart/)
+- Online learning settings written jointly with [**Julien Weibel**](https://www.normalesup.org/~jweibel/), [**Pierre Gaillard**](http://pierre.gaillard.me/), and [**Wouter Koolen**](https://wouterkoolen.info/)
+- SDP-representation of refined quadratic Lojasiewicz inequalities, strongly monotone operators with Lipschitz or cocoercive properties, and convex functions with block-smoothness written jointly with [**Anne Rubbens**](https://www.uclouvain.be/fr/people/anne.rubbens)
 
 ### Acknowledgments
 
@@ -296,319 +307,283 @@ as well as for support regarding the continuous integration.
 ## References
 
 [1] Y. Drori, M. Teboulle (2014).
-[Performance of first-order methods for smooth convex minimization: a novel approach.](https://arxiv.org/pdf/1206.3209.pdf)
-Mathematical Programming 145(1–2), 451–482.
+[Performance of first-order methods for smooth convex minimization: a novel approach](https://arxiv.org/pdf/1206.3209.pdf). Mathematical Programming 145(1–2), 451–482.
 
 [2] A. Taylor, J. Hendrickx, F. Glineur (2017).
-[Smooth strongly convex interpolation and exact worst-case performance of first-order methods.](https://arxiv.org/pdf/1502.05666.pdf)
-Mathematical Programming, 161(1-2), 307-345.
+[Smooth strongly convex interpolation and exact worst-case performance of first-order methods](https://arxiv.org/pdf/1502.05666.pdf). Mathematical Programming, 161(1-2), 307-345.
 
 [3] A. Taylor, J. Hendrickx, F. Glineur (2017).
-[Exact worst-case performance of first-order methods for composite convex optimization.](https://arxiv.org/pdf/1512.07516.pdf)
-SIAM Journal on Optimization, 27(3):1283–1313.
+[Exact worst-case performance of first-order methods for composite convex optimization](https://arxiv.org/pdf/1512.07516.pdf). SIAM Journal on Optimization, 27(3):1283–1313.
 
 [4] A. Taylor, J. Hendrickx, F. Glineur (2017).
-[Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods.](https://adrientaylor.github.io/share/PESTO_CDC_2017.pdf)
-In 56th IEEE Conference on Decision and Control (CDC).
+[Performance Estimation Toolbox (PESTO): automated worst-case analysis of first-order optimization methods](https://adrientaylor.github.io/share/PESTO_CDC_2017.pdf). In 56th IEEE Conference on Decision and Control (CDC).
 
-[5] A. d’Aspremont, D. Scieur, A. Taylor (2021).
-[Acceleration Methods.](https://arxiv.org/pdf/2101.09545.pdf)
-Foundations and Trends in Optimization: Vol. 5, No. 1-2.
+[5] B. Goujaud, C. Moucer, F. Glineur, J.M. Hendrickx, A.B. Taylor, A. Dieuleveut (2024).
+[PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python](https://arxiv.org/pdf/2201.04040). Mathematical Programming Computation 16 (3), 337-367.
 
-[6] O. Güler (1992).
-[New proximal point algorithms for convex minimization.](https://epubs.siam.org/doi/abs/10.1137/0802032?mobileUi=0)
-SIAM Journal on Optimization, 2(4):649–664.
+[6] R.T. Rockafellar (1976).
+[Monotone operators and the proximal point algorithm](https://epubs.siam.org/doi/pdf/10.1137/0314056). SIAM journal on control and optimization, 14(5), 877-898.
 
-[7] Y. Drori (2017).
-[The exact information-based complexity of smooth convex minimization.](https://arxiv.org/pdf/1606.01424.pdf)
-Journal of Complexity, 39, 1-16.
+[7] R.D. Monteiro, B.F. Svaiter (2013).
+[An accelerated hybrid proximal extragradient method for convex optimization and its implications to second-order methods](https://epubs.siam.org/doi/abs/10.1137/110833786). SIAM Journal on Optimization, 23(2), 1092-1125.
 
-[8] E. De Klerk, F. Glineur, A. Taylor (2017).
-[On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions.](https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf)
-Optimization Letters, 11(7), 1185-1199.
+[8] S. Salzo, S. Villa (2012).
+[Inexact and accelerated proximal point algorithms](http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf). Journal of Convex analysis, 19(4), 1167-1192.
 
-[9] B.T. Polyak (1964).
-[Some methods of speeding up the convergence of iteration method.](https://www.sciencedirect.com/science/article/pii/0041555364901375)
-URSS Computational Mathematics and Mathematical Physics.
+[9] M. Barre, A. Taylor, F. Bach (2020).
+[Principled analyses and design of first-order methods with inexact proximal operators](https://arxiv.org/pdf/2006.06041v3.pdf)
 
-[10] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015).
-[Global convergence of the Heavy-ball method for convex optimization.](https://arxiv.org/pdf/1412.7457.pdf)
-European Control Conference (ECC).
+[10] A. d’Aspremont, D. Scieur, A. Taylor (2021).
+[Acceleration Methods](https://arxiv.org/pdf/2101.09545.pdf). Foundations and Trends in Optimization: Vol. 5, No. 1-2.
 
-[11] E. De Klerk, F. Glineur, A. Taylor (2020).
-[Worst-case convergence analysis of inexact gradient and Newton methods through semidefinite programming performance estimation.](https://arxiv.org/pdf/1709.05191.pdf)
-SIAM Journal on Optimization, 30(3), 2053-2082.
+[11] H.A. Le Thi, T. Pham Dinh (2018).
+[DC programming and DCA: thirty years of developments](https://link.springer.com/article/10.1007/s10107-018-1235-y). Mathematical Programming, 169(1), 5-68.
 
-[12] O. Gannot (2021).
-[A frequency-domain analysis of inexact gradient methods.](https://arxiv.org/pdf/1912.13494.pdf)
-Mathematical Programming.
+[12] Y. Drori and A. Taylor (2020).
+[Efficient first-order methods for convex minimization: a constructive approach](https://arxiv.org/pdf/1803.05676.pdf). Mathematical Programming 184 (1), 183-220.
 
-[13] D. Kim, J. Fessler (2016).
-[Optimized first-order methods for smooth convex minimization.](https://arxiv.org/pdf/1406.5468.pdf)
-Mathematical Programming 159.1-2: 81-107.
+[13] E. De Klerk, F. Glineur, A. Taylor (2020).
+[Worst-case convergence analysis of inexact gradient and Newton methods through semidefinite programming performance estimation](https://arxiv.org/pdf/1709.05191.pdf). SIAM Journal on Optimization, 30(3), 2053-2082.
 
-[14] S. Cyrus, B. Hu, B. Van Scoy, L. Lessard (2018).
-[A robust accelerated optimization algorithm for strongly convex functions.](https://arxiv.org/pdf/1710.04753.pdf)
-American Control Conference (ACC).
+[14] M. Frank, P. Wolfe (1956).
+[An algorithm for quadratic programming](https://arxiv.org/pdf/1608.04826.pdf). Naval research logistics quarterly, 3(1-2), 95-110.
 
-[15] Y. Nesterov (2003).
-[Introductory lectures on convex optimization: A basic course.](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf)
-Springer Science & Business Media.
+[15] J. Eckstein and W. Yao (2018).
+[Relative-error approximate versions of Douglas–Rachford splitting and special cases of the ADMM](https://link.springer.com/article/10.1007/s10107-017-1160-5). Mathematical Programming, 170(2), 417-444.
 
-[16] S. Boyd, L. Xiao, A. Mutapcic (2003).
-[Subgradient Methods (lecture notes).](https://web.stanford.edu/class/ee392o/subgrad_method.pdf)
-
-[17] Y. Drori, M. Teboulle (2016).
-[An optimal variant of Kelley's cutting-plane method.](https://arxiv.org/pdf/1409.2636.pdf)
-Mathematical Programming, 160(1), 321-351.
-
-[18] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018).
-[The fastest known globally convergent first-order method for minimizing strongly convex functions.](http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf)
-IEEE Control Systems Letters, 2(1), 49-54.
-
-[19] P. Patrinos, L. Stella, A. Bemporad (2014).
-[Douglas-Rachford splitting: Complexity estimates and accelerated variants.](https://arxiv.org/pdf/1407.6723.pdf)
-In 53rd IEEE Conference on Decision and Control (CDC).
-
-[20] Y. Censor, S.A. Zenios (1992).
-[Proximal minimization algorithm with D-functions.](https://link.springer.com/content/pdf/10.1007/BF00940051.pdf)
-Journal of Optimization Theory and Applications, 73(3), 451-464.
-
-[21] E. Ryu, S. Boyd (2016).
-[A primer on monotone operator methods.](https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf)
-Applied and Computational Mathematics 15(1), 3-43.
-
-[22] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
-[Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.](https://arxiv.org/pdf/1812.00146.pdf)
-SIAM Journal on Optimization, 30(3), 2251-2271.
-
-[23] P. Giselsson, and S. Boyd (2016).
-[Linear convergence and metric selection in Douglas-Rachford splitting and ADMM.](https://arxiv.org/pdf/1410.8479.pdf)
-IEEE Transactions on Automatic Control, 62(2), 532-544.
-
-[24] M .Frank, P. Wolfe (1956).
-An algorithm for quadratic programming.
-Naval research logistics quarterly, 3(1-2), 95-110.
-
-[25] M. Jaggi (2013).
-[Revisiting Frank-Wolfe: Projection-free sparse convex optimization.](http://proceedings.mlr.press/v28/jaggi13.pdf)
-In 30th International Conference on Machine Learning (ICML).
-
-[26] A. Auslender, M. Teboulle (2006).
-[Interior gradient and proximal methods for convex and conic optimization.](https://epubs.siam.org/doi/pdf/10.1137/S1052623403427823)
-SIAM Journal on Optimization 16.3 (2006): 697-725.
-
-[27] H.H. Bauschke, J. Bolte, M. Teboulle (2017).
-[A Descent Lemma Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications.](https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf)
-Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348
-
-[28] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
-[Optimal complexity and certification of Bregman first-order methods.](https://arxiv.org/pdf/1911.08510.pdf)
-Mathematical Programming, 1-43.
-
-[29] A. Taylor, J. Hendrickx, F. Glineur (2018).
-[Exact worst-case convergence rates of the proximal gradient method for composite convex minimization.](https://arxiv.org/pdf/1705.04398.pdf)
-Journal of Optimization Theory and Applications, 178(2), 455-476.
-
-[30] B. Polyak (1987).
-Introduction to Optimization.
-Optimization Software New York.
+[16] M. Barre, A. Taylor, F. Bach (2020).
+[Principled analyses and design of first-order methods with inexact proximal operators, arXiv 2006](https://arxiv.org/pdf/2006.06041v2.pdf). 06041v2.
 
-[31] L. Lessard, B. Recht, A. Packard (2016).
-[Analysis and design of optimization algorithms via integral quadratic constraints.](https://arxiv.org/pdf/1408.3595.pdf)
-SIAM Journal on Optimization 26(1), 57–95.
+[17] M. Barre, A. Taylor, F. Bach (2021).
+[A note on approximate accelerated forward-backward methods with absolute and relative errors, and possibly strongly convex objectives](https://arxiv.org/pdf/2106.15536v2.pdf). arXiv:2106.15536v2.
 
-[32] D. Davis, W. Yin (2017).
-[A three-operator splitting scheme and its optimization applications.](https://arxiv.org/pdf/1504.01032.pdf)
-Set-valued and variational analysis, 25(4), 829-858.
+[18] M. Barré, A. Taylor, A. d’Aspremont (2020).
+[Complexity guarantees for Polyak steps with momentum](https://arxiv.org/pdf/2002.00915.pdf). In Conference on Learning Theory (COLT).
 
-[33] Taylor, A. B. (2017).
-[Convex interpolation and performance estimation of first-order methods for convex optimization.](https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01)
-PhD Thesis, UCLouvain.
+[19] Y. Censor, S.A. Zenios (1992).
+[Proximal minimization algorithm with D-functions](https://link.springer.com/content/pdf/10.1007/BF00940051.pdf). Journal of Optimization Theory and Applications, 73(3), 451-464.
 
-[34] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
-[The exact worst-case convergence rate of the gradient method with fixed step lengths for L-smooth functions.](https://arxiv.org/pdf/2104.05468v3.pdf)
-arXiv 2104.05468.
+[20] H.H. Bauschke, J. Bolte, M. Teboulle (2017).
+[A Descent Lemma Beyond Lipschitz Gradient Continuity: First-Order Methods Revisited and Applications](https://cmps-people.ok.ubc.ca/bauschke/Research/103.pdf). Mathematics of Operations Research, 2017, vol. 42, no 2, p. 330-348.
 
-[35] J. Bolte, S. Sabach, M. Teboulle, Y. Vaisbourd (2018).
-[First order methods beyond convexity and Lipschitz gradient continuity with applications to quadratic inverse problems.](https://arxiv.org/pdf/1706.06461.pdf)
-SIAM Journal on Optimization, 28(3), 2131-2151.
+[21] R. Dragomir, A. Taylor, A. d’Aspremont, J. Bolte (2021).
+[Optimal complexity and certification of Bregman first-order methods](https://arxiv.org/pdf/1911.08510.pdf). Mathematical Programming, 1-43.
 
-[36] A. Defazio (2016).
-[A simple practical accelerated method for finite sums.](https://proceedings.neurips.cc/paper/2016/file/4f6ffe13a5d75b2d6a3923922b3922e5-Paper.pdf)
-Advances in Neural Information Processing Systems (NIPS), 29, 676-684.
+[22] D. Davis, W. Yin (2017).
+[A three-operator splitting scheme and its optimization applications](https://arxiv.org/pdf/1504.01032.pdf). Set-valued and variational analysis, 25(4), 829-858.
 
-[37] A. Defazio, F. Bach, S. Lacoste-Julien (2014).
-[SAGA: A fast incremental gradient method with support for non-strongly convex composite objectives.](http://papers.nips.cc/paper/2014/file/ede7e2b6d13a41ddf9f4bdef84fdc737-Paper.pdf)
-In Advances in Neural Information Processing Systems (NIPS).
+[23] A. Taylor, J. Hendrickx, F. Glineur (2018).
+[Exact worst-case convergence rates of the proximal gradient method for composite convex minimization](https://arxiv.org/pdf/1705.04398.pdf). Journal of Optimization Theory and Applications, 178(2), 455-476.
 
-[38] B. Hu, P. Seiler, L. Lessard (2020).
-[Analysis of biased stochastic gradient descent using sequential semidefinite programs.](https://arxiv.org/pdf/1711.00987.pdf)
-Mathematical programming.
+[24] B. Polyak (1987).
+[Introduction to Optimization](https://www.researchgate.net/profile/Boris-Polyak-2/publication/342978480_Introduction_to_Optimization/links/5f1033e5299bf1e548ba4636/Introduction-to-Optimization.pdf). Optimization Software New York.
 
-[39] A. Taylor, F. Bach (2019).
-[Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions.](https://arxiv.org/pdf/1902.00947.pdf)
-Conference on Learning Theory (COLT).
+[25] E. Ryu, S. Boyd (2016).
+[A primer on monotone operator methods](https://web.stanford.edu/~boyd/papers/pdf/monotone_primer.pdf). Applied and Computational Mathematics 15(1), 3-43.
 
-[40] D. Kim (2021).
-[Accelerated proximal point method for maximally monotone operators.](https://arxiv.org/pdf/1905.05149v4.pdf)
-Mathematical Programming, 1-31.
+[26] L. Lessard, B. Recht, A. Packard (2016).
+[Analysis and design of optimization algorithms via integral quadratic constraints](https://arxiv.org/pdf/1408.3595.pdf). SIAM Journal on Optimization 26(1), 57–95.
 
-[41] W. Moursi, L. Vandenberghe (2019).
-[Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and a Strongly Monotone Operator.](https://arxiv.org/pdf/1805.09396.pdf)
-Journal of Optimization Theory and Applications 183, 179–198.
+[27] P. Patrinos, L. Stella, A. Bemporad (2014).
+[Douglas-Rachford splitting: Complexity estimates and accelerated variants](https://arxiv.org/pdf/1407.6723.pdf). In 53rd IEEE Conference on Decision and Control (CDC).
 
-[42] G. Gu, J. Yang (2020).
-[Tight sublinear convergence rate of the proximal point algorithm for maximal monotone inclusion problem.](https://epubs.siam.org/doi/pdf/10.1137/19M1299049)
-SIAM Journal on Optimization, 30(3), 1905-1921.
+[28] A. Auslender, M. Teboulle (2006).
+[Interior gradient and proximal methods for convex and conic optimization](https://epubs.siam.org/doi/pdf/10.1137/S1052623403427823). SIAM Journal on Optimization 16.3 (2006): 697-725.
 
-[43] B. Halpern (1967).
-[Fixed points of nonexpanding maps.](https://www.ams.org/journals/bull/1967-73-06/S0002-9904-1967-11864-0/S0002-9904-1967-11864-0.pdf)
-American Mathematical Society, 73(6), 957–961.
+[29] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+[Operator splitting performance estimation: Tight contraction factors and optimal parameter selection](https://arxiv.org/pdf/1812.00146.pdf). SIAM Journal on Optimization, 30(3), 2251-2271.
 
-[44] F. Lieder (2021).
-[On the convergence rate of the Halpern-iteration.](http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf)
-Optimization Letters, 15(2), 405-418.
+[30] P. Giselsson, and S. Boyd (2016).
+[Linear convergence and metric selection in Douglas-Rachford splitting and ADMM](https://arxiv.org/pdf/1410.8479.pdf). IEEE Transactions on Automatic Control, 62(2), 532-544.
 
-[45] F. Lieder (2018).
-[Projection Based Methods for Conic Linear Programming Optimal First Order Complexities and Norm Constrained Quasi Newton Methods.](https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf)
-PhD thesis, HHU Düsseldorf.
+[31] J. Park, E. Ryu (2023).
+[Accelerated Infeasibility Detection of Constrained Optimization and Fixed-Point Iterations](https://arxiv.org/pdf/2303.15876.pdf). International Conference on Machine Learning.
 
-[46] Y. Nesterov (1983).
-[A method for solving the convex programming problem with convergence rate O(1/k^2).](http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf)
-In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
+[32] B. Halpern (1967).
+[Fixed points of nonexpanding maps](https://www.ams.org/journals/bull/1967-73-06/S0002-9904-1967-11864-0/S0002-9904-1967-11864-0.pdf). American Mathematical Society, 73(6), 957–961.
 
-[47] N. Bansal, A. Gupta (2019).
-[Potential-function proofs for gradient methods.](https://arxiv.org/pdf/1712.04581.pdf)
-Theory of Computing, 15(1), 1-32.
+[33] F. Lieder (2021).
+[On the convergence rate of the Halpern-iteration](http://www.optimization-online.org/DB_FILE/2017/11/6336.pdf). Optimization Letters, 15(2), 405-418.
 
-[48] M. Barre, A. Taylor, F. Bach (2021).
-[A note on approximate accelerated forward-backward methods with absolute and relative errors, and possibly strongly convex objectives.](https://arxiv.org/pdf/2106.15536v2.pdf)
-arXiv:2106.15536v2.
+[34] F. Lieder (2018).
+[Projection Based Methods for Conic Linear Programming Optimal First Order Complexities and Norm Constrained Quasi Newton Methods](https://docserv.uni-duesseldorf.de/servlets/DerivateServlet/Derivate-49971/Dissertation.pdf). PhD thesis, HHU Düsseldorf.
 
-[49] J. Eckstein and W. Yao (2018).
-[Relative-error approximate versions of Douglas–Rachford splitting and special cases of the ADMM.](https://link.springer.com/article/10.1007/s10107-017-1160-5)
-Mathematical Programming, 170(2), 417-444.
+[35] J. Park, E. Ryu (2022).
+[Exact Optimal Accelerated Complexity for Fixed-Point Iterations](https://proceedings.mlr.press/v162/park22c/park22c.pdf). In 39th International Conference on Machine Learning (ICML).
 
-[50] M. Barré, A. Taylor, A. d’Aspremont (2020).
-[Complexity guarantees for Polyak steps with momentum.](https://arxiv.org/pdf/2002.00915.pdf)
-In Conference on Learning Theory (COLT).
+[36] B. Hu, P. Seiler, L. Lessard (2020).
+[Analysis of biased stochastic gradient descent using sequential semidefinite programs](https://arxiv.org/pdf/1711.00987.pdf). Mathematical programming.
 
-[51] D. Kim, J. Fessler (2017).
-[On the convergence analysis of the optimized gradient method.](https://arxiv.org/pdf/1510.08573.pdf)
-Journal of Optimization Theory and Applications, 172(1), 187-205.
+[37] A. Taylor, F. Bach (2019).
+[Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions](https://arxiv.org/pdf/1902.00947.pdf). Conference on Learning Theory (COLT).
 
-[52] Steven Diamond and Stephen Boyd (2016).
-[CVXPY: A Python-embedded modeling language for convex optimization.](https://arxiv.org/pdf/1603.00943.pdf)
-Journal of Machine Learning Research (JMLR) 17.83.1--5 (2016).
+[38] A. Defazio (2016).
+[A simple practical accelerated method for finite sums](https://proceedings.neurips.cc/paper/2016/file/4f6ffe13a5d75b2d6a3923922b3922e5-Paper.pdf). Advances in Neural Information Processing Systems (NIPS), 29, 676-684.
 
-[53] Agrawal, Akshay and Verschueren, Robin and Diamond, Steven and Boyd, Stephen (2018).
-[A rewriting system for convex optimization problems.](https://arxiv.org/pdf/1709.04494.pdf)
-Journal of Control and Decision (JCD) 5.1.42--60 (2018).
+[39] A. Defazio, F. Bach, S. Lacoste-Julien (2014).
+[SAGA: A fast incremental gradient method with support for non-strongly convex composite objectives](http://papers.nips.cc/paper/2014/file/ede7e2b6d13a41ddf9f4bdef84fdc737-Paper.pdf). In Advances in Neural Information Processing Systems (NIPS).
 
-[54] Adrien Taylor, Bryan Van Scoy, Laurent Lessard (2018).
-[Lyapunov Functions for First-Order Methods: Tight Automated Convergence Guarantees.](https://arxiv.org/pdf/1803.06073.pdf)
-International Conference on Machine Learning (ICML).
+[40] S. Lojasiewicz (1963).
+[Une propriété topologique des sous-ensembles analytiques réels](https://aif.centre-mersenne.org/item/10.5802/aif.1384.pdf). Les équations aux dérivées partielles, 117 (1963), 87–89.
 
-[55] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
-[Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound.](https://arxiv.org/pdf/2203.00342.pdf)
+[41] B. Polyak (1963).
+[Gradient methods for the minimisation of functionals USSR Computational Mathematics and Mathematical Physics 3(4), 864–878](https://www.sciencedirect.com/science/article/abs/pii/0041555363903823)
 
-[56] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
-[Optimal first-order methods for convex functions with a quadratic upper bound.](https://arxiv.org/pdf/2205.15033.pdf)
+[42] J. Bolte, A. Daniilidis, and A. Lewis (2007).
+[The Łojasiewicz inequality for nonsmooth subanalytic functions with applications to subgradient dynamical systems](https://bolte.perso.math.cnrs.fr/Loja.pdf). SIAM Journal on Optimization 17, 1205–1223.
 
-[57] W. Su, S. Boyd, E. J. Candès (2016).
-[A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights.](https://jmlr.org/papers/volume17/15-084/15-084.pdf)
-In the Journal of Machine Learning Research (JMLR).
+[43] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2023).
+[Conditions for linear convergence of the gradient method for non-convex optimization](https://arxiv.org/pdf/2204.00647). Optimization Letters.
 
-[58] C. Moucer, A. Taylor, F. Bach (2022).
-[A systematic approach to Lyapunov analyses of continuous-time models in convex optimization.](https://arxiv.org/pdf/2205.12772.pdf)
+[44] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
+[A constructive approach to strengthen algebraic descriptions of function and operator classes](https://arxiv.org/pdf/2504.14377.pdf)
 
-[59] A. C. Wilson, B. Recht, M. I. Jordan (2021).
-[A Lyapunov analysis of accelerated methods in optimization.](https://jmlr.org/papers/volume22/20-195/20-195.pdf)
-In the Journal of Machine Learning Reasearch (JMLR), 22(113):1−34, 2021.
+[45] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
+[On the rate of convergence of the difference-of-convex algorithm (DCA)](https://arxiv.org/pdf/2109.13566). Journal of Optimization Theory and Applications, 202(1), 475-496.
 
-[60] J.M. Sanz-Serna and K. C. Zygalakis (2021)
-[The connections between Lyapunov functions for some optimization algorithms and differential equations.](https://arxiv.org/pdf/2009.00673.pdf)
-In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
+[46] T. Rotaru, P. Patrinos, F. Glineur (2025).
+[Tight Analysis of Difference-of-Convex Algorithm (DCA) Improves Convergence Rates for Proximal Gradient Descent](https://arxiv.org/pdf/2503.04486). Journal of Optimization Theory and Applications, 202(1), 475-496.
 
-[61] D. Scieur, V. Roulet, F. Bach and A. D'Aspremont (2017).
-[Integration methods and accelerated optimization algorithms.](https://papers.nips.cc/paper/2017/file/bf62768ca46b6c3b5bea9515d1a1fc45-Paper.pdf)
-In Advances in Neural Information Processing Systems (NIPS).
+[47] J. Bolte, S. Sabach, M. Teboulle, Y. Vaisbourd (2018).
+[First order methods beyond convexity and Lipschitz gradient continuity with applications to quadratic inverse problems](https://arxiv.org/pdf/1706.06461.pdf). SIAM Journal on Optimization, 28(3), 2131-2151.
 
-[62] J. Park, E. Ryu (2022).
-[Exact Optimal Accelerated Complexity for Fixed-Point Iterations.](https://proceedings.mlr.press/v162/park22c/park22c.pdf)
-In 39th International Conference on Machine Learning (ICML).
+[48] Taylor, A. B. (2017).
+[Convex interpolation and performance estimation of first-order methods for convex optimization](https://dial.uclouvain.be/downloader/downloader.php?pid=boreal:182881&datastream=PDF_01). PhD Thesis, UCLouvain.
 
-[63] M. Barre, A. Taylor, F. Bach (2020).
-[Principled analyses and design of first-order methods with inexact proximal operators.](https://arxiv.org/pdf/2006.06041v2.pdf)
+[49] H. Abbaszadehpeivasti, E. de Klerk, M. Zamani (2021).
+[The exact worst-case convergence rate of the gradient method with fixed step lengths for L-smooth functions](https://arxiv.org/pdf/2104.05468v3.pdf). Optimization Letters, 16(6), 1649-1661.
 
-[64] Y. Drori and A. Taylor (2020).
-[Efficient first-order methods for convex minimization: a constructive approach.](https://arxiv.org/pdf/1803.05676.pdf)
-Mathematical Programming 184 (1), 183-220.
+[50] E. Hazan (2016).
+[Introduction to online convex optimization](https://arxiv.org/pdf/1912.13213). Foundations and Trends in Optimization, 2(3-4), 157-325.
 
-[65] Z. Shi, R. Liu (2016).
-[Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.](https://arxiv.org/pdf/1608.04826.pdf)
-In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
+[51] J. Weibel, P. Gaillard, W.M. Koolen, A. Taylor (2025).
+[Optimized projection-free algorithms for online learning: construction and worst-case analysis](https://arxiv.org/pdf/2506.05855)
 
-[66] R.D. Millán, M.P. Machado (2019).
-[Inexact proximal epsilon-subgradient methods for composite convex optimization problems.](https://arxiv.org/pdf/1805.10120.pdf)
-Journal of Global Optimization 75.4 (2019): 1029-1060.
+[52] F. Jakob, A. Iannelli (2025).
+[Online Convex Optimization and Integral Quadratic Constraints: A new approach to regret analysis](https://arxiv.org/pdf/2503.23600?)
 
-[67] M. Kirszbraun (1934).
-Uber die zusammenziehende und Lipschitzsche transformationen.
-Fundamenta Mathematicae, 22 (1934).
+[53] N. Bansal, A. Gupta (2019).
+[Potential-function proofs for gradient methods](https://arxiv.org/pdf/1712.04581.pdf). Theory of Computing, 15(1), 1-32.
 
-[68] F.A. Valentine (1943).
-On the extension of a vector function so as to preserve a Lipschitz condition.
-Bulletin of the American Mathematical Society, 49 (2).
+[54] Y. Nesterov (1983).
+[A method for solving the convex programming problem with convergence rate O(1/k^2)](http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf). In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
 
-[69] F.A. Valentine (1945).
-A Lipschitz condition preserving extension for a vector function.
-American Journal of Mathematics, 67(1).
+[55] Y.-G. Hsieh, F. Iutzeler, J. Malick, P. Mertikopoulos (2019).
+[On the convergence of single-call stochastic extra-gradient methods](https://arxiv.org/pdf/1908.08465.pdf). Advances in Neural Information Processing Systems, 32:6938–6948, 2019
 
-[70] M. Kirszbraun (1934).
-Uber die zusammenziehende und Lipschitzsche transformationen.
-Fundamenta Mathematicae, 22 (1934).
+[56] E. Gorbunov, A. Taylor, G. Gidel (2022).
+[Last-Iterate Convergence of Optimistic Gradient Method for Monotone Variational Inequalities](https://arxiv.org/pdf/2205.08446.pdf)
 
-[71] F.A. Valentine (1943).
-On the extension of a vector function so as to preserve a Lipschitz condition.
-Bulletin of the American Mathematical Society, 49 (2).
+[57] W. Moursi, L. Vandenberghe (2019).
+[Douglas–Rachford Splitting for the Sum of a Lipschitz Continuous and a Strongly Monotone Operator](https://arxiv.org/pdf/1805.09396.pdf). Journal of Optimization Theory and Applications 183, 179–198.
 
-[72] F.A. Valentine (1945).
-A Lipschitz condition preserving extension for a vector function.
-American Journal of Mathematics, 67(1).
+[58] Y. Cai, A. Oikonomou, W. Zheng (2022).
+[Tight Last-Iterate Convergence of the Extragradient and the Optimistic Gradient Descent-Ascent Algorithm for Constrained Monotone Variational Inequalities](https://arxiv.org/pdf/2204.09228.pdf)
 
-[73] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
-[Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity.](https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf)
-International Conference on Machine Learning.
+[59] D. Kim (2021).
+[Accelerated proximal point method for maximally monotone operators](https://arxiv.org/pdf/1905.05149v4.pdf). Mathematical Programming, 1-31.
 
-[74] A. Brøndsted, R.T. Rockafellar.
-[On the subdifferentiability of convex functions.](https://www.jstor.org/stable/2033889)
-Proceedings of the American Mathematical Society 16(4), 605–611 (1965)
+[60] G. Gu, J. Yang (2020).
+[Tight sublinear convergence rate of the proximal point algorithm for maximal monotone inclusion problem](https://epubs.siam.org/doi/pdf/10.1137/19M1299049). SIAM Journal on Optimization, 30(3), 1905-1921.
 
-[75] R.T. Rockafellar (1976).
-[Monotone operators and the proximal point algorithm.](https://epubs.siam.org/doi/pdf/10.1137/0314056)
-SIAM journal on control and optimization, 14(5), 877-898.
+[61] C. Guille-Escuret, B. Goujaud, A. Ibrahim, I. Mitliagkas (2022).
+[Gradient Descent Is Optimal Under Lower Restricted Secant Inequality And Upper Error Bound](https://arxiv.org/pdf/2203.00342.pdf)
 
-[76] R.D. Monteiro, B.F. Svaiter (2013).
-[An accelerated hybrid proximal extragradient method for convex optimization and its implications to second-order methods.](https://epubs.siam.org/doi/abs/10.1137/110833786)
-SIAM Journal on Optimization, 23(2), 1092-1125.
+[62] E. De Klerk, F. Glineur, A. Taylor (2017).
+[On the worst-case complexity of the gradient method with exact line search for smooth strongly convex functions](https://link.springer.com/content/pdf/10.1007/s11590-016-1087-4.pdf). Optimization Letters, 11(7), 1185-1199.
 
-[77] S. Salzo, S. Villa (2012).
-[Inexact and accelerated proximal point algorithms.](http://www.optimization-online.org/DB_FILE/2011/08/3128.pdf)
-Journal of Convex analysis, 19(4), 1167-1192.
+[63] E. Ghadimi, H. R. Feyzmahdavian, M. Johansson (2015).
+[Global convergence of the Heavy-ball method for convex optimization](https://arxiv.org/pdf/1412.7457.pdf). European Control Conference (ECC).
 
-[78] H. H. Bauschke and P. L. Combettes (2017).
-Convex Analysis and Monotone Operator Theory in Hilbert Spaces.
-Springer New York, 2nd ed.
+[64] B. Goujaud, A. Taylor, A. Dieuleveut (2022).
+[Optimal first-order methods for convex functions with a quadratic upper bound](https://arxiv.org/pdf/2205.15033.pdf)
 
-[79] J. M. Altschuler, P. A. Parrilo (2023).
-Acceleration by Stepsize Hedging I: Multi-Step Descent and the Silver Stepsize Schedule.
-arXiv preprint arXiv:2309.07879.
+[65] Y. Nesterov (2003).
+[Introductory lectures on convex optimization: A basic course](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.693.855&rep=rep1&type=pdf). Springer Science & Business Media.
 
-[80] J. M. Altschuler, P. A. Parrilo (2023).
-Acceleration by Stepsize Hedging II: Silver Stepsize Schedule for Smooth Convex Optimization.
-arXiv preprint arXiv:2309.16530.
+[66] S. Boyd, L. Xiao, A. Mutapcic (2003).
+[Subgradient Methods (lecture notes)](https://web.stanford.edu/class/ee392o/subgrad_method.pdf)
 
-[81] B. Goujaud, C. Moucer, F. Glineur, J. Hendrickx, A. Taylor, A. Dieuleveut (2022).
-[PEPit: computer-assisted worst-case analyses of first-order optimization methods in Python.](https://arxiv.org/pdf/2201.04040.pdf)
+[67] Y. Drori, M. Teboulle (2016).
+[An optimal variant of Kelley's cutting-plane method](https://arxiv.org/pdf/1409.2636.pdf). Mathematical Programming, 160(1), 321-351.
+
+[68] D. Kim, J. Fessler (2021).
+[Optimizing the efficiency of first-order methods for decreasing the gradient of smooth convex functions](https://arxiv.org/pdf/1803.06600.pdf). Journal of optimization theory and applications, 188(1), 192-219.
+
+[69] N. Bousselmi, J. Hendrickx, F. Glineur (2023).
+[Interpolation Conditions for Linear Operators and applications to Performance Estimation Problems](https://arxiv.org/pdf/2302.08781.pdf). arXiv preprint
+
+[70] Y. Drori (2017).
+[The exact information-based complexity of smooth convex minimization](https://arxiv.org/pdf/1606.01424.pdf). Journal of Complexity, 39, 1-16.
+
+[71] J. M. Altschuler, P. A. Parrilo (2023).
+[Acceleration by Stepsize Hedging I: Multi-Step Descent and the Silver Stepsize Schedule](https://arxiv.org/abs/2309.07879). arXiv preprint arXiv:2309.07879.
+
+[72] J. M. Altschuler, P. A. Parrilo (2023).
+[Acceleration by Stepsize Hedging II: Silver Stepsize Schedule for Smooth Convex Optimization](https://arxiv.org/abs/2309.16530). arXiv preprint arXiv:2309.16530.
+
+[73] R.D. Millán, M.P. Machado (2019).
+[Inexact proximal epsilon-subgradient methods for composite convex optimization problems](https://arxiv.org/pdf/1805.10120.pdf). Journal of Global Optimization 75.4 (2019): 1029-1060.
+
+[74] D. Kim, J. Fessler (2016).
+[Optimized first-order methods for smooth convex minimization](https://arxiv.org/pdf/1406.5468.pdf). Mathematical Programming 159.1-2: 81-107.
+
+[75] S. Cyrus, B. Hu, B. Van Scoy, L. Lessard (2018).
+[A robust accelerated optimization algorithm for strongly convex functions](https://arxiv.org/pdf/1710.04753.pdf). American Control Conference (ACC).
+
+[76] O. Güler (1992).
+[New proximal point algorithms for convex minimization](https://epubs.siam.org/doi/abs/10.1137/0802032?mobileUi=0). SIAM Journal on Optimization, 2(4):649–664.
+
+[77] A. Taylor, Y. Drori (2022).
+[An optimal gradient method for smooth strongly convex minimization](https://arxiv.org/pdf/2101.09741.pdf). Mathematical Programming.
+
+[78] Van Scoy, B., Freeman, R. A., Lynch, K. M. (2018).
+[The fastest known globally convergent first-order method for minimizing strongly convex functions](http://www.optimization-online.org/DB_FILE/2017/03/5908.pdf). IEEE Control Systems Letters, 2(1), 49-54.
+
+[79] O. Gannot (2021).
+[A frequency-domain analysis of inexact gradient methods](https://arxiv.org/pdf/1912.13494.pdf). Mathematical Programming.
+
+[80] B.T. Polyak (1964).
+[Some methods of speeding up the convergence of iteration method](https://www.sciencedirect.com/science/article/pii/0041555364901375). URSS Computational Mathematics and Mathematical Physics.
+
+[81] F. Maryam, H. Hindi, S. Boyd (2003).
+[Log-det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices](https://web.stanford.edu/~boyd/papers/pdf/rank_min_heur_hankel.pdf). American Control Conference (ACC).
+
+[82] J.P. Boyle, R.L. Dykstra (1986).
+[A method for finding projections onto the intersection of convex sets in Hilbert spaces](https://link.springer.com/chapter/10.1007/978-1-4613-9940-7_3). Lecture Notes in Statistics. Vol. 37. pp. 28–47.
+
+[83] D. Kim, J. Fessler (2017).
+[On the convergence analysis of the optimized gradient method](https://arxiv.org/pdf/1510.08573.pdf). Journal of Optimization Theory and Applications, 172(1), 187-205.
+
+[84] J. Von Neumann (1949).
+[On rings of operators](https://www.jstor.org/stable/1969463). Reduction theory. Annals of Mathematics, pp. 401–485.
+
+[85] A. C. Wilson, B. Recht, M. I. Jordan (2021).
+[A Lyapunov analysis of accelerated methods in optimization](https://jmlr.org/papers/volume22/20-195/20-195.pdf). In the Journal of Machine Learning Reasearch (JMLR), 22(113):1−34, 2021.
+
+[86] J.M. Sanz-Serna and K. C. Zygalakis (2021).
+[The connections between Lyapunov functions for some optimization algorithms and differential equations](https://arxiv.org/pdf/2009.00673.pdf). In SIAM Journal on Numerical Analysis, 59 pp 1542-1565.
+
+[87] C. Moucer, A. Taylor, F. Bach (2022).
+[A systematic approach to Lyapunov analyses of continuous-time models in convex optimization](https://arxiv.org/pdf/2205.12772.pdf). In SIAM Journal on Optimization 33 (3), 1558-1586.
+
+[88] W. Su, S. Boyd, E. J. Candès (2016).
+[A differential equation for modeling Nesterov's accelerated gradient method: Theory and insights](https://jmlr.org/papers/volume17/15-084/15-084.pdf). In the Journal of Machine Learning Research (JMLR).
+
+[89] D. Scieur, V. Roulet, F. Bach and A. D'Aspremont (2017).
+[Integration methods and accelerated optimization algorithms](https://papers.nips.cc/paper/2017/file/bf62768ca46b6c3b5bea9515d1a1fc45-Paper.pdf). In Advances in Neural Information Processing Systems (NIPS).
+
+[90] M. Kirszbraun (1934).
+[Uber die zusammenziehende und Lipschitzsche transformationen](https://eudml.org/doc/212681). Fundamenta Mathematicae, 22 (1934).
+
+[91] F.A. Valentine (1943).
+[On the extension of a vector function so as to preserve a Lipschitz condition](https://projecteuclid.org/journals/bulletin-of-the-american-mathematical-society/volume-49/issue-2). Bulletin of the American Mathematical Society, 49 (2).
+
+[92] F.A. Valentine (1945).
+[A Lipschitz condition preserving extension for a vector function](https://www.jstor.org/stable/2371917). American Journal of Mathematics, 67(1).
+
+[93] H. H. Bauschke and P. L. Combettes (2017).
+[Convex Analysis and Monotone Operator Theory in Hilbert Spaces](https://link.springer.com/book/10.1007/978-3-319-48311-5). Springer New York.
+
+[94] E. Gorbunov, A. Taylor, S. Horváth, G. Gidel (2023).
+[Convergence of proximal point and extragradient-based methods beyond monotonicity: the case of negative comonotonicity](https://proceedings.mlr.press/v202/gorbunov23a/gorbunov23a.pdf). International Conference on Machine Learning.

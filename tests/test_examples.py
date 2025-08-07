@@ -45,6 +45,10 @@ from PEPit.examples.composite_convex_minimization import wc_three_operator_split
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
 from PEPit.examples.nonconvex_optimization import wc_no_lips_2
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_naive as wc_gradient_lojasiewicz_a
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_intermediate as wc_gradient_lojasiewicz_b
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_expensive as wc_gradient_lojasiewicz_c
+from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_dca
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
@@ -56,6 +60,8 @@ from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_accelerated_proximal_point as wc_accelerated_proximal_point_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_douglas_rachford_splitting as wc_douglas_rachford_splitting_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_douglas_rachford_splitting_2 as wc_douglas_rachford_splitting_operators_2
 from PEPit.examples.monotone_inclusions_variational_inequalities import wc_optimal_strongly_monotone_proximal_point as \
     wc_optimal_strongly_monotone_proximal_point_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
@@ -64,6 +70,10 @@ from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_three_operator_splitting as wc_three_operator_splitting_operators
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_optimistic_gradient as wc_optimistic_gradient_operators
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_optimistic_gradient_refined as wc_optimistic_gradient_operators_refined
+from PEPit.examples.monotone_inclusions_variational_inequalities import \
+    wc_optimistic_gradient_refined_cocoercive as wc_optimistic_gradient_operators_refined_cocoercive
 from PEPit.examples.monotone_inclusions_variational_inequalities import \
     wc_past_extragradient as wc_past_extragradient_operators
 from PEPit.examples.fixed_point_problems import wc_halpern_iteration
@@ -96,6 +106,10 @@ from PEPit.examples.continuous_time_models import wc_gradient_flow_convex
 from PEPit.examples.continuous_time_models import wc_accelerated_gradient_flow_strongly_convex
 from PEPit.examples.continuous_time_models import wc_gradient_flow_strongly_convex
 from PEPit.examples.tutorials import wc_gradient_descent_contraction
+from PEPit.examples.online_learning import wc_online_gradient_descent
+from PEPit.examples.online_learning import wc_online_frank_wolfe
+from PEPit.examples.online_learning import wc_online_follow_leader
+from PEPit.examples.online_learning import wc_online_follow_regularized_leader
 
 
 class TestExamplesCVXPY(unittest.TestCase):
@@ -490,6 +504,76 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc, theory = wc_no_lips_2(L, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_lojasiewicz_a(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)) /2 / L
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)/2) / L
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+
+    def test_lojasiewicz_b(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+        alpha = (2*mu/(2*L+mu))
+
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)) /2 / L
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)/2) / L
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+
+    def test_lojasiewicz_c(self):
+        L, mu, n = 1, .2, 3
+        gamma = 1 / L
+        
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)) /2 / L
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+        
+        gamma = (1+np.sqrt(3)/2) / L
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        
+        delta = self.relative_precision * theory
+        self.assertLessEqual(wc, theory + delta)
+
+    def test_DCA(self):
+        L1, L2, mu1, mu2 = 2., 3.2, .2, .1
+        wc, theory = wc_dca(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=6, alpha = 0, wrapper="mosek", solver=None, verbose=self.verbose)
+
+        self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
+
     def test_saga(self):
         L, mu, n = 1, 0.1, 5
 
@@ -554,6 +638,12 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc, theory = wc_douglas_rachford_splitting_operators(L, mu, alpha, theta, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
+    def test_douglas_rachford_splitting_operators_2(self):
+        beta, mu, alpha, theta = 1.2, 0.1, 0.3, 1.5
+
+        wc, theory = wc_douglas_rachford_splitting_operators_2(beta, mu, alpha, theta, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
     def test_three_operator_splitting_operators(self):
         L, mu, beta, alpha, theta = 1, 0.1, 1, 1.3, 0.9
         n_list = range(1, 2)
@@ -570,6 +660,20 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc2, _ = wc_optimistic_gradient_operators(n=n2, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
 
+    def test_optimistic_gradient_refined(self):
+        n1, n2, L, gamma = 2, 2, 1, 1 / 4
+
+        wc1, _ = wc_optimistic_gradient_operators(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators_refined(n=n2, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+
+    def test_optimistic_gradient_cocoercive(self):
+        n1, n2, L, gamma, beta = 1, 1, 1, 1 / 4, 1
+
+        wc1, _ = wc_optimistic_gradient_operators_refined(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators_refined_cocoercive(n=n2, gamma=gamma, beta=beta, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc2, wc1)
+        
     def test_past_extragradient(self):
         n1, n2, L, gamma = 5, 6, 1, 1 / 4
 
@@ -688,6 +792,31 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
 
         wc, theory = wc_gradient_descent_contraction(L=L, mu=mu, gamma=gamma, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_online_gradient_descent(self):
+        M, D, n = 1,.5,4
+        wc, theory = wc_online_gradient_descent(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
+
+    def test_online_frank_wolfe(self):
+        M, D, n = 1,.5, 2
+        wc, theory = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
+        self.assertLessEqual(wc, theory)
+
+    def test_online_follow_leader(self):
+        M, D, n = 1,1, 2
+        wc1, _ = wc_online_follow_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+        wc2, _ = wc_online_follow_leader(M=M, D=D, n=n+1, wrapper=self.wrapper, verbose=self.verbose)
+
+        self.assertLessEqual(wc1, wc2)
+
+    def test_online_follow_regularized_leader(self):
+        M, D, n = 1,.5, 2
+        wc, theory = wc_online_follow_regularized_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
+
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
 
