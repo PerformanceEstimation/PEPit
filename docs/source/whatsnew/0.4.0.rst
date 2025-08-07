@@ -14,3 +14,5 @@ What's new in PEPit 0.4.0
 - New examples: (i) Refined block-coordinate descent (refined interpolation techniques--but computationally more expensive) (ii) introduction of quadratic Lojasiewicz inequalities, examples on gradient descent (with different ways to improse Lojasiewicz inequalities, from naive ones to more advanced SDP-representable ones) (iii) optimistic gradient with more advanced SDP-representable monotonocity/Lipschitz characterization, (iv) difference-of-convex algorithm (DCA, also known as the convex-concave procedure),  (v) online learning settings (online gradient descent, online Frank-Wolfe, follow the leader, follow the regularized leader).
 
 - Corrected example: SGD's closed-form solution has been updated.
+
+- The support of functions of the class :class:`ConvexIndicatorFunction` can be constrained through a radius in addition to a diameter.
