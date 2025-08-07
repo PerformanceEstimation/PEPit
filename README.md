@@ -260,16 +260,16 @@ PEPit supports the following [function classes](https://pepit.readthedocs.io/en/
 - [Convex support](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-support-functions)
 - [Convex quadratically growing](https://pepit.readthedocs.io/en/latest/api/functions.html#convex-and-quadratically-upper-bounded)
 - [Functions verifying restricted secant inequality and upper error bound](https://pepit.readthedocs.io/en/latest/api/functions.html#restricted-secant-inequality-and-error-bound)
-- [Smooth function satisfying a quadratic Lojasiewicz inequality](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality) ([stronger variant 1](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-expensive-version), [stronger variant 2](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-very-expensive-version))
+- [Smooth function satisfying a quadratic Lojasiewicz inequality](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-expensive-version))
 
 PEPit supports the following [operator classes](https://pepit.readthedocs.io/en/latest/api/operators.html) CNIs:
 
 - [Monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#monotone)
 - [Strongly monotone](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone)
 - [Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#lipschitz-continuous)
-- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#smooth-function-satisfying-quadratic-lojasiewicz-inequality-refined-very-expensive-version))
+- [Strongly monotone and Lipschitz continuous](https://pepit.readthedocs.io/en/latest/api/operators.html#strongly-monotone-and-lipschitz-continuous-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/functions.html#strongly-monotone-and-lipschitz-continuous-expensive-version))
 - [Cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive)
-- [Strongly monotone and cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-refined-expensive-version))
+- [Strongly monotone and cocoercive](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-cheap-version) ([stronger variant](https://pepit.readthedocs.io/en/latest/api/operators.html#cocoercive-and-strongly-monotone-expensive-version))
 
 
 ## Contributors
