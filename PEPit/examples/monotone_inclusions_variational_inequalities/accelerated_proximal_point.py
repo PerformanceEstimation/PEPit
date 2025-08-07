@@ -24,7 +24,7 @@ def wc_accelerated_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbos
 
             \\begin{eqnarray}
                 x_{t+1} & = & J_{\\alpha A}(y_t), \\\\
-                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+1}(x_t - y_{t-1}),
+                y_{t+1} & = & x_{t+1} + \\frac{t}{t+2}(x_{t+1} - x_{t}) - \\frac{t}{t+2}(x_t - y_{t-1}),
             \\end{eqnarray}
 
     where :math:`x_0=y_0=y_{-1}`
