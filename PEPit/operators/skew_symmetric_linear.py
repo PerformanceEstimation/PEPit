@@ -85,7 +85,7 @@ class SkewSymmetricLinearOperator(Function):
         Formulates the list of interpolation constraints for self (Skew-symmetric linear operator).
         """
         # Interpolation conditions of symmetric linear operators class
-        constraint = (xi * gi == Expression(is_leaf=False, decomposition_dict=dict()))
+        constraint = (xi * gi == 0)
 
         return constraint
 
