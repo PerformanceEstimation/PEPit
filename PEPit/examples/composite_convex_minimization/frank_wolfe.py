@@ -4,24 +4,25 @@ from PEPit.functions import SmoothConvexFunction
 from PEPit.primitive_steps import linear_optimization_step
 
 
-def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_frank_wolfe(L, D, R, center, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
     .. math:: F_\\star \\triangleq \\min_x \\{F(x) \\equiv f_1(x) + f_2(x)\\},
 
     where :math:`f_1` is :math:`L`-smooth and convex
-    and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}` of diameter at most :math:`D`.
+    and where :math:`f_2` is a convex indicator function on :math:`\\mathcal{D}`
+    of diameter at most :math:`D` and radius at most :math:`R` around `center`.
 
     This code computes a worst-case guarantee for the **conditional gradient** method, aka **Frank-Wolfe** method.
     That is, it computes the smallest possible :math:`\\tau(n, L)` such that the guarantee
 
-    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L) D^2,
+    .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, D, R),
 
     is valid, where x_n is the output of the **conditional gradient** method,
     and where :math:`x_\\star` is a minimizer of :math:`F`.
-    In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L)` is computed as the worst-case value of
-    :math:`F(x_n) - F(x_\\star)` when :math:`D \\leqslant 1`.
+    In short, for given values of :math:`n` and :math:`L`, :math:`\\tau(n, L, D, R)`
+    is computed as the worst-case value of :math:`F(x_n) - F(x_\\star)`.
 
     **Algorithm**:
 
@@ -36,7 +37,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **Theoretical guarantee**:
 
-    An **upper** guarantee obtained in [2, Theorem 1] is
+    An **upper** guarantee obtained in [2, Theorem 1] when R = infinity is
 
         .. math :: F(x_n) - F(x_\\star) \\leqslant \\frac{2L D^2}{n+2}.
 
@@ -54,7 +55,9 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     Args:
         L (float): the smoothness parameter.
-        D (float): diameter of :math:`f_2`.
+        D (float): diameter of :math:`\\mathcal{D}`.
+        R (float): radius of :math:`\\mathcal{D}`.
+        center (Point): center of :math:`\\mathcal{D}`. If None, the radius constraint must be observed to one center.
         n (int): number of iterations.
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
@@ -70,7 +73,8 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=float('inf'), center=None, n=10,
+        >>>                                             wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 26x26
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -102,9 +106,9 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     # Instantiate PEP
     problem = PEP()
 
-    # Declare a smooth convex function and a convex indicator of rayon D
+    # Declare a smooth convex function and a convex indicator of diameter D
     func1 = problem.declare_function(function_class=SmoothConvexFunction, L=L)
-    func2 = problem.declare_function(function_class=ConvexIndicatorFunction, D=D)
+    func2 = problem.declare_function(function_class=ConvexIndicatorFunction, D=D, R=R, center=center)
     # Define the function to optimize as the sum of func1 and func2
     func = func1 + func2
 
@@ -135,7 +139,7 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    # when theta = 1
+    # when theta = 1, and R = infinity
     theoretical_tau = 2 * L * D ** 2 / (n + 2)
 
     # Print conclusion if required
@@ -149,4 +153,5 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, n=10, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=float('inf'), center=None, n=10,
+                                                wrapper="cvxpy", solver=None, verbose=1)

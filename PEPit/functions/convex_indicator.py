@@ -1,6 +1,8 @@
 import numpy as np
 
+from PEPit.point import Point
 from PEPit.function import Function
+
 
 class ConvexIndicatorFunction(Function):
     """
@@ -10,8 +12,9 @@ class ConvexIndicatorFunction(Function):
     Attributes:
         D (float): upper bound on the diameter of the feasible set, possibly set to np.inf
         R (float): upper bound on the radius of the feasible set, possibly set to np.inf
-        center (Point): Center of the feasible set spanned by the radius constraint, possibly set to None.
-    Convex indicator functions are characterized by a parameter `D` (or `R`), hence can be instantiated as
+        center (Point): Center of the feasible set spanned by the radius constraint.
+                        If set to None, there exists such a point but it remains undefined.
+    Convex indicator functions are characterized by a parameter `D` and/or `R`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
@@ -67,8 +70,11 @@ class ConvexIndicatorFunction(Function):
         self.D = D
         # Store the radius R in an attribute
         self.R = R
-        # Store the center in an attribute 
-        self.center = center
+        # Store the center in an attribute
+        if center is None and self.R != np.inf:
+            self.center = Point()
+        else:
+            self.center = center
 
     @staticmethod
     def set_value_constraint_i(xi, gi, fi):
@@ -104,14 +110,17 @@ class ConvexIndicatorFunction(Function):
         # Diameter constraint
         constraint = ((xi - xj) ** 2 <= self.D ** 2)
 
-        # Radius constraint 
-        if self.R < np.inf:
-            # No self.center provided centers the ball on the origin
-            if self.center is None: 
-                constraint = ((xi)**2 <= self.R ** 2)
-            # Centering the ball on self.center
-            else: 
-                constraint = ((self.center - xi)**2 <= self.R ** 2)
+        return constraint
+
+    def set_radius_constraint_i(self,
+                                xi, gi, fi,
+                                ):
+        """
+        Formulate the constraints bounding the radius of the support of self around self.center.
+
+        """
+        # Radius constraint
+        constraint = ((xi - self.center)**2 <= self.R ** 2)
 
         return constraint
 
@@ -130,9 +139,16 @@ class ConvexIndicatorFunction(Function):
                                                       constraint_name="convexity",
                                                       set_class_constraint_i_j=self.set_convexity_constraint_i_j,
                                                       )
-        if (self.D != np.inf) or (self.R != np.inf):
+
+        if self.D != np.inf:
             self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                           list_of_points_2=self.list_of_points,
                                                           constraint_name="diameter",
                                                           set_class_constraint_i_j=self.set_diameter_constraint_i_j,
                                                           )
+
+        if self.R != np.inf:
+            self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                         constraint_name="radius",
+                                                         set_class_constraint_i=self.set_radius_constraint_i,
+                                                         )
