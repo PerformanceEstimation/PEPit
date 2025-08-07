@@ -16,3 +16,5 @@ What's new in PEPit 0.4.0
 - Corrected example: SGD's closed-form solution has been updated.
 
 - The support of functions of the class :class:`ConvexIndicatorFunction` can be constrained through a radius in addition to a diameter.
+
+- Fix: The :class:`SkewSymmetricLinearOperator` constraints have been completed with the formerly missing "xi * gi == 0".
