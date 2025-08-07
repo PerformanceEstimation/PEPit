@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions import Refined_BlockSmoothConvexFunction
+from PEPit.functions import BlockSmoothConvexFunctionExpensive
 
 
 def wc_cyclic_coordinate_descent_refined(L, n, wrapper="cvxpy", solver=None, verbose=1):
@@ -73,7 +73,7 @@ def wc_cyclic_coordinate_descent_refined(L, n, wrapper="cvxpy", solver=None, ver
     partition = problem.declare_block_partition(d=d)
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(Refined_BlockSmoothConvexFunction, L=L, partition=partition)
+    func = problem.declare_function(BlockSmoothConvexFunctionExpensive, L=L, partition=partition)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

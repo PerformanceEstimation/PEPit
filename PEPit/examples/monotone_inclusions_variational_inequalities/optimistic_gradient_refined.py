@@ -1,6 +1,6 @@
 from PEPit import PEP
 from PEPit.functions import ConvexIndicatorFunction
-from PEPit.operators import Refined_LipschitzStronglyMonotoneOperator
+from PEPit.operators import LipschitzStronglyMonotoneOperatorExpensive
 from PEPit.primitive_steps import proximal_step
 
 
@@ -155,7 +155,7 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
 
     # Declare an indicator function and a monotone operator
     ind_C = problem.declare_function(ConvexIndicatorFunction)
-    F = problem.declare_function(Refined_LipschitzStronglyMonotoneOperator, mu=0, L=L)
+    F = problem.declare_function(LipschitzStronglyMonotoneOperatorExpensive, mu=0, L=L)
 
     total_problem = F + ind_C
 

@@ -7,7 +7,7 @@ class CocoerciveOperator(Function):
     implementing the interpolation constraints of the class of cocoercive (and maximally monotone) operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         beta (float): cocoercivity parameter

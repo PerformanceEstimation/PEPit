@@ -71,15 +71,15 @@ Restricted secant inequality and error bound
    :members:
    :show-inheritance:
 
-Convex and smooth by block
---------------------------
-.. autoclass:: PEPit.functions.BlockSmoothConvexFunction
+Convex and smooth by block (cheap version)
+------------------------------------------
+.. autoclass:: PEPit.functions.BlockSmoothConvexFunctionCheap
    :members:
    :show-inheritance:
 
-Convex and smooth by block (refined expensive version)
+Convex and smooth by block (expensive version)
 ------------------------------------------------------
-.. autoclass:: PEPit.functions.Refined_BlockSmoothConvexFunction
+.. autoclass:: PEPit.functions.BlockSmoothConvexFunctionExpensive
    :members:
    :show-inheritance:
    
@@ -88,22 +88,15 @@ Strongly convex and smooth quadratic
 .. autoclass:: PEPit.functions.SmoothStronglyConvexQuadraticFunction
    :members:
    :show-inheritance:
-   
-Smooth function satisfying quadratic Lojasiewicz inequality
------------------------------------------------------------
-.. autoclass:: PEPit.functions.LojasiewiczSmoothFunction
+
+Smooth function satisfying quadratic Lojasiewicz inequality (cheap version)
+---------------------------------------------------------------------------
+.. autoclass:: PEPit.functions.SmoothQuadraticLojasiewiczFunctionCheap
    :members:
    :show-inheritance:
 
-Smooth function satisfying quadratic Lojasiewicz inequality (refined expensive version)
----------------------------------------------------------------------------------------
-.. autoclass:: PEPit.functions.Refined_LojasiewiczSmoothFunction
+Smooth function satisfying quadratic Lojasiewicz inequality (expensive version)
+-------------------------------------------------------------------------------
+.. autoclass:: PEPit.functions.SmoothQuadraticLojasiewiczFunctionExpensive
    :members:
    :show-inheritance:
-
-Smooth function satisfying quadratic Lojasiewicz inequality (refined very expensive version)
---------------------------------------------------------------------------------------------
-.. autoclass:: PEPit.functions.ExpertRefined_LojasiewiczSmoothFunction
-   :members:
-   :show-inheritance:
-

@@ -8,7 +8,7 @@ class LipschitzOperator(Function):
     implementing the interpolation constraints of the class of Lipschitz continuous operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         L (float): Lipschitz parameter

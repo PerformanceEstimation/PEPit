@@ -1,14 +1,13 @@
-from PEPit.function import Function
-from PEPit import PSDMatrix
-from PEPit.block_partition import BlockPartition
-from PEPit.expression import Expression
 import numpy as np
 
-class Refined_BlockSmoothConvexFunction(Function):
+from PEPit.function import Function
+from PEPit.block_partition import BlockPartition
+
+
+class BlockSmoothConvexFunctionCheap(Function):
     """
-    The :class:`Refined_BlockSmoothConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    The :class:`BlockSmoothConvexFunctionCheap` class overwrites the `add_class_constraints` method of :class:`Function`,
     by implementing necessary constraints for interpolation of the class of smooth convex functions by blocks.
-    The implemented constraint is that of [2, Section 3.1].
 
     Attributes:
         partition (BlockPartition): partitioning of the variables (in blocks).
@@ -19,11 +18,11 @@ class Refined_BlockSmoothConvexFunction(Function):
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.functions import BlockSmoothConvexFunction
+        >>> from PEPit.functions import BlockSmoothConvexFunctionCheap
         >>> problem = PEP()
         >>> partition = problem.declare_block_partition(d=3)
         >>> L = [1, 4, 10]
-        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
+        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunctionCheap, partition=partition, L=L)
 
     References:
 
@@ -31,12 +30,9 @@ class Refined_BlockSmoothConvexFunction(Function):
     Better worst-case complexity analysis of the block coordinate descent method for large scale machine learning.
     In 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA).
     <https://arxiv.org/pdf/1608.04826.pdf>`_
-    
-    `[2] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
-    A constructive approach to strengthen algebraic descriptions of function and operator classes.
-    <https://arxiv.org/pdf/2504.14377.pdf>`_
 
     """
+
     def __init__(self,
                  partition,
                  L,
@@ -80,22 +76,10 @@ class Refined_BlockSmoothConvexFunction(Function):
         self.partition = partition
         self.L = L
 
-        
-    def last_call_before_problem_formulation(self):
-        """
-        Last call before modeling and solving the full PEP. Add necessarily intermediate variable before solving.
-        
-        """
-        nb_pts = len(self.list_of_points)
-        preallocate = nb_pts * (nb_pts**2  - 1) * (self.partition.get_nb_blocks()**2)
-        self.s = np.ndarray((preallocate,),dtype=Expression)
-        for i in range(preallocate):
-            self.s[i] = Expression()
-    
     def add_class_constraints(self):
         """
         Formulates the list of necessary constraints for interpolation for self (block smooth convex function);
-        see [2, Proposition 3.9].
+        see [1, Lemma 1.1].
 
         """
         # Set function ID
@@ -104,12 +88,10 @@ class Refined_BlockSmoothConvexFunction(Function):
             function_id = "Function_{}".format(self.counter)
 
         # Set tables_of_constraints attributes
-        for m in range(self.partition.get_nb_blocks()):
-            for l in range(self.partition.get_nb_blocks()):
-                self.tables_of_constraints["smoothness_convexity_block_{}{}".format(m, l)] = [[[]]]*len(self.list_of_points)
+        for k in range(self.partition.get_nb_blocks()):
+            self.tables_of_constraints["smoothness_convexity_block_{}".format(k)] = [[]]*len(self.list_of_points)
 
         # Browse list of points and create interpolation constraints
-        counter = 0
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -123,36 +105,22 @@ class Refined_BlockSmoothConvexFunction(Function):
                 xj_id = xj.get_name()
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)
-                
-                for k, point_k in enumerate(self.list_of_points):
-                    xk, gk, fk = point_k
-                    xk_id = xk.get_name()
-                    if xk_id is None:
-                        xk_id = "Point_{}".format(k)
+
+                if point_i == point_j:
+                    for k in range(self.partition.get_nb_blocks()):
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(0)
+
+                else:
+
+                    for k in range(self.partition.get_nb_blocks()):
+
+                        # partial gradients for block k
+                        gik = self.partition.get_block(gi, k)
+                        gjk = self.partition.get_block(gj, k)
                         
-                    if not (point_i == point_j and point_i == point_k):
-                        for m in range(self.partition.get_nb_blocks()):
-                            for l in range(self.partition.get_nb_blocks()):
-                                # partial gradients for block m
-                                gim = self.partition.get_block(gi, m)
-                                gjm = self.partition.get_block(gj, m)
-                                gkm = self.partition.get_block(gk, m)
-                                
-                                # partial gradients for block l
-                                gjl = self.partition.get_block(gj, l)
-                                gkl = self.partition.get_block(gk, l)
-                                
-                                # Necessary conditions for interpolation
-                                constraint = ( self.s[counter] >= 0)
-                                A = -(-fi + fk + gk * (xi - xk) + 1 / (2 * self.L[m]) * (gim - gkm) ** 2)
-                                B = -(-fi + fj + gj * (xi - xj) + 1 / (2 * self.L[m]) * (gim - gjm) ** 2)
-                                C = -( 1 / (2 * self.L[l]) * (gjl - gkl) ** 2 - 1 / (2 * self.L[m]) * (gjm - gkm) ** 2)
-                                
-                                T = np.array([[A, (A+B+C)/2-self.s[counter]], [(A+B+C)/2-self.s[counter], B]], dtype=Expression)
-                                psd_matrix = PSDMatrix(matrix_of_expressions=T)
-                                self.list_of_class_psd.append(psd_matrix)
-                                
-                                constraint.set_name("IC_{}_smoothness_convexity_block_{}{}({}, {}, {})".format(function_id, m, l, xi_id, xj_id, xk_id))
-                                self.tables_of_constraints["smoothness_convexity_block_{}{}".format(m, l)][i].append(constraint)
-                                self.list_of_class_constraints.append(constraint)
-                                counter += 1 
+                        # Necessary conditions for interpolation
+                        constraint = (fi - fj >= gj * (xi - xj) + 1 / (2 * self.L[k]) * (gik - gjk) ** 2)
+                        constraint.set_name("IC_{}_smoothness_convexity_block_{}({}, {})".format(function_id, k,
+                                                                                                 xi_id, xj_id))
+                        self.tables_of_constraints["smoothness_convexity_block_{}".format(k)][i].append(constraint)
+                        self.list_of_class_constraints.append(constraint)

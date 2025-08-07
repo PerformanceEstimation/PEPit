@@ -23,17 +23,17 @@ No Lips 2
 
 Gradient descent on smooth function satisfying quadratic Lojasiewicz inequality
 -------------------------------------------------------------------------------
-.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_naiveLojaciewicz
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_naive_Lojaciewicz
 
 
 Gradient descent on smooth function satisfying quadratic Lojasiewicz inequality (more expensive/less conservative version)
 --------------------------------------------------------------------------------------------------------------------------
-.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_refinedLojaciewicz
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_refined_Lojaciewicz
 
 
 Gradient descent on smooth function satisfying quadratic Lojasiewicz inequality (much more expensive/less conservative version)
 -------------------------------------------------------------------------------------------------------------------------------
-.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_expertLojaciewicz
+.. autofunction:: PEPit.examples.nonconvex_optimization.wc_gradient_descent_expert_Lojaciewicz
 
 
 Difference-of-convex algorithm (DCA)

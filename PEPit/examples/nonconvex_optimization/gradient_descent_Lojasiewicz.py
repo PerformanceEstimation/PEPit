@@ -1,8 +1,9 @@
 from PEPit import PEP
-from PEPit.functions import LojasiewiczSmoothFunction
+from PEPit.functions import SmoothQuadraticLojasiewiczFunctionCheap
 import numpy as np
 
-def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
+
+def wc_gradient_descent_naive_Lojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -73,7 +74,7 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
         >>> L = 1
         >>> mu = .2
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_naiveLojaciewicz(L=L, gamma=gamma, n=1, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_naive_Lojaciewicz(L=L, gamma=gamma, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
 	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
 	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -104,7 +105,7 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
     problem = PEP()
 
     # Declare a smooth function satisfying a quadratic Lojasiewicz inequality
-    func = problem.declare_function(LojasiewiczSmoothFunction, L=L, mu=mu)
+    func = problem.declare_function(SmoothQuadraticLojasiewiczFunctionCheap, L=L, mu=mu)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -156,4 +157,4 @@ def wc_gradient_descent_naiveLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solve
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
     verbose = 0
-    pepit_tau, theoretical_tau = wc_gradient_descent_naiveLojaciewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_naive_Lojaciewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)

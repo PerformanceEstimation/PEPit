@@ -1,7 +1,7 @@
 from math import sqrt
 
 from PEPit import PEP
-from PEPit.operators import LipschitzStronglyMonotoneOperator
+from PEPit.operators import LipschitzStronglyMonotoneOperatorCheap
 from PEPit.operators import StronglyMonotoneOperator
 from PEPit.primitive_steps import proximal_step
 
@@ -108,7 +108,7 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
     problem = PEP()
 
     # Declare a monotone operator
-    A = problem.declare_function(LipschitzStronglyMonotoneOperator, L=L, mu=0)
+    A = problem.declare_function(LipschitzStronglyMonotoneOperatorCheap, L=L, mu=0)
     B = problem.declare_function(StronglyMonotoneOperator, mu=mu)
 
     # Then define starting points w0 and w1

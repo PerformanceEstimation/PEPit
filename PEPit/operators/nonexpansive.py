@@ -7,7 +7,7 @@ class NonexpansiveOperator(Function):
     implementing the interpolation constraints of the class of (possibly inconsistent) nonexpansive operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         v (Point): infimal displacement vector.

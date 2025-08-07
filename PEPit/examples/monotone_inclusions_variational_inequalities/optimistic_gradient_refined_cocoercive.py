@@ -1,6 +1,6 @@
 from PEPit import PEP
 from PEPit.functions import ConvexIndicatorFunction
-from PEPit.operators import Refined_CocoerciveStronglyMonotoneOperator
+from PEPit.operators import CocoerciveStronglyMonotoneOperatorExpensive
 from PEPit.primitive_steps import proximal_step
 
 
@@ -156,7 +156,7 @@ def wc_optimistic_gradient_refined_cocoercive(n, gamma, mu, beta, wrapper="cvxpy
 
     # Declare an indicator function and a monotone operator
     ind_C = problem.declare_function(ConvexIndicatorFunction)
-    F = problem.declare_function(Refined_CocoerciveStronglyMonotoneOperator, mu=0, beta=beta)
+    F = problem.declare_function(CocoerciveStronglyMonotoneOperatorExpensive, mu=0, beta=beta)
 
     total_problem = F + ind_C
 

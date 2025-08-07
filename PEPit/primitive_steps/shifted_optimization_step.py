@@ -4,7 +4,7 @@ from PEPit.expression import Expression
 
 def shifted_optimization_step(dir, f):
     """
-    This routine outputs a stationnary point of a minimization problem:
+    This routine outputs a stationary point of a minimization problem:
 
     .. math:: \\arg\\min_{x} f(x)-\\left< \\text{dir};\, x \\right>.
 
@@ -18,7 +18,7 @@ def shifted_optimization_step(dir, f):
         
     Returns:
         x (Point): the optimal point.
-        gx (Point): the (sub)gradient of f at x.
+        gx (Point): the (sub)gradient of f at x, i.e. `dir`.
         fx (Expression): the function value of f at x.
 
     """

@@ -282,9 +282,7 @@ class Function(object):
         to be interpolated.
 
         """
-
     
-
     def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`Function`.

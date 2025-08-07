@@ -1,8 +1,8 @@
 from PEPit import PEP
-from PEPit.functions import Refined_LojasiewiczSmoothFunction
+from PEPit.functions import SmoothQuadraticLojasiewiczFunctionCheap
 import numpy as np
 
-def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxpy", solver=None, verbose=1):
+def wc_gradient_descent_refined_Lojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -12,7 +12,7 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
     
     .. math:: f(x)-f_\\star \\leqslant \\frac{1}{2\\mu}\|\\nabla f(x) \|^2,
     
-    details can be found in [1,2,3]. The example here relies on the :class:`Refined_LojasiewiczSmoothFunction`
+    details can be found in [1,2,3]. The example here relies on the :class:`SmoothQuadraticLojasiewiczFunctionCheap`
     description of smooth Lojasiewicz functions (based on [5, Proposition 3.2]).
 
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
@@ -79,7 +79,7 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
         >>> mu = .2
         >>> alpha = (mu/2/(L+mu))
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_refined_Lojaciewicz(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
 	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
 	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -110,7 +110,7 @@ def wc_gradient_descent_refinedLojaciewicz(L, mu, gamma, n, alpha, wrapper="cvxp
     problem = PEP()
 
     # Declare a smooth function satisfying a quadratic Lojasiewicz inequality
-    func = problem.declare_function(Refined_LojasiewiczSmoothFunction, L=L, mu=mu, alpha=alpha)
+    func = problem.declare_function(SmoothQuadraticLojasiewiczFunctionCheap, L=L, mu=mu, alpha=alpha)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -163,4 +163,4 @@ if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
     alpha = (2*mu/(2*L+mu))
     verbose = 0
-    pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojaciewicz(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_refined_Lojaciewicz(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)

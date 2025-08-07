@@ -45,9 +45,9 @@ from PEPit.examples.composite_convex_minimization import wc_three_operator_split
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
 from PEPit.examples.nonconvex_optimization import wc_no_lips_2
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naiveLojaciewicz as wc_gradient_Lojaciewicz_a
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refinedLojaciewicz as wc_gradient_Lojaciewicz_b
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expertLojaciewicz as wc_gradient_Lojaciewicz_c
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naive_Lojaciewicz as wc_gradient_Lojaciewicz_a
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refined_Lojaciewicz as wc_gradient_Lojaciewicz_b
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expert_Lojaciewicz as wc_gradient_Lojaciewicz_c
 from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_DCA
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
@@ -566,7 +566,6 @@ class TestExamplesCVXPY(unittest.TestCase):
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
 
-
     def test_DCA(self):
         L1, L2, mu1, mu2 = 2., 3.2, .2, .1
         wc, theory = wc_DCA(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=6, alpha = 0, wrapper="mosek", solver=None, verbose=self.verbose)
@@ -817,7 +816,6 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc, theory = wc_online_follow_regularized_leader(M=M, D=D, n=n, wrapper=self.wrapper, verbose=self.verbose) 
 
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
-        
 
 
 class TestExamplesMosek(TestExamplesCVXPY):

@@ -1,8 +1,8 @@
 from PEPit import PEP
-from PEPit.functions import ExpertRefined_LojasiewiczSmoothFunction
+from PEPit.functions import SmoothQuadraticLojasiewiczFunctionExpensive
 import numpy as np
 
-def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_gradient_descent_expert_Lojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -12,7 +12,7 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
     
     .. math:: f(x)-f_\\star \\leqslant \\frac{1}{2\\mu}\|\\nabla f(x) \|^2,
     
-    details can be found in [1,2,3]. The example here relies on the :class:`ExpertRefined_LojasiewiczSmoothFunction`
+    details can be found in [1,2,3]. The example here relies on the :class:`SmoothQuadraticLojasiewiczFunctionExpensive`
     description of smooth Lojasiewicz functions (based on [5, Proposition 3.4]).
 
     This code computes a worst-case guarantee for **gradient descent** with fixed step-size :math:`\\gamma`.
@@ -78,7 +78,7 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
         >>> L = 1
         >>> mu = .2
         >>> gamma = 1 / L
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_expertLojaciewicz(L=L, gamma=gamma, n=1, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_expert_Lojaciewicz(L=L, gamma=gamma, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
 	(PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
 	(PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -119,7 +119,7 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
     problem = PEP()
 
     # Declare a smooth function satisfying a quadratic Lojasiewicz inequality
-    func = problem.declare_function(ExpertRefined_LojasiewiczSmoothFunction, L=L, mu=mu)
+    func = problem.declare_function(SmoothQuadraticLojasiewiczFunctionExpensive, L=L, mu=mu)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()
@@ -171,4 +171,4 @@ def wc_gradient_descent_expertLojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solv
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
     verbose = 0
-    pepit_tau, theoretical_tau = wc_gradient_descent_expertLojaciewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_expert_Lojaciewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)

@@ -91,7 +91,7 @@ class Point(object):
         # Initialize the value attribute to None until the PEP is solved
         self._value = None
 
-        # If leaf, the decomposition is updated w.r.t the new direction,
+        # If is leaf, the decomposition is updated w.r.t the new direction,
         # the object counter is set
         # and the class counter updated.
         # Otherwise, the decomposition_dict is stored in an attribute and the object counter is set to None
@@ -286,7 +286,7 @@ class Point(object):
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self._value is None:
-            # If leaf, the PEP would have filled the attribute after solving the problem.
+            # If is leaf, the PEP would have filled the attribute after solving the problem.
             if self._is_leaf:
                 raise ValueError("The PEP must be solved to evaluate Points!")
             # If linear combination, combine the values of the leaf, and store the result before returning it.
