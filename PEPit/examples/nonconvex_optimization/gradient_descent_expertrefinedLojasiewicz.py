@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import SmoothQuadraticLojasiewiczFunctionExpensive
 import numpy as np
 
-def wc_gradient_descent_expert_Lojaciewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_gradient_descent_expert_Lojasiewicz(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -76,7 +76,7 @@ def wc_gradient_descent_expert_Lojaciewicz(L, mu, gamma, n, wrapper="cvxpy", sol
 
     Example:
         >>> L, mu, gamma, n = 1, .2, 1, 1
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_expertLojaciewicz(L=L, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_expertLojasiewicz(L=L, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -168,4 +168,4 @@ def wc_gradient_descent_expert_Lojaciewicz(L, mu, gamma, n, wrapper="cvxpy", sol
     
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
-    pepit_tau, theoretical_tau = wc_gradient_descent_expert_Lojaciewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_gradient_descent_expert_Lojasiewicz(L=L, mu=mu, gamma=gamma, n=n, wrapper="cvxpy", solver=None, verbose=1)

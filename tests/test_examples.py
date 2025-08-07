@@ -45,9 +45,9 @@ from PEPit.examples.composite_convex_minimization import wc_three_operator_split
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
 from PEPit.examples.nonconvex_optimization import wc_no_lips_2
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naive_Lojaciewicz as wc_gradient_Lojaciewicz_a
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refined_Lojaciewicz as wc_gradient_Lojaciewicz_b
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expert_Lojaciewicz as wc_gradient_Lojaciewicz_c
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naive_Lojasiewicz as wc_gradient_Lojasiewicz_a
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refined_Lojasiewicz as wc_gradient_Lojasiewicz_b
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expert_Lojasiewicz as wc_gradient_Lojasiewicz_c
 from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_DCA
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
@@ -506,19 +506,19 @@ class TestExamplesCVXPY(unittest.TestCase):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
 
-        wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojaciewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
@@ -528,19 +528,19 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
         alpha = (2*mu/(2*L+mu))
 
-        wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojaciewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
@@ -549,19 +549,19 @@ class TestExamplesCVXPY(unittest.TestCase):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
         
-        wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojaciewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
