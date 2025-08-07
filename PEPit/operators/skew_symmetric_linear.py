@@ -90,7 +90,7 @@ class SkewSymmetricLinearOperator(Function):
                                                       constraint_name="antisymmetric_linearity",
                                                       set_class_constraint_i_j=
                                                       self.set_antisymmetric_linear_constraint_i_j,
-                                                      symmetry=True,
+                                                      symmetry=-1,
                                                       )
 
         # Create a PSD matrix to enforce the singular values to be smaller than L
