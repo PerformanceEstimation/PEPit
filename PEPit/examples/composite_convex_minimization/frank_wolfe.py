@@ -1,5 +1,3 @@
-import numpy as np
-
 from PEPit import PEP
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.functions import SmoothConvexFunction
@@ -74,7 +72,7 @@ def wc_frank_wolfe(L, D, R, center, n, wrapper="cvxpy", solver=None, verbose=1):
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=np.infty, center=None, n=10,
+        >>> pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=float('inf'), center=None, n=10,
         >>>                                             wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 26x26
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
@@ -154,5 +152,5 @@ def wc_frank_wolfe(L, D, R, center, n, wrapper="cvxpy", solver=None, verbose=1):
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=np.infty, center=None, n=10,
+    pepit_tau, theoretical_tau = wc_frank_wolfe(L=1, D=1, R=float('inf'), center=None, n=10,
                                                 wrapper="cvxpy", solver=None, verbose=1)

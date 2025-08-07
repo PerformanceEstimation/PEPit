@@ -1,6 +1,6 @@
 import unittest
 
-import numpy as np
+from math import sqrt
 
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_conjugate_gradient_qg_convex
@@ -126,7 +126,7 @@ class TestExamplesCVXPY(unittest.TestCase):
 
     def test_epsilon_subgradient_method(self):
         M, n, eps, R = 2, 6, 2, 1
-        gamma = 1 / (np.sqrt(n + 1))
+        gamma = 1 / (sqrt(n + 1))
 
         wc, theory = wc_epsilon_subgradient_method(M=M, n=n, gamma=gamma, eps=eps, R=R, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc, theory)
@@ -215,7 +215,7 @@ class TestExamplesCVXPY(unittest.TestCase):
 
     def test_subgradient_method(self):
         M, n = 2, 10
-        gamma = 1 / (np.sqrt(n + 1) * M)
+        gamma = 1 / (sqrt(n + 1) * M)
 
         wc, theory = wc_subgradient_method(M=M, n=n, gamma=gamma, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
@@ -343,7 +343,7 @@ class TestExamplesCVXPY(unittest.TestCase):
     def test_heavy_ball_momentum(self):
         L, mu, n = 1, .1, 3
         alpha = 1 / (2 * L)  # alpha \in [0, 1/L]
-        beta = np.sqrt((1 - alpha * mu) * (1 - L * alpha))
+        beta = sqrt((1 - alpha * mu) * (1 - L * alpha))
 
         wc, theory = wc_heavy_ball_momentum(mu=mu, L=L, alpha=alpha, beta=beta, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc, theory * (1 + self.relative_precision))
@@ -410,8 +410,8 @@ class TestExamplesCVXPY(unittest.TestCase):
     def test_conditional_gradient_frank_wolfe(self):
         D, L, n = 1., 1., 10
 
-        wc_D, theory = wc_frank_wolfe(L, D=D, R=np.infty, center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
-        wc_R, _ = wc_frank_wolfe(L, D=np.infty, R=D/2, center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        wc_D, theory = wc_frank_wolfe(L, D=D, R=float('inf'), center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
+        wc_R, _ = wc_frank_wolfe(L, D=float('inf'), R=D/2, center=None, n=n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc_R, wc_D)
         self.assertLessEqual(wc_D, theory)
 
