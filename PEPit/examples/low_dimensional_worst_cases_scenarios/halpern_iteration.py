@@ -69,26 +69,26 @@ def wc_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.03305790577349196
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.03305790577466909
         (PEPit) Postprocessing: 12 eigenvalue(s) > 0 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.033047905727429217
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 3.494895432655832e-09 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790606633461
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790575185698
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.8483042527042987e-09 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790606312158
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790577532096
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.834729915591876e-13 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790577532096
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.834729915591876e-13 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790577678836
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.2580800749100387e-13 after 3 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03304790577678836
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.2580800749100387e-13 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.3350847983797365e-12
-        		All the primal scalar constraints are verified up to an error of 5.296318938974309e-13
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.4946460426395706e-12
+        		All the primal scalar constraints are verified up to an error of 5.708211681110242e-13
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.146036222356589e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.81631899443615e-07
-        (PEPit) Final upper bound (dual): 0.03305791391531532 and lower bound (primal example): 0.03304790577532096 
-        (PEPit) Duality gap: absolute: 1.0008139994355236e-05 and relative: 0.00030283734353385173
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.146117367966438e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.8163082866886653e-07
+        (PEPit) Final upper bound (dual): 0.03305791391665664 and lower bound (primal example): 0.03304790577678836 
+        (PEPit) Duality gap: absolute: 1.0008139868282473e-05 and relative: 0.0003028373397055563
         *** Example file: worst-case performance of Halpern Iterations ***
         	PEPit guarantee:	 ||xN - AxN||^2 == 0.0330579 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||xN - AxN||^2 <= 0.0330579 ||x0 - x_*||^2

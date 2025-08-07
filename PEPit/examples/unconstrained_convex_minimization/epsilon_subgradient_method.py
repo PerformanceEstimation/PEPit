@@ -86,16 +86,16 @@ def wc_epsilon_subgradient_method(M, n, gamma, eps, R, wrapper="cvxpy", solver=N
         			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0191560420875132
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0191560420875105
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 9.992007221626409e-16
+        		All the primal scalar constraints are verified up to an error of 8.881784197001252e-16
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 8.140035658377668e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.4537099231463084e-07
-        (PEPit) Final upper bound (dual): 1.019156044756485 and lower bound (primal example): 1.0191560420875132 
-        (PEPit) Duality gap: absolute: 2.668971710306778e-09 and relative: 2.6188057570065385e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 8.140035838944204e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.453710021145397e-07
+        (PEPit) Final upper bound (dual): 1.0191560447564818 and lower bound (primal example): 1.0191560420875105 
+        (PEPit) Duality gap: absolute: 2.668971266217568e-09 and relative: 2.61880532126443e-09
         *** Example file: worst-case performance of the epsilon-subgradient method ***
         	PEPit guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.01916
         	Theoretical guarantee:	 min_(0 <= t <= n) f(x_i) - f_* <= 1.04491

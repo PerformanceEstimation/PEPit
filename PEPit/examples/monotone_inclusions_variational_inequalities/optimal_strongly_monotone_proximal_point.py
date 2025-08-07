@@ -87,16 +87,16 @@ def wc_optimal_strongly_monotone_proximal_point(n, mu, wrapper="cvxpy", solver=N
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.003936989547244047
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.003936989547264896
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0607807556608727e-09
-        		All the primal scalar constraints are verified up to an error of 3.5351675688243754e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0607852269985061e-09
+        		All the primal scalar constraints are verified up to an error of 3.535184401522195e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.804099035739487e-08
-        (PEPit) Final upper bound (dual): 0.003936990621254958 and lower bound (primal example): 0.003936989547244047 
-        (PEPit) Duality gap: absolute: 1.0740109105886186e-09 and relative: 2.7280004117370406e-07
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.8038520857887303e-08
+        (PEPit) Final upper bound (dual): 0.0039369906212799455 and lower bound (primal example): 0.003936989547264896 
+        (PEPit) Duality gap: absolute: 1.0740150496388323e-09 and relative: 2.728010924959076e-07
         *** Example file: worst-case performance of Optimal Strongly-monotone Proximal Point Method ***
         	PEPit guarantee:	 ||AxN||^2 <= 0.00393699 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||AxN||^2 <= 0.00393698 ||x0 - x_*||^2

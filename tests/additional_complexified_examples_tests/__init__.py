@@ -1,3 +1,4 @@
+from .cyclic_coordinate_descent_refined import wc_cyclic_coordinate_descent_refined
 from .gradient_descent_blocks import wc_gradient_descent_blocks
 from .gradient_descent_useless_blocks import wc_gradient_descent_useless_blocks
 from .gradient_exact_line_search import wc_gradient_exact_line_search_complexified
@@ -13,7 +14,8 @@ from .randomized_coordinate_descent_smooth_convex import wc_randomized_coordinat
 from .randomized_coordinate_descent_smooth_strongly_convex import wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
 
 
-__all__ = ['gradient_descent_blocks', 'wc_gradient_descent_blocks',
+__all__ = ['cyclic_coordinate_descent_refined', 'wc_cyclic_coordinate_descent_refined',
+           'gradient_descent_blocks', 'wc_gradient_descent_blocks',
            'gradient_descent_useless_blocks', 'wc_gradient_descent_useless_blocks',
            'gradient_exact_line_search', 'wc_gradient_exact_line_search_complexified',
            'inexact_gradient_exact_line_search', 'wc_inexact_gradient_exact_line_search_complexified',

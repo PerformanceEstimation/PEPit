@@ -11,7 +11,7 @@ class SymmetricLinearOperator(Function):
     implementing the interpolation constraints for the class of symmetric linear operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         mu (float): eigenvalues lower bound

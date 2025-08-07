@@ -8,7 +8,7 @@ class LipschitzOperator(Function):
     implementing the interpolation constraints of the class of Lipschitz continuous operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         L (float): Lipschitz parameter
@@ -28,17 +28,20 @@ class LipschitzOperator(Function):
 
     References:
 
-        [1] M. Kirszbraun (1934).
+        `[1] M. Kirszbraun (1934).
         Uber die zusammenziehende und Lipschitzsche transformationen.
         Fundamenta Mathematicae, 22 (1934).
+        <https://eudml.org/doc/212681>`_
 
-        [2] F.A. Valentine (1943).
+        `[2] F.A. Valentine (1943).
         On the extension of a vector function so as to preserve a Lipschitz condition.
         Bulletin of the American Mathematical Society, 49 (2).
+        <https://projecteuclid.org/journals/bulletin-of-the-american-mathematical-society/volume-49/issue-2>`_
 
-        [3] F.A. Valentine (1945).
+        `[3] F.A. Valentine (1945).
         A Lipschitz condition preserving extension for a vector function.
         American Journal of Mathematics, 67(1).
+        <https://www.jstor.org/stable/2371917>`_
 
         Discussions and appropriate pointers for the interpolation problem can be found in:
         `[4] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).

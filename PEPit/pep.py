@@ -400,9 +400,6 @@ class PEP(object):
 
         """
 
-        # Create an expression that serve for the objective (min of the performance measures)
-        self.objective = Expression(is_leaf=True)
-
         # Store functions that have class constraints as well as functions that have personal constraints
         list_of_leaf_functions = [function for function in Function.list_of_functions
                                   if function.get_is_leaf()]
@@ -417,7 +414,10 @@ class PEP(object):
         for partition in BlockPartition.list_of_partitions:
             partition.add_partition_constraints()
 
-        # Report the creation of variables (G,F)
+        # Create an expression that serve for the objective (min of the performance measures)
+        self.objective = Expression(is_leaf=True)
+
+        # Report the creation of variables (G, F)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))

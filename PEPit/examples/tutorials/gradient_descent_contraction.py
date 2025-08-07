@@ -68,16 +68,16 @@ def wc_gradient_descent_contraction(L, mu, gamma, n, wrapper="cvxpy", solver=Non
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8100000029203449
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.8100000029204851
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.896548260018477e-09
-        		All the primal scalar constraints are verified up to an error of 3.042855638898251e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.8965988565083653e-09
+        		All the primal scalar constraints are verified up to an error of 3.0429548731041728e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.0078754315331366e-08
-        (PEPit) Final upper bound (dual): 0.8100000036427537 and lower bound (primal example): 0.8100000029203449 
-        (PEPit) Duality gap: absolute: 7.224087994472939e-10 and relative: 8.918627121515396e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.007851339693502e-08
+        (PEPit) Final upper bound (dual): 0.8100000036429309 and lower bound (primal example): 0.8100000029204851 
+        (PEPit) Duality gap: absolute: 7.224457698740139e-10 and relative: 8.919083546533442e-10
         *** Example file: worst-case performance of gradient descent with fixed step-sizes in contraction ***
         	PEPit guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2
         	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.81 ||x_0 - y_0||^2

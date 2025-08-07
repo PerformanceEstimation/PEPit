@@ -84,16 +84,16 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.052631584231766296
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.05263158422835028
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.992753634406465e-09
-        		All the primal scalar constraints are verified up to an error of 1.4782311839878215e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.991982341524508e-09
+        		All the primal scalar constraints are verified up to an error of 1.4780313955381486e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.756506718232842e-08
-        (PEPit) Final upper bound (dual): 0.05263158967733932 and lower bound (primal example): 0.052631584231766296 
-        (PEPit) Duality gap: absolute: 5.445573027229589e-09 and relative: 1.0346587712901982e-07
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.783914601477293e-08
+        (PEPit) Final upper bound (dual): 0.052631589673196755 and lower bound (primal example): 0.05263158422835028 
+        (PEPit) Duality gap: absolute: 5.444846476465592e-09 and relative: 1.034520726726044e-07
         *** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0526316 ||x0 - xs||^2

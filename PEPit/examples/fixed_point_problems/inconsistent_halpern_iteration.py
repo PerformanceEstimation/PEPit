@@ -75,18 +75,18 @@ def wc_inconsistent_halpern_iteration(n, wrapper="cvxpy", solver=None, verbose=1
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02678884717170149
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02678765011660289
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 4.2928149923682213e-10
+        		All the primal scalar constraints are verified up to an error of 1.7462298274040222e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.9511359559460285e-06
-        (PEPit) Final upper bound (dual): 0.02678881575052497 and lower bound (primal example): 0.02678884717170149 
-        (PEPit) Duality gap: absolute: -3.142117652177312e-08 and relative: -1.1729200708183147e-06
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.550501619888261e-06
+        (PEPit) Final upper bound (dual): 0.026787630626896923 and lower bound (primal example): 0.02678765011660289 
+        (PEPit) Duality gap: absolute: -1.9489705967157267e-08 and relative: -7.275631077127447e-07
         *** Example file: worst-case performance of (possibly inconsistent) Halpern Iterations ***
-        	PEPit guarantee:	 ||xN - AxN - v||^2 <= 0.0267888 ||x0 - x_*||^2
+        	PEPit guarantee:	 ||xN - AxN - v||^2 <= 0.0267876 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||xN - AxN - v||^2 <= 0.0366417 ||x0 - x_*||^2
     
     """

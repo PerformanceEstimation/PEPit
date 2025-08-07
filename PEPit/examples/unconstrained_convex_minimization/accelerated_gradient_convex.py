@@ -75,16 +75,16 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.16666666115099577
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.16666666115098375
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.820889929895971e-09
-        		All the primal scalar constraints are verified up to an error of 3.620050065267222e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.82087966328108e-09
+        		All the primal scalar constraints are verified up to an error of 3.6200406144937247e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.1009588480346295e-08
-        (PEPit) Final upper bound (dual): 0.16666666498584737 and lower bound (primal example): 0.16666666115099577 
-        (PEPit) Duality gap: absolute: 3.834851602935174e-09 and relative: 2.300911037907513e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.101096412994053e-08
+        (PEPit) Final upper bound (dual): 0.16666666498582347 and lower bound (primal example): 0.16666666115098375 
+        (PEPit) Duality gap: absolute: 3.834839723548811e-09 and relative: 2.3009039102756247e-08
         *** Example file: worst-case performance of accelerated gradient method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2

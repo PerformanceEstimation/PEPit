@@ -1,5 +1,5 @@
 from PEPit import PEP
-from PEPit.functions import BlockSmoothConvexFunction
+from PEPit.functions import BlockSmoothConvexFunctionCheap
 
 
 def wc_gradient_descent_blocks(L, n, verbose=1):
@@ -85,7 +85,7 @@ def wc_gradient_descent_blocks(L, n, verbose=1):
     Lmax = max(L)
 
     # Declare a strongly convex smooth function
-    func = problem.declare_function(BlockSmoothConvexFunction, L=L, partition=partition)
+    func = problem.declare_function(BlockSmoothConvexFunctionCheap, L=L, partition=partition)
 
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     xs = func.stationary_point()

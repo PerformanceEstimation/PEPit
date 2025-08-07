@@ -70,7 +70,7 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
 
     Example:
         >>> L = 1
-        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_randomized_coordinate_descent_smooth_convex(L=L, gamma=1 / L, d=2, t=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 6x6
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -84,16 +84,16 @@ def wc_randomized_coordinate_descent_smooth_convex(L, gamma, d, t, wrapper="cvxp
         			Partition 1 with 2 blocks: 1 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0000000021855517
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.0000000021376085
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.888278544731664e-09
-        		All the primal scalar constraints are verified up to an error of 8.385744333248845e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.883928533814235e-09
+        		All the primal scalar constraints are verified up to an error of 8.378247802361268e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.347767642940552e-08
-        (PEPit) Final upper bound (dual): 1.0000000024690172 and lower bound (primal example): 1.0000000021855517 
-        (PEPit) Duality gap: absolute: 2.8346547331636884e-10 and relative: 2.834654726968404e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.355255638828925e-08
+        (PEPit) Final upper bound (dual): 1.0000000024160758 and lower bound (primal example): 1.0000000021376085 
+        (PEPit) Duality gap: absolute: 2.784672492595064e-10 and relative: 2.7846724866425243e-10
         *** Example file: worst-case performance of randomized  coordinate gradient descent ***
         	PEPit guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))
         	Theoretical guarantee:	 E[phi(t, x_t)] <= 1.0 phi(t-1, x_(t-1))

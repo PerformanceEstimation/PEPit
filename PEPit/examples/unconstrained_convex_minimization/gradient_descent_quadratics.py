@@ -80,18 +80,18 @@ def wc_gradient_descent_quadratics(mu, L, gamma, n, wrapper="cvxpy", solver=None
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0649573836866313
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0649573837234624
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.909122375079227e-10
-        		All required PSD matrices are indeed positive semi-definite up to an error of 8.456976505538092e-09
-        		All the primal scalar constraints are verified up to an error of 8.495850689627105e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.166296416653088e-10
+        		All required PSD matrices are indeed positive semi-definite up to an error of 8.5005680002544e-09
+        		All the primal scalar constraints are verified up to an error of 8.619633617978906e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual matrices to lmi are positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.5432361579460934
-        (PEPit) Final upper bound (dual): 0.06495738812047232 and lower bound (primal example): 0.0649573836866313 
-        (PEPit) Duality gap: absolute: 4.4338410165600806e-09 and relative: 6.825769088776581e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.543004576738361
+        (PEPit) Final upper bound (dual): 0.06495738819334852 and lower bound (primal example): 0.0649573837234624 
+        (PEPit) Duality gap: absolute: 4.4698861279002244e-09 and relative: 6.881259483801711e-08
         *** Example file: worst-case performance of gradient descent on quadratics with fixed step-sizes ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0649574 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0649574 ||x_0 - x_*||^2
