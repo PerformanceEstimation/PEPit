@@ -502,7 +502,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         wc, theory = wc_no_lips_2(L, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
-    def test_lojaciewicz_a(self):
+    def test_lojasiewicz_a(self):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
 
@@ -523,7 +523,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
 
-    def test_lojaciewicz_b(self):
+    def test_lojasiewicz_b(self):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
         alpha = (2*mu/(2*L+mu))
@@ -545,7 +545,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
 
-    def test_lojaciewicz_c(self):
+    def test_lojasiewicz_c(self):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
         

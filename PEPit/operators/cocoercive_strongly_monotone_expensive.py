@@ -94,23 +94,10 @@ class CocoerciveStronglyMonotoneOperatorExpensive(Function):
                   " please avoid using the class CocoerciveStronglyMonotoneOperator\n"
                   "with beta == 0. Instead, please use the class StronglyMonotoneOperator.\033[0m")
 
-    def last_call_before_problem_formulation(self):
-        """
-        Adds necessary variables to the PEP to be able to formulate the necessary interpolation conditions.
-        """
-        nb_pts = len(self.list_of_points)
-        preallocate = nb_pts * (nb_pts ** 2 - 1)
-        self.Mab = np.ndarray((9, preallocate), dtype=Expression)
-        self.Mba = np.ndarray((9, preallocate), dtype=Expression)
-        for i in range(preallocate):
-            self.Mab[:, i] = [Expression() for _ in range(9)]
-            self.Mba[:, i] = [Expression() for _ in range(9)]
-
     def get_psd_constraint_i_j_k(self,
                                  xi, ti,
                                  xj, tj,
                                  xk, tk,
-                                 M,
                                  opt,
                                  ):
         """
@@ -132,15 +119,15 @@ class CocoerciveStronglyMonotoneOperatorExpensive(Function):
             Aik = - (ti - tk) * (xi - xk) + self.beta * (ti - tk) ** 2
             Ajk = - (tk - tj) * (xk - xj) + self.beta * (tk - tj) ** 2
 
-        M14 = M[0]
-        M15 = M[1]
-        M16 = M[2]
-        M17 = M[3]
-        M26 = M[4]
-        M27 = M[5]
-        M34 = M[6]
-        M37 = M[7]
-        M46 = M[8]
+        M14 = Expression()
+        M15 = Expression()
+        M16 = Expression()
+        M17 = Expression()
+        M26 = Expression()
+        M27 = Expression()
+        M34 = Expression()
+        M37 = Expression()
+        M46 = Expression()
 
         M25 = -M14
         M23 = -M15
@@ -171,7 +158,6 @@ class CocoerciveStronglyMonotoneOperatorExpensive(Function):
             function_id = "Function_{}".format(self.counter)
 
         # Browse list of points and create necessary constraints for interpolation [1, Appendix F]
-        counter = 0
         for i, point_i in enumerate(self.list_of_points):
 
             xi, ti, _ = point_i
@@ -196,7 +182,7 @@ class CocoerciveStronglyMonotoneOperatorExpensive(Function):
                         T = self.get_psd_constraint_i_j_k(xi, ti,
                                                           xj, tj,
                                                           xk, tk,
-                                                          self.Mab[:, counter], 1)
+                                                          opt=1)
                         psd_matrix = PSDMatrix(matrix_of_expressions=T,
                                                name="IC_{}_{}({}, {}, {})".format(function_id,
                                                                                   "cocoercive_strongly_monotone_lmi_1",
@@ -205,10 +191,9 @@ class CocoerciveStronglyMonotoneOperatorExpensive(Function):
                         T = self.get_psd_constraint_i_j_k(xi, ti,
                                                           xj, tj,
                                                           xk, tk,
-                                                          self.Mba[:, counter], 0)
+                                                          opt=0)
                         psd_matrix = PSDMatrix(matrix_of_expressions=T,
                                                name="IC_{}_{}({}, {}, {})".format(function_id,
                                                                                   "cocoercive_strongly_monotone_lmi_0",
                                                                                   xi_id, xj_id, xk_id))
                         self.list_of_class_psd.append(psd_matrix)
-                        counter += 1

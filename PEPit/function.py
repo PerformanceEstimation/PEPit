@@ -274,15 +274,7 @@ class Function(object):
 
         # P / v = P * (1/v)
         return self.__rmul__(other=1 / denominator)
-    
-    def last_call_before_problem_formulation(self):
-        """
-        This function is called before PEPit starts the modelling steps; it is a last chance for the functions
-        to create new variables, etc. accounting for the fact that they have at their disposal the list of points
-        to be interpolated.
 
-        """
-    
     def add_constraint(self, constraint, name=None):
         """
         Store a new :class:`Constraint` to the list of constraints of this :class:`Function`.

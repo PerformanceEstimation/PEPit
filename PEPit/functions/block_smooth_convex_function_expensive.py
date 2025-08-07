@@ -87,17 +87,6 @@ class BlockSmoothConvexFunctionExpensive(Function):
         self.partition = partition
         self.L = L
 
-    def last_call_before_problem_formulation(self):
-        """
-        Last call before modeling and solving the full PEP. Add necessarily intermediate variable before solving.
-        
-        """
-        nb_pts = len(self.list_of_points)
-        preallocate = nb_pts * (nb_pts ** 2 - 1) * (self.partition.get_nb_blocks() ** 2)
-        self.s = np.ndarray((preallocate,), dtype=Expression)
-        for i in range(preallocate):
-            self.s[i] = Expression()
-
     def add_class_constraints(self):
         """
         Formulates the list of necessary constraints for interpolation for self (block smooth convex function);
@@ -116,7 +105,6 @@ class BlockSmoothConvexFunctionExpensive(Function):
                     self.list_of_points)
 
         # Browse list of points and create interpolation constraints
-        counter = 0
         for i, point_i in enumerate(self.list_of_points):
 
             xi, gi, fi = point_i
@@ -150,21 +138,21 @@ class BlockSmoothConvexFunctionExpensive(Function):
                                 gkl = self.partition.get_block(gk, l)
 
                                 # Necessary conditions for interpolation
-                                constraint = (self.s[counter] >= 0)
+                                new_expr = Expression()
+                                constraint = (new_expr >= 0)
                                 A = -(-fi + fk + gk * (xi - xk) + 1 / (2 * self.L[m]) * (gim - gkm) ** 2)
                                 B = -(-fi + fj + gj * (xi - xj) + 1 / (2 * self.L[m]) * (gim - gjm) ** 2)
                                 C = -(1 / (2 * self.L[l]) * (gjl - gkl) ** 2 - 1 / (2 * self.L[m]) * (gjm - gkm) ** 2)
 
-                                T = np.array(
-                                    [[A, (A + B + C) / 2 - self.s[counter]], [(A + B + C) / 2 - self.s[counter], B]],
-                                    dtype=Expression)
+                                T = np.array([[A, (A + B + C) / 2 - new_expr], [(A + B + C) / 2 - new_expr, B]],
+                                             dtype=Expression)
                                 psd_matrix = PSDMatrix(matrix_of_expressions=T)
                                 self.list_of_class_psd.append(psd_matrix)
 
                                 constraint.set_name(
-                                    "IC_{}_smoothness_convexity_block_{}{}({}, {}, {})".format(function_id, m, l, xi_id,
-                                                                                               xj_id, xk_id))
+                                    "IC_{}_smoothness_convexity_block_{}{}({}, {}, {})".format(function_id,
+                                                                                               m, l,
+                                                                                               xi_id, xj_id, xk_id))
                                 self.tables_of_constraints["smoothness_convexity_block_{}{}".format(m, l)][i].append(
                                     constraint)
                                 self.list_of_class_constraints.append(constraint)
-                                counter += 1

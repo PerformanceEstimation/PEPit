@@ -94,15 +94,6 @@ class SmoothQuadraticLojasiewiczFunctionCheap(Function):
         self.L = L
         self.alpha = alpha
 
-    def last_call_before_problem_formulation(self):
-        """
-        Last call before modeling and solving the full PEP.
-        Check that there is a stationary point encoded; if not, create one.
-        
-        """
-        if self.list_of_stationary_points == list():
-            self.stationary_point()
-
     def set_quadratic_lojasiewicz_constraint_i_j(self,
                                                  xi, gi, fi,
                                                  xj, gj, fj,
@@ -163,6 +154,12 @@ class SmoothQuadraticLojasiewiczFunctionCheap(Function):
 
     def add_class_constraints(self):
 
+        # Check that there is at least one stationary point encoded;
+        # if not, create one.
+        if self.list_of_stationary_points == list():
+            self.stationary_point()
+
+        # Add the list of contraints
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_stationary_points,
                                                       constraint_name="quadratic_lojasiewicz",
@@ -180,6 +177,8 @@ class SmoothQuadraticLojasiewiczFunctionCheap(Function):
                                                       constraint_name="smoothness",
                                                       set_class_constraint_i_j=self.set_smoothness_constraint_i_j,
                                                       )
+
+        # If alpha is specified, add the related set contraints defined in [4, Proposition 3.2].
         if self.alpha is not None:
             self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                           list_of_points_2=self.list_of_points,

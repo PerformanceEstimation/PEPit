@@ -85,25 +85,6 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
         self.mu = mu
         self.L = L
 
-    def last_call_before_problem_formulation(self):
-        """
-        Adds necessary variables to the PEP to be able to formulate the necessary interpolation conditions.
-        Further, if the list of stationary points is empty, it adds a stationary point to it.
-        
-        """
-        if self.list_of_stationary_points == list():
-            self.stationary_point()
-
-        nb_pts = len(self.list_of_points)
-        preallocate = nb_pts ** 2
-        self.M13 = np.ndarray((preallocate,), dtype=Expression)
-        self.M14 = np.ndarray((preallocate,), dtype=Expression)
-        self.M24 = np.ndarray((preallocate,), dtype=Expression)
-        for i in range(preallocate):
-            self.M13[i] = Expression()
-            self.M14[i] = Expression()
-            self.M24[i] = Expression()
-
     def set_quadratic_lojasiewicz_constraint_i_j(self,
                                                  xi, gi, fi,
                                                  xj, gj, fj,
@@ -138,6 +119,11 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
         see, e.g., discussions around [3, Proposition 3.4].
 
         """
+        # Check that there is at least one stationary point encoded;
+        # if not, create one.
+        if self.list_of_stationary_points == list():
+            self.stationary_point()
+
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_stationary_points,
                                                       constraint_name="quadratic_lojasiewicz",
@@ -156,7 +142,6 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
             function_id = "Function_{}".format(self.counter)
 
         # Browse list of points and create necessary constraints for interpolation [3, Lemma 3.4]
-        counter = 0
         _, _, fs = self.list_of_stationary_points[0]
         for i, point_i in enumerate(self.list_of_points):
 
@@ -181,18 +166,20 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
                     D = 2 * self.mu * (B - C - (self.L + 3 * self.mu) * A) / (2 * self.L + self.mu)
                     E = 4 * self.mu ** 2 * ((self.L + self.mu) * A - 2 * B) / (2 * self.L + self.mu) ** 2
                     F = - 2 * self.mu * A - D - E - 8 * self.mu ** 3 * B / (2 * self.L + self.mu) ** 3
+                    
+                    M13 = Expression()
+                    M14 = Expression()
+                    M22 = - 6 * self.mu * A - D - 2 * M13
+                    M24 = Expression()
+                    M33 = - 6 * self.mu * A - 2 * D - E - 2 * M24
 
-                    M22 = - 6 * self.mu * A - D - 2 * self.M13[counter]
-                    M33 = - 6 * self.mu * A - 2 * D - E - 2 * self.M24[counter]
-
-                    T = np.array([[-2 * self.mu * A, 0, self.M13[counter], self.M14[counter]],
-                                  [0, M22, -self.M14[counter], self.M24[counter]],
-                                  [self.M13[counter], -self.M14[counter], M33, 0],
-                                  [self.M14[counter], self.M24[counter], 0, F]], dtype=Expression)
+                    T = np.array([[-2 * self.mu * A, 0, M13, M14],
+                                  [0, M22, -M14, M24],
+                                  [M13, -M14, M33, 0],
+                                  [M14, M24, 0, F]], dtype=Expression)
 
                     psd_matrix = PSDMatrix(matrix_of_expressions=T,
                                            name="IC_{}_{}({}, {})".format(function_id,
                                                                           "smooth_quadratic_lojasiewicz_lmi",
                                                                           xi_id, xj_id))
                     self.list_of_class_psd.append(psd_matrix)
-                    counter += 1
