@@ -77,35 +77,35 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
 
     Example:
         >>> M,D,n = 1,.5,2
-        >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-				Function 1 : Adding 4 scalar constraint(s) ...
-				Function 1 : 4 scalar constraint(s) added
-				Function 2 : Adding 4 scalar constraint(s) ...
-				Function 2 : 4 scalar constraint(s) added
-				Function 3 : Adding 28 scalar constraint(s) ...
-				Function 3 : 28 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7071068079799386
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite up to an error of 1.1705181160638522e-08
-			All the primal scalar constraints are verified up to an error of 4.569347711314009e-08
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.8776329641953e-09
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.614006627199603e-07
-	(PEPit) Final upper bound (dual): 0.7071068126252953 and lower bound (primal example): 0.7071068079799386 
-	(PEPit) Duality gap: absolute: 4.6453566548976255e-09 and relative: 6.569526134486629e-09
-	*** Example file: worst-case regret of online gradient descent (fixed step-sizes) ***
-		PEPit guarantee:	 R_n <= 0.707107
-		Theoretical guarantee:	 R_n <= 0.707107
-
+        			Function 1 : Adding 4 scalar constraint(s) ...
+        			Function 1 : 4 scalar constraint(s) added
+        			Function 2 : Adding 4 scalar constraint(s) ...
+        			Function 2 : 4 scalar constraint(s) added
+        			Function 3 : Adding 28 scalar constraint(s) ...
+        			Function 3 : 28 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7071068079799386
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.1705181160638522e-08
+        		All the primal scalar constraints are verified up to an error of 4.569347711314009e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.8776329641953e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.614006627199603e-07
+        (PEPit) Final upper bound (dual): 0.7071068126252953 and lower bound (primal example): 0.7071068079799386 
+        (PEPit) Duality gap: absolute: 4.6453566548976255e-09 and relative: 6.569526134486629e-09
+        *** Example file: worst-case regret of online gradient descent (fixed step-sizes) ***
+        	PEPit guarantee:	 R_n <= 0.707107
+        	Theoretical guarantee:	 R_n <= 0.707107
+    
     """
     # Instantiate PEP
     problem = PEP()
@@ -156,4 +156,4 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
 
 if __name__ == "__main__":
     M,D,n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1) 
+    pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 

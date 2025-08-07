@@ -92,33 +92,33 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (2 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 5 function(s)
-                    Function 1 : Adding 2 scalar constraint(s) ...
-                    Function 1 : 2 scalar constraint(s) added
-                    Function 2 : Adding 2 scalar constraint(s) ...
-                    Function 2 : 2 scalar constraint(s) added
-                    Function 3 : Adding 2 scalar constraint(s) ...
-                    Function 3 : 2 scalar constraint(s) added
-                    Function 4 : Adding 2 scalar constraint(s) ...
-                    Function 4 : 2 scalar constraint(s) added
-                    Function 5 : Adding 2 scalar constraint(s) ...
-                    Function 5 : 2 scalar constraint(s) added
+        			Function 1 : Adding 2 scalar constraint(s) ...
+        			Function 1 : 2 scalar constraint(s) added
+        			Function 2 : Adding 2 scalar constraint(s) ...
+        			Function 2 : 2 scalar constraint(s) added
+        			Function 3 : Adding 2 scalar constraint(s) ...
+        			Function 3 : 2 scalar constraint(s) added
+        			Function 4 : Adding 2 scalar constraint(s) ...
+        			Function 4 : 2 scalar constraint(s) added
+        			Function 5 : Adding 2 scalar constraint(s) ...
+        			Function 5 : 2 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 4.1830003941347
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 4.183000394303014
         (PEPit) Primal feasibility check:
-                The solver found a Gram matrix that is positive semi-definite
-                All the primal scalar constraints are verified up to an error of 1.0321604682062002e-15
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.2212453270876722e-15
         (PEPit) Dual feasibility check:
-                The solver found a residual matrix that is positive semi-definite
-                All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3303453802862415e-07
-        (PEPit) Final upper bound (dual): 4.183000393650909 and lower bound (primal example): 4.1830003941347
-        (PEPit) Duality gap: absolute: -4.837907852106582e-10 and relative: -1.1565640440508152e-10
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3274065824196207e-07
+        (PEPit) Final upper bound (dual): 4.183000393816744 and lower bound (primal example): 4.183000394303014 
+        (PEPit) Duality gap: absolute: -4.862696911800413e-10 and relative: -1.1624901872883166e-10
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-            PEPit guarantee:	 E[||x_1 - x_*||^2] <= 4.183
-            Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 4.183
-
+        	PEPit guarantee:	 E[||x_1 - x_*||^2] <= 4.183
+        	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 4.183
+    
     """
 
     # Instantiate PEP

@@ -68,16 +68,16 @@ def wc_cyclic_coordinate_descent(L, n, wrapper="cvxpy", solver=None, verbose=1):
         			Partition 1 with 3 blocks: 363 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.4892758367502887
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 1.489275837101339
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.745171522956692e-09
-        		All the primal scalar constraints are verified up to an error of 7.4478840872416185e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.746787768677001e-09
+        		All the primal scalar constraints are verified up to an error of 7.456650408244059e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.835133702255824e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.797651214794727e-07
-        (PEPit) Final upper bound (dual): 1.4892758368167314 and lower bound (primal example): 1.4892758367502887 
-        (PEPit) Duality gap: absolute: 6.644262917632204e-11 and relative: 4.461405169998919e-11
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.838891370416837e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.804651942291628e-07
+        (PEPit) Final upper bound (dual): 1.4892758371735533 and lower bound (primal example): 1.489275837101339 
+        (PEPit) Duality gap: absolute: 7.221423459213838e-11 and relative: 4.8489495896672164e-11
         *** Example file: worst-case performance of cyclic coordinate descent with fixed step-sizes ***
         	PEPit guarantee:	 f(x_n)-f_* <= 1.48928 ||x_0 - x_*||^2
     

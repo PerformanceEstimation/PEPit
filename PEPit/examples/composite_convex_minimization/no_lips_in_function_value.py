@@ -92,16 +92,16 @@ def wc_no_lips_in_function_value(L, gamma, n, wrapper="cvxpy", solver=None, verb
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6666666666481619
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.666666666648161
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.4396019099027768e-11
+        		All the primal scalar constraints are verified up to an error of 1.4395949710088729e-11
         (PEPit) Dual feasibility check:
-        		The solver found a residual matrix that is positive semi-definite up to an error of 1.039633194677115e-21
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.4920273295805233e-11
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.426985490058363e-10
-        (PEPit) Final upper bound (dual): 0.666666666662425 and lower bound (primal example): 0.6666666666481619 
-        (PEPit) Duality gap: absolute: 1.4263146219661849e-11 and relative: 2.139471933008663e-11
+        		The solver found a residual matrix that is positive semi-definite up to an error of 1.3315069623255106e-21
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.4920638309169674e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.427130463022609e-10
+        (PEPit) Final upper bound (dual): 0.6666666666624239 and lower bound (primal example): 0.666666666648161 
+        (PEPit) Duality gap: absolute: 1.4262924175056924e-11 and relative: 2.1394386263179262e-11
         *** Example file: worst-case performance of the NoLips in function values ***
         	PEPit guarantee:	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)
         	Theoretical guarantee:	 F(x_n) - F_* <= 0.666667 Dh(x_*; x_0)

@@ -73,16 +73,16 @@ def wc_gradient_descent_qg_convex(L, gamma, n, wrapper="cvxpy", solver=None, ver
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19230769057979225
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.19230769057989414
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 6.487419074163725e-10
+        		All the primal scalar constraints are verified up to an error of 6.488017484373998e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.613757534126084e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.03711530175072e-09
-        (PEPit) Final upper bound (dual): 0.1923076915693468 and lower bound (primal example): 0.19230769057979225 
-        (PEPit) Duality gap: absolute: 9.895545494131852e-10 and relative: 5.145683703182944e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.614444025786438e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.03742597164331e-09
+        (PEPit) Final upper bound (dual): 0.19230769156951819 and lower bound (primal example): 0.19230769057989414 
+        (PEPit) Duality gap: absolute: 9.896240493745267e-10 and relative: 5.146045102982441e-09
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.192308 ||x_0 - x_*||^2

@@ -88,16 +88,16 @@ def wc_douglas_rachford_splitting(L, mu, alpha, theta, wrapper="cvxpy", solver=N
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.928770707839351
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9287707078375604
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.297473722026212e-09
-        		All the primal scalar constraints are verified up to an error of 1.64989273354621e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.297222217534066e-09
+        		All the primal scalar constraints are verified up to an error of 1.6497672117310458e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.4855088898444464e-07
-        (PEPit) Final upper bound (dual): 0.9287707057295752 and lower bound (primal example): 0.928770707839351 
-        (PEPit) Duality gap: absolute: -2.109775798508906e-09 and relative: -2.2715787445719413e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.485426757210419e-07
+        (PEPit) Final upper bound (dual): 0.9287707057276714 and lower bound (primal example): 0.9287707078375604 
+        (PEPit) Duality gap: absolute: -2.109889041257418e-09 and relative: -2.271700672138803e-09
         *** Example file: worst-case performance of the Douglas Rachford Splitting***
         	PEPit guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2
         	Theoretical guarantee:	 ||w_(t+1)^0 - w_(t+1)^1||^2 <= 0.928771 ||w_(t)^0 - w_(t)^1||^2

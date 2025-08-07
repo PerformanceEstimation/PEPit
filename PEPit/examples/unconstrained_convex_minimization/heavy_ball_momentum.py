@@ -89,16 +89,16 @@ def wc_heavy_ball_momentum(mu, L, alpha, beta, n, wrapper="cvxpy", solver=None, 
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7534930184723507
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7534930184722486
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.447704542447025e-09
-        		All the primal scalar constraints are verified up to an error of 2.3525640133886805e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.447704549549468e-09
+        		All the primal scalar constraints are verified up to an error of 2.3525573294991275e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1216875770062036e-07
-        (PEPit) Final upper bound (dual): 0.7534930169804492 and lower bound (primal example): 0.7534930184723507 
-        (PEPit) Duality gap: absolute: -1.4919014912351258e-09 and relative: -1.979980510316926e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1217055700431244e-07
+        (PEPit) Final upper bound (dual): 0.753493016980345 and lower bound (primal example): 0.7534930184722486 
+        (PEPit) Duality gap: absolute: -1.4919036006588726e-09 and relative: -1.9799833098437924e-09
         *** Example file: worst-case performance of the Heavy-Ball method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.753493 (f(x_0) - f(x_*))
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.9025 (f(x_0) - f(x_*))

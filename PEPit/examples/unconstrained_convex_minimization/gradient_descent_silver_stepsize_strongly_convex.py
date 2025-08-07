@@ -80,16 +80,16 @@ def wc_gradient_descent_silver_stepsize_strongly_convex(L, mu, n, wrapper="cvxpy
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.22144968332064685
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.2214496833206523
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.709908798754045e-14
+        		All the primal scalar constraints are verified up to an error of 1.726732905965589e-14
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.029501372712101e-15
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0411976074102435e-12
-        (PEPit) Final upper bound (dual): 0.22144968332063517 and lower bound (primal example): 0.22144968332064685 
-        (PEPit) Duality gap: absolute: -1.1685097334179773e-14 and relative: -5.276637635674737e-14
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.059821779868726e-15
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.8519554936513068e-12
+        (PEPit) Final upper bound (dual): 0.22144968332064066 and lower bound (primal example): 0.2214496833206523 
+        (PEPit) Duality gap: absolute: -1.1629586182948515e-14 and relative: -5.2515704735098826e-14
         *** Example file: worst-case performance of gradient descent with silver step-sizes ***
         	PEPit guarantee:	 ||x_n - x_*||^2 <= 0.22145 ||x_0 - x_*||^2
         	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.22145 ||x_0 - x_*||^2

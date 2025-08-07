@@ -79,35 +79,35 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
     Example:
         >>> M, D, n = 1,.5,2
-        >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-				Function 1 : Adding 4 scalar constraint(s) ...
-				Function 1 : 4 scalar constraint(s) added
-				Function 2 : Adding 4 scalar constraint(s) ...
-				Function 2 : 4 scalar constraint(s) added
-				Function 3 : Adding 28 scalar constraint(s) ...
-				Function 3 : 28 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9330127185046186
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite up to an error of 3.831994018595078e-09
-			All the primal scalar constraints are verified up to an error of 1.2383195857612606e-08
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.157025748731026e-08
-	(PEPit) Final upper bound (dual): 0.9330127200996287 and lower bound (primal example): 0.9330127185046186 
-	(PEPit) Duality gap: absolute: 1.595010012955811e-09 and relative: 1.709526549125938e-09
-	*** Example file: worst-case regret of online Frank-Wolfe ***
-		PEPit guarantee:	 R_n <= 0.933013
-		Theoretical guarantee:	 R_n <= 1.47558
-
+        			Function 1 : Adding 4 scalar constraint(s) ...
+        			Function 1 : 4 scalar constraint(s) added
+        			Function 2 : Adding 4 scalar constraint(s) ...
+        			Function 2 : 4 scalar constraint(s) added
+        			Function 3 : Adding 28 scalar constraint(s) ...
+        			Function 3 : 28 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9330127185046186
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.831994018595078e-09
+        		All the primal scalar constraints are verified up to an error of 1.2383195857612606e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.157025748731026e-08
+        (PEPit) Final upper bound (dual): 0.9330127200996287 and lower bound (primal example): 0.9330127185046186 
+        (PEPit) Duality gap: absolute: 1.595010012955811e-09 and relative: 1.709526549125938e-09
+        *** Example file: worst-case regret of online Frank-Wolfe ***
+        	PEPit guarantee:	 R_n <= 0.933013
+        	Theoretical guarantee:	 R_n <= 1.47558
+    
     """
     # Instantiate PEP
     problem = PEP()
@@ -163,4 +163,4 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
 
 if __name__ == "__main__":
     M, D, n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1) 
+    pepit_tau, theoretical_tau = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 

@@ -64,7 +64,7 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 15x15
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -77,16 +77,16 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06631412698565144
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06631412717626445
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 2.881525884221303e-09
+        		All the primal scalar constraints are verified up to an error of 2.911285089737814e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.0104852598258245e-08
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.484355451749491e-08
-        (PEPit) Final upper bound (dual): 0.06631413197861648 and lower bound (primal example): 0.06631412698565144 
-        (PEPit) Duality gap: absolute: 4.992965041417108e-09 and relative: 7.529263021885893e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.0187221108482403e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.533233993629353e-08
+        (PEPit) Final upper bound (dual): 0.06631413218999846 and lower bound (primal example): 0.06631412717626445 
+        (PEPit) Duality gap: absolute: 5.013734011294346e-09 and relative: 7.560582073210024e-08
         *** Example file: worst-case performance of the Optimistic Gradient Method***
         	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0663141 ||x0 - xs||^2
     
@@ -141,4 +141,4 @@ def wc_optimistic_gradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1)
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1 / 4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimistic_gradient(n=5, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)

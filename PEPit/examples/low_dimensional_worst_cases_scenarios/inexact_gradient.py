@@ -95,40 +95,40 @@ def wc_inexact_gradient(L, mu, epsilon, n, wrapper="cvxpy", solver=None, verbose
         			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.13973101296945833
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 2.99936924706653e-06 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.13973101021632428
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 3.028518178869447e-06 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314530774
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 7.356394561198437e-08 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101333230654
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.1396310103564475
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 9.047553817195615e-08 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101028561192
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314132523
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101042304152
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101315746582
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101027602265
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101311324322
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101034245295
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101297326166
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.1396310103204911
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101303966996
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 1.216071300777247e-12 after 7 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101306836934
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 7.45808567822026e-12 after 8 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101314164972
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 6.382593300104802e-12 after 9 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101344891796
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101022486266
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 9.087483651128653e-13 after 7 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.1396310102399474
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 8.535000475023181e-12 after 8 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101023133517
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 4.810079003044157e-13 after 9 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.1396310102275719
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after 10 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.13963101344891796
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.1396310102275719
         (PEPit) Postprocessing: 1 eigenvalue(s) > 0 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.749538388559788e-11
-        		All the primal scalar constraints are verified up to an error of 6.561007293015564e-11
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.83270861025616e-13
+        		All the primal scalar constraints are verified up to an error of 1.0150352780513572e-12
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.481776410060961e-07
-        (PEPit) Final upper bound (dual): 0.13973101221655027 and lower bound (primal example): 0.13963101344891796 
-        (PEPit) Duality gap: absolute: 9.999876763230886e-05 and relative: 0.0007161644477277393
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.4160437804734643e-07
+        (PEPit) Final upper bound (dual): 0.1397310094213599 and lower bound (primal example): 0.1396310102275719 
+        (PEPit) Duality gap: absolute: 9.999919378800293e-05 and relative: 0.0007161675162632091
         *** Example file: worst-case performance of inexact gradient ***
         	PEPit guarantee:	 f(x_n)-f_* == 0.139731 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.139731 (f(x_0)-f_*)

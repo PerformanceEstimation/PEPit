@@ -103,16 +103,16 @@ def wc_partially_inexact_douglas_rachford_splitting(mu, L, n, gamma, sigma, wrap
         			Function 1 : 10 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.2812061652921267
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.28120616529230436
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.538692070583704e-10
-        		All the primal scalar constraints are verified up to an error of 2.1234433933425834e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.53872229933017e-10
+        		All the primal scalar constraints are verified up to an error of 2.123453302083078e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.755838881401962e-07
-        (PEPit) Final upper bound (dual): 0.2812061650995206 and lower bound (primal example): 0.2812061652921267 
-        (PEPit) Duality gap: absolute: -1.9260609773752435e-10 and relative: -6.849284315563937e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.7559549492517377e-07
+        (PEPit) Final upper bound (dual): 0.28120616509970037 and lower bound (primal example): 0.28120616529230436 
+        (PEPit) Duality gap: absolute: -1.9260398831377756e-10 and relative: -6.849209302135044e-10
         *** Example file: worst-case performance of the partially inexact Douglas Rachford splitting ***
         	PEPit guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2
         	Theoretical guarantee:	 ||z_n - z_*||^2 <= 0.281206 ||z_0 - z_*||^2

@@ -68,16 +68,16 @@ def wc_accelerated_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbos
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.01000002559061373
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.010000025590611602
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.589511920935478e-09
-        		All the primal scalar constraints are verified up to an error of 7.459300880967301e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.5895117470294495e-09
+        		All the primal scalar constraints are verified up to an error of 7.4593002417217e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.7282086824171376e-08
-        (PEPit) Final upper bound (dual): 0.010000027890024786 and lower bound (primal example): 0.01000002559061373 
-        (PEPit) Duality gap: absolute: 2.2994110556590064e-09 and relative: 2.2994051713400514e-07
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 4.728277936710436e-08
+        (PEPit) Final upper bound (dual): 0.01000002789002249 and lower bound (primal example): 0.010000025590611602 
+        (PEPit) Duality gap: absolute: 2.2994108873908292e-09 and relative: 2.2994050030727943e-07
         *** Example file: worst-case performance of the Accelerated Proximal Point Method***
         	PEPit guarantee:	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2
         	Theoretical guarantee:	 ||x_n - y_n||^2 <= 0.01 ||x_0 - x_s||^2

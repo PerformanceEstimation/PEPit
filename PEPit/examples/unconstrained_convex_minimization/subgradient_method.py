@@ -89,16 +89,16 @@ def wc_subgradient_method(M, n, gamma, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7559287513714278
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7559287513714107
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.0475429120359347e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.251581484359109e-08
-        (PEPit) Final upper bound (dual): 0.7559287543574007 and lower bound (primal example): 0.7559287513714278 
-        (PEPit) Duality gap: absolute: 2.9859729133718815e-09 and relative: 3.950071892297578e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.0475405061169397e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.251377031711948e-08
+        (PEPit) Final upper bound (dual): 0.7559287543573815 and lower bound (primal example): 0.7559287513714107 
+        (PEPit) Duality gap: absolute: 2.9859708039481347e-09 and relative: 3.950069101791627e-09
         *** Example file: worst-case performance of subgradient method ***
         	PEPit guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||
         	Theoretical guarantee:	 min_(0 \leq t \leq n) f(x_i) - f_* <= 0.755929 ||x_0 - x_*||

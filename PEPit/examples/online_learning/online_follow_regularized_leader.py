@@ -79,29 +79,29 @@ def wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, v
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (0 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 3 function(s)
-				Function 1 : Adding 9 scalar constraint(s) ...
-				Function 1 : 9 scalar constraint(s) added
-				Function 2 : Adding 4 scalar constraint(s) ...
-				Function 2 : 4 scalar constraint(s) added
-				Function 3 : Adding 15 scalar constraint(s) ...
-				Function 3 : 15 scalar constraint(s) added
-	(PEPit) Setting up the problem: additional constraints for 0 function(s)
-	(PEPit) Compiling SDP
-	(PEPit) Calling SDP solver
-	(PEPit) Solver status: prosta.prim_and_dual_feas (wrapper:mosek, solver: MOSEK); optimal value: 0.7071067900029648
-	(PEPit) Primal feasibility check:
-			The solver found a Gram matrix that is positive semi-definite
-			All the primal scalar constraints are verified up to an error of 1.7911056637842648e-08
-	(PEPit) Dual feasibility check:
-			The solver found a residual matrix that is positive semi-definite
-			All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.7132283953961866e-08
-	(PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 5.107611759149334e-08
-	(PEPit) Final upper bound (dual): 0.7071067911277964 and lower bound (primal example): 0.7071067900029648 
-	(PEPit) Duality gap: absolute: 1.1248315612277793e-09 and relative: 1.5907520294396592e-09
-	*** Example file: worst-case regret of online follow the regularized leader ***
-		PEPit guarantee:	 R_n <= 0.707107
-		Theoretical guarantee:	 R_n <= 0.707107
-
+        			Function 1 : Adding 9 scalar constraint(s) ...
+        			Function 1 : 9 scalar constraint(s) added
+        			Function 2 : Adding 4 scalar constraint(s) ...
+        			Function 2 : 4 scalar constraint(s) added
+        			Function 3 : Adding 15 scalar constraint(s) ...
+        			Function 3 : 15 scalar constraint(s) added
+        (PEPit) Setting up the problem: additional constraints for 0 function(s)
+        (PEPit) Compiling SDP
+        (PEPit) Calling SDP solver
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.7071068096527651
+        (PEPit) Primal feasibility check:
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.3442036099876085e-09
+        		All the primal scalar constraints are verified up to an error of 2.9812280422092385e-08
+        (PEPit) Dual feasibility check:
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 1.6889222586942237e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2145136205173416e-07
+        (PEPit) Final upper bound (dual): 0.707106811831799 and lower bound (primal example): 0.7071068096527651 
+        (PEPit) Duality gap: absolute: 2.1790339532756775e-09 and relative: 3.08161924553622e-09
+        *** Example file: worst-case regret of online follow the regularized leader ***
+        	PEPit guarantee:	 R_n <= 0.707107
+        	Theoretical guarantee:	 R_n <= 0.707107
+    
     """
     # Instantiate PEP
     problem = PEP()
@@ -159,4 +159,4 @@ def wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, v
 
 if __name__ == "__main__":
     M, D, n = 1, .5, 2
-    pepit_tau, theoretical_tau = wc_online_follow_regularized_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1) 
+    pepit_tau, theoretical_tau = wc_online_follow_regularized_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 

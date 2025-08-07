@@ -48,9 +48,10 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
     Journal of Optimization Theory and Applications, 178(2), 455-476.
     <https://arxiv.org/pdf/1705.04398.pdf>`_
 
-    [2] B. Polyak (1987).
+    `[2] B. Polyak (1987).
     Introduction to Optimization.
     Optimization Software New York.
+    <https://www.researchgate.net/profile/Boris-Polyak-2/publication/342978480_Introduction_to_Optimization/links/5f1033e5299bf1e548ba4636/Introduction-to-Optimization.pdf>`_
 
     `[3] E. Ryu, S. Boyd (2016).
     A primer on monotone operator methods.
@@ -94,16 +95,16 @@ def wc_proximal_gradient(L, mu, gamma, n, wrapper="cvxpy", solver=None, verbose=
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6561000457701127
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.6561000457691557
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.5629838208999835e-09
-        		All the primal scalar constraints are verified up to an error of 1.0696532309201201e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.562925261728628e-09
+        		All the primal scalar constraints are verified up to an error of 1.0696409768334858e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.6272376343894344e-07
-        (PEPit) Final upper bound (dual): 0.6561000458035535 and lower bound (primal example): 0.6561000457701127 
-        (PEPit) Duality gap: absolute: 3.3440805680129415e-11 and relative: 5.096906469634138e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.6270914088577513e-07
+        (PEPit) Final upper bound (dual): 0.6561000458025597 and lower bound (primal example): 0.6561000457691557 
+        (PEPit) Duality gap: absolute: 3.340394627571186e-11 and relative: 5.091288514780078e-11
         *** Example file: worst-case performance of the Proximal Gradient Method in function values***
         	PEPit guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2
         	Theoretical guarantee:	 ||x_n - x_*||^2 <= 0.6561 ||x0 - xs||^2

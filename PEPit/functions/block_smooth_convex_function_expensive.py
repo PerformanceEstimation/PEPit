@@ -11,6 +11,11 @@ class BlockSmoothConvexFunctionExpensive(Function):
     of :class:`Function`, by implementing necessary constraints for interpolation of the class of
     smooth convex functions by blocks. The implemented constraint is that of [2, Section 3.1].
 
+    Warning:
+        Functions that are smooth by blocks and convex generally do not enjoy known interpolation conditions.
+        The conditions implemented in this class are necessary but a priori not sufficient for interpolation.
+        Hence, the numerical results obtained when using this class might be non-tight upper bounds.
+
     Attributes:
         partition (BlockPartition): partitioning of the variables (in blocks).
         L (list): smoothness parameters (one per block).

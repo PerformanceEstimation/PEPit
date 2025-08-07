@@ -89,16 +89,16 @@ def wc_accelerated_gradient_method(L, gamma, lam, wrapper="cvxpy", solver=None, 
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 7.94632223606942e-09
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 7.946316794241876e-09
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.9439082173289184e-10
-        		All the primal scalar constraints are verified up to an error of 2.9403765314447956e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.9438973508380758e-10
+        		All the primal scalar constraints are verified up to an error of 2.940380701608571e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.223563804320635e-08
-        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.94632223606942e-09 
-        (PEPit) Duality gap: absolute: -7.94632223606942e-09 and relative: -1.0
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0452697077144956e-08
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.946316794241876e-09 
+        (PEPit) Duality gap: absolute: -7.946316794241876e-09 and relative: -1.0
         *** Example file: worst-case performance of accelerated gradient method for a given Lyapunov function***
         	PEPit guarantee:	 V_(n+1) - V_n <= 0.0
         	Theoretical guarantee:	 V_(n+1) - V_n <= 0.0

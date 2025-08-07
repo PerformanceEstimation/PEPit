@@ -73,16 +73,16 @@ def wc_gradient_descent(L, gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.1666666649793712
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.1666666649793714
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.325029587061441e-10
-        		All the primal scalar constraints are verified up to an error of 6.633613956752438e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.325029629397552e-10
+        		All the primal scalar constraints are verified up to an error of 6.63361402267193e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.0696173743789816e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.547098305159261e-08
-        (PEPit) Final upper bound (dual): 0.16666667331941884 and lower bound (primal example): 0.1666666649793712 
-        (PEPit) Duality gap: absolute: 8.340047652488636e-09 and relative: 5.004028642152831e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.0696174975682125e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.547097551421911e-08
+        (PEPit) Final upper bound (dual): 0.1666666733194192 and lower bound (primal example): 0.1666666649793714 
+        (PEPit) Duality gap: absolute: 8.340047791266514e-09 and relative: 5.004028725419552e-08
         *** Example file: worst-case performance of gradient descent with fixed step-sizes ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2

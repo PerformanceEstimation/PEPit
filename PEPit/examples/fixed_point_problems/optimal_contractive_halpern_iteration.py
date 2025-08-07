@@ -67,16 +67,16 @@ def wc_optimal_contractive_halpern_iteration(n, gamma, wrapper="cvxpy", solver=N
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.010613261462073679
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.010613261452839461
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.170073408600879e-09
-        		All the primal scalar constraints are verified up to an error of 1.5453453107439064e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.168468266637523e-09
+        		All the primal scalar constraints are verified up to an error of 1.5448873458279166e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.883430104655162e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.396268932559219e-07
-        (PEPit) Final upper bound (dual): 0.010613268001708536 and lower bound (primal example): 0.010613261462073679 
-        (PEPit) Duality gap: absolute: 6.5396348579438435e-09 and relative: 6.161757986753765e-07
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.882587759923054e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3959053599116993e-07
+        (PEPit) Final upper bound (dual): 0.010613267990638164 and lower bound (primal example): 0.010613261452839461 
+        (PEPit) Duality gap: absolute: 6.537798703451503e-09 and relative: 6.160027935335925e-07
         *** Example file: worst-case performance of Optimal Contractive Halpern Iterations ***
         	PEPit guarantee:	 ||xN - AxN||^2 <= 0.0106133 ||x0 - x_*||^2
         	Theoretical guarantee:	 ||xN - AxN||^2 <= 0.0106132 ||x0 - x_*||^2

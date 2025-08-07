@@ -94,16 +94,16 @@ def wc_conjugate_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
         			Function 1 : 6 scalar constraint(s) added
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.061894196487033516
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06189419648705603
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.09403336792362e-09
-        		All the primal scalar constraints are verified up to an error of 7.438128096087793e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.094038231215726e-09
+        		All the primal scalar constraints are verified up to an error of 7.438133589957041e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.571121581640089e-08
-        (PEPit) Final upper bound (dual): 0.06189420236648946 and lower bound (primal example): 0.061894196487033516 
-        (PEPit) Duality gap: absolute: 5.8794559429364845e-09 and relative: 9.49920392644276e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.571101560090838e-08
+        (PEPit) Final upper bound (dual): 0.06189420236651673 and lower bound (primal example): 0.06189419648705603 
+        (PEPit) Duality gap: absolute: 5.879460696078809e-09 and relative: 9.49921160590296e-08
         *** Example file: worst-case performance of conjugate gradient method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0618942 ||x_0 - x_*||^2
