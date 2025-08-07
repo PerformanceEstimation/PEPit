@@ -168,14 +168,13 @@ class TestExamples(unittest.TestCase):
                                                                              verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, wc, delta=self.relative_precision * theory)
 
-
     def test_cyclic_coordinate(self):
         L = [1., 3.]
         n = 2
-        
+
         wc_base, _ = wc_cyclic_coordinate_descent(L=L, n=n, verbose=self.verbose)
         wc_refined, _ = wc_cyclic_coordinate_descent_refined(L=L, n=n, verbose=self.verbose)
-        
+
         self.assertLessEqual(wc_refined, (1 + self.relative_precision) * wc_base)
 
     def test_gradient_descent_useless_blocks(self):

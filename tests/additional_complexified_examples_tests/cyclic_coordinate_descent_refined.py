@@ -111,5 +111,5 @@ def wc_cyclic_coordinate_descent_refined(L, n, wrapper="cvxpy", solver=None, ver
 
 
 if __name__ == "__main__":
-    L = [.1, 3, 2.] 
+    L = [.1, 3, 2.]
     pepit_tau, theoretical_tau = wc_cyclic_coordinate_descent_refined(L=L, n=2, wrapper="cvxpy", solver=None, verbose=1)

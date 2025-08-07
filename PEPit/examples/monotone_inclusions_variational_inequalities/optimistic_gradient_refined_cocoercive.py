@@ -4,14 +4,15 @@ from PEPit.operators import CocoerciveStronglyMonotoneOperatorExpensive
 from PEPit.primitive_steps import proximal_step
 
 
-def wc_optimistic_gradient_refined_cocoercive(n, gamma, mu, beta, wrapper="cvxpy", solver=None, verbose=1):
+def wc_optimistic_gradient_refined_cocoercive(n, gamma, beta, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the monotone variational inequality
 
         .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right> \\geqslant 0\\,\\,\\forall x\\in C,
 
-    where :math:`C` is a closed convex set and :math:`F` is maximally monotone and cocoercive. In this example, we use the characterization of
-    cocoercive strongly monotone operators provided in [3, Proposition F.3] (which results in more computationnaly expensive PEPs to be solved).
+    where :math:`C` is a closed convex set and :math:`F` is maximally monotone and cocoercive.
+    In this example, we use the characterization of cocoercive strongly monotone operators
+    provided in [3, Proposition F.3] (which results in more computationnaly expensive PEPs to be solved).
 
     This code computes a worst-case guarantee for the **optimistic gradient method**.
     That, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
@@ -70,7 +71,7 @@ def wc_optimistic_gradient_refined_cocoercive(n, gamma, mu, beta, wrapper="cvxpy
         theoretical_tau (None): no theoretical bound.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient_refined_cocoercive(n=1, gamma=1/4, mu=.05, beta=1/4, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_optimistic_gradient_refined_cocoercive(n=1, gamma=1/4, beta=1/4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 7x7
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -199,4 +200,5 @@ def wc_optimistic_gradient_refined_cocoercive(n, gamma, mu, beta, wrapper="cvxpy
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined_cocoercive(n=1, gamma=1/4, mu=.05, beta=1/4, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined_cocoercive(n=1, gamma=1 / 4, beta=1 / 4,
+                                                                           wrapper="cvxpy", solver=None, verbose=1)

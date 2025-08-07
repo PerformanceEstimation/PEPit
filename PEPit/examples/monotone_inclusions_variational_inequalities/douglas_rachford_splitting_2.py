@@ -1,5 +1,3 @@
-from math import sqrt
-
 from PEPit import PEP
 from PEPit.operators import CocoerciveOperator
 from PEPit.operators import StronglyMonotoneOperator
@@ -12,8 +10,9 @@ def wc_douglas_rachford_splitting_2(beta, mu, alpha, theta, wrapper="cvxpy", sol
 
     .. math:: \\mathrm{Find}\\, x:\\, 0\\in Ax + Bx,
 
-    where :math:`A` is :math:`\\beta`-cocoercive and maximally monotone and :math:`B` is (maximally) :math:`\\mu`-strongly
-    monotone. We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively
+    where :math:`A` is :math:`\\beta`-cocoercive and maximally monotone
+    and :math:`B` is (maximally) :math:`\\mu`-strongly monotone.
+    We denote by :math:`J_{\\alpha A}` and :math:`J_{\\alpha B}` the resolvents of respectively
     :math:`\\alpha A` and :math:`\\alpha B`.
 
     This code computes a worst-case guarantee for the **Douglas-Rachford splitting** (DRS).
@@ -133,22 +132,29 @@ def wc_douglas_rachford_splitting_2(beta, mu, alpha, theta, wrapper="cvxpy", sol
     # Compute theoretical guarantee (for comparison), see [1, Theorem 4.1]
     mu = alpha * mu
     beta = alpha * beta
-    if mu * beta - mu + beta < 0 and theta <= 2 * ( beta + 1 ) * ( mu - beta - mu * beta ) / ( mu + mu * beta - beta - beta ** 2 - 2 * mu * beta ** 2):
-        theoretical_tau = ( 1 - theta * beta / ( beta + 1 ) ) ** 2
-    elif mu * beta - mu - beta > 0 and theta <=  2 * ( mu ** 2 + beta ** 2 + mu * beta + mu + beta - mu ** 2 * beta ** 2) / (mu ** 2 + beta ** 2 + mu ** 2 * beta + mu * beta ** 2 + mu + beta - 2 * mu ** 2 * beta ** 2):
-        theoretical_tau = ( 1 - theta * ( 1 + mu * beta ) / ( mu + 1 ) / ( beta + 1 ) ) ** 2
-    elif theta >= 2 * ( mu * beta + mu + beta ) / ( 2 * mu * beta + mu + beta ) :
-    	theoretical_tau = ( 1 - theta ) ** 2
-    elif mu * beta + mu - beta < 0 and theta <= 2 * ( mu + 1 ) * ( beta - mu - mu * beta) / ( beta + mu * beta - mu - mu ** 2 - 2 * mu ** 2 * beta ):
-    	theoretical_tau = ( 1 - theta * mu / ( mu + 1 ) ) ** 2
-    else :
-        theoretical_tau = (2 - theta) / 4 / mu * ( ( 2 - theta ) * mu * ( beta + 1 ) + theta * beta * ( 1 - mu ) ) * ( ( 2 - theta ) * beta * ( mu + 1 ) + theta * mu * ( 1 - beta ) ) / mu / beta / ( 2 * mu * beta * ( 1 - theta ) + ( 2 - theta ) * ( mu + beta + 1 ) )
+    if mu * beta - mu + beta < 0 and theta <= 2 * (beta + 1) * (mu - beta - mu * beta) / (
+            mu + mu * beta - beta - beta ** 2 - 2 * mu * beta ** 2):
+        theoretical_tau = (1 - theta * beta / (beta + 1)) ** 2
+    elif mu * beta - mu - beta > 0 and theta <= 2 * (
+            mu ** 2 + beta ** 2 + mu * beta + mu + beta - mu ** 2 * beta ** 2) / (
+            mu ** 2 + beta ** 2 + mu ** 2 * beta + mu * beta ** 2 + mu + beta - 2 * mu ** 2 * beta ** 2):
+        theoretical_tau = (1 - theta * (1 + mu * beta) / (mu + 1) / (beta + 1)) ** 2
+    elif theta >= 2 * (mu * beta + mu + beta) / (2 * mu * beta + mu + beta):
+        theoretical_tau = (1 - theta) ** 2
+    elif mu * beta + mu - beta < 0 and theta <= 2 * (mu + 1) * (beta - mu - mu * beta) / (
+            beta + mu * beta - mu - mu ** 2 - 2 * mu ** 2 * beta):
+        theoretical_tau = (1 - theta * mu / (mu + 1)) ** 2
+    else:
+        theoretical_tau = (2 - theta) / 4 / mu * ((2 - theta) * mu * (beta + 1) + theta * beta * (1 - mu)) * (
+                    (2 - theta) * beta * (mu + 1) + theta * mu * (1 - beta)) / mu / beta / (
+                                      2 * mu * beta * (1 - theta) + (2 - theta) * (mu + beta + 1))
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Douglas Rachford Splitting***')
         print('\tPEPit guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(theoretical_tau))
+        print('\tTheoretical guarantee:\t ||w_(t+1)^0 - w_(t+1)^1||^2 <= {:.6} ||w_(t)^0 - w_(t)^1||^2'.format(
+            theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method ( and the reference theoretical value)
     return pepit_tau, theoretical_tau

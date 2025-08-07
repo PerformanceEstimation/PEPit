@@ -55,7 +55,7 @@ Cocoercive and strongly monotone (cheap version)
 
 Cocoercive and strongly monotone (expensive version)
 ----------------------------------------------------
-.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperatorCheap
+.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperatorExpensive
    :members:
    :show-inheritance:
 

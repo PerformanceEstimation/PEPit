@@ -4,6 +4,7 @@ from PEPit.functions import ConvexLipschitzFunction
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
+
 def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the online convex minimization problem, whose goal is to sequentially minimize the regret
@@ -76,7 +77,7 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> M,D,n = 1,.5,2
+        >>> M,D,n = 1, .5, 2
         >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
@@ -109,32 +110,31 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
     """
     # Instantiate PEP
     problem = PEP()
-    
-    M_list = [ M  for i in range(n)]
-    gamma = D/M/np.sqrt(n)
-    
+
+    gamma = D / (M * np.sqrt(n))
+
     # Declare a sequence of M-Lipschitz convex functions fi and an indicator function with Diameter D
-    fis = [problem.declare_function(ConvexLipschitzFunction, M=M_list[i])  for i in range(n)]
+    fis = [problem.declare_function(ConvexLipschitzFunction, M=M) for _ in range(n)]
     h = problem.declare_function(function_class=ConvexIndicatorFunction, D=D)
-    
+
     F = np.sum(fis)
     # Defining a reference point
     xRef = problem.set_initial_point()
-    xRef,_,_ = proximal_step(xRef, h, 1) # project the reference point
+    xRef, _, _ = proximal_step(xRef, h, 1)  # project the reference point
     gRef, FRef = F.oracle(xRef)
-    
+
     # Then define the starting point x0 of the algorithm
     x1 = problem.set_initial_point()
-    x1,_,_ = proximal_step(x1, h, 1) # project the initial point
-    
+    x1, _, _ = proximal_step(x1, h, 1)  # project the initial point
+
     # Run n steps of gradient descent with step-size gamma
     x = x1
     g_saved = [gRef for _ in range(n)]
     f_saved = [FRef for _ in range(n)]
     for i in range(n):
         g_saved[i], f_saved[i] = fis[i].oracle(x)
-        x,_,_ = proximal_step(x - gamma * g_saved[i], h, gamma)
-        
+        x, _, _ = proximal_step(x - gamma * g_saved[i], h, gamma)
+
     # Set the performance metric to the regret
     problem.set_performance_metric(np.sum(f_saved) - FRef)
 
@@ -143,7 +143,7 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee
-    theoretical_tau = M*D*np.sqrt(n)
+    theoretical_tau = M * D * np.sqrt(n)
 
     # Print conclusion if required
     if verbose != -1:
@@ -154,6 +154,7 @@ def wc_online_gradient_descent(M, D, n, wrapper="cvxpy", solver=None, verbose=1)
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
+
 if __name__ == "__main__":
-    M,D,n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 
+    M, D, n = 1, .5, 2
+    pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)

@@ -4,6 +4,7 @@ from PEPit.functions import ConvexLipschitzFunction
 from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 
+
 def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the online convex minimization problem, whose goal is to sequentially minimize the regret
@@ -63,7 +64,7 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> M, D, n = 1,.5,2
+        >>> M, D, n = 1, .5, 2
         >>> pepit_tau, theoretical_tau = wc_online_follow_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
@@ -95,25 +96,20 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     # Instantiate PEP
     problem = PEP()
-    
-    M_list = [ M  for i in range(n)]
-    gamma = D/M/np.sqrt(n)
-    
+
+    M_list = [M for i in range(n)]
+
     # Declare a sequence of M-Lipschitz convex functions fi and an indicator function with Diameter D
-    fis = [problem.declare_function(ConvexLipschitzFunction, M=M_list[i])  for i in range(n)]
+    fis = [problem.declare_function(ConvexLipschitzFunction, M=M_list[i]) for i in range(n)]
     h = problem.declare_function(function_class=ConvexIndicatorFunction, D=D)
-    
-    F = np.sum(fis)
-    Ftot = F + h
 
     # Defining a reference point
     xRef = problem.set_initial_point()
-    xRef,_,_ = proximal_step(xRef, h, 1) # project the reference point
-    gRef, FRef = F.oracle(xRef)
+    xRef, _, _ = proximal_step(xRef, h, 1)  # project the reference point
 
     x1 = problem.set_initial_point()
-    x1,_,_ = proximal_step(x1, h, 1) # project the reference point
-    
+    x1, _, _ = proximal_step(x1, h, 1)  # project the reference point
+
     # Run n steps of gradient descent with step-size gamma
     x = x1
     x_saved = list()
@@ -121,14 +117,14 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     f_saved = list()
     f_occ = h
     for i in range(n):
-        x_saved.append(x-xRef)
+        x_saved.append(x - xRef)
         g, f = fis[i].oracle(x)
-        f_saved.append(f-fis[i].value(xRef))
+        f_saved.append(f - fis[i].value(xRef))
         g_saved.append(g)
         f_occ = f_occ + fis[i]
-        if i < n-1:
+        if i < n - 1:
             x = f_occ.stationary_point()
-    
+
     # Set the performance metric to the function values accuracy
     problem.set_performance_metric(np.sum(f_saved))
 
@@ -147,6 +143,7 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
+
 if __name__ == "__main__":
-    M, D, n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_follow_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 
+    M, D, n = 1, .5, 2
+    pepit_tau, theoretical_tau = wc_online_follow_leader(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)

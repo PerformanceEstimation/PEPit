@@ -45,10 +45,10 @@ from PEPit.examples.composite_convex_minimization import wc_three_operator_split
 from PEPit.examples.nonconvex_optimization import wc_gradient_descent as wc_gradient_descent_non_convex
 from PEPit.examples.nonconvex_optimization import wc_no_lips_1
 from PEPit.examples.nonconvex_optimization import wc_no_lips_2
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_naive_Lojasiewicz as wc_gradient_Lojasiewicz_a
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_refined_Lojasiewicz as wc_gradient_Lojasiewicz_b
-from PEPit.examples.nonconvex_optimization import wc_gradient_descent_expert_Lojasiewicz as wc_gradient_Lojasiewicz_c
-from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_DCA
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_naive as wc_gradient_lojasiewicz_a
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_intermediate as wc_gradient_lojasiewicz_b
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_expensive as wc_gradient_lojasiewicz_c
+from PEPit.examples.nonconvex_optimization import wc_difference_of_convex_algorithm as wc_dca
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_saga
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd_overparametrized
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_sgd
@@ -506,19 +506,19 @@ class TestExamplesCVXPY(unittest.TestCase):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
 
-        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_a(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
@@ -528,19 +528,19 @@ class TestExamplesCVXPY(unittest.TestCase):
         gamma = 1 / L
         alpha = (2*mu/(2*L+mu))
 
-        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_b(L, mu, gamma, n, alpha,wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
@@ -549,26 +549,26 @@ class TestExamplesCVXPY(unittest.TestCase):
         L, mu, n = 1, .2, 3
         gamma = 1 / L
         
-        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)) /2 / L
-        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
         
         gamma = (1+np.sqrt(3)/2) / L
-        wc, theory = wc_gradient_Lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
+        wc, theory = wc_gradient_lojasiewicz_c(L, mu, gamma, n, wrapper=self.wrapper, verbose=self.verbose)
         
         delta = self.relative_precision * theory
         self.assertLessEqual(wc, theory + delta)
 
     def test_DCA(self):
         L1, L2, mu1, mu2 = 2., 3.2, .2, .1
-        wc, theory = wc_DCA(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=6, alpha = 0, wrapper="mosek", solver=None, verbose=self.verbose)
+        wc, theory = wc_dca(mu1=mu1, mu2=mu2, L1=L1, L2=L2, n=6, alpha = 0, wrapper="mosek", solver=None, verbose=self.verbose)
 
         self.assertAlmostEqual(theory, wc, delta=self.relative_precision * theory)
 
@@ -669,7 +669,7 @@ class TestExamplesCVXPY(unittest.TestCase):
         n1, n2, L, gamma, beta = 1, 1, 1, 1 / 4, 1
 
         wc1, _ = wc_optimistic_gradient_operators_refined(n=n1, gamma=gamma, L=L, wrapper=self.wrapper, verbose=self.verbose)
-        wc2, _ = wc_optimistic_gradient_operators_refined_cocoercive(n=n2, gamma=gamma, mu=0, beta=beta, wrapper=self.wrapper, verbose=self.verbose)
+        wc2, _ = wc_optimistic_gradient_operators_refined_cocoercive(n=n2, gamma=gamma, beta=beta, wrapper=self.wrapper, verbose=self.verbose)
         self.assertLessEqual(wc2, wc1)
         
     def test_past_extragradient(self):

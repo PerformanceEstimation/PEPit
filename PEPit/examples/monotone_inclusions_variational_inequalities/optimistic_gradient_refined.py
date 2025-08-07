@@ -10,8 +10,9 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
 
         .. math:: \\mathrm{Find}\\, x_\\star \\in C\\text{ such that } \\left<F(x_\\star);x-x_\\star\\right> \\geqslant 0\\,\\,\\forall x\\in C,
 
-    where :math:`C` is a closed convex set and :math:`F` is maximally monotone and Lipschitz. In this example, we use the characterization of
-    Lipschitz monotone operators provided in [3, Proposition 3.15] (which results in more computationnaly expensive PEPs to be solved).
+    where :math:`C` is a closed convex set and :math:`F` is maximally monotone and Lipschitz.
+    In this example, we use the characterization of Lipschitz monotone operators provided in [3, Proposition 3.15]
+    (which results in more computationnaly expensive PEPs to be solved).
 
     This code computes a worst-case guarantee for the **optimistic gradient method**.
     That, it computes the smallest possible :math:`\\tau(n)` such that the guarantee
@@ -197,4 +198,6 @@ def wc_optimistic_gradient_refined(n, gamma, L, wrapper="cvxpy", solver=None, ve
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=1, gamma=1/4, L=1, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_optimistic_gradient_refined(n=1, gamma=1 / 4, L=1,
+                                                                wrapper="cvxpy", solver=None,
+                                                                verbose=1)

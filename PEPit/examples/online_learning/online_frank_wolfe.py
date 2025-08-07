@@ -5,6 +5,7 @@ from PEPit.functions import ConvexIndicatorFunction
 from PEPit.primitive_steps import proximal_step
 from PEPit.primitive_steps import linear_optimization_step
 
+
 def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the online convex minimization problem, whose goal is to sequentially minimize the regret
@@ -78,8 +79,8 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> M, D, n = 1,.5,2
-        >>> pepit_tau, theoretical_tau = wc_online_gradient_descent(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
+        >>> M, D, n = 1, .5, 2
+        >>> pepit_tau, theoretical_tau = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 10x10
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -111,37 +112,35 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     # Instantiate PEP
     problem = PEP()
-    
-    M_list = [ M  for i in range(n)]
-    eta = D/2/M * (3/n)**(3/4)
-    sigma = min([1,np.sqrt(3/n)])
-    
+
+    eta = D / (2 * M) * (3 / n) ** (3 / 4)
+    sigma = min([1, np.sqrt(3 / n)])
+
     # Declare a sequence of M-Lipschitz convex functions fi and an indicator function with Diameter D
-    fis = [problem.declare_function(ConvexLipschitzFunction, M=M_list[i])  for i in range(n)]
+    fis = [problem.declare_function(ConvexLipschitzFunction, M=M) for _ in range(n)]
     h = problem.declare_function(function_class=ConvexIndicatorFunction, D=D)
-    
-    F = np.sum(fis)
+
     # Defining a reference point
     xRef = problem.set_initial_point()
-    xRef,_,_ = proximal_step(xRef, h, 1) # project the reference point
-    
+    xRef, _, _ = proximal_step(xRef, h, 1)  # project the reference point
+
     # Then define the starting point x0 of the algorithm
     x1 = problem.set_initial_point()
-    x1,_,_ = proximal_step(x1, h, 1) # project the initial point
-    
+    x1, _, _ = proximal_step(x1, h, 1)  # project the initial point
+
     # Run n steps of the online Conditional Gradient / Frank-Wolfe method starting from x1
     x = x1
     acc_g = 0 * xRef
-    regret = 0 * xRef**2
-    
+    regret = 0 * xRef ** 2
+
     for i in range(n):
         g, f = fis[i].oracle(x)
         regret = regret + f - fis[i](xRef)
         acc_g = acc_g + g
-        dir_t = (x-x1) + eta * acc_g
+        dir_t = (x - x1) + eta * acc_g
         v, _, _ = linear_optimization_step(dir_t, h)
-        x = (1-sigma) * x + sigma * v
-        
+        x = (1 - sigma) * x + sigma * v
+
     # Set the performance metric to the function values accuracy
     problem.set_performance_metric(regret)
 
@@ -150,7 +149,7 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee
-    theoretical_tau = 4/3**(3/4) * M * D * n**(3/4)
+    theoretical_tau = 4 / 3 ** (3 / 4) * M * D * n ** (3 / 4)
 
     # Print conclusion if required
     if verbose != -1:
@@ -161,6 +160,7 @@ def wc_online_frank_wolfe(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
+
 if __name__ == "__main__":
-    M, D, n = 1,.5,2
-    pepit_tau, theoretical_tau = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1) 
+    M, D, n = 1, .5, 2
+    pepit_tau, theoretical_tau = wc_online_frank_wolfe(M=M, D=D, n=n, wrapper="cvxpy", solver=None, verbose=1)

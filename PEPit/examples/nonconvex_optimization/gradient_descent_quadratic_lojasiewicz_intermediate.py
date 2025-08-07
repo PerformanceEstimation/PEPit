@@ -1,8 +1,10 @@
-from PEPit import PEP
-from PEPit.functions import SmoothQuadraticLojasiewiczFunctionCheap
 import numpy as np
 
-def wc_gradient_descent_refined_Lojasiewicz(L, mu, gamma, n, alpha, wrapper="cvxpy", solver=None, verbose=1):
+from PEPit import PEP
+from PEPit.functions import SmoothQuadraticLojasiewiczFunctionCheap
+
+
+def wc_gradient_descent_quadratic_lojasiewicz_intermediate(L, mu, gamma, n, alpha, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the minimization problem
 
@@ -118,34 +120,34 @@ def wc_gradient_descent_refined_Lojasiewicz(L, mu, gamma, n, alpha, wrapper="cvx
     x0 = problem.set_initial_point()
 
     # Set the initial constraint that is the distance between x0 and x^*
-    problem.set_initial_condition( func(x0) - fs <= 1)
-    
+    problem.set_initial_condition(func(x0) - fs <= 1)
+
     # Run gradient descent
     x = x0
     for i in range(n):
         g = func.gradient(x)
         x = x - gamma * g
-    
+
     # Set up performance measure
-    problem.set_performance_metric( func(x) - fs )
-    
+    problem.set_performance_metric(func(x) - fs)
+
     # Solve
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
-    
     # Compute theoretical guarantee (see bounds in [4, Theorem 3])
     m, mp = -L, mu
-    if ( gamma >= 0 and gamma <= 1/L):
-        theoretical_tau = (mp * ( 1 - L * gamma) + np.sqrt( (L-m) * (m-mp) * (2-L*gamma) * mp * gamma + (L-m)**2 )**2 / (L-m+mp)**2)
-    elif (gamma >= 1/L and gamma <= 3/( m + L + np.sqrt( m**2 - L *m + L**2 ) ) ) :
-        theoretical_tau = ( ( L * gamma - 2 ) * ( m * gamma - 2 ) * mp * gamma ) / ( (L+m-mp) * gamma - 2) + 1
-    elif ( gamma >= 3 / ( m + L + np.sqrt( m**2 - m * L + L**2) ) and gamma <= 2/L ):
-        theoretical_tau = ( L * gamma - 1 )**2 / ( ( L * gamma - 1 )**2 + mp * gamma * ( 2 - L * gamma) )
+    if (gamma >= 0 and gamma <= 1 / L):
+        theoretical_tau = (mp * (1 - L * gamma) + np.sqrt(
+            (L - m) * (m - mp) * (2 - L * gamma) * mp * gamma + (L - m) ** 2) ** 2 / (L - m + mp) ** 2)
+    elif (gamma >= 1 / L and gamma <= 3 / (m + L + np.sqrt(m ** 2 - L * m + L ** 2))):
+        theoretical_tau = ((L * gamma - 2) * (m * gamma - 2) * mp * gamma) / ((L + m - mp) * gamma - 2) + 1
+    elif (gamma >= 3 / (m + L + np.sqrt(m ** 2 - m * L + L ** 2)) and gamma <= 2 / L):
+        theoretical_tau = (L * gamma - 1) ** 2 / ((L * gamma - 1) ** 2 + mp * gamma * (2 - L * gamma))
     else:
         theoretical_tau = None
 
-    theoretical_tau = theoretical_tau**n 
+    theoretical_tau = theoretical_tau ** n
 
     # Print conclusion if required
     if verbose != -1:
@@ -160,5 +162,6 @@ def wc_gradient_descent_refined_Lojasiewicz(L, mu, gamma, n, alpha, wrapper="cvx
 
 if __name__ == "__main__":
     L, mu, gamma, n = 1, .2, 1, 1
-    alpha = (2*mu/(2*L+mu))
-    pepit_tau, theoretical_tau = wc_gradient_descent_refined_Lojasiewicz(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
+    alpha = (2 * mu / (2 * L + mu))
+    pepit_tau, theoretical_tau = wc_gradient_descent_quadratic_lojasiewicz_intermediate(L=L, mu=mu, gamma=gamma, n=n, alpha=alpha,
+                                                                                        wrapper="cvxpy", solver=None, verbose=1)
