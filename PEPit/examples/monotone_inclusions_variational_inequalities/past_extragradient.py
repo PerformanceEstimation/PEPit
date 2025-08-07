@@ -1,6 +1,6 @@
 from PEPit import PEP
 from PEPit.functions import ConvexIndicatorFunction
-from PEPit.operators import LipschitzStronglyMonotoneOperator
+from PEPit.operators import LipschitzStronglyMonotoneOperatorCheap
 from PEPit.primitive_steps import proximal_step
 
 
@@ -81,16 +81,16 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06026638371348259
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06026638366058837
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0034351046829282e-09
-        		All the primal scalar constraints are verified up to an error of 8.834041276273297e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 1.0022302278988268e-09
+        		All the primal scalar constraints are verified up to an error of 8.796389172616159e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.653590985767508e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.799251158012433e-08
-        (PEPit) Final upper bound (dual): 0.06026638541530024 and lower bound (primal example): 0.06026638371348259 
-        (PEPit) Duality gap: absolute: 1.7018176451388811e-09 and relative: 2.823825722196363e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.659076198893817e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.8117161796698436e-08
+        (PEPit) Final upper bound (dual): 0.060266385363880064 and lower bound (primal example): 0.06026638366058837 
+        (PEPit) Duality gap: absolute: 1.7032916951875698e-09 and relative: 2.8262716156659814e-08
         *** Example file: worst-case performance of the Past Extragradient Method***
         	PEPit guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0602664 ||x0 - xs||^2
     
@@ -101,7 +101,7 @@ def wc_past_extragradient(n, gamma, L, wrapper="cvxpy", solver=None, verbose=1):
 
     # Declare an indicator function and a monotone operator
     ind_C = problem.declare_function(ConvexIndicatorFunction)
-    F = problem.declare_function(LipschitzStronglyMonotoneOperator, mu=0, L=L)
+    F = problem.declare_function(LipschitzStronglyMonotoneOperatorCheap, mu=0, L=L)
 
     total_problem = F + ind_C
 

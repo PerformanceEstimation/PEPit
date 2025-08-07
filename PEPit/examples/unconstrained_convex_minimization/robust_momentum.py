@@ -90,16 +90,16 @@ def wc_robust_momentum(mu, L, lam, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5285548454743232
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.5285548454804174
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
         		All the primal scalar constraints are verified
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.797521527290181e-08
-        (PEPit) Final upper bound (dual): 0.5285548474610776 and lower bound (primal example): 0.5285548454743232 
-        (PEPit) Duality gap: absolute: 1.9867544276408466e-09 and relative: 3.758842520605294e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.778431681160021e-08
+        (PEPit) Final upper bound (dual): 0.5285548474761074 and lower bound (primal example): 0.5285548454804174 
+        (PEPit) Duality gap: absolute: 1.9956899466322398e-09 and relative: 3.7757480868769724e-09
         *** Example file: worst-case performance of the Robust Momentum Method ***
         	PEPit guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)
         	Theoretical guarantee:	 v(x_(n+1)) <= 0.528555 v(x_n)

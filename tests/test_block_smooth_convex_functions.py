@@ -3,7 +3,7 @@ import unittest
 from PEPit import PEP
 from PEPit.point import Point
 from PEPit.function import Function
-from PEPit.functions.block_smooth_convex_function import BlockSmoothConvexFunction
+from PEPit.functions.block_smooth_convex_function_cheap import BlockSmoothConvexFunctionCheap
 from PEPit.functions.smooth_convex_function import SmoothConvexFunction
 
 
@@ -20,8 +20,8 @@ class TestConstraintsBlockSmoothConvex(unittest.TestCase):
         self.partition3 = self.pep.declare_block_partition(d=3)
 
         self.func1 = SmoothConvexFunction(L=self.L1)
-        self.func2 = BlockSmoothConvexFunction(L=self.L2, partition=self.partition2)
-        self.func3 = BlockSmoothConvexFunction(L=self.L3, partition=self.partition3)
+        self.func2 = BlockSmoothConvexFunctionCheap(L=self.L2, partition=self.partition2)
+        self.func3 = BlockSmoothConvexFunctionCheap(L=self.L3, partition=self.partition3)
 
         self.point1 = Point(is_leaf=True, decomposition_dict=None)
         self.point2 = Point(is_leaf=True, decomposition_dict=None)
@@ -41,8 +41,8 @@ class TestConstraintsBlockSmoothConvex(unittest.TestCase):
         self.assertIsInstance(self.func1, Function)
         self.assertIsInstance(self.func2, Function)
         self.assertIsInstance(self.func3, Function)
-        self.assertIsInstance(self.func3, BlockSmoothConvexFunction)
-        self.assertIsInstance(self.func2, BlockSmoothConvexFunction)
+        self.assertIsInstance(self.func3, BlockSmoothConvexFunctionCheap)
+        self.assertIsInstance(self.func2, BlockSmoothConvexFunctionCheap)
         self.assertIsInstance(self.func1, SmoothConvexFunction)
 
     def test_sizes(self):

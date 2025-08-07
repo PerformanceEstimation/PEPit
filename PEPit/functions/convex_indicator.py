@@ -1,5 +1,6 @@
 import numpy as np
 
+from PEPit.point import Point
 from PEPit.function import Function
 
 
@@ -10,15 +11,21 @@ class ConvexIndicatorFunction(Function):
 
     Attributes:
         D (float): upper bound on the diameter of the feasible set, possibly set to np.inf
-
-    Convex indicator functions are characterized by a parameter `D`, hence can be instantiated as
+        R (float): upper bound on the radius of the feasible set, possibly set to np.inf
+        center (Point): Center of the feasible set spanned by the radius constraint.
+                        If set to None, there exists such a point but it remains undefined.
+    Convex indicator functions are characterized by a parameter `D` and/or `R`, hence can be instantiated as
 
     Example:
         >>> from PEPit import PEP
+        >>> from PEPit import Point
         >>> from PEPit.functions import ConvexIndicatorFunction
         >>> problem = PEP()
-        >>> func = problem.declare_function(function_class=ConvexIndicatorFunction, D=1)
-
+        >>> func1 = problem.declare_function(function_class=ConvexIndicatorFunction, D=1)
+        >>> func2 = problem.declare_function(function_class=ConvexIndicatorFunction, R=1)
+        >>> omega = Point()
+        >>> func3 = problem.declare_function(function_class=ConvexIndicatorFunction, R=1, center=omega)
+        
     References:
 
     `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
@@ -30,6 +37,8 @@ class ConvexIndicatorFunction(Function):
 
     def __init__(self,
                  D=np.inf,
+                 R=np.inf,
+                 center=None,
                  is_leaf=True,
                  decomposition_dict=None,
                  reuse_gradient=False,
@@ -38,6 +47,9 @@ class ConvexIndicatorFunction(Function):
 
         Args:
             D (float): Diameter of the support of self. Default value set to infinity.
+            R (float): Radius of the support of self. Default value set to infinity.
+            center: Center of the feasible set spanned by the radius constraint of self. Default value set to None.
+                    If the value is None, the feasible set is centered on the origin.
             is_leaf (bool): True if self is defined from scratch.
                             False if self is defined as linear combination of leaf.
             decomposition_dict (dict): Decomposition of self as linear combination of leaf :class:`Function` objects.
@@ -56,6 +68,13 @@ class ConvexIndicatorFunction(Function):
 
         # Store the diameter D in an attribute
         self.D = D
+        # Store the radius R in an attribute
+        self.R = R
+        # Store the center in an attribute
+        if center is None and self.R != np.inf:
+            self.center = Point()
+        else:
+            self.center = center
 
     @staticmethod
     def set_value_constraint_i(xi, gi, fi):
@@ -93,6 +112,18 @@ class ConvexIndicatorFunction(Function):
 
         return constraint
 
+    def set_radius_constraint_i(self,
+                                xi, gi, fi,
+                                ):
+        """
+        Formulate the constraints bounding the radius of the support of self around self.center.
+
+        """
+        # Radius constraint
+        constraint = ((xi - self.center)**2 <= self.R ** 2)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of interpolation constraints for self (closed convex indicator function),
@@ -108,9 +139,16 @@ class ConvexIndicatorFunction(Function):
                                                       constraint_name="convexity",
                                                       set_class_constraint_i_j=self.set_convexity_constraint_i_j,
                                                       )
+
         if self.D != np.inf:
             self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                           list_of_points_2=self.list_of_points,
                                                           constraint_name="diameter",
                                                           set_class_constraint_i_j=self.set_diameter_constraint_i_j,
                                                           )
+
+        if self.R != np.inf:
+            self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                         constraint_name="radius",
+                                                         set_class_constraint_i=self.set_radius_constraint_i,
+                                                         )

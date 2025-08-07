@@ -88,32 +88,32 @@ def wc_frank_wolfe(L, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953904645822
-        (PEPit) Postprocessing: 15 eigenvalue(s) > 1.6888130186731306e-08 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07828953896022825
+        (PEPit) Postprocessing: 15 eigenvalue(s) > 1.6901731014750697e-08 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953725941896
-        (PEPit) Postprocessing: 11 eigenvalue(s) > 1.1861651266980264e-08 after 1 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953903506054
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953827556187
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 5.259349500958895e-09 after 1 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953894898742
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 2 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953903905457
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953893021713
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 3 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953893599122
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953878629332
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 4 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953897127347
-        (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 5 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953853593198
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953886867731
+        (PEPit) Postprocessing: 11 eigenvalue(s) > 3.5625534521309287e-12 after 5 dimension reduction step(s)
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953860484489
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after 6 dimension reduction step(s)
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953853593198
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07818953860484489
         (PEPit) Postprocessing: 11 eigenvalue(s) > 0 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.838754901390161e-10
-        		All the primal scalar constraints are verified up to an error of 9.411701695771768e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.3614813402196086e-10
+        		All the primal scalar constraints are verified up to an error of 6.596046486784246e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.474580080029191e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2084335345375351e-07
-        (PEPit) Final upper bound (dual): 0.07828954284798424 and lower bound (primal example): 0.07818953853593198 
-        (PEPit) Duality gap: absolute: 0.00010000431205225979 and relative: 0.0012789986221277267
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.4682721500621377e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2155275372348722e-07
+        (PEPit) Final upper bound (dual): 0.07828954275558239 and lower bound (primal example): 0.07818953860484489 
+        (PEPit) Duality gap: absolute: 0.00010000415073750657 and relative: 0.001278996557875966
         *** Example file: worst-case performance of the Conditional Gradient (Frank-Wolfe) in function value ***
         	PEPit guarantee:	 f(x_n)-f_* == 0.0782895 ||x0 - xs||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x0 - xs||^2

@@ -96,20 +96,20 @@ def wc_optimized_gradient(L, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0767518265733206
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.07675182658909867
         (PEPit) Postprocessing: 6 eigenvalue(s) > 0 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.0766518263678761
-        (PEPit) Postprocessing: 1 eigenvalue(s) > 8.430457643734283e-09 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.07665182638365314
+        (PEPit) Postprocessing: 1 eigenvalue(s) > 8.430486098367942e-09 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.872825531822352e-11
-        		All the primal scalar constraints are verified up to an error of 1.9493301200643187e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 5.872882200186105e-11
+        		All the primal scalar constraints are verified up to an error of 1.9493406411622005e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.3578267940913163e-09
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.653093053290753e-08
-        (PEPit) Final upper bound (dual): 0.0767518302587488 and lower bound (primal example): 0.0766518263678761 
-        (PEPit) Duality gap: absolute: 0.00010000389087269634 and relative: 0.0013046511167619983
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.3554960855935635e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.7023258253444443e-08
+        (PEPit) Final upper bound (dual): 0.07675183030228215 and lower bound (primal example): 0.07665182638365314 
+        (PEPit) Duality gap: absolute: 0.00010000391862900748 and relative: 0.0013046514786023995
         *** Example file: worst-case performance of optimized gradient method ***
         	PEPit guarantee:	 f(y_n)-f_* == 0.0767518 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(y_n)-f_* <= 0.0767518 ||x_0 - x_*||^2

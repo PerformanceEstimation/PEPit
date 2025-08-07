@@ -4,10 +4,15 @@ from PEPit.function import Function
 from PEPit.block_partition import BlockPartition
 
 
-class BlockSmoothConvexFunction(Function):
+class BlockSmoothConvexFunctionCheap(Function):
     """
-    The :class:`BlockSmoothConvexFunction` class overwrites the `add_class_constraints` method of :class:`Function`,
+    The :class:`BlockSmoothConvexFunctionCheap` class overwrites the `add_class_constraints` method of :class:`Function`,
     by implementing necessary constraints for interpolation of the class of smooth convex functions by blocks.
+
+    Warning:
+        Functions that are smooth by blocks and convex generally do not enjoy known interpolation conditions.
+        The conditions implemented in this class are necessary but a priori not sufficient for interpolation.
+        Hence, the numerical results obtained when using this class might be non-tight upper bounds.
 
     Attributes:
         partition (BlockPartition): partitioning of the variables (in blocks).
@@ -18,11 +23,11 @@ class BlockSmoothConvexFunction(Function):
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.functions import BlockSmoothConvexFunction
+        >>> from PEPit.functions import BlockSmoothConvexFunctionCheap
         >>> problem = PEP()
         >>> partition = problem.declare_block_partition(d=3)
         >>> L = [1, 4, 10]
-        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunction, partition=partition, L=L)
+        >>> func = problem.declare_function(function_class=BlockSmoothConvexFunctionCheap, partition=partition, L=L)
 
     References:
 

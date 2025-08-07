@@ -27,6 +27,7 @@ from .subgradient_method import wc_subgradient_method
 from .subgradient_method_rsi_eb import wc_subgradient_method_rsi_eb
 from .triple_momentum import wc_triple_momentum
 
+
 __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'accelerated_gradient_strongly_convex', 'wc_accelerated_gradient_strongly_convex',
            'accelerated_proximal_point', 'wc_accelerated_proximal_point',
@@ -40,6 +41,8 @@ __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
            'gradient_descent_qg_convex_decreasing', 'wc_gradient_descent_qg_convex_decreasing',
            'gradient_descent_quadratics', 'wc_gradient_descent_quadratics',
            'gradient_exact_line_search', 'wc_gradient_exact_line_search',
+           'gradient_descent_silver_stepsize_convex', 'wc_gradient_descent_silver_stepsize_convex',
+           'gradient_descent_silver_stepsize_strongly_convex', 'wc_gradient_descent_silver_stepsize_strongly_convex',
            'heavy_ball_momentum', 'wc_heavy_ball_momentum',
            'heavy_ball_momentum_qg_convex', 'wc_heavy_ball_momentum_qg_convex',
            'inexact_accelerated_gradient', 'wc_inexact_accelerated_gradient',

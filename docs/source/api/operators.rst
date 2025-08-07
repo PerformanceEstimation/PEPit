@@ -29,9 +29,15 @@ Nonexpansive
    :members:
    :show-inheritance:
 
-Strongly monotone and Lipschitz continuous
-------------------------------------------
-.. autoclass:: PEPit.operators.LipschitzStronglyMonotoneOperator
+Strongly monotone and Lipschitz continuous (cheap version)
+----------------------------------------------------------
+.. autoclass:: PEPit.operators.LipschitzStronglyMonotoneOperatorCheap
+   :members:
+   :show-inheritance:
+
+Strongly monotone and Lipschitz continuous (expensive version)
+--------------------------------------------------------------
+.. autoclass:: PEPit.operators.LipschitzStronglyMonotoneOperatorExpensive
    :members:
    :show-inheritance:
 
@@ -41,9 +47,15 @@ Cocoercive
    :members:
    :show-inheritance:
 
-Cocoercive and strongly monotone
---------------------------------
-.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperator
+Cocoercive and strongly monotone (cheap version)
+------------------------------------------------
+.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperatorCheap
+   :members:
+   :show-inheritance:
+
+Cocoercive and strongly monotone (expensive version)
+----------------------------------------------------
+.. autoclass:: PEPit.operators.CocoerciveStronglyMonotoneOperatorExpensive
    :members:
    :show-inheritance:
 

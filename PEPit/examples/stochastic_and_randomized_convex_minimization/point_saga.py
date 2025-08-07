@@ -103,16 +103,16 @@ def wc_point_saga(L, mu, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9714053953788857
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9714053953199334
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.818284021357577e-10
-        		All the primal scalar constraints are verified up to an error of 4.496377781215699e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.5747500536954106e-10
+        		All the primal scalar constraints are verified up to an error of 4.2740396999363384e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.574069365446737e-07
-        (PEPit) Final upper bound (dual): 0.9714053958630251 and lower bound (primal example): 0.9714053953788857 
-        (PEPit) Duality gap: absolute: 4.841393952403905e-10 and relative: 4.983906796724733e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 6.311609088578054e-07
+        (PEPit) Final upper bound (dual): 0.9714053957803594 and lower bound (primal example): 0.9714053953199334 
+        (PEPit) Duality gap: absolute: 4.6042603063511933e-10 and relative: 4.739792807960239e-10
         *** Example file: worst-case performance of Point SAGA for a given Lyapunov function ***
         	PEPit guarantee:	 E[V(x^(1))] <= 0.971405 V(x^(0))
         	Theoretical guarantee:	 E[V(x^(1))] <= 0.973292 V(x^(0))

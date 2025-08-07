@@ -71,16 +71,16 @@ def wc_bregman_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06666666577966435
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.06666666577966336
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 7.300917023722597e-10
+        		All the primal scalar constraints are verified up to an error of 7.300920007446976e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.627346042650288e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1600769917201519e-08
-        (PEPit) Final upper bound (dual): 0.06666666638907502 and lower bound (primal example): 0.06666666577966435 
-        (PEPit) Duality gap: absolute: 6.094106747012162e-10 and relative: 9.1411602421417e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 3.627362036465223e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.1600747813276144e-08
+        (PEPit) Final upper bound (dual): 0.06666666638907442 and lower bound (primal example): 0.06666666577966336 
+        (PEPit) Duality gap: absolute: 6.094110632792749e-10 and relative: 9.14116607081279e-09
         *** Example file: worst-case performance of the Bregman Proximal Point in function values ***
         	PEPit guarantee:	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)
         	Theoretical guarantee:	 F(x_n)-F_* <= 0.0666667 Dh(x_*; x_0)

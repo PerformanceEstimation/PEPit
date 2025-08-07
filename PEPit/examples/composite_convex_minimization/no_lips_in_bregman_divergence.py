@@ -90,16 +90,16 @@ def wc_no_lips_in_bregman_divergence(L, gamma, n, wrapper="cvxpy", solver=None, 
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.022222222222201146
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.022222222222193107
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 2.9698465908722937e-15
+        		All the primal scalar constraints are verified up to an error of 3.566591466608315e-15
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.016518693845357e-15
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0942663016198577e-13
-        (PEPit) Final upper bound (dual): 0.022222222222206895 and lower bound (primal example): 0.022222222222201146 
-        (PEPit) Duality gap: absolute: 5.748873599387139e-15 and relative: 2.586993119726666e-13
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 7.9017853022551e-15
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.7006729706018063e-13
+        (PEPit) Final upper bound (dual): 0.02222222222220066 and lower bound (primal example): 0.022222222222193107 
+        (PEPit) Duality gap: absolute: 7.552986014403018e-15 and relative: 3.398843706485811e-13
         *** Example file: worst-case performance of the NoLips_2 in Bregman divergence ***
         	PEPit guarantee:	 min_t Dh(x_(t-1); x_t) <= 0.0222222 Dh(x_*; x_0)
         	Theoretical guarantee:	 min_t Dh(x_(t-1); x_t) <= 0.0222222 Dh(x_*; x_0)

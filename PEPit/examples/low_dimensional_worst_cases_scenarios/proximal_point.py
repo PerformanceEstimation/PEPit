@@ -65,20 +65,20 @@ def wc_proximal_point(alpha, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.0350493891186265
-        (PEPit) Postprocessing: 3 eigenvalue(s) > 6.668982718413771e-09 before dimension reduction
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.03504938911859705
+        (PEPit) Postprocessing: 3 eigenvalue(s) > 6.66897064282442e-09 before dimension reduction
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03494938907009
-        (PEPit) Postprocessing: 2 eigenvalue(s) > 3.285085131308424e-10 after dimension reduction
+        (PEPit) Solver status: optimal (solver: MOSEK); objective value: 0.03494938907006561
+        (PEPit) Postprocessing: 2 eigenvalue(s) > 3.285089843486249e-10 after dimension reduction
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.8548497077664176e-11
-        		All the primal scalar constraints are verified up to an error of 1.1291529170009973e-10
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.854333827729659e-11
+        		All the primal scalar constraints are verified up to an error of 1.1289407950143548e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.034322726414018e-08
-        (PEPit) Final upper bound (dual): 0.03504939011652487 and lower bound (primal example): 0.03494938907009 
-        (PEPit) Duality gap: absolute: 0.00010000104643487218 and relative: 0.0028613102859773296
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0333995201109465e-08
+        (PEPit) Final upper bound (dual): 0.035049390116491635 and lower bound (primal example): 0.03494938907006561 
+        (PEPit) Duality gap: absolute: 0.00010000104642602509 and relative: 0.0028613102857261864
         *** Example file: worst-case performance of the Proximal Point Method***
         	PEPit guarantee:	 ||x(n) - x(n-1)||^2 == 0.0350494 ||x0 - xs||^2
         	Theoretical guarantee:	 ||x(n) - x(n-1)||^2 <= 0.0350494 ||x0 - xs||^2

@@ -83,16 +83,16 @@ def wc_heavy_ball_momentum_qg_convex(L, n, wrapper="cvxpy", solver=None, verbose
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.08333333312648067
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.08333333312677232
         (PEPit) Primal feasibility check:
         		The solver found a Gram matrix that is positive semi-definite
-        		All the primal scalar constraints are verified up to an error of 1.0360445487633818e-10
+        		All the primal scalar constraints are verified up to an error of 1.0357759788748311e-10
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.384283773139436e-11
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.3121924686696765e-09
-        (PEPit) Final upper bound (dual): 0.08333333333812117 and lower bound (primal example): 0.08333333312648067 
-        (PEPit) Duality gap: absolute: 2.1164049679445185e-10 and relative: 2.539685967837512e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 9.410870890813632e-11
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.3134912789184716e-09
+        (PEPit) Final upper bound (dual): 0.08333333333831308 and lower bound (primal example): 0.08333333312677232 
+        (PEPit) Duality gap: absolute: 2.1154075713347709e-10 and relative: 2.5384890918939593e-09
         *** Example file: worst-case performance of the Heavy-Ball method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0833333 ||x_0 - x_*||^2

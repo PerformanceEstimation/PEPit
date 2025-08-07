@@ -10,7 +10,7 @@ class NegativelyComonotoneOperator(Function):
         Those constraints might not be sufficient, thus the caracterized class might contain more operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Attributes:
         rho (float): comonotonicity parameter (>0)

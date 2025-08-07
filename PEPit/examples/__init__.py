@@ -10,4 +10,5 @@ __all__ = ['unconstrained_convex_minimization',
            'low_dimensional_worst_cases_scenarios',
            'tutorials',
            'continuous_time_models',
+           'online_learning',
            ]

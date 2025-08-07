@@ -41,9 +41,9 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
 
     **Theoretical guarantee**: An empirically tight one-iteration guarantee is provided in the code of PESTO [1]:
 
-        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + \\frac{1}{2}\\left(1-\\frac{\\mu}{L}\\right) R \\sqrt{\\left(1-\\frac{\\mu}{L}\\right)^2 R^2 + 4\\frac{v^2}{L^2}} + \\frac{v^2}{L^2},
+        .. math:: \\mathbb{E}\\left[\\|x_1 - x_\\star\\|^2\\right] \\leqslant \\left( \\gamma\\frac{L-\\mu}{2}R + \\sqrt{\\left(1-\\gamma\\frac{L+\\mu}{2}\\right)^2 R^2 + \\gamma^2 v^2} \\right)^2.
 
-    when :math:`\\gamma=\\frac{1}{L}`. Note that we observe the guarantee does not depend on the number :math:`n` of
+    Note that we observe the guarantee does not depend on the number :math:`n` of
     functions for this particular setting, thereby implying that the guarantees are also valid for expectation
     minimization settings (i.e., when :math:`n` goes to infinity).
 
@@ -72,7 +72,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         wrapper (str): the name of the wrapper to be used.
         solver (str): the name of the solver the wrapper should use.
         verbose (int): level of information details to print.
-                        
+
                         - -1: No verbose at all.
                         - 0: This example's output.
                         - 1: This example's output + PEPit information.
@@ -85,7 +85,7 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
     Example:
         >>> mu = 0.1
         >>> L = 1
-        >>> gamma = 1 / L
+        >>> gamma = .7 / L
         >>> pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 11x11
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
@@ -105,19 +105,19 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 5.041652165318314
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 4.183000394303014
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.85488416412956e-09
-        		All the primal scalar constraints are verified up to an error of 2.157126582913449e-08
+        		The solver found a Gram matrix that is positive semi-definite
+        		All the primal scalar constraints are verified up to an error of 1.2212453270876722e-15
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.9611762548955365e-07
-        (PEPit) Final upper bound (dual): 5.041652154374022 and lower bound (primal example): 5.041652165318314 
-        (PEPit) Duality gap: absolute: -1.094429169512523e-08 and relative: -2.170774844486766e-09
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.3274065824196207e-07
+        (PEPit) Final upper bound (dual): 4.183000393816744 and lower bound (primal example): 4.183000394303014 
+        (PEPit) Duality gap: absolute: -4.862696911800413e-10 and relative: -1.1624901872883166e-10
         *** Example file: worst-case performance of stochastic gradient descent with fixed step-size ***
-        	PEPit guarantee:	 E[||x_1 - x_*||^2] <= 5.04165
-        	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 5.04165
+        	PEPit guarantee:	 E[||x_1 - x_*||^2] <= 4.183
+        	Theoretical guarantee:	 E[||x_1 - x_*||^2] <= 4.183
     
     """
 
@@ -151,9 +151,8 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    kappa = L / mu
-    theoretical_tau = 1 / 2 * (1 - 1 / kappa) ** 2 * R ** 2 + 1 / 2 * (1 - 1 / kappa) * R * np.sqrt(
-        (1 - 1 / kappa) ** 2 * R ** 2 + 4 * v ** 2 / L ** 2) + v ** 2 / L ** 2
+    theoretical_tau = (gamma * R * (L - mu) / 2 + np.sqrt(
+        R ** 2 * (L + mu) ** 2 / 4 * (gamma - 2 / (L + mu)) ** 2 + v ** 2 * gamma ** 2)) ** 2
 
     # Print conclusion if required
     if verbose != -1:
@@ -168,5 +167,5 @@ def wc_sgd(L, mu, gamma, v, R, n, wrapper="cvxpy", solver=None, verbose=1):
 if __name__ == "__main__":
     mu = 0.1
     L = 1
-    gamma = 1 / L
+    gamma = .7 / L
     pepit_tau, theoretical_tau = wc_sgd(L=L, mu=mu, gamma=gamma, v=1, R=2, n=5, wrapper="cvxpy", solver=None, verbose=1)

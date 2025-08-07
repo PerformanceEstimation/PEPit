@@ -1,26 +1,26 @@
-Continuous-time models
-======================
+Online learning and convex optimization 
+=======================================
 
 .. contents::
    :depth: 1
    :local:
 
 
-Gradient flow for strongly convex functions
--------------------------------------------
-.. autofunction:: PEPit.examples.continuous_time_models.wc_gradient_flow_strongly_convex
+Online gradient descent (OGD)
+-----------------------------
+.. autofunction:: PEPit.examples.online_learning.wc_online_gradient_descent
 
 
-Gradient flow for convex functions
-----------------------------------
-.. autofunction:: PEPit.examples.continuous_time_models.wc_gradient_flow_convex
+Online Frank-Wolfe (OFW)
+------------------------
+.. autofunction:: PEPit.examples.online_learning.wc_online_frank_wolfe
 
 
-Accelerated gradient flow for strongly convex functions
--------------------------------------------------------
-.. autofunction:: PEPit.examples.continuous_time_models.wc_accelerated_gradient_flow_strongly_convex
+Follow-the-leader (FTL)
+-----------------------
+.. autofunction:: PEPit.examples.online_learning.wc_online_follow_leader
 
 
-Accelerated gradient flow for convex functions
-----------------------------------------------
-.. autofunction:: PEPit.examples.continuous_time_models.wc_accelerated_gradient_flow_convex
+Follow-the-regularized-leader (FTRL)
+------------------------------------
+.. autofunction:: PEPit.examples.online_learning.wc_online_follow_regularized_leader

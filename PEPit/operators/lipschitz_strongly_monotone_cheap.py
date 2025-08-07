@@ -2,14 +2,14 @@ import numpy as np
 from PEPit.function import Function
 
 
-class LipschitzStronglyMonotoneOperator(Function):
+class LipschitzStronglyMonotoneOperatorCheap(Function):
     """
-    The :class:`LipschitzStronglyMonotoneOperator` class overwrites the `add_class_constraints` method
+    The :class:`LipschitzStronglyMonotoneOperatorCheap` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
     for the class of Lipschitz continuous strongly monotone (and maximally monotone) operators.
 
     Note:
-        Operator values can be requested through `gradient` and `function values` should not be used.
+        Operator values can be requested through `gradient`, and `function values` should not be used.
 
     Warning:
         Lipschitz strongly monotone operators do not enjoy known interpolation conditions. The conditions implemented
@@ -25,15 +25,16 @@ class LipschitzStronglyMonotoneOperator(Function):
 
     Example:
         >>> from PEPit import PEP
-        >>> from PEPit.operators import LipschitzStronglyMonotoneOperator
+        >>> from PEPit.operators import LipschitzStronglyMonotoneOperatorCheap
         >>> problem = PEP()
-        >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperator, mu=.1, L=1.)
+        >>> h = problem.declare_function(function_class=LipschitzStronglyMonotoneOperatorCheap, mu=.1, L=1.)
 
     References:
-        `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
-        Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
-        SIAM Journal on Optimization, 30(3), 2251-2271.
-        <https://arxiv.org/pdf/1812.00146.pdf>`_
+
+    `[1] E. Ryu, A. Taylor, C. Bergeling, P. Giselsson (2020).
+    Operator splitting performance estimation: Tight contraction factors and optimal parameter selection.
+    SIAM Journal on Optimization, 30(3), 2251-2271.
+    <https://arxiv.org/pdf/1812.00146.pdf>`_
 
     """
 

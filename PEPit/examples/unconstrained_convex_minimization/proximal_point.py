@@ -74,16 +74,16 @@ def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.020833335685730252
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.02083333568572521
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.626659005644299e-09
-        		All the primal scalar constraints are verified up to an error of 1.1386158081487519e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.626657775567276e-09
+        		All the primal scalar constraints are verified up to an error of 1.13861532216597e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0464297827437203e-08
-        (PEPit) Final upper bound (dual): 0.020833337068527292 and lower bound (primal example): 0.020833335685730252 
-        (PEPit) Duality gap: absolute: 1.382797040067052e-09 and relative: 6.637425042856655e-08
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.0463811740572e-08
+        (PEPit) Final upper bound (dual): 0.020833337068521363 and lower bound (primal example): 0.02083333568572521 
+        (PEPit) Duality gap: absolute: 1.3827961518886323e-09 and relative: 6.637420779602328e-08
         *** Example file: worst-case performance of proximal point method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0208333 ||x_0 - x_*||^2

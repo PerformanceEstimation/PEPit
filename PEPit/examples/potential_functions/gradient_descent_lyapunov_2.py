@@ -71,16 +71,16 @@ def wc_gradient_descent_lyapunov_2(L, gamma, n, wrapper="cvxpy", solver=None, ve
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 4.129020680920803e-09
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 7.787519962221268e-09
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 2.3114964936226548e-11
-        		All the primal scalar constraints are verified up to an error of 2.3376856006507296e-11
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 4.552057438244044e-11
+        		All the primal scalar constraints are verified up to an error of 5.6992632835317636e-11
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 4.907374995917855e-13
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 7.181842880899949e-09
-        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 4.129020680920803e-09 
-        (PEPit) Duality gap: absolute: -4.129020680920803e-09 and relative: -1.0
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.622871625720458e-08
+        (PEPit) Final upper bound (dual): 0.0 and lower bound (primal example): 7.787519962221268e-09 
+        (PEPit) Duality gap: absolute: -7.787519962221268e-09 and relative: -1.0
         *** Example file: worst-case performance of gradient descent with fixed step size for a given Lyapunov function***
         	PEPit guarantee:	V_(n+1) - V_(n) <= 0.0
         	Theoretical guarantee:	V_(n+1) - V_(n) <= 0.0

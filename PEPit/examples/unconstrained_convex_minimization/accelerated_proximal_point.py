@@ -97,16 +97,16 @@ def wc_accelerated_proximal_point(A0, gammas, n, wrapper="cvxpy", solver=None, v
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.015931148923290624
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.01593114892329127
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.713119626105772e-10
-        		All the primal scalar constraints are verified up to an error of 1.4460231649235378e-09
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 3.7131214110874085e-10
+        		All the primal scalar constraints are verified up to an error of 1.4460238423330551e-09
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.0490523713620816e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.9451787884841313e-09
-        (PEPit) Final upper bound (dual): 0.015931149263944334 and lower bound (primal example): 0.015931148923290624 
-        (PEPit) Duality gap: absolute: 3.4065371010139067e-10 and relative: 2.138287148915985e-08
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.0490532342962685e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.945112502095782e-09
+        (PEPit) Final upper bound (dual): 0.01593114926394514 and lower bound (primal example): 0.01593114892329127 
+        (PEPit) Duality gap: absolute: 3.4065386969595046e-10 and relative: 2.138288150692735e-08
         *** Example file: worst-case performance of fast proximal point method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.0159311 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
         	Theoretical guarantee:	 f(x_n)-f_* <= 0.0511881 (f(x_0) - f_* + A/2* ||x_0 - x_*||^2)
