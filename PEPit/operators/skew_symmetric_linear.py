@@ -78,6 +78,17 @@ class SkewSymmetricLinearOperator(Function):
 
         return constraint
 
+    @staticmethod
+    def set_diagonal_linear_constraint_i(xi, gi, fi,
+                                         ):
+        """
+        Formulates the list of interpolation constraints for self (Skew-symmetric linear operator).
+        """
+        # Interpolation conditions of symmetric linear operators class
+        constraint = (xi * gi == 0)
+
+        return constraint
+
     def add_class_constraints(self):
         """
         Formulates the list of necessary and sufficient conditions for interpolation of self
@@ -90,8 +101,13 @@ class SkewSymmetricLinearOperator(Function):
                                                       constraint_name="antisymmetric_linearity",
                                                       set_class_constraint_i_j=
                                                       self.set_antisymmetric_linear_constraint_i_j,
-                                                      symmetry=-1,
+                                                      symmetry=True,
                                                       )
+        self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
+                                                     constraint_name="diagonal_linearity",
+                                                     set_class_constraint_i=
+                                                     self.set_diagonal_linear_constraint_i,
+                                                     )
 
         # Create a PSD matrix to enforce the singular values to be smaller than L
         N = len(self.list_of_points)
