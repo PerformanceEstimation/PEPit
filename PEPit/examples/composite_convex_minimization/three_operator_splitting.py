@@ -16,14 +16,13 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
     and :math:`f_3` is :math:`L_3`-smooth convex.
     Proximal operators are assumed to be available for :math:`f_1` and :math:`f_2`.
 
-    This code computes a worst-case guarantee for the **Three Operator Splitting (TOS)**.
+    This code computes the worst-case guarantee of the contraction achieved by the **Three Operator Splitting (TOS)**.
     That is, it computes the smallest possible :math:`\\tau(n, L_1, L_3, \\mu_1)` such that the guarantee
 
     .. math:: \\|w^{(0)}_{n} - w^{(1)}_{n}\\|^2 \\leqslant \\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta) \\|w^{(0)}_{0} - w^{(1)}_{0}\\|^2
 
     is valid, where :math:`w^{(0)}_{0}` and :math:`w^{(1)}_{0}` are two different starting points
     and :math:`w^{(0)}_{n}` and :math:`w^{(1)}_{n}` are the two corresponding :math:`n^{\\mathrm{th}}` outputs of TOS.
-    (i.e., how do the iterates contract when the method is started from two different initial points).
 
     In short, for given values of :math:`n`, :math:`L_1`, :math:`L_3`, :math:`\\mu_1`, :math:`\\alpha`
     and :math:`\\theta`, the contraction factor :math:`\\tau(n, L_1, L_3, \\mu_1, \\alpha, \\theta)`
@@ -146,7 +145,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of the Three Operator Splitting in distance ***')
-        print('\tPEPit guarantee:\t ||w^2_n - w^1_n||^2 <= {:.6} ||x0 - ws||^2'.format(pepit_tau))
+        print('\tPEPit guarantee:\t ||w^1_n - w^0_n||^2 <= {:.6} ||w^1_0 - w^0_0||^2'.format(pepit_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the upper theoretical value)
     return pepit_tau, theoretical_tau
