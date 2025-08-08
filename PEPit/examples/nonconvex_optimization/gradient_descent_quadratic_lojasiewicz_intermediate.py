@@ -79,7 +79,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_intermediate(L, mu, gamma, n, alph
     Example:
         >>> L, mu, gamma, n = 1, .2, 1, 1
         >>> alpha = (2*mu/(2*L+mu))
-        >>> pepit_tau, theoretical_tau = wc_gradient_descent_refinedLojasiewicz(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_gradient_descent_quadratic_lojasiewicz_intermediate(L=L, gamma=gamma, n=1, alpha=alpha, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -101,7 +101,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_intermediate(L, mu, gamma, n, alph
         (PEPit) Final upper bound (dual): 0.7272727272394729 and lower bound (primal example): 0.727272727239017 
         (PEPit) Duality gap: absolute: 4.558575739110893e-13 and relative: 6.268041641568012e-13
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-        *** 	 (smooth problem satisfying a Lojasiewicz inequality; refined version) ***
+        *** 	 (smooth problem satisfying a Lojasiewicz inequality; intermediate version) ***
         	PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
     
@@ -152,7 +152,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_intermediate(L, mu, gamma, n, alph
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; refined version) ***')
+        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; intermediate version) ***')
         print('\tPEPit guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 

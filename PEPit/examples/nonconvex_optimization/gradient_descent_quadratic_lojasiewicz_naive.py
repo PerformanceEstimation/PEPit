@@ -95,7 +95,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_naive(L, mu, gamma, n, wrapper="cv
         (PEPit) Final upper bound (dual): 0.7272727115834279 and lower bound (primal example): 0.7272727088286305 
         (PEPit) Duality gap: absolute: 2.754797390203123e-09 and relative: 3.7878465075914795e-09
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-        *** 	 (smooth problem satisfying a Lojasiewicz inequality; basic version) ***
+        *** 	 (smooth problem satisfying a Lojasiewicz inequality; cheap naive version) ***
         	PEPit guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
     
@@ -146,7 +146,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_naive(L, mu, gamma, n, wrapper="cv
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; basic version) ***')
+        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; cheap naive version) ***')
         print('\tPEPit guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
