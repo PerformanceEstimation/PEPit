@@ -92,7 +92,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_naive(L, mu, gamma, n, wrapper="cv
         		The solver found a residual matrix that is positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 6.45387237307569e-09
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 3.656794643018536e-08
-        (PEPit) Final upper bound (dual): 0.7272727115834279 and lower bound (primal example): 0.7272727088286305
+        (PEPit) Final upper bound (dual): 0.7272727115834279 and lower bound (primal example): 0.7272727088286305 
         (PEPit) Duality gap: absolute: 2.754797390203123e-09 and relative: 3.7878465075914795e-09
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
         *** 	 (smooth problem satisfying a Lojasiewicz inequality; basic version) ***

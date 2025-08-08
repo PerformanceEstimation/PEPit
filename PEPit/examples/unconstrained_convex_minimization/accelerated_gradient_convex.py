@@ -89,7 +89,7 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
         (PEPit) Duality gap: absolute: 3.834839723548811e-09 and relative: 2.3009039102756247e-08
         *** Example file: worst-case performance of accelerated gradient method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-        	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.5 ||x_0 - x_*||^2
     
     """
     # Instantiate PEP

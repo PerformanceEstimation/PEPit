@@ -97,7 +97,7 @@ def wc_three_operator_splitting(mu1, L1, L3, alpha, theta, n, wrapper="cvxpy", s
         (PEPit) Final upper bound (dual): 0.4754523347677999 and lower bound (primal example): 0.4754523346392658 
         (PEPit) Duality gap: absolute: 1.285341277856844e-10 and relative: 2.703407227628939e-10
         *** Example file: worst-case performance of the Three Operator Splitting in distance ***
-        	PEPit guarantee:	 ||w^2_n - w^1_n||^2 <= 0.475452 ||x0 - ws||^2
+        	PEPit guarantee:	 ||w^1_n - w^0_n||^2 <= 0.475452 ||w^1_0 - w^0_0||^2
     
     """
 
