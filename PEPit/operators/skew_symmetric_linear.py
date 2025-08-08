@@ -96,6 +96,7 @@ class SkewSymmetricLinearOperator(Function):
         """
 
         # Add the class constraint for antisymmetric linear operators
+        print("At the beginning, the number of class constraint is {}.".format(len(self.list_of_class_constraints)))
         self.add_constraints_from_two_lists_of_points(list_of_points_1=self.list_of_points,
                                                       list_of_points_2=self.list_of_points,
                                                       constraint_name="antisymmetric_linearity",
@@ -103,6 +104,7 @@ class SkewSymmetricLinearOperator(Function):
                                                       self.set_antisymmetric_linear_constraint_i_j,
                                                       symmetry=True,
                                                       )
+        print("After the first editing, the number of class constraint is {}.".format(len(self.list_of_class_constraints)))
         self.add_constraints_from_one_list_of_points(list_of_points=self.list_of_points,
                                                      constraint_name="diagonal_linearity",
                                                      set_class_constraint_i=

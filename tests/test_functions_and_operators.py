@@ -236,6 +236,11 @@ class TestFunctionsAndOperators(unittest.TestCase):
         print(np.array(self.operator11.tables_of_constraints.keys()))
         print(np.array(self.operator11.tables_of_constraints['antisymmetric_linearity']))
         print(np.array(self.operator11.tables_of_constraints['diagonal_linearity']))
+        which_constraint = np.array(self.operator11.tables_of_constraints['antisymmetric_linearity'])[0, 0]
+        print(which_constraint)
+        print(type(which_constraint))
+        print(which_constraint.get_name())
+        print(which_constraint.decomposition_dict())
         print("====================================================================================")
         print("====================================================================================")
         print("====================================================================================")
