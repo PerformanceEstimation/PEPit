@@ -192,10 +192,8 @@ class TestFunctionsAndOperators(unittest.TestCase):
         num_points_eval = len(self.all_points[1:]) + 3
 
         # Add function class constraints
-        print("Before all: {}".format(len(self.operator11.list_of_class_constraints)))
         for function in self.all_functions_and_operators:
             function.set_class_constraints()
-        print("After all: {}".format(len(self.operator11.list_of_class_constraints)))
 
         # Verify the number of points stored in list_of_points attributes
         for function in self.all_functions_and_operators:
@@ -229,23 +227,6 @@ class TestFunctionsAndOperators(unittest.TestCase):
         self.assertEqual(len(self.operator8.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
         self.assertEqual(len(self.operator9.list_of_class_constraints), num_points_eval)
         self.assertEqual(len(self.operator10.list_of_class_constraints), num_points_eval * (num_points_eval - 1) / 2)
-        print("====================================================================================")
-        print("====================================================================================")
-        print("====================================================================================")
-        print(num_points_eval)
-        print(num_points_eval * (num_points_eval + 1) / 2)
-        print(len(self.operator11.list_of_class_constraints))
-        print(np.array(self.operator11.tables_of_constraints.keys()))
-        print(np.array(self.operator11.tables_of_constraints['antisymmetric_linearity']))
-        print(np.array(self.operator11.tables_of_constraints['diagonal_linearity']))
-        which_constraint = np.array(self.operator11.tables_of_constraints['antisymmetric_linearity'])[0, 0]
-        print(which_constraint)
-        print(type(which_constraint))
-        print(which_constraint.get_name())
-        print(which_constraint.expression.decomposition_dict())
-        print("====================================================================================")
-        print("====================================================================================")
-        print("====================================================================================")
         self.assertEqual(len(self.operator11.list_of_class_constraints), num_points_eval * (num_points_eval + 1) / 2)
         self.assertEqual(len(self.new_operator.list_of_class_constraints), 0)
 
