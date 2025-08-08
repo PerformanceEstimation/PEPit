@@ -192,8 +192,10 @@ class TestFunctionsAndOperators(unittest.TestCase):
         num_points_eval = len(self.all_points[1:]) + 3
 
         # Add function class constraints
+        print("Before all: {}".format(len(self.operator11.list_of_class_constraints)))
         for function in self.all_functions_and_operators:
             function.set_class_constraints()
+        print("After all: {}".format(len(self.operator11.list_of_class_constraints)))
 
         # Verify the number of points stored in list_of_points attributes
         for function in self.all_functions_and_operators:
@@ -240,7 +242,7 @@ class TestFunctionsAndOperators(unittest.TestCase):
         print(which_constraint)
         print(type(which_constraint))
         print(which_constraint.get_name())
-        print(which_constraint.decomposition_dict())
+        print(which_constraint.expression.decomposition_dict())
         print("====================================================================================")
         print("====================================================================================")
         print("====================================================================================")
