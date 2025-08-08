@@ -13,6 +13,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_descent_silver_stepsize_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_subgradient_method_rsi_eb
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex
+from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_convex_simplified
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_gradient_strongly_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_accelerated_proximal_point
 from PEPit.examples.unconstrained_convex_minimization import wc_proximal_point
@@ -32,6 +33,7 @@ from PEPit.examples.unconstrained_convex_minimization import wc_epsilon_subgradi
 from PEPit.examples.unconstrained_convex_minimization import wc_cyclic_coordinate_descent
 from PEPit.examples.composite_convex_minimization import wc_accelerated_douglas_rachford_splitting
 from PEPit.examples.composite_convex_minimization import wc_accelerated_proximal_gradient
+from PEPit.examples.composite_convex_minimization import wc_accelerated_proximal_gradient_simplified
 from PEPit.examples.composite_convex_minimization import wc_bregman_proximal_point
 from PEPit.examples.composite_convex_minimization import wc_frank_wolfe
 from PEPit.examples.composite_convex_minimization import wc_douglas_rachford_splitting
@@ -391,6 +393,12 @@ class TestExamplesCVXPY(unittest.TestCase):
         mu, L, n = 0, 1, 10
 
         wc, theory = wc_accelerated_gradient_convex(mu, L, n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
+
+    def test_accelerated_gradient_convex_simplified(self):
+        mu, L, n = 0, 1, 10
+
+        wc, theory = wc_accelerated_gradient_convex_simplified(mu, L, n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_accelerated_gradient_strongly_convex(self):
@@ -403,6 +411,12 @@ class TestExamplesCVXPY(unittest.TestCase):
         mu, L, n = 0, 1, 5
 
         wc, theory = wc_accelerated_proximal_gradient(mu, L, n, wrapper=self.wrapper, verbose=self.verbose)
+        self.assertLessEqual(wc, theory)
+
+    def test_accelerated_proximal_gradient_method_simplified(self):
+        mu, L, n = 0, 1, 5
+
+        wc, theory = wc_accelerated_proximal_gradient_simplified(mu, L, n, wrapper=self.wrapper, verbose=self.verbose)
         self.assertAlmostEqual(wc, theory, delta=self.relative_precision * theory)
 
     def test_accelerated_douglas_rachford_splitting(self):

@@ -1,4 +1,5 @@
 from .accelerated_gradient_convex import wc_accelerated_gradient_convex
+from .accelerated_gradient_convex_simplified import wc_accelerated_gradient_convex_simplified
 from .accelerated_gradient_strongly_convex import wc_accelerated_gradient_strongly_convex
 from .accelerated_proximal_point import wc_accelerated_proximal_point
 from .conjugate_gradient import wc_conjugate_gradient
@@ -29,6 +30,7 @@ from .triple_momentum import wc_triple_momentum
 
 
 __all__ = ['accelerated_gradient_convex', 'wc_accelerated_gradient_convex',
+           'accelerated_gradient_convex_simplified', 'wc_accelerated_gradient_convex_simplified',
            'accelerated_gradient_strongly_convex', 'wc_accelerated_gradient_strongly_convex',
            'accelerated_proximal_point', 'wc_accelerated_proximal_point',
            'conjugate_gradient', 'wc_conjugate_gradient',

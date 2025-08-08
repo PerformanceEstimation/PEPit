@@ -16,9 +16,14 @@ Proximal gradient on quadratics
 .. autofunction:: PEPit.examples.composite_convex_minimization.wc_proximal_gradient_quadratics
 
 
-Accelerated proximal gradient
------------------------------
+Accelerated proximal gradient (a.k.a., FISTA)
+---------------------------------------------
 .. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_proximal_gradient
+
+
+Simplified accelerated proximal gradient
+----------------------------------------
+.. autofunction:: PEPit.examples.composite_convex_minimization.wc_accelerated_proximal_gradient_simplified
 
 
 Bregman proximal point

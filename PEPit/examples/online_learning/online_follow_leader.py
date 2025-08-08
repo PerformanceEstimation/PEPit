@@ -80,16 +80,16 @@ def wc_online_follow_leader(M, D, n, wrapper="cvxpy", solver=None, verbose=1):
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.9330127285845171
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.933012716710238
         (PEPit) Primal feasibility check:
-        		The solver found a Gram matrix that is positive semi-definite up to an error of 8.958065311703632e-09
-        		All the primal scalar constraints are verified up to an error of 3.481293675555719e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 7.082570717379284e-09
+        		All the primal scalar constraints are verified up to an error of 2.8049949474251434e-08
         (PEPit) Dual feasibility check:
         		The solver found a residual matrix that is positive semi-definite
-        		All the dual scalar values associated with inequality constraints are nonnegative
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.2781705987788661e-07
-        (PEPit) Final upper bound (dual): 0.93301273263622 and lower bound (primal example): 0.9330127285845171 
-        (PEPit) Duality gap: absolute: 4.051702862106765e-09 and relative: 4.342601915253229e-09
+        		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 2.2603605415766684e-10
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 1.0515587808859884e-07
+        (PEPit) Final upper bound (dual): 0.9330127181067216 and lower bound (primal example): 0.933012716710238 
+        (PEPit) Duality gap: absolute: 1.3964835954283217e-09 and relative: 1.4967465827821315e-09
         *** Example file: worst-case regret of online follow the leader ***
         	PEPit guarantee:	 R_n <= 0.933013
     

@@ -1,5 +1,6 @@
 from .accelerated_douglas_rachford_splitting import wc_accelerated_douglas_rachford_splitting
 from .accelerated_proximal_gradient import wc_accelerated_proximal_gradient
+from .accelerated_proximal_gradient_simplified import wc_accelerated_proximal_gradient_simplified
 from .bregman_proximal_point import wc_bregman_proximal_point
 from .douglas_rachford_splitting import wc_douglas_rachford_splitting
 from .douglas_rachford_splitting_contraction import wc_douglas_rachford_splitting_contraction
@@ -13,6 +14,7 @@ from .three_operator_splitting import wc_three_operator_splitting
 
 __all__ = ['accelerated_douglas_rachford_splitting', 'wc_accelerated_douglas_rachford_splitting',
            'accelerated_proximal_gradient', 'wc_accelerated_proximal_gradient',
+           'accelerated_proximal_gradient_simplified', 'wc_accelerated_proximal_gradient_simplified',
            'bregman_proximal_point', 'wc_bregman_proximal_point',
            'douglas_rachford_splitting', 'wc_douglas_rachford_splitting',
            'douglas_rachford_splitting_contraction', 'wc_douglas_rachford_splitting_contraction',
