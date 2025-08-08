@@ -3,9 +3,8 @@ from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import ConvexFunction
 from PEPit.primitive_steps import proximal_step
 
-import numpy as np
 
-def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_accelerated_proximal_gradient_simplified(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the composite convex minimization problem
 
@@ -15,7 +14,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     and where :math:`h` is closed convex and proper.
 
     This code computes a worst-case guarantee for the **accelerated proximal gradient** method,
-    also known as **fast proximal gradient (FPGM)** method or FISTA [1].
+    also known as **fast proximal gradient (FPGM)** method.
     That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math :: F(x_n) - F(x_\\star) \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2,
@@ -27,26 +26,31 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**: Initialize :math:`\\lambda_1=1`, :math:`y_1=x_0`. One iteration of FISTA is described by
+    **Algorithm**: Accelerated proximal gradient is described as follows, for :math:`t \in \\{ 0, \\dots, n-1\\}`,
 
     .. math::
+        :nowrap:
 
         \\begin{eqnarray}
-            \\text{Set: }\\lambda_{t+1} & = & \\frac{1}{2} \\left(1 + \\sqrt{4\\lambda_t^2 + 1}\\right)\\\\
-            x_{t} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\|x-\\left(y_{t} - \\frac{1}{L} \\nabla f(y_t)\\right)\\|^2 \\right\\}\\\\
-            y_{t+1} & = & x_{t} + \\frac{\\lambda_t-1}{\\lambda_{t+1}} (x_t-x_{t-1}).
+            x_{t+1} & = & \\arg\\min_x \\left\\{h(x)+\\frac{L}{2}\|x-\\left(y_{t} - \\frac{1}{L} \\nabla f(y_t)\\right)\\|^2 \\right\\}, \\\\
+            y_{t+1} & = & x_{t+1} + \\frac{i}{i+3} (x_{t+1} - x_{t}),
         \\end{eqnarray}
 
-    **Theoretical guarantee**: The following worst-case guarantee can be found in e.g., [1, Theorem 4.4]:
+    where :math:`y_{0} = x_0`.
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{\\lambda_n^2}.
+    **Theoretical guarantee**: A **tight** (empirical) worst-case guarantee for FPGM is obtained in
+    [1, method FPGM1 in Sec. 4.2.1, Table 1 in sec 4.2.2], for :math:`\\mu=0`:
+
+    .. math:: F(x_n) - F_\\star \\leqslant \\frac{2 L}{n^2+5n+2} \\|x_0 - x_\\star\\|^2,
+
+    which is attained on simple one-dimensional constrained linear optimization problems.
 
     **References**:
-    
-    `[1] A. Beck, M. Teboulle (2009).
-    A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems.
-    SIAM journal on imaging sciences, 2009, vol. 2, no 1, p. 183-202.
-    <https://www.ceremade.dauphine.fr/~carlier/FISTA>`_
+
+    `[1] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Exact worst-case performance of first-order methods for composite convex optimization.
+    SIAM Journal on Optimization, 27(3):1283–1313.
+    <https://arxiv.org/pdf/1512.07516.pdf>`_
 
 
     Args:
@@ -67,7 +71,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
         theoretical_tau (float): theoretical value.
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient_simplified(L=1, mu=0, n=4, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 12x12
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -114,16 +118,13 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     # Set the initial constraint that is the distance between x0 and x^*
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
-    # Compute n steps of the accelerated proximal gradient method starting from x0    	
+    # Compute n steps of the accelerated proximal gradient method starting from x0
     x_new = x0
     y = x0
-    lam = 1
     for i in range(n):
-        lam_old = lam
-        lam = (1 + np.sqrt(4 * lam_old ** 2 + 1)) / 2
         x_old = x_new
         x_new, _, hx_new = proximal_step(y - 1 / L * f.gradient(y), h, 1 / L)
-        y = x_new + (lam_old - 1) / lam * (x_new - x_old) 
+        y = x_new + i / (i + 3) * (x_new - x_old)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric((f(x_new) + hx_new) - Fs)
@@ -132,9 +133,8 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
-    # Theoretical guarantee (for comparison)
-    theoretical_tau = L / 2 / lam_old**2
-    
+    # Compute theoretical guarantee (for comparison)
+    theoretical_tau = 2 * L / (n ** 2 + 5 * n + 2)  # tight if mu == 0, see [1], Table 1 (column 1, line 1)
     if mu != 0:
         print('Warning: momentum is tuned for non-strongly convex functions.')
 
@@ -150,6 +150,6 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient(L=1, mu=0, n=4,
-                                                                  wrapper="cvxpy", solver=None,
-                                                                  verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_proximal_gradient_simplified(L=1, mu=0, n=4,
+                                                                             wrapper="cvxpy", solver=None,
+                                                                             verbose=1)

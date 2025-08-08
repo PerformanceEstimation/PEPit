@@ -41,6 +41,11 @@ Accelerated gradient for convex objective
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_gradient_convex
 
 
+Simplified accelerated gradient for convex objective
+----------------------------------------------------
+.. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_gradient_convex_simplified
+
+
 Accelerated gradient for strongly convex objective
 --------------------------------------------------
 .. autofunction:: PEPit.examples.unconstrained_convex_minimization.wc_accelerated_gradient_strongly_convex

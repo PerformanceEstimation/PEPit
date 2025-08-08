@@ -11,7 +11,7 @@ What's new in PEPit 0.4.0
 
 - New primitive step: linearly shifted optimization (minimize given function + linear term), which is among others used in the difference-of-convex algorithm (DCA, also known as the convex-concave procedure).
 
-- New examples: (i) Refined block-coordinate descent (refined interpolation techniques--but computationally more expensive) (ii) introduction of quadratic Lojasiewicz inequalities, examples on gradient descent (with different ways to improse Lojasiewicz inequalities, from naive ones to more advanced SDP-representable ones) (iii) optimistic gradient with more advanced SDP-representable monotonocity/Lipschitz characterization, (iv) difference-of-convex algorithm (DCA, also known as the convex-concave procedure),  (v) online learning settings (online gradient descent, online Frank-Wolfe, follow the leader, follow the regularized leader).
+- New examples: (i) Refined block-coordinate descent (refined interpolation techniques--but computationally more expensive) (ii) introduction of quadratic Lojasiewicz inequalities, examples on gradient descent (with different ways to improse Lojasiewicz inequalities, from naive ones to more advanced SDP-representable ones) (iii) optimistic gradient with more advanced SDP-representable monotonocity/Lipschitz characterization, (iv) difference-of-convex algorithm (DCA, also known as the convex-concave procedure),  (v) online learning settings (online gradient descent, online Frank-Wolfe, follow the leader, follow the regularized leader), (vi) added classical accelerated gradient methods (with FISTA-like inertial coefficients), its previous implemented version is now referred to as a simplified version.
 
 - Corrected example: SGD's closed-form solution has been updated.
 
