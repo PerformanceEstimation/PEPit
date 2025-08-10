@@ -28,7 +28,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`F(x_n) - F(x_\\star)` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**: Initialize :math:`\\lambda_0=1`, :math:`y_1=x_0`. One iteration of FISTA is described by
+    **Algorithm**: Initialize :math:`\\lambda_1=1`, :math:`y_1=x_0`. One iteration of FISTA is described by
 
     .. math::
 
@@ -74,26 +74,26 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
         (PEPit) Setting up the problem: initial conditions and general constraints (1 constraint(s) added)
         (PEPit) Setting up the problem: interpolation conditions for 2 function(s)
-                    Function 1 : Adding 30 scalar constraint(s) ...
-                    Function 1 : 30 scalar constraint(s) added
-                    Function 2 : Adding 20 scalar constraint(s) ...
-                    Function 2 : 20 scalar constraint(s) added
+        			Function 1 : Adding 30 scalar constraint(s) ...
+        			Function 1 : 30 scalar constraint(s) added
+        			Function 2 : Adding 20 scalar constraint(s) ...
+        			Function 2 : 20 scalar constraint(s) added
         (PEPit) Setting up the problem: additional constraints for 0 function(s)
         (PEPit) Compiling SDP
         (PEPit) Calling SDP solver
-        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.045363656016817494
+        (PEPit) Solver status: optimal (wrapper:cvxpy, solver: MOSEK); optimal value: 0.05167329605152958
         (PEPit) Primal feasibility check:
-                The solver found a Gram matrix that is positive semi-definite up to an error of 7.3555132913319e-09
-                All the primal scalar constraints are verified up to an error of 1.7867120057774022e-08
+        		The solver found a Gram matrix that is positive semi-definite up to an error of 6.64684463996332e-09
+        		All the primal scalar constraints are verified up to an error of 1.6451693951591295e-08
         (PEPit) Dual feasibility check:
-                The solver found a residual matrix that is positive semi-definite
-                All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.255603842175434e-10
-        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 9.450420430196857e-08
-        (PEPit) Final upper bound (dual): 0.04536366234093697 and lower bound (primal example): 0.045363656016817494
-        (PEPit) Duality gap: absolute: 6.32411947809608e-09 and relative: 1.394093870157106e-07
+        		The solver found a residual matrix that is positive semi-definite
+        		All the dual scalar values associated with inequality constraints are nonnegative
+        (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 8.587603813802402e-08
+        (PEPit) Final upper bound (dual): 0.051673302055698395 and lower bound (primal example): 0.05167329605152958 
+        (PEPit) Duality gap: absolute: 6.004168814910393e-09 and relative: 1.1619480996379491e-07
         *** Example file: worst-case performance of the Accelerated Proximal Gradient Method in function values***
-            PEPit guarantee:	 f(x_n)-f_* <= 0.0453637 ||x0 - xs||^2
-            Theoretical guarantee:	 f(x_n)-f_* <= 0.0460565 ||x0 - xs||^2
+        	PEPit guarantee:	 f(x_n)-f_* <= 0.0516733 ||x0 - xs||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.0661257 ||x0 - xs||^2
     
     """
 
@@ -118,7 +118,7 @@ def wc_accelerated_proximal_gradient(mu, L, n, wrapper="cvxpy", solver=None, ver
     # Compute n steps of the accelerated proximal gradient method starting from x0    	
     x_new = x0
     y = x0
-    lam = (1 + sqrt(5)) / 2
+    lam = 1
     for i in range(n):
         lam_old = lam
         lam = (1 + sqrt(4 * lam_old ** 2 + 1)) / 2
