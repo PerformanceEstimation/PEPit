@@ -1,10 +1,8 @@
-from math import sqrt
-
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
 
 
-def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
+def wc_accelerated_gradient_convex_simplified(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
     """
     Consider the convex minimization problem
 
@@ -12,31 +10,35 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
 
     where :math:`f` is :math:`L`-smooth and :math:`\\mu`-strongly convex (:math:`\\mu` is possibly 0).
 
-    This code computes a worst-case guarantee for an **accelerated gradient method**, a.k.a. **fast gradient method** [1].
-    That is, it computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
+    This code computes a worst-case guarantee for an **accelerated gradient method**, a.k.a. **fast gradient method**
+    with a set of classical slightly simplified sets of coefficients compared to the original [1].
+    That is, the code computes the smallest possible :math:`\\tau(n, L, \\mu)` such that the guarantee
 
     .. math:: f(x_n) - f_\\star \\leqslant \\tau(n, L, \\mu) \\|x_0 - x_\\star\\|^2
 
-    is valid, where :math:`x_n` is the output of the accelerated gradient method,
+    is valid, where :math:`x_n` is the output of the accelerated gradient method below,
     and where :math:`x_\\star` is the minimizer of :math:`f`.
     In short, for given values of :math:`n`, :math:`L` and :math:`\\mu`,
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**: Initialize :math:`\\lambda_1=1`, :math:`y_1=x_0`.
-    One iteration of accelerated gradient method is described by
+    **Algorithm**:
+    The accelerated gradient method of this example is provided by
 
-    .. math::
+        .. math::
+            :nowrap:
 
-        \\begin{eqnarray}
-            \\text{Set: }\\lambda_{t+1} & = & \\frac{1 + \\sqrt{4\\lambda_t^2 + 1}}{2} \\\\
-            x_{t} & = & y_t - \\frac{1}{L} \\nabla f(y_t),\\\\
-            y_{t+1} & = & x_{t} + \\frac{\\lambda_t-1}{\\lambda_{t+1}} (x_t-x_{t-1}).
-        \\end{eqnarray}
+            \\begin{eqnarray}
+                x_{t+1} & = & y_t - \\frac{1}{L} \\nabla f(y_t) \\\\
+                y_{t+1} & = & x_{t+1} + \\frac{t-1}{t+2} (x_{t+1} - x_t).
+            \\end{eqnarray}
 
-    **Theoretical guarantee**: The following worst-case guarantee can be found in e.g., [2, Theorem 4.4]:
+    **Theoretical guarantee**:
+    When :math:`\\mu=0`, a tight **empirical** guarantee can be found in [2, Table 1]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\frac{\\|x_0-x_\\star\\|^2}{\\lambda_n^2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{2L\\|x_0-x_\\star\\|^2}{n^2 + 5 n + 6},
+
+    where tightness is obtained on some Huber loss functions.
 
     **References**:
     
@@ -44,11 +46,11 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
     A method for solving the convex programming problem with convergence rate O(1/k^2).
     In Dokl. akad. nauk Sssr (Vol. 269, pp. 543-547).
     <http://www.mathnet.ru/links/9bcb158ed2df3d8db3532aafd551967d/dan46009.pdf>`_
-    
-    `[2] A. Beck, M. Teboulle (2009).
-    A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems.
-    SIAM journal on imaging sciences, 2009, vol. 2, no 1, p. 183-202.
-    <https://www.ceremade.dauphine.fr/~carlier/FISTA>`_
+
+    `[2] A. Taylor, J. Hendrickx, F. Glineur (2017).
+    Exact worst-case performance of first-order methods for composite convex optimization.
+    SIAM Journal on Optimization, 27(3):1283–1313.
+    <https://arxiv.org/pdf/1512.07516.pdf>`_
 
     Args:
         mu (float): the strong convexity parameter
@@ -68,7 +70,7 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
         theoretical_tau (float): theoretical value
 
     Example:
-        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, wrapper="cvxpy", solver=None, verbose=1)
+        >>> pepit_tau, theoretical_tau = wc_accelerated_gradient_convex_simplified(mu=0, L=1, n=1, wrapper="cvxpy", solver=None, verbose=1)
         (PEPit) Setting up the problem: size of the Gram matrix: 4x4
         (PEPit) Setting up the problem: performance measure is the minimum of 1 element(s)
         (PEPit) Setting up the problem: Adding initial conditions and general constraints ...
@@ -91,7 +93,7 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
         (PEPit) Duality gap: absolute: 3.834839723548811e-09 and relative: 2.3009039102756247e-08
         *** Example file: worst-case performance of accelerated gradient method ***
         	PEPit guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
-        	Theoretical guarantee:	 f(x_n)-f_* <= 0.5 ||x_0 - x_*||^2
+        	Theoretical guarantee:	 f(x_n)-f_* <= 0.166667 ||x_0 - x_*||^2
     
     """
     # Instantiate PEP
@@ -111,27 +113,22 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
     problem.set_initial_condition((x0 - xs) ** 2 <= 1)
 
     # Run n steps of the fast gradient method
-    x = x0
+    x_new = x0
     y = x0
-    lam = 1
-    
-    for _ in range(n):
-        lam_old = lam
-        lam = (1 + sqrt(4 * lam_old ** 2 + 1)) / 2
-        x_old = x
-        x = y - 1 / L * func.gradient(y)
-        y = x + (lam_old - 1) / lam * (x - x_old)
+    for i in range(n):
+        x_old = x_new
+        x_new = y - 1 / L * func.gradient(y)
+        y = x_new + i / (i + 3) * (x_new - x_old)
 
     # Set the performance metric to the function value accuracy
-    problem.set_performance_metric(func(x) - fs)
+    problem.set_performance_metric(func(x_new) - fs)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Theoretical guarantee (for comparison)
-    theoretical_tau = L / (2 * lam_old**2)
-    
+    theoretical_tau = 2 * L / (n ** 2 + 5 * n + 6)  # tight only for mu=0, see [2], Table 1 (column 1, line 1)
     if mu != 0:
         print('Warning: momentum is tuned for non-strongly convex functions.')
 
@@ -146,5 +143,6 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_accelerated_gradient_convex(mu=0, L=1, n=1, wrapper="cvxpy",
-                                                                solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_accelerated_gradient_convex_simplified(mu=0, L=1, n=1,
+                                                                           wrapper="cvxpy",
+                                                                           solver=None, verbose=1)

@@ -106,13 +106,13 @@ def wc_gradient_descent_quadratic_lojasiewicz_expensive(L, mu, gamma, n, wrapper
         		All the dual matrices to lmi are positive semi-definite
         		All the dual scalar values associated with inequality constraints are nonnegative up to an error of 5.671954340368105e-10
         (PEPit) The worst-case guarantee proof is perfectly reconstituted up to an error of 2.0306640495891322e-08
-        (PEPit) Final upper bound (dual): 0.6832669563172779 and lower bound (primal example): 0.6832669556328734
+        (PEPit) Final upper bound (dual): 0.6832669563172779 and lower bound (primal example): 0.6832669556328734 
         (PEPit) Duality gap: absolute: 6.844044220244427e-10 and relative: 1.0016647466735981e-09
         *** Example file: worst-case performance of gradient descent with fixed step-size ***
-        *** 	 (smooth problem satisfying a Lojasiewicz inequality; expert version) ***
+        *** 	 (smooth problem satisfying a Lojasiewicz inequality; expensive version) ***
         	PEPit guarantee:	 f(x_1) - f(x_*) <= 0.683267 (f(x_0)-f_*)
         	Theoretical guarantee:	 f(x_1) - f(x_*) <= 0.727273 (f(x_0)-f_*)
-
+    
     """
     # Instantiate PEP
     problem = PEP()
@@ -160,7 +160,7 @@ def wc_gradient_descent_quadratic_lojasiewicz_expensive(L, mu, gamma, n, wrapper
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of gradient descent with fixed step-size ***')
-        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; expert version) ***')
+        print('*** \t (smooth problem satisfying a Lojasiewicz inequality; expensive version) ***')
         print('\tPEPit guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(pepit_tau))
         print('\tTheoretical guarantee:\t f(x_1) - f(x_*) <= {:.6} (f(x_0)-f_*)'.format(theoretical_tau))
 
