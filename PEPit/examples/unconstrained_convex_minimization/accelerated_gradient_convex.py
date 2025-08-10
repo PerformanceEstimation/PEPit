@@ -1,6 +1,7 @@
+from math import sqrt
+
 from PEPit import PEP
 from PEPit.functions import SmoothStronglyConvexFunction
-import numpy as np
 
 
 def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbose=1):
@@ -22,19 +23,20 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
     :math:`\\tau(n, L, \\mu)` is computed as the worst-case value of
     :math:`f(x_n)-f_\\star` when :math:`\\|x_0 - x_\\star\\|^2 \\leqslant 1`.
 
-    **Algorithm**: Initialize :math:`\\lambda_1=1`, :math:`y_1=x_0`. One iteration of accelerated gradient method is described by
+    **Algorithm**: Initialize :math:`\\lambda_1=1`, :math:`y_1=x_0`.
+    One iteration of accelerated gradient method is described by
 
     .. math::
 
         \\begin{eqnarray}
-            \\text{Set: }\\lambda_{t+1} & = & \\frac{1}{2} \\left(1 + \\sqrt{4\\lambda_t^2 + 1}\\right)\\\\
+            \\text{Set: }\\lambda_{t+1} & = & \\frac{1 + \\sqrt{4\\lambda_t^2 + 1}}{2} \\\\
             x_{t} & = & y_t - \\frac{1}{L} \\nabla f(y_t),\\\\
             y_{t+1} & = & x_{t} + \\frac{\\lambda_t-1}{\\lambda_{t+1}} (x_t-x_{t-1}).
         \\end{eqnarray}
 
     **Theoretical guarantee**: The following worst-case guarantee can be found in e.g., [2, Theorem 4.4]:
 
-    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L\\|x_0-x_\\star\\|^2}{\\lambda_n^2}.
+    .. math:: f(x_n)-f_\\star \\leqslant \\frac{L}{2}\\frac{\\|x_0-x_\\star\\|^2}{\\lambda_n^2}.
 
     **References**:
     
@@ -114,11 +116,11 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
     lam = 1
     
     for _ in range(n):
-    	lam_old = lam
-    	lam = (1 + np.sqrt(4 * lam_old ** 2 + 1)) / 2
-    	x_old = x
-    	x = y - 1 / L * func.gradient(y)
-    	y = x + (lam_old - 1) / lam * (x - x_old) 
+        lam_old = lam
+        lam = (1 + sqrt(4 * lam_old ** 2 + 1)) / 2
+        x_old = x
+        x = y - 1 / L * func.gradient(y)
+        y = x + (lam_old - 1) / lam * (x - x_old)
 
     # Set the performance metric to the function value accuracy
     problem.set_performance_metric(func(x) - fs)
@@ -128,7 +130,7 @@ def wc_accelerated_gradient_convex(mu, L, n, wrapper="cvxpy", solver=None, verbo
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Theoretical guarantee (for comparison)
-    theoretical_tau = L / 2 / lam_old**2
+    theoretical_tau = L / (2 * lam_old**2)
     
     if mu != 0:
         print('Warning: momentum is tuned for non-strongly convex functions.')
