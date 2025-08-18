@@ -13,7 +13,7 @@ PEPit is mainly based on the formalism and developments from [2, 3] by a subset 
 A friendly informal introduction to this formalism is available in this [blog post](https://francisbach.com/computer-aided-analyses/)
 and a corresponding Matlab library is presented in [4] ([PESTO](https://github.com/AdrienTaylor/Performance-Estimation-Toolbox)).
 
-Website and documentation of PEPit: [https://pepit.readthedocs.io/](https://pepit.readthedocs.io/)
+Website and documentation of PEPit: [https://pepit.readthedocs.io/](https://pepit.readthedocs.io/en/latest/)
 
 Source Code (MIT): [https://github.com/PerformanceEstimation/PEPit](https://github.com/PerformanceEstimation/PEPit)
 
