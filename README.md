@@ -304,6 +304,23 @@ The authors would like to thank [**Rémi Flamary**](https://remi.flamary.com/)
 for his feedbacks on preliminary versions of the toolbox,
 as well as for support regarding the continuous integration.
 
+## Funding
+
+blabla
+
+<p align="center">
+  <a href="https://www.inria.fr">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="50">
+  </a>
+  <a href="https://www.polytechnique.edu/">
+    <img src="/docs/source/logos/X.ai" alt="X.ai" height="50">
+  </a>
+  <a href="https://erc.europa.eu/homepage">
+    <img src="/docs/source/logos/EU.png" alt="European Union" height="50">
+  </a>
+</p>
+
+
 ## References
 
 [1] Y. Drori, M. Teboulle (2014).
