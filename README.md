@@ -278,24 +278,24 @@ PEPit supports the following [operator classes](https://pepit.readthedocs.io/en/
 
 This toolbox has been created by
 
-- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/)  <a href="https://www.polytechnique.edu/">
-    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="30">
+- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) 
+- [**Céline Moucer**](https://cmoucer.github.io)
+- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html)
+- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/)
+- [**Adrien Taylor**](https://adrientaylor.github.io/)
+- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
+
+<p align="center">
+  <a href="https://www.inria.fr" style="margin: 0 40px;">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="70">
   </a>
-- [**Céline Moucer**](https://cmoucer.github.io) <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="30">
+  <a href="https://www.polytechnique.edu/" style="margin: 0 40px;">
+    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="70">
   </a>
-- [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html) <a href="https://www.uclouvain.be/">
-    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="30">
+  <a href="https://www.uclouvain.be/" style="margin: 0 40px;">
+    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="90">
   </a>
-- [**François Glineur**](https://perso.uclouvain.be/francois.glineur/) <a href="https://www.uclouvain.be/">
-    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="30">
-  </a>
-- [**Adrien Taylor**](https://adrientaylor.github.io/) <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="30">
-  </a>
-- [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/) <a href="https://www.polytechnique.edu/">
-    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="30">
-  </a>
+</p>
 
 ### External contributions
 
@@ -321,7 +321,7 @@ as well as for support regarding the continuous integration.
 
 This project is co-funded by the European Research Council (ERC grants SEQUOIA 724063 and CASPER 101162889) and under the management of Agence Nationale de la Recherche (ANR-19-CHIA-0002-01/chaire SCAI and Hi!Paris and ANR-23-IACL-0008 PR[AI]RIE-PSAI). Views and opinions expressed are however those of the authors only.
 
-<table width="100%">
+<table border="0" width="100%" style="border-collapse: collapse;">
   <tr>
     <td align="left" valign="middle">
       <a href="https://erc.europa.eu/homepage">
