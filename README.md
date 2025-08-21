@@ -287,13 +287,13 @@ This toolbox has been created by
 
 <p align="center">
   <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="70" style="margin: 0 40px;">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="70" style="margin: 0 80px;">
   </a>
   <a href="https://www.polytechnique.edu/">
-    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="70" style="margin: 0 10px;">
+    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="70">
   </a>
   <a href="https://www.uclouvain.be/">
-    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="80">
+    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="90">
   </a>
 </p>
 
@@ -323,7 +323,7 @@ This project is co-funded by the European Research Council (ERC grants SEQUOIA 7
 
 <p align="left">
   <a href="https://erc.europa.eu/homepage">
-    <img src="/docs/source/logos/EU.png" alt="European Union" height="130" style="margin: 0 40px;">
+    <img src="/docs/source/logos/EU.png" alt="European Union" height="130" style="margin: 0 100px;">
   </a>
   <a href="https://anr.fr/">
     <img src="/docs/source/logos/anr.png" alt="ANR" height="80">
