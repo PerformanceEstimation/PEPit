@@ -323,7 +323,7 @@ This project is co-funded by the European Research Council (ERC grants SEQUOIA 7
 
 <p align="left">
   <a href="https://erc.europa.eu/homepage">
-    <img src="/docs/source/logos/EU.png" alt="European Union" height="130" style="margin: 0 100px;">
+    <img src="/docs/source/logos/EU.png" alt="European Union" height="110" style="margin: 0 100px;">
   </a>
   <a href="https://anr.fr/">
     <img src="/docs/source/logos/anr.png" alt="ANR" height="80">
