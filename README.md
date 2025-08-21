@@ -286,13 +286,13 @@ This toolbox has been created by
 - [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
 
 <p align="center">
-  <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="70" style="margin: 0 80px;">
+  <a href="https://www.inria.fr" style="margin: 0 40px;">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="70">
   </a>
-  <a href="https://www.polytechnique.edu/">
+  <a href="https://www.polytechnique.edu/" style="margin: 0 40px;">
     <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="70">
   </a>
-  <a href="https://www.uclouvain.be/">
+  <a href="https://www.uclouvain.be/" style="margin: 0 40px;">
     <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="90">
   </a>
 </p>
