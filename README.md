@@ -287,13 +287,13 @@ This toolbox has been created by
 
 <p align="center">
   <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="50">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="80" style="margin: 0 20px;">
   </a>
   <a href="https://www.polytechnique.edu/">
-    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="50">
+    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="80" style="margin: 0 20px;">
   </a>
   <a href="https://www.uclouvain.be/">
-    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="50">
+    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="80" style="margin: 0 20px;">
   </a>
 </p>
 
