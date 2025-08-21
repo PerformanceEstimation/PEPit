@@ -285,6 +285,18 @@ This toolbox has been created by
 - [**Adrien Taylor**](https://adrientaylor.github.io/)
 - [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
 
+<p align="center">
+  <a href="https://www.inria.fr">
+    <img src="/docs/source/logos/inria.png" alt="Inria" height="50">
+  </a>
+  <a href="https://www.polytechnique.edu/">
+    <img src="/docs/source/logos/X.png" alt="Ecole Polytechnique" height="50">
+  </a>
+  <a href="https://www.uclouvain.be/">
+    <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="50">
+  </a>
+</p>
+
 ### External contributions
 
 All external contributions are welcome.
@@ -306,17 +318,15 @@ as well as for support regarding the continuous integration.
 
 ## Funding
 
-blabla
+
+This project is co-funded by the European Research Council (ERC grants SEQUOIA 724063 and CASPER 101162889) and under the management of Agence Nationale de la Recherche (ANR-19-CHIA-0002-01/chaire SCAI and Hi!Paris and ANR-23-IACL-0008 PR[AI]RIE-PSAI). Views and opinions expressed are however those of the authors only.
 
 <p align="center">
-  <a href="https://www.inria.fr">
-    <img src="/docs/source/logos/inria.png" alt="Inria" height="50">
+  <a href="https://anr.fr/">
+    <img src="/docs/source/logos/anr.png" alt="ANR" height="80">
   </a>
-  <a href="https://www.polytechnique.edu/">
-    <img src="/docs/source/logos/X.ai" alt="X.ai" height="50">
-  </a>
-  <a href="https://erc.europa.eu/homepage">
-    <img src="/docs/source/logos/EU.png" alt="European Union" height="50">
+   <a href="https://erc.europa.eu/homepage">
+    <img src="/docs/source/logos/EU.png" alt="European Union" height="80">
   </a>
 </p>
 
