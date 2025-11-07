@@ -12,6 +12,8 @@ from .proximal_point_useless_partition import wc_proximal_point_complexified2
 from .proximal_point_LMI import wc_proximal_point_complexified3
 from .randomized_coordinate_descent_smooth_convex import wc_randomized_coordinate_descent_smooth_convex_complexified
 from .randomized_coordinate_descent_smooth_strongly_convex import wc_randomized_coordinate_descent_smooth_strongly_convex_complexified
+from .smooth_quadratic_lojasiewicz_function_super_expensive import SmoothQuadraticLojasiewiczFunctionComplexified
+from .gradient_descent_quadratic_lojasiewicz_expensive import wc_gradient_descent_quadratic_lojasiewicz_complexified
 
 
 __all__ = ['cyclic_coordinate_descent_refined', 'wc_cyclic_coordinate_descent_refined',
@@ -28,4 +30,6 @@ __all__ = ['cyclic_coordinate_descent_refined', 'wc_cyclic_coordinate_descent_re
            'proximal_point_LMI', 'wc_proximal_point_complexified3',
            'randomized_coordinate_descent_smooth_convex', 'wc_randomized_coordinate_descent_smooth_convex_complexified',
            'randomized_coordinate_descent_smooth_strongly_convex', 'wc_randomized_coordinate_descent_smooth_strongly_convex_complexified',
+           'smooth_quadratic_lojasiewicz_function_super_expensive', 'SmoothQuadraticLojasiewiczFunctionComplexified',
+           'gradient_descent_quadratic_lojasiewicz_expensive', 'wc_gradient_descent_quadratic_lojasiewicz_complexified',
            ]

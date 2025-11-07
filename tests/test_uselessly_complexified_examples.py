@@ -1,5 +1,7 @@
 import unittest
 
+from math import sqrt
+
 from PEPit.examples.unconstrained_convex_minimization import wc_proximal_point
 from PEPit.examples.composite_convex_minimization import wc_proximal_gradient
 from PEPit.examples.unconstrained_convex_minimization import wc_gradient_exact_line_search
@@ -8,6 +10,7 @@ from PEPit.examples.stochastic_and_randomized_convex_minimization import \
     wc_randomized_coordinate_descent_smooth_strongly_convex
 from PEPit.examples.stochastic_and_randomized_convex_minimization import wc_randomized_coordinate_descent_smooth_convex
 from PEPit.examples.unconstrained_convex_minimization import wc_cyclic_coordinate_descent
+from PEPit.examples.nonconvex_optimization import wc_gradient_descent_quadratic_lojasiewicz_expensive as wc_gradient_lojasiewicz_a
 
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified
 from tests.additional_complexified_examples_tests import wc_proximal_gradient_complexified2
@@ -24,6 +27,8 @@ from tests.additional_complexified_examples_tests import wc_randomized_coordinat
 from tests.additional_complexified_examples_tests import wc_gradient_descent_useless_blocks
 from tests.additional_complexified_examples_tests import wc_gradient_descent_blocks
 from tests.additional_complexified_examples_tests import wc_cyclic_coordinate_descent_refined
+
+from tests.additional_complexified_examples_tests import wc_gradient_descent_quadratic_lojasiewicz_complexified as wc_gradient_lojasiewicz_b
 
 
 class TestExamples(unittest.TestCase):
@@ -189,3 +194,24 @@ class TestExamples(unittest.TestCase):
 
         wc_modified, theory = wc_gradient_descent_blocks(L=[L], n=n, verbose=self.verbose)
         self.assertAlmostEqual(wc_modified, theory, delta=self.relative_precision * theory)
+
+    def test_lojasiewicz(self):
+        L, mu, n = 1, .2, 3
+        
+        gamma = 1 / L
+        wc_a, _ = wc_gradient_lojasiewicz_a(L, mu, gamma, n, verbose=self.verbose)
+        wc_b, _ = wc_gradient_lojasiewicz_b(L, mu, gamma, n, verbose=self.verbose)
+
+        self.assertAlmostEqual(wc_a, wc_b, delta=self.relative_precision * wc_a)
+        
+        gamma = (1 + sqrt(3)) / (2 * L)
+        wc_a, _ = wc_gradient_lojasiewicz_a(L, mu, gamma, n, verbose=self.verbose)
+        wc_b, _ = wc_gradient_lojasiewicz_b(L, mu, gamma, n, verbose=self.verbose)
+
+        self.assertAlmostEqual(wc_a, wc_b, delta=self.relative_precision * wc_a)
+
+        gamma = (1 + sqrt(3) / 2) / L
+        wc_a, _ = wc_gradient_lojasiewicz_a(L, mu, gamma, n, verbose=self.verbose)
+        wc_b, _ = wc_gradient_lojasiewicz_b(L, mu, gamma, n, verbose=self.verbose)
+
+        self.assertAlmostEqual(wc_a, wc_b, delta=self.relative_precision * wc_a)

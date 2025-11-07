@@ -1,0 +1,6 @@
+What's new in PEPit 0.4.1
+=========================
+
+- Improvement: The :class:`SmoothQuadraticLojasiewiczFunctionExpensive` has been improved with slightly cheaper formulations.
+
+- Added uselessly complexified tests to verify numerically that the formulations are in line.
