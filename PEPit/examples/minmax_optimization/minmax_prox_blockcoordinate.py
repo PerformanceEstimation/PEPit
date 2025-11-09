@@ -2,7 +2,7 @@ from PEPit import PEP
 from PEPit.functions import BlockConvexConcaveFunction
 from PEPit.point import Point
 from PEPit.expression import Expression
-
+import numpy as np
 
 def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     """
@@ -100,7 +100,6 @@ def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
     func = problem.declare_function(function_class=BlockConvexConcaveFunction, partition=block_partition)
     # Start by defining its unique optimal point xs = x_* and corresponding function value fs = f_*
     zs = func.stationary_point()
-    fs = func(zs)
 
     # Then define the starting point x0 of the algorithm
     z0 = problem.set_initial_point()
@@ -110,42 +109,42 @@ def wc_proximal_point(gamma, n, wrapper="cvxpy", solver=None, verbose=1):
 
     # Run n steps of the proximal point method
     z = z0
-    z_avg = z
-    count = 1
+    z_prev = z
+
     for _ in range(n):
       
 
          # Compute x from the docstring equation.
          gz = Point()
          fz = Expression()
+         z_prev = z
          z = z - gamma * block_partition.get_block(gz, 0)
          z = z + gamma * block_partition.get_block(gz, 1)
-         z_avg += z
-         count+=1
+
          # Add point to Function f.
          func.add_point((z, gz, fz))
          
-    z_avg /= count
-    #func.add_point((z_avg, func.gradient(z_avg), func(z_avg)))
+
     # Set the performance metric to the final distance to optimum in function values
-    problem.set_performance_metric(func(z_avg)-fs)
+    problem.set_performance_metric((z-z_prev)**2)
 
     # Solve the PEP
     pepit_verbose = max(verbose, 0)
     pepit_tau = problem.solve(wrapper=wrapper, solver=solver, verbose=pepit_verbose)
 
     # Compute theoretical guarantee (for comparison)
-    theoretical_tau = 1 / (gamma * n)
+    #theoretical_tau = 1 / (gamma * n)
+    theoretical_tau = np.power((1.0 - (1.0/n)), n-1)/n
 
     # Print conclusion if required
     if verbose != -1:
         print('*** Example file: worst-case performance of proximal point method ***')
-        print('\tPEPit guarantee:\t f(z_avg)-f_* <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
-        print('\tTheoretical guarantee:\t f(z_avg)-f_* <= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
+        print('\tPEPit guarantee:\t ||z_n - z_n-1||^2 <= {:.6} ||z_0 - z_*||^2'.format(pepit_tau))
+        print('\tTheoretical guarantee:\t||z_n - z_n-1||^2<= {:.6} ||z_0 - z_*||^2'.format(theoretical_tau))
 
     # Return the worst-case guarantee of the evaluated method (and the reference theoretical value)
     return pepit_tau, theoretical_tau
 
 
 if __name__ == "__main__":
-    pepit_tau, theoretical_tau = wc_proximal_point(gamma=0.2, n=10, wrapper="cvxpy", solver=None, verbose=1)
+    pepit_tau, theoretical_tau = wc_proximal_point(gamma=2, n=5, wrapper="cvxpy", solver=None, verbose=1)

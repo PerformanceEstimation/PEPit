@@ -80,45 +80,37 @@ class BlockConvexConcaveFunction(Function):
             function_id = "Function_{}".format(self.counter)
 
         # Set tables_of_constraints attributes
-        self.tables_of_constraints["convexity_block_{}".format(0)] = [[]]*len(self.list_of_points)
-        self.tables_of_constraints["concavity_block_{}".format(1)] = [[]]*len(self.list_of_points)
+        self.tables_of_constraints["convexity_concavity_block_{}".format(0)] = [[]]*len(self.list_of_points)
 
         # Browse list of points and create interpolation constraints
         for i, point_i in enumerate(self.list_of_points):
 
-            xi, gi, fi = point_i
-            xi_id = xi.get_name()
-            if xi_id is None:
-                xi_id = "Point_{}".format(i)
+            zi, gi, fi = point_i
+            zi_id = zi.get_name()
+            if zi_id is None:
+                zi_id = "Point_{}".format(i)
 
             for j, point_j in enumerate(self.list_of_points):
 
-                xj, gj, fj = point_j
-                xj_id = xj.get_name()
-                if xj_id is None:
-                    xj_id = "Point_{}".format(j)
+                zj, gj, fj = point_j
+                zj_id = zj.get_name()
+                if zj_id is None:
+                    zj_id = "Point_{}".format(j)
 
                 if point_i == point_j:
-                    self.tables_of_constraints["convexity_block_{}".format(0)][i].append(0)
-                    self.tables_of_constraints["concavity_block_{}".format(1)][i].append(0)
+                    self.tables_of_constraints["convexity_concavity_block_{}".format(0)][i].append(0)
 
                 else:
-                    gj_cvx = self.partition.get_block(gj, 0)
-                    xi_cvx = self.partition.get_block(xi, 0)
-                    xj_cvx = self.partition.get_block(xj, 0)
-                    constraint = fi - fj >= gj_cvx * (xi_cvx - xj_cvx)
-                    constraint.set_name("IC_{}_convexity_block_{}({}, {})".format(function_id, 0,
-                                                                                  xi_id, xj_id))
-                    self.tables_of_constraints["convexity_block_{}".format(0)][i].append(constraint)
-                    self.list_of_class_constraints.append(constraint)
+                    gj_x = self.partition.get_block(gj, 0)
+                    xi = self.partition.get_block(zi, 0)
+                    xj = self.partition.get_block(zj, 0)
 
-                    gj_ccv = self.partition.get_block(gj, 1)
-                    xi_ccv = self.partition.get_block(xi, 1)
-                    xj_ccv = self.partition.get_block(xj, 1)
-                    constraint = fi - fj <= gj_ccv * (xi_ccv - xj_ccv)
-                    constraint.set_name("IC_{}_concavity_block_{}({}, {})".format(function_id, 1,
-                                                                                  xi_id, xj_id))
-                    self.tables_of_constraints["concavity_block_{}".format(1)][i].append(constraint)
+                    gi_y = self.partition.get_block(gi, 1)
+                    yi = self.partition.get_block(zi, 1)
+                    yj = self.partition.get_block(zj, 1)
+                    constraint = fi >= fj + gj_x * (xi - xj) + gi_y * (yi - yj)
+                    constraint.set_name("IC_{}_convexity_concavity_block_{}({}, {})".format(function_id, 0,
+                                                                                  zi_id, zj_id))
+                    self.tables_of_constraints["convexity_concavity_block_{}".format(0)][i].append(constraint)
                     self.list_of_class_constraints.append(constraint)
-
                     
