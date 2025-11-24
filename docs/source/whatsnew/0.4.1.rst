@@ -1,0 +1,4 @@
+What's new in PEPit 0.4.1
+=========================
+
+- Fix: An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.

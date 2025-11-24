@@ -146,7 +146,7 @@ class MosekWrapper(Wrapper):
 
         sym_A = self.task.appendsparsesymmat(Point.counter, A_i, A_j, A_val)
         self.task.putbaraij(nb_cons, 0, [sym_A], [1.0])
-        self.task.putaijlist(nb_cons + np.zeros(a_i.shape, dtype=np.int8), a_i, a_val)
+        self.task.putaijlist(np.full(a_i.shape, nb_cons), a_i, a_val)
 
         if track:
             self._constraint_index_in_mosek.append(nb_cons)
@@ -201,7 +201,7 @@ class MosekWrapper(Wrapper):
                 # fill the mosek (equality) constraint 
                 self.task.putbaraij(nb_cons, 0, [sym_A1], [1.0])
                 self.task.putbaraij(nb_cons, psd_matrix.counter + 1, [sym_A2], [1.0])
-                self.task.putaijlist(nb_cons + np.zeros(a_i.shape, dtype=np.int8), a_i, a_val)
+                self.task.putaijlist(np.full(a_i.shape, nb_cons), a_i, a_val)
                 self.task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
 
         # Print a message if verbose mode activated
