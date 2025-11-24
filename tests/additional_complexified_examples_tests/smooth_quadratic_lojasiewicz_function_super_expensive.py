@@ -5,15 +5,16 @@ from PEPit.expression import Expression
 from PEPit import PSDMatrix
 
 
-class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
+class SmoothQuadraticLojasiewiczFunctionComplexified(Function):
     """
-    The :class:`SmoothQuadraticLojasiewiczFunctionExpensive` class overwrites the `add_class_constraints` method
+    The :class:`SmoothQuadraticLojasiewiczFunctionSuperExpensive` class overwrites the `add_class_constraints` method
     of :class:`Function`, implementing some constraints (which are not necessary and sufficient for interpolation)
     for the class of smooth (not necessarily convex) functions that also satisfy a quadratic Lojasiewicz inequality
     (sometimes also referred to as a Polyak-Lojasiewicz inequality). Extensive descriptions of such classes of
     functions can be found in [1, 2].
     
-    The conditions implemented here are presented in [3, Proposition 3.4].
+    The conditions implemented here are presented in [3 (version 1 on arXiv), Proposition 3.4], that have been 
+    improved since then [4, Proposition 3.4].
 
     Warning:
         Smooth functions satisfying a Lojasiewicz property do not enjoy known interpolation conditions.
@@ -43,8 +44,12 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
     <https://bolte.perso.math.cnrs.fr/Loja.pdf>`_
 
     `[3] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
+    A constructive approach to strengthen algebraic descriptions of function and operator classes (Version 1).
+    <https://arxiv.org/pdf/2504.14377v1>`_
+
+    `[4] A. Rubbens, J.M. Hendrickx, A. Taylor (2025).
     A constructive approach to strengthen algebraic descriptions of function and operator classes.
-    <https://arxiv.org/pdf/2504.14377.pdf>`_
+    <https://arxiv.org/pdf/2504.14377>`_
 
     """
 
@@ -162,31 +167,24 @@ class SmoothQuadraticLojasiewiczFunctionExpensive(Function):
                             xi - xj) ** 2
                     B = (self.L + self.mu) * (fi - fs - 1 / (2 * self.L) * gi ** 2)
                     C = (self.L - self.mu) * (fj - fs + 1 / (2 * self.L) * gj ** 2)
+
+                    D = 2 * self.mu * (B - C - (self.L + 3 * self.mu) * A) / (2 * self.L + self.mu)
+                    E = 4 * self.mu ** 2 * ((self.L + self.mu) * A - 2 * B) / (2 * self.L + self.mu) ** 2
+                    F = - 2 * self.mu * A - D - E - 8 * self.mu ** 3 * B / (2 * self.L + self.mu) ** 3
                     
-                    Mt11 = - A * ( 2 * self.L + self.mu )
-                    Mt12 = Expression()
-                    Mt22 = Expression()
-                    
-                    D = B - C - ( self.L + 3 * self.mu ) * A
+                    M13 = Expression()
+                    M14 = Expression()
+                    M22 = - 6 * self.mu * A - D - 2 * M13
+                    M24 = Expression()
+                    M33 = - 6 * self.mu * A - 2 * D - E - 2 * M24
 
-                    M11 = Mt11 - 4 * self.mu / ( 2 * self.L + self.mu) * Mt12 - D
-                    M12 = Mt12 - self.mu / ( 2 * self.L + self.mu) * Mt22 - (self.L + self.mu) / 2 * A + B
-                    M22 = Mt22 - B
+                    T = np.array([[-2 * self.mu * A, 0, M13, M14],
+                                  [0, M22, -M14, M24],
+                                  [M13, -M14, M33, 0],
+                                  [M14, M24, 0, F]], dtype=Expression)
 
-                    T1 = np.array([[M11, M12],
-                                  [M12, M22]], dtype=Expression)
-
-                    psd_matrix = PSDMatrix(matrix_of_expressions=T1,
+                    psd_matrix = PSDMatrix(matrix_of_expressions=T,
                                            name="IC_{}_{}({}, {})".format(function_id,
-                                                                          "smooth_quadratic_lojasiewicz_lmi_1",
-                                                                          xi_id, xj_id))
-                    self.list_of_class_psd.append(psd_matrix)
-
-                    T2 = np.array([[Mt11, Mt12],
-                                  [Mt12, Mt22]], dtype=Expression)
-
-                    psd_matrix = PSDMatrix(matrix_of_expressions=T2,
-                                           name="IC_{}_{}({}, {})".format(function_id,
-                                                                          "smooth_quadratic_lojasiewicz_lmi_2",
+                                                                          "smooth_quadratic_lojasiewicz_lmi",
                                                                           xi_id, xj_id))
                     self.list_of_class_psd.append(psd_matrix)
