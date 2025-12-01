@@ -46,8 +46,8 @@ class PEP(object):
         G_value (ndarray): the value of the Gram matrix G that the solver found.
         F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
         
-        trim_dimension (bool): trims the apperent useless dimensions of the found worst-case function
-                               (best used with dimension_reduction_heuristic)
+        trim_dim (bool): trims the apperent useless dimensions of the found worst-case function
+                         (best used with dimension_reduction_heuristic)
                                
         toggled_dimensions (int): number of dimensions output when using eval() on :class:`Point` objects
                                  (after solving the PEP)
@@ -674,9 +674,11 @@ class PEP(object):
         """
         
         self.trim_dim = trim_dim
-        self.toggled_dimensions = toggled_dimensions
-        
-        self._eval_points_and_function_values(self.F_value, self.G_value, verbose=0)
+        if toggled_dimensions is not None:
+            self.toggled_dimensions = min(toggled_dimensions, Point.counter)
+        elif self.estimated_dimension is not None:
+            self.toggled_dimensions = min(self.estimated_dimension, Point.counter)
+        Point._toggled_dimensions = self.toggled_dimensions
 
     def check_feasibility(self, wc_value, verbose=1):
         """
@@ -888,7 +890,6 @@ class PEP(object):
     def _eval_points_and_function_values(self, F_value, G_value, verbose=1):
         """
         Store values of :class:`Point` and :class:`Expression objects at optimum after the PEP has been solved.
-        It adapts to the option `trim_dimension` and `toggle_dimensions` to trim worst-case dimensions.
 
         Args:
             F_value (nd.array): value of the cvxpy variable F
@@ -917,16 +918,6 @@ class PEP(object):
 
         # Extracts points values
         points_values = np.linalg.qr((np.sqrt(eig_val) * eig_vec).T, mode='r')
-        nb_points = points_values.shape[1]
-        
-        # Adapts to the trim_dimensions and toggled_dimensions
-        if not self.trim_dim:
-            toggled_dimensions = nb_points
-        else:
-            if self.toggled_dimensions is not None:
-                toggled_dimensions = np.min(self.toggled_dimensions, nb_points)
-            else:
-                toggled_dimensions = np.min(self.estimated_dimension, nb_points)
 
         # Iterate over point and function value
         # Set the attribute value of all leaf variables to the right value
@@ -962,3 +953,12 @@ class PEP(object):
                                 raise TypeError(
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
+        
+        # Adapts to the trim_dimensions and toggled_dimensions
+        if not self.trim_dim:
+            toggled_dimensions = Point.counter
+        else:
+            if self.toggled_dimensions is not None:
+                Point._toggled_dimensions = min(self.toggled_dimensions, nb_points)
+            else:
+                Point._toggled_dimensions = min(self.estimated_dimension, nb_points)
