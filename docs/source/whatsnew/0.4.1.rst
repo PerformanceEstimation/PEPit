@@ -6,3 +6,5 @@ What's new in PEPit 0.4.1
 - Added uselessly complexified tests to verify numerically that the formulations are in line.
 
 - Fix: An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.
+
+- New: one can disable some software verification tools (licensing, installation, etc) to allow for fast processing time (via boolean option safe_mode).

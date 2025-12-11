@@ -281,8 +281,9 @@ class PEP(object):
         # Store performance metric in the appropriate list
         self.list_of_performance_metrics.append(expression)
 
-    def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", verbose=1,
-              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4, **kwargs):
+    def solve(self, wrapper="cvxpy", return_primal_or_dual="dual", safe_mode=True, verbose=1,
+              dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4,
+              **kwargs):
         """
         Transform the :class:`PEP` under the SDP form, and solve it. Parse the options for solving the SDPs,
         instantiate the concerning wrappers and call the main internal solve option for solving the PEP.
@@ -296,6 +297,9 @@ class PEP(object):
                                                    (primal value of the objective).
                                                    Default is "dual".
                                                    Note both value should be almost the same by strong duality.
+            safe_mode (bool, optional): Enable safe mode that includes basic checks such as appropriate packages 
+                                        being installed or not, or licenses. Deactivating might lead to codes that
+                                        are harder to debug.
 
             verbose (int, optional): Level of information details to print
                                      (Override the solver verbose parameter).
@@ -315,11 +319,11 @@ class PEP(object):
             eig_regularization (float, optional): The regularization we use to make
                                                   :math:`G + \\mathrm{eig_regularization}I_d \succ 0`.
                                                   (only used when "dimension_reduction_heuristic" is not None)
-                                                  The default value is 1e-5.
+                                                  The default value is 1e-3.
             tol_dimension_reduction (float, optional): The error tolerance in the heuristic minimization problem.
                                                        Precisely, the second problem minimizes "optimal_value - tol"
                                                        (only used when "dimension_reduction_heuristic" is not None)
-                                                       The default value is 1e-5.
+                                                       The default value is 1e-4.
             kwargs (keywords, optional): Additional solver-specific arguments.
 
         Returns:
@@ -330,21 +334,23 @@ class PEP(object):
 
         # Check that the solver is installed, if it is not, switch to CVXPY.
         found_python_package = importlib.util.find_spec(wrapper_name)
-        if found_python_package is None:
-            if verbose:
-                print('\033[96m(PEPit) {} not found in system environment,'
-                      ' switching to cvxpy\033[0m'.format(wrapper_name))
-            wrapper_name = "cvxpy"
+        if safe_mode:
+            if found_python_package is None:
+                if verbose:
+                    print('\033[96m(PEPit) {} not found in system environment,'
+                          ' switching to cvxpy\033[0m'.format(wrapper_name))
+                wrapper_name = "cvxpy"
 
         # Initiate a wrapper to interface with the solver
         wrapper = WRAPPERS[wrapper_name](verbose=verbose)
 
         # Check that a valid license to the solver is found. Otherwise, switch to CVXPY.
-        if not wrapper.check_license():
-            if verbose:
-                print('\033[96m(PEPit) No valid {} license found, switching to cvxpy\033[96m'.format(wrapper_name))
-            wrapper_name = "cvxpy"
-            wrapper = WRAPPERS[wrapper_name](verbose=verbose)
+        if safe_mode:
+            if not wrapper.check_license():
+                if verbose:
+                    print('\033[96m(PEPit) No valid {} license found, switching to cvxpy\033[96m'.format(wrapper_name))
+                wrapper_name = "cvxpy"
+                wrapper = WRAPPERS[wrapper_name](verbose=verbose)
 
         # Store wrapper information in self
         self.wrapper_name = wrapper_name
