@@ -418,7 +418,7 @@ class Function(object):
                 if xj_id is None:
                     xj_id = "Point_{}".format(j)
 
-                if i == j or (i > j and symmetry):
+                if point_i == point_j or (i > j and symmetry):
                     row_of_constraints.append(0)
 
                 else:
