@@ -8,6 +8,7 @@ from .convex_support_function import ConvexSupportFunction
 from .rsi_eb_function import RsiEbFunction
 from .smooth_convex_function import SmoothConvexFunction
 from .smooth_convex_lipschitz_function import SmoothConvexLipschitzFunction
+from .smooth_convex_qgm_functions import SmoothConvexQGFunction
 from .smooth_function import SmoothFunction
 from .smooth_quadratic_lojasiewicz_function_cheap import SmoothQuadraticLojasiewiczFunctionCheap
 from .smooth_quadratic_lojasiewicz_function_expensive import SmoothQuadraticLojasiewiczFunctionExpensive
@@ -25,6 +26,7 @@ __all__ = ['block_smooth_convex_function_cheap', 'BlockSmoothConvexFunctionCheap
            'rsi_eb_function', 'RsiEbFunction',
            'smooth_convex_function', 'SmoothConvexFunction',
            'smooth_convex_lipschitz_function', 'SmoothConvexLipschitzFunction',
+           'smooth_convex_qgm_functions', 'SmoothConvexQGFunction',
            'smooth_function', 'SmoothFunction',
            'smooth_quadratic_lojasiewicz_function_cheap', 'SmoothQuadraticLojasiewiczFunctionCheap',
            'smooth_quadratic_lojasiewicz_function_expensive', 'SmoothQuadraticLojasiewiczFunctionExpensive',
