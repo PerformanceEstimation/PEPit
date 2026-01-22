@@ -8,6 +8,7 @@ class Constraint(object):
 
     Attributes:
         name (str): A name set through the set_name method. None is no name is given.
+        activated (bool): A boolean flag used to activate/deactivate the Constraint in the PEP.
         expression (Expression): The :class:`Expression` that is compared to 0.
         equality_or_inequality (str): "equality" or "inequality". Encodes the type of constraint.
         _value (float): numerical value of `self.expression` obtained after solving the PEP via SDP solver.
@@ -59,6 +60,9 @@ class Constraint(object):
         # Initialize name of the constraint
         self.name = None
 
+        # Initialize the activated attribute to True
+        self.activated = True
+
         # Update the counter
         self.counter = Constraint.counter
         Constraint.counter += 1
@@ -91,6 +95,20 @@ class Constraint(object):
         Returns (str): the attribute name.
         """
         return self.name
+
+    def activate(self):
+        """
+        Activate the use of the Constraint.
+
+        """
+        self.activated = True
+
+    def deactivate(self):
+        """
+        Deactivate the use of the Constraint.
+
+        """
+        self.activated = False
 
     def eval(self):
         """
