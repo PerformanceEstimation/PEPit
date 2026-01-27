@@ -9,6 +9,7 @@ class PSDMatrix(object):
 
     Attributes:
         name (str): A name set through the set_name method. None is no name is given.
+        activated (bool): A boolean flag used to activate/deactivate the LMI constraint in the PEP.
         matrix_of_expressions (Iterable of Iterable of Expression): a square matrix of :class:`Expression` objects.
         shape (tuple of ints): the shape of the underlying matrix of :class:`Expression` objects.
         _value (2D ndarray of floats): numerical values of :class:`Expression` objects
@@ -61,6 +62,9 @@ class PSDMatrix(object):
             TypeError: if provided matrix does not contain only Expressions and / or scalar values.
 
         """
+        # Initialize the activated attribute to True
+        self.activated = True
+
         # Initialize name of the psd matrix
         self.name = name
 
@@ -94,6 +98,20 @@ class PSDMatrix(object):
         Returns (str): the attribute name.
         """
         return self.name
+
+    def activate(self):
+        """
+        Activate the use of the LMI constraint.
+
+        """
+        self.activated = True
+
+    def deactivate(self):
+        """
+        Deactivate the use of the LMI constraint.
+
+        """
+        self.activated = False
 
     @staticmethod
     def _store(matrix_of_expressions):
