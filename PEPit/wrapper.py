@@ -89,13 +89,12 @@ class Wrapper(object):
         """
         raise NotImplementedError("This method must be overwritten in children classes")
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
+    def send_lmi_constraint_to_solver(self, psd_matrix):
         """
         Transfer a PEPit :class:`PSDMatrix` (LMI constraint) to the solver
         and add it the tracking lists.
 
         Args:
-            psd_counter (int): a counter useful for the verbose mode.
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """

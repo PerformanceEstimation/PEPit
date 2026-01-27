@@ -112,6 +112,7 @@ class TestWrapperCVXPY(unittest.TestCase):
                            1 == (self.x0 - self.xs) ** 2,
                            ]:
             self.problem.list_of_constraints = [constraint]
+            self.problem._prepare_constraints(verbose=self.verbose)
             self.problem.solve(verbose=self.verbose, wrapper=self.wrapper)
             elements_of_proof.append(constraint.eval_dual() * constraint.expression)
 
