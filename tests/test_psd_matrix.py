@@ -103,6 +103,13 @@ class TestPSDMatrix(unittest.TestCase):
         self.assertIs(self.psd1[0, 0], self.expr1)
         self.assertIs(self.psd2[0, 1], self.expr3)
 
+    def test_activated(self):
+        self.assertIs(self.psd1.activated, True)
+        self.psd1.deactivate()
+        self.assertIs(self.psd1.activated, False)
+        self.psd1.activate()
+        self.assertIs(self.psd1.activated, True)
+
     def test_eval(self):
         
         # The PEP has not been solved yet, so no value is accessible.

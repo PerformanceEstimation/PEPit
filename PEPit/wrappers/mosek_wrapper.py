@@ -161,12 +161,11 @@ class MosekWrapper(Wrapper):
                              ' must either be \'equality\' or \'inequality\'.'
                              '{} got {}'.format(constraint.get_name(), constraint.equality_or_inequality))
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
+    def send_lmi_constraint_to_solver(self, psd_matrix):
         """
         Transfer a PEPit :class:`PSDMatrix` (LMI constraint) to MOSEK and add it the tracking lists.
 
         Args:
-            psd_counter (int): a counter useful for the verbose mode.
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """
@@ -203,10 +202,6 @@ class MosekWrapper(Wrapper):
                 self.task.putbaraij(nb_cons, psd_matrix.counter + 1, [sym_A2], [1.0])
                 self.task.putaijlist(np.full(a_i.shape, nb_cons), a_i, a_val)
                 self.task.putconbound(nb_cons, mosek.boundkey.fx, -alpha_val, -alpha_val)
-
-        # Print a message if verbose mode activated
-        if self.verbose > 0:
-            print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
 
     def _recover_dual_values(self):
         """
