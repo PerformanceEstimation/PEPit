@@ -135,7 +135,7 @@ class CvxpyWrapper(Wrapper):
             # Raise an exception otherwise
             raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
                              ' must either be \'equality\' or \'inequality\'.'
-                             'Got {}'.format(constraint.equality_or_inequality))
+                             '{} got {}'.format(constraint.get_name(), constraint.equality_or_inequality))
 
         # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints.append(cvxpy_constraint)

@@ -159,7 +159,7 @@ class MosekWrapper(Wrapper):
             # Raise an exception otherwise
             raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
                              ' must either be \'equality\' or \'inequality\'.'
-                             'Got {}'.format(constraint.equality_or_inequality))
+                             '{} got {}'.format(constraint.get_name(), constraint.equality_or_inequality))
 
     def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
         """
