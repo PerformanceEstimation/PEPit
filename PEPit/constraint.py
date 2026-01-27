@@ -57,15 +57,15 @@ class Constraint(object):
             AssertionError: if provided `equality_or_inequality` argument is neither "equality" nor "inequality".
 
         """
-        # Initialize name of the constraint
-        self.name = None
-
         # Initialize the activated attribute to True
         self.activated = True
 
         # Update the counter
         self.counter = Constraint.counter
         Constraint.counter += 1
+
+        # Initialize name of the constraint
+        self.name = "Constraint {}".format(self.counter)
 
         # Store the underlying expression
         self.expression = expression
