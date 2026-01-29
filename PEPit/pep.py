@@ -585,6 +585,12 @@ class PEP(object):
         # Determine the lists of constraints and LMIs sent to wrapper
         self._list_of_constraints_sent_to_wrapper = [constraint for constraint in self._list_of_prepared_constraints if constraint.activated]
         self._list_of_psd_sent_to_wrapper = [psd for psd in self._list_of_prepared_psd if psd.activated]
+        
+        # Clean dual variables before solving
+        for constraint in self._list_of_prepared_constraints:
+            constraint._dual_variable_value = 0.
+        for psd in self._list_of_prepared_psd:
+            psd._dual_variable_value = np.zeros_like(psd.matrix_of_expressions)
 
         # Send constraints to the wrapper
         for constraint in self._list_of_constraints_sent_to_wrapper:
