@@ -1,10 +1,23 @@
 What's new in PEPit 0.4.1
 =========================
 
-- Improvement: The :class:`SmoothQuadraticLojasiewiczFunctionExpensive` has been improved with slightly cheaper formulations.
+New features:
+-------------
 
-- Added uselessly complexified tests to verify numerically that the formulations are in line.
+- One can now disable some software verification tools (licensing, installation, etc) to allow for fast processing time (via boolean option safe_mode).
 
-- Fix: An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.
+- Constraints (scalar and LMI) can now be deactivated using the `deactivate` method and activated back using the `activated` method. Note the PEP can be solved several times with different activated constraints. The method `solve` only creates the interpolation constraints once for all.
 
-- New: one can disable some software verification tools (licensing, installation, etc) to allow for fast processing time (via boolean option safe_mode).
+New demo:
+---------
+
+- The file `ressources/demo/PEPit_demo_extracting_a_proof.ipynb` contains an example usage of the new :class:`Constraint` feature.
+
+Fixes:
+------
+
+- The :class:`SmoothQuadraticLojasiewiczFunctionExpensive` has been improved with slightly cheaper formulations.
+
+- An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.
+
+- The method `add_constraints_from_two_lists_of_points` of the class :class:`Function` has been fixed. So far, it was assumed that the two lists were identical.
