@@ -74,7 +74,7 @@ class TestConstraints(unittest.TestCase):
 
     def test_name(self):
 
-        self.assertIsNone(self.initial_condition.get_name())
+        self.assertEqual(self.initial_condition.get_name(), "Constraint 0")
         self.assertIsNone(self.performance_metric.get_name())
 
         self.initial_condition.set_name("init")
@@ -92,6 +92,13 @@ class TestConstraints(unittest.TestCase):
         for i in range(len(self.problem.list_of_constraints)):
             self.assertIsInstance(self.problem.list_of_constraints[i].equality_or_inequality, str)
             self.assertIn(self.problem.list_of_constraints[i].equality_or_inequality, {'equality', 'inequality'})
+
+    def test_activated(self):
+        self.assertIs(self.initial_condition.activated, True)
+        self.initial_condition.deactivate()
+        self.assertIs(self.initial_condition.activated, False)
+        self.initial_condition.activate()
+        self.assertIs(self.initial_condition.activated, True)
 
     def test_eval(self):
 

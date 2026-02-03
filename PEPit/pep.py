@@ -37,8 +37,11 @@ class PEP(object):
         wrapper_name (str): name of the used wrapper.
         wrapper (Wrapper): :class:`Wrapper` object that interfaces between the :class:`PEP` and the solver.
 
-        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects sent to the wrapper.
-        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects sent to the wrapper.
+        _list_of_prepared_constraints (list): list of :class:`Constraint` objects ready to be sent to the wrapper.
+        _list_of_prepared_psd (list): list of :class:`PSDMatrix` objects ready to be sent to the wrapper.
+
+        _list_of_constraints_sent_to_wrapper (list): list of :class:`Constraint` objects actually sent to the wrapper.
+        _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects actually sent to the wrapper.
 
         objective (Expression): the expression to be maximized by the solver.
                                 It is set by the method `solve`. And should not be updated otherwise.
@@ -87,6 +90,8 @@ class PEP(object):
 
         # Initialize lists of constraints that will be sent to the wrapper to solve the SDP.
         # Those lists should not be updated by hand, only the solve method does update them.
+        self._list_of_prepared_constraints = list()
+        self._list_of_prepared_psd = list()
         self._list_of_constraints_sent_to_wrapper = list()
         self._list_of_psd_sent_to_wrapper = list()
 
@@ -330,6 +335,13 @@ class PEP(object):
             float: Worst case guarantee of the PEP.
 
         """
+        # Prepare the list of constraints to be given to the wrapper
+        # This runs only once!
+        # Then the method solve directly interacts with the solvers without browsing all PEPit's data.
+        if self.objective is None:
+            self._prepare_constraints(verbose=verbose)
+
+        # Prepare wrapper and solver
         wrapper_name = wrapper.lower()
 
         # Check that the solver is installed, if it is not, switch to CVXPY.
@@ -356,11 +368,169 @@ class PEP(object):
         self.wrapper_name = wrapper_name
         self.wrapper = wrapper
 
-        # Call the internal solve methods, which formulates and solves the PEP via the SDP solver.
+        # Call the internal solving methods, which formulates and solves the PEP via the SDP solver.
         out = self._solve_with_wrapper(wrapper, verbose, return_primal_or_dual,
                                        dimension_reduction_heuristic,
                                        eig_regularization, tol_dimension_reduction, **kwargs)
         return out
+
+    def _prepare_constraints(self, verbose=1):
+        """
+        Prepare the lists of scalar and lmi constraints that can be used.
+        Those are stored in the attributes `_list_of_prepared_constraints` and  `_list_of_prepared_psd`.
+
+        Args:
+            verbose (int, optional): Level of information details to print
+                                     (Override the solver verbose parameter).
+
+                                     - 0: No verbose at all
+                                     - 1: PEPit information is printed but not solver's
+                                     - 2: Both PEPit and solver details are printed
+
+        """
+
+        # Store functions that have class constraints as well as functions that have personal constraints
+        list_of_leaf_functions = [function for function in Function.list_of_functions
+                                  if function.get_is_leaf()]
+        list_of_functions_with_constraints = [function for function in Function.list_of_functions
+                                              if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
+
+        # Create all class constraints
+        for function in list_of_leaf_functions:
+            function.set_class_constraints()
+
+        # Create all partition constraints
+        for partition in BlockPartition.list_of_partitions:
+            partition.add_partition_constraints()
+
+        # Create an expression that serve for the objective (min of the performance measures)
+        self.objective = Expression(is_leaf=True)
+
+        # Initialize the lists of constraints sent to wrapper
+        self._list_of_prepared_constraints = list()
+        self._list_of_prepared_psd = list()
+
+        # Defining performance metrics
+        # Note maximizing the minimum of all the performance metrics
+        # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
+
+        for performance_metric in self.list_of_performance_metrics:
+            assert isinstance(performance_metric, Expression)
+            performance_metric_constraint = (self.objective <= performance_metric)
+            self._list_of_prepared_constraints.append(performance_metric_constraint)
+
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' performance measure is the minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
+
+        # Defining initial conditions and general constraints
+        if verbose:
+            print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
+        for condition in self.list_of_constraints:
+            self._list_of_prepared_constraints.append(condition)
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' initial conditions and general constraints ({} constraint(s) added)'.format(
+                    len(self.list_of_constraints)))
+
+        # Defining general lmi constraints
+        if len(self.list_of_psd) > 0:
+            if verbose:
+                print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
+            for psd_counter, psd_matrix in enumerate(self.list_of_psd):
+                # Print a message if verbose mode activated
+                if verbose > 0:
+                    print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
+                # Add the PSD matrix to the list of prepared PSDs
+                self._list_of_prepared_psd.append(psd_matrix)
+
+        # Defining class constraints
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' interpolation conditions for {} function(s)'.format(len(list_of_leaf_functions)))
+        function_counter = 0
+        for function in list_of_leaf_functions:
+            function_counter += 1
+
+            if verbose:
+                print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
+                      'scalar constraint(s) ...')
+
+            for constraint in function.list_of_class_constraints:
+                self._list_of_prepared_constraints.append(constraint)
+
+            if verbose:
+                print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_constraints),
+                      'scalar constraint(s) added')
+
+            if len(function.list_of_class_psd) > 0:
+                if verbose:
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_psd),
+                          'lmi constraint(s) ...')
+
+                for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
+                    # Print a message if verbose mode activated
+                    if verbose > 0:
+                        print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
+                    # Add the PSD matrix to the list of prepared PSDs
+                    self._list_of_prepared_psd.append(psd_matrix)
+
+                if verbose:
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_psd),
+                          'lmi constraint(s) added')
+
+        # Other function constraints
+        if verbose:
+            print('(PEPit) Setting up the problem:'
+                  ' additional constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
+        function_counter = 0
+        for function in list_of_functions_with_constraints:
+            function_counter += 1
+
+            if len(function.list_of_constraints) > 0:
+                if verbose:
+                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_constraints),
+                          'scalar constraint(s) ...')
+
+                for constraint in function.list_of_constraints:
+                    self._list_of_prepared_constraints.append(constraint)
+
+                if verbose:
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_constraints),
+                          'scalar constraint(s) added')
+
+            if len(function.list_of_psd) > 0:
+                if verbose:
+                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_psd),
+                          'lmi constraint(s) ...')
+
+                for psd_counter, psd_matrix in enumerate(function.list_of_psd):
+                    # Print a message if verbose mode activated
+                    if verbose > 0:
+                        print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
+                    # Add the PSD matrix to the list of prepared PSDs
+                    self._list_of_prepared_psd.append(psd_matrix)
+
+                if verbose:
+                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_psd),
+                          'lmi constraint(s) added')
+
+        # Defining block partition constraints
+        if verbose and len(BlockPartition.list_of_partitions) > 0:
+            print(
+                '(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
+
+        partition_counter = 0
+        for partition in BlockPartition.list_of_partitions:
+            partition_counter += 1
+            if verbose:
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
+                      'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
+            for constraint in partition.list_of_constraints:
+                self._list_of_prepared_constraints.append(constraint)
+            if verbose:
+                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
+                      'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
 
     def _solve_with_wrapper(self, wrapper, verbose=1, return_primal_or_dual="dual",
                             dimension_reduction_heuristic=None, eig_regularization=1e-3, tol_dimension_reduction=1e-4,
@@ -406,150 +576,27 @@ class PEP(object):
 
         """
 
-        # Store functions that have class constraints as well as functions that have personal constraints
-        list_of_leaf_functions = [function for function in Function.list_of_functions
-                                  if function.get_is_leaf()]
-        list_of_functions_with_constraints = [function for function in Function.list_of_functions
-                                              if len(function.list_of_constraints) > 0 or len(function.list_of_psd) > 0]
-
-        # Create all class constraints
-        for function in list_of_leaf_functions:
-            function.set_class_constraints()
-
-        # Create all partition constraints
-        for partition in BlockPartition.list_of_partitions:
-            partition.add_partition_constraints()
-
-        # Create an expression that serve for the objective (min of the performance measures)
-        self.objective = Expression(is_leaf=True)
-
         # Report the creation of variables (G, F)
         if verbose:
             print('(PEPit) Setting up the problem:'
                   ' size of the Gram matrix: {}x{}'.format(Point.counter, Point.counter))
         wrapper.set_main_variables()
 
-        # Initialize the lists of constraints sent to wrapper
-        self._list_of_constraints_sent_to_wrapper = list()
-        self._list_of_psd_sent_to_wrapper = list()
+        # Determine the lists of constraints and LMIs sent to wrapper
+        self._list_of_constraints_sent_to_wrapper = [constraint for constraint in self._list_of_prepared_constraints if constraint.activated]
+        self._list_of_psd_sent_to_wrapper = [psd for psd in self._list_of_prepared_psd if psd.activated]
+        
+        # Clean dual variables before solving
+        for constraint in self._list_of_prepared_constraints:
+            constraint._dual_variable_value = 0.
+        for psd in self._list_of_prepared_psd:
+            psd._dual_variable_value = np.zeros_like(psd.matrix_of_expressions)
 
-        # Defining performance metrics
-        # Note maximizing the minimum of all the performance metrics
-        # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
-
-        for performance_metric in self.list_of_performance_metrics:
-            assert isinstance(performance_metric, Expression)
-            performance_metric_constraint = (self.objective <= performance_metric)
-            wrapper.send_constraint_to_solver(performance_metric_constraint)
-            self._list_of_constraints_sent_to_wrapper.append(performance_metric_constraint)
-
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' performance measure is the minimum of {} element(s)'.format(len(self.list_of_performance_metrics)))
-
-        # Defining initial conditions and general constraints
-        if verbose:
-            print('(PEPit) Setting up the problem: Adding initial conditions and general constraints ...')
-        for condition in self.list_of_constraints:
-            wrapper.send_constraint_to_solver(condition)
-            self._list_of_constraints_sent_to_wrapper.append(condition)
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' initial conditions and general constraints ({} constraint(s) added)'.format(
-                    len(self.list_of_constraints)))
-
-        # Defining general lmi constraints
-        if len(self.list_of_psd) > 0:
-            if verbose:
-                print('(PEPit) Setting up the problem: {} lmi constraint(s) added'.format(len(self.list_of_psd)))
-            for psd_counter, psd_matrix in enumerate(self.list_of_psd):
-                wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
-                self._list_of_psd_sent_to_wrapper.append(psd_matrix)
-
-        # Defining class constraints
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' interpolation conditions for {} function(s)'.format(len(list_of_leaf_functions)))
-        function_counter = 0
-        for function in list_of_leaf_functions:
-            function_counter += 1
-
-            if verbose:
-                print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_constraints),
-                      'scalar constraint(s) ...')
-
-            for constraint in function.list_of_class_constraints:
-                wrapper.send_constraint_to_solver(constraint)
-                self._list_of_constraints_sent_to_wrapper.append(constraint)
-
-            if verbose:
-                print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_constraints),
-                      'scalar constraint(s) added')
-
-            if len(function.list_of_class_psd) > 0:
-                if verbose:
-                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_class_psd),
-                          'lmi constraint(s) ...')
-
-                for psd_counter, psd_matrix in enumerate(function.list_of_class_psd):
-                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
-                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
-
-                if verbose:
-                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_class_psd),
-                          'lmi constraint(s) added')
-
-        # Other function constraints
-        if verbose:
-            print('(PEPit) Setting up the problem:'
-                  ' additional constraints for {} function(s)'.format(len(list_of_functions_with_constraints)))
-        function_counter = 0
-        for function in list_of_functions_with_constraints:
-            function_counter += 1
-
-            if len(function.list_of_constraints) > 0:
-                if verbose:
-                    print('\t\t\tFunction', function_counter, ':', 'Adding', len(function.list_of_constraints),
-                          'scalar constraint(s) ...')
-
-                for constraint in function.list_of_constraints:
-                    wrapper.send_constraint_to_solver(constraint)
-                    self._list_of_constraints_sent_to_wrapper.append(constraint)
-
-                if verbose:
-                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_constraints),
-                          'scalar constraint(s) added')
-
-            if len(function.list_of_psd) > 0:
-                if verbose:
-                    print('\t\t function', function_counter, ':', 'Adding', len(function.list_of_psd),
-                          'lmi constraint(s) ...')
-
-                for psd_counter, psd_matrix in enumerate(function.list_of_psd):
-                    wrapper.send_lmi_constraint_to_solver(psd_counter, psd_matrix)
-                    self._list_of_psd_sent_to_wrapper.append(psd_matrix)
-
-                if verbose:
-                    print('\t\t\tFunction', function_counter, ':', len(function.list_of_psd),
-                          'lmi constraint(s) added')
-
-        # Defining block partition constraints
-        if verbose and len(BlockPartition.list_of_partitions) > 0:
-            print(
-                '(PEPit) Setting up the problem: {} partition(s) added'.format(len(BlockPartition.list_of_partitions)))
-
-        partition_counter = 0
-        for partition in BlockPartition.list_of_partitions:
-            partition_counter += 1
-            if verbose:
-                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
-                      'blocks: Adding', len(partition.list_of_constraints), 'scalar constraint(s)...')
-            for constraint in partition.list_of_constraints:
-                wrapper.send_constraint_to_solver(constraint)
-                self._list_of_constraints_sent_to_wrapper.append(constraint)
-            if verbose:
-                print('\t\t\tPartition', partition_counter, 'with', partition.get_nb_blocks(),
-                      'blocks:', len(partition.list_of_constraints), 'scalar constraint(s) added')
+        # Send constraints to the wrapper
+        for constraint in self._list_of_constraints_sent_to_wrapper:
+            wrapper.send_constraint_to_solver(constraint)
+        for psd in self._list_of_psd_sent_to_wrapper:
+            wrapper.send_lmi_constraint_to_solver(psd)
 
         # Instantiate the problem
         if verbose:
@@ -704,13 +751,13 @@ class PEP(object):
                 print(message)
 
         # Get the max value of all transgression of the constraints
-        if self._list_of_constraints_sent_to_wrapper:
+        if self._list_of_prepared_constraints:
             max_constraint_error = np.max(
                 [constraint.eval()
-                 for constraint in self._list_of_constraints_sent_to_wrapper
+                 for constraint in self._list_of_prepared_constraints
                  if constraint.equality_or_inequality == "inequality"]
                 + [np.abs(constraint.eval())
-                   for constraint in self._list_of_constraints_sent_to_wrapper
+                   for constraint in self._list_of_prepared_constraints
                    if constraint.equality_or_inequality == "equality"]
             )
             if verbose:
@@ -755,7 +802,7 @@ class PEP(object):
         # Scalar constraints
         # Dual of inequality constraints >= 0
         inequality_constraint_dual_values = [constraint.eval_dual()
-                                             for constraint in self._list_of_constraints_sent_to_wrapper
+                                             for constraint in self._list_of_prepared_constraints
                                              if constraint.equality_or_inequality == "inequality"]
         if inequality_constraint_dual_values:
             inequality_constraint_dual_min_value = np.min(inequality_constraint_dual_values)
@@ -765,7 +812,7 @@ class PEP(object):
                     message += " up to an error of {}".format(-inequality_constraint_dual_min_value)
                 print(message)
         # + <expression, dual> <= 0
-        for constraint in self._list_of_constraints_sent_to_wrapper:
+        for constraint in self._list_of_prepared_constraints:
             constraints_combination += constraint.eval_dual() * constraint.expression
 
         # Proof reconstruction

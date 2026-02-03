@@ -135,18 +135,17 @@ class CvxpyWrapper(Wrapper):
             # Raise an exception otherwise
             raise ValueError('The attribute \'equality_or_inequality\' of a constraint object'
                              ' must either be \'equality\' or \'inequality\'.'
-                             'Got {}'.format(constraint.equality_or_inequality))
+                             '{} got {}'.format(constraint.get_name(), constraint.equality_or_inequality))
 
         # Add the corresponding CVXPY constraint to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints.append(cvxpy_constraint)
 
-    def send_lmi_constraint_to_solver(self, psd_counter, psd_matrix):
+    def send_lmi_constraint_to_solver(self, psd_matrix):
         """
         Transform a PEPit :class:`PSDMatrix` into a CVXPY symmetric PSD matrix
         and add the 2 formats of the constraints into the tracking lists.
 
         Args:
-            psd_counter (int): a counter useful for the verbose mode.
             psd_matrix (PSDMatrix): a matrix of expressions that is constrained to be PSD.
 
         """
@@ -169,10 +168,6 @@ class CvxpyWrapper(Wrapper):
         for i in range(psd_matrix.shape[0]):
             for j in range(psd_matrix.shape[1]):
                 cvxpy_constraints_list.append(M[i, j] == self._expression_to_solver(psd_matrix[i, j]))
-
-        # Print a message if verbose mode activated
-        if self.verbose > 0:
-            print('\t\t Size of PSD matrix {}: {}x{}'.format(psd_counter + 1, *psd_matrix.shape))
 
         # Add the corresponding CVXPY constraints to the list of constraints to be sent to CVXPY
         self._list_of_solver_constraints += cvxpy_constraints_list

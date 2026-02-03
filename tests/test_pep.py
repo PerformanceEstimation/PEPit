@@ -160,12 +160,40 @@ class TestPEP(unittest.TestCase):
     def test_consistency(self):
 
         # Solve twice the same problem in a row and verify the two lists of constraints have same length.
-        _ = self.problem.solve(verbose=self.verbose)
-        l1 = self.problem._list_of_constraints_sent_to_wrapper
-        _ = self.problem.solve(verbose=self.verbose)
-        l2 = self.problem._list_of_constraints_sent_to_wrapper
+        self.assertEqual(len(self.problem._list_of_prepared_constraints), 0)
+        self.assertEqual(len(self.problem._list_of_constraints_sent_to_wrapper), 0)
 
-        self.assertEqual(len(l1), len(l2))
+        # Run solve
+        _ = self.problem.solve(verbose=self.verbose)
+        lp1 = self.problem._list_of_prepared_constraints
+        ls1 = self.problem._list_of_constraints_sent_to_wrapper
+
+        # Rerun solve
+        _ = self.problem.solve(verbose=self.verbose)
+        lp2 = self.problem._list_of_prepared_constraints
+        ls2 = self.problem._list_of_constraints_sent_to_wrapper
+
+        # Deactivate one constraint, then rerun solve
+        self.problem.list_of_constraints[0].deactivate()
+        _ = self.problem.solve(verbose=self.verbose)
+        lp3 = self.problem._list_of_prepared_constraints
+        ls3 = self.problem._list_of_constraints_sent_to_wrapper
+
+        # Reactivate the constraint, then rerun solve
+        self.problem.list_of_constraints[0].activate()
+        _ = self.problem.solve(verbose=self.verbose)
+        lp4 = self.problem._list_of_prepared_constraints
+        ls4 = self.problem._list_of_constraints_sent_to_wrapper
+
+        # Compare lengths
+        self.assertEqual(len(lp1), len(lp2))
+        self.assertEqual(len(lp1), len(lp3))
+        self.assertEqual(len(lp1), len(lp4))
+
+        self.assertEqual(len(lp1), len(ls1))
+        self.assertEqual(len(lp2), len(ls2))
+        self.assertEqual(len(lp3), len(ls3)+1)
+        self.assertEqual(len(lp4), len(ls4))
 
     def test_dimension_reduction(self):
 
