@@ -48,6 +48,14 @@ class PEP(object):
 
         G_value (ndarray): the value of the Gram matrix G that the solver found.
         F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
+        
+        trim_dim (bool): trims the apperent useless dimensions of the found worst-case function
+                         (best used with dimension_reduction_heuristic)
+                               
+        toggled_dimensions (int): number of dimensions output when using eval() on :class:`Point` objects
+                                 (after solving the PEP)
+                                 
+        estimated_dimension (int): estimated dimension of computed worst-case instance.
 
         residual (ndarray): the dual value found by the solver to the lmi constraints G >> 0.
 
@@ -106,6 +114,10 @@ class PEP(object):
         # The constraint G >= 0 is the only constraint that is not defined from the class Constraint.
         # Its dual value, called residual, is then stored in the following attribute.
         self.residual = None
+        
+        self.trim_dim = False
+        self.toggled_dimensions = None
+        self.estimated_dimension = None
 
     @staticmethod
     def _reset_classes():
@@ -628,6 +640,7 @@ class PEP(object):
         # leading to different dual values. The ones we store here provide the proof of the obtained guarantee.
         self.residual = wrapper.assign_dual_values()
         G_value, F_value = wrapper.get_primal_variables()
+        nb_eigenvalues = G_value.shape[0]
 
         # Perform a dimension reduction if required
         if dimension_reduction_heuristic:
@@ -690,6 +703,7 @@ class PEP(object):
         self.F_value = F_value
         self._eval_points_and_function_values(F_value, G_value, verbose=verbose)
         dual_objective = self.check_feasibility(wc_value, verbose=verbose)
+        self.estimated_dimension = nb_eigenvalues
 
         # Return the value of the minimal performance metric
         if return_primal_or_dual == "dual":
@@ -699,6 +713,25 @@ class PEP(object):
         else:
             raise ValueError("The argument \'return_primal_or_dual\' must be \'dual\' or \`primal\`."
                              "Got {}".format(return_primal_or_dual))
+    
+    def trim_dimension(self, trim_dim=False, toggled_dimensions=None):
+        """
+        Activate the dimension trimmer (convenient for plotting worst-case trajectories).
+	`toggled_dimensions` dimensions are output when using `Point.eval`.
+
+        Args:
+            trim_dim (bool): activates/deactivates the dimension trimmer.
+            toggled_dimensions (int, optional): number of dimensions that are kept when evaluating.
+                                                default to the estimated number of nonzero eigenvalues.
+
+        """
+        
+        self.trim_dim = trim_dim
+        if toggled_dimensions is not None:
+            self.toggled_dimensions = min(toggled_dimensions, Point.counter)
+        elif self.estimated_dimension is not None:
+            self.toggled_dimensions = min(self.estimated_dimension, Point.counter)
+        Point._toggled_dimensions = self.toggled_dimensions
 
     def check_feasibility(self, wc_value, verbose=1):
         """
@@ -973,3 +1006,12 @@ class PEP(object):
                                 raise TypeError(
                                     "Expressions are made of function values, inner products and constants only!"
                                     "Got {}".format(type(sub_expression)))
+        
+        # Adapts to the trim_dimensions and toggled_dimensions
+        if not self.trim_dim:
+            toggled_dimensions = Point.counter
+        else:
+            if self.toggled_dimensions is not None:
+                Point._toggled_dimensions = min(self.toggled_dimensions, nb_points)
+            else:
+                Point._toggled_dimensions = min(self.estimated_dimension, nb_points)

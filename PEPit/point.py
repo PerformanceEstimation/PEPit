@@ -20,6 +20,7 @@ class Point(object):
                                    Keys are :class:`Point` objects.
                                    And values are their associated coefficients.
         counter (int): counts the number of leaf :class:`Point` objects.
+        _toggled_dimensions (int): shows only the first `toggled_dimensions` dimensions when using `eval`.
 
     :class:`Point` objects can be added or subtracted together.
     They can also be multiplied and divided by a scalar value.
@@ -52,6 +53,9 @@ class Point(object):
     # namely the number of points needed to linearly generate the others.
     counter = 0
     list_of_leaf_points = list()
+    # Number of dimensions to be output when evaluating (None corresponds to
+    # all dimensions being output
+    _toggled_dimensions = None
 
     def __init__(self,
                  is_leaf=True,
@@ -282,7 +286,6 @@ class Point(object):
             ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
 
         """
-
         # If the attribute value is not None, then simply return it.
         # Otherwise, compute it and return it.
         if self._value is None:
@@ -298,6 +301,23 @@ class Point(object):
 
         return self._value
 
+    def eval_ld(self):
+        """
+        Evaluation in lower dimension.
+
+        Returns:
+            value (np.array): The trimmed value of this :class:`Point` after the corresponding PEP was solved numerically.
+
+        Raises:
+            ValueError("The PEP must be solved to evaluate Points!") if the PEP has not been solved yet.
+
+        """
+        if Point._toggled_dimensions is not None:
+            toggled_dimensions = Point._toggled_dimensions
+        else:
+            toggled_dimensions = Point.counter
+        
+        return self.eval()[:toggled_dimensions]
 
 # Define a null Point initialized to 0.
 null_point = Point(is_leaf=False, decomposition_dict=dict())
