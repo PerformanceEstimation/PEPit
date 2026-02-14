@@ -1,6 +1,6 @@
 sphinx
 sphinx-autodocgen
 sphinx-rtd-theme
-myst-parser
+myst-nb
 easydev
 -r ../requirements.txt
