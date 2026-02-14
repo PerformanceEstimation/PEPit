@@ -45,7 +45,7 @@ templates_path = ['_templates']
 # -- MyST & Notebook Settings ------------------------------------------------
 nb_execution_mode = "off"
 myst_title_to_header = True
-myst_heading_anchors = None        # Set to None to avoid Jupyter TOC conflicts
+# myst_heading_anchors = None        # Set to None to avoid Jupyter TOC conflicts
 myst_dmath_allow_labels = False    # Disable MyST labels to stop double-numbering
 myst_update_mathjax = False        # Let MathJax 3 handle its own configuration
 myst_dmath_double_inline = True
