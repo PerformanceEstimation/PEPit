@@ -1,10 +1,10 @@
 import os
 import sys
 import shutil
-import PEPit
 
 # The module you're documenting (assumes you've added the project root dir to sys.path)
 sys.path.insert(0, os.path.abspath('../..'))
+import PEPit
 
 # -- Project information -----------------------------------------------------
 project = 'PEPit'
