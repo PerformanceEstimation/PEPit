@@ -16,8 +16,9 @@ class Wrapper(object):
 
     Attributes:
         _list_of_constraints_sent_to_solver (list): list of :class:`Constraint` and :class:`PSDMatrix` objects
-                                                    associated to the PEP. This list does not contain constraints
-                                                    due to internal representation of the problem by the solver.
+                                                    associated to the :class:`PEP`.
+                                                    This list does not contain constraints due to internal
+                                                    representation of the problem by the solver.
         optimal_F (numpy.array): Elements of F after solving.
         optimal_G (numpy.array): Gram matrix of the PEP after solving.
         objective (Expression): The objective expression that must be maximized.
@@ -30,9 +31,9 @@ class Wrapper(object):
         solver_name (str): The name of the solver the wrapper interact with.
         verbose (int): Level of information details to print (Override the solver verbose parameter).
 
-                       - 0: No verbose at all
-                       - 1: PEPit information is printed but not solver's
-                       - 2: Both PEPit and solver details are printed
+                       - 0: No verbose at all.
+                       - 1: PEPit information is printed but not solver's.
+                       - 2: Both PEPit and solver details are printed.
 
     """
 
@@ -44,9 +45,9 @@ class Wrapper(object):
         Args:
             verbose (int): Level of information details to print (Override the solver verbose parameter).
 
-                           - 0: No verbose at all
-                           - 1: PEPit information is printed but not solver's
-                           - 2: Both PEPit and solver details are printed
+                           - 0: No verbose at all.
+                           - 1: PEPit information is printed but not solver's.
+                           - 2: Both PEPit and solver details are printed.
 
         """
         # Initialize lists of constraints that are used to solve the SDP.
@@ -131,8 +132,9 @@ class Wrapper(object):
             residual (ndarray): main dual PSD matrix (dual to the PSD constraint on the Gram matrix).
 
         Raises:
-            TypeError if the attribute `_list_of_constraints_sent_to_solver` of this object
-            is neither a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
+            TypeError
+                if the attribute `_list_of_constraints_sent_to_solver` of this object is neither
+                a :class:`Constraint` object, nor a :class:`PSDMatrix` one.
 
         """
         dual_values, residual = self._recover_dual_values()
