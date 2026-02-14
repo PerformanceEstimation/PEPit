@@ -14,6 +14,7 @@ Welcome to PEPit's documentation!
    quickstart
    api
    examples
+   tutorials
    whatsnew
    contributing
 
