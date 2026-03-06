@@ -2,6 +2,7 @@ from .block_partition import BlockPartition
 from .constraint import Constraint
 from .expression import Expression, null_expression
 from .function import Function
+from .interpolator import Interpolator
 from .psd_matrix import PSDMatrix
 from .wrapper import Wrapper
 from .pep import PEP
@@ -10,6 +11,7 @@ from .point import Point, null_point
 __all__ = ['block_partition', 'BlockPartition',
            'examples',
            'functions',
+           'interpolators',
            'operators',
            'primitive_steps',
            'tools',
@@ -17,6 +19,7 @@ __all__ = ['block_partition', 'BlockPartition',
            'constraint', 'Constraint',
            'expression', 'Expression', 'null_expression',
            'function', 'Function',
+           'interpolator', 'Interpolator',
            'psd_matrix', 'PSDMatrix',
            'pep', 'PEP',
            'point', 'Point', 'null_point',
