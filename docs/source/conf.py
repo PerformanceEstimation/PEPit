@@ -1,24 +1,12 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
 import os
 import sys
+import shutil
 
 # The module you're documenting (assumes you've added the project root dir to sys.path)
 sys.path.insert(0, os.path.abspath('../..'))
+import PEPit
 
 # -- Project information -----------------------------------------------------
-
 project = 'PEPit'
 copyright = '2021, PEPit Contributors'
 author = 'PEPit Contributors'
@@ -32,7 +20,6 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # 'easydev.copybutton',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
@@ -43,68 +30,97 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
-    # 'sphinxcontrib_autodocgen',
-    'myst_parser',
+    'myst_nb',
 ]
 
-napoleon_custom_sections = [('Returns', 'params_style'),
-                            ('Attributes', 'params_style')]
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+    '.ipynb': 'myst-nb',
+}
 
-import PEPit
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
+templates_path = ['_templates']
 
+# -- MyST & Notebook Settings ------------------------------------------------
+nb_execution_mode = "off"
+myst_title_to_header = True
+myst_dmath_allow_labels = False    # Disable MyST labels to stop double-numbering
+myst_update_mathjax = False        # Let MathJax 3 handle its own configuration
+myst_dmath_double_inline = True
+
+myst_enable_extensions = [
+    "dollarmath",
+    "amsmath",
+    "colon_fence",
+    "deflist",
+    "html_image",
+    "html_admonition",
+]
+
+# -- MathJax 3 Settings ------------------------------------------------------
+mathjax3_config = {
+    'tex': {
+        'inlineMath': [['$', '$'], ['\\(', '\\)']],
+        'displayMath': [['$$', '$$'], ['\\[', '\\]']],
+        'processEscapes': True,
+        'tags': 'ams',             # AMS numbering (1), (2) on the right
+        'useLabelIds': True
+    },
+    'options': {
+        'processHtmlClass': 'tex2jax_process|mathjax_process|math|output_area',
+    }
+}
+
+# -- HTML Output Settings ---------------------------------------------------
+html_theme = 'sphinx_rtd_theme'
+html_static_path = ['_static']
+html_secnumber_suffix = " "
+
+# -- Napoleon settings -------------------------------------------------------
+napoleon_google_docstring = True
+napoleon_numpy_docstring = True
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = False
+
+# -- Napoleon & Autodoc -----------------------------------------------------
+napoleon_custom_sections = [('Returns', 'params_style'), ('Attributes', 'params_style')]
+autoclass_content = 'both'
 autodocgen_config = [{
     'modules': [PEPit],
     'generated_source_dir': './autodocgen-output/',
 
-    # if module matches this then it and any of its submodules will be skipped
+    # Skips any module with "__" in the name or specific internal modules
     'skip_module_regex': '(.*[.]__|myskippedmodule)',
 
-    # produce a text file containing a list of everything documented. you can use this in a test to notice
-    # when you've intentionally added/removed/changed a documented API
+    # Log file to track exactly what is being documented
     'write_documented_items_output_file': 'autodocgen_documented_items.txt',
 
-    # customize autodoc on a per-module basis
+    # Custom options for specific classes if needed
     'autodoc_options_decider': {
-        'mymodule.FooBar': {'inherited-members': True},
+        'PEPit.FooBar': {'inherited-members': True},
     },
 
-    # choose a different title for specific modules, e.g. the toplevel one
-    'module_title_decider': lambda modulename: 'API Reference' if modulename == 'mymodule' else modulename,
+    # Renames the top-level module to "API Reference" in the TOC
+    'module_title_decider': lambda modulename: 'API Reference' if modulename == 'PEPit' else modulename,
 }]
 
-autoclass_content = 'both'
+# -- Automated Notebook Copying ---------------------------------------------
+current_dir = os.path.dirname(__file__)
+nb_source = os.path.abspath(os.path.join(current_dir, '../../ressources/demo/'))
+nb_dest = os.path.join(current_dir, 'notebooks_folder')
 
-# Include or not the special methods
-napoleon_include_special_with_doc = False
+if os.path.exists(nb_dest):
+    shutil.rmtree(nb_dest)
+os.makedirs(nb_dest)
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+if os.path.exists(nb_source):
+    for file in os.listdir(nb_source):
+        if file.endswith('.ipynb'):
+            shutil.copy2(os.path.join(nb_source, file), os.path.join(nb_dest, file))
 
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
 
-# -- Options for HTML output -------------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'sphinx_rtd_theme'
-
-# # Make the copy paste possible for any example code in documentation
-# import easydev
-#
-# jscopybutton_path = easydev.copybutton.get_copybutton_path()
-#
-# # if not os.path.isdir('_static'):
-# #     os.mkdir('_static')
-#
-# import shutil
-#
-# shutil.copy(jscopybutton_path, '_static')
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# -- Setup Function ---------------------------------------------------------
+def setup(app):
+    app.add_css_file('custom.css')
