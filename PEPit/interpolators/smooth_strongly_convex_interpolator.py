@@ -21,7 +21,6 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         self.L = L
         self.mu = mu
         self.options = options
-        
 
     def __set_constraint__(self,
                            xi, gi, fi,
@@ -37,8 +36,7 @@ class SmoothStronglyConvexInterpolator(Interpolator):
                           + self.mu / 2 *  cp.norm(xi - xj,2) ** 2 )
         
         return constraint
-
-
+                
     def evaluate(self, x):
     	
     	k = x.shape[0]
@@ -55,14 +53,11 @@ class SmoothStronglyConvexInterpolator(Interpolator):
     	    cons.append(self.__set_constraint__(x_padded,gx,fx,xi.eval(),gi.eval(),fi.eval()))
         
     	if self.options == 'highest':
-    	    prob = cp.Problem(cp.Maximize(fx), cons)
+    	    prob = cp.Problem(cp.Maximize(fx), cons, solver=self.solver)
     	if self.options == 'lowest':
-    	    prob = cp.Problem(cp.Minimize(fx), cons)
+    	    prob = cp.Problem(cp.Minimize(fx), cons, solver=self.solver )
     	prob.solve(verbose=False)
     	return fx.value.squeeze()
-    	
-    def __call__(self, x):
-        return self.evaluate(x)
     	    
         
         
