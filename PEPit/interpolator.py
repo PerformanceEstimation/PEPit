@@ -62,4 +62,4 @@ class Interpolator(object):
 
         else:
             # If mosek is not installed, ask CVXPY to run SCS.
-            self.solver = "SCS"
+            self.solver = cp.SCS

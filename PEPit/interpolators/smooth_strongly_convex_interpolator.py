@@ -53,10 +53,10 @@ class SmoothStronglyConvexInterpolator(Interpolator):
     	    cons.append(self.__set_constraint__(x_padded,gx,fx,xi.eval(),gi.eval(),fi.eval()))
         
     	if self.options == 'highest':
-    	    prob = cp.Problem(cp.Maximize(fx), cons, solver=self.solver)
+    	    prob = cp.Problem(cp.Maximize(fx), cons)
     	if self.options == 'lowest':
-    	    prob = cp.Problem(cp.Minimize(fx), cons, solver=self.solver )
-    	prob.solve(verbose=False)
+    	    prob = cp.Problem(cp.Minimize(fx), cons)
+    	prob.solve(verbose=False, solver=self.solver)
     	return fx.value.squeeze()
     	    
         
