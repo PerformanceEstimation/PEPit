@@ -17,6 +17,7 @@ class TestInterpolator(unittest.TestCase):
 
     def setUp(self):
     
+        self.wrapper = "cvxpy"
         problem = PEP()
         self.func1 = ConvexFunction()
         self.func2 = SmoothConvexFunction(L=1.)
@@ -124,7 +125,7 @@ class TestInterpolator(unittest.TestCase):
         f0, fs = f(x0), f(xs)
         problem.set_initial_condition((x0-xs)**2 >= 1)
         problem.set_performance_metric(-(f0-fs))
-        pepit_tau = problem.solve(verbose=0)
+        pepit_tau = problem.solve(verbose=0, wrapper=self.wrapper)
         
         x0_val = x0.eval()
         xs_val = xs.eval()
