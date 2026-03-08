@@ -5,6 +5,8 @@ from PEPit.interpolator import Interpolator
 class SmoothStronglyConvexInterpolator(Interpolator):
     """
     The class :class:`Interpolator` is designed to help identifying worst-case examples.
+    Given a new coordinate vector (
+
 
     Attributes:
         func (Function): list of triplets
@@ -19,6 +21,8 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         self.L = L
         self.mu = mu
         self.options = options
+        
+                raise ValueError("The PEP must be solved to evaluate Points!")
         
 
     def __set_constraint__(self,

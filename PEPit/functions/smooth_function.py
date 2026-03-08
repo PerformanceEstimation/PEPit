@@ -66,7 +66,7 @@ class SmoothFunction(Function):
 
     def get_interpolator(self, options='lowest'):
         """
-        Returns: SmoothStronglyConvexInterpolator based on self.
+        Returns: SmoothStronglyConvexInterpolator (with mu=-L) based on self.
 
         """
         return SmoothStronglyConvexInterpolator(self, L=self.L, mu=-self.L, options=options)

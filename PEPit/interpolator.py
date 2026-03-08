@@ -17,8 +17,6 @@ class Interpolator(object):
     def __init__(self, func):
         self.func = func
         self.d = Point.counter
-        # MUST CHECK THAT THE PROBLEM WAS EVALUATED
-
 
     def evaluate(self, x):
         """

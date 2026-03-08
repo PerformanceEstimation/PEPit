@@ -1,6 +1,6 @@
 from PEPit.function import Function
 from PEPit.interpolators import SmoothStronglyConvexInterpolator
-
+import numpy as np
 
 class ConvexFunction(Function):
     """
@@ -44,10 +44,10 @@ class ConvexFunction(Function):
 
     def get_interpolator(self, options='lowest'):
         """
-        Returns: SmoothStronglyConvexInterpolator based on self.
+        Returns: SmoothStronglyConvexInterpolator (with L=np.inf and mu=0) based on self.
 
         """
-        return SmoothStronglyConvexInterpolator(self, options=options)
+        return SmoothStronglyConvexInterpolator(self, L=np.inf, mu=0, options=options)
 
     @staticmethod
     def set_convexity_constraint_i_j(xi, gi, fi,
