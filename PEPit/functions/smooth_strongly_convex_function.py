@@ -71,12 +71,12 @@ class SmoothStronglyConvexFunction(Function):
                   "L == np.inf. Instead, please use the class StronglyConvexFunction (which accounts for the fact\n"
                   "that there might be several sub-gradients at the same point).\033[0m")
 
-    def get_interpolator(self):
+    def get_interpolator(self, options='lowest'):
         """
         Returns: SmoothStronglyConvexInterpolator based on self.
 
         """
-    return SmoothStronglyConvexInterpolator(self)
+        return SmoothStronglyConvexInterpolator(self, L=self.L, mu=self.mu, options=options)
 
     def set_smoothness_strong_convexity_constraint_i_j(self,
                                                        xi, gi, fi,

@@ -13,14 +13,12 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         d_eff (int): effective dimension of the interpolation
         
     """
-    def __init__(self, func, options='lowest'):
+    def __init__(self, func, L=np.inf, mu=0, options='lowest'):
         
         super().__init__(func=func)
-        self.L = func.L
-        self.mu = func.mu
+        self.L = L
+        self.mu = mu
         self.options = options
-        self.d = 2 # EXTRACT
-        # MUST CHECK THAT THE PROBLEM WAS EVALUATED
         
 
     def __set_constraint__(self,
@@ -41,29 +39,28 @@ class SmoothStronglyConvexInterpolator(Interpolator):
 
     def evaluate(self, x):
     	
-    	x_trimmed = x...
-        fx = cp.Variable(1)
-        gx = cp.Variable((self.d,))
-        cons = []
-        for i, point_i in enumerate(func.list_of_points):
-            xi, gi, fi = point_i
-            cons.append(self.__set_constraint__(xi.eval(),gi.eval(),fi.eval(),x,gx,fx))
-            cons.append(self.__set_constraint__(x,gx,fx,xi.eval(),gi.eval(),fi.eval()))
-            
-        #self.x_list, self.g_list, self.f_list =  list_of_triplets
-        #self.nb_eval = len(self.x_list)
-        #for i in range(self.nb_eval):
-        #    fi = self.f_list[i]
-        #    gi = self.g_list[i]
-        #    xi = self.x_list[i]
-            
+    	k = x.shape[0]
+    	if k > self.d:
+    	    raise ValueError("Error: specified input to evaluate has dimension larger than target dimension")
+    	x_padded = np.pad(x, (0, self.d - k))
+    	
+    	fx = cp.Variable(1)
+    	gx = cp.Variable((self.d,))
+    	cons = []
+    	for i, point_i in enumerate(self.func.list_of_points):
+    	    xi, gi, fi = point_i
+    	    cons.append(self.__set_constraint__(xi.eval(),gi.eval(),fi.eval(),x_padded,gx,fx))
+    	    cons.append(self.__set_constraint__(x_padded,gx,fx,xi.eval(),gi.eval(),fi.eval()))
         
-        if self.options == 'highest':
-            prob = cp.Problem(cp.Maximize(fx), cons)
-        if self.options == 'lowest':
-            prob = cp.Problem(cp.Minimize(fx), cons)
-        prob.solve(verbose=False)
-        return fx.value
+    	if self.options == 'highest':
+    	    prob = cp.Problem(cp.Maximize(fx), cons)
+    	if self.options == 'lowest':
+    	    prob = cp.Problem(cp.Minimize(fx), cons)
+    	prob.solve(verbose=False)
+    	return fx.value.squeeze()
+    	
+    def __call__(self, x):
+        return self.evaluate(x)
     	    
         
         

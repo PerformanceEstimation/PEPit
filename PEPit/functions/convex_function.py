@@ -1,4 +1,5 @@
 from PEPit.function import Function
+from PEPit.interpolators import SmoothStronglyConvexInterpolator
 
 
 class ConvexFunction(Function):
@@ -40,6 +41,13 @@ class ConvexFunction(Function):
                          reuse_gradient=reuse_gradient,
                          name=name,
                          )
+
+    def get_interpolator(self, options='lowest'):
+        """
+        Returns: SmoothStronglyConvexInterpolator based on self.
+
+        """
+        return SmoothStronglyConvexInterpolator(self, options=options)
 
     @staticmethod
     def set_convexity_constraint_i_j(xi, gi, fi,

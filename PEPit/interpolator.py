@@ -1,3 +1,5 @@
+from PEPit.point import Point
+
 class Interpolator(object):
     """
     A :class:`Interpolator` object encodes an interpolating procedure for a function class or an operator.
@@ -9,10 +11,13 @@ class Interpolator(object):
         
     Attributes:
         func (Function): A :class:`Function` object that contains the samples to be interpolated.
+        d (int): Size of the SDP that it corresponds to (dimension of the space where the interpolation takes place).
 
     """
     def __init__(self, func):
         self.func = func
+        self.d = Point.counter
+        # MUST CHECK THAT THE PROBLEM WAS EVALUATED
 
 
     def evaluate(self, x):
