@@ -22,8 +22,6 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         self.mu = mu
         self.options = options
         
-                raise ValueError("The PEP must be solved to evaluate Points!")
-        
 
     def __set_constraint__(self,
                            xi, gi, fi,
