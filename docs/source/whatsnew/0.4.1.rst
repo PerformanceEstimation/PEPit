@@ -20,3 +20,5 @@ Fixes:
 - An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.
 
 - The method `add_constraints_from_two_lists_of_points` of the class :class:`Function` has been fixed. So far, it was assumed that the two lists were identical.
+
+- Fixed notation in the online learning examples from the documentation (the regret formula was erroneous).
