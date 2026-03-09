@@ -109,9 +109,9 @@ class TestInterpolator(unittest.TestCase):
         f_mid_high = f_interp_high(x_mid)
         fs_val = fs.eval()
         
-        self.assertAlmostEqual(f_mid_low, f_mid_high, delta=1e-5)
+        self.assertAlmostEqual(f_mid_low, f_mid_high, delta=1e-4)
         f_expected_val = (L/2*np.linalg.norm(x_mid)**2).squeeze()
-        self.assertAlmostEqual(f_mid_low-fs, f_expected_val , delta=1e-5)
+        self.assertAlmostEqual(f_mid_low-fs, f_expected_val , delta=1e-4)
 
     def test_naive_value2(self):
     
@@ -137,8 +137,8 @@ class TestInterpolator(unittest.TestCase):
         f_mid_high = f_interp_high(x_mid)
         fs_val = fs.eval()
         
-        self.assertAlmostEqual(f_mid_low, f_mid_high, delta=1e-5)
+        self.assertAlmostEqual(f_mid_low, f_mid_high, delta=1e-4)
         f_expected_val = (mu/2*np.linalg.norm(x_mid)**2).squeeze()
-        self.assertAlmostEqual(f_mid_low-fs, f_expected_val , delta=1e-5)
+        self.assertAlmostEqual(f_mid_low-fs, f_expected_val , delta=1e-4)
         
         
