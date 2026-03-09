@@ -74,7 +74,7 @@ class TestConstraints(unittest.TestCase):
 
     def test_name(self):
 
-        self.assertEqual(self.initial_condition.get_name(), "Constraint 0")
+        self.assertEqual(self.initial_condition.get_name(), "Initial condition")
         self.assertIsNone(self.performance_metric.get_name())
 
         self.initial_condition.set_name("init")
