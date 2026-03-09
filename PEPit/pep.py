@@ -44,10 +44,11 @@ class PEP(object):
         _list_of_psd_sent_to_wrapper (list): list of :class:`PSDMatrix` objects actually sent to the wrapper.
 
         objective (Expression): the expression to be maximized by the solver.
-                                It is set by the method `solve`. And should not be updated otherwise.
+                                It is set by the method `solve`.
+                                And should not be updated otherwise.
 
         G_value (ndarray): the value of the Gram matrix G that the solver found.
-        F_value (ndarray): the value of the vector of :class:`Expression`s F that the solver found.
+        F_value (ndarray): the value of the vector of :class:`Expression` F that the solver found.
 
         residual (ndarray): the dual value found by the solver to the lmi constraints G >> 0.
 
@@ -191,6 +192,8 @@ class PEP(object):
         # Set name
         if name is not None:
             condition.set_name(name=name)
+        else:
+            condition.set_name(name="Initial condition")
 
         # Call add_constraint method
         self.add_constraint(constraint=condition)
@@ -414,9 +417,10 @@ class PEP(object):
         # Note maximizing the minimum of all the performance metrics
         # is equivalent to maximize objective which is constraint to be smaller than all the performance metrics.
 
-        for performance_metric in self.list_of_performance_metrics:
+        for rank, performance_metric in enumerate(self.list_of_performance_metrics):
             assert isinstance(performance_metric, Expression)
             performance_metric_constraint = (self.objective <= performance_metric)
+            performance_metric_constraint.set_name(name="Performance metric {}".format(rank+1))
             self._list_of_prepared_constraints.append(performance_metric_constraint)
 
         if verbose:
