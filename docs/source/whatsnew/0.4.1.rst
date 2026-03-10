@@ -4,13 +4,18 @@ What's new in PEPit 0.4.1
 New features:
 -------------
 
-- New: one can disable some software verification tools (licensing, installation, etc) to allow for fast processing time (via boolean option safe_mode).
+- One can now disable some software verification tools (licensing, installation, etc) to allow for fast processing time (via boolean option safe_mode).
 
 - Constraints (scalar and LMI) can now be deactivated using the `deactivate` method and activated back using the `activated` method. Note the PEP can be solved several times with different activated constraints. The method `solve` only creates the interpolation constraints once for all.
 
 - New :class:``Interpolator'' allows to visualize counter-examples found via performance estimation problems.
 
-- New demo to learn how to search and visualize low-dimensional worst-case counter-examples.
+New demo:
+---------
+
+- The file `ressources/demo/PEPit_demo_extracting_a_proof.ipynb` contains example usages of the new :class:`Constraint` feature.
+
+- The file `ressources/demo/PEPit_demo_extract_worst_case_examples.ipynb` contains example usages of the new :class:`Interpolator` class to visualize low-dimensional worst-case counter-examples.
 
 Fixes:
 ------
