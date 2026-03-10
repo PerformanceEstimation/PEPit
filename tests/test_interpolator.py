@@ -1,16 +1,18 @@
 import unittest
 
 import numpy as np
+
 from PEPit.pep import PEP
 from PEPit.point import Point
 
-from PEPit.interpolator import Interpolator
-from PEPit.interpolators import SmoothStronglyConvexInterpolator
 from PEPit.functions import ConvexFunction
 from PEPit.functions import SmoothConvexFunction
 from PEPit.functions import SmoothFunction
 from PEPit.functions import SmoothStronglyConvexFunction
 from PEPit.functions import StronglyConvexFunction
+
+from PEPit.interpolator import Interpolator
+from PEPit.interpolators import SmoothStronglyConvexInterpolator
 
 
 class TestInterpolator(unittest.TestCase):
@@ -21,7 +23,7 @@ class TestInterpolator(unittest.TestCase):
         problem = PEP()
         self.func1 = ConvexFunction()
         self.func2 = SmoothConvexFunction(L=1.)
-        self.func3 = SmoothStronglyConvexFunction(L=1.2,mu=.1)
+        self.func3 = SmoothStronglyConvexFunction(L=1.2, mu=.1)
         self.func4 = StronglyConvexFunction(mu=.25)
         self.func5 = SmoothFunction(L=1.5)
         
@@ -33,7 +35,6 @@ class TestInterpolator(unittest.TestCase):
         pt2 = Point()
         pt3 = Point()
         self.interp5 = self.func5.get_interpolator()
-        
 
     def test_is_instance(self):
 
@@ -70,7 +71,6 @@ class TestInterpolator(unittest.TestCase):
         self.assertEqual(self.interp3.func, self.func3)
         self.assertEqual(self.interp4.func, self.func4)
         self.assertEqual(self.interp5.func, self.func5)
-    
 
     def test_dimensions(self):
 

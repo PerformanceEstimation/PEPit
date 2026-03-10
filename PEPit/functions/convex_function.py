@@ -1,6 +1,7 @@
+import numpy as np
 from PEPit.function import Function
 from PEPit.interpolators import SmoothStronglyConvexInterpolator
-import numpy as np
+
 
 class ConvexFunction(Function):
     """

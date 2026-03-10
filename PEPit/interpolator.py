@@ -1,7 +1,8 @@
 import importlib.util
+import cvxpy as cp
 
 from PEPit.point import Point
-import cvxpy as cp
+
 
 class Interpolator(object):
     """
@@ -9,7 +10,7 @@ class Interpolator(object):
 
     Warnings:
         This class must be overwritten by a child class that encodes one (or more) specific interpolation procedure(s).
-        In particular, the method `evaluate` must be overwrten.
+        In particular, the method `evaluate` must be overwritten.
         See the :class:`PEPit.interpolators` modules.
         
     Attributes:

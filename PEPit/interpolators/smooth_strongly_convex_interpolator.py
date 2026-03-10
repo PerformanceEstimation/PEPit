@@ -1,6 +1,8 @@
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
+
 from PEPit.interpolator import Interpolator
+
 
 class SmoothStronglyConvexInterpolator(Interpolator):
     """
@@ -10,19 +12,19 @@ class SmoothStronglyConvexInterpolator(Interpolator):
     That is, given a set of triplets :math:`(x_i,g_i,f_i)` for which there exists such an interpolating function
     (see [2, Theorem 4]).
     
-    Interpolators are interfaced to PEPit via the :class:`Function`. More precisely, functions associated to interpolation
-    conditions and constructive interpolating constructions are featured with the `get_interpolator()` method, that allows
-    to receive an interpolator associated with the triplets of the corresponding solved PEP.
+    Interpolators are interfaced to PEPit via the :class:`Function`. More precisely, functions associated to
+    interpolation conditions and constructive interpolating constructions are featured with the `get_interpolator()`
+    method, that allows to receive an interpolator associated with the triplets of the corresponding solved PEP.
     
-    A complete demo is available from 
+    A complete demo is available
     `here <https://github.com/PerformanceEstimation/PEPit/blob/master/ressources/demo/PEPit_demo_extract_worst_case_examples.ipynb>`_.
 
 
     Attributes:
         func (Function): PEPit function that contains the list of triplets.
-        options (str): 'lowest' or 'highest' (determines whether the interpolant is the lowest of highest possible interpolant)
         L (float): smoothness parameter for the interpolant.
         mu (float): strong convexity parameter for the interpolant.
+        options (str): Either "lowest" or "highest"; determines whether to use the minimum or maximum possible interpolant.
 
     References:
 
@@ -54,12 +56,12 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         """
         if self.L is not np.inf:
             constraint = (0 >= fj - fi + gj @ (xi - xj)
-                          + 1 / 2 / (self.L-self.mu) * cp.norm(gi - gj,2) ** 2
-                          + self.mu * self.L / 2 / (self.L-self.mu) *  cp.norm(xi - xj,2) ** 2
-                          - self.mu / (self.L - self.mu) * (gi-gj)@(xi-xj) )
+                          + 1 / 2 / (self.L-self.mu) * cp.norm(gi - gj, 2) ** 2
+                          + self.mu * self.L / 2 / (self.L-self.mu) * cp.norm(xi - xj, 2) ** 2
+                          - self.mu / (self.L - self.mu) * (gi-gj)@(xi-xj))
         else:
             constraint = (0 >= fj - fi + gj @ (xi - xj)
-                          + self.mu / 2 *  cp.norm(xi - xj,2) ** 2 )
+                          + self.mu / 2 * cp.norm(xi - xj, 2) ** 2)
         
         return constraint
                 
@@ -71,7 +73,7 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         """
         k = x.shape[0]
         if k > self.d:
-    	    raise ValueError("Error: specified input to evaluate has dimension larger than target dimension")
+            raise ValueError("Error: specified input to evaluate has dimension larger than target dimension")
         x_padded = np.pad(x, (0, self.d - k))
         
         fx = cp.Variable(1)
@@ -79,15 +81,13 @@ class SmoothStronglyConvexInterpolator(Interpolator):
         cons = []
         for i, point_i in enumerate(self.func.list_of_points):
             xi, gi, fi = point_i
-            cons.append(self.__set_constraint__(xi.eval(),gi.eval(),fi.eval(),x_padded,gx,fx))
-            cons.append(self.__set_constraint__(x_padded,gx,fx,xi.eval(),gi.eval(),fi.eval()))
+            cons.append(self.__set_constraint__(xi.eval(), gi.eval(), fi.eval(), x_padded, gx, fx))
+            cons.append(self.__set_constraint__(x_padded, gx, fx, xi.eval(), gi.eval(), fi.eval()))
         
         if self.options == 'highest':
             prob = cp.Problem(cp.Maximize(fx), cons)
         if self.options == 'lowest':
             prob = cp.Problem(cp.Minimize(fx), cons)
         prob.solve(verbose=False, solver=self.solver)
+
         return fx.value.squeeze()
-    	    
-        
-        
