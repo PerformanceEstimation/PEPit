@@ -7,3 +7,4 @@ Tutorials
 
    Finding worst-case guarantees <notebooks_folder/PEPit_demo.ipynb>
    Extracting a proof <notebooks_folder/PEPit_demo_extracting_a_proof.ipynb>
+   Extracting a worst-case example <notebooks_folder/PEPit_demo_extract_worst_case_examples.ipynb>
