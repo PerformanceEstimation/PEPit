@@ -1,5 +1,6 @@
 import numpy as np
 from PEPit.function import Function
+from PEPit.interpolators import SmoothStronglyConvexInterpolator
 
 
 class SmoothFunction(Function):
@@ -62,6 +63,13 @@ class SmoothFunction(Function):
         if self.L == np.inf:
             print("\033[96m(PEPit) The class of L-smooth functions with L == np.inf implies no constraint: \n"
                   "it contains all differentiable functions. This might imply issues in your code.\033[0m")
+
+    def get_interpolator(self, options='lowest'):
+        """
+        Returns: SmoothStronglyConvexInterpolator (with mu=-L) based on self.
+
+        """
+        return SmoothStronglyConvexInterpolator(self, L=self.L, mu=-self.L, options=options)
 
     def set_smoothness_i_j(self,
                            xi, gi, fi,

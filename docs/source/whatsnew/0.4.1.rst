@@ -8,10 +8,14 @@ New features:
 
 - Constraints (scalar and LMI) can now be deactivated using the `deactivate` method and activated back using the `activated` method. Note the PEP can be solved several times with different activated constraints. The method `solve` only creates the interpolation constraints once for all.
 
+- The new :class:``Interpolator'' allows to visualize counter-examples found via performance estimation problems.
+
 New demo:
 ---------
 
-- The file `ressources/demo/PEPit_demo_extracting_a_proof.ipynb` contains an example usage of the new :class:`Constraint` feature.
+- The file `ressources/demo/PEPit_demo_extracting_a_proof.ipynb` contains example usages of the new :class:`Constraint` feature.
+
+- The file `ressources/demo/PEPit_demo_extract_worst_case_examples.ipynb` contains example usages of the new :class:`Interpolator` class to visualize low-dimensional worst-case counter-examples.
 
 Fixes:
 ------
@@ -21,3 +25,5 @@ Fixes:
 - An integer overflow (due to previously specified dtype=int8) in :class:`MosekWrapper` has been fixed.
 
 - The method `add_constraints_from_two_lists_of_points` of the class :class:`Function` has been fixed. So far, it was assumed that the two lists were identical.
+
+- Fixed notation in the online learning examples from the documentation (the regret formula was erroneous).

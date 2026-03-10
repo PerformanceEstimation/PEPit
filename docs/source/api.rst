@@ -7,6 +7,7 @@ API and modules
 
    api/main_modules
    api/functions_and_operators
+   api/interpolators
    api/steps
    api/tools
    api/wrappers

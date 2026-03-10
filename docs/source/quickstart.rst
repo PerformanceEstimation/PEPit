@@ -22,6 +22,9 @@ For people who are more comfortable with Matlab, we report to
 `PESTO
 <https://github.com/AdrienTaylor/Performance-Estimation-Toolbox>`_.
 
+Since early 2026, a Julia version of PEPit is also available at
+`PEPit.jl<https://github.com/PerformanceEstimation/PEPit.jl>`_.
+
 How tu use PEPit?
 ------------------
 

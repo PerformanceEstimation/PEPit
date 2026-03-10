@@ -157,6 +157,18 @@ class Function(object):
         """
         return self._is_leaf
 
+    def get_interpolator(self):
+        """
+        Warnings:
+            Needs to be overwritten with an appropriate interpolator for the class.
+
+        Raises:
+            NotImplementedError: This method must be overwritten in children classes
+
+        """
+
+        raise NotImplementedError("This method must be overwritten in children classes")
+
     def __add__(self, other):
         """
         Add 2 :class:`Function` objects together, leading to a new :class:`Function` object.
