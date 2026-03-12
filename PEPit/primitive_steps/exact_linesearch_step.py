@@ -1,7 +1,7 @@
 from PEPit.point import Point
 
 
-def exact_linesearch_step(x0, f, directions):
+def exact_linesearch_step(x0, f, directions, name='new_x'):
     """
     This routine outputs some :math:`x` by *mimicking* an exact line/span search in specified directions.
     It is used for instance in ``PEPit.examples.unconstrained_convex_minimization.wc_gradient_exact_line_search``
@@ -63,6 +63,7 @@ def exact_linesearch_step(x0, f, directions):
         x0 (Point): the starting point.
         f (Function): the function on which the (sub)gradient will be evaluated.
         directions (List of Points): the list of all directions required to be orthogonal to the (sub)gradient of x.
+        name (Str): the name of the point we arrive to.
 
     Returns:
         x (Point): such that all vectors in directions are orthogonal to the (sub)gradient of f at x.
@@ -72,18 +73,18 @@ def exact_linesearch_step(x0, f, directions):
     """
 
     # Instantiate a Point
-    x = Point()
+    x = Point(name=name)
 
     # Define gradient and function value of f on x
     gx, fx = f.oracle(x)
 
     # Add constraints
     constraint = ((x - x0) * gx == 0)
-    constraint.set_name("exact_linesearch({})_on_{}".format(f.get_name(), x0.get_name()))
+    constraint.set_name("exact_linesearch({})_to_{}_from_{}".format(f.get_name(), x.get_name(), x0.get_name()))
     f.add_constraint(constraint)
     for d in directions:
         constraint = (d * gx == 0)
-        constraint.set_name("exact_linesearch({})_on_{}_in_direction_{}".format(f.get_name(), x0.get_name(), d.get_name()))
+        constraint.set_name("exact_linesearch({})_to_{}_from_{}_in_direction_{}".format(f.get_name(), x.get_name(), x0.get_name(), d.get_name()))
         f.add_constraint(constraint)
 
     # Return triplet of points
