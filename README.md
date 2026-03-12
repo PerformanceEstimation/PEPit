@@ -274,16 +274,17 @@ PEPit supports the following [operator classes](https://pepit.readthedocs.io/en/
 
 ## Contributors
 
-### Creators
+### Creators, internal contributors and maintainers
 
 This toolbox has been created by
 
-- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/) 
+- [**Baptiste Goujaud**](https://www.linkedin.com/in/baptiste-goujaud-b60060b3/)
 - [**Céline Moucer**](https://cmoucer.github.io)
 - [**Julien Hendrickx**](https://perso.uclouvain.be/julien.hendrickx/index.html)
 - [**François Glineur**](https://perso.uclouvain.be/francois.glineur/)
 - [**Adrien Taylor**](https://adrientaylor.github.io/)
 - [**Aymeric Dieuleveut**](http://www.cmap.polytechnique.fr/~aymeric.dieuleveut/)
+- [**Daniel Berg Thomsen**](https://bergthomsen.com/) (internal contributor)
 
 <p align="center">
   <a href="https://www.inria.fr" style="margin: 0 40px;">
@@ -296,6 +297,7 @@ This toolbox has been created by
     <img src="/docs/source/logos/uclouvain.jpg" alt="UCLouvain" height="90">
   </a>
 </p>
+
 
 ### External contributions
 
