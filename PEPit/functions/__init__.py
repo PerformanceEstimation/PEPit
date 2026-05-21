@@ -1,3 +1,4 @@
+from .block_convex_concave_function import BlockConvexConcaveFunction
 from .block_smooth_convex_function_cheap import BlockSmoothConvexFunctionCheap
 from .block_smooth_convex_function_expensive import BlockSmoothConvexFunctionExpensive
 from .convex_function import ConvexFunction
@@ -15,7 +16,8 @@ from .smooth_strongly_convex_function import SmoothStronglyConvexFunction
 from .smooth_strongly_convex_quadratic_function import SmoothStronglyConvexQuadraticFunction
 from .strongly_convex_function import StronglyConvexFunction
 
-__all__ = ['block_smooth_convex_function_cheap', 'BlockSmoothConvexFunctionCheap',
+__all__ = ['block_convex_concave_function', 'BlockConvexConcaveFunction',
+           'block_smooth_convex_function_cheap', 'BlockSmoothConvexFunctionCheap',
            'block_smooth_convex_function_expensive', 'BlockSmoothConvexFunctionExpensive',
            'convex_function', 'ConvexFunction',
            'convex_indicator', 'ConvexIndicatorFunction',
