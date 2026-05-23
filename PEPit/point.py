@@ -3,6 +3,7 @@ import numpy as np
 from PEPit.expression import Expression
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict, multiply_dicts
+from PEPit.tools.symbolic_scalar import is_scalar, evaluate_scalar
 
 
 class Point(object):
@@ -200,7 +201,7 @@ class Point(object):
         """
 
         # Multiplying by a scalar value is applying a homothety
-        if isinstance(other, int) or isinstance(other, float):
+        if is_scalar(other):
             # Build the decomposition of the new point
             new_decomposition_dict = dict()
             for key, value in self.decomposition_dict.items():
@@ -293,7 +294,7 @@ class Point(object):
             else:
                 value = np.zeros(Point.counter)
                 for point, weight in self.decomposition_dict.items():
-                    value += weight * point.eval()
+                    value += evaluate_scalar(weight) * point.eval()
                 self._value = value
 
         return self._value

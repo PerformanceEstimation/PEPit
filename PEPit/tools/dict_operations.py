@@ -1,3 +1,6 @@
+from PEPit.tools.symbolic_scalar import evaluate_scalar
+
+
 def merge_dict(dict1, dict2):
     """
     Merge keys of dict1 and dict2.
@@ -48,11 +51,11 @@ def prune_dict(my_dict):
     pruned_dict = dict()
 
     # Add all entry of dict1 that does not have a null value
-    for key in my_dict.keys():
+    for key, value in my_dict.items():
 
-        if my_dict[key] != 0:
+        if evaluate_scalar(value) != 0:
 
-            pruned_dict[key] = my_dict[key]
+            pruned_dict[key] = value
 
     # Return pruned dict
     return pruned_dict

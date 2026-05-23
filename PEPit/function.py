@@ -7,6 +7,7 @@ from PEPit.constraint import Constraint
 from PEPit.psd_matrix import PSDMatrix
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict
+from PEPit.tools.symbolic_scalar import is_scalar
 
 
 class Function(object):
@@ -241,7 +242,7 @@ class Function(object):
         """
 
         # Verify other is a scalar constant
-        assert isinstance(other, float) or isinstance(other, int)
+        assert is_scalar(other)
 
         # Multiply uniformly self's decomposition_dict by other
         new_decomposition_dict = dict()
@@ -493,7 +494,7 @@ class Function(object):
                     if isinstance(element, Constraint):
                         new_row.append(element.eval_dual())
                     # If there is a scalar number, simply return it.
-                    elif isinstance(element, float) or isinstance(element, int):
+                    elif is_scalar(element):
                         new_row.append(element)
                     else:
                         raise TypeError("The elements of table of constraints must either be Constraints objects"

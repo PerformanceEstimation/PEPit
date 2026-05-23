@@ -11,6 +11,7 @@ from PEPit.constraint import Constraint
 from PEPit.function import Function
 from PEPit.psd_matrix import PSDMatrix
 from PEPit.block_partition import BlockPartition
+from PEPit.tools.symbolic_scalar import evaluate_scalar
 
 
 class PEP(object):
@@ -832,11 +833,11 @@ class PEP(object):
         )
         # Get the actual dual_objective from its dict
         if 1 in dual_objective_expression_decomposition_dict.keys():
-            dual_objective = dual_objective_expression_decomposition_dict[1]
+            dual_objective = evaluate_scalar(dual_objective_expression_decomposition_dict[1])
         else:
             dual_objective = 0.
         # Compute the remaining terms, that should be small and only due to numerical stability errors
-        remaining_terms = np.sum(np.abs([value for key, value in dual_objective_expression_decomposition_dict.items()
+        remaining_terms = np.sum(np.abs([evaluate_scalar(value) for key, value in dual_objective_expression_decomposition_dict.items()
                                          if key != 1]))
         if verbose:
             message = "(PEPit) The worst-case guarantee proof is perfectly reconstituted"

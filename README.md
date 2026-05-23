@@ -57,6 +57,7 @@ It relies on the following Python modules:
 - Numpy
 - Scipy
 - Cvxpy
+- Sympy
 - Matplotlib (for the demo notebook)
 
 

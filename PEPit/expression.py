@@ -4,6 +4,7 @@ import numpy as np
 from PEPit.constraint import Constraint
 
 from PEPit.tools.dict_operations import merge_dict, prune_dict
+from PEPit.tools.symbolic_scalar import is_scalar, evaluate_scalar
 
 
 class Expression(object):
@@ -151,7 +152,7 @@ class Expression(object):
         if isinstance(other, Expression):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, other.decomposition_dict)
         # If other is a scalar constant, add it to the decomposition_dict of self
-        elif isinstance(other, int) or isinstance(other, float):
+        elif is_scalar(other):
             merged_decomposition_dict = merge_dict(self.decomposition_dict, {1: other})
         # Raise an Exception in any other scenario
         else:
@@ -249,7 +250,7 @@ class Expression(object):
         """
 
         # Verify other is a scalar constant
-        assert isinstance(other, int) or isinstance(other, float)
+        assert is_scalar(other)
 
         # Multiply uniformly self's decomposition_dict by other
         new_decomposition_dict = dict()
@@ -414,14 +415,14 @@ class Expression(object):
                     # Distinguish 3 cases: function values, inner products, and constant values
                     if type(key) == Expression:
                         assert key.get_is_leaf()
-                        value += weight * key.eval()
+                        value += evaluate_scalar(weight) * key.eval()
                     elif type(key) == tuple:
                         point1, point2 = key
                         assert point1.get_is_leaf()
                         assert point2.get_is_leaf()
-                        value += weight * np.dot(point1.eval(), point2.eval())
+                        value += evaluate_scalar(weight) * np.dot(point1.eval(), point2.eval())
                     elif key == 1:
-                        value += weight
+                        value += evaluate_scalar(weight)
                     # Raise Exception out of those 3 cases
                     else:
                         raise TypeError("Expressions are made of function values, inner products and constants only!"

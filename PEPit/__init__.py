@@ -7,6 +7,7 @@ from .psd_matrix import PSDMatrix
 from .wrapper import Wrapper
 from .pep import PEP
 from .point import Point, null_point
+from .tools.symbolic_scalar import SymbolicScalar
 
 __all__ = ['block_partition', 'BlockPartition',
            'examples',
@@ -24,4 +25,5 @@ __all__ = ['block_partition', 'BlockPartition',
            'pep', 'PEP',
            'point', 'Point', 'null_point',
            'wrapper', 'Wrapper',
+           'SymbolicScalar',
            ]

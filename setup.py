@@ -20,7 +20,7 @@ setuptools.setup(
                 "to pep their optimization algorithms as easily as they implement them",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["cvxpy>=1.1.17", "pandas>=1.0.0"],
+    install_requires=["cvxpy>=1.1.17", "pandas>=1.0.0", "sympy>=1.10"],
     url="https://github.com/PerformanceEstimation/PEPit",
     project_urls={
         "Documentation": "https://pepit.readthedocs.io/en/{}/".format(version),

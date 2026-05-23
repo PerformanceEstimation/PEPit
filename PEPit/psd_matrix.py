@@ -1,6 +1,7 @@
 import numpy as np
 
 from PEPit.expression import Expression
+from PEPit.tools.symbolic_scalar import is_scalar
 
 
 class PSDMatrix(object):
@@ -141,7 +142,7 @@ class PSDMatrix(object):
                 if isinstance(matrix[i, j], Expression):
                     pass
                 # ... or a python scalar. If so, store it as an Expression
-                elif isinstance(matrix[i, j], int) or isinstance(matrix[i, j], float):
+                elif is_scalar(matrix[i, j]):
                     matrix[i, j] = Expression(is_leaf=False, decomposition_dict={1: matrix[i, j]})
                 # Raise an Exception in any other scenario
                 else:
